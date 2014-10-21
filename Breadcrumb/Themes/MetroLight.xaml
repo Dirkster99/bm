@@ -1,0 +1,15 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
+  <ResourceDictionary.MergedDictionaries>
+    <!-- Metro Light  -->
+    <ResourceDictionary Source="/BreadcrumbLib;component/Themes/Default/Geometry.xaml" />
+    <ResourceDictionary Source="/Breadcrumb;component/Themes/Metro/Light/Brushes.xaml" />
+    <ResourceDictionary Source="/Breadcrumb;component/Themes/Metro/Light/Colors.xaml" />
+    <ResourceDictionary Source="/BreadcrumbLib;component/Controls/DropDownList.xaml" />
+
+    <ResourceDictionary Source="/Breadcrumb;component/Themes/Metro/Light/ModernUI.light.xaml" />
+    <ResourceDictionary Source="/FirstFloor.ModernUI;component/Assets/ScrollBar.xaml" />
+  </ResourceDictionary.MergedDictionaries>
+
+</ResourceDictionary>

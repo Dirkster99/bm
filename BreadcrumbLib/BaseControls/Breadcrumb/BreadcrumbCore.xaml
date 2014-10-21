@@ -1,0 +1,94 @@
+<ResourceDictionary
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+
+    xmlns:breadcrumpbc="clr-namespace:BreadcrumbLib.BaseControls.Breadcrumb"
+    xmlns:bc="clr-namespace:BreadcrumbLib.BaseControls"
+    xmlns:uc="clr-namespace:BreadcrumbLib.Controls.Breadcrumbs"
+    xmlns:ctrls="clr-namespace:BreadcrumbLib.Controls"
+    xmlns:conv="clr-namespace:BreadcrumbLib.Converters"
+    >
+  <ResourceDictionary.MergedDictionaries>
+    <ResourceDictionary Source="/BreadcrumbLib;component/Themes/Default/Colors.xaml" />
+    <ResourceDictionary Source="/BreadcrumbLib;component/Themes/Default/Geometry.xaml" />
+    <!-- ResourceDictionary Source="/BreadcrumbLib;component/Themes/Breadcrumb/Buttons.xaml" />
+    <ResourceDictionary Source="/BreadcrumbLib;component/Themes/Breadcrumb/BreadcrumbParts.xaml" / -->
+  </ResourceDictionary.MergedDictionaries>
+
+  <Style x:Key="{x:Type breadcrumpbc:BreadcrumbCore}" TargetType="{x:Type breadcrumpbc:BreadcrumbCore}" >
+    <!--<Setter Property="Height" Value="30" />-->
+    <Setter Property="BorderThickness" Value="0" />
+    <Setter Property="ItemContainerStyle" Value="{DynamicResource {x:Type breadcrumpbc:BreadcrumbItem}}" />
+    <Setter Property="ItemsPanel">
+      <Setter.Value>
+        <ItemsPanelTemplate>
+          <breadcrumpbc:BreadcrumbCorePanel IsItemsHost="True"   />
+        </ItemsPanelTemplate>
+      </Setter.Value>
+    </Setter>
+
+    <Setter Property="Template">
+      <Setter.Value>
+
+        <ControlTemplate TargetType="{x:Type breadcrumpbc:BreadcrumbCore}">
+          <ControlTemplate.Resources>
+            <conv:BoolToVisibilityCollapsedConverter x:Key="btvc" />
+            <conv:FlipBoolToVisibilityConverter x:Key="fbtv" />
+          </ControlTemplate.Resources>
+          <Border BorderBrush="{TemplateBinding BorderBrush}" IsHitTestVisible="True"  
+                            BorderThickness="{TemplateBinding BorderThickness}" MinHeight="25">
+            <DockPanel Margin="1,0" Background="Transparent" IsHitTestVisible="True" >
+              <DockPanel.Resources>
+                <conv:BoolToVisibilityConverter x:Key="btv" />
+              </DockPanel.Resources>
+              <ctrls:DropDown DockPanel.Dock="Left" 
+                                         Visibility="{Binding ShowDropDown, RelativeSource={RelativeSource TemplatedParent}, Converter={StaticResource btvc}}"
+                                         IsDropDownOpen="{Binding IsDropDownOpen, Mode=TwoWay, 
+                                            RelativeSource={RelativeSource TemplatedParent}}" 
+                                         VerticalAlignment="Stretch" >
+                <ctrls:DropDown.Header>
+                  <Grid>
+                    <Path StrokeThickness="1.2" Data="{StaticResource ExpanderArrow}"
+                          HorizontalAlignment="Center" VerticalAlignment="Center" 
+                          Visibility="{Binding IsOverflowed, RelativeSource={RelativeSource TemplatedParent}, Converter={StaticResource btv}}"
+                          Margin="{TemplateBinding Padding}" IsHitTestVisible="True" />
+
+                    <ToggleButton Template="{DynamicResource BasicArrowButton}"
+                                  IsHitTestVisible="False" 
+                                  Visibility="{Binding IsOverflowed, RelativeSource={RelativeSource TemplatedParent}, Converter={StaticResource fbtv}}"
+                                  IsChecked="{Binding IsDropDownOpen, Mode=OneWay, RelativeSource={RelativeSource TemplatedParent}}"
+                                  />
+                  </Grid>
+                </ctrls:DropDown.Header>
+                <ctrls:DropDown.Content>
+
+                  <ScrollViewer MaxHeight="{TemplateBinding DropDownHeight}" 
+                                                  Width="{TemplateBinding DropDownWidth}"
+                                                  HorizontalScrollBarVisibility="Hidden" VerticalScrollBarVisibility="Auto">
+                    <StackPanel Orientation="Vertical" >
+                      <breadcrumpbc:BreadcrumbOverflowPanel ItemsSource="{TemplateBinding OverflowedItems}" />
+                      <Separator HorizontalAlignment="Stretch" Visibility="{Binding IsOverflowed, 
+                                                            RelativeSource={RelativeSource TemplatedParent},
+                                                            Converter={StaticResource btv}}" />
+                      <breadcrumpbc:BreadcrumbOverflowPanel ItemsSource="{TemplateBinding RootItemsSource}" />
+                    </StackPanel>
+
+                  </ScrollViewer>
+                </ctrls:DropDown.Content>
+
+              </ctrls:DropDown>
+              <ItemsPresenter x:Name="PART_BreadcrumbList" HorizontalAlignment="Left" VerticalAlignment="Center" 
+                                                     SnapsToDevicePixels="{TemplateBinding UIElement.SnapsToDevicePixels}"                                        
+                                                     KeyboardNavigation.DirectionalNavigation="None"
+                                            
+                                            >
+              </ItemsPresenter>
+
+            </DockPanel>
+          </Border>
+        </ControlTemplate>
+      </Setter.Value>
+    </Setter>
+  </Style>
+
+</ResourceDictionary>

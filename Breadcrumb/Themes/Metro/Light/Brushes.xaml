@@ -1,0 +1,42 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+										xmlns:sys="clr-namespace:System;assembly=mscorlib"
+                    >
+
+  <!-- default accent colors and brushes -->
+  <Color x:Key="AccentColor">#1ba1e2</Color>
+  <SolidColorBrush x:Key="Accent" Color="{DynamicResource AccentColor}" />
+
+  <!-- SolidColorBrush x:Key="SystemButtonMouseOverBackgroundColor" Color="#20FFFFFF" / -->
+
+  <!-- MetroLight Theme -->
+  <SolidColorBrush x:Key="WindowBackground" Color="White" />
+
+  <SolidColorBrush x:Key="ControlBackground" Color="White" />
+
+  <SolidColorBrush x:Key="ForegroundTextBrush" Color="Black" />
+  <SolidColorBrush x:Key="ControlForeground" Color="Black" />
+  <SolidColorBrush x:Key="ControlBorderBrush" Color="#FFe9def5" />
+
+  <SolidColorBrush x:Key="ArrowBorderForeground" Color="#80999999" />
+  <SolidColorBrush x:Key="ArrowFillForeground" Color="#FF000000" />
+
+  <SolidColorBrush x:Key="ArrowFillMouseOverForeground" Color="{DynamicResource AccentColor}" />
+  <SolidColorBrush x:Key="ArrowBorderMouseOverForeground" Color="{DynamicResource AccentColor}" />
+
+  <SolidColorBrush x:Key="ArrowFillCheckedForeground" Color="White" />
+  <SolidColorBrush x:Key="ArrowBorderCheckedForeground" Color="White" />
+
+  <SolidColorBrush x:Key="ButtonSelectedColor"  Color="White"  />
+  <SolidColorBrush x:Key="ButtonBackgoundColor" Color="White" />
+
+  <!-- Decide whether styling is using a 3D depth effect or not -->
+  <sys:Boolean x:Key="ThreeDStyleBrushes">False</sys:Boolean>
+  <SolidColorBrush x:Key="HotTrack_SelectedBrush"   Color="#FFd9eee5"/>
+  <SolidColorBrush x:Key="HotTrack_BackgroundBrush" Color="#FFd9eee5"/>
+  <SolidColorBrush x:Key="HotTrack_HighlightBrush"  Color="#25d9eee5" />
+
+  <!-- This color is applied to the drop down button (Hottrack) when it is selected and the drop down is open -->
+  <SolidColorBrush x:Key="OpenDropDownButton_Background"  Color="{DynamicResource AccentColor}" />
+
+</ResourceDictionary>

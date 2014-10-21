@@ -1,0 +1,167 @@
+<ResourceDictionary
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+
+    xmlns:breadcrumpbc="clr-namespace:BreadcrumbLib.BaseControls.Breadcrumb"
+    xmlns:bc="clr-namespace:BreadcrumbLib.BaseControls"
+    xmlns:uc="clr-namespace:BreadcrumbLib.Controls.Breadcrumb"
+    xmlns:ctrls="clr-namespace:BreadcrumbLib.Controls"
+    xmlns:conv="clr-namespace:BreadcrumbLib.Converters"
+    >
+
+	<ResourceDictionary.MergedDictionaries>
+		<ResourceDictionary Source="/BreadcrumbLib;component/Themes/Default/Colors.xaml" />
+		<ResourceDictionary Source="/BreadcrumbLib;component/Themes/Default/Geometry.xaml" />
+		<ResourceDictionary Source="/BreadcrumbLib;component/Themes/Default/Buttons.xaml" />
+		<!-- ResourceDictionary Source="/BreadcrumbLib;component/Themes/Breadcrumb/BreadcrumbParts.xaml" / -->
+	</ResourceDictionary.MergedDictionaries>
+
+	<Style x:Key="focusVisualStyle">
+		<Setter Property="Control.Template">
+			<Setter.Value>
+				<ControlTemplate>
+					<Rectangle Stroke="#8E6EA6F5" StrokeThickness="1" RadiusX="2" RadiusY="2"/>
+				</ControlTemplate>
+			</Setter.Value>
+		</Setter>
+	</Style>
+
+	<Style x:Key="{x:Type breadcrumpbc:BreadcrumbItem}" TargetType="{x:Type breadcrumpbc:BreadcrumbItem}" >
+		<!--<Setter Property="Height" Value="20"  />-->
+		<Setter Property="HorizontalAlignment" Value="Stretch"  />
+		<Setter Property="VerticalAlignment" Value="Stretch"  />
+		<Setter Property="FocusVisualStyle" Value="{StaticResource focusVisualStyle}" />
+		<Setter Property="BorderBrush" Value="{DynamicResource {x:Static SystemColors.ActiveBorderBrushKey}}" />
+		<Setter Property="BorderThickness" Value="1" />
+		<Setter Property="IsDropDownOpen" Value="{Binding IsExpanded, Mode=TwoWay}"  />
+		<Setter Property="ItemContainerStyle" Value="{Binding ItemContainerStyle, RelativeSource={RelativeSource AncestorType={x:Type breadcrumpbc:BreadcrumbCore}}}" />
+		<Setter Property="MaxHeight" Value="{Binding ActualHeight, Mode=OneWay, RelativeSource={RelativeSource AncestorType={x:Type breadcrumpbc:BreadcrumbCore}}}" />
+		<Setter Property="ItemsPanel">
+			<Setter.Value>
+				<ItemsPanelTemplate>
+					<StackPanel IsItemsHost="True" Orientation="Vertical" 
+                                VirtualizingPanel.IsVirtualizing="True"
+                                VirtualizingPanel.IsContainerVirtualizable="True"
+                                VirtualizingPanel.VirtualizationMode="Standard"
+                                />
+				</ItemsPanelTemplate>
+			</Setter.Value>
+		</Setter>
+
+		<Setter Property="Template">
+			<Setter.Value>
+				<ControlTemplate TargetType="{x:Type breadcrumpbc:BreadcrumbItem}">
+					<ControlTemplate.Resources>
+						<conv:BoolToVisibilityConverter x:Key="btv" />
+						<conv:FlipBoolToVisibilityCollapsedConverter x:Key="fbtvc" />
+						<conv:BoolToVisibilityCollapsedConverter x:Key="btvc" />
+					</ControlTemplate.Resources>
+					<Grid Name="MainGrid" SnapsToDevicePixels="True" Margin="0,0"  HorizontalAlignment="Stretch">
+						<!-- If Is separator, display separator -->
+						<Separator Visibility="{Binding IsSeparator, RelativeSource={RelativeSource TemplatedParent}, Converter={StaticResource btv}}" />
+						<!-- Otherwise display a grid with popup -->
+						<Grid Visibility="{Binding IsSeparator, RelativeSource={RelativeSource TemplatedParent}, Converter={StaticResource fbtvc}}"  >
+							<Grid.ColumnDefinitions>
+								<ColumnDefinition Width="*" />
+								<ColumnDefinition Width="0"  />
+							</Grid.ColumnDefinitions>
+							<!-- Header -->
+							<DockPanel x:Name="basePanel" SnapsToDevicePixels="True" Grid.Column="0" Margin="0" LastChildFill="True">
+								<!-- Header Toggle Button - visible requires ShowToggle and HasItems -->
+								<ctrls:HotTrack IsSelected="{TemplateBinding IsMouseOver}"
+                                 x:Name="headerToggleHL" DockPanel.Dock="Right" 
+                                 BorderThickness="{TemplateBinding BorderThickness}"
+                                 SelectedBorderBrush="{TemplateBinding BorderBrush}"
+                                 Visibility="{Binding ShowToggle, RelativeSource={RelativeSource TemplatedParent}, Converter={StaticResource btvc}}"
+                                >
+									<!-- DropDown Popup -->
+									<ctrls:DropDown Visibility="{Binding HasItems, RelativeSource={RelativeSource TemplatedParent}, Converter={StaticResource btvc}}"     
+                                    IsDropDownOpen="{Binding IsDropDownOpen, Mode=TwoWay, 
+                                            RelativeSource={RelativeSource TemplatedParent}}">
+										<ScrollViewer CanContentScroll="True"  HorizontalScrollBarVisibility="Hidden" VerticalScrollBarVisibility="Auto"
+                                                      Visibility="{Binding Path=IsLoading, Converter={StaticResource fbtvc},
+                                                        Mode=TwoWay, RelativeSource={RelativeSource TemplatedParent}}" 
+                                                      >
+											<ItemsPresenter x:Name="itemList" HorizontalAlignment="Stretch" VerticalAlignment="Center" 
+                                                SnapsToDevicePixels="{TemplateBinding UIElement.SnapsToDevicePixels}"
+                                                MaxHeight="{Binding DropDownHeight, RelativeSource={RelativeSource AncestorType={x:Type breadcrumpbc:BreadcrumbCore}}}" 
+                                                Width="{Binding DropDownWidth, RelativeSource={RelativeSource AncestorType={x:Type breadcrumpbc:BreadcrumbCore}}}" 
+                                                KeyboardNavigation.DirectionalNavigation="None"
+                                                VirtualizingStackPanel.IsVirtualizing="True" 
+                                                VirtualizingStackPanel.VirtualizationMode="Standard"                                                     
+                                              >
+											</ItemsPresenter>
+										</ScrollViewer>
+									</ctrls:DropDown>
+								</ctrls:HotTrack>
+
+								<!-- Header Content - visible requres ShowCaption  -->
+								<ctrls:HotTrack x:Name="headerHL"
+								                BorderThickness="{TemplateBinding BorderThickness}"
+                                 SelectedBorderBrush="{TemplateBinding BorderBrush}"                                 
+                                 Visibility="{Binding ShowCaption, RelativeSource={RelativeSource TemplatedParent}, Converter={StaticResource btvc}}"
+                                 IsDragging="{Binding IsMouseOver, ElementName=headerToggleHL}">
+									<Button x:Name="buttonCurrent"  HorizontalAlignment="Stretch"                                                  
+                                                Template="{StaticResource BaseButton}" 
+                                                Grid.RowSpan="2" >
+										<Button.Content>
+											<DockPanel>
+												<!-- Add some space in front if it's inside menu  -->
+												<Rectangle Width="5" DockPanel.Dock="Left" 
+                                               Visibility="{Binding IsTopLevel, RelativeSource={RelativeSource TemplatedParent}, Converter={StaticResource fbtvc}}" />
+
+												<bc:MultiContentControl ContentTemplate="{TemplateBinding HeaderTemplate}"
+                                                ContentTemplate2="{TemplateBinding IconTemplate}"
+                                                ContentVisible2="{TemplateBinding ShowIcon}"
+                                    />
+											</DockPanel>
+										</Button.Content>
+									</Button>
+								</ctrls:HotTrack>
+							</DockPanel>
+						</Grid>
+					</Grid>
+
+					<ControlTemplate.Triggers>
+						<!--<EventTrigger RoutedEvent="bc:BreadcrumbItem.ShowingCaption"  >
+                <BeginStoryboard>
+                    <Storyboard>
+                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="headerToggleHL" Storyboard.TargetProperty="Visibility">
+                            <DiscreteObjectKeyFrame Value="{x:Static Visibility.Collapsed}" KeyTime="0:0:0.2" />
+                        </ObjectAnimationUsingKeyFrames>
+                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="headerHL" Storyboard.TargetProperty="Visibility">
+                            <DiscreteObjectKeyFrame Value="{x:Static Visibility.Collapsed}" KeyTime="0:0:0.2" />
+                        </ObjectAnimationUsingKeyFrames>
+                        <DoubleAnimation Storyboard.TargetName="headerHL" FillBehavior="Stop" 
+                                                     Storyboard.TargetProperty="MaxWidth" From="0" To="200" Duration="00:00:0.5" />
+                    </Storyboard>
+                </BeginStoryboard>
+            </EventTrigger>
+
+            <EventTrigger RoutedEvent="bc:BreadcrumbItem.HidingCaption">
+                <BeginStoryboard>
+                    <Storyboard>
+                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="headerToggleHL" Storyboard.TargetProperty="Visibility">
+                            <DiscreteObjectKeyFrame Value="{x:Static Visibility.Collapsed}" KeyTime="0:0:0.2" />
+                        </ObjectAnimationUsingKeyFrames>
+                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="headerHL" Storyboard.TargetProperty="Visibility">
+                            <DiscreteObjectKeyFrame Value="{x:Static Visibility.Collapsed}" KeyTime="0:0:0.2" />
+                        </ObjectAnimationUsingKeyFrames>
+                        <DoubleAnimation Storyboard.TargetName="headerHL" FillBehavior="Stop" 
+                                                     Storyboard.TargetProperty="MaxWidth" From="200" To="0" Duration="00:00:0.5" />
+                    </Storyboard>
+                </BeginStoryboard>
+            </EventTrigger>-->
+
+
+					</ControlTemplate.Triggers>
+				</ControlTemplate>
+			</Setter.Value>
+		</Setter>
+		<!--<Setter Property="HeaderTemplate" Value="{Binding HeaderTemplate, Mode=OneWay,
+            RelativeSource={RelativeSource AncestorType={x:Type bc:BreadcrumbCore}}}" />
+        <Setter Property="IconTemplate" Value="{Binding IconTemplate, Mode=OneWay,
+            RelativeSource={RelativeSource AncestorType={x:Type bc:BreadcrumbCore}}}" />-->
+	</Style>
+
+</ResourceDictionary>

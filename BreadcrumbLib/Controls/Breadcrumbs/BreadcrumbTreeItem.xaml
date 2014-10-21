@@ -1,0 +1,140 @@
+<ResourceDictionary
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+
+    xmlns:ctrls="clr-namespace:BreadcrumbLib.Controls"
+    xmlns:bc="clr-namespace:BreadcrumbLib.BaseControls"
+    xmlns:uc="clr-namespace:BreadcrumbLib.Controls.Breadcrumbs"
+    xmlns:conv="clr-namespace:BreadcrumbLib.Converters"
+ >
+
+  <ResourceDictionary.MergedDictionaries>
+    <ResourceDictionary Source="/BreadcrumbLib;component/Themes/Default/Colors.xaml" />
+    <ResourceDictionary Source="/BreadcrumbLib;component/Themes/Default/Geometry.xaml" />
+    <ResourceDictionary Source="/BreadcrumbLib;component/Themes/Default/Buttons.xaml" />
+  </ResourceDictionary.MergedDictionaries>
+
+  <!-- x:Key="BreadcrumbTreeItemStyle"
+         This is now a Default Style which is loaded through Themes/Generic.xaml via style key propoerty registered in static constructor -->
+  <Style TargetType="{x:Type uc:BreadcrumbTreeItem}">
+    <Setter Property="Background" Value="Transparent"/>
+    <Setter Property="BorderThickness" Value="1" />
+    <Setter Property="BorderBrush" Value="{DynamicResource ControlBorderBrush}" />
+    <Setter Property="OverflowedItemContainerStyle" Value="{Binding OverflowedItemContainerStyle, RelativeSource={RelativeSource AncestorType={x:Type uc:BreadcrumbTree}}}" />
+    <!--<Setter Property="FocusVisualStyle" Value="{StaticResource TreeViewItemFocusVisual}"/>-->
+    <Setter Property="Padding" Value="1,0,0,0"/>
+    <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}"/>
+    <Setter Property="Template">
+      <Setter.Value>
+        <ControlTemplate TargetType="{x:Type uc:BreadcrumbTreeItem}">
+          <bc:OverflowableStackPanel HorizontalAlignment="Stretch" Orientation="Horizontal" 
+                                   OverflowItemCount="{Binding OverflowItemCount, RelativeSource={RelativeSource TemplatedParent}
+                                                , Mode=OneWayToSource}" >
+            <VisualStateManager.VisualStateGroups>
+              <VisualStateGroup x:Name="CaptionStates">
+                <VisualState x:Name="ShowCaption" >
+                  <Storyboard>
+                    <DoubleAnimation Storyboard.TargetName="headerHL"  Duration="0:0:1"
+                                             Storyboard.TargetProperty="MaxWidth" 
+                                             To="1000" />
+                    <ObjectAnimationUsingKeyFrames Storyboard.TargetName="headerHL"
+                                                   Storyboard.TargetProperty="(UIElement.Visibility)">
+                      <DiscreteObjectKeyFrame KeyTime="00:00:00">
+                        <DiscreteObjectKeyFrame.Value>
+                          <Visibility>Visible</Visibility>
+                        </DiscreteObjectKeyFrame.Value>
+                      </DiscreteObjectKeyFrame>
+                    </ObjectAnimationUsingKeyFrames>
+                  </Storyboard>
+                </VisualState>
+                <VisualState x:Name="HideCaption"  >
+                  <Storyboard>
+                    <DoubleAnimation Storyboard.TargetName="headerHL"  Duration="0:0:0"
+                                             Storyboard.TargetProperty="MaxWidth" To="{Binding ActualWidth, ElementName=PART_CaptionButton}"  />
+                    <DoubleAnimation Storyboard.TargetName="headerHL"  Duration="0:0:1"
+                                             Storyboard.TargetProperty="MaxWidth" To="0"  />
+                    <ObjectAnimationUsingKeyFrames Storyboard.TargetName="headerHL"
+                                                   Storyboard.TargetProperty="(UIElement.Visibility)">
+                      <DiscreteObjectKeyFrame KeyTime="00:00:1">
+                        <DiscreteObjectKeyFrame.Value>
+                          <Visibility>Collapsed</Visibility>
+                        </DiscreteObjectKeyFrame.Value>
+                      </DiscreteObjectKeyFrame>
+                    </ObjectAnimationUsingKeyFrames>
+                  </Storyboard>
+                </VisualState>
+              </VisualStateGroup>
+            </VisualStateManager.VisualStateGroups>
+
+            <ctrls:HotTrack Grid.Column="0" Grid.Row="0"   x:Name="headerHL" bc:OverflowableStackPanel.CanOverflow="True"
+                            SelectedBorderBrush="{TemplateBinding BorderBrush}" MaxWidth="1000"
+                            BorderThickness="1,0" >
+
+              <StackPanel Orientation="Horizontal">
+                <StackPanel.Resources>
+                  <conv:BoolToVisibilityCollapsedConverter x:Key="btvc" />
+                </StackPanel.Resources>
+                <Button Template="{StaticResource BaseButton}" x:Name="PART_CaptionButton"  
+                            MaxWidth="1000"
+                            >
+                  <ContentPresenter x:Name="PART_Header" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"                                   
+                                  SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" ContentSource="Header" />
+                </Button>
+                <ctrls:HotTrack x:Name="headerToggleHL"  bc:OverflowableStackPanel.CanOverflow="True"
+                                 BorderThickness="1,0,0,0"
+                                 SelectedBorderBrush="Transparent" 
+                                 IsSelected="{Binding IsExpanded, Mode=TwoWay, RelativeSource={RelativeSource TemplatedParent}}"
+                                 SelectedBrush="{DynamicResource OpenDropDownButton_Background}"
+                                 Visibility="{Binding HasItems, RelativeSource={RelativeSource TemplatedParent}, Converter={StaticResource btvc}}"
+                                >
+                  <ctrls:DropDownList x:Name="PART_Toggle" ItemsSource="{TemplateBinding ItemsSource}"
+                                  Visibility="{Binding HasItems, RelativeSource={RelativeSource TemplatedParent}, Converter={StaticResource btvc}}" 
+                                  SelectedValuePath="{Binding ValuePath, RelativeSource={RelativeSource TemplatedParent}}"                                  
+                                  IsDropDownOpen="{Binding IsExpanded, Mode=TwoWay, RelativeSource={RelativeSource TemplatedParent}}"
+                                  SelectedValue="{Binding SelectedChild, Mode=TwoWay, RelativeSource={RelativeSource TemplatedParent}}"
+                                  ItemTemplate="{TemplateBinding MenuItemTemplate}" >
+                  </ctrls:DropDownList>
+                </ctrls:HotTrack>
+
+              </StackPanel>
+            </ctrls:HotTrack>
+
+            <ItemsPresenter x:Name="ItemsHost" Grid.Column="1" />
+
+          </bc:OverflowableStackPanel>
+          <ControlTemplate.Triggers>
+            <MultiTrigger >
+              <MultiTrigger.Conditions>
+                <Condition Property="IsChildSelected" Value="false" />
+                <Condition Property="IsCurrentSelected" Value="false" />
+              </MultiTrigger.Conditions>
+              <MultiTrigger.Setters>
+                <Setter Property="Visibility" Value="Collapsed"/>
+              </MultiTrigger.Setters>
+            </MultiTrigger>
+            <Trigger  SourceName="headerHL" Property="IsMouseDirectlyOver" Value="True">
+              <Setter TargetName="headerToggleHL" Property="IsEnabled" Value="False" />
+            </Trigger>
+            <!--<Trigger Property="IsExpanded" Value="true">
+                <Setter Property="Visibility" Value="Visible"/>
+            </Trigger>-->
+            <!--<Trigger Property="HasItems" Value="false">
+                <Setter Property="Visibility" TargetName="Expander" Value="Hidden"/>
+            </Trigger>-->
+          </ControlTemplate.Triggers>
+        </ControlTemplate>
+      </Setter.Value>
+    </Setter>
+
+    <!-- Setter Property="ItemsPanel" Value="{StaticResource StackItemPanelTemplate}" / -->
+    <Setter Property="MenuItemTemplate" Value="{Binding MenuItemTemplate, RelativeSource={RelativeSource AncestorType={x:Type uc:BreadcrumbTree}}}" />
+    <Style.Triggers>
+      <!--This trigger is needed, because RelativeSource binding can only succeeds if the current MenuItem is already connected to its visual parent-->
+      <Trigger Property="IsVisible" Value="True">
+        <Setter Property="HorizontalContentAlignment" Value="{Binding Path=HorizontalContentAlignment, RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}}}"/>
+        <Setter Property="VerticalContentAlignment" Value="{Binding Path=VerticalContentAlignment, RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}}}"/>
+      </Trigger>
+    </Style.Triggers>
+  </Style>
+
+</ResourceDictionary>

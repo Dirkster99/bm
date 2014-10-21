@@ -1,0 +1,15 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+  <ResourceDictionary.MergedDictionaries>
+    <!-- ResourceDictionary Source="/BreadcrumbLib;component/Themes/Default/Geometry.xaml" / -->
+    <ResourceDictionary Source="/BreadcrumbLib;component/Themes/Brushes.xaml" />
+    <ResourceDictionary Source="/BreadcrumbLib;component/Controls/DropDownList.xaml" />
+    <!-- ResourceDictionary Source="/BreadcrumbLib;component/Themes/Default/Colors.xaml" />
+        <ResourceDictionary Source="/BreadcrumbLib;component/Themes/Default/ComboboxNullAsSeparatorStyle.xaml" />
+				<ResourceDictionary Source="/BreadcrumbLib;component/Themes/Default/Buttons.xaml" / -->
+  </ResourceDictionary.MergedDictionaries>
+  
+  <SolidColorBrush x:Key="WindowBackground" Color="White" />
+  <SolidColorBrush x:Key="ControlBackground" Color="White" />
+
+</ResourceDictionary>

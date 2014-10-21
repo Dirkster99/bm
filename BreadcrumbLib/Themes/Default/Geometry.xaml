@@ -1,0 +1,84 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
+    <Geometry x:Key="Checkmark">F1 M 10.0,1.2 L 4.7,9.1 L 4.5,9.1 L 0,5.2 L 1.3,3.5 L 4.3,6.1L 8.3,0 L 10.0,1.2 Z</Geometry>
+    
+    <Geometry x:Key="ReversedNormalArrow">M7,0 L6,3.5 7,7 z</Geometry>
+    <!--Breadcrumb-->
+    <Geometry x:Key="NormalArrow">M0,0 L4,3.5 0,7 z</Geometry>
+    <Geometry x:Key="ExpandedArrow">M0,3 L7,3 3.5,7 z</Geometry>
+    <Geometry x:Key="ExpanderArrow">M6,1 L2,4 L6,7 M11,1 L7,4 L11,7</Geometry>
+    <Geometry x:Key="RefreshBranch">M6,3 A6,10,0,0,0,4,8 M8,12 A6,10,0,0,0,10,7</Geometry>
+    <Geometry x:Key="RefreshArrow">M2,7 L7,7 4,9.5z M7,8 L10,5.5 12,8 z</Geometry>
+    <PathGeometry x:Key="TreeArrow" Figures="M0,0 L0,6 L6,0 z"/>
+
+    <Geometry x:Key="DownArrow">M0,0 L10,0 5,10Z</Geometry>
+    <Geometry x:Key="UpArrow">M0,10 L10,10 5,0Z</Geometry>
+    <Geometry x:Key="RightArrow">M0,0 L10,5 L0,10Z</Geometry>
+    <Geometry x:Key="LeftArrow">M0,5 L10,10 10,0Z</Geometry>
+    <Geometry x:Key="CloseX">M0,0 L1,1 M0,1 L1,0</Geometry>
+    <!--UpdatedVersion-->
+    <!--<Geometry x:Key="RefreshArrow">M4,7 L9,7 6,9.5z M9,8 L12,5.5 14,8 z</Geometry>-->
+    <!--<Geometry x:Key="RefreshBranch">M8,3 A6,10,0,0,0,6,8 M10,12 A6,10,0,0,0,12,7</Geometry>-->
+    <Geometry x:Key="StarFrame">M8,2 L4,14 14,7 2,7 12,14 z</Geometry>
+    <Geometry x:Key="Star">M8,2 L6,6,2,7 5,9 4,14 8,10 12,14 11,9 14,7 10,6  z</Geometry>
+    <Geometry x:Key="LockBody">M4,7 L12,7 12,14 4,14 z</Geometry>
+    <PathGeometry x:Key="LockClosed">
+        <PathFigure StartPoint="5,7" IsClosed="True">
+            <ArcSegment Point="11,7" Size="3,5.5"  IsLargeArc="True" SweepDirection="Clockwise"  />
+            <LineSegment Point="9,7" />
+            <ArcSegment Point="7,7" Size="1.2,2.2" IsLargeArc="True" />
+        </PathFigure>
+    </PathGeometry>
+    <PathGeometry x:Key="LockOpened">
+        <PathFigure StartPoint="10,7" IsClosed="True">
+            <ArcSegment Point="16,7" Size="3,5.5"  IsLargeArc="True" SweepDirection="Clockwise"  />
+            <LineSegment Point="14,7" />
+            <ArcSegment Point="12,7" Size="1.2,2.2" IsLargeArc="True"  />
+        </PathFigure>
+    </PathGeometry>
+    
+    <Geometry x:Key="Folder">M3,4.5 L8,4.5 8,6 12,6 12,13 2,13 2,6 3,6 z</Geometry>
+    <Geometry x:Key="FolderOpen">M5,8 L15,8 12,13 2,13z</Geometry>
+    <Geometry x:Key="FolderZip">M2,7.5 L9,7.5 5,11, 12,11</Geometry>
+
+    <EllipseGeometry x:Key="MagnifierGlass" Center="10,6" RadiusX="3.2" RadiusY="3.2" />
+    <Geometry x:Key="MagnifierHandle">M7,9 L3,13</Geometry>
+
+    <!--<GeometryGroup x:Key="Magnifier">
+        <EllipseGeometry Center="10,6" RadiusX="3.2" RadiusY="3.2" />
+        <Geometry>M7,9 L3,13</Geometry>
+    </GeometryGroup>-->
+
+    <!--PreviewPanel-->
+    <Geometry x:Key="NormalSquare">M0,0 L7,0 7,7 0,7 z</Geometry>
+    <GeometryGroup x:Key="NormalPause">
+        <Geometry>M0,0 L2,0 2,7 0,7 z</Geometry>
+        <Geometry>M5,0 L7,0 7,7 5,7 z</Geometry>
+    </GeometryGroup>
+
+    <GeometryGroup x:Key="Cross">
+        <Geometry>M2,2 L7,7</Geometry>
+        <Geometry>M2,7 L7,2</Geometry>
+    </GeometryGroup>
+
+    <!--Navigation-->
+    <Geometry x:Key="expandlArrow">M0,3 L7,3 3.5,7 z</Geometry>
+    <Geometry x:Key="rightNavigation">M8,0 L13,5 8,10 M0,5 L13,5</Geometry>
+    <Geometry x:Key="leftNavigation">M8,0 L1,5 8,10 M0,5 L13,5</Geometry>
+
+    <Geometry x:Key="cross">M1,1 L9,9 M1,9 L9,1</Geometry>
+
+    <Geometry x:Key="descArrow">M0,3 L7,3 3.5,7 z</Geometry>
+    <Geometry x:Key="ascArrow">M0,7 L7,7 3.5,3 z</Geometry>
+
+    <Geometry x:Key="verticalLine">M1,2 L1,8 3,8 3,2 z</Geometry>
+
+    <!--Titlebar-->
+    <Geometry x:Key="minimize">M7,8 L18,8 18,12 7,12 z</Geometry>
+    <Geometry x:Key="maximize">M7,3 L18,3 18,12 7,12 z M10,6 L15,6 15,9 10,9 z</Geometry>
+    <Geometry x:Key="restore">M7.417,2.75 L16.542,2.75 16.542,11.417 14.417,11.417 14.417,5.0000001 7.417,5.0000001 z M5.667,5.0000001 L14.417,5.0000001 14.417,12.833 5.667,12.833 z M8.5,7.7500004 L11.833,7.7500004 11.833,10.667001 8.5,10.667001 z</Geometry>
+    <Geometry x:Key="close">M21.103761,3.645 L22.286016,5.350036 23.521239,3.729 26.854339,3.9793241 26.854339,5.0625752 23.604567,7.7293729 23.604567,8.4795984 26.938,11.478927 26.938,12.645 23.604321,12.562107 C23.604321,12.562107 23.362087,12.642403 22.242004,10.658062 L22.197928,10.579659 22.063,10.812 C20.896663,12.894973 21.020682,12.478106 21.020682,12.478106 L17.687,12.561001 17.687,11.394927 21.020434,8.3955983 21.020434,7.6453727 17.770661,4.9785749 17.770661,3.895324 z</Geometry>    
+
+
+</ResourceDictionary>

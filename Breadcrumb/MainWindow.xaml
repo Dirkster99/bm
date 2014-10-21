@@ -1,0 +1,24 @@
+﻿<Window x:Class="Breadcrumb.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+
+        xmlns:ctrls="clr-namespace:BreadcrumbLib.Controls;assembly=BreadcrumbLib"
+        xmlns:uc="clr-namespace:BreadcrumbLib.Controls.Breadcrumbs;assembly=BreadcrumbLib"
+        xmlns:bc="clr-namespace:BreadcrumbLib.BaseControls;assembly=BreadcrumbLib"
+        xmlns:conv="clr-namespace:BreadcrumbLib.Converters;assembly=BreadcrumbLib"
+        Title="MainWindow" Height="350" Width="525"
+        
+        Background="{DynamicResource WindowBackground}"
+        >
+  <Grid Background="{DynamicResource ControlBackground}" >
+    <Grid.RowDefinitions>
+      <RowDefinition Height="Auto" />
+      <RowDefinition Height="Auto" />
+      <RowDefinition Height="Auto" />
+    </Grid.RowDefinitions>
+
+    <ctrls:Breadcrumb DataContext="{Binding ExTest}" Grid.Row="1" />
+
+    <ctrls:Breadcrumb DataContext="{Binding ExTest1}" Grid.Row="2" />
+  </Grid>
+</Window>
