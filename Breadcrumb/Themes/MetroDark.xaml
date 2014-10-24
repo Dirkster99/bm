@@ -6,9 +6,12 @@
     <ResourceDictionary Source="/BreadcrumbLib;component/Themes/Default/Geometry.xaml" />
 	  <ResourceDictionary Source="/Breadcrumb;component/Themes/Metro/Dark/Brushes.xaml" />
 	  <ResourceDictionary Source="/Breadcrumb;component/Themes/Metro/Dark/Colors.xaml" />
-    <ResourceDictionary Source="/BreadcrumbLib;component/Controls/DropDownList.xaml" />
 
     <ResourceDictionary Source="/Breadcrumb;component/Themes/Metro/Dark/ModernUI.dark.xaml" />
-	  <ResourceDictionary Source="/FirstFloor.ModernUI;component/Assets/ScrollBar.xaml" /> 
+
+    <!-- Why is it necessary to include this? It must be missing in a control where it is used (?) -->
+    <ResourceDictionary Source="/BreadcrumbLib;component/Themes/Default/Buttons.xaml" />
+    
+    <ResourceDictionary Source="/FirstFloor.ModernUI;component/Assets/ScrollBar.xaml" /> 
   </ResourceDictionary.MergedDictionaries>
 </ResourceDictionary>

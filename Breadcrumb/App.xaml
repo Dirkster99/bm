@@ -10,7 +10,6 @@
     <!-- Metro Dark
     <ResourceDictionary Source="/Breadcrumb;component/Themes/MetroDark.xaml" />
  -->
-
     <!-- Metro Light
     <ResourceDictionary Source="/Breadcrumb;component/Themes/MetroLight.xaml" />
  -->

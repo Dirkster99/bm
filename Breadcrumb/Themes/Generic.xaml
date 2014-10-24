@@ -3,10 +3,9 @@
   <ResourceDictionary.MergedDictionaries>
     <!-- ResourceDictionary Source="/BreadcrumbLib;component/Themes/Default/Geometry.xaml" / -->
     <ResourceDictionary Source="/BreadcrumbLib;component/Themes/Brushes.xaml" />
-    <ResourceDictionary Source="/BreadcrumbLib;component/Controls/DropDownList.xaml" />
-    <!-- ResourceDictionary Source="/BreadcrumbLib;component/Themes/Default/Colors.xaml" />
-        <ResourceDictionary Source="/BreadcrumbLib;component/Themes/Default/ComboboxNullAsSeparatorStyle.xaml" />
-				<ResourceDictionary Source="/BreadcrumbLib;component/Themes/Default/Buttons.xaml" / -->
+
+    <!-- Why is it necessary to include this? It must be missing in a control where it is used (?) -->
+    <ResourceDictionary Source="/BreadcrumbLib;component/Themes/Default/Buttons.xaml" />
   </ResourceDictionary.MergedDictionaries>
   
   <SolidColorBrush x:Key="WindowBackground" Color="White" />

@@ -27,12 +27,12 @@
 			};
 
 			this.Entries.SetEntries(UpdateMode.Update, new TreeNodeViewModel(string.Empty, "Root", this, null),
-					                                       new TreeNodeViewModel("AA", "Root", this, null));
+					                                       new TreeNodeViewModel("AA", "Root", this, null));            
 		}
 		#endregion constructors
 
 		#region events
-		public event PropertyChangedEventHandler PropertyChanged;
+        public event PropertyChangedEventHandler PropertyChanged = (o, e) => { };
 		#endregion events
 
 		#region properties

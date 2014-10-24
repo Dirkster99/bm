@@ -32,12 +32,12 @@
 		/// <summary>
 		/// Whether subentries loaded.
 		/// </summary>
-		bool IsLoaded { get; set; }
+		bool IsLoaded { get; }
 
 		/// <summary>
 		/// Whether subentries is loading.
 		/// </summary>
-		bool IsLoading { get; set; }
+		bool IsLoading { get; }
 
 		/// <summary>
 		/// A list of sub-entries, after loaded, used by VM thread only.

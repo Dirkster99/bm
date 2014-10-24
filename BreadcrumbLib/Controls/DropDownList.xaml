@@ -42,7 +42,7 @@
         </ControlTemplate>
       </Setter.Value>
     </Setter>
-    <Setter Property="ItemContainerStyle" Value="{StaticResource ComboboxNullAsSeparatorStyle}" />
+    <Setter Property="ItemContainerStyle" Value="{StaticResource ComboboxNullCancelButton}" />
   </Style>
 
 </ResourceDictionary>

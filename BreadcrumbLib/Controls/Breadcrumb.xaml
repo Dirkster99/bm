@@ -25,10 +25,20 @@
                   BorderThickness="{TemplateBinding BorderThickness}">
 
             <Grid>
+              <Grid.Resources>
+                <conv:BoolToVisibilityCollapsedConverter x:Key="btv" />
+              </Grid.Resources>
+
               <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="Auto" />
                 <ColumnDefinition Width="*" />
               </Grid.ColumnDefinitions>
+
+              <ProgressBar Background="Transparent" Foreground="{DynamicResource {x:Static SystemColors.HotTrackBrushKey}}"
+                           IsIndeterminate="{Binding IsIndeterminate, RelativeSource={RelativeSource TemplatedParent}}" Opacity="0.5" Grid.ColumnSpan="2"
+                           Visibility="{Binding IsProgressbarVisible, RelativeSource={RelativeSource TemplatedParent}, Converter={StaticResource btv}}"
+                           Value="{Binding Progress, RelativeSource={RelativeSource TemplatedParent}}"
+                           BorderBrush="Transparent" BorderThickness="0"/>
 
               <!-- Display a dropdown list at the left most button in the control -->
               <ctrls:DropDownList Grid.Column="0"

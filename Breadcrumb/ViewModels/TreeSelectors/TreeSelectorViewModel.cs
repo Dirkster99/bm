@@ -8,6 +8,7 @@
 	using Breadcrumb.Viewmodels.Base;
 	using Breadcrumb.ViewModels.Interfaces;
 	using Breadcrumb.ViewModels.TreeLookupProcessors;
+	using BreadcrumbLib.Utils;
 
 	/// <summary>
 	/// Base class of ITreeSelector, which implement Tree based structure and support LookupProcessing.
@@ -60,9 +61,9 @@
 		}
 
 		public ITreeSelector<VM, T> ParentSelector { get; private set; }
-		
+
 		public ITreeRootSelector<VM, T> RootSelector { get; private set; }
-		
+
 		public IEntriesHelper<VM> EntryHelper { get; private set; }
 
 		public bool IsSelected
@@ -154,14 +155,15 @@
 
 					if (value != null)
 					{
-						this.LookupAsync(value, SearchNextLevel<VM, T>.LoadSubentriesIfNotLoaded,
-															new TreeLookupProcessor<VM, T>(HierarchicalResult.Related, (hr, p, c) =>
-															{
-																c.IsSelected = true;
-																this._prevSelected = c;
+						AsyncUtils.RunAsync(async () => await this.LookupAsync(value,
+																																	 SearchNextLevel<VM, T>.LoadSubentriesIfNotLoaded,
+																																		new TreeLookupProcessor<VM, T>(HierarchicalResult.Related, (hr, p, c) =>
+																																		{
+																																			c.IsSelected = true;
+																																			this._prevSelected = c;
 
-																return true;
-															}));
+																																			return true;
+																																		})));
 					}
 				}
 			}
@@ -170,7 +172,7 @@
 		public bool IsOverflowedOrRoot
 		{
 			get { return this._isOverflowed || this.IsRoot; }
-		
+
 			set { }
 		}
 
@@ -226,15 +228,15 @@
 				// And just in case if the new selected value is child of this node.
 				if (this.RootSelector.SelectedValue != null)
 				{
-					this.LookupAsync(
-							this.RootSelector.SelectedValue,
-							new SearchNextUsingReverseLookup<VM, T>(this.RootSelector.SelectedSelector),
-							new TreeLookupProcessor<VM, T>(HierarchicalResult.All, (hr, p, c) =>
-							{
-								this.SelectedChild = c == null ? default(T) : c.Value;
+					AsyncUtils.RunAsync(() => this.LookupAsync(
+		this.RootSelector.SelectedValue,
+		new SearchNextUsingReverseLookup<VM, T>(this.RootSelector.SelectedSelector),
+		new TreeLookupProcessor<VM, T>(HierarchicalResult.All, (hr, p, c) =>
+		{
+			this.SelectedChild = c == null ? default(T) : c.Value;
 
-								return true;
-							}));
+			return true;
+		})));
 				}
 
 				// SetSelectedChild(lookupResult == null ? default(T) : lookupResult.Value);

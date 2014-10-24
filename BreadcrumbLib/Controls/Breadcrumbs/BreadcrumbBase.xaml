@@ -90,7 +90,6 @@
         </ItemsPanelTemplate>
       </Setter.Value>
     </Setter>
-
   </Style>
 
 </ResourceDictionary>

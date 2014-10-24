@@ -43,10 +43,12 @@
                       Background="{TemplateBinding Background}" Name="DropDownBorder">
 
                 <Grid x:Name="PART_DropDown">
+                  <!-- Use transparent inner border to implement padding against the outter element -->
                   <Border x:Name="PART_DropDownBorder" 
                           Background="{TemplateBinding Background}" 
-                              Padding="{TemplateBinding Padding}"
-                          BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}">
+                          Padding="{TemplateBinding Padding}"
+                          BorderBrush="Transparent"
+                          BorderThickness="{TemplateBinding BorderThickness}">
                     <ContentPresenter x:Name="PART_Content"  Content="{TemplateBinding Content}" />
                   </Border>
                 </Grid>
@@ -54,6 +56,7 @@
             </Popup>
           </Grid>
           <ControlTemplate.Triggers>
+            <!-- Show the normal arrow right button when there is nothing else defined in this Header -->
             <Trigger Property="Header" Value="{x:Null}">
               <Setter TargetName="PART_ToggleButton" Property="Template" Value="{DynamicResource BasicArrowButton}" />
             </Trigger>

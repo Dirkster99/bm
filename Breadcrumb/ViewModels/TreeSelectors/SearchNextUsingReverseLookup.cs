@@ -37,6 +37,7 @@
 		public async Task LookupAsync(T value, ITreeSelector<VM, T> parentSelector,
 				ICompareHierarchy<T> comparer, params ITreeLookupProcessor<VM, T>[] processors)
 		{
+            await Task.FromResult(0);
 			if (parentSelector.EntryHelper.IsLoaded)
 			{
 				foreach (VM current in parentSelector.EntryHelper.AllNonBindable)

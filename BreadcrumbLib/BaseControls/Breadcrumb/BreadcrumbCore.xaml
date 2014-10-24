@@ -11,8 +11,7 @@
   <ResourceDictionary.MergedDictionaries>
     <ResourceDictionary Source="/BreadcrumbLib;component/Themes/Default/Colors.xaml" />
     <ResourceDictionary Source="/BreadcrumbLib;component/Themes/Default/Geometry.xaml" />
-    <!-- ResourceDictionary Source="/BreadcrumbLib;component/Themes/Breadcrumb/Buttons.xaml" />
-    <ResourceDictionary Source="/BreadcrumbLib;component/Themes/Breadcrumb/BreadcrumbParts.xaml" / -->
+    <ResourceDictionary Source="/BreadcrumbLib;component/Themes/Default/Buttons.xaml" />
   </ResourceDictionary.MergedDictionaries>
 
   <Style x:Key="{x:Type breadcrumpbc:BreadcrumbCore}" TargetType="{x:Type breadcrumpbc:BreadcrumbCore}" >

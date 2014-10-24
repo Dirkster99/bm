@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
@@ -75,17 +75,14 @@
       <DependentUpon>ClipCorner.xaml</DependentUpon>
     </Compile>
     <Compile Include="Controls\Breadcrumbs\BreadcrumbList.cs" />
-    <Compile Include="Controls\Breadcrumbs\BreadcrumbExpander.xaml.cs">
-      <DependentUpon>BreadcrumbExpander.xaml</DependentUpon>
-    </Compile>
     <Compile Include="Controls\Breadcrumbs\BreadcrumbTree.xaml.cs">
       <DependentUpon>BreadcrumbTree.xaml</DependentUpon>
     </Compile>
     <Compile Include="Controls\Breadcrumbs\BreadcrumbTreeItem.xaml.cs">
       <DependentUpon>BreadcrumbTreeItem.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Controls\Bradcrumb.xaml.cs">
-      <DependentUpon>Bradcrumb.xaml</DependentUpon>
+    <Compile Include="Controls\Breadcrumb.xaml.cs">
+      <DependentUpon>Breadcrumb.xaml</DependentUpon>
     </Compile>
     <Compile Include="Controls\DropDown.xaml.cs">
       <DependentUpon>DropDown.xaml</DependentUpon>
@@ -121,9 +118,11 @@
     <Compile Include="Defines\Strings.cs" />
     <Compile Include="Interfaces\IHierarchyHelper.cs" />
     <Compile Include="Interfaces\ISuggestSource.cs" />
+    <Compile Include="Utils\AsyncUtils.cs" />
     <Compile Include="Utils\PathExistsValidationRule.cs" />
     <Compile Include="Utils\PathHierarchyHelper.cs" />
     <Compile Include="Utils\PropertyPathHelper.cs" />
+    <Compile Include="Utils\RelayCommand.cs" />
     <Compile Include="Utils\UITools.cs" />
     <Compile Include="Defines\AttachedProperties.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -149,10 +148,6 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Controls\Breadcrumbs\BreadcrumbExpander.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
     <Page Include="Controls\Breadcrumbs\BreadcrumbTree.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -161,7 +156,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Controls\Bradcrumb.xaml">
+    <Page Include="Controls\Breadcrumb.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>

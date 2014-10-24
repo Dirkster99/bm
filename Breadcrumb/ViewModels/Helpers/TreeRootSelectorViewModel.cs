@@ -9,6 +9,7 @@
 	using Breadcrumb.ViewModels.Interfaces;
 	using Breadcrumb.ViewModels.TreeLookupProcessors;
 	using Breadcrumb.ViewModels.TreeSelectors;
+    using BreadcrumbLib.Utils;
 
 	public class TreeRootSelectorViewModel<VM, T> : TreeSelectorViewModel<VM, T>, ITreeRootSelector<VM, T>
 	{
@@ -74,10 +75,21 @@
 			}
 		}
 
+		/// <summary>
+		/// Gets/sets the select item when the user opens the drop down and selects 1 item
+		/// in the dropdownlist of the RootDropDown button.
+		/// </summary>
 		public T SelectedValue
 		{
-			get { return this._selectedValue; }
-			set { this.SelectAsync(value); }
+			get
+			{
+				return this._selectedValue;
+			}
+
+			set
+			{
+				AsyncUtils.RunAsync(() => this.SelectAsync(value));
+			}
 		}
 
 		////public int RootLevel { get { return _rootLevel; } set { _rootLevel = value; } }
@@ -119,6 +131,8 @@
 				this.SelectionChanged(this, EventArgs.Empty);
 
 			this.updateRootItems(path);
+
+            path.Last().EntryHelper.LoadAsync();
 		}
 
 		public override void ReportChildDeselected(Stack<ITreeSelector<VM, T>> path)
@@ -131,7 +145,8 @@
 			    this.CompareHierarchy(this._selectedValue, value) != HierarchicalResult.Current)
 			{
 				await this.LookupAsync(value, RecrusiveSearch<VM, T>.LoadSubentriesIfNotLoaded,
-								SetSelected<VM, T>.WhenSelected, SetChildSelected<VM, T>.ToSelectedChild);
+								SetSelected<VM, T>.WhenSelected, SetChildSelected<VM, T>.ToSelectedChild, 
+                                LoadSubEntries<VM,T>.WhenSelected(UpdateMode.Replace, false, null));
 			}
 		}
 
@@ -173,6 +188,10 @@
 			}
 		}
 
+		/// <summary>
+		/// Method is executed when the user clicks the RootDropDown button.
+		/// </summary>
+		/// <param name="path"></param>
 		private void updateRootItems(Stack<ITreeSelector<VM, T>> path = null)
 		{
 			////if (_rootItems == null)
@@ -190,7 +209,8 @@
 				this._rootItems.Add(default(VM)); // Separator
 			}
 
-			this.updateRootItemsAsync(this, this._rootItems, 1);
+			// Get all items for display in the root drop down list
+			AsyncUtils.RunAsync(() => this.updateRootItemsAsync(this, this._rootItems, 1));
 		}
 		#endregion
 	}

@@ -10,6 +10,7 @@
 	using Breadcrumb.Utils;
 	using Breadcrumb.Viewmodels.Base;
 	using Breadcrumb.ViewModels.Interfaces;
+	using BreadcrumbLib.Utils;
 
 	public class EntriesHelperViewModel<VM> : NotifyPropertyChanged, IEntriesHelper<VM>
 	{
@@ -31,24 +32,48 @@
 		#endregion fields
 
 		#region constructors
+		/// <summary>
+		/// Class constructor
+		/// </summary>
+		/// <param name="loadSubEntryFunc"></param>
 		public EntriesHelperViewModel(Func<bool, object, Task<IEnumerable<VM>>> loadSubEntryFunc)
 		{
 			this._loadSubEntryFunc = loadSubEntryFunc;
 
 			this.All = new FastObservableCollection<VM>();
 			this.All.Add(default(VM));
+
+			this.CancelCommand = new RelayCommand(obj =>
+			{
+				var token = _lastCancellationToken;
+
+				if (token != null)
+					token.Cancel();
+			});
 		}
 
+		/// <summary>
+		/// Class constructor
+		/// </summary>
+		/// <param name="loadSubEntryFunc"></param>
 		public EntriesHelperViewModel(Func<bool, Task<IEnumerable<VM>>> loadSubEntryFunc)
 			: this((b, __) => loadSubEntryFunc(b))
 		{
 		}
 
+		/// <summary>
+		/// Class constructor
+		/// </summary>
+		/// <param name="loadSubEntryFunc"></param>
 		public EntriesHelperViewModel(Func<Task<IEnumerable<VM>>> loadSubEntryFunc)
 			: this(_ => loadSubEntryFunc())
 		{
 		}
 
+		/// <summary>
+		/// Class constructor
+		/// </summary>
+		/// <param name="loadSubEntryFunc"></param>
 		public EntriesHelperViewModel(params VM[] entries)
 		{
 			this._isLoaded = true;
@@ -72,6 +97,9 @@
 			set { this._clearBeforeLoad = value; }
 		}
 
+		/// <summary>
+		/// Gets whether a breadcrumb entry is expanded or not.
+		/// </summary>
 		public bool IsExpanded
 		{
 			get
@@ -81,14 +109,20 @@
 
 			set
 			{
-				if (value && !this._isExpanded)
-					this.LoadAsync();
+				if (this._isExpanded != value)
+				{
+					////if (value && !this._isExpanded)
+					////	AsyncUtils.RunAsync(() => this.LoadAsync());
 
-				this._isExpanded = value;
-				this.NotifyOfPropertyChanged(() => this.IsExpanded);
+					this._isExpanded = value;
+					this.NotifyOfPropertyChanged(() => this.IsExpanded);
+				}
 			}
 		}
 
+		/// <summary>
+		/// Gets whether current items are loaded or not.
+		/// </summary>
 		public bool IsLoaded
 		{
 			get
@@ -96,13 +130,19 @@
 				return this._isLoaded;
 			}
 
-			set
+			private set
 			{
-				this._isLoaded = value;
-				this.NotifyOfPropertyChanged(() => this.IsLoaded);
+				if (this._isLoaded != value)
+				{
+					this._isLoaded = value;
+					this.NotifyOfPropertyChanged(() => this.IsLoaded);
+				}
 			}
 		}
 
+		/// <summary>
+		/// Gets whether the control is currently loading items or not.
+		/// </summary>
 		public bool IsLoading
 		{
 			get
@@ -110,11 +150,23 @@
 				return this._isLoading;
 			}
 
-			set
+			private set
 			{
-				this._isLoading = value;
-				this.NotifyOfPropertyChanged(() => this.IsLoading);
+				if (this._isLoading != value)
+				{
+					this._isLoading = value;
+					this.NotifyOfPropertyChanged(() => this.IsLoading);
+				}
 			}
+		}
+
+		/// <summary>
+		/// Gets the command that can cancel the current LoadSync() operation.
+		/// </summary>
+		public RelayCommand CancelCommand
+		{
+			get;
+			private set;
 		}
 
 		public DateTime LastRefreshTimeUtc
@@ -169,9 +221,12 @@
 			}
 		}
 
-		public async Task<IEnumerable<VM>> LoadAsync(UpdateMode updateMode = UpdateMode.Replace, bool force = false, object parameter = null)
+		public async Task<IEnumerable<VM>> LoadAsync(UpdateMode updateMode = UpdateMode.Replace,
+		                                             bool force = false,
+																								 object parameter = null)
 		{
-			if (this._loadSubEntryFunc != null) // Ignore if contructucted using entries but not entries func
+			// Ignore if constructed using entries but not entries func
+			if (this._loadSubEntryFunc != null)
 			{
 				this._lastCancellationToken.Cancel(); // Cancel previous load.
 
@@ -200,7 +255,7 @@
 									this._lastRefreshTimeUtc = DateTime.UtcNow;
 								}
 							},
-							
+
 							this._lastCancellationToken, scheduler);
 						}
 						catch ////(InvalidOperationException ex)
@@ -220,11 +275,11 @@
 			{
 				case UpdateMode.Update:
 					this.updateEntries(viewModels);
-				break;
-				
+					break;
+
 				case UpdateMode.Replace:
 					this.setEntries(viewModels);
-				break;
+					break;
 
 				default:
 					throw new NotSupportedException("UpdateMode");
