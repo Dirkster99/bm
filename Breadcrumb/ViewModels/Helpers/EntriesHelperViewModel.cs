@@ -6,11 +6,11 @@
 	using System.Linq;
 	using System.Threading;
 	using System.Threading.Tasks;
+	using System.Windows.Input;
 	using Breadcrumb.Defines;
 	using Breadcrumb.Utils;
 	using Breadcrumb.Viewmodels.Base;
 	using Breadcrumb.ViewModels.Interfaces;
-	using BreadcrumbLib.Utils;
 
 	public class EntriesHelperViewModel<VM> : NotifyPropertyChanged, IEntriesHelper<VM>
 	{
@@ -163,7 +163,7 @@
 		/// <summary>
 		/// Gets the command that can cancel the current LoadSync() operation.
 		/// </summary>
-		public RelayCommand CancelCommand
+		public ICommand CancelCommand
 		{
 			get;
 			private set;
