@@ -34,10 +34,11 @@
                 <ColumnDefinition Width="*" />
               </Grid.ColumnDefinitions>
 
+							<!-- Visibility="{Binding IsProgressbarVisible, RelativeSource={RelativeSource TemplatedParent}, Converter={StaticResource btv}}"-->
               <ProgressBar Background="Transparent" Foreground="{DynamicResource {x:Static SystemColors.HotTrackBrushKey}}"
                            IsIndeterminate="{Binding IsIndeterminate, RelativeSource={RelativeSource TemplatedParent}}" Opacity="0.5" Grid.ColumnSpan="2"
-                           Visibility="{Binding IsProgressbarVisible, RelativeSource={RelativeSource TemplatedParent}, Converter={StaticResource btv}}"
                            Value="{Binding Progress, RelativeSource={RelativeSource TemplatedParent}}"
+													 Visibility="Hidden"
                            BorderBrush="Transparent" BorderThickness="0"/>
 
               <!-- Display a dropdown list at the left most button in the control -->

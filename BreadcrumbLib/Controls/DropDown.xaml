@@ -58,7 +58,7 @@
           <ControlTemplate.Triggers>
             <!-- Show the normal arrow right button when there is nothing else defined in this Header -->
             <Trigger Property="Header" Value="{x:Null}">
-              <Setter TargetName="PART_ToggleButton" Property="Template" Value="{DynamicResource BasicArrowButton}" />
+              <Setter TargetName="PART_ToggleButton" Property="Template" Value="{StaticResource BasicArrowButton}" />
             </Trigger>
             <Trigger Property="Content" Value="{x:Null}">
               <Setter Property="Visibility" Value="Collapsed" />
