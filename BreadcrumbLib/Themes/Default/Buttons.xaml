@@ -5,6 +5,7 @@
   xmlns:ctrls="clr-namespace:BreadcrumbLib.Controls"
   xmlns:bc="clr-namespace:BreadcrumbLib.BaseControls"
   xmlns:conv="clr-namespace:BreadcrumbLib.Converters"
+  xmlns:themes="clr-namespace:BreadcrumbLib.Themes"
 >
 
   <ResourceDictionary.MergedDictionaries>
@@ -14,10 +15,10 @@
 
   <ControlTemplate x:Key="BaseToggleButton" TargetType="{x:Type ToggleButton}">
     <ctrls:HotTrack IsSelected="{TemplateBinding IsChecked}"
-				            SelectedBrush="{DynamicResource HotTrack_SelectedBrush}"
+				            SelectedBrush="{DynamicResource {x:Static themes:ResourceKeys.HotTrack_SelectedBrush}}"
 										BackgroundBrush="{DynamicResource HotTrack_BackgroundBrush}"
 			              HighlightBrush="{DynamicResource HotTrack_HighlightBrush}"
-			              ThreeDStyle="{DynamicResource ThreeDStyleBrushes}"
+			              ThreeDStyle="{DynamicResource {x:Static themes:ResourceKeys.ThreeDStyleBrushes}}"
 			              SelectedBorderBrush="{DynamicResource {x:Static SystemColors.ActiveBorderBrushKey}}"
 										BorderThickness="{TemplateBinding BorderThickness}"
 										>
@@ -40,8 +41,8 @@
 
       <Grid>
         <Path x:Name="path"
-						  Fill="{DynamicResource ArrowFillForeground}"
-						  Stroke="{DynamicResource ArrowBorderForeground}"
+						  Fill="{DynamicResource {x:Static themes:ResourceKeys.ArrowFillForeground}}"
+						  Stroke="{DynamicResource {x:Static themes:ResourceKeys.ArrowBorderForeground}}"
               Data="{StaticResource NormalArrow}"
               HorizontalAlignment="Center"
               VerticalAlignment="Center" 
@@ -53,13 +54,13 @@
     <ControlTemplate.Triggers>
       <Trigger Property="IsPressed" Value="True">
         <Setter TargetName="path" Property="Data" Value="{StaticResource ExpandedArrow}"/>
-        <Setter TargetName="path" Property="Fill" Value="{DynamicResource ArrowFillCheckedForeground}" />
-        <Setter TargetName="path" Property="Fill" Value="{DynamicResource ArrowBorderCheckedForeground}" />
+				<Setter TargetName="path" Property="Fill" Value="{DynamicResource {x:Static themes:ResourceKeys.ArrowFillCheckedForeground}}" />
+				<Setter TargetName="path" Property="Fill" Value="{DynamicResource {x:Static themes:ResourceKeys.ArrowBorderCheckedForeground}}" />
       </Trigger>
       <Trigger Property="IsChecked" Value="True">
         <Setter TargetName="path" Property="Data" Value="{StaticResource ExpandedArrow}"/>
-        <Setter TargetName="path" Property="Fill" Value="{DynamicResource ArrowFillCheckedForeground}" />
-        <Setter TargetName="path" Property="Fill" Value="{DynamicResource ArrowBorderCheckedForeground}" />
+				<Setter TargetName="path" Property="Fill" Value="{DynamicResource {x:Static themes:ResourceKeys.ArrowFillCheckedForeground}}" />
+				<Setter TargetName="path" Property="Fill" Value="{DynamicResource {x:Static themes:ResourceKeys.ArrowBorderCheckedForeground}}" />
       </Trigger>
       <MultiTrigger>
         <MultiTrigger.Conditions>
@@ -67,8 +68,8 @@
           <Condition Property="IsChecked" Value="False" />
         </MultiTrigger.Conditions>
         <MultiTrigger.Setters>
-          <Setter TargetName="path" Property="Fill"   Value="{DynamicResource ArrowFillMouseOverForeground}" />
-          <Setter TargetName="path" Property="Stroke" Value="{DynamicResource ArrowBorderMouseOverForeground}" />
+					<Setter TargetName="path" Property="Fill"   Value="{DynamicResource {x:Static themes:ResourceKeys.ArrowFillMouseOverForeground}}" />
+					<Setter TargetName="path" Property="Stroke" Value="{DynamicResource {x:Static themes:ResourceKeys.ArrowBorderMouseOverForeground}}" />
         </MultiTrigger.Setters>
       </MultiTrigger>
     </ControlTemplate.Triggers>

@@ -6,7 +6,8 @@
     >
   <ResourceDictionary.MergedDictionaries>
     <ResourceDictionary Source="/BreadcrumbLib;component/Themes/Default/Buttons.xaml" />
-  </ResourceDictionary.MergedDictionaries>
+		<ResourceDictionary Source="/BreadcrumbLib;component/Themes/Default/Colors.xaml" />
+	</ResourceDictionary.MergedDictionaries>
 
   <ControlTemplate x:Key="SwitchTemplate" TargetType="{x:Type bc:Switch}">
     <ControlTemplate.Resources>

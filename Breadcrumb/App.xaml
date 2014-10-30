@@ -4,13 +4,10 @@
              StartupUri="MainWindow.xaml"
            >
 	<Application.Resources>
-		<!-- Generic -->
-		<ResourceDictionary Source="/Breadcrumb;component/Themes/Generic.xaml" />
-
-		<!-- Metro Dark
-		<ResourceDictionary Source="/Breadcrumb;component/Themes/MetroDark.xaml" />
+			<!-- Metro Dark
+			<ResourceDictionary Source="/Breadcrumb;component/Themes/MetroDark.xaml" />
  -->
-		<!-- Metro Light
+			<!-- Metro Light
 		<ResourceDictionary Source="/Breadcrumb;component/Themes/MetroLight.xaml" />
  -->
 	</Application.Resources>

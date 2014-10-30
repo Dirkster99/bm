@@ -3,14 +3,10 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
 
         xmlns:ctrls="clr-namespace:BreadcrumbLib.Controls;assembly=BreadcrumbLib"
-        xmlns:uc="clr-namespace:BreadcrumbLib.Controls.Breadcrumbs;assembly=BreadcrumbLib"
-        xmlns:bc="clr-namespace:BreadcrumbLib.BaseControls;assembly=BreadcrumbLib"
-        xmlns:conv="clr-namespace:BreadcrumbLib.Converters;assembly=BreadcrumbLib"
+        xmlns:themes="clr-namespace:BreadcrumbLib.Themes;assembly=BreadcrumbLib"
         Title="MainWindow" Height="350" Width="525"
-        
-        Background="{DynamicResource WindowBackground}"
         >
-  <Grid Background="{DynamicResource ControlBackground}" >
+	<Grid Background="{DynamicResource {x:Static themes:ResourceKeys.ControlBackground}}" >
     <Grid.RowDefinitions>
       <RowDefinition Height="Auto" />
       <RowDefinition Height="Auto" />

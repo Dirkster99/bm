@@ -21,9 +21,8 @@
 
     <ResourceDictionary Source="/BreadcrumbLib;component/controls/Breadcrumb.xaml" />
 
-    <ResourceDictionary Source="/BreadcrumbLib;component/Themes/Brushes.xaml" />
-    <ResourceDictionary Source="/BreadcrumbLib;component/Themes/Default/Colors.xaml" />
     <ResourceDictionary Source="/BreadcrumbLib;component/Themes/Default/Buttons.xaml" />
-  </ResourceDictionary.MergedDictionaries>
+		<ResourceDictionary Source="/BreadcrumbLib;component/Themes/Default/Colors.xaml" />
+	</ResourceDictionary.MergedDictionaries>
 
 </ResourceDictionary>

@@ -118,6 +118,8 @@
     <Compile Include="Defines\Strings.cs" />
     <Compile Include="Interfaces\IHierarchyHelper.cs" />
     <Compile Include="Interfaces\ISuggestSource.cs" />
+    <Compile Include="Themes\ResourceKeys.cs" />
+    <Compile Include="Themes\StaticResourceKey.cs" />
     <Compile Include="Utils\AsyncUtils.cs" />
     <Compile Include="Utils\PathExistsValidationRule.cs" />
     <Compile Include="Utils\PathHierarchyHelper.cs" />
@@ -157,10 +159,6 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="Controls\Breadcrumb.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Themes\Brushes.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>

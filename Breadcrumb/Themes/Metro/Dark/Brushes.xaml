@@ -1,7 +1,9 @@
-﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-										xmlns:sys="clr-namespace:System;assembly=mscorlib"
-										>
+﻿<ResourceDictionary
+	xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+	xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+	xmlns:sys="clr-namespace:System;assembly=mscorlib"
+	xmlns:themes="clr-namespace:BreadcrumbLib.Themes;assembly=BreadcrumbLib"
+  >
 
 	<!-- default accent colors and brushes -->
 	<Color x:Key="AccentColor">#1ba1e2</Color>
@@ -10,33 +12,31 @@
 	<!-- SolidColorBrush x:Key="SystemButtonMouseOverBackgroundColor" Color="#20FFFFFF" / -->
 
 	<!-- MetroDark Theme -->
-	<SolidColorBrush x:Key="WindowBackground" Color="Gray" />
+	<SolidColorBrush x:Key="{x:Static themes:ResourceKeys.ControlBackground}" Color="Black" />
 
-	<SolidColorBrush x:Key="ControlBackground" Color="Black" />
+	<SolidColorBrush x:Key="{x:Static themes:ResourceKeys.ForegroundTextBrush}" Color="White" />
+	<SolidColorBrush x:Key="{x:Static themes:ResourceKeys.ControlForeground}" Color="White" />
+	<SolidColorBrush x:Key="{x:Static themes:ResourceKeys.ControlBorderBrush}" Color="Gray" />
 
-	<SolidColorBrush x:Key="ForegroundTextBrush" Color="White" />
-	<SolidColorBrush x:Key="ControlForeground" Color="White" />
-	<SolidColorBrush x:Key="ControlBorderBrush" Color="Gray" />
+	<SolidColorBrush x:Key="{x:Static themes:ResourceKeys.ArrowBorderForeground}" Color="#FF999999" />
+	<SolidColorBrush x:Key="{x:Static themes:ResourceKeys.ArrowFillForeground}" Color="Transparent" />
 
-	<SolidColorBrush x:Key="ArrowBorderForeground" Color="#FF999999" />
-	<SolidColorBrush x:Key="ArrowFillForeground" Color="Transparent" />
+	<SolidColorBrush x:Key="{x:Static themes:ResourceKeys.ArrowFillMouseOverForeground}" Color="{DynamicResource AccentColor}" />
+	<SolidColorBrush x:Key="{x:Static themes:ResourceKeys.ArrowBorderMouseOverForeground}" Color="{DynamicResource AccentColor}" />
 
-	<SolidColorBrush x:Key="ArrowFillMouseOverForeground" Color="{DynamicResource AccentColor}" />
-	<SolidColorBrush x:Key="ArrowBorderMouseOverForeground" Color="{DynamicResource AccentColor}" />
+	<SolidColorBrush x:Key="{x:Static themes:ResourceKeys.ArrowFillCheckedForeground}" Color="White" />
+	<SolidColorBrush x:Key="{x:Static themes:ResourceKeys.ArrowBorderCheckedForeground}" Color="White" />
 
-	<SolidColorBrush x:Key="ArrowFillCheckedForeground" Color="White" />
-  <SolidColorBrush x:Key="ArrowBorderCheckedForeground" Color="White" />
-
-  <SolidColorBrush x:Key="ButtonSelectedColor"  Color="White"  />
-  <SolidColorBrush x:Key="ButtonBackgoundColor" Color="White" />
+	<SolidColorBrush x:Key="{x:Static themes:ResourceKeys.ButtonSelectedColor}"  Color="White"  />
+	<SolidColorBrush x:Key="{x:Static themes:ResourceKeys.ButtonBackgoundColor}" Color="White" />
 
 	<!-- Decide whether styling is using a 3D depth effect or not -->
-	<sys:Boolean x:Key="ThreeDStyleBrushes">False</sys:Boolean>
-	<SolidColorBrush x:Key="HotTrack_SelectedBrush"   Color="#25FFFFFF"/>
-	<SolidColorBrush x:Key="HotTrack_BackgroundBrush" Color="#25FFFFFF"/>
-	<SolidColorBrush x:Key="HotTrack_HighlightBrush"  Color="#253e3e40" />
+	<sys:Boolean x:Key="{x:Static themes:ResourceKeys.ThreeDStyleBrushes}">False</sys:Boolean>
+	<SolidColorBrush x:Key="{x:Static themes:ResourceKeys.HotTrack_SelectedBrush}"   Color="#25FFFFFF"/>
+	<SolidColorBrush x:Key="{x:Static themes:ResourceKeys.HotTrack_BackgroundBrush}" Color="#25FFFFFF"/>
+	<SolidColorBrush x:Key="{x:Static themes:ResourceKeys.HotTrack_HighlightBrush}"  Color="#253e3e40" />
 
   <!-- This color is applied to the drop down button (Hottrack) when it is selected and the drop down is open -->
-  <SolidColorBrush x:Key="OpenDropDownButton_Background"  Color="{DynamicResource AccentColor}" />
+	<SolidColorBrush x:Key="{x:Static themes:ResourceKeys.OpenDropDownButton_Background}"  Color="{DynamicResource AccentColor}" />
 
 </ResourceDictionary>

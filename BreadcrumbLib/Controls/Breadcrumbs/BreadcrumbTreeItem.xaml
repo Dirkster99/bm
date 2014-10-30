@@ -6,20 +6,22 @@
     xmlns:bc="clr-namespace:BreadcrumbLib.BaseControls"
     xmlns:uc="clr-namespace:BreadcrumbLib.Controls.Breadcrumbs"
     xmlns:conv="clr-namespace:BreadcrumbLib.Converters"
+    xmlns:themes="clr-namespace:BreadcrumbLib.Themes"
  >
 
   <ResourceDictionary.MergedDictionaries>
     <ResourceDictionary Source="/BreadcrumbLib;component/Themes/Default/Colors.xaml" />
     <ResourceDictionary Source="/BreadcrumbLib;component/Themes/Default/Geometry.xaml" />
     <ResourceDictionary Source="/BreadcrumbLib;component/Themes/Default/Buttons.xaml" />
-  </ResourceDictionary.MergedDictionaries>
+		<ResourceDictionary Source="/BreadcrumbLib;component/Themes/Default/Colors.xaml" />
+	</ResourceDictionary.MergedDictionaries>
 
   <!-- x:Key="BreadcrumbTreeItemStyle"
          This is now a Default Style which is loaded through Themes/Generic.xaml via style key propoerty registered in static constructor -->
   <Style TargetType="{x:Type uc:BreadcrumbTreeItem}">
     <Setter Property="Background" Value="Transparent"/>
     <Setter Property="BorderThickness" Value="1" />
-    <Setter Property="BorderBrush" Value="{DynamicResource ControlBorderBrush}" />
+		<Setter Property="BorderBrush" Value="{DynamicResource {x:Static themes:ResourceKeys.ControlBorderBrush}}" />
     <Setter Property="OverflowedItemContainerStyle" Value="{Binding OverflowedItemContainerStyle, RelativeSource={RelativeSource AncestorType={x:Type uc:BreadcrumbTree}}}" />
     <!--<Setter Property="FocusVisualStyle" Value="{StaticResource TreeViewItemFocusVisual}"/>-->
     <Setter Property="Padding" Value="1,0,0,0"/>
@@ -84,7 +86,7 @@
                                  BorderThickness="1,0,0,0"
                                  SelectedBorderBrush="Transparent" 
                                  IsSelected="{Binding IsExpanded, Mode=TwoWay, RelativeSource={RelativeSource TemplatedParent}}"
-                                 SelectedBrush="{DynamicResource OpenDropDownButton_Background}"
+                                 SelectedBrush="{DynamicResource {x:Static themes:ResourceKeys.OpenDropDownButton_Background}}"
                                  Visibility="{Binding HasItems, RelativeSource={RelativeSource TemplatedParent}, Converter={StaticResource btvc}}"
                                 >
                   <ctrls:DropDownList x:Name="PART_Toggle" ItemsSource="{TemplateBinding ItemsSource}"

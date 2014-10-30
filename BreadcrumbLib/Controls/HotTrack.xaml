@@ -5,18 +5,22 @@
     xmlns:ctrls="clr-namespace:BreadcrumbLib.Controls"
     xmlns:bc="clr-namespace:BreadcrumbLib.Controls"
     xmlns:conv="clr-namespace:BreadcrumbLib.Converters"
+
+    xmlns:themes="clr-namespace:BreadcrumbLib.Themes"
     >
 	<ResourceDictionary.MergedDictionaries>
+		<ResourceDictionary Source="/BreadcrumbLib;component/Themes/Default/Colors.xaml" />
+
 		<ResourceDictionary>
 			<conv:BoolToVisibilityCollapsedConverter x:Key="btvc" />
 		</ResourceDictionary>
 	</ResourceDictionary.MergedDictionaries>
 
 	<Style TargetType="{x:Type ctrls:HotTrack}">
-		<Setter Property="SelectedBrush" Value="{DynamicResource HotTrack_SelectedBrush}" />
-		<Setter Property="BackgroundBrush" Value="{DynamicResource HotTrack_BackgroundBrush}" />
-		<Setter Property="HighlightBrush" Value="{DynamicResource HotTrack_HighlightBrush}" />
-		<Setter Property="ThreeDStyle" Value="{DynamicResource ThreeDStyleBrushes}" />
+		<Setter Property="SelectedBrush" Value="{DynamicResource {x:Static themes:ResourceKeys.HotTrack_SelectedBrush}}" />
+		<Setter Property="BackgroundBrush" Value="{DynamicResource {x:Static themes:ResourceKeys.HotTrack_BackgroundBrush}}" />
+		<Setter Property="HighlightBrush" Value="{DynamicResource {x:Static themes:ResourceKeys.HotTrack_HighlightBrush}}" />
+		<Setter Property="ThreeDStyle" Value="{DynamicResource {x:Static themes:ResourceKeys.ThreeDStyleBrushes}}" />
 		<Setter Property="Template">
 
 			<Setter.Value>
@@ -132,10 +136,10 @@
 							<Setter TargetName="borderCurrent" Property="BorderBrush"
 							        Value="{Binding RelativeSource={RelativeSource AncestorType={x:Type ctrls:HotTrack},Mode=FindAncestor}, Path=SelectedBorderBrush}" />
 
-							<!--<Setter TargetName="PART_Selected"   Property="Fill" Value="{DynamicResource ButtonSelectedColor}" />
-							<Setter TargetName="PART_Background" Property="Fill" Value="{DynamicResource ButtonBackgoundColor}" />
-							<Setter TargetName="PART_Highlight" Property="Fill" Value="{DynamicResource ButtonBackgoundColor}" />
-							<Setter TargetName="PART_HotTrackGrid" Property="Background" Value="{DynamicResource ButtonSelectedColor}" />-->
+							<!--<Setter TargetName="PART_Selected"   Property="Fill" Value="{DynamicResource {x:Static themes:ResourceKeys.ButtonSelectedColor}}" />
+							<Setter TargetName="PART_Background" Property="Fill" Value="{DynamicResource {x:Static themes:ResourceKeys.ButtonBackgoundColor}}" />
+							<Setter TargetName="PART_Highlight" Property="Fill" Value="{DynamicResource {x:Static themes:ResourceKeys.ButtonBackgoundColor}}" />
+							<Setter TargetName="PART_HotTrackGrid" Property="Background" Value="{DynamicResource {x:Static themes:ResourceKeys.ButtonSelectedColor}}" />-->
 						</Trigger>
 
 						<Trigger Property="IsMouseOver" Value="True">

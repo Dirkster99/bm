@@ -2,16 +2,18 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
 
     xmlns:ctrls="clr-namespace:BreadcrumbLib.Controls"
+		xmlns:themes="clr-namespace:BreadcrumbLib.Themes"
     >
   <ResourceDictionary.MergedDictionaries>
     <ResourceDictionary Source="/BreadcrumbLib;component/Themes/Default/Buttons.xaml" />
     <ResourceDictionary Source="/BreadcrumbLib;component/Themes/Default/ComboboxNullAsSeparatorStyle.xaml" />
-  </ResourceDictionary.MergedDictionaries>
+		<ResourceDictionary Source="/BreadcrumbLib;component/Themes/Default/Colors.xaml" />
+	</ResourceDictionary.MergedDictionaries>
 
   <Style x:Key="{x:Type ctrls:DropDownList}" TargetType="{x:Type ctrls:DropDownList}">
-    <Setter Property="Background" Value="{DynamicResource ControlBackground}" />
-    <Setter Property="Foreground" Value="{DynamicResource ControlForeground}" />
-    <Setter Property="BorderBrush" Value="{DynamicResource ControlBorderBrush}" />
+		<Setter Property="Background" Value="{DynamicResource {x:Static themes:ResourceKeys.ControlBackground}}" />
+		<Setter Property="Foreground" Value="{DynamicResource {x:Static themes:ResourceKeys.ControlForeground}}" />
+		<Setter Property="BorderBrush" Value="{DynamicResource {x:Static themes:ResourceKeys.ControlBorderBrush}}" />
     <Setter Property="HeaderButtonTemplate" Value="{StaticResource BaseToggleButton}" />
     <Setter Property="BorderThickness" Value="1" />
     <Setter Property="Template">
