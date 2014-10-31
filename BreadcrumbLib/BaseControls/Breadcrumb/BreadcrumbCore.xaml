@@ -9,7 +9,7 @@
     xmlns:conv="clr-namespace:BreadcrumbLib.Converters"
     >
   <ResourceDictionary.MergedDictionaries>
-    <ResourceDictionary Source="/BreadcrumbLib;component/Themes/Default/Colors.xaml" />
+    <ResourceDictionary Source="/BreadcrumbLib;component/Themes/Default/Brushes.xaml" />
     <ResourceDictionary Source="/BreadcrumbLib;component/Themes/Default/Geometry.xaml" />
     <ResourceDictionary Source="/BreadcrumbLib;component/Themes/Default/Buttons.xaml" />
   </ResourceDictionary.MergedDictionaries>

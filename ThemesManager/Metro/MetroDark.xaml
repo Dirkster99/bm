@@ -1,0 +1,11 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
+  <ResourceDictionary.MergedDictionaries>
+    <!-- Metro Dark -->
+		<ResourceDictionary Source="/Themes;component/Metro/Dark/ModernUI.dark.xaml" />
+    <ResourceDictionary Source="/BreadcrumbLib;component/Themes/Metro/MetroDarkBrushes.xaml" />
+    
+    <ResourceDictionary Source="/FirstFloor.ModernUI;component/Assets/ScrollBar.xaml" /> 
+  </ResourceDictionary.MergedDictionaries>
+</ResourceDictionary>

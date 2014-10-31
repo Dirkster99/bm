@@ -9,7 +9,7 @@
                     >
   <ResourceDictionary.MergedDictionaries>
     <ResourceDictionary Source="/BreadcrumbLib;component/Themes/Default/Buttons.xaml" />
-		<ResourceDictionary Source="/BreadcrumbLib;component/Themes/Default/Colors.xaml" />
+    <ResourceDictionary Source="/BreadcrumbLib;component/Themes/Default/Brushes.xaml" />
 	</ResourceDictionary.MergedDictionaries>
 
   <ControlTemplate x:Key="BreadcrumbTemplate" TargetType="{x:Type uc:BreadcrumbBase}">

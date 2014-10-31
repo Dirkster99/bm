@@ -11,7 +11,7 @@
     <ResourceDictionary Source="/BreadcrumbLib;component/Themes/Default/Geometry.xaml" />
     <ResourceDictionary Source="/BreadcrumbLib;component/Themes/Default/ComboboxNullAsSeparatorStyle.xaml" />
     <ResourceDictionary Source="/BreadcrumbLib;component/Controls/Breadcrumbs/BreadcrumbTreeItem.xaml" />
-		<ResourceDictionary Source="/BreadcrumbLib;component/Themes/Default/Colors.xaml" />
+    <ResourceDictionary Source="/BreadcrumbLib;component/Themes/Default/Brushes.xaml" />
 	</ResourceDictionary.MergedDictionaries>
 
   <Style TargetType="{x:Type ctrls:Breadcrumb}">
@@ -83,7 +83,7 @@
                   </Style>
                 </uc:BreadcrumbTree.ItemContainerStyle>
 
-                <!-- Each element in the drop down list has an icon and a textual name -->
+                <!-- Each element in the vertical drop down list has an icon and a textual name -->
                 <uc:BreadcrumbTree.MenuItemTemplate>
                   <DataTemplate>
                     <Grid>
@@ -93,18 +93,24 @@
                       </Grid.ColumnDefinitions>
 
                       <Image Source="{Binding Icon}" Margin="3,0" DockPanel.Dock="Left" />
-                      <TextBlock Text="{Binding Header}" VerticalAlignment="Center" Grid.Column="1" />
+                      <TextBlock Text="{Binding Header}"
+                                 Foreground="{DynamicResource {x:Static themes:ResourceKeys.ForegroundTextBrush}}"
+                                 VerticalAlignment="Center"
+                                 Grid.Column="1" />
                     </Grid>
                   </DataTemplate>
                 </uc:BreadcrumbTree.MenuItemTemplate>
 
                 <uc:BreadcrumbTree.ItemTemplate>
-                  <!-- Display of path elements within the Breadcrumb tree control -->
+                  <!-- Display of path elements within the HORIZONTAL Breadcrumb tree control
+                       eg "C:\" |> "Program Files" "|>" 
+                  -->
                   <HierarchicalDataTemplate ItemsSource="{Binding Entries.All}">
 										<Border Background="{DynamicResource {x:Static themes:ResourceKeys.ControlBackground}}" BorderThickness="0">
                       <TextBlock Text="{Binding Header}"
                                  VerticalAlignment="Center"
-                                 Foreground="{DynamicResource {x:Static themes:ResourceKeys.ControlForeground}}" />
+                                 Foreground="{DynamicResource {x:Static themes:ResourceKeys.ForegroundTextBrush}}"
+                                 />
                     </Border>
                   </HierarchicalDataTemplate>
                 </uc:BreadcrumbTree.ItemTemplate>

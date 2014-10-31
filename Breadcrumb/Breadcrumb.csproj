@@ -62,12 +62,6 @@
     <Reference Include="ExifLib">
       <HintPath>..\packages\ExifLib.1.6.3.0\lib\net45\ExifLib.dll</HintPath>
     </Reference>
-    <Reference Include="FirstFloor.ModernUI">
-      <HintPath>..\01_Libs\Mui\FirstFloor.ModernUI.dll</HintPath>
-    </Reference>
-    <Reference Include="Microsoft.Windows.Shell">
-      <HintPath>..\01_Libs\Mui\Microsoft.Windows.Shell.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
@@ -132,6 +126,7 @@
     <Compile Include="ViewModels\TreeSelectors\SearchNextLevel.cs" />
     <Compile Include="ViewModels\TreeSelectors\SearchNextUsingReverseLookup.cs" />
     <Compile Include="ViewModels\TreeSelectors\TreeSelectorViewModel.cs" />
+    <Compile Include="Views\BindingProxy.cs" />
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -144,38 +139,6 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Page Include="Themes\MetroDark.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Themes\MetroLight.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Themes\Metro\Light\Brushes.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Themes\Metro\Light\Colors.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Themes\Metro\Light\ModernUI.light.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Themes\Metro\Dark\Brushes.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Themes\Metro\Dark\Colors.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Themes\Metro\Dark\ModernUI.Dark.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs">
@@ -211,6 +174,10 @@
       <Project>{15bbe1fb-d9e1-4b86-be6c-b7d04a1a79f0}</Project>
       <Name>BreadcrumbLib</Name>
     </ProjectReference>
+    <ProjectReference Include="..\ThemesManager\Themes.csproj">
+      <Project>{6570ee8b-24c8-4025-b382-247ff6a8ea94}</Project>
+      <Name>Themes</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Resource Include="SystemIO\folder.ico" />
@@ -224,6 +191,9 @@
     </PropertyGroup>
     <Error Condition="!Exists('$(SolutionDir)\.nuget\NuGet.targets')" Text="$([System.String]::Format('$(ErrorText)', '$(SolutionDir)\.nuget\NuGet.targets'))" />
   </Target>
+  <PropertyGroup>
+    <PreBuildEvent>Copy /Y "$(SolutionDir)01_Libs\MUI\*.dll" "$(TargetDir)"</PreBuildEvent>
+  </PropertyGroup>
   <!-- Import Project="$(ProgramFiles)\MSBuild\StyleCop\v4.7\StyleCop.Targets" / -->
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

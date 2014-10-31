@@ -2,8 +2,11 @@
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
 
+        xmlns:bindLocal="clr-namespace:Breadcrumb.Views"
+
         xmlns:ctrls="clr-namespace:BreadcrumbLib.Controls;assembly=BreadcrumbLib"
         xmlns:themes="clr-namespace:BreadcrumbLib.Themes;assembly=BreadcrumbLib"
+
         Title="MainWindow" Height="350" Width="525"
         >
 	<Grid Background="{DynamicResource {x:Static themes:ResourceKeys.ControlBackground}}" >
@@ -12,6 +15,27 @@
       <RowDefinition Height="Auto" />
       <RowDefinition Height="Auto" />
     </Grid.RowDefinitions>
+
+		<Menu Grid.Row="0">
+			<Menu.Resources>
+				<!-- Use a proxy to bind items to root object of this collection -->
+				<bindLocal:BindingProxy  x:Key="MenuDataContextProxy" Data="{Binding}" />
+			</Menu.Resources>
+				<MenuItem Header="View" ItemsSource="{Binding Path=Themes.ListAllThemes}">
+					<MenuItem.ItemContainerStyle>
+						<Style TargetType="MenuItem">
+							<Setter Property="Header" Value="{Binding HlThemeName}" />
+							<!-- Setter Property="IsCheckable" Value="True" / -->
+							<Setter Property="IsChecked" Value="{Binding IsSelected, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" />
+						<Setter Property="Command" Value="{Binding Path=Data.ViewThemeCommand, Source={StaticResource MenuDataContextProxy}}" />
+							<Setter Property="CommandParameter" Value="{Binding HlThemeName}" />
+							<Setter Property="ToolTipService.ShowOnDisabled" Value="True" />
+							<Setter Property="ToolTip" Value="{Binding RelativeSource={RelativeSource Self}, Path=Command.Text}"/>
+							<Setter Property="Margin" Value="3,3,3,0" />
+						</Style>
+					</MenuItem.ItemContainerStyle>
+				</MenuItem>
+		</Menu>
 
     <ctrls:Breadcrumb DataContext="{Binding ExTest}" Grid.Row="1" />
 

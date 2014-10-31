@@ -9,7 +9,7 @@
 >
 
   <ResourceDictionary.MergedDictionaries>
-    <ResourceDictionary Source="/BreadcrumbLib;component/Themes/Default/Colors.xaml" />
+    <ResourceDictionary Source="/BreadcrumbLib;component/Themes/Default/Brushes.xaml" />
     <ResourceDictionary Source="/BreadcrumbLib;component/Themes/Default/Geometry.xaml" />
   </ResourceDictionary.MergedDictionaries>
 
@@ -23,8 +23,8 @@
 										BorderThickness="{TemplateBinding BorderThickness}"
 										>
       <ContentPresenter HorizontalAlignment="{TemplateBinding HorizontalAlignment}" 
-                              VerticalAlignment="Center" Grid.RowSpan="2" />
-
+                        VerticalAlignment="Center"
+                        Grid.RowSpan="2" />
     </ctrls:HotTrack>
   </ControlTemplate>
 
@@ -86,7 +86,8 @@
     <ctrls:HotTrack x:Name="HotTrack" SelectedBorderBrush="{TemplateBinding BorderBrush}"
                 Padding="{TemplateBinding Padding}" Background="Transparent" 
                 SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"
-                BorderThickness="{TemplateBinding BorderThickness}">
+                BorderThickness="{TemplateBinding BorderThickness}"
+                    >
       <ContentPresenter HorizontalAlignment="{TemplateBinding HorizontalAlignment}" 
                               VerticalAlignment="{TemplateBinding VerticalAlignment}" />
     </ctrls:HotTrack>

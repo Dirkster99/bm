@@ -9,8 +9,8 @@
 	<!--http://web.archive.org/web/20071210050943/http://www.brethorsting.com/resources/syscolors.html-->
 	<!--http://msdn.microsoft.com/en-us/library/aa974176.aspx#fonts-->
 
-	<Color x:Key="{x:Static SystemColors.ControlLightColorKey}">White</Color>
-	<Color x:Key="{x:Static SystemColors.ActiveCaptionColorKey}">Azure</Color>
+	<!-- Color x:Key="{x:Static SystemColors.ControlLightColorKey}">White</Color -->
+	<!-- Color x:Key="{x:Static SystemColors.ActiveCaptionColorKey}">Azure</Color -->
 	<!--Control colors.-->
 	<!-- Color x:Key="WindowColor">#FFE8EDF9</Color -->
 	<!-- Color x:Key="ContentAreaColorLight">#FFC5CBF9</Color -->
@@ -23,9 +23,9 @@
 	<!-- Color x:Key="SelectedBackgroundColor">#FF9BDDFB</Color -->
 	<!-- Color x:Key="SelectedUnfocusedColor">#FFDDDDDD</Color -->
 
-	<Color x:Key="ControlLightColor">White</Color>
+	<!-- Color x:Key="ControlLightColor">White</Color -->
 	<!-- Color x:Key="ControlMediumColor">Wheat</Color -->
-	<Color x:Key="ControlDarkColor">#FF211AA9</Color>
+	<!-- Color x:Key="ControlDarkColor">#FF211AA9</Color -->
 
 	<!-- Color x:Key="ControlMouseOverColor">LightBlue</Color -->
 	<!-- Color x:Key="ControlPressedColor">#FF211AA9</Color -->
@@ -35,9 +35,9 @@
     <Color x:Key="GlyphMouseOver">sc#1, 0.004391443, 0.002428215, 0.242281124</Color -->
 
 	<!--Border colors-->
-	<Color x:Key="BorderLightColor">#FFCCCCCC</Color>
+	<!-- Color x:Key="BorderLightColor">#FFCCCCCC</Color -->
 	<!-- Color x:Key="BorderMediumColor">#FF888888</Color -->
-	<Color x:Key="BorderDarkColor">#FF444444</Color>
+	<!-- Color x:Key="BorderDarkColor">#FF444444</Color -->
 
 	<!-- Color x:Key="PressedBorderLightColor">#FF888888</Color -->
 	<!-- Color x:Key="PressedBorderDarkColor">#FF444444</Color -->
@@ -53,8 +53,9 @@
     <Color x:Key="SliderTrackDarkColor">#FFC5CBF9</Color>
 
     <Color x:Key="NavButtonFrameColor">#FF3843C4</Color -->
+  <SolidColorBrush x:Key="{x:Static themes:ResourceKeys.ControlBackground}" Color="White" />
 
-	<SolidColorBrush x:Key="{x:Static themes:ResourceKeys.ForegroundTextBrush}" Color="Black" />
+  <SolidColorBrush x:Key="{x:Static themes:ResourceKeys.ForegroundTextBrush}" Color="Black" />
 	<SolidColorBrush x:Key="{x:Static themes:ResourceKeys.ControlForeground}" Color="Black" />
 	<SolidColorBrush x:Key="{x:Static themes:ResourceKeys.ControlBorderBrush}" Color="Gray" />
 

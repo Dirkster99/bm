@@ -9,7 +9,7 @@
     xmlns:themes="clr-namespace:BreadcrumbLib.Themes"
     >
 	<ResourceDictionary.MergedDictionaries>
-		<ResourceDictionary Source="/BreadcrumbLib;component/Themes/Default/Colors.xaml" />
+    <ResourceDictionary Source="/BreadcrumbLib;component/Themes/Default/Brushes.xaml" />
 
 		<ResourceDictionary>
 			<conv:BoolToVisibilityCollapsedConverter x:Key="btvc" />

@@ -3,12 +3,4 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              StartupUri="MainWindow.xaml"
            >
-	<Application.Resources>
-			<!-- Metro Dark
-			<ResourceDictionary Source="/Breadcrumb;component/Themes/MetroDark.xaml" />
- -->
-			<!-- Metro Light
-		<ResourceDictionary Source="/Breadcrumb;component/Themes/MetroLight.xaml" />
- -->
-	</Application.Resources>
 </Application>

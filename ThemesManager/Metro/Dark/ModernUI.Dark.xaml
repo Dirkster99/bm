@@ -1,9 +1,5 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
-	<ResourceDictionary.MergedDictionaries>
-		<ResourceDictionary Source="Brushes.xaml" />
-	</ResourceDictionary.MergedDictionaries>
-
 	<!-- Source:
 	     https://mui.codeplex.com/SourceControl/latest#1.0/FirstFloor.ModernUI/FirstFloor.ModernUI/Assets/ModernUI.Dark.xaml
 	-->

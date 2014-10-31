@@ -10,10 +10,9 @@
  >
 
   <ResourceDictionary.MergedDictionaries>
-    <ResourceDictionary Source="/BreadcrumbLib;component/Themes/Default/Colors.xaml" />
     <ResourceDictionary Source="/BreadcrumbLib;component/Themes/Default/Geometry.xaml" />
     <ResourceDictionary Source="/BreadcrumbLib;component/Themes/Default/Buttons.xaml" />
-		<ResourceDictionary Source="/BreadcrumbLib;component/Themes/Default/Colors.xaml" />
+    <ResourceDictionary Source="/BreadcrumbLib;component/Themes/Default/Brushes.xaml" />
 	</ResourceDictionary.MergedDictionaries>
 
   <!-- x:Key="BreadcrumbTreeItemStyle"
@@ -76,11 +75,15 @@
                 <StackPanel.Resources>
                   <conv:BoolToVisibilityCollapsedConverter x:Key="btvc" />
                 </StackPanel.Resources>
-                <Button Template="{StaticResource BaseButton}" x:Name="PART_CaptionButton"  
-                            MaxWidth="1000"
+                <Button Template="{StaticResource BaseButton}"
+                        x:Name="PART_CaptionButton"  
+                        MaxWidth="1000"
                             >
-                  <ContentPresenter x:Name="PART_Header" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"                                   
-                                  SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" ContentSource="Header" />
+                  <ContentPresenter x:Name="PART_Header"
+                                    HorizontalAlignment="Stretch"
+                                    VerticalAlignment="Stretch"                                   
+                                    SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"
+                                    ContentSource="Header" />
                 </Button>
                 <ctrls:HotTrack x:Name="headerToggleHL"  bc:OverflowableStackPanel.CanOverflow="True"
                                  BorderThickness="1,0,0,0"
