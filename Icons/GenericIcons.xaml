@@ -1,0 +1,31 @@
+﻿<ResourceDictionary
+  xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+  xmlns:themes="clr-namespace:BreadcrumbLib.Themes;assembly=BreadcrumbLib"
+  >
+
+	<BitmapImage x:Key="SpecialFolder_ApplicationData" UriSource="/Icons;component/Generic/SpecialFolder_ApplicationData.ico" />
+
+	<BitmapImage x:Key="SpecialFolder_Default" UriSource="/Icons;component/Generic/SpecialFolder_Default.ico" />
+
+  <BitmapImage x:Key="SpecialFolder_DesktopFolder" UriSource="/Icons;component/Generic/SpecialFolder_DesktopFolder.ico" />
+
+  <BitmapImage x:Key="SpecialFolder_Favourites" UriSource="/Icons;component/Generic/SpecialFolder_Favourites.ico" />
+
+  <BitmapImage x:Key="SpecialFolder_Fonts" UriSource="/Icons;component/Generic/SpecialFolder_Fonts.ico" />
+
+  <BitmapImage x:Key="SpecialFolder_MyComputer" UriSource="/Icons;component/Generic/SpecialFolder_MyComputer.ico" />
+
+  <BitmapImage x:Key="SpecialFolder_MyMusic" UriSource="/Icons;component/Generic/SpecialFolder_MyMusic.ico" />
+
+  <BitmapImage x:Key="SpecialFolder_MyPictures" UriSource="/Icons;component/Generic/SpecialFolder_MyPictures.ico" />
+
+  <BitmapImage x:Key="SpecialFolder_MyVideos" UriSource="/Icons;component/Generic/SpecialFolder_MyVideos.ico" />
+
+  <BitmapImage x:Key="SpecialFolder_MyDocuments" UriSource="/Icons;component/Generic/SpecialFolder_MyDocuments.ico" />
+
+  <BitmapImage x:Key="SpecialFolder_RecentPlaces" UriSource="/Icons;component/Generic/SpecialFolder_RecentPlaces.ico" />
+
+  <BitmapImage x:Key="SpecialFolder_UserProfile" UriSource="/Icons;component/Generic/SpecialFolder_UserProfile.ico" />
+  
+</ResourceDictionary>

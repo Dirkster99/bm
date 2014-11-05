@@ -7,6 +7,8 @@
         xmlns:ctrls="clr-namespace:BreadcrumbLib.Controls;assembly=BreadcrumbLib"
         xmlns:themes="clr-namespace:BreadcrumbLib.Themes;assembly=BreadcrumbLib"
 
+        xmlns:conv="clr-namespace:Breadcrumb.Demo.Converter"
+
         Title="MainWindow" Height="350" Width="525"
         >
 	<Grid Background="{DynamicResource {x:Static themes:ResourceKeys.ControlBackground}}" >
@@ -14,6 +16,7 @@
       <RowDefinition Height="Auto" />
       <RowDefinition Height="Auto" />
       <RowDefinition Height="Auto" />
+      <RowDefinition Height="*" />
     </Grid.RowDefinitions>
 
 		<Menu Grid.Row="0">
@@ -40,5 +43,22 @@
     <ctrls:Breadcrumb DataContext="{Binding ExTest}" Grid.Row="1" />
 
     <ctrls:Breadcrumb DataContext="{Binding ExTest1}" Grid.Row="2" />
+
+    <ListBox ItemsSource="{Binding SpecialFoldersTest.Folders}" Grid.Row="3">
+      <ListBox.ItemTemplate>
+        <DataTemplate>
+          <StackPanel Orientation="Horizontal">
+            <Image Margin="3" Width="64">
+              <Image.Source>
+                <MultiBinding Converter="{conv:BrowseItemTypeToImageConverter}">
+                  <Binding Path="EnumSpecialFolder" />
+                </MultiBinding>
+              </Image.Source>
+            </Image>
+            <TextBlock Text="{Binding FolderName}" Margin="3,0" />
+          </StackPanel>
+        </DataTemplate>
+      </ListBox.ItemTemplate>
+    </ListBox>
   </Grid>
 </Window>

@@ -7,6 +7,7 @@
 	using System.Windows;
 	using System.Windows.Input;
 	using System.Windows.Threading;
+	using Breadcrumb.Demo;
 	using Breadcrumb.DirectoryInfoEx;
 	using Breadcrumb.SystemIO;
 	using Breadcrumb.Utils;
@@ -26,6 +27,8 @@
 		#region constructors
 		public AppViewModel()
 		{
+			this.SpecialFoldersTest = new SpecialFoldersViewModel();
+
 			this.mThemes = new ThemesManager();
 
 			this.ChangeThemeCmd_Executed("Metro Dark", Application.Current.Dispatcher);
@@ -91,6 +94,7 @@
 
 		public ExTreeNodeViewModel ExTest1 { get; private set; }
 
+		public SpecialFoldersViewModel SpecialFoldersTest { get; private set; }
 		#endregion properties
 
 		#region methods
@@ -211,7 +215,7 @@
 						}
 						catch (Exception Exp)
 						{
-							MessageBox.Show(Exp.StackTrace.ToString());
+							MessageBox.Show(string.Format("Error Loading: '{0}'\n Stack Trace: {1}\n", item, Exp.StackTrace.ToString()));
 						}
 					}
 				}

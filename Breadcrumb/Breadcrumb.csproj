@@ -83,6 +83,9 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Defines\Enums.cs" />
+    <Compile Include="Demo\Converter\BrowseItemTypeToImageConverter.cs" />
+    <Compile Include="Demo\SpecialFoldersViewModel.cs" />
+    <Compile Include="Demo\SpecialFolderViewModel.cs" />
     <Compile Include="DirectoryInfoEx\Enums.cs" />
     <Compile Include="DirectoryInfoEx\ExIconExtractor.cs" />
     <Compile Include="DirectoryInfoEx\ExTreeNodeViewModel.cs" />
@@ -173,6 +176,10 @@
     <ProjectReference Include="..\BreadcrumbLib\BreadcrumbLib.csproj">
       <Project>{15bbe1fb-d9e1-4b86-be6c-b7d04a1a79f0}</Project>
       <Name>BreadcrumbLib</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Icons\Icons.csproj">
+      <Project>{b0e97e26-48e6-467c-a5e8-79d4ed4e5550}</Project>
+      <Name>Icons</Name>
     </ProjectReference>
     <ProjectReference Include="..\ThemesManager\Themes.csproj">
       <Project>{6570ee8b-24c8-4025-b382-247ff6a8ea94}</Project>
