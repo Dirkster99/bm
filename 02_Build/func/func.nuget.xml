@@ -1,0 +1,50 @@
+<?xml version="1.0"?>
+<properties>
+  <!--<property name="nuget.tmp.dir" value="..\tmp\nuget\" />
+  <property name="nuget.source.dir" value="..\src\nuget" />
+  <property name="nuget.compilier" value="..\tools\nuget\nuget.exe" />
+  <property name="nuget.output.dir" value="..\release" />
+  <property name="nuget.nuspec.name" value="DirectoryInfoEx.nuspec" />-->
+
+
+  <target name="nuget-copy-contents" description="Copy nuget.source.dir\contents to nuget.tmp.dir\contents">
+    <copy todir="${nuget.tmp.dir}\contents">
+      <fileset basedir="${nuget.source.dir}\contents">
+        <include name="*/**" />
+      </fileset>
+    </copy>
+  </target>
+
+  <target name="nuget-copy-lib" description="Copy dest.path\lib to nuget.tmp.dir\lib\net45">
+    <copy todir="${nuget.tmp.dir}\lib\net45">
+      <fileset basedir="${dest.path}\lib\net45">
+        <include name="*.dll" />
+        <include name="*.pdb" />
+      </fileset>
+    </copy>
+  </target>
+
+  <target name="nuget-copy-nuspec" description="Copy nuget.source.dir\nuget.nuspec.name to nuget.tmp.dir\nuget.nuspec.name">
+    <copy todir="${nuget.tmp.dir}">
+      <fileset basedir="${nuget.source.dir}">
+        <include name="${nuget.nuspec.name}" />
+      </fileset>
+    </copy>
+  </target>
+
+  
+  <target name="nuget">
+    <call target="nuget-copy-nuspec" />
+    <call target="nuget-copy-contents" />
+    <call target="nuget-copy-lib" />
+
+    <exec program="${nuget.compilier}">
+      <arg line="pack" />
+      <arg line='"${nuget.tmp.dir}\${nuget.nuspec.name}"' />
+      <arg line='-Version ${version}' />
+      <arg line='-OutputDirectory ${path::get-full-path(nuget.output.dir)}' />
+    </exec>
+
+    <delete dir='${nuget.tmp.dir}' />
+  </target>
+</properties>

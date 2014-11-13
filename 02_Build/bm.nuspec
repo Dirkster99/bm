@@ -1,0 +1,20 @@
+<?xml version="1.0"?>
+<package >
+  <metadata>
+    <id>Breadcrumb.Metro</id>
+    <version>1.2.3.4</version>
+    <authors>dirkster/lycj</authors>
+    <owners>dirkster</owners>
+    <licenseUrl>https://bm.codeplex.com/license</licenseUrl>
+    <projectUrl>http://bm.codeplex.com/</projectUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>The Breadcrumb project is a WPF control project that implements a Breadcrumb control in 3 available themes (Generic, Metro Light, and Metro Dark).</description>
+    <releaseNotes></releaseNotes>
+    <copyright>Copyright 2014, Released under MIT license</copyright>
+    <tags>WPF Breadcrumb</tags>
+    <dependencies>      
+      <dependency id="ExifLib" version="1.5.1" />
+      <dependency id="DirectoryInfoEx" version="1.0.26" />      
+    </dependencies>
+  </metadata>
+</package>

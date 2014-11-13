@@ -1,0 +1,105 @@
+<?xml version="1.0"?>
+<properties>
+  <property name="nunit.unittest" value="true" />
+  <property name="nunit.buildtest" value="true" />
+  <property name="nunit.tests.dir" value="..\release\nunit\" />
+
+  <target name="nunit">
+    <call target="nunit-init-variables" />
+    <if test="${nunit.buildtest}">
+      <call target="nunit-build" />
+    </if>
+    <call target="nunit-test" />
+    <!--<delete dir="${nunit.tests.dir}" />-->
+  </target>
+
+  <target name="nunit-org">
+    <call target="nunit-init-variables" />
+    <if test="${nunit.buildtest}">
+      <call target="nunit-build" />
+    </if>
+    <call target="nunit-org-test" />
+    <!--<delete dir="${nunit.tests.dir}" />-->
+  </target>
+  
+  
+  <target name="nunit-init-variables">    
+    <property name="nunit.test.name" value="IntegrationTest.${project::get-name()}" />    
+    <property name="nunit.test.path" value="${test.inte.path}\${nunit.test.name}\" />    
+    <property name="nunit.test.bin" value="${nunit.test.name}.dll" />    
+    <if test="${nunit.unittest}">
+      <property name="nunit.test.name" value="UnitTest.${project::get-name()}" />
+      <property name="nunit.test.path" value="${test.unit.path}\${nunit.test.name}\" />
+      <property name="nunit.test.bin" value="${nunit.test.name}.dll" />
+    </if>
+  </target>
+
+  <target name="nunit-build">
+    <call target="nunit-init-variables" />
+
+    <copy todir="${nunit.tests.dir}\">
+      <fileset basedir="${lib.path}">
+        <include name="*" />
+        <include name="${thirdparty.nunitframework}.dll" />
+      </fileset>     
+    </copy>
+    <copy todir="${nunit.tests.dir}\">
+      <fileset basedir="${build.current.dir}">
+        <include name="*" />
+      </fileset>
+    </copy>
+
+    <echo message="build.test: ${nunit.test.bin}" />
+    <csc target="library" output="${nunit.tests.dir}\${nunit.test.bin}"
+         keyfile="${build.keyfile}"
+         debug="${debug}" unsafe="false" platform="x86" >
+      <references>
+        <include name="System.Data.Entity.dll" />
+        <include name="${nunit.tests.dir}\*.dll" />
+        <exclude name="${nunit.tests.dir}\${thirdparty.sevenzip}.dll" />
+        <exclude name="${nunit.tests.dir}\${thirdparty.sevenzip64}.dll" />
+      </references>
+      <sources>        
+        <include name="${nunit.test.path}\**.cs" />
+      </sources>
+    </csc>
+
+    <echo message="${nunit.test.path}\app.config" />
+    <!--<copy
+       file="${nunit.test.path}\app.config"
+       tofile="${nunit.tests.dir}\${nunit.test.bin}.config" />-->
+    
+    <if test="${file::exists('{nunit.test.path}\app.config')}">
+      <echo message="${nunit.test.path}\app.config -> ${nunit.test.path}\app.config" />
+      <copy
+        file="${nunit.test.path}\app.config"
+        tofile="${nunit.tests.dir}\${nunit.test.bin}.config" />
+    </if>
+  </target>
+
+  <target name="nunit-test">
+    <echo message="test: ${nunit.tests.dir}\${nunit.test.bin}" />
+
+    <!-- Run Unit Tests under NUnit 2.5 -->
+    <exec program="${common.tools.nunit.path}\nunit-console-x86.exe"
+          workingdir="${nunit.tests.dir}"
+          >
+      <arg value="${nunit.test.bin}" />
+    </exec>
+
+    <!--<nunit2>
+      <formatter type="Plain" />      
+      <test assemblyname="${nunit.tests.dir}\${nunit.test.bin}" />
+    </nunit2>-->
+  </target>
+
+  <target name="nunit-org-test">
+    <echo message="test: ${nunit.tests.dir}\${nunit.test.bin}" />
+
+    <nunit2>
+      <formatter type="Plain" />      
+      <test assemblyname="${nunit.tests.dir}\${nunit.test.bin}" />
+    </nunit2>
+  </target>
+
+</properties>

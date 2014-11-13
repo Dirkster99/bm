@@ -1,0 +1,225 @@
+<?xml version="1.0"?>
+<properties>
+
+  <!--<target name="importversion">
+    <echo message="import.version" />
+    <property name="versioning.import" value="version-${project::get-name()}.txt" />
+    <property name="versioning.import.path" value="${common.version.path}\${versioning.import}" />
+    <if test="${not file::exists(versioning.import.path)}">
+      <property name="versioning.import" value="version.txt" />
+      <property name="versioning.import.path" value="${common.version.path}\${versioning.import}" />
+    </if>    
+
+    <copy todir="${current.dir}" failonerror="false">
+      <fileset basedir="${common.version.path}">
+        <include name="${versioning.import}" />
+      </fileset>
+    </copy>
+
+  </target>-->
+
+  <target name="lookupversionfile">
+    <property name="common.version.path" value=".\Version\" />
+    <property name="versioning.filename" value="version-${project::get-name()}.txt" overwrite="false" />
+    <property name="versioning.fullpath" value="${common.version.path}\${versioning.filename}" />
+    <if test="${not file::exists(versioning.fullpath)}">
+      <echo message="${versioning.filename}" />
+      <property name="versioning.filename" value="version.txt" />
+      <property name="versioning.fullpath" value="${common.version.path}\${versioning.filename}" />
+    </if>
+  </target>
+  
+  <!--http://vidmar.net/weblog/archive/2006/10/18/3237.aspx-->
+  <!--http://bloggingabout.net/blogs/joshua/archive/2005/07/26/8675.aspx-->
+  <target name="getversion" description="Populate the version properties based on the version.txt file">
+    <call target="lookupversionfile" />
+    <echo message="get.version: ${versioning.fullpath}"/>
+    <script language="C#">
+      <references>
+        <include name="System.dll" />
+      </references>
+      <imports>
+        <import namespace="System.Text.RegularExpressions" />
+      </imports>
+      <code>
+        <![CDATA[
+    public static void ScriptMain(Project project)
+    {
+     // parse version document to get version information
+     string fileName = project.Properties["versioning.fullpath"];
+     StreamReader reader = new StreamReader(fileName);
+     string versionInfo = reader.ReadLine();
+     reader.Close();
+     Regex pattern = new Regex("[0-9]+");
+     MatchCollection matches = pattern.Matches(versionInfo);
+     if (matches.Count != 4)
+      throw new Exception(string.Format("Version number {0} in {1} has incorrect format.", versionInfo, fileName));
+     int major = int.Parse(matches[0].Value);
+     int minor = int.Parse(matches[1].Value);
+     int build = int.Parse(matches[2].Value);
+     int revision = int.Parse(matches[3].Value);
+     project.Properties.Add("build.version.major", major.ToString());
+     project.Properties.Add("build.version.minor", minor.ToString());
+     project.Properties.Add("build.version.build", build.ToString());
+     project.Properties.Add("build.version.revision", revision.ToString());     
+    }
+   ]]>
+      </code>
+    </script>
+    <call target="setversionstring" />
+  </target>
+
+  <target name="setversionstring" description="Set the build.version.versionstring property">
+    <script language="C#">
+      <references>
+        <include name="System.dll" />
+      </references>
+      <imports>
+        <import namespace="System.Text.RegularExpressions" />
+      </imports>
+      <code>
+        <![CDATA[
+    public static void ScriptMain(Project project)
+    {
+     string versionString = string.Format("{0}.{1}.{2}.{3}",
+      project.Properties["build.version.major"],
+      project.Properties["build.version.minor"],
+      project.Properties["build.version.build"],
+      project.Properties["build.version.revision"]
+     );
+     project.Properties["build.version.versionstring"] = versionString;   
+     
+     string shortVersionString = string.Format("{0}.{1}.{2}",
+      project.Properties["build.version.major"],
+      project.Properties["build.version.minor"],
+      project.Properties["build.version.build"]
+     );
+      project.Properties["version"] = shortVersionString;   
+     
+     
+     project.Log(Level.Info, versionString);
+    }
+   ]]>
+      </code>
+    </script>
+  </target>
+
+  
+  
+  <target name="incrementbuildnumber" description="Increment the build number and write to version.txt file">
+    <script language="C#">
+      <references>
+        <include name="System.dll" />
+      </references>
+      <imports>
+        <import namespace="System.Text.RegularExpressions" />
+      </imports>
+      <code>
+        <![CDATA[
+    public static void ScriptMain(Project project)
+    {
+     string fileName = project.Properties["versioning.fullpath"];
+     int major = int.Parse(project.Properties["build.version.major"]);
+     int minor = int.Parse(project.Properties["build.version.minor"]);
+     int build = int.Parse(project.Properties["build.version.build"]);
+     int revision = int.Parse(project.Properties["build.version.revision"]);
+     build++;
+     revision = 0;
+     string versionString = string.Format("{0}.{1}.{2}.{3}", major, minor, build, revision);
+     project.Properties["build.version.build"] = build.ToString();
+     project.Properties["build.version.revision"] = revision.ToString();
+     
+     StreamWriter writer = new StreamWriter(fileName, false);
+     writer.WriteLine(versionString);
+     writer.Close();
+    }
+   ]]>
+      </code>
+    </script>
+    <call target="setversionstring" />
+  </target>
+
+  <target name="incrementrevisionnumber" description="Increment the build number and write to version.txt file">
+    <script language="C#">
+      <references>
+        <include name="System.dll" />
+      </references>
+      <imports>
+        <import namespace="System.Text.RegularExpressions" />
+      </imports>
+      <code>
+        <![CDATA[
+    public static void ScriptMain(Project project)
+    {
+     string fileName = project.Properties["versioning.fullpath"];
+     int major = int.Parse(project.Properties["build.version.major"]);
+     int minor = int.Parse(project.Properties["build.version.minor"]);
+     int build = int.Parse(project.Properties["build.version.build"]);
+     int revision = int.Parse(project.Properties["build.version.revision"]);
+     revision++;
+     string versionString = string.Format("{0}.{1}.{2}.{3}", major, minor, build, revision);
+     project.Properties["build.version.revision"] = revision.ToString();
+     
+     StreamWriter writer = new StreamWriter(fileName, false);
+     writer.WriteLine(versionString);
+     writer.Close();
+    }
+   ]]>
+      </code>
+    </script>
+    <call target="setversionstring" />
+  </target>
+
+  <target name="setversion" description="Stamp the version info onto assemblyinfo.cs files">
+    <echo message="${src.path}\AssemblyInfo.cs" />
+    <foreach item="File" property="filename">
+      <in>
+        <items>
+          <include name="${src.path}\**\AssemblyInfo.cs"></include>
+          <include name="${src.path}\AssemblyInfo.cs"></include>
+        </items>
+      </in>
+      <do>
+        <script language="C#">
+          <references>
+            <include name="System.dll" />
+          </references>
+          <imports>
+            <import namespace="System.Text.RegularExpressions" />
+          </imports>
+          <code>
+            <![CDATA[
+     public static void ScriptMain(Project project)
+     {
+      //FileStream file = File.Open(project.Properties["filename"], FileMode.Open, FileAccess.ReadWrite);   
+      Console.WriteLine(project.Properties["filename"]);
+      StreamReader reader = new StreamReader(project.Properties["filename"]);
+      string contents = reader.ReadToEnd();
+      reader.Close();
+      string replacement = string.Format(
+       "[assembly: AssemblyVersion(\"{0}.{1}.{2}.{3}\")]",
+       project.Properties["build.version.major"],
+       project.Properties["build.version.minor"],
+       project.Properties["build.version.build"],
+       project.Properties["build.version.revision"]
+      );
+       string fileversionReplacement = string.Format(
+       "[assembly: AssemblyFileVersion(\"{0}.{1}.{2}.{3}\")]",
+       project.Properties["build.version.major"],
+       project.Properties["build.version.minor"],
+       project.Properties["build.version.build"],
+       project.Properties["build.version.revision"]
+      );
+      string newText = Regex.Replace(contents, @"\[assembly: AssemblyVersion\("".*""\)\]", replacement);
+      newText = Regex.Replace(newText, @"\[assembly: AssemblyFileVersion\("".*""\)\]", fileversionReplacement);
+      StreamWriter writer = new StreamWriter(project.Properties["filename"], false);
+      writer.Write(newText);
+      writer.Close();
+     }
+     ]]>
+          </code>
+        </script>
+      </do>
+    </foreach>
+  </target>
+</properties>

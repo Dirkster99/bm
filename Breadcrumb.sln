@@ -18,6 +18,25 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Icons", "Icons\Icons.csproj
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Themes", "Themes\Themes.csproj", "{6570EE8B-24C8-4025-B382-247FF6A8EA94}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".build", ".build", "{30AF6BF9-566C-499F-9321-D6983176CEE1}"
+	ProjectSection(SolutionItems) = preProject
+		02_Build\bm.build = 02_Build\bm.build
+		02_Build\bm.nuspec = 02_Build\bm.nuspec
+		02_Build\local.properties.xml = 02_Build\local.properties.xml
+		02_Build\projects.txt = 02_Build\projects.txt
+		02_Build\version\version.txt = 02_Build\version\version.txt
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "func", "func", "{31669C62-B1F9-44D6-BE65-B4BB18907121}"
+	ProjectSection(SolutionItems) = preProject
+		02_Build\func\func.msbuild2.xml = 02_Build\func\func.msbuild2.xml
+		02_Build\func\func.nuget.xml = 02_Build\func\func.nuget.xml
+		02_Build\func\func.nunit.xml = 02_Build\func\func.nunit.xml
+		02_Build\func\func.parseProjects.xml = 02_Build\func\func.parseProjects.xml
+		02_Build\func\func.versioning.xml = 02_Build\func\func.versioning.xml
+		02_Build\local.properties.xml = 02_Build\local.properties.xml
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -57,5 +76,8 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{31669C62-B1F9-44D6-BE65-B4BB18907121} = {30AF6BF9-566C-499F-9321-D6983176CEE1}
 	EndGlobalSection
 EndGlobal

@@ -1,0 +1,94 @@
+<?xml version="1.0"?>
+<properties>
+  <property name="tmp.obj.path" value="${root.dir}\tmp" />
+  <property name="msbuild.csproj.path" value="" />
+  <property name="msbuild.version" value="35" />
+  <property name="version" value="35" />
+  <property name="msbuild.sign" value="true" />  
+
+  <target name="msbuild" description="">
+
+    <property name="msbuild.csproj.name" value="${path::get-file-name(msbuild.csproj.path)}" />
+    <property name="msbuild.csproj.dir" value="${path::get-directory-name(path::get-full-path(msbuild.csproj.path))}" />
+    <property name="msbuild.nant.csproj.name" value="${path::change-extension(msbuild.csproj.name,'.nant.csproj')}" />
+    <property name="msbuild.projfile.output.dir" value="${path::get-full-path(dest.current.path)}" />
+
+
+    <echo message="msbuild.bin: ${msbuild.csproj.dir}\${msbuild.nant.csproj.name} -> ${msbuild.dir} -> ${msbuild.projfile.output.dir}" />
+
+    <call target="constructProjFile" />
+
+    <if test="${msbuild.version=='35'}">
+      <property name="msbuild.compilier" value="${net.msbuild.35}" />
+    </if>
+    <if test="${msbuild.version=='4'}">
+      <property name="msbuild.compilier" value="${net.msbuild.4}" />
+    </if>
+
+    <property name="msbuild.sign.argument" value="" />
+    <if test="${not msbuild.sign}">
+      <exec program="${msbuild.compilier}">
+        <arg line='"${msbuild.csproj.dir}\${msbuild.nant.csproj.name}"' />
+        <arg line="/property:Configuration=${net.msbuild.configuration}" />
+        <arg value="/p:IntermediateOutputPath=${tmp.obj.path}\${project::get-name()}\" />
+        <arg value="/target:Rebuild" />
+        <arg value="${msbuild.sign.argument}" />
+        <arg value="/verbosity:normal" />
+        <arg value="/nologo" />
+      </exec>      
+    </if>
+
+    <if test="${msbuild.sign}">
+      <exec program="${msbuild.compilier}">
+        <arg line='"${msbuild.csproj.dir}\${msbuild.nant.csproj.name}"' />
+        <arg line="/property:Configuration=${net.msbuild.configuration}" />
+        <arg value="/p:IntermediateOutputPath=${tmp.obj.path}\${project::get-name()}\" />
+        <arg value="/target:Rebuild" />
+        <arg value="/p:SignAssembly=true" />
+        <arg value="/p:DelaySign=false" />
+        <arg line="/p:keyfile=${build.keyfile}" />
+        <arg line="/p:AssemblyOriginatorKeyFile=${build.keyfile}" />
+        <arg value="/verbosity:normal" />
+        <arg value="/nologo" />
+      </exec>      
+    </if>
+
+    <delete file="${msbuild.csproj.dir}\${msbuild.nant.csproj.name}" />
+
+  </target>
+
+  <target name="constructProjFile" description="">
+    <script language="C#">
+      <references>
+        <include name="System.dll" />
+      </references>
+      <imports>
+        <import namespace="System.Text.RegularExpressions" />
+      </imports>
+      <code>
+        <![CDATA[
+    public static void ScriptMain(Project project)
+    {
+     string origProjPath = Path.Combine(project.Properties["msbuild.csproj.dir"], project.Properties["msbuild.csproj.name"]);
+     string nantProjPath = Path.Combine(project.Properties["msbuild.csproj.dir"], project.Properties["msbuild.nant.csproj.name"]);
+     string outputPath = project.Properties["msbuild.projfile.output.dir"];
+     string replacement = "<OutputPath>" + outputPath + "</OutputPath>";
+     
+     StreamReader reader = new StreamReader(origProjPath );
+      string contents = reader.ReadToEnd();
+      reader.Close();
+      
+      string newText = Regex.Replace(contents, @"<OutputPath>.*</OutputPath>", replacement);
+      
+      StreamWriter writer = new StreamWriter(nantProjPath, false);
+      writer.Write(newText);
+      writer.Close();
+    }
+   ]]>
+      </code>
+    </script>
+
+  </target>
+
+
+</properties>
