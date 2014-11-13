@@ -1,4 +1,5 @@
 ﻿using Breadcrumb.Viewmodels.Base;
+using Breadcrumb.ViewModels.Interfaces;
 using Breadcrumb.ViewModels.ResourceLoader;
 using BreadcrumbLib.Utils;
 using System;
@@ -11,17 +12,24 @@ using System.Windows.Media.Imaging;
 
 namespace Breadcrumb.ViewModels.Helpers
 {
-    public class IconHelper : NotifyPropertyChanged
+    public abstract class IconHelper : NotifyPropertyChanged, IIconHelper
     {
-        private IResourceLoader _resourceLoader;
-        private ImageSource _icon;
-        private double? _size;
-
-        public IconHelper(IResourceLoader resourceLoader, double? size)
+        public static IIconHelper FromResourceLoader(IResourceLoader resource, int? size)
         {
-            _resourceLoader = resourceLoader;
-            _size = size;
+            return new ResourceIconHelper(resource, size);
         }
+
+        public static IIconHelper Undefined = new NullIconHelper();
+
+        private ImageSource _icon;
+        private int? _size;
+
+        public IconHelper(int? size)
+        {            
+            Size = size;
+        }
+
+        public int? Size { get { return _size; } private set { _size = value; } }
 
         public ImageSource Value
         {
@@ -40,43 +48,18 @@ namespace Breadcrumb.ViewModels.Helpers
         public void Refresh(bool force = true)
         {
             if (_icon == null || force)
-                loadIconAsync(_resourceLoader)
-                    .ContinueWith(async tsk =>
-                {
-                    if (!tsk.IsFaulted  && tsk.Result != null)
-                        Value = tsk.Result;
-                    else if (_resourceLoader.FailSafeLoader != null)
-                        Value = await loadIconAsync(_resourceLoader.FailSafeLoader);
-                }, TaskScheduler.FromCurrentSynchronizationContext());
+                loadIconAsync().ContinueWith(tsk =>
+                    {
+                        if (!tsk.IsFaulted && tsk.Result != null)
+                            Value = tsk.Result;                        
+                    }, TaskScheduler.FromCurrentSynchronizationContext());
         }
 
-        private async Task<ImageSource> loadIconAsync(IResourceLoader resourceLoader)
+        public void Refresh()
         {
-            if (!(_size.HasValue))
-                return new BitmapImage() { StreamSource = await resourceLoader.LoadAsync() };
-
-            using (var stream = await resourceLoader.LoadAsync())
-            {
-                if (stream.Length == 0)
-                    return null;
-
-                //http://stackoverflow.com/questions/952080/how-do-you-select-the-right-size-icon-from-a-multi-resolution-ico-file-in-wpf/7024970#7024970
-                var decoder = BitmapDecoder.Create(stream, BitmapCreateOptions.None, BitmapCacheOption.OnDemand);
-
-                var result = decoder.Frames.SingleOrDefault(f => f.Width == _size);
-                if (result == default(BitmapFrame))
-                    result = decoder.Frames.OrderBy(f => f.Width).First();
-
-                return result;
-            }
-
+            Refresh(true);
         }
 
-        //private async Task loadIconIfNotLoadedAsync()
-        //{
-        //    if (_icon == null)
-        //        Value = await loadIconAsync(_resourceLoader);
-        //}
-
+        protected abstract Task<ImageSource> loadIconAsync();
     }
 }

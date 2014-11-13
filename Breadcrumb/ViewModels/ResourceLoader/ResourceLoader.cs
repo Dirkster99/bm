@@ -16,10 +16,8 @@ namespace Breadcrumb.ViewModels.ResourceLoader
             return new EmbeddedResourceLoader(library, path2Resource) { FailSafeLoader = failSafeLoader };
         }
 
-        public static IResourceLoader Cache(IResourceLoader actualResource)
+        public static IResourceLoader CacheResource(IResourceLoader actualResource)
         {
-            //if (actualResource is DictionaryResourceLoader)
-            //    throw new ArgumentException("Not Cachable");
             return new CacheResourceLoader(actualResource);
         }
 

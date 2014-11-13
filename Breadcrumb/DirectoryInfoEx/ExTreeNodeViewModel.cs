@@ -94,9 +94,9 @@
             if (sfType.HasValue)
             {
                 string resourceKey = String.Format("{0}_{1}", "SpecialFolder", sfType.Value.ToString());
-                this.Icons = new IconHelperViewModel(ResourceLoader.FromResourceDictionary(resourceKey, defaultIcon));
+                this.Icons = IconHelperViewModel.FromResourceLoader(ResourceLoader.FromResourceDictionary(resourceKey, defaultIcon));
             }
-            else this.Icons = new IconHelperViewModel(defaultIcon);
+            else this.Icons = IconHelperViewModel.FromResourceLoader(defaultIcon);
         }
 
         #endregion constructors
@@ -123,7 +123,7 @@
             }
         }
 
-        public IconHelperViewModel Icons { get; set; }
+        public IIconHelperViewModel Icons { get; set; }
 
         public ImageSource Icon
         {

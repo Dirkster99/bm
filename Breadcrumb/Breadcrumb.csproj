@@ -106,7 +106,12 @@
     <Compile Include="ViewModels\Base\NotifyPropertyChanged.cs" />
     <Compile Include="ViewModels\Helpers\EntriesHelperViewModel.cs" />
     <Compile Include="ViewModels\Helpers\IconHelper.cs" />
+    <Compile Include="ViewModels\Helpers\NullIconHelper.cs" />
+    <Compile Include="ViewModels\Helpers\ResourceIconHelper.cs" />
+    <Compile Include="ViewModels\Helpers\ResourceIconHelperViewModel.cs" />
     <Compile Include="ViewModels\Helpers\IconHelperViewModel.cs" />
+    <Compile Include="ViewModels\Interfaces\IIconHelper.cs" />
+    <Compile Include="ViewModels\Interfaces\IIconHelperViewModel.cs" />
     <Compile Include="ViewModels\Interfaces\ITreeLookup.cs" />
     <Compile Include="ViewModels\Interfaces\ITreeLookupProcessor.cs" />
     <Compile Include="ViewModels\Interfaces\ISupportTreeSelector.cs" />
