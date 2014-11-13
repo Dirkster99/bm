@@ -191,7 +191,7 @@
       <Project>{b0e97e26-48e6-467c-a5e8-79d4ed4e5550}</Project>
       <Name>Icons</Name>
     </ProjectReference>
-    <ProjectReference Include="..\ThemesManager\Themes.csproj">
+    <ProjectReference Include="..\Themes\Themes.csproj">
       <Project>{6570ee8b-24c8-4025-b382-247ff6a8ea94}</Project>
       <Name>Themes</Name>
     </ProjectReference>
