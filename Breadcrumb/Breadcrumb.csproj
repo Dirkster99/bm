@@ -56,8 +56,9 @@
     <Prefer32Bit>true</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="DirectoryInfoEx">
-      <HintPath>..\packages\DirectoryInfoEx.0.25.0\lib\net45\DirectoryInfoEx.dll</HintPath>
+    <Reference Include="DirectoryInfoEx, Version=1.0.26.1, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\DirectoryInfoEx.1.0.26\lib\net45\DirectoryInfoEx.dll</HintPath>
     </Reference>
     <Reference Include="ExifLib">
       <HintPath>..\packages\ExifLib.1.6.3.0\lib\net45\ExifLib.dll</HintPath>
@@ -104,12 +105,21 @@
     <Compile Include="ViewModels\AppViewModel.cs" />
     <Compile Include="ViewModels\Base\NotifyPropertyChanged.cs" />
     <Compile Include="ViewModels\Helpers\EntriesHelperViewModel.cs" />
+    <Compile Include="ViewModels\Helpers\IconHelper.cs" />
+    <Compile Include="ViewModels\Helpers\IconHelperViewModel.cs" />
     <Compile Include="ViewModels\Interfaces\ITreeLookup.cs" />
     <Compile Include="ViewModels\Interfaces\ITreeLookupProcessor.cs" />
     <Compile Include="ViewModels\Interfaces\ISupportTreeSelector.cs" />
     <Compile Include="ViewModels\Interfaces\ITreeRootSelector.cs" />
     <Compile Include="ViewModels\Interfaces\ITreeSelector.cs" />
     <Compile Include="ViewModels\Interfaces\IEntryHierarchyComparer.cs" />
+    <Compile Include="ViewModels\ResourceLoader\CacheResourceLoader.cs" />
+    <Compile Include="ViewModels\ResourceLoader\DictionaryResourceLoader.cs" />
+    <Compile Include="ViewModels\ResourceLoader\EmbeddedResoureLader.cs" />
+    <Compile Include="ViewModels\ResourceLoader\IResourceLoader.cs" />
+    <Compile Include="ViewModels\ResourceLoader\LambdaResourceLoader.cs" />
+    <Compile Include="ViewModels\ResourceLoader\ResourceLoader.cs" />
+    <Compile Include="ViewModels\ResourceLoader\StreamUtils.cs" />
     <Compile Include="ViewModels\TreeLookupProcessors\LoadSubEntries.cs" />
     <Compile Include="ViewModels\TreeLookupProcessors\TreeLookupProcessor.cs" />
     <Compile Include="ViewModels\TreeLookupProcessors\SetSelected.cs" />

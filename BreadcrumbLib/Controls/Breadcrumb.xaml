@@ -92,7 +92,7 @@
                         <ColumnDefinition Width="*" />
                       </Grid.ColumnDefinitions>
 
-                      <Image Source="{Binding Icon}" Margin="3,0" DockPanel.Dock="Left" />
+                      <Image Source="{Binding Icons.Size16.Value}" Margin="3,0" DockPanel.Dock="Left" />
                       <TextBlock Text="{Binding Header}"
                                  Foreground="{DynamicResource {x:Static themes:ResourceKeys.ForegroundTextBrush}}"
                                  VerticalAlignment="Center"

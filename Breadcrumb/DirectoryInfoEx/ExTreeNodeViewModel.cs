@@ -1,147 +1,165 @@
 ﻿namespace Breadcrumb.DirectoryInfoEx
 {
-	using System.Collections.Generic;
-	using System.Drawing;
-	using System.IO;
-	using System.Linq;
-	using System.Threading.Tasks;
-	using System.Windows.Media;
-	using Breadcrumb.Defines;
-	using Breadcrumb.Viewmodels.Base;
-	using Breadcrumb.ViewModels.Helpers;
-	using Breadcrumb.ViewModels.Interfaces;
-	using Breadcrumb.ViewModels.TreeSelectors;
-	using QuickZip.Converters;
+    using System.Collections.Generic;
+    using System.Drawing;
+    using System.IO;
+    using System.Linq;
+    using System.Threading.Tasks;
+    using System.Windows.Media;
+    using Breadcrumb.Defines;
+    using Breadcrumb.Viewmodels.Base;
+    using Breadcrumb.ViewModels.Helpers;
+    using Breadcrumb.ViewModels.Interfaces;
+    using Breadcrumb.ViewModels.TreeSelectors;
+    using QuickZip.Converters;
+    using Breadcrumb.ViewModels.ResourceLoader;
+    using System;
 
-	public class ExTreeNodeViewModel : NotifyPropertyChanged, ISupportTreeSelector<ExTreeNodeViewModel, FileSystemInfoEx>
-	{
-		#region fields
-		public static ICompareHierarchy<FileSystemInfoEx> Comparer = new ExHierarchyComparer();
+    public class ExTreeNodeViewModel : NotifyPropertyChanged, ISupportTreeSelector<ExTreeNodeViewModel, FileSystemInfoEx>
+    {
+        #region fields
+        public static ICompareHierarchy<FileSystemInfoEx> Comparer = new ExHierarchyComparer();
 
-		private static IconExtractor iconExtractor = new ExIconExtractor();
+        private static IconExtractor iconExtractor = new ExIconExtractor(); //To-Do: Remove this.
+        private static IResourceLoader defaultIcon = 
+            ResourceLoader.FromResourceDictionary(String.Format("{0}_{1}", "SpecialFolder", "Default"));
 
-		private DirectoryInfoEx _dir;
-		private ExTreeNodeViewModel _rootNode, _parentNode;
+        private DirectoryInfoEx _dir;
+        private ExTreeNodeViewModel _rootNode, _parentNode;
 
-		private string _header;
+        private string _header;
 
-		private bool _isIconLoaded = false;
-		private ImageSource _icon = null;
-		#endregion fields
+        private bool _isIconLoaded = false;
+        private ImageSource _icon = null;
+        #endregion fields
 
-		#region constructors
-		/// <summary>
-		/// Class constructor
-		/// </summary>
-		public ExTreeNodeViewModel()
-		{
-			this.Entries = new EntriesHelperViewModel<ExTreeNodeViewModel>();
-			this.Selection =
-				new TreeRootSelectorViewModel<ExTreeNodeViewModel, FileSystemInfoEx>(this.Entries)
-				{
-					Comparers = new[] { ExTreeNodeViewModel.Comparer }
-				};
+        #region constructors
+        /// <summary>
+        /// Class constructor
+        /// </summary>
+        public ExTreeNodeViewModel()
+        {
+            this.Entries = new EntriesHelperViewModel<ExTreeNodeViewModel>();
+            this.Selection =
+                new TreeRootSelectorViewModel<ExTreeNodeViewModel, FileSystemInfoEx>(this.Entries)
+                {
+                    Comparers = new[] { ExTreeNodeViewModel.Comparer }
+                };
 
-			// Find all entries below desktop (filter out recycle bin entry since its realy not that useful)
-			this._dir = DirectoryInfoEx.DesktopDirectory;
-			this.Entries.SetEntries(UpdateMode.Update, this._dir.GetDirectories()
-							     .Where(d => !d.Equals(DirectoryInfoEx.RecycleBinDirectory))
-							     .Select(d => new ExTreeNodeViewModel(d, this)).ToArray());
+            // Find all entries below desktop (filter out recycle bin entry since its realy not that useful)
+            this._dir = DirectoryInfoEx.DesktopDirectory;
+            this.Entries.SetEntries(UpdateMode.Update, this._dir.GetDirectories()
+                                 .Where(d => !d.Equals(DirectoryInfoEx.RecycleBinDirectory))
+                                 .Select(d => new ExTreeNodeViewModel(d, this)).ToArray());
 
-			this.Header = this._dir.Label;
-		}
+            this.Header = this._dir.Label;
+            initIconHelper(_dir);
+        }
 
-		/// <summary>
-		/// Class constructor
-		/// </summary>
-		/// <param name="dir"></param>
-		/// <param name="parentNode"></param>
-		internal ExTreeNodeViewModel(DirectoryInfoEx dir, ExTreeNodeViewModel parentNode)
-		{
-			this._dir = dir;
+        /// <summary>
+        /// Class constructor
+        /// </summary>
+        /// <param name="dir"></param>
+        /// <param name="parentNode"></param>
+        internal ExTreeNodeViewModel(DirectoryInfoEx dir, ExTreeNodeViewModel parentNode)
+        {
+            this._dir = dir;
 
-			// If parentNode == null => Root.
-			this._rootNode = parentNode == null ? this : parentNode._rootNode;
+            // If parentNode == null => Root.
+            this._rootNode = parentNode == null ? this : parentNode._rootNode;
 
-			this._parentNode = parentNode;
-			this.Header = this._dir.Label;
+            this._parentNode = parentNode;
+            this.Header = this._dir.Label;
 
-			this.Entries = new EntriesHelperViewModel<ExTreeNodeViewModel>((isLoaded, parameter) => Task.Run(() =>
-			{
-				try
-				{
-					return this._dir.GetDirectories().Select(d => new ExTreeNodeViewModel(d, this));
-				}
-				catch
-				{
-					return new List<ExTreeNodeViewModel>();
-				}
-			}));
+            this.Entries = new EntriesHelperViewModel<ExTreeNodeViewModel>((isLoaded, parameter) => Task.Run(() =>
+            {
+                try
+                {
+                    return this._dir.GetDirectories().Select(d => new ExTreeNodeViewModel(d, this));
+                }
+                catch
+                {
+                    return new List<ExTreeNodeViewModel>();
+                }
+            }));
 
-			this.Selection = new TreeSelectorViewModel<ExTreeNodeViewModel, FileSystemInfoEx>(this._dir,
-																																											  this,
-																																											  this._parentNode.Selection,
-																																											  this.Entries);
-		}
-		#endregion constructors
+            this.Selection = new TreeSelectorViewModel<ExTreeNodeViewModel, FileSystemInfoEx>(
+                this._dir, this, this._parentNode.Selection, this.Entries);
+            initIconHelper(_dir);
+        }
+        
+        private void initIconHelper(DirectoryInfoEx dir)
+        {
+            var sfType = dir.ShellFolderType;
+            if (sfType.HasValue)
+            {
+                string resourceKey = String.Format("{0}_{1}", "SpecialFolder", sfType.Value.ToString());
+                this.Icons = new IconHelperViewModel(ResourceLoader.FromResourceDictionary(resourceKey, defaultIcon));
+            }
+            else this.Icons = new IconHelperViewModel(defaultIcon);
+        }
 
-		#region properties
-		public ITreeSelector<ExTreeNodeViewModel, FileSystemInfoEx> Selection { get; set; }
+        #endregion constructors
 
-		public IEntriesHelper<ExTreeNodeViewModel> Entries { get; set; }
+        #region properties
+        public ITreeSelector<ExTreeNodeViewModel, FileSystemInfoEx> Selection { get; set; }
 
-		public string Header
-		{
-			get
-			{
-				return this._header;
-			}
+        public IEntriesHelper<ExTreeNodeViewModel> Entries { get; set; }
 
-			set
-			{
-				if (this._header != value)
-				{
-					this._header = value;
-					this.NotifyOfPropertyChanged(() => this.Header);
-				}
-			}
-		}
+        public string Header
+        {
+            get
+            {
+                return this._header;
+            }
 
-		public ImageSource Icon
-		{
-			get
-			{
-				if (!this._isIconLoaded)
-				{
-					this._isIconLoaded = true;
-					this.loadIcon();
-				}
+            set
+            {
+                if (this._header != value)
+                {
+                    this._header = value;
+                    this.NotifyOfPropertyChanged(() => this.Header);
+                }
+            }
+        }
 
-				return this._icon;
-			}
+        public IconHelperViewModel Icons { get; set; }
 
-			set
-			{
-				if (this._icon != value)
-				{
-					this._icon = value;
-					this.NotifyOfPropertyChanged(() => this.Icon);
-				}
-			}
-		}
+        public ImageSource Icon
+        {
+            get
+            {
+                if (!this._isIconLoaded)
+                {
+                    this._isIconLoaded = true;
+                    this.loadIcon();
+                }
 
-		private void loadIcon()
-		{
-			Bitmap bitmap = null;
+                return this._icon;
+            }
 
-			this._dir.RequestPIDL(pidl =>
-			{
-				bitmap = ExTreeNodeViewModel.iconExtractor.GetBitmap(IconSize.large, pidl.Ptr, true, false);
+            set
+            {
+                if (this._icon != value)
+                {
+                    this._icon = value;
+                    this.NotifyOfPropertyChanged(() => this.Icon);
+                }
+            }
+        }
 
-				if (bitmap != null)
-					this.Icon = Breadcrumb.Utils.BitmapSourceUtils.CreateBitmapSourceFromBitmap(bitmap);
-			});
-		}
-		#endregion properties
-	}
+        private void loadIcon()
+        {
+            Bitmap bitmap = null;
+
+            this._dir.RequestPIDL(pidl =>
+            {
+                bitmap = ExTreeNodeViewModel.iconExtractor.GetBitmap(IconSize.large, pidl.Ptr, true, false);
+
+                if (bitmap != null)
+                    this.Icon = Breadcrumb.Utils.BitmapSourceUtils.CreateBitmapSourceFromBitmap(bitmap);
+            });
+        }
+        #endregion properties
+    }
 }
