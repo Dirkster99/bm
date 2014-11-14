@@ -100,6 +100,7 @@
     <Compile Include="Controls\SuggestBox\MultiSuggestSource.cs" />
     <Compile Include="Controls\SuggestBox\NullSuggestSource.cs" />
     <Compile Include="Controls\SuggestBox\SuggestBox.cs" />
+    <Compile Include="Controls\SuggestBox\SuggestBox2.xaml.cs" />
     <Compile Include="Controls\SuggestBox\SuggestBoxBase.cs" />
     <Compile Include="Controls\SuggestBox\SuggestSourceImpl.cs" />
     <Compile Include="Controls\Switch.xaml.cs">
@@ -159,6 +160,10 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="Controls\Breadcrumb.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Controls\SuggestBox\SuggestBox2.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>

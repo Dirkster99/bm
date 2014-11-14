@@ -1,0 +1,75 @@
+﻿
+    <ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"    
+    xmlns:sbox="clr-namespace:BreadcrumbLib.Controls.SuggestBox"
+                        xmlns:conv="clr-namespace:BreadcrumbLib.Converters"
+    >
+    <ResourceDictionary.MergedDictionaries>
+        <!--<ResourceDictionary Source="pack://application:,,,/FileExplorer3.WPF;component/Themes/Common/Converters.xaml" />
+        <ResourceDictionary Source="pack://application:,,,/FileExplorer3.WPF;component/Themes/Common/Buttons.xaml" />-->
+       
+    </ResourceDictionary.MergedDictionaries>
+
+    <ControlTemplate x:Key="suggestableTextBoxTemplate" TargetType="{x:Type sbox:SuggestBox2}">
+        <ControlTemplate.Resources>            
+            <conv:BoolToVisibilityConverter x:Key="btv" />
+        </ControlTemplate.Resources>
+        <Border Name="Border" CornerRadius="2"  Background="{DynamicResource {x:Static SystemColors.WindowBrushKey}}" 
+                BorderBrush="{TemplateBinding BorderBrush}" 
+                BorderThickness="{TemplateBinding BorderThickness}" Padding="1" >
+            <!--<VisualStateManager.VisualStateGroups>
+                <VisualStateGroup x:Name="FocusStates">
+                    <VisualState x:Name="Focused" >
+                        <Storyboard>
+                            <BooleanAnimationUsingKeyFrames Storyboard.TargetName="PART_Popup" Storyboard.TargetProperty="IsOpen">
+                                <DiscreteBooleanKeyFrame  KeyTime="0"  Value="True" />
+                            </BooleanAnimationUsingKeyFrames>
+                        </Storyboard>
+                    </VisualState>
+                    <VisualState x:Name="Unfocused" >
+                        <Storyboard>
+                            <BooleanAnimationUsingKeyFrames Storyboard.TargetName="PART_Popup" Storyboard.TargetProperty="IsOpen">
+                                <DiscreteBooleanKeyFrame  KeyTime="0"  Value="False" />
+                            </BooleanAnimationUsingKeyFrames>
+                        </Storyboard>
+                    </VisualState>
+                </VisualStateGroup>
+            </VisualStateManager.VisualStateGroups>-->
+            <Grid x:Name="root">               
+                <ScrollViewer Margin="0" x:Name="PART_ContentHost" />
+                <Popup x:Name="PART_Popup" AllowsTransparency="true"  
+                                   PlacementTarget="{Binding ElementName=PART_ContentHost}"                                   
+                                   Placement="Bottom"                                                        
+                                   IsOpen="{TemplateBinding IsPopupOpened}"                                     
+                                   PopupAnimation="Fade"   
+                                   >
+                   
+                    <Border x:Name="DropDownBorder" Background="{DynamicResource {x:Static SystemColors.WindowBrushKey}}"  
+                                            Width="{Binding ActualWidth, ElementName=PART_ContentHost}"                                             
+                                            MaxHeight="100"
+                                            BorderBrush="{TemplateBinding BorderBrush}"
+                                            BorderThickness="1,0,1,1">
+
+                        <ListBox x:Name="PART_ItemList" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"                                                             
+                                                     VerticalContentAlignment="Stretch" HorizontalContentAlignment="Stretch"
+                                                     DisplayMemberPath="{TemplateBinding DisplayMemberPath}"
+                                                     SelectedValuePath="{TemplateBinding ValuePath}"                                                     
+                                                     ItemsSource="{Binding Suggestions, RelativeSource={RelativeSource TemplatedParent}}"
+                                                     ScrollViewer.HorizontalScrollBarVisibility="Disabled" 
+                                                    KeyboardNavigation.AcceptsReturn="True"
+                                                     KeyboardNavigation.DirectionalNavigation="Cycle" />
+                    </Border>
+                </Popup>
+            </Grid>
+        </Border>
+    </ControlTemplate>
+    
+    
+    <Style TargetType="{x:Type sbox:SuggestBox2}" BasedOn="{StaticResource {x:Type TextBox}}">
+        <Setter Property="Template" Value="{StaticResource suggestableTextBoxTemplate}" />     
+        <Setter Property="VerticalContentAlignment" Value="Center" />
+        <Setter Property="BorderThickness" Value="1" />
+    </Style>
+
+
+</ResourceDictionary>
