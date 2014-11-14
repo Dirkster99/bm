@@ -102,7 +102,6 @@
     <Compile Include="Utils\AsyncSemaphore.cs" />
     <Compile Include="Utils\BitmapSourceUtils.cs" />
     <Compile Include="Utils\FastObservableCollection.cs" />
-    <Compile Include="Utils\RelayCommand.cs" />
     <Compile Include="ViewModels\AppViewModel.cs" />
     <Compile Include="ViewModels\Base\NotifyPropertyChanged.cs" />
     <Compile Include="ViewModels\Helpers\EntriesHelperViewModel.cs" />
@@ -135,8 +134,8 @@
     <Compile Include="ViewModels\TreeLookupProcessors\SetChildSelected.cs" />
     <Compile Include="ViewModels\TreeLookupProcessors\SetChildNotSelected.cs" />
     <Compile Include="ViewModels\TreeLookupProcessors\RefreshDirectory.cs" />
-    <Compile Include="ViewModels\TreeNodeViewModel.cs" />
-    <Compile Include="ViewModels\TreeViewModel.cs" />
+    <Compile Include="CustomImpl\TreeNodeViewModel.cs" />
+    <Compile Include="CustomImpl\TreeViewModel.cs" />
     <Compile Include="ViewModels\Interfaces\IEntriesHelper.cs" />
     <Compile Include="ViewModels\Helpers\TreeRootSelectorViewModel.cs" />
     <Compile Include="ViewModels\TreeSelectors\BroadcastNextLevel.cs" />

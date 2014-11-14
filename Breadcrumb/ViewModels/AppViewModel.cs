@@ -14,6 +14,7 @@
 	using Breadcrumb.ViewModels.Interfaces;
 	using Themes;
 	using Themes.Base;
+    using BreadcrumbLib.Utils;
 
 	public class AppViewModel : Breadcrumb.Viewmodels.Base.NotifyPropertyChanged
 	{

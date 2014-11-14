@@ -11,6 +11,7 @@
 	using Breadcrumb.Utils;
 	using Breadcrumb.Viewmodels.Base;
 	using Breadcrumb.ViewModels.Interfaces;
+    using BreadcrumbLib.Utils;
 
 	public class EntriesHelperViewModel<VM> : NotifyPropertyChanged, IEntriesHelper<VM>
 	{
