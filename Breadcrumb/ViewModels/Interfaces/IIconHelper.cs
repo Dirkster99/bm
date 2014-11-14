@@ -11,6 +11,6 @@ namespace Breadcrumb.ViewModels.Interfaces
     {
         int? Size { get; }
         ImageSource Value { get; }
-        void Refresh();
+        Task RefreshAsync();
     }
 }

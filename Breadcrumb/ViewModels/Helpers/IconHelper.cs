@@ -35,7 +35,7 @@ namespace Breadcrumb.ViewModels.Helpers
         {
             get
             {
-                Refresh(false);
+                RefreshAsync(false);
                 return _icon;
             }
             private set
@@ -45,19 +45,19 @@ namespace Breadcrumb.ViewModels.Helpers
             }
         }
 
-        public void Refresh(bool force = true)
+        public async Task RefreshAsync(bool force = true)
         {
             if (_icon == null || force)
-                loadIconAsync().ContinueWith(tsk =>
+                await loadIconAsync().ContinueWith(tsk =>
                     {
                         if (!tsk.IsFaulted && tsk.Result != null)
                             Value = tsk.Result;                        
                     }, TaskScheduler.FromCurrentSynchronizationContext());
         }
 
-        public void Refresh()
+        public Task RefreshAsync()
         {
-            Refresh(true);
+            return RefreshAsync(true);
         }
 
         protected abstract Task<ImageSource> loadIconAsync();

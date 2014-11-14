@@ -21,15 +21,16 @@ namespace Breadcrumb.ViewModels.Helpers
             Size16 = Size24 = Size32 = Size48 = Size64 = Size128 = Size256 = IconHelper.Undefined;
         }
 
-        public void Refresh()
+        public async Task RefreshAsync()
         {
-            Size16.Refresh();
-            Size24.Refresh();
-            Size32.Refresh();
-            Size48.Refresh();
-            Size64.Refresh();
-            Size128.Refresh();
-            Size256.Refresh();
+            await Task.WhenAll(
+            Size16.RefreshAsync(),
+            Size24.RefreshAsync(),
+            Size32.RefreshAsync(),
+            Size48.RefreshAsync(),
+            Size64.RefreshAsync(),
+            Size128.RefreshAsync(),
+            Size256.RefreshAsync());
         }
 
         public IIconHelper Size16 { get; protected set; }

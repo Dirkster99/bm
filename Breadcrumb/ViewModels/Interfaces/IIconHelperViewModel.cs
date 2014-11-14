@@ -17,6 +17,6 @@ namespace Breadcrumb.ViewModels.Interfaces
         IIconHelper Size128 { get; }
         IIconHelper Size256 { get; }
 
-        void Refresh();
+        Task RefreshAsync();
     }
 }
