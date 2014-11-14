@@ -20,11 +20,11 @@
         <Setter Property="RefreshCommand" Value="{Binding Selection.RefreshCommand}" />
         <Setter Property="IsLoading" Value="{Binding Selection.IsLookingUp}" />
         <Setter Property="SelectedValue" Value="{Binding Selection.SelectedValue, Mode=TwoWay}" />
-        <Setter Property="IconTemplate">
+        <Setter Property="HeaderTemplate">
             <Setter.Value>
                 <!-- ToggleButton Icon-->
                 <DataTemplate>
-                    <Image Source="{Binding Icon}" Margin="3,0" DockPanel.Dock="Left" />
+                    <Image Source="{Binding Selection.SelectedViewModel.Icons.Size16.Value}" Margin="3,0" DockPanel.Dock="Left" />
                 </DataTemplate>
             </Setter.Value>
         </Setter>
@@ -133,9 +133,8 @@
                             </ctrls:DropDownList>
 
                             <ToggleButton x:Name="navtoggle" ToolTip="ThemeMe" Grid.Column="1" 
-                                          Focusable="False"
-                                          Content="{Binding SelectedValue, RelativeSource={RelativeSource TemplatedParent}}"                                          
-                                          ContentTemplate="{Binding IconTemplate, RelativeSource={RelativeSource TemplatedParent}}"
+                                          Focusable="False" Content="{Binding}"                            
+                                          ContentTemplate="{TemplateBinding HeaderTemplate}"
                             IsChecked="{Binding IsEditing, Mode=TwoWay, RelativeSource={RelativeSource TemplatedParent}}" />
 
                             <ctrls:Switch 
@@ -144,11 +143,11 @@
                                 <ctrls:Switch.ContentOn>
                                     <sbox:SuggestBox2 
                                         x:Name="sbox" 
-                                        DisplayMemberPath="{Binding DisplayMemberPath, RelativeSource={RelativeSource TemplatedParent}}"
-                                        ValuePath="{Binding ValuePath, RelativeSource={RelativeSource TemplatedParent}}"
-                                        SuggestSource="{Binding PathSuggestSource, RelativeSource={RelativeSource TemplatedParent}}"
+                                        DisplayMemberPath="{TemplateBinding DisplayMemberPath}"
+                                        ValuePath="{TemplateBinding ValuePath}"
+                                        SuggestSource="{TemplateBinding PathSuggestSource}"
                                         IsEnabled="{Binding IsEditing, Mode=OneWay, RelativeSource={RelativeSource TemplatedParent}}"
-                                        Text="{Binding SelectedValuePath, 
+                                        Text="{Binding SelectedValueString, 
                                             RelativeSource={RelativeSource TemplatedParent}, UpdateSourceTrigger=Explicit}" />
                                 </ctrls:Switch.ContentOn>
                                 <ctrls:Switch.ContentOff>
@@ -156,9 +155,9 @@
                                     <!--ToDo: Add Breadcrumb.ItemContainerStyle, and BreadcrumbTree reference Breadcrumb.ItemContainerStyle -->
                                     <!-- The BreadcrumbTree control displays the complete path and each drop down list -->
                                     <uc:BreadcrumbTree Grid.Column="1" ItemsSource="{Binding Entries.All}" x:Name="btree"
-                                                       ItemTemplate="{Binding ItemTemplate, RelativeSource={RelativeSource TemplatedParent}}"
-                                                       MenuItemTemplate="{Binding MenuItemTemplate, RelativeSource={RelativeSource TemplatedParent}}"
-                                                       ItemContainerStyle="{Binding ItemContainerStyle, RelativeSource={RelativeSource TemplatedParent}}"
+                                                       ItemTemplate="{TemplateBinding ItemTemplate}"
+                                                       MenuItemTemplate="{TemplateBinding MenuItemTemplate}"
+                                                       ItemContainerStyle="{TemplateBinding ItemContainerStyle}"
                                                        >
 
 

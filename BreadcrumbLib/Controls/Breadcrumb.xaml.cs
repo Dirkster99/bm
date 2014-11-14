@@ -45,10 +45,10 @@ using BreadcrumbLib.Controls.Breadcrumbs;
             SuggestBox.SuggestBox2.ValuePathProperty.AddOwner(typeof(Breadcrumb));
 
         /// <summary>
-        /// For internal use only.
+        /// For internal use only, Path of SelectedValue
         /// </summary>
-        public static readonly DependencyProperty SelectedValuePathProperty =
-          DependencyProperty.Register("SelectedValuePath", typeof(string),
+        public static readonly DependencyProperty SelectedValueStringProperty =
+          DependencyProperty.Register("SelectedValueString", typeof(string),
           typeof(Breadcrumb), new UIPropertyMetadata("", OnSelectedValueChanged));
 
         public static readonly DependencyProperty PathConverterProperty =
@@ -84,8 +84,8 @@ using BreadcrumbLib.Controls.Breadcrumbs;
                                typeof(Breadcrumb));
 
 
-        public static readonly DependencyProperty IconTemplateProperty =
-                 DependencyProperty.Register("IconTemplate", typeof(DataTemplate), typeof(Breadcrumb));
+        public static readonly DependencyProperty HeaderTemplateProperty =
+                 DependencyProperty.Register("HeaderTemplate", typeof(DataTemplate), typeof(Breadcrumb));
 
         public static readonly DependencyProperty ItemTemplateProperty =
                 BreadcrumbTree.ItemTemplateProperty.AddOwner(typeof(Breadcrumb));
@@ -140,9 +140,9 @@ using BreadcrumbLib.Controls.Breadcrumbs;
                 b.IsUpdating = true;
 
                 if (b.IsEditing)
-                    b.SelectedValue = b.PathConverter.ConvertBack(b.SelectedValuePath, typeof(object), null, Thread.CurrentThread.CurrentCulture);
+                    b.SelectedValue = b.PathConverter.ConvertBack(b.SelectedValueString, typeof(object), null, Thread.CurrentThread.CurrentCulture);
                 else
-                    b.SelectedValuePath = (string)b.PathConverter.Convert(b.SelectedValue, typeof(string), null, Thread.CurrentThread.CurrentCulture);
+                    b.SelectedValueString = (string)b.PathConverter.Convert(b.SelectedValue, typeof(string), null, Thread.CurrentThread.CurrentCulture);
 
                 b.IsUpdating = false;
             }
@@ -190,10 +190,13 @@ using BreadcrumbLib.Controls.Breadcrumbs;
             set { SetValue(SelectedValueProperty, value); }
         }
 
-        internal string SelectedValuePath
+        /// <summary>
+        /// Selected value as string.
+        /// </summary>
+        internal string SelectedValueString
         {
-            get { return (string)GetValue(SelectedValuePathProperty); }
-            set { SetValue(SelectedValuePathProperty, value); }
+            get { return (string)GetValue(SelectedValueStringProperty); }
+            set { SetValue(SelectedValueStringProperty, value); }
         }
 
         public IValueConverter PathConverter
@@ -263,10 +266,10 @@ using BreadcrumbLib.Controls.Breadcrumbs;
             set { this.SetValue(ItemContainerStyleProperty, value); }
         }
 
-        public DataTemplate IconTemplate
+        public DataTemplate HeaderTemplate
         {
-            get { return (DataTemplate)GetValue(IconTemplateProperty); }
-            set { this.SetValue(IconTemplateProperty, value); }
+            get { return (DataTemplate)GetValue(HeaderTemplateProperty); }
+            set { this.SetValue(HeaderTemplateProperty, value); }
         }
 
         public DataTemplate MenuItemTemplate

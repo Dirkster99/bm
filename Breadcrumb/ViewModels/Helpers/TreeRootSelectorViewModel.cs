@@ -248,7 +248,7 @@
             }
 
             // Get all items for display in the root drop down list
-            Task.Run(() => this.updateRootItemsAsync(this, this._rootItems, 1));
+            this.updateRootItemsAsync(this, this._rootItems, 1);
         }
         #endregion
     }
