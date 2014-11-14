@@ -143,7 +143,7 @@
     <Compile Include="ViewModels\TreeSelectors\RecrusiveSearch.cs" />
     <Compile Include="ViewModels\TreeSelectors\SearchNextLevel.cs" />
     <Compile Include="ViewModels\TreeSelectors\SearchNextUsingReverseLookup.cs" />
-    <Compile Include="ViewModels\TreeSelectors\TreeSelectorViewModel.cs" />
+    <Compile Include="ViewModels\Helpers\TreeSelectorViewModel.cs" />
     <Compile Include="Views\BindingProxy.cs" />
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
