@@ -90,6 +90,7 @@
     <Compile Include="DirectoryInfoEx\Enums.cs" />
     <Compile Include="DirectoryInfoEx\ExIconExtractor.cs" />
     <Compile Include="DirectoryInfoEx\ExIconResourceLoader.cs" />
+    <Compile Include="DirectoryInfoEx\ExSuggestSource.cs" />
     <Compile Include="DirectoryInfoEx\ExTreeNodeViewModel.cs" />
     <Compile Include="DirectoryInfoEx\ExHierarchyComparer.cs" />
     <Compile Include="DirectoryInfoEx\IconExtractor.cs" />

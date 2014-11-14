@@ -14,6 +14,9 @@
     using QuickZip.Converters;
     using Breadcrumb.ViewModels.ResourceLoader;
     using System;
+    using BreadcrumbLib.Interfaces;
+    using System.Windows.Data;
+    using BreadcrumbLib.Utils;
 
     public class ExTreeNodeViewModel : NotifyPropertyChanged, ISupportTreeSelector<ExTreeNodeViewModel, FileSystemInfoEx>
     {
@@ -21,7 +24,7 @@
         public static ICompareHierarchy<FileSystemInfoEx> Comparer = new ExHierarchyComparer();
 
         private static IconExtractor iconExtractor = new ExIconExtractor(); //To-Do: Remove this.
-        private static IResourceLoader defaultIcon = 
+        private static IResourceLoader defaultIcon =
             ResourceLoader.FromResourceDictionary(String.Format("{0}_{1}", "SpecialFolder", "Default"));
 
         private DirectoryInfoEx _dir;
@@ -53,6 +56,8 @@
                                  .Select(d => new ExTreeNodeViewModel(d, this)).ToArray());
 
             this.Header = this._dir.Label;
+            this.PathConverter = new LambdaValueConverter<FileSystemInfoEx, string>(
+                fsi => fsi.FullName, path => new DirectoryInfoEx(path));
             initIconHelper(_dir);
         }
 
@@ -87,7 +92,7 @@
                 this._dir, this, this._parentNode.Selection, this.Entries);
             initIconHelper(_dir);
         }
-        
+
         private void initIconHelper(DirectoryInfoEx dir)
         {
             //this.Icons = IconHelperViewModel.FromResourceLoader(new ExIconResourceLoader(dir, true, null));
@@ -105,8 +110,9 @@
 
         #region properties
         public ITreeSelector<ExTreeNodeViewModel, FileSystemInfoEx> Selection { get; set; }
-
+        public IValueConverter PathConverter { get; set; }
         public IEntriesHelper<ExTreeNodeViewModel> Entries { get; set; }
+        public ISuggestSource SuggestSource { get { return new ExSuggestSource(); } }
 
         public string Header
         {

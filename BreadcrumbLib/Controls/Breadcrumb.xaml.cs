@@ -82,6 +82,7 @@
                                DependencyProperty.Register("RefreshCommand", typeof(ICommand),
                                typeof(Breadcrumb));
 
+
         #endregion
 
         #region constructors
@@ -99,6 +100,7 @@
         /// </summary>
         public Breadcrumb()
         {
+            
         }
         #endregion constructors
 
@@ -153,6 +155,11 @@
             {
                 IsEditing = false;
             }));
+
+            this.CommandBindings.Add(new CommandBinding(ApplicationCommands.Find, (ExecutedRoutedEventHandler)((o,e) =>
+            {
+                sbox.updateSource();                
+            })));
             //sbox.AddHandler(TextBox.LostFocusEvent, (RoutedEventHandler)((o, e) =>
             //{
             //    IsEditing = false;

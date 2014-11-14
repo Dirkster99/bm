@@ -337,7 +337,7 @@ namespace BreadcrumbLib.Controls.SuggestBox
         /// <summary>
         /// Update source of TextBox.TextProperty expression 
         /// </summary>
-        protected virtual void updateSource()
+        public virtual void updateSource()
         {
             var txtBindingExpr = this.GetBindingExpression(TextBox.TextProperty);
             if (txtBindingExpr == null)

@@ -78,7 +78,7 @@
 
                             <ToggleButton x:Name="navtoggle" ToolTip="ThemeMe" Grid.Column="1" 
                                           Focusable="False"
-                                          Content="{Binding SelectedValue, RelativeSource={RelativeSource TemplatedParent}}"
+                                          Content="{Binding SelectedValue, RelativeSource={RelativeSource TemplatedParent}}"                                          
                             IsChecked="{Binding IsEditing, Mode=TwoWay, RelativeSource={RelativeSource TemplatedParent}}" />
 
                             <ctrls:Switch 
@@ -159,6 +159,7 @@
                                         Visibility="{Binding IsLoading, RelativeSource={RelativeSource TemplatedParent}, Converter={StaticResource btvc}}"
                                         Command="{Binding CancelCommand, RelativeSource={RelativeSource TemplatedParent}}" />
                                 <Button Content="Navigate"
+                                        Command="Find"
                                         Visibility="{Binding IsEditing, RelativeSource={RelativeSource TemplatedParent}, Converter={StaticResource btvc}}"
                                         />
                             </Grid>

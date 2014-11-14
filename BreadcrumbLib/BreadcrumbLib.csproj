@@ -122,6 +122,7 @@
     <Compile Include="Themes\ResourceKeys.cs" />
     <Compile Include="Themes\StaticResourceKey.cs" />
     <Compile Include="Utils\AsyncUtils.cs" />
+    <Compile Include="Utils\LambdaValueConverter.cs" />
     <Compile Include="Utils\PathExistsValidationRule.cs" />
     <Compile Include="Utils\PathHierarchyHelper.cs" />
     <Compile Include="Utils\PropertyPathHelper.cs" />

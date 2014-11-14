@@ -2,27 +2,30 @@
   xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
   xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
 >
-  <ResourceDictionary.MergedDictionaries>
-    <ResourceDictionary Source="/BreadcrumbLib;component/Controls/HotTrack.xaml" />
-    <ResourceDictionary Source="/BreadcrumbLib;component/Controls/Switch.xaml" />
+    <ResourceDictionary.MergedDictionaries>
+        <ResourceDictionary Source="/BreadcrumbLib;component/Controls/HotTrack.xaml" />
+        <ResourceDictionary Source="/BreadcrumbLib;component/Controls/Switch.xaml" />
 
-    <ResourceDictionary Source="/BreadcrumbLib;component/baseControls/ClipCorner.xaml" />
-    <ResourceDictionary Source="/BreadcrumbLib;component/baseControls/Breadcrumb/BreadcrumbCore.xaml" />
-    <ResourceDictionary Source="/BreadcrumbLib;component/Controls/Breadcrumbs/BreadcrumbBase.xaml" />
-    <ResourceDictionary Source="/BreadcrumbLib;component/baseControls/Breadcrumb/BreadcrumbItem.xaml" />
+        <ResourceDictionary Source="/BreadcrumbLib;component/baseControls/ClipCorner.xaml" />
+        <ResourceDictionary Source="/BreadcrumbLib;component/baseControls/Breadcrumb/BreadcrumbCore.xaml" />
+        <ResourceDictionary Source="/BreadcrumbLib;component/Controls/Breadcrumbs/BreadcrumbBase.xaml" />
+        <ResourceDictionary Source="/BreadcrumbLib;component/baseControls/Breadcrumb/BreadcrumbItem.xaml" />
 
-    <ResourceDictionary Source="/BreadcrumbLib;component/Controls/Breadcrumbs/BreadcrumbTreeItem.xaml" />
-    <ResourceDictionary Source="/BreadcrumbLib;component/Controls/Breadcrumbs/BreadcrumbTree.xaml" />
+        <ResourceDictionary Source="/BreadcrumbLib;component/Controls/Breadcrumbs/BreadcrumbTreeItem.xaml" />
+        <ResourceDictionary Source="/BreadcrumbLib;component/Controls/Breadcrumbs/BreadcrumbTree.xaml" />
 
-    <ResourceDictionary Source="/BreadcrumbLib;component/baseControls/Breadcrumb/BreadcrumbOverflowPanel.xaml" />
 
-    <ResourceDictionary Source="/BreadcrumbLib;component/Controls/DropDownList.xaml" />
-    <ResourceDictionary Source="/BreadcrumbLib;component/Controls/DropDown.xaml" />
+        <ResourceDictionary Source="/BreadcrumbLib;component/Controls/SuggestBox/SuggestBox2.xaml" />
 
-    <ResourceDictionary Source="/BreadcrumbLib;component/controls/Breadcrumb.xaml" />
+        <ResourceDictionary Source="/BreadcrumbLib;component/baseControls/Breadcrumb/BreadcrumbOverflowPanel.xaml" />
 
-    <ResourceDictionary Source="/BreadcrumbLib;component/Themes/Default/Buttons.xaml" />
-    <ResourceDictionary Source="/BreadcrumbLib;component/Themes/Default/Brushes.xaml" />
-	</ResourceDictionary.MergedDictionaries>
+        <ResourceDictionary Source="/BreadcrumbLib;component/Controls/DropDownList.xaml" />
+        <ResourceDictionary Source="/BreadcrumbLib;component/Controls/DropDown.xaml" />
+
+        <ResourceDictionary Source="/BreadcrumbLib;component/controls/Breadcrumb.xaml" />
+
+        <ResourceDictionary Source="/BreadcrumbLib;component/Themes/Default/Buttons.xaml" />
+        <ResourceDictionary Source="/BreadcrumbLib;component/Themes/Default/Brushes.xaml" />
+    </ResourceDictionary.MergedDictionaries>
 
 </ResourceDictionary>

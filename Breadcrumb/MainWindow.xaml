@@ -40,11 +40,18 @@
 				</MenuItem>
 		</Menu>
 
-    <ctrls:Breadcrumb DataContext="{Binding ExTest}" Grid.Row="1" />
+        <ctrls:Breadcrumb DataContext="{Binding ExTest}" 
+                          PathSuggestSource="{Binding SuggestSource}"
+                          DisplayMemberPath="FullName"
+                          ValuePath="FullName"
+                          PathConverter="{Binding PathConverter}" Grid.Row="1" />
+        <ctrls:Breadcrumb DataContext="{Binding ExTest1}" 
+                           PathSuggestSource="{Binding SuggestSource}"
+                          DisplayMemberPath="FullName"
+                          ValuePath="FullName"
+                          PathConverter="{Binding PathConverter}" Grid.Row="2" />
 
-    <ctrls:Breadcrumb DataContext="{Binding ExTest1}" Grid.Row="2" />
-
-    <ListBox ItemsSource="{Binding SpecialFoldersTest.Folders}" Grid.Row="3">
+        <ListBox ItemsSource="{Binding SpecialFoldersTest.Folders}" Grid.Row="3">
       <ListBox.ItemTemplate>
         <DataTemplate>
           <StackPanel Orientation="Horizontal">
