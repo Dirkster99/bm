@@ -8,6 +8,7 @@
     using System.Windows.Data;
     using BreadcrumbLib.Interfaces;
     using System.Threading;
+using BreadcrumbLib.Controls.Breadcrumbs;
 
 
     #region ToStringConverter
@@ -82,6 +83,18 @@
                                DependencyProperty.Register("RefreshCommand", typeof(ICommand),
                                typeof(Breadcrumb));
 
+
+        public static readonly DependencyProperty IconTemplateProperty =
+                 DependencyProperty.Register("IconTemplate", typeof(DataTemplate), typeof(Breadcrumb));
+
+        public static readonly DependencyProperty ItemTemplateProperty =
+                BreadcrumbTree.ItemTemplateProperty.AddOwner(typeof(Breadcrumb));
+
+        public static readonly DependencyProperty MenuItemTemplateProperty =
+                BreadcrumbTree.MenuItemTemplateProperty.AddOwner(typeof(Breadcrumb));
+
+        public static readonly DependencyProperty ItemContainerStyleProperty =
+                BreadcrumbTree.ItemContainerStyleProperty.AddOwner(typeof(Breadcrumb));
 
         #endregion
 
@@ -242,6 +255,30 @@
         {
             get { return (ICommand)GetValue(RefreshCommandProperty); }
             set { this.SetValue(RefreshCommandProperty, value); }
+        }
+
+        public Style ItemContainerStyle
+        {
+            get { return (Style)GetValue(ItemContainerStyleProperty); }
+            set { this.SetValue(ItemContainerStyleProperty, value); }
+        }
+
+        public DataTemplate IconTemplate
+        {
+            get { return (DataTemplate)GetValue(IconTemplateProperty); }
+            set { this.SetValue(IconTemplateProperty, value); }
+        }
+
+        public DataTemplate MenuItemTemplate
+        {
+            get { return (DataTemplate)GetValue(MenuItemTemplateProperty); }
+            set { this.SetValue(MenuItemTemplateProperty, value); }
+        }
+
+        public DataTemplate ItemTemplate
+        {
+            get { return (DataTemplate)GetValue(ItemTemplateProperty); }
+            set { this.SetValue(ItemTemplateProperty, value); }
         }
 
         #endregion

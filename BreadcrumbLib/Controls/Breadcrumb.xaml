@@ -20,6 +20,62 @@
         <Setter Property="RefreshCommand" Value="{Binding Selection.RefreshCommand}" />
         <Setter Property="IsLoading" Value="{Binding Selection.IsLookingUp}" />
         <Setter Property="SelectedValue" Value="{Binding Selection.SelectedValue, Mode=TwoWay}" />
+        <Setter Property="IconTemplate">
+            <Setter.Value>
+                <!-- ToggleButton Icon-->
+                <DataTemplate>
+                    <Image Source="{Binding Icon}" Margin="3,0" DockPanel.Dock="Left" />
+                </DataTemplate>
+            </Setter.Value>
+        </Setter>
+        <Setter Property="ItemTemplate">
+            <Setter.Value>
+                <!-- Display of path elements within the HORIZONTAL Breadcrumb tree control
+                       eg "C:\" |> "Program Files" "|>" 
+                  -->
+                <HierarchicalDataTemplate ItemsSource="{Binding Entries.All}">
+                    <Border Background="{DynamicResource {x:Static themes:ResourceKeys.ControlBackground}}" BorderThickness="0">
+                        <TextBlock Text="{Binding Header}"
+                                 VerticalAlignment="Center"
+                                 Foreground="{DynamicResource {x:Static themes:ResourceKeys.ForegroundTextBrush}}"
+                                 />
+                    </Border>
+                </HierarchicalDataTemplate>
+            </Setter.Value>
+        </Setter>
+        <Setter Property="MenuItemTemplate">
+            <Setter.Value>
+                <!-- Each element in the vertical drop down list has an icon and a textual name -->
+                <DataTemplate>
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
+
+                        <Image Source="{Binding Icon}" Margin="3,0" DockPanel.Dock="Left" />
+                        <TextBlock Text="{Binding Header}"
+                                 Foreground="{DynamicResource {x:Static themes:ResourceKeys.ForegroundTextBrush}}"
+                                 VerticalAlignment="Center"
+                                 Grid.Column="1" />
+                    </Grid>
+                </DataTemplate>
+            </Setter.Value>
+        </Setter>
+        <Setter Property="ItemContainerStyle">
+            <Setter.Value>
+                <Style TargetType="{x:Type uc:BreadcrumbTreeItem}" BasedOn="{StaticResource {x:Type uc:BreadcrumbTreeItem}}">
+                    <Setter Property="ValuePath" Value="Selection.Value" />
+                    <Setter Property="IsExpanded" Value="{Binding Entries.IsExpanded, Mode=TwoWay}"  />
+                    <Setter Property="IsCurrentSelected" Value="{Binding Selection.IsSelected, Mode=TwoWay}"  />
+                    <Setter Property="SelectedChild" Value="{Binding Selection.SelectedChildUI, Mode=TwoWay}"  />
+                    <Setter Property="IsChildSelected" Value="{Binding Selection.IsChildSelected, Mode=OneWay}"  />
+
+                    <!--Updated by BreadcrumbTreeItem and it's OverflowableStackPanel-->
+                    <Setter Property="IsOverflowed" Value="{Binding Selection.IsOverflowed, Mode=OneWayToSource}"  />
+                </Style>
+            </Setter.Value>
+        </Setter>
 
         <Setter Property="Template">
             <Setter.Value>
@@ -57,7 +113,7 @@
                       ItemsSource="{Binding Selection.OverflowedAndRootItems}"
                       SelectedValuePath="Selection.Value"
                       SelectedValue="{Binding Selection.SelectedValue}"                               
-                      ItemTemplate="{Binding MenuItemTemplate, ElementName=btree}"
+                      ItemTemplate="{TemplateBinding MenuItemTemplate}"
                       >
                                 <ctrls:DropDownList.Header>
                                     <Path Stroke="{DynamicResource {x:Static themes:ResourceKeys.ControlForeground}}"
@@ -79,6 +135,7 @@
                             <ToggleButton x:Name="navtoggle" ToolTip="ThemeMe" Grid.Column="1" 
                                           Focusable="False"
                                           Content="{Binding SelectedValue, RelativeSource={RelativeSource TemplatedParent}}"                                          
+                                          ContentTemplate="{Binding IconTemplate, RelativeSource={RelativeSource TemplatedParent}}"
                             IsChecked="{Binding IsEditing, Mode=TwoWay, RelativeSource={RelativeSource TemplatedParent}}" />
 
                             <ctrls:Switch 
@@ -98,51 +155,12 @@
                                     <!--Problem: User cannot have it's own implementation-->
                                     <!--ToDo: Add Breadcrumb.ItemContainerStyle, and BreadcrumbTree reference Breadcrumb.ItemContainerStyle -->
                                     <!-- The BreadcrumbTree control displays the complete path and each drop down list -->
-                                    <uc:BreadcrumbTree Grid.Column="1" ItemsSource="{Binding Entries.All}" x:Name="btree">
-                                        <uc:BreadcrumbTree.ItemContainerStyle>
-                                            <Style TargetType="{x:Type uc:BreadcrumbTreeItem}" BasedOn="{StaticResource {x:Type uc:BreadcrumbTreeItem}}">
-                                                <Setter Property="ValuePath" Value="Selection.Value" />
-                                                <Setter Property="IsExpanded" Value="{Binding Entries.IsExpanded, Mode=TwoWay}"  />
-                                                <Setter Property="IsCurrentSelected" Value="{Binding Selection.IsSelected, Mode=TwoWay}"  />
-                                                <Setter Property="SelectedChild" Value="{Binding Selection.SelectedChildUI, Mode=TwoWay}"  />
-                                                <Setter Property="IsChildSelected" Value="{Binding Selection.IsChildSelected, Mode=OneWay}"  />
+                                    <uc:BreadcrumbTree Grid.Column="1" ItemsSource="{Binding Entries.All}" x:Name="btree"
+                                                       ItemTemplate="{Binding ItemTemplate, RelativeSource={RelativeSource TemplatedParent}}"
+                                                       MenuItemTemplate="{Binding MenuItemTemplate, RelativeSource={RelativeSource TemplatedParent}}"
+                                                       ItemContainerStyle="{Binding ItemContainerStyle, RelativeSource={RelativeSource TemplatedParent}}"
+                                                       >
 
-                                                <!--Updated by BreadcrumbTreeItem and it's OverflowableStackPanel-->
-                                                <Setter Property="IsOverflowed" Value="{Binding Selection.IsOverflowed, Mode=OneWayToSource}"  />
-                                            </Style>
-                                        </uc:BreadcrumbTree.ItemContainerStyle>
-
-                                        <!-- Each element in the vertical drop down list has an icon and a textual name -->
-                                        <uc:BreadcrumbTree.MenuItemTemplate>
-                                            <DataTemplate>
-                                                <Grid>
-                                                    <Grid.ColumnDefinitions>
-                                                        <ColumnDefinition Width="Auto" />
-                                                        <ColumnDefinition Width="*" />
-                                                    </Grid.ColumnDefinitions>
-
-                                                    <Image Source="{Binding Icon}" Margin="3,0" DockPanel.Dock="Left" />
-                                                    <TextBlock Text="{Binding Header}"
-                                 Foreground="{DynamicResource {x:Static themes:ResourceKeys.ForegroundTextBrush}}"
-                                 VerticalAlignment="Center"
-                                 Grid.Column="1" />
-                                                </Grid>
-                                            </DataTemplate>
-                                        </uc:BreadcrumbTree.MenuItemTemplate>
-
-                                        <uc:BreadcrumbTree.ItemTemplate>
-                                            <!-- Display of path elements within the HORIZONTAL Breadcrumb tree control
-                       eg "C:\" |> "Program Files" "|>" 
-                  -->
-                                            <HierarchicalDataTemplate ItemsSource="{Binding Entries.All}">
-                                                <Border Background="{DynamicResource {x:Static themes:ResourceKeys.ControlBackground}}" BorderThickness="0">
-                                                    <TextBlock Text="{Binding Header}"
-                                 VerticalAlignment="Center"
-                                 Foreground="{DynamicResource {x:Static themes:ResourceKeys.ForegroundTextBrush}}"
-                                 />
-                                                </Border>
-                                            </HierarchicalDataTemplate>
-                                        </uc:BreadcrumbTree.ItemTemplate>
 
                                         <!--<uc:BreadcrumbTree.LayoutTransform>
                         <ScaleTransform ScaleX="2" ScaleY="2" />
