@@ -53,7 +53,7 @@
                             <ColumnDefinition Width="*" />
                         </Grid.ColumnDefinitions>
 
-                        <Image Source="{Binding Icon}" Margin="3,0" DockPanel.Dock="Left" />
+                        <Image Source="{Binding Icons.Size16.Value}" Margin="3,0" DockPanel.Dock="Left" />
                         <TextBlock Text="{Binding Header}"
                                  Foreground="{DynamicResource {x:Static themes:ResourceKeys.ForegroundTextBrush}}"
                                  VerticalAlignment="Center"
@@ -99,13 +99,14 @@
                                 <ColumnDefinition Width="*" />
                                 <ColumnDefinition Width="Auto" />
                             </Grid.ColumnDefinitions>
-
-                            <!-- Visibility="{Binding IsProgressbarVisible, RelativeSource={RelativeSource TemplatedParent}, Converter={StaticResource btv}}"-->
-                            <ProgressBar Background="Transparent" Foreground="{DynamicResource {x:Static SystemColors.HotTrackBrushKey}}"
-                           IsIndeterminate="{Binding IsIndeterminate, RelativeSource={RelativeSource TemplatedParent}}" Opacity="0.5" Grid.ColumnSpan="2"
-                           Value="{Binding Progress, RelativeSource={RelativeSource TemplatedParent}}"
-													 Visibility="Hidden"
-                           BorderBrush="Transparent" BorderThickness="0"/>
+                            
+                            <ProgressBar Background="Transparent" 
+                                    Grid.ColumnSpan="4"
+                                    Foreground="{DynamicResource {x:Static SystemColors.HotTrackBrushKey}}"
+                                    IsIndeterminate="{Binding IsIndeterminate, RelativeSource={RelativeSource TemplatedParent}}" Opacity="0.5" 
+                                    Value="{Binding Progress, RelativeSource={RelativeSource TemplatedParent}}"
+                                    Visibility="{Binding IsProgressbarVisible, RelativeSource={RelativeSource TemplatedParent}, Converter={StaticResource btv}}"
+                                    BorderBrush="Transparent" BorderThickness="0"/>
 
                             <!-- Display a dropdown list at the left most button in the control -->
                             <ctrls:DropDownList Grid.Column="0"

@@ -8,7 +8,7 @@
     using System.Windows.Data;
     using BreadcrumbLib.Interfaces;
     using System.Threading;
-using BreadcrumbLib.Controls.Breadcrumbs;
+    using BreadcrumbLib.Controls.Breadcrumbs;
 
 
     #region ToStringConverter
@@ -83,7 +83,7 @@ using BreadcrumbLib.Controls.Breadcrumbs;
                                DependencyProperty.Register("RefreshCommand", typeof(ICommand),
                                typeof(Breadcrumb));
 
-
+        #region BreadcrumbTree related
         public static readonly DependencyProperty HeaderTemplateProperty =
                  DependencyProperty.Register("HeaderTemplate", typeof(DataTemplate), typeof(Breadcrumb));
 
@@ -95,6 +95,23 @@ using BreadcrumbLib.Controls.Breadcrumbs;
 
         public static readonly DependencyProperty ItemContainerStyleProperty =
                 BreadcrumbTree.ItemContainerStyleProperty.AddOwner(typeof(Breadcrumb));
+        #endregion BreadcrumbTree related
+
+
+        #region ProgressBar related - IsIndeterminate, IsProgressbarVisible, ProgressBarValue
+        public static readonly DependencyProperty IsIndeterminateProperty =
+                DependencyProperty.Register("IsIndeterminate", typeof(bool),
+                typeof(Breadcrumb), new UIPropertyMetadata(true));
+
+        public static readonly DependencyProperty IsProgressbarVisibleProperty =
+                DependencyProperty.Register("IsProgressbarVisible", typeof(bool),
+                typeof(Breadcrumb), new UIPropertyMetadata(false));
+
+        public static readonly DependencyProperty ProgressProperty =
+                DependencyProperty.Register("Progress", typeof(int),
+                typeof(Breadcrumb), new UIPropertyMetadata(0));
+        #endregion ProgressBar related - IsIndeterminate, IsProgressbarVisible, ProgressBarValue
+
 
         #endregion
 
@@ -113,7 +130,7 @@ using BreadcrumbLib.Controls.Breadcrumbs;
         /// </summary>
         public Breadcrumb()
         {
-            
+
         }
         #endregion constructors
 
@@ -169,9 +186,9 @@ using BreadcrumbLib.Controls.Breadcrumbs;
                 IsEditing = false;
             }));
 
-            this.CommandBindings.Add(new CommandBinding(ApplicationCommands.Find, (ExecutedRoutedEventHandler)((o,e) =>
+            this.CommandBindings.Add(new CommandBinding(ApplicationCommands.Find, (ExecutedRoutedEventHandler)((o, e) =>
             {
-                sbox.updateSource();                
+                sbox.updateSource();
             })));
             //sbox.AddHandler(TextBox.LostFocusEvent, (RoutedEventHandler)((o, e) =>
             //{
@@ -260,6 +277,7 @@ using BreadcrumbLib.Controls.Breadcrumbs;
             set { this.SetValue(RefreshCommandProperty, value); }
         }
 
+        #region BreadcrumbTree related
         public Style ItemContainerStyle
         {
             get { return (Style)GetValue(ItemContainerStyleProperty); }
@@ -283,6 +301,36 @@ using BreadcrumbLib.Controls.Breadcrumbs;
             get { return (DataTemplate)GetValue(ItemTemplateProperty); }
             set { this.SetValue(ItemTemplateProperty, value); }
         }
+        #endregion
+
+        #region ProgressBar related - IsIndeterminate, IsProgressbarVisible, ProgressBarValue
+        /// <summary>
+        /// Toggle whether the progress bar is indertminate
+        /// </summary>
+        public bool IsIndeterminate
+        {
+            get { return (bool)GetValue(IsIndeterminateProperty); }
+            set { this.SetValue(IsIndeterminateProperty, value); }
+        }
+
+        /// <summary>
+        /// Toggle whether Progressbar visible
+        /// </summary>
+        public bool IsProgressbarVisible
+        {
+            get { return (bool)GetValue(IsProgressbarVisibleProperty); }
+            set { this.SetValue(IsProgressbarVisibleProperty, value); }
+        }
+
+        /// <summary>
+        /// Value of Progressbar.
+        /// </summary>
+        public int Progress
+        {
+            get { return (int)GetValue(ProgressProperty); }
+            set { this.SetValue(ProgressProperty, value); }
+        }
+        #endregion
 
         #endregion
     }

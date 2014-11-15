@@ -43,7 +43,7 @@
         <ctrls:Breadcrumb DataContext="{Binding ExTest}" 
                           PathSuggestSource="{Binding SuggestSource}"
                           DisplayMemberPath="FullName"
-                          ValuePath="FullName"
+                          ValuePath="FullName" IsProgressbarVisible="True" IsIndeterminate="True"
                           PathConverter="{Binding PathConverter}" Grid.Row="1" />
         <ctrls:Breadcrumb DataContext="{Binding ExTest1}" 
                            PathSuggestSource="{Binding SuggestSource}"
