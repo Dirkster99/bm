@@ -99,4 +99,25 @@
                 params ITreeLookupProcessor<VM, T>[] processors);
         #endregion methods
     }
+
+    public static partial class ExtensionMethods
+    {
+        public static async Task RefreshIconsAsync<VM, T>(this ITreeSelector<VM, T> selector)
+        {
+            await selector.LookupAsync(selector.Value,
+                                    TreeSelectors.RecrusiveBroadcast<VM, T>.SkipIfNotLoaded,
+                                    CancellationToken.None,
+                                    TreeLookupProcessors.RefreshIcons<VM, T>.IfLoaded);
+
+            //if (selector is ISupportIconHelper)
+            //{
+            //    await (selector as ISupportIconHelper).Icons.RefreshAsync();
+            //    if (selector.Entries.IsLoaded)
+            //        await Task.WhenAll(
+            //        selector.Entries.AllNonBindable
+            //            .Where(subVm => subVm is ISupportEntriesHelper<VM>)
+            //            .Select(subVm => (subVm as ISupportEntriesHelper<VM>).RefreshIconsAsync()));                
+            //}
+        }
+    }
 }

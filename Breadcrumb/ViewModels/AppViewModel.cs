@@ -136,8 +136,13 @@
 								////this.mSettingsManager.SettingData.CurrentTheme = newThemeName;
 								this.ResetTheme();                        // Initialize theme in process
 
-                                this.ExTest.RefreshIconsAsync();
-                                this.ExTest1.RefreshIconsAsync();
+                                //this.ExTest.RefreshIconsAsync();
+                                this.ExTest1.Selection.RefreshIconsAsync();
+
+                                this.ExTest.Selection.LookupAsync(this.ExTest.Selection.Value,
+                                    TreeSelectors.RecrusiveBroadcast<ExTreeNodeViewModel, FileSystemInfoEx>.SkipIfNotLoaded, 
+                                    CancellationToken.None,
+                                    TreeLookupProcessors.RefreshIcons<ExTreeNodeViewModel, FileSystemInfoEx>.IfLoaded);
 							}
 						}
 						catch (Exception exp)

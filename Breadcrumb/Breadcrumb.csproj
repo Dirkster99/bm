@@ -128,6 +128,7 @@
     <Compile Include="ViewModels\ResourceLoader\ResourceLoader.cs" />
     <Compile Include="ViewModels\ResourceLoader\StreamUtils.cs" />
     <Compile Include="ViewModels\TreeLookupProcessors\LoadSubEntries.cs" />
+    <Compile Include="ViewModels\TreeLookupProcessors\RefreshIcons.cs" />
     <Compile Include="ViewModels\TreeLookupProcessors\TreeLookupProcessor.cs" />
     <Compile Include="ViewModels\TreeLookupProcessors\SetSelected.cs" />
     <Compile Include="ViewModels\TreeLookupProcessors\SetNotSelected.cs" />

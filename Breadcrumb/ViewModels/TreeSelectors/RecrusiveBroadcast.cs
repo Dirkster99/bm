@@ -15,7 +15,7 @@
 		/// <summary>
 		///  Lookup until lookupvalue is found, and process all node.  Load entries if not loaded.
 		/// </summary>
-		public static RecrusiveBroadcast<VM, T> LoadSubentriesIfNotLoaded = new RecrusiveBroadcast<VM, T>(false);
+		public static RecrusiveBroadcast<VM, T> LoadSubentriesIfNotLoaded = new RecrusiveBroadcast<VM, T>(true);
 
 		/// <summary>
 		///  Lookup until lookupvalue is found, and process all node.  Skip if not loaded.
@@ -54,10 +54,10 @@
 					if (processors.Process(compareResult, parentSelector, currentSelectionHelper))
 					{
 						await this.LookupAsync(value, currentSelectionHelper, comparer, processors);
-						return;
+                        //return;
 					}
 
-					break;
+                    //break;
 				}
 			}
 		}
