@@ -113,6 +113,7 @@
     <Compile Include="ViewModels\Helpers\IconHelperViewModel.cs" />
     <Compile Include="ViewModels\Interfaces\IIconHelper.cs" />
     <Compile Include="ViewModels\Interfaces\IIconHelperViewModel.cs" />
+    <Compile Include="ViewModels\Interfaces\ISupportIconHelper.cs" />
     <Compile Include="ViewModels\Interfaces\ITreeLookup.cs" />
     <Compile Include="ViewModels\Interfaces\ITreeLookupProcessor.cs" />
     <Compile Include="ViewModels\Interfaces\ISupportTreeSelector.cs" />

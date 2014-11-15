@@ -135,6 +135,9 @@
 							{
 								////this.mSettingsManager.SettingData.CurrentTheme = newThemeName;
 								this.ResetTheme();                        // Initialize theme in process
+
+                                this.ExTest.RefreshIconsAsync();
+                                this.ExTest1.RefreshIconsAsync();
 							}
 						}
 						catch (Exception exp)

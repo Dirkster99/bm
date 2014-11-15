@@ -18,7 +18,7 @@
     using System.Windows.Data;
     using BreadcrumbLib.Utils;
 
-    public class ExTreeNodeViewModel : NotifyPropertyChanged, ISupportTreeSelector<ExTreeNodeViewModel, FileSystemInfoEx>
+    public class ExTreeNodeViewModel : NotifyPropertyChanged, ISupportIconHelper, ISupportTreeSelector<ExTreeNodeViewModel, FileSystemInfoEx>
     {
         #region fields
         public static ICompareHierarchy<FileSystemInfoEx> Comparer = new ExHierarchyComparer();

@@ -57,7 +57,9 @@ namespace Breadcrumb.ViewModels.Helpers
 
         public Task RefreshAsync()
         {
-            return RefreshAsync(true);
+            if (_icon != null)
+                return RefreshAsync(true);
+            else return Task.Delay(0);
         }
 
         protected abstract Task<ImageSource> loadIconAsync();
