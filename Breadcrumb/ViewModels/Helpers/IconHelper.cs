@@ -4,6 +4,7 @@ using Breadcrumb.ViewModels.ResourceLoader;
 using BreadcrumbLib.Utils;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -21,47 +22,47 @@ namespace Breadcrumb.ViewModels.Helpers
 
         public static IIconHelper Undefined = new NullIconHelper();
 
-        private ImageSource _icon;
+        private Stream _value = null;
         private int? _size;
 
         public IconHelper(int? size)
-        {            
+        {
             Size = size;
         }
 
         public int? Size { get { return _size; } private set { _size = value; } }
 
-        public ImageSource Value
+        public Stream Value
         {
             get
             {
                 RefreshAsync(false);
-                return _icon;
+                return _value;
             }
             private set
             {
-                _icon = value;
+                _value = value;
                 NotifyOfPropertyChanged(() => Value);
             }
         }
 
         public async Task RefreshAsync(bool force = true)
         {
-            if (_icon == null || force)
-                await loadIconAsync().ContinueWith(tsk =>
+            if (_value == null || force)
+                await loadValueAsync().ContinueWith(tsk =>
                     {
                         if (!tsk.IsFaulted && tsk.Result != null)
-                            Value = tsk.Result;                        
+                            Value = tsk.Result;
                     }, TaskScheduler.FromCurrentSynchronizationContext());
         }
 
         public Task RefreshAsync()
         {
-            if (_icon != null)
+            if (_value != null)
                 return RefreshAsync(true);
             else return Task.Delay(0);
         }
 
-        protected abstract Task<ImageSource> loadIconAsync();
+        protected abstract Task<Stream> loadValueAsync();
     }
 }

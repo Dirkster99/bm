@@ -115,6 +115,7 @@
     <Compile Include="Converters\FlipBoolConverter.cs" />
     <Compile Include="Converters\FlipBoolToVisibilityCollapsedConverter.cs" />
     <Compile Include="Converters\FlipBoolToVisibilityConverter.cs" />
+    <Compile Include="Converters\StreamToImageSourceConverter.cs" />
     <Compile Include="Defines\ExplorerCommands.cs" />
     <Compile Include="Defines\Strings.cs" />
     <Compile Include="Interfaces\IHierarchyHelper.cs" />

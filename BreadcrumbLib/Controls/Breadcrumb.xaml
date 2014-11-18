@@ -47,13 +47,16 @@
             <Setter.Value>
                 <!-- Each element in the vertical drop down list has an icon and a textual name -->
                 <DataTemplate>
+                    <DataTemplate.Resources>
+                        <conv:StreamToImageSourceConverter x:Key="sti" />
+                    </DataTemplate.Resources>
                     <Grid>
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="Auto" />
                             <ColumnDefinition Width="*" />
                         </Grid.ColumnDefinitions>
 
-                        <Image Source="{Binding Icons.Size16.Value}" Margin="3,0" DockPanel.Dock="Left" />
+                        <Image Source="{Binding Icons.Size16.Value, Converter={StaticResource sti}}" Margin="3,0" DockPanel.Dock="Left" />
                         <TextBlock Text="{Binding Header}"
                                  Foreground="{DynamicResource {x:Static themes:ResourceKeys.ForegroundTextBrush}}"
                                  VerticalAlignment="Center"

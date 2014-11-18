@@ -95,8 +95,8 @@
 
         private void initIconHelper(DirectoryInfoEx dir)
         {
-            //this.Icons = IconHelperViewModel.FromResourceLoader(new ExIconResourceLoader(dir, true, null));
-            //return;
+            this.Icons = IconHelperViewModel.FromResourceLoader(new ExIconResourceLoader(dir, true, 16));
+            return;
             var sfType = dir.ShellFolderType;
             if (sfType.HasValue)
             {

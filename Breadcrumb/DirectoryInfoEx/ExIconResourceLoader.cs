@@ -34,8 +34,7 @@ namespace Breadcrumb.DirectoryInfoEx
                     _size.Value <= 32 ? IconSize.large :
                     _size.Value <= 48 ? IconSize.extraLarge :
                     _size.Value <= 128 ? IconSize.jumbo : IconSize.thumbnail;
-
-            size = IconSize.jumbo;
+            
             return _fsi.RequestPIDL(pidl =>
                 {
                     MemoryStream ms = new MemoryStream();
