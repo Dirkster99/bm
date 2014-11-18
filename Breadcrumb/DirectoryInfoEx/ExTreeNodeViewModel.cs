@@ -95,15 +95,19 @@
 
         private void initIconHelper(DirectoryInfoEx dir)
         {
-            this.Icons = IconHelperViewModel.FromResourceLoader(new ExIconResourceLoader(dir, true, 16));
-            return;
             var sfType = dir.ShellFolderType;
             if (sfType.HasValue)
             {
                 string resourceKey = String.Format("{0}_{1}", "SpecialFolder", sfType.Value.ToString());
-                this.Icons = IconHelperViewModel.FromResourceLoader(ResourceLoader.FromResourceDictionary(resourceKey, defaultIcon));
+                Func<int, IResourceLoader> resourceLoaderFunc =
+                    size => ResourceLoader.FromResourceDictionary(resourceKey,
+                        new ExIconResourceLoader(dir, true, size));
+                this.Icons = ResourceIconHelperViewModel.FromResourceLoader(resourceLoaderFunc);
             }
-            else this.Icons = IconHelperViewModel.FromResourceLoader(defaultIcon);
+            else
+                if (dir.FullName.EndsWith(":\\") || dir.FullName.EndsWith(".ms"))
+                    this.Icons = ResourceIconHelperViewModel.FromResourceLoader(size => new ExIconResourceLoader(dir, true, size));
+                else this.Icons = ResourceIconHelperViewModel.FromResourceLoader(defaultIcon);
         }
 
         #endregion constructors

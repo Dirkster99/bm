@@ -25,45 +25,14 @@ namespace Breadcrumb.ViewModels.Helpers
 
         protected override async Task<Stream> loadValueAsync()
         {
-            return (await _resourceLoader.LoadAsync()) ??
-                (_resourceLoader.FailSafeLoader != null ? await _resourceLoader.FailSafeLoader.LoadAsync()
-                : null);
+            Stream retVal = await _resourceLoader.LoadAsync();
+            if (retVal != null)
+                return retVal;
+            if (_resourceLoader.FailSafeLoader != null)
+                return await _resourceLoader.FailSafeLoader.LoadAsync();
 
-            //try
-            //{
-            //    ImageSource retVal = await loadFromResource(_resourceLoader);
-            //    if (retVal != null)
-            //        return retVal;
+            return null;
 
-            //    if (_resourceLoader.FailSafeLoader != null)
-            //        return await loadFromResource(_resourceLoader.FailSafeLoader);
-            //}
-            //catch (Exception) { }
-            
-            //return null;
-
-        }
-
-        //private async Task<ImageSource> loadFromResource(IResourceLoader resourceLoader)
-        //{
-        //    if (!(Size.HasValue))
-        //        return new BitmapImage() { StreamSource = await resourceLoader.LoadAsync() };
-
-        //    using (var stream = await resourceLoader.LoadAsync())
-        //    {
-        //        if (stream.Length == 0)
-        //            return null;
-
-        //        //http://stackoverflow.com/questions/952080/how-do-you-select-the-right-size-icon-from-a-multi-resolution-ico-file-in-wpf/7024970#7024970
-        //        var decoder = BitmapDecoder.Create(stream, BitmapCreateOptions.None, BitmapCacheOption.None);
-
-        //        var result = decoder.Frames.SingleOrDefault(f => f.Width == Size);
-        //        if (result == default(BitmapFrame))
-        //            result = decoder.Frames.OrderBy(f => f.Width).First();
-
-        //        return result;
-        //    }
-
-        //}               
+        }        
     }
 }

@@ -30,12 +30,11 @@ namespace Breadcrumb.ViewModels.ResourceLoader
 
         protected override async Task<Stream> loadAsync()
         {
-            object resource = Application.Current.Resources[ResourceName];
             Uri resourceUri = GetResourceUri();
             if (resourceUri != null)
                 return await new EmbeddedResourceLoader(resourceUri).LoadAsync();
 
-            return new MemoryStream();
+            return null;
         }
     }
 }

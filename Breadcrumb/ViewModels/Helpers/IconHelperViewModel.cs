@@ -11,11 +11,7 @@ namespace Breadcrumb.ViewModels.Helpers
 {
     public class IconHelperViewModel : NotifyPropertyChanged, IIconHelperViewModel
     {
-        public static IIconHelperViewModel FromResourceLoader(IResourceLoader resourceLoader)
-        {            
-            return new ResourceIconHelperViewModel(resourceLoader);
-        }
-
+       
         public IconHelperViewModel()
         {
             Size16 = Size24 = Size32 = Size48 = Size64 = Size128 = Size256 = IconHelper.Undefined;

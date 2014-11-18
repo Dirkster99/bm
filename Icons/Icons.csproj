@@ -61,7 +61,7 @@
     <Resource Include="Dark\SpecialFolder_Desktop.ico" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Dark\SpecialFolder_DesktopFolder.ico" />
+    <Resource Include="Dark\SpecialFolder_DesktopDirectory.ico" />
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Dark\SpecialFolder_Downloads.ico" />
@@ -142,7 +142,7 @@
     <Resource Include="Generic\SpecialFolder_Desktop.ico" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Generic\SpecialFolder_DesktopFolder.ico" />
+    <Resource Include="Generic\SpecialFolder_DesktopDirectory.ico" />
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Generic\SpecialFolder_Downloads.ico" />
@@ -223,7 +223,7 @@
     <Resource Include="Light\SpecialFolder_Desktop.ico" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Light\SpecialFolder_DesktopFolder.ico" />
+    <Resource Include="Light\SpecialFolder_DesktopDirectory.ico" />
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Light\SpecialFolder_Downloads.ico" />

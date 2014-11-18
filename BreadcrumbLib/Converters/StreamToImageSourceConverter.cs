@@ -13,13 +13,38 @@ namespace BreadcrumbLib.Converters
     [ValueConversion(typeof(Stream), typeof(ImageSource))]
     public class StreamToImageSourceConverter : IValueConverter
     {
+        public int? Size { get; set; }
+
         public object Convert(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
-        {
-            if (value is Stream)
-                return BitmapFrame.Create(value as Stream,
+        {   
+            Stream stream = value as Stream;
+            
+            if (stream == null)
+                return null;
+            
+            int? size = Size;
+            if (parameter != null)
+            {
+                int temp;
+                if (Int32.TryParse(parameter.ToString(), out temp))
+                    size = temp;
+            }
+
+            if (size.HasValue)
+            {
+                 //http://stackoverflow.com/questions/952080/how-do-you-select-the-right-size-icon-from-a-multi-resolution-ico-file-in-wpf/7024970#7024970
+                        var decoder = BitmapDecoder.Create(stream, BitmapCreateOptions.None, BitmapCacheOption.None);
+
+                        var result = decoder.Frames.SingleOrDefault(f => f.Width == size.Value);
+                        if (result == default(BitmapFrame))
+                            result = decoder.Frames.OrderBy(f => f.Width).First();
+
+                        return result;
+            }
+            else
+                return BitmapFrame.Create(stream,
                                       BitmapCreateOptions.None,
                                       BitmapCacheOption.OnLoad);
-            else return null;
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)

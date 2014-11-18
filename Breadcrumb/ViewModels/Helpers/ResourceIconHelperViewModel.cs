@@ -1,4 +1,5 @@
 ﻿using Breadcrumb.Viewmodels.Base;
+using Breadcrumb.ViewModels.Interfaces;
 using Breadcrumb.ViewModels.ResourceLoader;
 using System;
 using System.Collections.Generic;
@@ -10,15 +11,26 @@ namespace Breadcrumb.ViewModels.Helpers
 {
     public class ResourceIconHelperViewModel : IconHelperViewModel
     {
-        private IResourceLoader _resourceLoader;
+        public static IIconHelperViewModel FromResourceLoader(Func<int, IResourceLoader> resourceLoaderFunc)
+        {
+            return new ResourceIconHelperViewModel(resourceLoaderFunc);
+        }
 
-        internal ResourceIconHelperViewModel(IResourceLoader resourceLoader)
+        public static IIconHelperViewModel FromResourceLoader(IResourceLoader resourceLoader)            
+        {
+            return FromResourceLoader(size => resourceLoader);
+        }
+
+        
+        internal ResourceIconHelperViewModel(Func<int, IResourceLoader> resourceLoaderFunc)
             : base()
         {
-            _resourceLoader = resourceLoader;
-            Size16 = new ResourceIconHelper(_resourceLoader, 16);
-            Size32 = new ResourceIconHelper(_resourceLoader, 32);
-            Size48 = new ResourceIconHelper(_resourceLoader, 48);
+            Size16 = new ResourceIconHelper(resourceLoaderFunc(16), 16);
+            Size32 = new ResourceIconHelper(resourceLoaderFunc(32), 32);
+            Size48 = new ResourceIconHelper(resourceLoaderFunc(48), 48);
+            Size64 = new ResourceIconHelper(resourceLoaderFunc(64), 64);
+            Size128 = new ResourceIconHelper(resourceLoaderFunc(128), 128);
+            Size256 = new ResourceIconHelper(resourceLoaderFunc(256), 256);                        
         }
       
     }
