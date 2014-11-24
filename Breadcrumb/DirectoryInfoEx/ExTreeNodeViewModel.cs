@@ -17,6 +17,9 @@
     using BreadcrumbLib.Interfaces;
     using System.Windows.Data;
     using BreadcrumbLib.Utils;
+    using System.Threading;
+    using System.IO.Utils;
+    using ShellDll;
 
     public class ExTreeNodeViewModel : NotifyPropertyChanged, ISupportIconHelper, ISupportTreeSelector<ExTreeNodeViewModel, FileSystemInfoEx>
     {
@@ -57,8 +60,39 @@
 
             this.Header = this._dir.Label;
             this.PathConverter = new LambdaValueConverter<FileSystemInfoEx, string>(
-                fsi => fsi.FullName, path => new DirectoryInfoEx(path));
+                fsi =>
+                {
+                    DirectoryInfoEx di = fsi as DirectoryInfoEx;
+                    if (di != null && di.FullName.StartsWith("::"))
+                    {
+                        var kfId = di.KnownFolderId;
+                        if (kfId.HasValue)
+                        {
+                            var attrib = EnumAttributeUtils<DisplayNameAttribute, ShellDll.KnownFolderIds>.FindAttribute(kfId.Value);
+                            if (attrib != null)
+                                return Environment.ExpandEnvironmentVariables(attrib.DisplayName);
+                        }
+                    }
+                    return fsi.FullName;
+
+                },
+                path =>
+                {
+                    if (path.IndexOfAny(new char[] { '/', '\\' }) == -1)
+                    {
+                        foreach (var kfId in Enum.GetValues(typeof(KnownFolderIds)))
+                        {
+                            var attrib = EnumAttributeUtils<DisplayNameAttribute, ShellDll.KnownFolderIds>.FindAttribute(kfId);
+                            if (attrib != null && attrib.DisplayName.Equals(path, StringComparison.CurrentCultureIgnoreCase))
+                                return new DirectoryInfoEx((KnownFolderIds)kfId);
+                        }
+                    }
+                    return new DirectoryInfoEx(path);
+
+                });
             initIconHelper(_dir);
+
+
         }
 
         /// <summary>
@@ -76,11 +110,13 @@
             this._parentNode = parentNode;
             this.Header = this._dir.Label;
 
-            this.Entries = new EntriesHelperViewModel<ExTreeNodeViewModel>((isLoaded, parameter) => Task.Run(() =>
+            this.Entries = new EntriesHelperViewModel<ExTreeNodeViewModel>((isLoaded, parameter) => Task.Run(async () =>
             {
                 try
                 {
-                    return this._dir.GetDirectories().Select(d => new ExTreeNodeViewModel(d, this));
+                    return (await this._dir.GetDirectoriesAsync("*", SearchOption.TopDirectoryOnly,
+                        CancellationToken.None))
+                        .Select(d => new ExTreeNodeViewModel(d, this));
                 }
                 catch
                 {
@@ -95,17 +131,22 @@
 
         private void initIconHelper(DirectoryInfoEx dir)
         {
-            var sfType = dir.ShellFolderType;
-            if (sfType.HasValue)
+            var kfType = dir.KnownFolderType;
+            if (kfType != null)
             {
-                string resourceKey = String.Format("{0}_{1}", "SpecialFolder", sfType.Value.ToString());
-                Func<int, IResourceLoader> resourceLoaderFunc =
-                    size => ResourceLoader.FromResourceDictionary(resourceKey,
-                        new ExIconResourceLoader(dir, true, size));
-                this.Icons = ResourceIconHelperViewModel.FromResourceLoader(resourceLoaderFunc);
+                var kfId = kfType.KnownFolderId;
+                if (kfId != null)
+                {
+                    string resourceKey = String.Format("{0}_{1}", "SpecialFolder", kfId.Value.ToString());
+                    Func<int, IResourceLoader> resourceLoaderFunc =
+                        size => ResourceLoader.FromResourceDictionary(resourceKey,
+                            new ExIconResourceLoader(dir, true, size));
+                    this.Icons = ResourceIconHelperViewModel.FromResourceLoader(resourceLoaderFunc);
+                }
+                else this.Icons = ResourceIconHelperViewModel.FromResourceLoader(size => new ExIconResourceLoader(dir, true, size));
             }
             else
-                if (dir.FullName.EndsWith(":\\") || dir.FullName.EndsWith(".ms"))
+                if (dir.FullName.EndsWith(":\\"))
                     this.Icons = ResourceIconHelperViewModel.FromResourceLoader(size => new ExIconResourceLoader(dir, true, size));
                 else this.Icons = ResourceIconHelperViewModel.FromResourceLoader(defaultIcon);
         }

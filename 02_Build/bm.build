@@ -74,8 +74,8 @@
       <property name="copy.current.src.path" value="${dest.path}\src\app\${projname}" />
       <property name="copy.current.dest.path" value="..\${projname}" />
       <echo message="copy.source: ${copy.current.src.path} sources -> ${copy.current.dest.path}" />
-      <copy todir="${path::get-full-path(copy.current.src.path)}">
-        <fileset basedir=" ${path::get-full-path(copy.current.dest.path)}">
+      <copy todir="${path::get-full-path(copy.current.dest.path)}">
+        <fileset basedir=" ${path::get-full-path(copy.current.src.path)}">
           <include name="*/**" />
           <exclude name="obj/**" />
           <exclude name="bin/**" />

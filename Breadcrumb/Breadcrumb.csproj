@@ -17,7 +17,7 @@
     <RestorePackages>true</RestorePackages>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <PlatformTarget>AnyCPU</PlatformTarget>
+    <PlatformTarget>x64</PlatformTarget>
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
@@ -56,9 +56,9 @@
     <Prefer32Bit>true</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="DirectoryInfoEx, Version=1.0.26.1, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="DirectoryInfoEx, Version=1.0.27.2, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\DirectoryInfoEx.1.0.26\lib\net45\DirectoryInfoEx.dll</HintPath>
+      <HintPath>..\packages\DirectoryInfoEx.1.0.27\lib\net45\DirectoryInfoEx.dll</HintPath>
     </Reference>
     <Reference Include="ExifLib">
       <HintPath>..\packages\ExifLib.1.6.3.0\lib\net45\ExifLib.dll</HintPath>
