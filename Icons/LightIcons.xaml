@@ -8,7 +8,7 @@
 
 	<BitmapImage x:Key="SpecialFolder_Default" UriSource="/Icons;component/Light/SpecialFolder_Default.ico" />
 
-    <BitmapImage x:Key="SpecialFolder_Desktop" UriSource="/Icons;component/Light/SpecialFolder_Desktop.ico" />
+  <BitmapImage x:Key="SpecialFolder_DesktopFolder" UriSource="/Icons;component/Light/SpecialFolder_DesktopFolder.ico" />
 
   <BitmapImage x:Key="SpecialFolder_Favourites" UriSource="/Icons;component/Light/SpecialFolder_Favourites.ico" />
 

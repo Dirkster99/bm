@@ -1,12 +1,14 @@
 ﻿namespace Breadcrumb.DirectoryInfoEx
 {
-	using System;
-	using System.IO;
-	using Breadcrumb.Defines;
-	using Breadcrumb.SystemIO;
-	using Breadcrumb.ViewModels.Interfaces;
+    using System;
+    using System.IO;
+    using Breadcrumb.Defines;
+    using Breadcrumb.SystemIO;
+    using Breadcrumb.ViewModels.Interfaces;
+    using Models;
+    using BreadcrumbLib.Defines;
 
-	public class ExHierarchyComparer : ICompareHierarchy<FileSystemInfoEx>
+    public class ExHierarchyComparer : ICompareHierarchy<FileSystemInfoEx>
 	{
 		#region fields
 		private PathComparer _pathComparer = new PathComparer();

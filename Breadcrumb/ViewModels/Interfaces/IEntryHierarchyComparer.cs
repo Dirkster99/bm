@@ -1,8 +1,8 @@
 ﻿namespace Breadcrumb.ViewModels.Interfaces
 {
-	using Breadcrumb.Defines;
+    using BreadcrumbLib.Defines;
 
-	public interface ICompareHierarchy<T>
+    public interface ICompareHierarchy<T>
 	{
 		HierarchicalResult CompareHierarchy(T value1, T value2);
 	}

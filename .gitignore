@@ -14,7 +14,3 @@ tmp/
 *.out
 *.sou
 Edi/MiniUML.Plugins/MiniUML.Plugins.UmlClassDiagram.dll
-/03_Release
-/02_Build/compile.txt
-/packages
-/.nuget

@@ -1,14 +1,15 @@
 ﻿namespace Breadcrumb.ViewModels.Interfaces
 {
-	using Breadcrumb.Defines;
+    using Breadcrumb.Defines;
+    using BreadcrumbLib.Defines;
 
-	/// <summary>
-	/// Used with ITreeSelector and ITreeLookup, when ITreeSelector.LookupAsync return any HierarchicalResult, 
-	/// it will be processed by these processors.    
-	/// </summary>
-	/// <typeparam name="VM"></typeparam>
-	/// <typeparam name="T"></typeparam>
-	public interface ITreeLookupProcessor<VM, T>
+    /// <summary>
+    /// Used with ITreeSelector and ITreeLookup, when ITreeSelector.LookupAsync return any HierarchicalResult, 
+    /// it will be processed by these processors.    
+    /// </summary>
+    /// <typeparam name="VM"></typeparam>
+    /// <typeparam name="T"></typeparam>
+    public interface ITreeLookupProcessor<VM, T>
 	{
 		/// <summary>
 		/// Called by ITreeSelector.LookupAsync() to process returned HierarchicalResult from ITreeLookup.

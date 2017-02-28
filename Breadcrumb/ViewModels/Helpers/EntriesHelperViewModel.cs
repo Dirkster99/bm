@@ -1,19 +1,18 @@
 ﻿namespace Breadcrumb.ViewModels.Helpers
 {
-	using System;
-	using System.Collections.Generic;
-	using System.Collections.ObjectModel;
-	using System.Linq;
-	using System.Threading;
-	using System.Threading.Tasks;
-	using System.Windows.Input;
-	using Breadcrumb.Defines;
-	using Breadcrumb.Utils;
-	using Breadcrumb.Viewmodels.Base;
-	using Breadcrumb.ViewModels.Interfaces;
-    using BreadcrumbLib.Utils;
+    using Breadcrumb.Utils;
+    using Breadcrumb.ViewModels.Interfaces;
+    using BreadcrumbLib.Defines;
+    using BreadcrumbLiv.Viewmodels.Base;
+    using System;
+    using System.Collections.Generic;
+    using System.Collections.ObjectModel;
+    using System.Linq;
+    using System.Threading;
+    using System.Threading.Tasks;
+    using System.Windows.Input;
 
-	public class EntriesHelperViewModel<VM> : NotifyPropertyChanged, IEntriesHelper<VM>
+    public class EntriesHelperViewModel<VM> : NotifyPropertyChanged, IEntriesHelper<VM>
 	{
 		#region fields
 		////private static ILogger logger = LogManagerFactory.DefaultLogManager.GetLogger<EntriesHelper<VM>>();
@@ -116,7 +115,7 @@
 					////	AsyncUtils.RunAsync(() => this.LoadAsync());
 
 					this._isExpanded = value;
-					this.NotifyOfPropertyChanged(() => this.IsExpanded);
+					this.NotifyOfPropertyChange(() => this.IsExpanded);
 				}
 			}
 		}
@@ -136,7 +135,7 @@
 				if (this._isLoaded != value)
 				{
 					this._isLoaded = value;
-					this.NotifyOfPropertyChanged(() => this.IsLoaded);
+					this.NotifyOfPropertyChange(() => this.IsLoaded);
 				}
 			}
 		}
@@ -156,7 +155,7 @@
 				if (this._isLoading != value)
 				{
 					this._isLoading = value;
-					this.NotifyOfPropertyChanged(() => this.IsLoading);
+					this.NotifyOfPropertyChange(() => this.IsLoading);
 				}
 			}
 		}

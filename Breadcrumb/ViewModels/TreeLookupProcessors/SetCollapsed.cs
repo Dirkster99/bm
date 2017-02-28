@@ -1,19 +1,20 @@
 ﻿namespace Breadcrumb.ViewModels.TreeLookupProcessors
 {
-	using System;
-	using System.Collections.Generic;
-	using System.Linq;
-	using System.Text;
-	using System.Threading.Tasks;
-	using Breadcrumb.Defines;
-	using Breadcrumb.ViewModels.Interfaces;
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Text;
+    using System.Threading.Tasks;
+    using Breadcrumb.Defines;
+    using Breadcrumb.ViewModels.Interfaces;
+    using BreadcrumbLib.Defines;
 
-	/// <summary>
-	/// Set ViewModel's EntryHelper.IsExpanded to false.
-	/// </summary>
-	/// <typeparam name="VM"></typeparam>
-	/// <typeparam name="T"></typeparam>
-	public class SetCollapsed<VM, T> : ITreeLookupProcessor<VM, T>
+    /// <summary>
+    /// Set ViewModel's EntryHelper.IsExpanded to false.
+    /// </summary>
+    /// <typeparam name="VM"></typeparam>
+    /// <typeparam name="T"></typeparam>
+    public class SetCollapsed<VM, T> : ITreeLookupProcessor<VM, T>
 	{
 		/// <summary>
 		/// Set ViewModel's EntryHelper.IsExpanded to false if it's child of current lookup.

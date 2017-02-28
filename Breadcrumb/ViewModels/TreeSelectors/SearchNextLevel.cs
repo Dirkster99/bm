@@ -1,15 +1,16 @@
 ﻿namespace Breadcrumb.ViewModels.TreeSelectors
 {
-	using System.Threading.Tasks;
-	using Breadcrumb.Defines;
-	using Breadcrumb.ViewModels.Interfaces;
+    using System.Threading.Tasks;
+    using Breadcrumb.Defines;
+    using Breadcrumb.ViewModels.Interfaces;
+    using BreadcrumbLib.Defines;
 
-	/// <summary>
-	/// Lookup only next level of tree nodes, even if the lookupvalue is in deeper level, and process only the matched node.
-	/// </summary>
-	/// <typeparam name="VM"></typeparam>
-	/// <typeparam name="T"></typeparam>
-	public class SearchNextLevel<VM, T> : ITreeLookup<VM, T>
+    /// <summary>
+    /// Lookup only next level of tree nodes, even if the lookupvalue is in deeper level, and process only the matched node.
+    /// </summary>
+    /// <typeparam name="VM"></typeparam>
+    /// <typeparam name="T"></typeparam>
+    public class SearchNextLevel<VM, T> : ITreeLookup<VM, T>
 	{
 		/// <summary>
 		/// Lookup only next level of tree nodes, even if the lookupvalue is in deeper level, and process only the matched node.

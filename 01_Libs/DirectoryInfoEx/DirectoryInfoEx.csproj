@@ -1,0 +1,218 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>9.0.30729</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{09DF5A9A-989E-410C-BA72-5A94CF481E57}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>QuickZip.IO.PIDL</RootNamespace>
+    <AssemblyName>DirectoryInfoEx</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <SccProjectName>
+    </SccProjectName>
+    <SccLocalPath>
+    </SccLocalPath>
+    <SccAuxPath>
+    </SccAuxPath>
+    <SccProvider>
+    </SccProvider>
+    <FileUpgradeFlags>
+    </FileUpgradeFlags>
+    <OldToolsVersion>3.5</OldToolsVersion>
+    <UpgradeBackupLocation />
+    <PublishUrl>publish\</PublishUrl>
+    <Install>true</Install>
+    <InstallFrom>Disk</InstallFrom>
+    <UpdateEnabled>false</UpdateEnabled>
+    <UpdateMode>Foreground</UpdateMode>
+    <UpdateInterval>7</UpdateInterval>
+    <UpdateIntervalUnits>Days</UpdateIntervalUnits>
+    <UpdatePeriodically>false</UpdatePeriodically>
+    <UpdateRequired>false</UpdateRequired>
+    <MapFileExtensions>true</MapFileExtensions>
+    <ApplicationRevision>0</ApplicationRevision>
+    <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
+    <IsWebBootstrapper>false</IsWebBootstrapper>
+    <UseApplicationTrust>false</UseApplicationTrust>
+    <BootstrapperEnabled>true</BootstrapperEnabled>
+    <TargetFrameworkProfile>
+    </TargetFrameworkProfile>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup>
+    <SignAssembly>false</SignAssembly>
+  </PropertyGroup>
+  <PropertyGroup>
+    <AssemblyOriginatorKeyFile>..\..\..\..\Common\quickzip.snk</AssemblyOriginatorKeyFile>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="IO\FileSystemInfoEx\ExtensionMethods.cs" />
+    <Compile Include="IO\Header\FileBrowser\Interfaces\IExtractImage.cs" />
+    <Compile Include="IO\Header\FileBrowser\Interfaces\IAdviseSink.cs" />
+    <Compile Include="IO\Header\FileBrowser\Interfaces\IContextMenu.cs" />
+    <Compile Include="IO\Header\FileBrowser\Interfaces\IDataObject.cs" />
+    <Compile Include="IO\Header\FileBrowser\Interfaces\IDragSourceHelper.cs" />
+    <Compile Include="IO\Header\FileBrowser\Interfaces\IDropSource.cs" />
+    <Compile Include="IO\Header\FileBrowser\Interfaces\IDropTarget.cs" />
+    <Compile Include="IO\Header\FileBrowser\Interfaces\IDropTargetHelper.cs" />
+    <Compile Include="IO\Header\FileBrowser\Interfaces\IEnumFORMATETC.cs" />
+    <Compile Include="IO\Header\FileBrowser\Interfaces\IEnumIDList.cs" />
+    <Compile Include="IO\Header\FileBrowser\Interfaces\IEnumSTATSTG.cs" />
+    <Compile Include="IO\Header\FileBrowser\Interfaces\IShellExtInit.cs" />
+    <Compile Include="IO\Header\FileBrowser\Interfaces\IShellFolder.cs" />
+    <Compile Include="IO\Header\FileBrowser\Interfaces\IStorage.cs" />
+    <Compile Include="IO\Header\FileBrowser\Interfaces\IStream.cs" />
+    <Compile Include="IO\Header\FileBrowser\PIDL.cs" />
+    <Compile Include="IO\Header\FileBrowser\ShellAPI.cs" />
+    <Compile Include="IO\Header\FileBrowser\ShellHelper.cs" />
+    <Compile Include="IO\FileStreamEx\FileStreamEx.cs" />
+    <Compile Include="IO\FileSystemInfoEx\DirectoryInfoEx.cs" />
+    <Compile Include="IO\FileSystemInfoEx\DriveInfoEx.cs" />
+    <Compile Include="IO\FileSystemInfoEx\FileInfoEx.cs" />
+    <Compile Include="IO\FileSystemInfoEx\FileSystemInfoEx.cs" />
+    <Compile Include="IO\Header\IShellFolder2.cs" />
+    <None Include="IO\Header\KnownFolders.cs" />
+    <None Include="IO\Header\PreviewHandlerWPF\Interface\COMStream.cs" />
+    <Compile Include="IO\Header\KnownFolder\Attributes\DisplayNameAttribute.cs" />
+    <Compile Include="IO\Header\KnownFolder\Attributes\DefaultPathAttribute.cs" />
+    <Compile Include="IO\Header\KnownFolder\Attributes\KnownFolderCategoryAttribute.cs" />
+    <Compile Include="IO\Header\KnownFolder\Attributes\KnownFolderGuidAttribute .cs" />
+    <Compile Include="IO\Header\KnownFolder\Attributes\CsidlAttribute.cs" />
+    <Compile Include="IO\Header\KnownFolder\Attributes\MinVersionAttribute.cs" />
+    <Compile Include="IO\Header\KnownFolder\Attributes\SpecialFolderAttribute.cs" />
+    <Compile Include="IO\Header\KnownFolder\Enums\KnownFolderCategory.cs" />
+    <Compile Include="IO\Header\KnownFolder\Enums\KnownFolderFindMode.cs" />
+    <Compile Include="IO\Header\KnownFolder\Enums\KnownFolderDefinitionFlags.cs" />
+    <Compile Include="IO\Header\KnownFolder\Enums\KnownFolderDefinition.cs" />
+    <Compile Include="IO\Header\KnownFolder\Enums\KnownFolderIds.cs" />
+    <Compile Include="IO\Header\KnownFolder\Enums\KnownFolderRedirectionCapabilities.cs" />
+    <Compile Include="IO\Header\KnownFolder\Enums\KnownFolderRetrievalOptions.cs" />
+    <Compile Include="IO\Header\KnownFolder\Interfaces\IKnownFolder..cs" />
+    <Compile Include="IO\Header\KnownFolder\Interfaces\IKnownFolderManager.cs" />
+    <Compile Include="IO\Header\KnownFolder\InternalKnownFolderDefinition.cs" />
+    <Compile Include="IO\Header\KnownFolder\KnownFolder.cs" />
+    <Compile Include="IO\Header\KnownFolder\KnownFolderManager.cs" />
+    <Compile Include="IO\Header\PreviewHandlerWPF\Interface\MSG.cs" />
+    <Compile Include="IO\Header\PreviewHandlerWPF\Interface\IInitalizeWithFile.cs" />
+    <Compile Include="IO\Header\PreviewHandlerWPF\Interface\IInitializeWithStream.cs" />
+    <Compile Include="IO\Header\PreviewHandlerWPF\Interface\IPreviewHandler.cs" />
+    <Compile Include="IO\Header\PreviewHandlerWPF\PreviewManager.cs" />
+    <Compile Include="IO\Header\ShellAPI.cs" />
+    <Compile Include="IO\Header\ShellLink\Interface\FileIcon.cs" />
+    <Compile Include="IO\Header\ShellLink\Interface\ShellLink.cs" />
+    <Compile Include="IO\Tools\AttributeUtils.cs" />
+    <Compile Include="IO\Tools\Comparer\ExComparer.cs" />
+    <Compile Include="IO\Tools\Dialog\ShellProgressDialog.cs" />
+    <Compile Include="IO\Tools\EnumAttributeUtils.cs" />
+    <Compile Include="IO\Tools\Interface\IWorkLogger.cs" />
+    <Compile Include="IO\Tools\Interface\OverwriteInfo.cs" />
+    <Compile Include="IO\Tools\Interface\ICustomProgressDialog.cs" />
+    <Compile Include="IO\Tools\Interface\IExWork.cs" />
+    <Compile Include="IO\Tools\Interface\ISupportDrag.cs" />
+    <Compile Include="IO\Tools\Interface\ISupportDrop.cs" />
+    <Compile Include="IO\Tools\Interface\IWork.cs" />
+    <Compile Include="IO\Tools\Interface\ShellFolder2.cs" />
+    <Compile Include="IO\Tools\PathEx.cs" />
+    <Compile Include="IO\Tools\ThirdParty\CRC32\crc32.cs" />
+    <Compile Include="IO\Tools\ThirdParty\IProgressDialog.cs" />
+    <Compile Include="IO\Tools\ThirdParty\NaturalComparer.cs" />
+    <Compile Include="IO\Tools\Work\ListWork.cs" />
+    <Compile Include="IO\Tools\Work\MoveWork.cs" />
+    <Compile Include="IO\Tools\Work\DeleteWork.cs" />
+    <Compile Include="IO\Tools\Work\ExWorkBase.cs" />
+    <Compile Include="IO\Tools\Work\CopyWork.cs" />
+    <Compile Include="IO\Tools\Work\MultiExWork.cs" />
+    <Compile Include="IO\Tools\Work\NullWorkLogger.cs" />
+    <Compile Include="IO\Tools\Work\WorkBase.cs" />
+    <Compile Include="IO\Tools\Work\FileWorkLogger.cs" />
+    <Compile Include="IO\Tools\Work\WorkSpawner.cs" />
+    <Compile Include="IO\Tools\Wrappers\ContextMenu\ContextMenuHelperEx.cs" />
+    <Compile Include="IO\Tools\Wrappers\ContextMenu\ContextMenuWrapper.cs" />
+    <Compile Include="IO\Tools\DirectoryEx.cs" />
+    <Compile Include="IO\Tools\FileEx.cs" />
+    <Compile Include="IO\Tools\Helper.cs" />
+    <Compile Include="IO\Tools\IOTools.cs" />
+    <Compile Include="IO\Tools\Interface\ShellFolder.cs" />
+    <Compile Include="IO\Tools\Interface\Storage.cs" />
+    <Compile Include="IO\Tools\Wrappers\ContextMenu\CustomMenuStructure.cs" />
+    <Compile Include="IO\Tools\Wrappers\DataObjectEx.cs" />
+    <Compile Include="IO\Tools\Wrappers\DragWrapper.cs" />
+    <Compile Include="IO\Tools\Wrappers\ExtraPropertiesProvider.cs" />
+    <Compile Include="IO\Tools\Wrappers\FileSystemWatcherEx.cs" />
+    <Compile Include="IO\Header\VirtualFileDataObject\ShellAPI.cs" />
+    <Compile Include="IO\Header\VirtualFileDataObject\VirtualFileDataObject.cs" />
+    <Compile Include="IO\Tools\Wrappers\FileTypeInfoProvider.cs" />
+    <Compile Include="IO\Tools\Wrappers\ImageExtractor.cs" />
+    <Compile Include="IO\Tools\Wrappers\Preview\PreviewerControl.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="IO\Tools\Wrappers\Preview\PreviewHelper.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="DirExCoreDiagram.cd" />
+    <None Include="DirExToolsDiagram.cd" />
+    <None Include="DirExWorkDiagram.cd" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="ChangeLog.txt" />
+    <Content Include="License.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="IO\Tools\Wrappers\DataObjectEx\" />
+  </ItemGroup>
+  <ItemGroup>
+    <BootstrapperPackage Include="Microsoft.Net.Client.3.5">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5 SP1 Client Profile</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Framework.3.5.SP1">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5 SP1</ProductName>
+      <Install>true</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Windows.Installer.3.1">
+      <Visible>False</Visible>
+      <ProductName>Windows Installer 3.1</ProductName>
+      <Install>true</Install>
+    </BootstrapperPackage>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

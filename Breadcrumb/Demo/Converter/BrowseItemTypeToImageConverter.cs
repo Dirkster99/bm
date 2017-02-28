@@ -276,7 +276,7 @@
 					uriPath = string.Format("{0}_{1}", prefix, "Default");
 					break;
 				
-				////case Environment.SpecialFolder.Personal: Enum Id is same as MyDocuments = 5 ???
+				////case Environment.SpecialFolder.Personal: Enum Id is same as MyDocuments = 5 ?
 				//// MyDocuments
 				////	break;
 				case Environment.SpecialFolder.PrinterShortcuts:

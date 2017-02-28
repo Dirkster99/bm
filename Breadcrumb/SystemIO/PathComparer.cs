@@ -1,10 +1,11 @@
 namespace Breadcrumb.SystemIO
 {
-	using System;
-	using Breadcrumb.Defines;
-	using Breadcrumb.ViewModels.Interfaces;
+    using System;
+    using Breadcrumb.Defines;
+    using Breadcrumb.ViewModels.Interfaces;
+    using BreadcrumbLib.Defines;
 
-	public class PathComparer : ICompareHierarchy<string>
+    public class PathComparer : ICompareHierarchy<string>
 	{
 		#region fields
 		private StringComparison _stringComparsion = StringComparison.InvariantCultureIgnoreCase;

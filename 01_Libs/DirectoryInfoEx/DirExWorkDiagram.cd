@@ -1,0 +1,138 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Comment CommentText="An abstract method named DoWork() which implement by inherited Work">
+    <Position X="2.26" Y="1.698" Height="0.698" Width="2.033" />
+  </Comment>
+  <Comment CommentText="Schedule and do work sequentially">
+    <Position X="8.021" Y="0.656" Height="0.562" Width="1.7" />
+  </Comment>
+  <Class Name="System.IO.Tools.WorkSpawner">
+    <Position X="8" Y="1.5" Width="1.75" />
+    <Members>
+      <Method Name="addWork" Hidden="true" />
+      <Field Name="fullWorkList" Hidden="true" />
+      <Method Name="GetIsMuted" Hidden="true" />
+      <Method Name="hookWorkEvent" Hidden="true" />
+      <Field Name="MonitorWorkListUpdated" Hidden="true" />
+      <Field Name="muteList" Hidden="true" />
+      <Method Name="newKey" Hidden="true" />
+      <Field Name="onGoingWorkList" Hidden="true" />
+      <Method Name="OnWorkList" Hidden="true" />
+      <Method Name="OnWorkMessage" Hidden="true" />
+      <Method Name="OnWorkOverwrite" Hidden="true" />
+      <Method Name="OnWorkProgress" Hidden="true" />
+      <Field Name="rand" Hidden="true" />
+      <Method Name="ReportMonitorUpdated" Hidden="true" />
+      <Method Name="retVal_WorkFinished" Hidden="true" />
+      <Method Name="retVal_WorkStart" Hidden="true" />
+      <Method Name="SetIsMuted" Hidden="true" />
+      <Method Name="startID" Hidden="true" />
+    </Members>
+    <TypeIdentifier>
+      <HashCode>QCAgAZAACiBAAACAgJAAAgICAAIAAAAgAgACAEQECNI=</HashCode>
+      <FileName>IO\Tools\Work\WorkSpawner.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="System.IO.Tools.WorkBase" Collapsed="true">
+    <Position X="2.25" Y="1" Width="1.5" />
+    <Compartments>
+      <Compartment Name="Fields" Collapsed="true" />
+      <Compartment Name="Properties" Collapsed="true" />
+    </Compartments>
+    <TypeIdentifier>
+      <HashCode>AwAiBACUACQIkGYggIgCAAUQIQAAQgAAIwghAQgCikA=</HashCode>
+      <FileName>IO\Tools\Work\WorkBase.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="System.IO.Tools.CopyWork">
+    <Position X="4.5" Y="2" Width="1.5" />
+    <Members>
+      <Field Name="_copyFrom" Hidden="true" />
+      <Field Name="_dest" Hidden="true" />
+      <Method Name="PrepateDirectoryForCopy" Hidden="true" />
+    </Members>
+    <TypeIdentifier>
+      <HashCode>AAAEAACAAAQAAAAAAAEAAAEAAAAAAAAAAAAAAAAAEAA=</HashCode>
+      <FileName>IO\Tools\Work\CopyWork.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="System.IO.Tools.ExWorkBase" Collapsed="true">
+    <Position X="4" Y="1" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAABAAAAiAAAAGAAAAAACAAAIAAAAAAAAAAAAAAABA=</HashCode>
+      <FileName>IO\Tools\Work\ExWorkBase.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="System.IO.Tools.ListWork">
+    <Position X="4.5" Y="4" Width="1.5" />
+    <Members>
+      <Field Name="_dirsToList" Hidden="true" />
+      <Field Name="_fileMask" Hidden="true" />
+      <Field Name="_listDir" Hidden="true" />
+      <Field Name="_listFile" Hidden="true" />
+      <Method Name="init" Hidden="true" />
+    </Members>
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAQAAAAAAQIAAAAAAAAAAAIAAAAgAAAAIAQ=</HashCode>
+      <FileName>IO\Tools\Work\ListWork.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="System.IO.Tools.MoveWork">
+    <Position X="6.25" Y="3.75" Width="1.5" />
+    <Members>
+      <Field Name="_copyFrom" Hidden="true" />
+      <Field Name="_dest" Hidden="true" />
+      <Method Name="PrepateDirectoryForMove" Hidden="true" />
+    </Members>
+    <TypeIdentifier>
+      <HashCode>AAAEAAAAAAQAAAAAAAEAAEAAAAAAAAAAAACAAAAAAAA=</HashCode>
+      <FileName>IO\Tools\Work\MoveWork.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="System.IO.Tools.DeleteWork">
+    <Position X="6.25" Y="2" Width="1.5" />
+    <Members>
+      <Field Name="_deleteItems" Hidden="true" />
+    </Members>
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAQAAAAAAAAAAAAAAAAAAAAAAAQAAAAAAAA=</HashCode>
+      <FileName>IO\Tools\Work\DeleteWork.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="System.IO.Tools.MultiExWork">
+    <Position X="2.75" Y="4.75" Width="1.5" />
+    <Members>
+      <Field Name="_workList" Hidden="true" />
+      <Field Name="completedWork" Hidden="true" />
+      <Method Name="hookWorkEvent" Hidden="true" />
+      <Method Name="OnWorkList" Hidden="true" />
+      <Method Name="OnWorkOverwrite" Hidden="true" />
+      <Method Name="OnWorkProgress" Hidden="true" />
+      <Method Name="retVal_WorkFinished" Hidden="true" />
+      <Method Name="retVal_WorkStart" Hidden="true" />
+      <Field Name="sequential" Hidden="true" />
+      <Method Name="unhookWorkEvent" Hidden="true" />
+    </Members>
+    <TypeIdentifier>
+      <HashCode>ACAgBQAACAxAAgAAAAAIAAAAAAAAAAAAAACAAAAACAI=</HashCode>
+      <FileName>IO\Tools\Work\MultiExWork.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Interface Name="System.IO.Tools.IWork">
+    <Position X="0.5" Y="1" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AgAgAAAAACAAgGIAgIAAAAQQIQAAQAAAAgAgAQgCAkA=</HashCode>
+      <FileName>IO\Tools\Interface\IWork.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="System.IO.Tools.IExWork">
+    <Position X="2.25" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAgAAAACAAAAAACAAAAAAAAAAAAAAAAAAABA=</HashCode>
+      <FileName>IO\Tools\Interface\IExWork.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>

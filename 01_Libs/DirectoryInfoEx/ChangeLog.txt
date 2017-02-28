@@ -1,0 +1,115 @@
+﻿
+QuickZip.IO.PIDL change log.
+
+     * 08-22-09 - version 0.1
+          o Initial version.
+     * 08-23-09 version 0.2
+          o Demo updated.
+     * 11-01-09 version 0.3
+          o Demo no longer load Network contents, edit the converter to disable this change.
+          o DirectoryEx (static class) added.
+          o PIDL class is now IDisposable and free automatically now. Also added new - internal classes ShellFolder and Storage which do the same.
+          o Performance improved, no longer construct from desktop directory. (see above)
+          o DirectoryInfoEx and FileInfoEx is now serializable.
+     * 11-01-09 Version 0.4
+          o Fixed Cache not working.
+     * 11-04-09 Version 0.5
+          o DirectoryInfoEx/FileInfoEx works even if the path specified is not exists (Exists == false, you have to call Create() or Refresh() before using it).
+          o Refresh(), Create(), MoveTo(), Delete(), CreateSubdirectory() Open() and related instance method added.
+          o Constructor support Environment path (e.g. %temp%)
+          o Test project.
+     * 11-07-09 Version 0.6
+          o Context menu support (ContextMenuWrapper)
+          o Demo updated (Context menu)
+          o FileSystemWatcherEx class added.
+          o Fixed FileInfoEx created by EnumFiles()(which used by GetFiles() and GetFileSystemInfos()) return incorrect Parent directory.
+     * 11-08-09 Version 0.7
+          o Fixed Root of all FileInfoEx equals to c:\Users\{User}\Desktop instead of a GUID.
+          o Demo updated (Context menu multiselected)
+     * 11-16-09 Version 0.8
+          o Fixed unable Rename item in same directory.
+          o Fixed ContextMenuWrapper dont return OnHover message on popup.
+          o Added QueryMenuItemsEventArgs.Command, return properly for user query items.
+          o Demo updated (added statusbar)
+     * 12-06-09 Version 0.9
+          o Fixed minor typo in DirectoryInfoEx.EmuFiles (if (iShellFolder != null))
+          o Fixed DirectoryEx.Copy does not Copy directory recursively. (it currently copies an empty folder)
+          o Fixed DIrectoryEx.Move (and perhaps FileEx as well) does not work correctly.
+          o Fixed Wrong Operator (new) in DirectoryInfoEx.Delete(), should be override.
+     * 01-04-10 Version 0.10
+          o Fixed FileSystemInfoEx.getParentIShellFolder() method generate ArgumentException when pidl of items directly in Desktop directory, caused by _desktopShellFolder.BindToObject({Desktop's PIDL},...);
+          o Fixed FileSystemInfoEx.Delete() return NotImplementException when get called.
+          o Fixed DirectoryEx/FileEx.Exists does not check if it's directory / file.
+          o Fixed FileSystemInfoEx.refresh() method does not update attribute.
+          o Implemented IClonable interface in FileSystemInfoEx, DirectoryInfoEx and FileInfoEx classes.
+          o Added BeforeInvoke event to ContextMenuWrapper class.
+          o Added Run behavior when double click in filelist.
+          o Added FileSystemWatcherEx.Filter.
+     * 01-20-10 Version 0.11
+          o Added DirectoryTree in the demo now properly refreshed when changed.
+            (Implemented an ObservableCollection in GetDirectoriesConverterEx class using FileSystemWatcherEx class)
+          o Added ContextMenuWrapper.OnQueryMenuItems.QueryContextMenu2/QueryContextMenu3 property.
+          o Added ContextMenuWrapper.OnBeforePopup event.
+          o Added ContextMenuWrapper.OnQueryMenuItems event now support multilevel menu. (e.g. @"Tools\Add")
+          o Added ContextMenuWrapper.OnQueryMenuItems event now support GrayedItems / HiddenItems.
+     * 02-15-10 Version 0.12
+          o Fixed Fullname of User/Shared directory under desktop is now it's GUID instead of it's file path.
+          o Fixed PIDL, PIDLRel, ShellFolder, Storage properties generated on demand to avoid x-thread issues.
+          o Added PathEx class to deal with PIDL related paths.
+     * 03-14-10 Version 0.13          
+          o Fixed FileSystemWaterEx ignore remove directory event.          
+          o Fixed Removed IDisposable in PIDL as it causing AccessViolationException, user have to free calling the Free() method.          
+     * 03-16-10 Version 0.14
+          o Fixed FileSystemInfoEx now stored a copy of PIDL/Rel, will return copy of it when properties is called (to avoid AccessViolation). 
+          o Fixed FileSystemInfoEx record the pidl when construct, as some path do not parasable (e.g. EntireNetwork)
+          o Added allowed folder list so Non-FileAncestor directory (e.g. recycle-bin) is listed.
+     * 03-18-10 Version 0.15
+          o Fixed ShellFolder/PIDL not freed in a couple locations. 
+          o (Please noted that PIDL/ShellFolder/Store no longer store in the FileSystemInfoEx => must be freed by user.)
+     * 03-19-10 Version 0.16
+          o Added IShellFolder2 interface and ShellFolder2 class.
+          o Added ExtraPropertiesProvider which can list extra file properties / list columns available.
+            (e.g. ExtraPropertiesProvider.GetProperty(file, ref ImageSummaryInformation.BitDepth); )
+          o Fixed getRelPIDL() cannot return correct value if File/DirInfoEx construct with string. (attemp to return a freed up pointer).
+          o Fixed ShellFolder not freed in 2 spots.
+     * 04-25-10 Version 0.17
+          o Added this operator in DirectoryInfoEx.
+          o Added DefaultItem and DefaultCommand in BeforePopup
+          o Added WorkSpawner, which can spawn ListWork, CopyWork, MoveWork and DeleteWork to perform responsive threaded operations.
+          o Fixed some XP system cannot create shared directories. (by cwharmon)
+          o Removed DirectoryInfoEx file/directory list caching (_cachedFileList) as it slow down if too many files (and the old EnumDirs/EnumFiles implementation).
+          o Added DirectoryInfoEx/DirectoryEx.EnumerateFiles/EnumerateDirectories/EnumerateFileSystemInfos() methods which work similar as the one in .Net4 (CancelDelegate is added to make it cancelable.)
+          o Added FileEx.ReadLines/ReadAllLines() methods.
+          o Added IOTools.CopyFile() method which support cancel.
+          o Added FileSystemInfoEx.FromString() method.
+      * 05-25-10 Version 0.18 - 
+          o WPF File Explorer User Control (DirectoryTree and FileList) now available.
+          o Fixed DirectoryInfoEx.EnumerateDirectories return files when listing network directories.
+          o Added ExComparer class, which enable sorting an array of FileSystemInfoEx entries.
+          o Fixed DriveInfoEx return incorrect TotalSize.  DriveInfoEx constructor now accept full drive name ("C" and "C:\" both accepted now)              
+          o (REMOVED) Added a check for NonEnumerated items so DirectoryInfoEx.EnumerateDirectories wont return some system directories (e.g. C:\MSOCache)
+          o Added IOTools.GetRelativePath.   Documented IOTools's static methods.
+          o Added IOTools.ShellFolderToCSIDL() and CSIDLToShellFolder() static methods. 
+          o Added constructor of DirectoryInfoEx which support Environment.ShellFolder.
+          o Fixed DirectoryInfoEx.EnumerateFiles ignore SearchPattern.
+          o Fixed Context menu disappear in some case. (By cwharmon)
+          o Updated DirectoryInfoEx/FileInfoEx listing code to improve speed.
+          o Added Progress Dialog for all Work, WorkBase.IsProgressDialogEnabled and ProgressDialog.
+      * 07-17-10 Version 0.19 - 
+          o FileTypeInfoProvider
+          o Fixed ArgumentException when getting storage of C:\{User}\Desktop.
+	  * 08-22-10 Version 0.20 - 
+	      o Fixed ShellProgressDialog still running after closed.
+		  o Added LinkSummaryInformation in ExtraPropertiesProvider.
+	  * 11-04-10 Version 0.21 - 
+	      o Small update to CustomMenuStructure class.
+		  o Fixed FileSystemInfoEx.getRelativePIDL() and getParentPIDL() that return relPIDL that is not a clone, which will crash if attempted to Free. (e.g. in DirectoryEx.Exists())
+	  * 03-??-11 Version 0.22 - 
+	      o Added ImageExtractor, which uses IExtractImage to generate thumbnails.
+		  o Added PreviewHelper and PreviewControl, which is a IPreviewHandler.
+		  o Fix illegal PIDL for Directory under Library.ms directory
+	  * 12-16-13 Version 0.24
+		  o Change access to FileSystemInfoEx.PIDL/PidlRel to extension methods (RequestPIDL/RelPIDL)
+		  o Fixed a memory leak when listing.
+	  * ??-??-13 Version 0.25  
+		  o Fixed OpenWithInfo.GetExecutablePath()

@@ -9,63 +9,60 @@
 
         xmlns:conv="clr-namespace:Breadcrumb.Demo.Converter"
 
-        Title="MainWindow" Height="350" Width="525"
+        Title="MainWindow" Height="550" Width="525"
         >
 	<Grid Background="{DynamicResource {x:Static themes:ResourceKeys.ControlBackground}}" >
-    <Grid.RowDefinitions>
-      <RowDefinition Height="Auto" />
-      <RowDefinition Height="Auto" />
-      <RowDefinition Height="Auto" />
-      <RowDefinition Height="*" />
-    </Grid.RowDefinitions>
+		<Grid.RowDefinitions>
+			<RowDefinition Height="Auto" />
+			<RowDefinition Height="Auto" />
+			<RowDefinition Height="Auto" />
+			<RowDefinition Height="Auto" />
+			<RowDefinition Height="*" />
+		</Grid.RowDefinitions>
 
 		<Menu Grid.Row="0">
 			<Menu.Resources>
 				<!-- Use a proxy to bind items to root object of this collection -->
 				<bindLocal:BindingProxy  x:Key="MenuDataContextProxy" Data="{Binding}" />
 			</Menu.Resources>
-				<MenuItem Header="View" ItemsSource="{Binding Path=Themes.ListAllThemes}">
-					<MenuItem.ItemContainerStyle>
-						<Style TargetType="MenuItem">
-							<Setter Property="Header" Value="{Binding HlThemeName}" />
-							<!-- Setter Property="IsCheckable" Value="True" / -->
-							<Setter Property="IsChecked" Value="{Binding IsSelected, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" />
+			<MenuItem Header="View" ItemsSource="{Binding Path=Themes.ListAllThemes}">
+				<MenuItem.ItemContainerStyle>
+					<Style TargetType="MenuItem">
+						<Setter Property="Header" Value="{Binding HlThemeName}" />
+						<!-- Setter Property="IsCheckable" Value="True" / -->
+						<Setter Property="IsChecked" Value="{Binding IsSelected, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" />
 						<Setter Property="Command" Value="{Binding Path=Data.ViewThemeCommand, Source={StaticResource MenuDataContextProxy}}" />
-							<Setter Property="CommandParameter" Value="{Binding HlThemeName}" />
-							<Setter Property="ToolTipService.ShowOnDisabled" Value="True" />
-							<Setter Property="ToolTip" Value="{Binding RelativeSource={RelativeSource Self}, Path=Command.Text}"/>
-							<Setter Property="Margin" Value="3,3,3,0" />
-						</Style>
-					</MenuItem.ItemContainerStyle>
-				</MenuItem>
+						<Setter Property="CommandParameter" Value="{Binding HlThemeName}" />
+						<Setter Property="ToolTipService.ShowOnDisabled" Value="True" />
+						<Setter Property="ToolTip" Value="{Binding RelativeSource={RelativeSource Self}, Path=Command.Text}"/>
+						<Setter Property="Margin" Value="3,3,3,0" />
+					</Style>
+				</MenuItem.ItemContainerStyle>
+			</MenuItem>
 		</Menu>
 
-        <ctrls:Breadcrumb DataContext="{Binding ExTest}" 
-                          PathSuggestSource="{Binding SuggestSource}"
-                          DisplayMemberPath="FullName"
-                          ValuePath="FullName" IsProgressbarVisible="True" IsIndeterminate="True"
-                          PathConverter="{Binding PathConverter}" Grid.Row="1" />
-        <ctrls:Breadcrumb DataContext="{Binding ExTest1}" 
-                           PathSuggestSource="{Binding SuggestSource}"
-                          DisplayMemberPath="FullName"
-                          ValuePath="FullName"
-                          PathConverter="{Binding PathConverter}" Grid.Row="2" />
+		<!-- ctrls:Breadcrumb DataContext="{Binding ExTest}" Grid.Row="1" / -->
 
-        <ListBox ItemsSource="{Binding SpecialFoldersTest.Folders}" Grid.Row="3">
-      <ListBox.ItemTemplate>
-        <DataTemplate>
-          <StackPanel Orientation="Horizontal">
-            <Image Margin="3" Width="64">
-              <Image.Source>
-                <MultiBinding Converter="{conv:BrowseItemTypeToImageConverter}">
-                  <Binding Path="EnumSpecialFolder" />
-                </MultiBinding>
-              </Image.Source>
-            </Image>
-            <TextBlock Text="{Binding FolderName}" Margin="3,0" />
-          </StackPanel>
-        </DataTemplate>
-      </ListBox.ItemTemplate>
-    </ListBox>
-  </Grid>
+		<!-- ctrls:Breadcrumb DataContext="{Binding ExTest1}" Grid.Row="2" / -->
+
+		<ctrls:Breadcrumb DataContext="{Binding BreadcrumbTest}" Grid.Row="3" />
+
+
+		<!-- ListBox ItemsSource="{Binding SpecialFoldersTest.Folders}" Grid.Row="4">
+			<ListBox.ItemTemplate>
+				<DataTemplate>
+					<StackPanel Orientation="Horizontal">
+						<Image Margin="3" Width="64">
+							<Image.Source>
+								<MultiBinding Converter="{conv:BrowseItemTypeToImageConverter}">
+									<Binding Path="EnumSpecialFolder" />
+								</MultiBinding>
+							</Image.Source>
+						</Image>
+						<TextBlock Text="{Binding FolderName}" Margin="3,0" />
+					</StackPanel>
+				</DataTemplate>
+			</ListBox.ItemTemplate>
+		</ListBox -->
+	</Grid>
 </Window>

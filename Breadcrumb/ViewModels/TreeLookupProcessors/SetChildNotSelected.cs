@@ -1,14 +1,15 @@
 ﻿namespace Breadcrumb.ViewModels.TreeLookupProcessors
 {
-	using Breadcrumb.Defines;
-	using Breadcrumb.ViewModels.Interfaces;
+    using Breadcrumb.Defines;
+    using Breadcrumb.ViewModels.Interfaces;
+    using BreadcrumbLib.Defines;
 
-	/// <summary>
-	/// Set ViewModel's ITreeSelector.SelectedChild to null.
-	/// </summary>
-	/// <typeparam name="VM"></typeparam>
-	/// <typeparam name="T"></typeparam>
-	public class SetChildNotSelected<VM, T> : ITreeLookupProcessor<VM, T>
+    /// <summary>
+    /// Set ViewModel's ITreeSelector.SelectedChild to null.
+    /// </summary>
+    /// <typeparam name="VM"></typeparam>
+    /// <typeparam name="T"></typeparam>
+    public class SetChildNotSelected<VM, T> : ITreeLookupProcessor<VM, T>
 	{
 		/// <summary>
 		/// Set ViewModel's ITreeSelector.SelectedChild to null if it's child of current lookup.

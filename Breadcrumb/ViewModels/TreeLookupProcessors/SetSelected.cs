@@ -1,14 +1,15 @@
 ﻿namespace Breadcrumb.ViewModels.TreeLookupProcessors
 {
-	using Breadcrumb.Defines;
-	using Breadcrumb.ViewModels.Interfaces;
+    using Breadcrumb.Defines;
+    using Breadcrumb.ViewModels.Interfaces;
+    using BreadcrumbLib.Defines;
 
-	/// <summary>
-	/// Set ViewModel's Selector.IsSelected to true 
-	/// </summary>
-	/// <typeparam name="VM"></typeparam>
-	/// <typeparam name="T"></typeparam>
-	public class SetSelected<VM, T> : ITreeLookupProcessor<VM, T>
+    /// <summary>
+    /// Set ViewModel's Selector.IsSelected to true 
+    /// </summary>
+    /// <typeparam name="VM"></typeparam>
+    /// <typeparam name="T"></typeparam>
+    public class SetSelected<VM, T> : ITreeLookupProcessor<VM, T>
 	{
 		/// <summary>
 		/// Set ViewModel's Selector.IsSelected to true  if it's lookupvalue of current lookup.

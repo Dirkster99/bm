@@ -3,7 +3,7 @@
 	using System;
 	using System.Windows.Input;
 
-	public class RelayCommand : ICommand
+	internal class RelayCommand : ICommand
 	{
 		private readonly Action<object> _handler;
 		private readonly Func<object, bool> _canHandle;

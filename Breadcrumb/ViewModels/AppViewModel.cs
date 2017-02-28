@@ -1,22 +1,21 @@
 ﻿namespace Breadcrumb.ViewModels
 {
-	using System;
-	using System.IO;
-	using System.Reflection;
-	using System.Threading;
-	using System.Windows;
-	using System.Windows.Input;
-	using System.Windows.Threading;
-	using Breadcrumb.Demo;
-	using Breadcrumb.DirectoryInfoEx;
-	using Breadcrumb.SystemIO;
-	using Breadcrumb.Utils;
-	using Breadcrumb.ViewModels.Interfaces;
-	using Themes;
-	using Themes.Base;
-    using BreadcrumbLib.Utils;
+    using Breadcrumb.Demo;
+    using Breadcrumb.DirectoryInfoEx;
+    using Breadcrumb.SystemIO;
+    using Breadcrumb.Utils;
+    using Breadcrumb.ViewModels.Interfaces;
+    using System;
+    using System.IO;
+    using System.Reflection;
+    using System.Threading;
+    using System.Windows;
+    using System.Windows.Input;
+    using System.Windows.Threading;
+    using Themes;
+    using Themes.Base;
 
-	public class AppViewModel : Breadcrumb.Viewmodels.Base.NotifyPropertyChanged
+	public class AppViewModel : NotifyPropertyChanged
 	{
 		#region fields
 		private ThemesManager mThemes;
@@ -53,6 +52,7 @@
 			this.ExTest1 = new ExTreeNodeViewModel();
 			(this.ExTest1.Selection as ITreeRootSelector<ExTreeNodeViewModel, FileSystemInfoEx>).SelectAsync(DirectoryInfoEx.FromString(@"C:\temp"));
 
+			BreadcrumbTest = new BreadcrumbViewModel();
 			// If you want to show only root directories, try Toggle this line in TreeRootSelector.
 			////updateRootItemsAsync(this, _rootItems, 2);
 		}
@@ -95,6 +95,8 @@
 
 		public ExTreeNodeViewModel ExTest1 { get; private set; }
 
+		public BreadcrumbViewModel BreadcrumbTest { get; private set; }
+
 		public SpecialFoldersViewModel SpecialFoldersTest { get; private set; }
 		#endregion properties
 
@@ -135,14 +137,6 @@
 							{
 								////this.mSettingsManager.SettingData.CurrentTheme = newThemeName;
 								this.ResetTheme();                        // Initialize theme in process
-
-                                this.ExTest.Selection.RefreshIconsAsync();
-                                this.ExTest1.Selection.RefreshIconsAsync();
-
-                                //this.ExTest.Selection.LookupAsync(this.ExTest.Selection.Value,
-                                //    TreeSelectors.RecrusiveBroadcast<ExTreeNodeViewModel, FileSystemInfoEx>.SkipIfNotLoaded, 
-                                //    CancellationToken.None,
-                                //    TreeLookupProcessors.RefreshIcons<ExTreeNodeViewModel, FileSystemInfoEx>.IfLoaded);
 							}
 						}
 						catch (Exception exp)

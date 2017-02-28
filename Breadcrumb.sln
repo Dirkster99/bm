@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2013
-VisualStudioVersion = 12.0.30723.0
+# Visual Studio 14
+VisualStudioVersion = 14.0.25420.1
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Breadcrumb", "Breadcrumb\Breadcrumb.csproj", "{3CC96481-522E-4769-B93D-C81915A06893}"
 EndProject
@@ -14,28 +14,11 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{E10CC4
 		.nuget\NuGet.targets = .nuget\NuGet.targets
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Themes", "ThemesManager\Themes.csproj", "{6570EE8B-24C8-4025-B382-247FF6A8EA94}"
+EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Icons", "Icons\Icons.csproj", "{B0E97E26-48E6-467C-A5E8-79D4ED4E5550}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Themes", "Themes\Themes.csproj", "{6570EE8B-24C8-4025-B382-247FF6A8EA94}"
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".build", ".build", "{30AF6BF9-566C-499F-9321-D6983176CEE1}"
-	ProjectSection(SolutionItems) = preProject
-		02_Build\bm.build = 02_Build\bm.build
-		02_Build\bm.nuspec = 02_Build\bm.nuspec
-		02_Build\local.properties.xml = 02_Build\local.properties.xml
-		02_Build\projects.txt = 02_Build\projects.txt
-		02_Build\version\version.txt = 02_Build\version\version.txt
-	EndProjectSection
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "func", "func", "{31669C62-B1F9-44D6-BE65-B4BB18907121}"
-	ProjectSection(SolutionItems) = preProject
-		02_Build\func\func.msbuild2.xml = 02_Build\func\func.msbuild2.xml
-		02_Build\func\func.nuget.xml = 02_Build\func\func.nuget.xml
-		02_Build\func\func.nunit.xml = 02_Build\func\func.nunit.xml
-		02_Build\func\func.parseProjects.xml = 02_Build\func\func.parseProjects.xml
-		02_Build\func\func.versioning.xml = 02_Build\func\func.versioning.xml
-		02_Build\local.properties.xml = 02_Build\local.properties.xml
-	EndProjectSection
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DirectoryInfoEx", "01_Libs\DirectoryInfoEx\DirectoryInfoEx.csproj", "{09DF5A9A-989E-410C-BA72-5A94CF481E57}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -61,23 +44,28 @@ Global
 		{15BBE1FB-D9E1-4B86-BE6C-B7D04A1A79F0}.Release|Any CPU.Build.0 = Release|Any CPU
 		{15BBE1FB-D9E1-4B86-BE6C-B7D04A1A79F0}.Release|x86.ActiveCfg = Release|x86
 		{15BBE1FB-D9E1-4B86-BE6C-B7D04A1A79F0}.Release|x86.Build.0 = Release|x86
-		{B0E97E26-48E6-467C-A5E8-79D4ED4E5550}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{B0E97E26-48E6-467C-A5E8-79D4ED4E5550}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{B0E97E26-48E6-467C-A5E8-79D4ED4E5550}.Debug|x86.ActiveCfg = Debug|Any CPU
-		{B0E97E26-48E6-467C-A5E8-79D4ED4E5550}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{B0E97E26-48E6-467C-A5E8-79D4ED4E5550}.Release|Any CPU.Build.0 = Release|Any CPU
-		{B0E97E26-48E6-467C-A5E8-79D4ED4E5550}.Release|x86.ActiveCfg = Release|Any CPU
 		{6570EE8B-24C8-4025-B382-247FF6A8EA94}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{6570EE8B-24C8-4025-B382-247FF6A8EA94}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6570EE8B-24C8-4025-B382-247FF6A8EA94}.Debug|x86.ActiveCfg = Debug|Any CPU
 		{6570EE8B-24C8-4025-B382-247FF6A8EA94}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6570EE8B-24C8-4025-B382-247FF6A8EA94}.Release|Any CPU.Build.0 = Release|Any CPU
 		{6570EE8B-24C8-4025-B382-247FF6A8EA94}.Release|x86.ActiveCfg = Release|Any CPU
+		{B0E97E26-48E6-467C-A5E8-79D4ED4E5550}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B0E97E26-48E6-467C-A5E8-79D4ED4E5550}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B0E97E26-48E6-467C-A5E8-79D4ED4E5550}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{B0E97E26-48E6-467C-A5E8-79D4ED4E5550}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B0E97E26-48E6-467C-A5E8-79D4ED4E5550}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B0E97E26-48E6-467C-A5E8-79D4ED4E5550}.Release|x86.ActiveCfg = Release|Any CPU
+		{09DF5A9A-989E-410C-BA72-5A94CF481E57}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{09DF5A9A-989E-410C-BA72-5A94CF481E57}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{09DF5A9A-989E-410C-BA72-5A94CF481E57}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{09DF5A9A-989E-410C-BA72-5A94CF481E57}.Debug|x86.Build.0 = Debug|Any CPU
+		{09DF5A9A-989E-410C-BA72-5A94CF481E57}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{09DF5A9A-989E-410C-BA72-5A94CF481E57}.Release|Any CPU.Build.0 = Release|Any CPU
+		{09DF5A9A-989E-410C-BA72-5A94CF481E57}.Release|x86.ActiveCfg = Release|Any CPU
+		{09DF5A9A-989E-410C-BA72-5A94CF481E57}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
-	EndGlobalSection
-	GlobalSection(NestedProjects) = preSolution
-		{31669C62-B1F9-44D6-BE65-B4BB18907121} = {30AF6BF9-566C-499F-9321-D6983176CEE1}
 	EndGlobalSection
 EndGlobal

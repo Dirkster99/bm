@@ -1,9 +1,10 @@
 ﻿namespace Breadcrumb.Demo
 {
-	using System;
-	using System.Collections.ObjectModel;
+    using BreadcrumbLiv.Viewmodels.Base;
+    using System;
+    using System.Collections.ObjectModel;
 
-	public class SpecialFoldersViewModel : Viewmodels.Base.NotifyPropertyChanged
+	public class SpecialFoldersViewModel : NotifyPropertyChanged
 	{
 		public SpecialFoldersViewModel()
 		{

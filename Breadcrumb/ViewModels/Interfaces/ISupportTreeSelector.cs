@@ -1,8 +1,4 @@
-﻿using System.Threading.Tasks;
-using System.Linq;
-using System.Threading;
-
-namespace Breadcrumb.ViewModels.Interfaces
+﻿namespace Breadcrumb.ViewModels.Interfaces
 {
 	/// <summary>
 	/// Implement by ViewModel that has Tree based structure and support LookupProcessing.
@@ -13,6 +9,4 @@ namespace Breadcrumb.ViewModels.Interfaces
 	{
 		ITreeSelector<VM, T> Selection { get; set; }
 	}
-
-    
 }
