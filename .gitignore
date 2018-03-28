@@ -1,3 +1,5 @@
+.vs/
+package/
 debug/
 release/
 build/
@@ -13,4 +15,3 @@ tmp/
 *.swp
 *.out
 *.sou
-Edi/MiniUML.Plugins/MiniUML.Plugins.UmlClassDiagram.dll
