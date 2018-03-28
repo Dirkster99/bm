@@ -1,17 +1,18 @@
 ﻿namespace Breadcrumb.SystemIO
 {
-	using System;
-	using System.Collections.Generic;
-	using System.IO;
-	using System.Linq;
-	using System.Threading.Tasks;
-	using Breadcrumb.Defines;
-	using Breadcrumb.Viewmodels.Base;
-	using Breadcrumb.ViewModels.Helpers;
-	using Breadcrumb.ViewModels.Interfaces;
-	using Breadcrumb.ViewModels.TreeSelectors;
+    using Breadcrumb.Defines;
+    using Breadcrumb.ViewModels.Helpers;
+    using Breadcrumb.ViewModels.Interfaces;
+    using Breadcrumb.ViewModels.TreeSelectors;
+    using BreadcrumbLib.Defines;
+    using BreadcrumbLiv.Viewmodels.Base;
+    using System;
+    using System.Collections.Generic;
+    using System.IO;
+    using System.Linq;
+    using System.Threading.Tasks;
 
-	public class DiskTreeNodeViewModel : NotifyPropertyChanged, ISupportTreeSelector<DiskTreeNodeViewModel, string>
+    public class DiskTreeNodeViewModel : NotifyPropertyChanged, ISupportTreeSelector<DiskTreeNodeViewModel, string>
 	{
 		#region fields
 		public static ICompareHierarchy<string> Comparer = new PathComparer(StringComparison.CurrentCultureIgnoreCase);
@@ -89,7 +90,7 @@
 			set
 			{
 				this._header = value;
-				this.NotifyOfPropertyChanged(() => this.Header);
+				this.NotifyOfPropertyChange(() => this.Header);
 			}
 		}
 	}

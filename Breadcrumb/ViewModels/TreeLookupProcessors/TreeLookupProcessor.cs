@@ -1,16 +1,16 @@
 ﻿namespace Breadcrumb.ViewModels.TreeLookupProcessors
 {
-	using System;
-	using Breadcrumb.Defines;
-	using Breadcrumb.ViewModels.Interfaces;
+    using Breadcrumb.ViewModels.Interfaces;
+    using BreadcrumbLib.Defines;
+    using System;
 
-	/// <summary>
-	/// Implementation of ITreeLookupProcessor, which used with ITreeSelector and ITreeLookup, 
-	/// when ITreeSelector.LookupAsync return any HierarchicalResult, it will be processed by these processors.    
-	/// </summary>
-	/// <typeparam name="VM"></typeparam>
-	/// <typeparam name="T"></typeparam>
-	public class TreeLookupProcessor<VM, T> : ITreeLookupProcessor<VM, T>
+    /// <summary>
+    /// Implementation of ITreeLookupProcessor, which used with ITreeSelector and ITreeLookup, 
+    /// when ITreeSelector.LookupAsync return any HierarchicalResult, it will be processed by these processors.    
+    /// </summary>
+    /// <typeparam name="VM"></typeparam>
+    /// <typeparam name="T"></typeparam>
+    public class TreeLookupProcessor<VM, T> : ITreeLookupProcessor<VM, T>
 	{
 		#region fields
 		private Func<HierarchicalResult, ITreeSelector<VM, T>, ITreeSelector<VM, T>, bool> _processFunc;

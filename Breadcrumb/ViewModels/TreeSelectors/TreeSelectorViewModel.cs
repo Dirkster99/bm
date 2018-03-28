@@ -1,21 +1,22 @@
 ﻿namespace Breadcrumb.ViewModels.TreeSelectors
 {
-	using System.Collections.Generic;
-	using System.Linq;
-	using System.Threading.Tasks;
-	using Breadcrumb.Defines;
-	using Breadcrumb.Utils;
-	using Breadcrumb.Viewmodels.Base;
-	using Breadcrumb.ViewModels.Interfaces;
-	using Breadcrumb.ViewModels.TreeLookupProcessors;
-	using BreadcrumbLib.Utils;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Threading.Tasks;
+    using Breadcrumb.Defines;
+    using Breadcrumb.Utils;
+    using Breadcrumb.ViewModels.Interfaces;
+    using Breadcrumb.ViewModels.TreeLookupProcessors;
+    using BreadcrumbLib.Utils;
+    using BreadcrumbLiv.Viewmodels.Base;
+    using BreadcrumbLib.Defines;
 
-	/// <summary>
-	/// Base class of ITreeSelector, which implement Tree based structure and support LookupProcessing.
-	/// </summary>
-	/// <typeparam name="VM"></typeparam>
-	/// <typeparam name="T"></typeparam>
-	public class TreeSelectorViewModel<VM, T> : NotifyPropertyChanged, ITreeSelector<VM, T>
+    /// <summary>
+    /// Base class of ITreeSelector, which implement Tree based structure and support LookupProcessing.
+    /// </summary>
+    /// <typeparam name="VM"></typeparam>
+    /// <typeparam name="T"></typeparam>
+    public class TreeSelectorViewModel<VM, T> : NotifyPropertyChanged, ITreeSelector<VM, T>
 	{
 		#region fields
 		private readonly AsyncLock _lookupLock = new AsyncLock();
@@ -78,7 +79,7 @@
 				if (this._isSelected != value)
 				{
 					this._isSelected = value;
-					this.NotifyOfPropertyChanged(() => this.IsSelected);
+					this.NotifyOfPropertyChange(() => this.IsSelected);
 					this.SelectedChild = default(T);
 
 					if (value)
@@ -99,8 +100,8 @@
 			set
 			{
 				this._isRoot = value;
-				this.NotifyOfPropertyChanged(() => this.IsRoot);
-				this.NotifyOfPropertyChanged(() => this.IsRootAndIsChildSelected);
+				this.NotifyOfPropertyChange(() => this.IsRoot);
+				this.NotifyOfPropertyChange(() => this.IsRootAndIsChildSelected);
 			}
 		}
 
@@ -125,10 +126,10 @@
 			{
 				this._selectedValue = value;
 
-				this.NotifyOfPropertyChanged(() => this.SelectedChild);
-				this.NotifyOfPropertyChanged(() => this.SelectedChildUI);
-				this.NotifyOfPropertyChanged(() => this.IsChildSelected);
-				this.NotifyOfPropertyChanged(() => this.IsRootAndIsChildSelected);
+				this.NotifyOfPropertyChange(() => this.SelectedChild);
+				this.NotifyOfPropertyChange(() => this.SelectedChildUI);
+				this.NotifyOfPropertyChange(() => this.IsChildSelected);
+				this.NotifyOfPropertyChange(() => this.IsRootAndIsChildSelected);
 			}
 		}
 
@@ -142,7 +143,7 @@
 			set
 			{
 				this.IsSelected = false;
-				this.NotifyOfPropertyChanged(() => this.IsSelected);
+				this.NotifyOfPropertyChange(() => this.IsSelected);
 
 				if (this._selectedValue == null || !this._selectedValue.Equals(value))
 				{
@@ -156,14 +157,14 @@
 					if (value != null)
 					{
 						AsyncUtils.RunAsync(async () => await this.LookupAsync(value,
-																																	 SearchNextLevel<VM, T>.LoadSubentriesIfNotLoaded,
-																																		new TreeLookupProcessor<VM, T>(HierarchicalResult.Related, (hr, p, c) =>
-																																		{
-																																			c.IsSelected = true;
-																																			this._prevSelected = c;
+														SearchNextLevel<VM, T>.LoadSubentriesIfNotLoaded,
+														new TreeLookupProcessor<VM, T>(HierarchicalResult.Related, (hr, p, c) =>
+														{
+															c.IsSelected = true;
+															this._prevSelected = c;
 
-																																			return true;
-																																		})));
+															return true;
+														})));
 					}
 				}
 			}
@@ -186,8 +187,8 @@
 			set
 			{
 				this._isOverflowed = value;
-				this.NotifyOfPropertyChanged(() => this.IsOverflowed);
-				this.NotifyOfPropertyChanged(() => this.IsOverflowedOrRoot);
+				this.NotifyOfPropertyChange(() => this.IsOverflowed);
+				this.NotifyOfPropertyChange(() => this.IsOverflowedOrRoot);
 			}
 		}
 		#endregion
@@ -208,8 +209,8 @@
 			{
 				this._selectedValue = path.Peek().Value;
 
-				this.NotifyOfPropertyChanged(() => this.SelectedChild);
-				this.NotifyOfPropertyChanged(() => this.SelectedChildUI);
+				this.NotifyOfPropertyChange(() => this.SelectedChild);
+				this.NotifyOfPropertyChange(() => this.SelectedChildUI);
 			}
 
 			path.Push(this);
@@ -240,9 +241,9 @@
 				}
 
 				// SetSelectedChild(lookupResult == null ? default(T) : lookupResult.Value);
-				this.NotifyOfPropertyChanged(() => this.IsChildSelected);
-				this.NotifyOfPropertyChanged(() => this.SelectedChild);
-				this.NotifyOfPropertyChanged(() => this.SelectedChildUI);
+				this.NotifyOfPropertyChange(() => this.IsChildSelected);
+				this.NotifyOfPropertyChange(() => this.SelectedChild);
+				this.NotifyOfPropertyChange(() => this.SelectedChildUI);
 			}
 
 			path.Push(this);

@@ -5,6 +5,8 @@
 	using System.Windows;
 	using System.Windows.Media;
 	using BreadcrumbLib.Defines;
+    using System.Windows.Threading;
+    using System.Text;
 
 	public static partial class UITools
 	{
@@ -14,27 +16,25 @@
 			desc.AddValueChanged(obj, handler);
 		}
 
-/***
-				public static void AddValueChangedDispatcher<T>(this T obj, DependencyProperty property,
-						EventHandler handler, DispatcherPriority priority) where T : DependencyObject
-				{
-					AddValueChanged(obj, property, (o, e) =>
-							{
-								obj.Dispatcher.BeginInvoke(priority, handler);
-							});
-				}
-
-				public static string PrintVisualAnestor(DependencyObject obj)
-				{
-					StringBuilder sb = new StringBuilder();
-					while (obj != null)
+		public static void AddValueChangedDispatcher<T>(this T obj, DependencyProperty property,
+				EventHandler handler, DispatcherPriority priority) where T : DependencyObject
+		{
+			AddValueChanged(obj, property, (o, e) =>
 					{
-						sb.AppendLine(obj.ToString());
-						obj = VisualTreeHelper.GetParent(obj);
-					}
-					return sb.ToString();
-				}
-		***/
+						obj.Dispatcher.BeginInvoke(priority, handler);
+					});
+		}
+
+		public static string PrintVisualAnestor(DependencyObject obj)
+		{
+			StringBuilder sb = new StringBuilder();
+			while (obj != null)
+			{
+				sb.AppendLine(obj.ToString());
+				obj = VisualTreeHelper.GetParent(obj);
+			}
+			return sb.ToString();
+		}
 
 		public static T FindAncestor<T>(DependencyObject obj, Func<T, bool> filter = null) where T : DependencyObject
 		{

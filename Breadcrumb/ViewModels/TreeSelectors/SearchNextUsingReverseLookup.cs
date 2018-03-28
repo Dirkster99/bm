@@ -1,16 +1,17 @@
 ﻿namespace Breadcrumb.ViewModels.TreeSelectors
 {
-	using System.Collections.Generic;
-	using System.Threading.Tasks;
-	using Breadcrumb.Defines;
-	using Breadcrumb.ViewModels.Interfaces;
+    using System.Collections.Generic;
+    using System.Threading.Tasks;
+    using Breadcrumb.Defines;
+    using Breadcrumb.ViewModels.Interfaces;
+    using BreadcrumbLib.Defines;
 
-	/// <summary>
-	/// Given a child selector (ITreeSelector), lookup only next level of tree nodes for the selector, and process only the child or matched node.
-	/// </summary>
-	/// <typeparam name="VM"></typeparam>
-	/// <typeparam name="T"></typeparam>
-	public class SearchNextUsingReverseLookup<VM, T> : ITreeLookup<VM, T>
+    /// <summary>
+    /// Given a child selector (ITreeSelector), lookup only next level of tree nodes for the selector, and process only the child or matched node.
+    /// </summary>
+    /// <typeparam name="VM"></typeparam>
+    /// <typeparam name="T"></typeparam>
+    public class SearchNextUsingReverseLookup<VM, T> : ITreeLookup<VM, T>
 	{
 		#region fields
 		private Stack<ITreeSelector<VM, T>> _hierarchy;

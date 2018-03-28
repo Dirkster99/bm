@@ -1,20 +1,21 @@
 ﻿namespace Breadcrumb.ViewModels
 {
-	using System;
-	using System.IO;
-	using System.Reflection;
-	using System.Threading;
-	using System.Windows;
-	using System.Windows.Input;
-	using System.Windows.Threading;
-	using Breadcrumb.DirectoryInfoEx;
-	using Breadcrumb.SystemIO;
-	using Breadcrumb.Utils;
-	using Breadcrumb.ViewModels.Interfaces;
-	using Themes;
-	using Themes.Base;
+    using Breadcrumb.Demo;
+    using Breadcrumb.DirectoryInfoEx;
+    using Breadcrumb.SystemIO;
+    using Breadcrumb.Utils;
+    using Breadcrumb.ViewModels.Interfaces;
+    using System;
+    using System.IO;
+    using System.Reflection;
+    using System.Threading;
+    using System.Windows;
+    using System.Windows.Input;
+    using System.Windows.Threading;
+    using Themes;
+    using Themes.Base;
 
-	public class AppViewModel : Breadcrumb.Viewmodels.Base.NotifyPropertyChanged
+	public class AppViewModel : NotifyPropertyChanged
 	{
 		#region fields
 		private ThemesManager mThemes;
@@ -26,6 +27,8 @@
 		#region constructors
 		public AppViewModel()
 		{
+			this.SpecialFoldersTest = new SpecialFoldersViewModel();
+
 			this.mThemes = new ThemesManager();
 
 			this.ChangeThemeCmd_Executed("Metro Dark", Application.Current.Dispatcher);
@@ -49,6 +52,7 @@
 			this.ExTest1 = new ExTreeNodeViewModel();
 			(this.ExTest1.Selection as ITreeRootSelector<ExTreeNodeViewModel, FileSystemInfoEx>).SelectAsync(DirectoryInfoEx.FromString(@"C:\temp"));
 
+			BreadcrumbTest = new BreadcrumbViewModel();
 			// If you want to show only root directories, try Toggle this line in TreeRootSelector.
 			////updateRootItemsAsync(this, _rootItems, 2);
 		}
@@ -91,6 +95,9 @@
 
 		public ExTreeNodeViewModel ExTest1 { get; private set; }
 
+		public BreadcrumbViewModel BreadcrumbTest { get; private set; }
+
+		public SpecialFoldersViewModel SpecialFoldersTest { get; private set; }
 		#endregion properties
 
 		#region methods
@@ -211,7 +218,7 @@
 						}
 						catch (Exception Exp)
 						{
-							MessageBox.Show(Exp.StackTrace.ToString());
+							MessageBox.Show(string.Format("Error Loading: '{0}'\n Stack Trace: {1}\n", item, Exp.StackTrace.ToString()));
 						}
 					}
 				}

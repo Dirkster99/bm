@@ -1,14 +1,14 @@
 ﻿namespace Breadcrumb.ViewModels.TreeLookupProcessors
 {
-	using Breadcrumb.Defines;
-	using Breadcrumb.ViewModels.Interfaces;
+    using Breadcrumb.ViewModels.Interfaces;
+    using BreadcrumbLib.Defines;
 
-	/// <summary>
-	/// Refresh current directory using EntryHelper.LoadAsync()
-	/// </summary>
-	/// <typeparam name="VM"></typeparam>
-	/// <typeparam name="T"></typeparam>
-	public class RefreshDirectory<VM, T> : ITreeLookupProcessor<VM, T>
+    /// <summary>
+    /// Refresh current directory using EntryHelper.LoadAsync()
+    /// </summary>
+    /// <typeparam name="VM"></typeparam>
+    /// <typeparam name="T"></typeparam>
+    public class RefreshDirectory<VM, T> : ITreeLookupProcessor<VM, T>
 	{
 		/// <summary>
 		/// Refresh current directory using EntryHelper.LoadAsync() if is matched current directory of current lookup.

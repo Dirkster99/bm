@@ -1,14 +1,14 @@
 ﻿namespace Breadcrumb.ViewModels.Interfaces
 {
-	using System;
-	using System.Collections.Generic;
-	using System.Collections.ObjectModel;
-	using System.ComponentModel;
-	using System.Threading.Tasks;
-	using Breadcrumb.Defines;
-	using Breadcrumb.Utils;
+    using Breadcrumb.Utils;
+    using BreadcrumbLib.Defines;
+    using System;
+    using System.Collections.Generic;
+    using System.Collections.ObjectModel;
+    using System.ComponentModel;
+    using System.Threading.Tasks;
 
-	public interface ISupportEntriesHelper<VM>
+    public interface ISupportEntriesHelper<VM>
 	{
 		IEntriesHelper<VM> Entries { get; set; }
 	}

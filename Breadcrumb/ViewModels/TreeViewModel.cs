@@ -1,13 +1,13 @@
 ﻿namespace Breadcrumb.ViewModels
 {
-	using System;
-	using System.ComponentModel;
-	using Breadcrumb.Defines;
-	using Breadcrumb.ViewModels.Helpers;
-	using Breadcrumb.ViewModels.Interfaces;
+    using System;
+    using System.ComponentModel;
+    using Breadcrumb.Defines;
+    using Breadcrumb.ViewModels.Helpers;
+    using Breadcrumb.ViewModels.Interfaces;
+    using BreadcrumbLib.Defines;
 
-	public class TreeViewModel : INotifyPropertyChanged,
-				ISupportTreeSelector<TreeNodeViewModel, string>, ICompareHierarchy<string>
+    public class TreeViewModel : INotifyPropertyChanged, ISupportTreeSelector<TreeNodeViewModel, string>, ICompareHierarchy<string>
 	{
 		public static string Format_DragDropItem = "DragDropItemVM";
 

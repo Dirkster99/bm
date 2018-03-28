@@ -20,13 +20,15 @@
 	{
 		#region fields
 		#region WPF Themes
-		#region Expression Dark theme resources
+		#region Dark theme resources
 		const string MetroDarkThemeName = "Metro Dark";
 		static readonly string[] MetroDarkResources = 
     {
 			"/Themes;component/Metro/Dark/ModernUI.dark.xaml",
+			"/Icons;component/DarkIcons.xaml",
 			"/BreadcrumbLib;component/Themes/Metro/MetroDarkBrushes.xaml",
-			"/FirstFloor.ModernUI;component/Assets/ScrollBar.xaml"
+			"/FirstFloor.ModernUI;component/Assets/ScrollBar.xaml",
+			"/FirstFloor.ModernUI;component/Assets/ListBox.xaml"
     };
 		#endregion Expression Dark theme resources
 
@@ -34,6 +36,7 @@
 		const string GenericThemeName = "Generic";
 		static readonly string[] GenericResources = 
     {
+			"/Icons;component/GenericIcons.xaml"
     };
 		#endregion Generic theme resources
 
@@ -42,8 +45,10 @@
 		static readonly string[] MetroResources = 
     {
       "/Themes;component/Metro/Light/ModernUI.light.xaml",
+			"/Icons;component/LightIcons.xaml",
       "/BreadcrumbLib;component/Themes/Metro/MetroLightBrushes.xaml",
-      "/FirstFloor.ModernUI;component/Assets/ScrollBar.xaml"
+      "/FirstFloor.ModernUI;component/Assets/ScrollBar.xaml",
+			"/FirstFloor.ModernUI;component/Assets/ListBox.xaml"
     };
 		#endregion Light Metro theme resources
 		#endregion WPF Themes

@@ -1,19 +1,20 @@
 ﻿namespace Breadcrumb.DirectoryInfoEx
 {
-	using System.Collections.Generic;
-	using System.Drawing;
-	using System.IO;
-	using System.Linq;
-	using System.Threading.Tasks;
-	using System.Windows.Media;
-	using Breadcrumb.Defines;
-	using Breadcrumb.Viewmodels.Base;
-	using Breadcrumb.ViewModels.Helpers;
-	using Breadcrumb.ViewModels.Interfaces;
-	using Breadcrumb.ViewModels.TreeSelectors;
-	using QuickZip.Converters;
+    using System.Collections.Generic;
+    using System.Drawing;
+    using System.IO;
+    using System.Linq;
+    using System.Threading.Tasks;
+    using System.Windows.Media;
+    using Breadcrumb.Defines;
+    using Breadcrumb.ViewModels.Helpers;
+    using Breadcrumb.ViewModels.Interfaces;
+    using Breadcrumb.ViewModels.TreeSelectors;
+    using QuickZip.Converters;
+    using BreadcrumbLiv.Viewmodels.Base;
+    using BreadcrumbLib.Defines;
 
-	public class ExTreeNodeViewModel : NotifyPropertyChanged, ISupportTreeSelector<ExTreeNodeViewModel, FileSystemInfoEx>
+    public class ExTreeNodeViewModel : NotifyPropertyChanged, ISupportTreeSelector<ExTreeNodeViewModel, FileSystemInfoEx>
 	{
 		#region fields
 		public static ICompareHierarchy<FileSystemInfoEx> Comparer = new ExHierarchyComparer();
@@ -102,7 +103,7 @@
 				if (this._header != value)
 				{
 					this._header = value;
-					this.NotifyOfPropertyChanged(() => this.Header);
+					this.NotifyOfPropertyChange(() => this.Header);
 				}
 			}
 		}
@@ -125,7 +126,7 @@
 				if (this._icon != value)
 				{
 					this._icon = value;
-					this.NotifyOfPropertyChanged(() => this.Icon);
+					this.NotifyOfPropertyChange(() => this.Icon);
 				}
 			}
 		}

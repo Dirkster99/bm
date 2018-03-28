@@ -1,0 +1,216 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Comment CommentText="FileEx/DirectoryEx static class">
+    <Position X="0.5" Y="0.5" Height="0.333" Width="1.992" />
+  </Comment>
+  <Comment CommentText="Watch file system changes">
+    <Position X="5.021" Y="0.5" Height="0.344" Width="1.825" />
+  </Comment>
+  <Comment CommentText="Show shell context menu">
+    <Position X="5" Y="4.49" Height="0.344" Width="1.846" />
+  </Comment>
+  <Comment CommentText="Read/Write file contents">
+    <Position X="2.792" Y="0.562" Height="0.291" Width="1.638" />
+  </Comment>
+  <Comment CommentText="Extract properties directly from shell.">
+    <Position X="7.039" Y="0.542" Height="0.292" Width="2.242" />
+  </Comment>
+  <Comment CommentText="Partial replacement of Path, because Path does not support guid path.">
+    <Position X="2.742" Y="5.143" Height="0.719" Width="1.867" />
+  </Comment>
+  <Comment CommentText="Tools usually for internal use.">
+    <Position X="9.99" Y="0.823" Height="0.406" Width="1.492" />
+  </Comment>
+  <Comment CommentText="Non DirectoryInfoEx related tools.">
+    <Position X="11.763" Y="0.594" Height="0.531" Width="1.544" />
+  </Comment>
+  <Comment CommentText="Allow sorting FileSystemInfoEx collections. (e.g. Array.Sort())">
+    <Position X="11.768" Y="4.687" Height="0.552" Width="1.981" />
+  </Comment>
+  <Class Name="System.IO.DirectoryEx">
+    <Position X="0.5" Y="4.25" Width="2" />
+    <Members>
+      <Method Name="FSListToStringList" Hidden="true" />
+    </Members>
+    <TypeIdentifier>
+      <HashCode>AAACAAEAAIABAgEAAAAAAAAAAgEAAAAAAAAAAA0AARA=</HashCode>
+      <FileName>IO\Tools\DirectoryEx.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="System.IO.FileEx">
+    <Position X="0.5" Y="1" Width="2" />
+    <TypeIdentifier>
+      <HashCode>AABAAAAAgIAAIAAAAAAAAAAAAgEgAFACAAAAAAEAAAA=</HashCode>
+      <FileName>IO\Tools\FileEx.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="System.IO.FileSystemWatcherEx">
+    <Position X="5" Y="1" Width="2" />
+    <Members>
+      <Field Name="_sww" Hidden="true" />
+      <Method Name="handleEvent" Hidden="true" />
+      <Method Name="HandleEvent" Hidden="true" />
+      <Method Name="handleRenameEvent" Hidden="true" />
+      <Method Name="init" Hidden="true" />
+      <Method Name="uninit" Hidden="true" />
+    </Members>
+    <TypeIdentifier>
+      <HashCode>AAAAABAAAUEgABIAYAAQCAAAADAAAAIAAAAAAAAAAAA=</HashCode>
+      <FileName>IO\Tools\Wrappers\FileSystemWatcherEx.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="System.IO.FileStreamEx">
+    <Position X="2.75" Y="1.25" Width="1.75" />
+    <Members>
+      <Field Name="_canRead" Hidden="true" />
+      <Field Name="_canWrite" Hidden="true" />
+      <Field Name="_disposed" Hidden="true" />
+      <Field Name="_fileName" Hidden="true" />
+      <Method Name="~FileStreamEx" Hidden="true" />
+      <Method Name="closeStream" Hidden="true" />
+      <Field Name="currentPos" Hidden="true" />
+      <Method Name="init" Hidden="true" />
+      <Field Name="stream" Hidden="true" />
+      <Field Name="streamInfo" Hidden="true" />
+      <Field Name="streamPtr" Hidden="true" />
+      <Field Name="tempParentStorage" Hidden="true" />
+      <Field Name="tempParentStoragePtr" Hidden="true" />
+    </Members>
+    <TypeIdentifier>
+      <HashCode>AAIAAAAAQCAEQAQoGBAAAABgIAAAAAIACAAAABOMACA=</HashCode>
+      <FileName>IO\FileStreamEx\FileStreamEx.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="System.IO.Tools.ContextMenuWrapper">
+    <Position X="5" Y="5" Width="2" />
+    <Members>
+      <Field Name="_contextMenuVisible" Hidden="true" />
+      <Field Name="_iContextMenu" Hidden="true" />
+      <Field Name="_iContextMenu2" Hidden="true" />
+      <Field Name="_iContextMenu3" Hidden="true" />
+      <Field Name="queryMenuItemsEventArgs" Hidden="true" />
+      <Method Name="removeCheckedSymbol" Hidden="true" />
+      <Method Name="WndProc" Hidden="true" />
+    </Members>
+    <TypeIdentifier>
+      <HashCode>BAAAAAAABEAAAAAAEAAAAEAAAAAACAAAAAIgQAiABAA=</HashCode>
+      <FileName>IO\Tools\Wrappers\ContextMenuWrapper.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="System.IO.Tools.ExtraPropertiesProvider">
+    <Position X="7.25" Y="1" Width="2" />
+    <NestedTypes>
+      <Enum Name="System.IO.Tools.ExtraPropertiesProvider.InformationCategory" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>IO\Tools\Wrappers\ExtraPropertiesProvider.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Enum>
+    </NestedTypes>
+    <TypeIdentifier>
+      <HashCode>EAAAAAAAAQBAAAIAIAgAgEAAAAQAAgEAAAQAAAAAAAA=</HashCode>
+      <FileName>IO\Tools\Wrappers\ExtraPropertiesProvider.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="System.IO.Tools.SummaryInformation" Collapsed="true">
+    <Position X="9.5" Y="6.5" Width="2" />
+    <TypeIdentifier>
+      <HashCode>ACACABAAYEABAECCgMAACAAAgAAAAAAAAAAEBABAoQA=</HashCode>
+      <FileName>IO\Tools\Wrappers\ExtraPropertiesProvider.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="System.IO.Tools.DocSummaryInformation" Collapsed="true">
+    <Position X="7.25" Y="5.75" Width="2" />
+    <TypeIdentifier>
+      <HashCode>ABAiAAAAEAABAABgCCIAAAQAAAAEBAAAAAAABABACQA=</HashCode>
+      <FileName>IO\Tools\Wrappers\ExtraPropertiesProvider.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="System.IO.Tools.ImageSummaryInformation" Collapsed="true">
+    <Position X="9.5" Y="5.75" Width="2" />
+    <TypeIdentifier>
+      <HashCode>AAACIwAACACBIgAAEAAAAAIBAACAQAAAAAAAAABAAQA=</HashCode>
+      <FileName>IO\Tools\Wrappers\ExtraPropertiesProvider.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="System.IO.Tools.MusicSummaryInformation" Collapsed="true">
+    <Position X="7.25" Y="6.5" Width="2" />
+    <TypeIdentifier>
+      <HashCode>AAACAAAEBEABAAAAAAIAAAIAAIAAAAAAIAAACABAAQA=</HashCode>
+      <FileName>IO\Tools\Wrappers\ExtraPropertiesProvider.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="System.IO.Tools.VideoSummaryInformation" Collapsed="true">
+    <Position X="9.5" Y="5" Width="2" />
+    <TypeIdentifier>
+      <HashCode>AAACIAAAAAABKCAAAAAIAABBACAAAAAAACAAgABAAQA=</HashCode>
+      <FileName>IO\Tools\Wrappers\ExtraPropertiesProvider.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="System.IO.Tools.AudioSummaryInformation" Collapsed="true">
+    <Position X="7.25" Y="5" Width="2" />
+    <TypeIdentifier>
+      <HashCode>BACCIABAAAABCCAAAAAIAAAAAAgAAAAAAAAAgABAAQA=</HashCode>
+      <FileName>IO\Tools\Wrappers\ExtraPropertiesProvider.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="QuickZip.IO.PathEx">
+    <Position X="2.75" Y="6" Width="1.75" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAEAAAAAAARAAAAAABAAABAAAAAAA=</HashCode>
+      <FileName>IO\Tools\PathEx.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="System.IO.IOTools">
+    <Position X="9.5" Y="0.5" Width="2" />
+    <Members>
+      <Field Name="_shellFolderLookupDic" Hidden="true" />
+      <Method Name="constructShellFolderLookupDic" Hidden="true" />
+      <Method Name="getFileStat" Hidden="true" />
+      <Method Name="getIStorage" Hidden="true" />
+      <Field Name="IID_Desktop" Hidden="true" />
+      <Field Name="IID_Library" Hidden="true" />
+      <Field Name="IID_Public" Hidden="true" />
+      <Field Name="IID_UserFiles" Hidden="true" />
+      <Method Name="openStream" Hidden="true" />
+    </Members>
+    <TypeIdentifier>
+      <HashCode>QAggAAAABIAAIAAAACCGQgECAhAAAIgECAAAAEGEgAA=</HashCode>
+      <FileName>IO\Tools\IOTools.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="System.IO.Helper">
+    <Position X="11.75" Y="1.25" Width="1.75" />
+    <Members>
+      <Field Name="IsUnitTesting" Hidden="true" />
+    </Members>
+    <TypeIdentifier>
+      <HashCode>AEAAAAAAAAAAABAEAEAAABCAAAAAAQBAAACAACAAAAg=</HashCode>
+      <FileName>IO\Tools\Helper.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="System.IO.Tools.ExComparer">
+    <Position X="11.75" Y="5.75" Width="1.75" />
+    <Members>
+      <Field Name="nc" Hidden="true" />
+    </Members>
+    <NestedTypes>
+      <Enum Name="System.IO.Tools.ExComparer.SortCriteria" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>IO\Tools\Comparer\ExComparer.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Enum>
+      <Enum Name="System.IO.Tools.ExComparer.SortDirectionType" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>IO\Tools\Comparer\ExComparer.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Enum>
+    </NestedTypes>
+    <TypeIdentifier>
+      <HashCode>AACAAAgEAAAAAAAAAAAAAAAAAAAAAAAAAABQAAAAAAA=</HashCode>
+      <FileName>IO\Tools\Comparer\ExComparer.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>

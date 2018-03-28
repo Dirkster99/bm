@@ -8,6 +8,8 @@ ECHO corresponding BIN and OBJ Folder contained in the following projects
 ECHO.
 ECHO BreadcrumbLib
 ECHO Breadcrumb
+ECHO ThemesManager
+ECHO Icons
 ECHO.
 REM Ask the user if hes really sure to continue beyond this point XXXXXXXX
 set /p choice=Are you sure to continue (Y/N)?
@@ -27,6 +29,17 @@ ECHO Deleting BIN and OBJ Folders in Breadcrumb folder
 ECHO.
 RMDIR /S /Q Breadcrumb\bin
 RMDIR /S /Q Breadcrumb\obj
+
+
+ECHO Deleting BIN and OBJ Folders in ThemesManager folder
+ECHO.
+RMDIR /S /Q ThemesManager\bin
+RMDIR /S /Q ThemesManager\obj
+
+ECHO Deleting BIN and OBJ Folders in Icons folder
+ECHO.
+RMDIR /S /Q Icons\bin
+RMDIR /S /Q Icons\obj
 
 PAUSE
 

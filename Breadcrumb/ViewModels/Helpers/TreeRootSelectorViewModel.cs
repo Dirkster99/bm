@@ -1,17 +1,17 @@
 ﻿namespace Breadcrumb.ViewModels.Helpers
 {
-	using System;
-	using System.Collections.Generic;
-	using System.Collections.ObjectModel;
-	using System.Linq;
-	using System.Threading.Tasks;
-	using Breadcrumb.Defines;
-	using Breadcrumb.ViewModels.Interfaces;
-	using Breadcrumb.ViewModels.TreeLookupProcessors;
-	using Breadcrumb.ViewModels.TreeSelectors;
+    using Breadcrumb.ViewModels.Interfaces;
+    using Breadcrumb.ViewModels.TreeLookupProcessors;
+    using Breadcrumb.ViewModels.TreeSelectors;
+    using BreadcrumbLib.Defines;
     using BreadcrumbLib.Utils;
+    using System;
+    using System.Collections.Generic;
+    using System.Collections.ObjectModel;
+    using System.Linq;
+    using System.Threading.Tasks;
 
-	public class TreeRootSelectorViewModel<VM, T> : TreeSelectorViewModel<VM, T>, ITreeRootSelector<VM, T>
+    public class TreeRootSelectorViewModel<VM, T> : TreeSelectorViewModel<VM, T>, ITreeRootSelector<VM, T>
 	{
 		#region fields
 		private T _selectedValue = default(T);
@@ -58,7 +58,7 @@
 			set
 			{
 				this._rootItems = value;
-				this.NotifyOfPropertyChanged(() => this.OverflowedAndRootItems);
+				this.NotifyOfPropertyChange(() => this.OverflowedAndRootItems);
 			}
 		}
 
@@ -124,8 +124,8 @@
 				prevSelector.IsSelected = false;
 			}
 
-			this.NotifyOfPropertyChanged(() => this.SelectedValue);
-			this.NotifyOfPropertyChanged(() => this.SelectedViewModel);
+			this.NotifyOfPropertyChange(() => this.SelectedValue);
+			this.NotifyOfPropertyChange(() => this.SelectedViewModel);
 
 			if (this.SelectionChanged != null)
 				this.SelectionChanged(this, EventArgs.Empty);

@@ -1,16 +1,17 @@
 ﻿namespace Breadcrumb.ViewModels.TreeSelectors
 {
-	using System.Collections.Generic;
-	using System.Threading.Tasks;
-	using Breadcrumb.Defines;
-	using Breadcrumb.ViewModels.Interfaces;
+    using System.Collections.Generic;
+    using System.Threading.Tasks;
+    using Breadcrumb.Defines;
+    using Breadcrumb.ViewModels.Interfaces;
+    using BreadcrumbLib.Defines;
 
-	/// <summary>
-	/// Lookup until lookupvalue is found, and process only parent or matchednode.
-	/// </summary>
-	/// <typeparam name="VM"></typeparam>
-	/// <typeparam name="T"></typeparam>
-	public class RecrusiveSearch<VM, T> : ITreeLookup<VM, T>
+    /// <summary>
+    /// Lookup until lookupvalue is found, and process only parent or matchednode.
+    /// </summary>
+    /// <typeparam name="VM"></typeparam>
+    /// <typeparam name="T"></typeparam>
+    public class RecrusiveSearch<VM, T> : ITreeLookup<VM, T>
 	{
 		#region fields
 		/// <summary>
