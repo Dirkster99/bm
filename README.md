@@ -1,3 +1,4 @@
+[![Build status](https://ci.appveyor.com/api/projects/status/rbxt9vtsth75o87i?svg=true)](https://ci.appveyor.com/project/Dirkster99/bm)
 # Breadcrumb.Metro
 
 This project implements an open source Breadcrumb control developed by *lycj*.
