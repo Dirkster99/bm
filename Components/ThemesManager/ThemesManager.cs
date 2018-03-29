@@ -16,7 +16,7 @@
 	/// themes, determine the currently selected theme, and set the currently selected
 	/// theme.
 	/// </summary>
-	public class ThemesManager : IThemesManager, IParentSelectedTheme
+	internal class ThemesManager : IThemesManager, IParentSelectedTheme
 	{
 		#region fields
 		#region WPF Themes
@@ -53,10 +53,8 @@
 		#endregion Light Metro theme resources
 		#endregion WPF Themes
 
-		public const string DefaultThemeName = ThemesManager.MetroLightThemeName;
-
-		private SortedDictionary<string, ThemeBase> mTextEditorThemes = null;
-		private ObservableCollection<ThemeBase> mListOfAllThemes = null;
+		private SortedDictionary<string, IThemeBase> mTextEditorThemes = null;
+		private ObservableCollection<IThemeBase> mListOfAllThemes = null;
 		private string mSelectedThemeName = string.Empty;
 		#endregion fields
 
@@ -66,11 +64,19 @@
 		/// </summary>
 		public ThemesManager()
 		{
-			this.mSelectedThemeName = ThemesManager.DefaultThemeName;
+			this.mSelectedThemeName = DefaultThemeName;
 		}
 		#endregion constructor
 
 		#region properties
+        public string DefaultThemeName
+        {
+            get
+            {
+                return ThemesManager.MetroLightThemeName;
+            }
+        }
+
 		/// <summary>
 		/// Get the name of the currently seelcted theme.
 		/// </summary>
@@ -85,20 +91,20 @@
 		/// <summary>
 		/// Get the object that has links to all resources for the currently selected WPF theme.
 		/// </summary>
-		public ThemeBase SelectedTheme
+		public IThemeBase SelectedTheme
 		{
 			get
 			{
 				if (this.mTextEditorThemes == null || this.mListOfAllThemes == null)
 					this.BuildThemeCollections();
 
-				ThemeBase theme;
+				IThemeBase theme;
 				this.mTextEditorThemes.TryGetValue(this.mSelectedThemeName, out theme);
 
 				// Fall back to default if all else fails
 				if (theme == null)
 				{
-					this.mTextEditorThemes.TryGetValue(ThemesManager.DefaultThemeName, out theme);
+					this.mTextEditorThemes.TryGetValue(DefaultThemeName, out theme);
 					this.mSelectedThemeName = theme.HlThemeName;
 				}
 
@@ -110,7 +116,7 @@
 		/// Get a list of all available themes (This property can typically be used to bind
 		/// menuitems or other resources to let the user select a theme in the user interface).
 		/// </summary>
-		public ObservableCollection<ThemeBase> ListAllThemes
+		public ObservableCollection<IThemeBase> ListAllThemes
 		{
 			get
 			{
@@ -133,7 +139,7 @@
 			if (this.mTextEditorThemes == null || this.mListOfAllThemes == null)
 				this.BuildThemeCollections();
 
-			ThemeBase theme;
+			IThemeBase theme;
 			this.mTextEditorThemes.TryGetValue(themeName, out theme);
 
 			// Fall back to default if all else fails
@@ -151,9 +157,9 @@
 		private void BuildThemeCollections()
 		{
 			this.mTextEditorThemes = this.BuildThemeDictionary();
-			this.mListOfAllThemes = new ObservableCollection<ThemeBase>();
+			this.mListOfAllThemes = new ObservableCollection<IThemeBase>();
 
-			foreach (KeyValuePair<string, ThemeBase> t in this.mTextEditorThemes)
+			foreach (KeyValuePair<string, IThemeBase> t in this.mTextEditorThemes)
 			{
 				this.mListOfAllThemes.Add(t.Value);
 			}
@@ -163,11 +169,11 @@
 		/// Build a sorted structure of all default themes and their resources.
 		/// </summary>
 		/// <returns></returns>
-		private SortedDictionary<string, ThemeBase> BuildThemeDictionary()
+		private SortedDictionary<string, IThemeBase> BuildThemeDictionary()
 		{
-			SortedDictionary<string, ThemeBase> ret = new SortedDictionary<string, ThemeBase>();
+			SortedDictionary<string, IThemeBase> ret = new SortedDictionary<string, IThemeBase>();
 
-			ThemeBase t = null;
+			IThemeBase t = null;
 			string themeName = null;
 			List<string> wpfTheme = null;
 

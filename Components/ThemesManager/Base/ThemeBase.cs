@@ -1,11 +1,10 @@
 ﻿namespace Themes.Base
 {
-	using System.Collections.Generic;
-	using System.Reflection;
-	using Themes.Interfaces;
+    using System.Collections.Generic;
+    using Themes.Interfaces;
 
-	public class ThemeBase : NotifyPropertyChanged
-	{
+    internal class ThemeBase : Base.ViewModelBase, IThemeBase
+    {
 		#region fields
 		private IParentSelectedTheme mParent = null;
 		#endregion fields

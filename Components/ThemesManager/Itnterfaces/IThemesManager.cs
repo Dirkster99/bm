@@ -14,13 +14,15 @@
 		/// <summary>
 		/// Get the object that has links to all resources for the currently selected WPF theme.
 		/// </summary>
-		ThemeBase SelectedTheme { get; }
+		IThemeBase SelectedTheme { get; }
 
-		/// <summary>
-		/// Get a list of all available themes (This property can typically be used to bind
-		/// menuitems or other resources to let the user select a theme in the user interface).
-		/// </summary>
-		ObservableCollection<ThemeBase> ListAllThemes { get; }
+        string DefaultThemeName { get; }
+
+        /// <summary>
+        /// Get a list of all available themes (This property can typically be used to bind
+        /// menuitems or other resources to let the user select a theme in the user interface).
+        /// </summary>
+        ObservableCollection<IThemeBase> ListAllThemes { get; }
 		#endregion properties
 
 		#region methods

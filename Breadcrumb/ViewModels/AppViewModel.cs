@@ -5,6 +5,7 @@
     using Breadcrumb.SystemIO;
     using Breadcrumb.Utils;
     using Breadcrumb.ViewModels.Interfaces;
+    using BreadcrumbLiv.Viewmodels.Base;
     using System;
     using System.IO;
     using System.Reflection;
@@ -14,11 +15,12 @@
     using System.Windows.Threading;
     using Themes;
     using Themes.Base;
+    using Themes.Interfaces;
 
-	public class AppViewModel : NotifyPropertyChanged
+    public class AppViewModel : NotifyPropertyChanged
 	{
 		#region fields
-		private ThemesManager mThemes;
+		private IThemesManager _Themes;
 
 		private DiskTreeNodeViewModel mDiskTest;
 		////private ExTreeNodeViewModel mExTest;
@@ -29,7 +31,7 @@
 		{
 			this.SpecialFoldersTest = new SpecialFoldersViewModel();
 
-			this.mThemes = new ThemesManager();
+            this._Themes = Factory.CreateThemesManager();
 
 			this.ChangeThemeCmd_Executed("Metro Dark", Application.Current.Dispatcher);
 
@@ -62,11 +64,11 @@
 		/// <summary>
 		/// Gets the current application themes manager.
 		/// </summary>
-		public ThemesManager Themes
+		public IThemesManager Themes
 		{
 			get
 			{
-				return this.mThemes;
+				return this._Themes;
 			}
 		}
 
@@ -109,9 +111,9 @@
 		/// <param name="e"></param>
 		/// <param name="disp"></param>
 		private void ChangeThemeCmd_Executed(string newThemeName,
-																				 System.Windows.Threading.Dispatcher disp)
+                                             Dispatcher disp)
 		{
-			string oldTheme = ThemesManager.DefaultThemeName;
+			string oldTheme = _Themes.DefaultThemeName;
 
 			try
 			{
@@ -122,7 +124,7 @@
 				if (newThemeName == null)
 					return;
 
-				oldTheme = this.mThemes.SelectedTheme.WPFThemeName;
+				oldTheme = this._Themes.SelectedTheme.WPFThemeName;
 
 				// The Work to perform on another thread
 				ThreadStart start = delegate
@@ -133,7 +135,7 @@
 					{
 						try
 						{
-							if (this.mThemes.SetSelectedTheme(newThemeName) == true)
+							if (this._Themes.SetSelectedTheme(newThemeName) == true)
 							{
 								////this.mSettingsManager.SettingData.CurrentTheme = newThemeName;
 								this.ResetTheme();                        // Initialize theme in process
@@ -169,7 +171,7 @@
 		public void ResetTheme()
 		{
 			// Get WPF Theme definition from Themes Assembly
-			ThemeBase nextThemeToSwitchTo = this.mThemes.SelectedTheme;
+			IThemeBase nextThemeToSwitchTo = this._Themes.SelectedTheme;
 			this.SwitchToSelectedTheme(nextThemeToSwitchTo);
 		}
 
@@ -178,15 +180,15 @@
 		/// The given name must map into the <seealso cref="Themes.ThemesVM.EnTheme"/> enumeration.
 		/// </summary>
 		/// <param name="nextThemeToSwitchTo"></param>
-		private bool SwitchToSelectedTheme(ThemeBase nextThemeToSwitchTo)
+		private bool SwitchToSelectedTheme(IThemeBase nextThemeToSwitchTo)
 		{
 			const string themesModul = "Themes.dll";
-			ThemeBase theme = null;
+			IThemeBase theme = null;
 
 			try
 			{
 				// Get WPF Theme definition from Themes Assembly
-				theme = this.mThemes.SelectedTheme;
+				theme = this._Themes.SelectedTheme;
 
 				if (theme != null)
 				{
@@ -232,7 +234,7 @@
 			finally
 			{
 				// Update all IsSelected properties in all themes ...
-				foreach (var item in this.mThemes.ListAllThemes)
+				foreach (var item in this._Themes.ListAllThemes)
 				{
 					item.UpdateIsSelected();
 				}

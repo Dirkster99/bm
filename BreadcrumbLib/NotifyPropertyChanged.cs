@@ -1,4 +1,4 @@
-﻿namespace Themes.Base
+﻿namespace BreadcrumbLiv.Viewmodels.Base
 {
 	using System;
 	using System.ComponentModel;
@@ -11,7 +11,7 @@
 	{
 		public event PropertyChangedEventHandler PropertyChanged;
 
-		protected virtual void NotifyOfPropertyChanged<T>(Expression<Func<T>> expression)
+		protected virtual void NotifyOfPropertyChange<T>(Expression<Func<T>> expression)
 		{
 			this.NotifyOfPropertyChanged(this.GetPropertyName<T>(expression));
 		}

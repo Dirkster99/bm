@@ -43,8 +43,10 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Base\NotifyPropertyChanged.cs" />
+    <Compile Include="Factory.cs" />
+    <Compile Include="Itnterfaces\IThemeBase.cs" />
     <Compile Include="Base\ThemeBase.cs" />
+    <Compile Include="Base\ViewModelBase.cs" />
     <Compile Include="Itnterfaces\IParentSelectedTheme.cs" />
     <Compile Include="Itnterfaces\IThemesManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -74,9 +76,7 @@
       <Name>BreadcrumbLib</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="FolderImages\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
