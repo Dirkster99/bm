@@ -184,11 +184,11 @@
       <Project>{09df5a9a-989e-410c-ba72-5a94cf481e57}</Project>
       <Name>DirectoryInfoEx</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Icons\Icons.csproj">
+    <ProjectReference Include="..\Components\Icons\Icons.csproj">
       <Project>{b0e97e26-48e6-467c-a5e8-79d4ed4e5550}</Project>
       <Name>Icons</Name>
     </ProjectReference>
-    <ProjectReference Include="..\ThemesManager\Themes.csproj">
+    <ProjectReference Include="..\Components\ThemesManager\Themes.csproj">
       <Project>{6570ee8b-24c8-4025-b382-247ff6a8ea94}</Project>
       <Name>Themes</Name>
     </ProjectReference>

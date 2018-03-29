@@ -69,7 +69,7 @@
     </Page>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\BreadcrumbLib\BreadcrumbLib.csproj">
+    <ProjectReference Include="..\..\BreadcrumbLib\BreadcrumbLib.csproj">
       <Project>{15bbe1fb-d9e1-4b86-be6c-b7d04a1a79f0}</Project>
       <Name>BreadcrumbLib</Name>
     </ProjectReference>

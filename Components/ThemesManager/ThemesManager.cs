@@ -198,9 +198,9 @@
 			}
 			catch (System.Exception exp)
 			{
-				string msg = string.Format("Error registering application theme '{0}' -> '{1}'",
+				string msg = string.Format("Error registering application theme '{0}' -> '{1}' -> \nMessage: {2}",
 																		themeName == null ? "(null)" : themeName,
-																		t == null ? "(null)" : t.HlThemeName);
+																		t == null ? "(null)" : t.HlThemeName, exp.Message);
 
 				// Log an error message and let the system boot up with default theme instead of re-throwing this
 				MessageBox.Show(msg, "An error occured", MessageBoxButton.OK);

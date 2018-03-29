@@ -8,6 +8,8 @@ ECHO corresponding BIN and OBJ Folder contained in the following projects
 ECHO.
 ECHO BreadcrumbLib
 ECHO Breadcrumb
+ECHO.
+ECHO DirectoryInfoEx
 ECHO ThemesManager
 ECHO Icons
 ECHO.
@@ -20,6 +22,7 @@ ECHO XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
 ECHO.
 ECHO XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
 
+ECHO.
 ECHO Deleting BIN and OBJ Folders in BreadcrumbLib folder
 ECHO.
 RMDIR /S /Q BreadcrumbLib\bin
@@ -30,16 +33,21 @@ ECHO.
 RMDIR /S /Q Breadcrumb\bin
 RMDIR /S /Q Breadcrumb\obj
 
+ECHO.
+ECHO Deleting BIN and OBJ Folders in DirectoryInfoEx folder
+ECHO.
+RMDIR /S /Q Components\DirectoryInfoEx\bin
+RMDIR /S /Q Components\DirectoryInfoEx\obj
 
 ECHO Deleting BIN and OBJ Folders in ThemesManager folder
 ECHO.
-RMDIR /S /Q ThemesManager\bin
-RMDIR /S /Q ThemesManager\obj
+RMDIR /S /Q Components\ThemesManager\bin
+RMDIR /S /Q Components\ThemesManager\obj
 
 ECHO Deleting BIN and OBJ Folders in Icons folder
 ECHO.
-RMDIR /S /Q Icons\bin
-RMDIR /S /Q Icons\obj
+RMDIR /S /Q Components\Icons\bin
+RMDIR /S /Q Components\Icons\obj
 
 PAUSE
 
