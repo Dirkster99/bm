@@ -1,13 +1,14 @@
 ﻿namespace BreadcrumbLib.Controls
 {
-    using BreadcrumbLib.ViewModels;
+    using BreadcrumbLib.Interfaces;
+    using BreadcrumbLib.Utils;
     using System.Windows;
     using System.Windows.Controls;
 
-	/// <summary>
-	/// Display a ToggleButton and when it's clicked, show it's content as a dropdown.
-	/// </summary>
-////    [TemplatePart(Name = "PART_SuggestBox", Type = typeof(SuggestBoxBase))]
+    /// <summary>
+    /// Display a ToggleButton and when it's clicked, show it's content as a dropdown.
+    /// </summary>
+    ////    [TemplatePart(Name = "PART_SuggestBox", Type = typeof(SuggestBoxBase))]
     [TemplatePart(Name = "PART_Switch", Type = typeof(Switch))]
     [TemplatePart(Name = "PART_DropDownList", Type = typeof(DropDownList))]
     public class Breadcrumb : UserControl
@@ -52,9 +53,39 @@
         public override void OnApplyTemplate()
         {
             base.OnApplyTemplate();
-////            this.Control_SuggestBox = this.Template.FindName("PART_SuggestBox", this) as SuggestBoxBase;  // sbox
-            this.Control_Switch = this.Template.FindName("PART_Switch", this) as Switch;                 // switch
-            this.Control_bexp = this.Template.FindName("PART_DropDownList", this) as DropDownList;      // bexp
+////        Control_SuggestBox = this.Template.FindName("PART_SuggestBox", this) as SuggestBoxBase;  // sbox
+            Control_Switch = this.Template.FindName("PART_Switch", this) as Switch;                 // switch
+            Control_bexp = this.Template.FindName("PART_DropDownList", this) as DropDownList;      // bexp
+
+            OnViewAttached();
+        }
+
+        private void OnViewAttached()
+        {
+            this.Control_bexp.AddValueChanged(ComboBox.SelectedValueProperty, (o, e) =>
+            {
+                IEntryViewModel evm = this.Control_bexp.SelectedItem as IEntryViewModel;
+                ////                    if (evm != null)
+                ////                        BroadcastDirectoryChanged(evm);
+
+                Control_Switch.Dispatcher.BeginInvoke(new System.Action(() =>
+                {
+                    Control_Switch.IsSwitchOn = true;
+                }));
+            });
+
+            this.Control_Switch.AddValueChanged(Switch.IsSwitchOnProperty, (o, e) =>
+            {
+                if (!this.Control_Switch.IsSwitchOn)
+                {
+                    ////                        _sbox.Dispatcher.BeginInvoke(new System.Action(() =>
+                    ////                        {
+                    ////                            Keyboard.Focus(_sbox);
+                    ////                            _sbox.Focus();
+                    ////                            _sbox.SelectAll();
+                    ////                        }), System.Windows.Threading.DispatcherPriority.Background);
+                }
+            });
         }
 
         /// <summary>
@@ -69,7 +100,7 @@
                 mIsLoaded = true;
 
                 if (DataContext != null)
-                    AttachView(DataContext as IViewAttached);
+                    OnViewAttached();
             }
         }
 
@@ -85,22 +116,9 @@
                 if (mIsLoaded == true)
                 {
                     if (e.NewValue != null)
-                        AttachView(e.NewValue as IViewAttached);
-                }              
+                        OnViewAttached();
+                }
             }
-        }
-
-        /// <summary>
-        /// Method executes to simulate the <seealso cref="IAttachView"/>
-        /// behaviour from Caliburn.Micro.
-        /// </summary>
-        /// <param name="viewAttachedViewModel"></param>
-        private void AttachView(IViewAttached viewAttachedViewModel)
-        {
-            if (viewAttachedViewModel == null)
-                return;
-
-            viewAttachedViewModel.OnViewAttached(this, null);
         }
         #endregion methods
     }

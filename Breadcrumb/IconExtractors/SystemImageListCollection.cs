@@ -1,4 +1,4 @@
-﻿namespace Breadcrumb.DirectoryInfoEx
+﻿namespace BreadCrumbLib.IconExtractors
 {
 	using Breadcrumb.Defines;
 

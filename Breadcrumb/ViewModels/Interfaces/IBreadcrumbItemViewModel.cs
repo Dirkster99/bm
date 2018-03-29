@@ -1,4 +1,6 @@
-﻿namespace Breadcrumb.ViewModels.Interfaces
+﻿using BreadcrumbLib.Interfaces;
+
+namespace Breadcrumb.ViewModels.Interfaces
 {
 	public interface IBreadcrumbItemViewModel : IEntryViewModel ////, ISupportTreeSelector<IBreadcrumbItemViewModel, IEntryModel>
     {

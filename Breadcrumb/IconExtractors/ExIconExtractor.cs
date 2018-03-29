@@ -1,4 +1,4 @@
-﻿namespace QuickZip.Converters
+﻿namespace BreadCrumbLib.IconExtractors
 {
 	using System;
 	using System.Drawing;

@@ -10,9 +10,9 @@
     using Breadcrumb.ViewModels.Helpers;
     using Breadcrumb.ViewModels.Interfaces;
     using Breadcrumb.ViewModels.TreeSelectors;
-    using QuickZip.Converters;
     using BreadcrumbLiv.Viewmodels.Base;
     using BreadcrumbLib.Defines;
+    using BreadCrumbLib.IconExtractors;
 
     public class ExTreeNodeViewModel : NotifyPropertyChanged, ISupportTreeSelector<ExTreeNodeViewModel, FileSystemInfoEx>
 	{

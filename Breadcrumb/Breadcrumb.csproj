@@ -86,13 +86,13 @@
     <Compile Include="Demo\SpecialFoldersViewModel.cs" />
     <Compile Include="Demo\SpecialFolderViewModel.cs" />
     <Compile Include="DirectoryInfoEx\Enums.cs" />
-    <Compile Include="DirectoryInfoEx\ExIconExtractor.cs" />
+    <Compile Include="IconExtractors\ExIconExtractor.cs" />
     <Compile Include="DirectoryInfoEx\ExTreeNodeViewModel.cs" />
     <Compile Include="DirectoryInfoEx\ExHierarchyComparer.cs" />
-    <Compile Include="DirectoryInfoEx\IconExtractor.cs" />
-    <Compile Include="DirectoryInfoEx\ImageTools.cs" />
-    <Compile Include="DirectoryInfoEx\SystemImageList.cs" />
-    <Compile Include="DirectoryInfoEx\SystemImageListCollection.cs" />
+    <Compile Include="IconExtractors\IconExtractor.cs" />
+    <Compile Include="IconExtractors\ImageTools.cs" />
+    <Compile Include="IconExtractors\SystemImageList.cs" />
+    <Compile Include="IconExtractors\SystemImageListCollection.cs" />
     <Compile Include="Models\Interfaces\IExportCommandBindings.cs" />
     <Compile Include="SystemIO\DiskTreeNodeViewModel.cs" />
     <Compile Include="SystemIO\PathComparer.cs" />
@@ -106,7 +106,6 @@
     <Compile Include="ViewModels\Helpers\EntriesHelperViewModel.cs" />
     <Compile Include="ViewModels\Interfaces\IBreadcrumbItemViewModel.cs" />
     <Compile Include="ViewModels\Interfaces\IBreadcrumbViewModel.cs" />
-    <Compile Include="ViewModels\Interfaces\IEntryViewModel.cs" />
     <Compile Include="ViewModels\Interfaces\ITreeLookup.cs" />
     <Compile Include="ViewModels\Interfaces\ITreeLookupProcessor.cs" />
     <Compile Include="ViewModels\Interfaces\ISupportTreeSelector.cs" />

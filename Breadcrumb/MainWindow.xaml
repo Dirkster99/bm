@@ -11,13 +11,13 @@
 
         Title="MainWindow" Height="550" Width="525"
         >
-	<Grid Background="{DynamicResource {x:Static themes:ResourceKeys.ControlBackground}}" >
+	<Grid Background="{DynamicResource {x:Static themes:ResourceKeys.ControlBackground}}"
+          Margin="12"
+          >
 		<Grid.RowDefinitions>
 			<RowDefinition Height="Auto" />
-			<RowDefinition Height="Auto" />
-			<RowDefinition Height="Auto" />
-			<RowDefinition Height="Auto" />
-			<RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
 		</Grid.RowDefinitions>
 
 		<Menu Grid.Row="0">
@@ -41,14 +41,16 @@
 			</MenuItem>
 		</Menu>
 
-		<!-- ctrls:Breadcrumb DataContext="{Binding ExTest}" Grid.Row="1" / -->
 
-		<!-- ctrls:Breadcrumb DataContext="{Binding ExTest1}" Grid.Row="2" / -->
+		<ctrls:Breadcrumb DataContext="{Binding BreadcrumbTest}"
+                          Grid.Row="1"
+                          Margin="3,12"
+                          />
 
-		<ctrls:Breadcrumb DataContext="{Binding BreadcrumbTest}" Grid.Row="3" />
-
-
-		<!-- ListBox ItemsSource="{Binding SpecialFoldersTest.Folders}" Grid.Row="4">
+		<ListBox ItemsSource="{Binding SpecialFoldersTest.Folders}"
+                 Grid.Row="2"
+                 Margin="3,12"
+                 >
 			<ListBox.ItemTemplate>
 				<DataTemplate>
 					<StackPanel Orientation="Horizontal">
@@ -63,6 +65,6 @@
 					</StackPanel>
 				</DataTemplate>
 			</ListBox.ItemTemplate>
-		</ListBox -->
+		</ListBox>
 	</Grid>
 </Window>

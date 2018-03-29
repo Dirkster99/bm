@@ -1,4 +1,4 @@
-﻿namespace Breadcrumb.ViewModels.Interfaces
+﻿namespace BreadcrumbLib.Interfaces
 {
     using BreadcrumbLib.Models;
     using System.Windows.Media;
