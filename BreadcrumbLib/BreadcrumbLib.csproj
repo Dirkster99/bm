@@ -120,7 +120,6 @@
     <Compile Include="Models\IPathHelper.cs" />
     <Compile Include="Models\PathHelper.cs" />
     <Compile Include="Utils\AsyncUtils.cs" />
-    <Compile Include="ViewModels\Base\NotifyPropertyChanged.cs" />
     <Compile Include="Themes\ResourceKeys.cs" />
     <Compile Include="Themes\StaticResourceKey.cs" />
     <Compile Include="Utils\UITools.cs" />

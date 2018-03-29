@@ -81,7 +81,7 @@
   <Class Name="BreadcrumbLib.Controls.Breadcrumb">
     <Position X="0.5" Y="14.5" Width="1.75" />
     <TypeIdentifier>
-      <HashCode>AAAAAAAAAABAAAABAABAAQAAAAAAAABAAAAAAAAMAAA=</HashCode>
+      <HashCode>AAAAAAAAAABAAgABAABAAQAAAAAAAABAAAAAAAAEAAA=</HashCode>
       <FileName>Controls\Breadcrumb.xaml.cs</FileName>
     </TypeIdentifier>
   </Class>
@@ -276,17 +276,6 @@
       <HashCode>AAAAAAAAIBAAAAAAAAAAAAAAAAAAgAAAAAEAAAAAAAA=</HashCode>
       <FileName>Utils\PropertyPathHelper.cs</FileName>
     </TypeIdentifier>
-  </Class>
-  <Class Name="BreadcrumbLib.Utils.RelayCommand" BaseTypeListCollapsed="true">
-    <Position X="12.75" Y="5.5" Width="1.75" />
-    <Compartments>
-      <Compartment Name="Fields" Collapsed="true" />
-    </Compartments>
-    <TypeIdentifier>
-      <HashCode>AIAAAAAAAIACAAQAAEEAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
-      <FileName>Utils\RelayCommand.cs</FileName>
-    </TypeIdentifier>
-    <Lollipop Position="0.2" />
   </Class>
   <Class Name="BreadcrumbLib.Utils.UITools">
     <Position X="11.75" Y="11" Width="2" />

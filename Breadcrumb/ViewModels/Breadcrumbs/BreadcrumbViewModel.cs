@@ -1,28 +1,35 @@
 namespace Breadcrumb.ViewModels.Breadcrumbs
 {
     using Breadcrumb.ViewModels.Interfaces;
-    using BreadcrumbLiv.Viewmodels.Base;
     using System.IO;
 
     /// <summary>
     /// Class implements the viewmodel that manages the complete breadcrump control.
     /// </summary>
-    public class BreadcrumbViewModel : NotifyPropertyChanged
+    internal class BreadcrumbViewModel : Base.ViewModelBase
     {
 		#region fields
 		private bool mEnableBreadcrumb;
 		private string _suggestedPath;
         #endregion fields
 
-		#region constructors
-		/// <summary>
-		/// Class constructor
-		/// </summary>
-		public BreadcrumbViewModel()
+        #region constructors
+        /// <summary>
+        /// Class constructor
+        /// </summary>
+        public BreadcrumbViewModel(string initialPath)
+            : this()
+        {
+            var selector = BreadcrumbSubTree.Selection as ITreeRootSelector<ExTreeNodeViewModel, FileSystemInfoEx>;
+            selector.SelectAsync(DirectoryInfoEx.FromString(initialPath));
+        }
+
+        /// <summary>
+        /// Class constructor
+        /// </summary>
+        protected BreadcrumbViewModel()
 		{
 			this.BreadcrumbSubTree = new ExTreeNodeViewModel();
-			(this.BreadcrumbSubTree.Selection as ITreeRootSelector<ExTreeNodeViewModel, FileSystemInfoEx>).SelectAsync(DirectoryInfoEx.FromString(@"C:\temp"));
-
 			mEnableBreadcrumb = true;
 		}
 		#endregion constructors
@@ -53,7 +60,7 @@ namespace Breadcrumb.ViewModels.Breadcrumbs
 				if (mEnableBreadcrumb != value)
 				{
 					mEnableBreadcrumb = value;
-					NotifyOfPropertyChange(() => EnableBreadcrumb);
+					NotifyOfPropertyChanged(() => EnableBreadcrumb);
 				}
 			}
 		}
@@ -65,7 +72,7 @@ namespace Breadcrumb.ViewModels.Breadcrumbs
 			{
 				_suggestedPath = value;
 
-				NotifyOfPropertyChange(() => SuggestedPath);
+				NotifyOfPropertyChanged(() => SuggestedPath);
 				OnSuggestPathChanged();
 			}
 		}

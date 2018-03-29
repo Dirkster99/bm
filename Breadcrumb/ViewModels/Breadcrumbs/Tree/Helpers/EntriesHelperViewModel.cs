@@ -3,7 +3,6 @@
     using Breadcrumb.Utils;
     using Breadcrumb.ViewModels.Interfaces;
     using BreadcrumbLib.Defines;
-    using BreadcrumbLiv.Viewmodels.Base;
     using System;
     using System.Collections.Generic;
     using System.Collections.ObjectModel;
@@ -12,7 +11,7 @@
     using System.Threading.Tasks;
     using System.Windows.Input;
 
-    public class EntriesHelperViewModel<VM> : NotifyPropertyChanged, IEntriesHelper<VM>
+    internal class EntriesHelperViewModel<VM> : Base.ViewModelBase, IEntriesHelper<VM>
 	{
 		#region fields
 		////private static ILogger logger = LogManagerFactory.DefaultLogManager.GetLogger<EntriesHelper<VM>>();
@@ -38,10 +37,10 @@
 		/// <param name="loadSubEntryFunc"></param>
 		public EntriesHelperViewModel(Func<bool, object, Task<IEnumerable<VM>>> loadSubEntryFunc)
 		{
-			this._loadSubEntryFunc = loadSubEntryFunc;
+			_loadSubEntryFunc = loadSubEntryFunc;
 
-			this.All = new FastObservableCollection<VM>();
-			this.All.Add(default(VM));
+			All = new FastObservableCollection<VM>();
+			All.Add(default(VM));
 
 			this.CancelCommand = new RelayCommand(obj =>
 			{
@@ -76,9 +75,9 @@
 		/// <param name="loadSubEntryFunc"></param>
 		public EntriesHelperViewModel(params VM[] entries)
 		{
-			this._isLoaded = true;
-			this.All = new FastObservableCollection<VM>();
-			this._subItemList = entries;
+			_isLoaded = true;
+			All = new FastObservableCollection<VM>();
+			_subItemList = entries;
 
 			(this.All as FastObservableCollection<VM>).AddItems(entries);
 			////foreach (var entry in entries)
@@ -115,7 +114,7 @@
 					////	AsyncUtils.RunAsync(() => this.LoadAsync());
 
 					this._isExpanded = value;
-					this.NotifyOfPropertyChange(() => this.IsExpanded);
+					this.NotifyOfPropertyChanged(() => this.IsExpanded);
 				}
 			}
 		}
@@ -135,7 +134,7 @@
 				if (this._isLoaded != value)
 				{
 					this._isLoaded = value;
-					this.NotifyOfPropertyChange(() => this.IsLoaded);
+					this.NotifyOfPropertyChanged(() => this.IsLoaded);
 				}
 			}
 		}
@@ -155,7 +154,7 @@
 				if (this._isLoading != value)
 				{
 					this._isLoading = value;
-					this.NotifyOfPropertyChange(() => this.IsLoading);
+					this.NotifyOfPropertyChanged(() => this.IsLoading);
 				}
 			}
 		}

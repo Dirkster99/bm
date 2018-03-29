@@ -11,7 +11,7 @@
     using System.Linq;
     using System.Threading.Tasks;
 
-    public class TreeRootSelectorViewModel<VM, T> : TreeSelectorViewModel<VM, T>, ITreeRootSelector<VM, T>
+    internal class TreeRootSelectorViewModel<VM, T> : TreeSelectorViewModel<VM, T>, ITreeRootSelector<VM, T>
 	{
 		#region fields
 		private T _selectedValue = default(T);
@@ -58,7 +58,7 @@
 			set
 			{
 				this._rootItems = value;
-				this.NotifyOfPropertyChange(() => this.OverflowedAndRootItems);
+				this.NotifyOfPropertyChanged(() => this.OverflowedAndRootItems);
 			}
 		}
 
@@ -124,8 +124,8 @@
 				prevSelector.IsSelected = false;
 			}
 
-			this.NotifyOfPropertyChange(() => this.SelectedValue);
-			this.NotifyOfPropertyChange(() => this.SelectedViewModel);
+			this.NotifyOfPropertyChanged(() => this.SelectedValue);
+			this.NotifyOfPropertyChanged(() => this.SelectedViewModel);
 
 			if (this.SelectionChanged != null)
 				this.SelectionChanged(this, EventArgs.Empty);

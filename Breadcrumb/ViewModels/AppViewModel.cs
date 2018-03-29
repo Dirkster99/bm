@@ -38,9 +38,7 @@
 				}
 			});
 
-			BreadcrumbTest = new BreadcrumbViewModel();
-			// If you want to show only root directories, try Toggle this line in TreeRootSelector.
-			////updateRootItemsAsync(this, _rootItems, 2);
+			BreadcrumbTest = new BreadcrumbViewModel(@"C:\");
 		}
 		#endregion constructors
 

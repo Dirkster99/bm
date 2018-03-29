@@ -7,7 +7,6 @@
     using Breadcrumb.ViewModels.Interfaces;
     using Breadcrumb.ViewModels.TreeLookupProcessors;
     using BreadcrumbLib.Utils;
-    using BreadcrumbLiv.Viewmodels.Base;
     using BreadcrumbLib.Defines;
 
     /// <summary>
@@ -15,7 +14,7 @@
     /// </summary>
     /// <typeparam name="VM"></typeparam>
     /// <typeparam name="T"></typeparam>
-    public class TreeSelectorViewModel<VM, T> : NotifyPropertyChanged, ITreeSelector<VM, T>
+    internal class TreeSelectorViewModel<VM, T> : Base.ViewModelBase, ITreeSelector<VM, T>
 	{
 		#region fields
 		private readonly AsyncLock _lookupLock = new AsyncLock();
@@ -78,7 +77,7 @@
 				if (this._isSelected != value)
 				{
 					this._isSelected = value;
-					this.NotifyOfPropertyChange(() => this.IsSelected);
+					this.NotifyOfPropertyChanged(() => this.IsSelected);
 					this.SelectedChild = default(T);
 
 					if (value)
@@ -99,8 +98,8 @@
 			set
 			{
 				this._isRoot = value;
-				this.NotifyOfPropertyChange(() => this.IsRoot);
-				this.NotifyOfPropertyChange(() => this.IsRootAndIsChildSelected);
+				this.NotifyOfPropertyChanged(() => this.IsRoot);
+				this.NotifyOfPropertyChanged(() => this.IsRootAndIsChildSelected);
 			}
 		}
 
@@ -125,10 +124,10 @@
 			{
 				this._selectedValue = value;
 
-				this.NotifyOfPropertyChange(() => this.SelectedChild);
-				this.NotifyOfPropertyChange(() => this.SelectedChildUI);
-				this.NotifyOfPropertyChange(() => this.IsChildSelected);
-				this.NotifyOfPropertyChange(() => this.IsRootAndIsChildSelected);
+				this.NotifyOfPropertyChanged(() => this.SelectedChild);
+				this.NotifyOfPropertyChanged(() => this.SelectedChildUI);
+				this.NotifyOfPropertyChanged(() => this.IsChildSelected);
+				this.NotifyOfPropertyChanged(() => this.IsRootAndIsChildSelected);
 			}
 		}
 
@@ -142,7 +141,7 @@
 			set
 			{
 				this.IsSelected = false;
-				this.NotifyOfPropertyChange(() => this.IsSelected);
+				this.NotifyOfPropertyChanged(() => this.IsSelected);
 
 				if (this._selectedValue == null || !this._selectedValue.Equals(value))
 				{
@@ -186,8 +185,8 @@
 			set
 			{
 				this._isOverflowed = value;
-				this.NotifyOfPropertyChange(() => this.IsOverflowed);
-				this.NotifyOfPropertyChange(() => this.IsOverflowedOrRoot);
+				this.NotifyOfPropertyChanged(() => this.IsOverflowed);
+				this.NotifyOfPropertyChanged(() => this.IsOverflowedOrRoot);
 			}
 		}
 		#endregion
@@ -208,8 +207,8 @@
 			{
 				this._selectedValue = path.Peek().Value;
 
-				this.NotifyOfPropertyChange(() => this.SelectedChild);
-				this.NotifyOfPropertyChange(() => this.SelectedChildUI);
+				this.NotifyOfPropertyChanged(() => this.SelectedChild);
+				this.NotifyOfPropertyChanged(() => this.SelectedChildUI);
 			}
 
 			path.Push(this);
@@ -240,9 +239,9 @@
 				}
 
 				// SetSelectedChild(lookupResult == null ? default(T) : lookupResult.Value);
-				this.NotifyOfPropertyChange(() => this.IsChildSelected);
-				this.NotifyOfPropertyChange(() => this.SelectedChild);
-				this.NotifyOfPropertyChange(() => this.SelectedChildUI);
+				this.NotifyOfPropertyChanged(() => this.IsChildSelected);
+				this.NotifyOfPropertyChanged(() => this.SelectedChild);
+				this.NotifyOfPropertyChanged(() => this.SelectedChildUI);
 			}
 
 			path.Push(this);

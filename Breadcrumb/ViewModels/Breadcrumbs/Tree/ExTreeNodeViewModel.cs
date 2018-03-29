@@ -9,12 +9,12 @@
     using Breadcrumb.ViewModels.Helpers;
     using Breadcrumb.ViewModels.Interfaces;
     using Breadcrumb.ViewModels.TreeSelectors;
-    using BreadcrumbLiv.Viewmodels.Base;
     using BreadcrumbLib.Defines;
     using Breadcrumb.IconExtractors;
     using Breadcrumb.IconExtractors.Enums;
+    using Breadcrumb.ViewModels.Base;
 
-    public class ExTreeNodeViewModel : NotifyPropertyChanged, ISupportTreeSelector<ExTreeNodeViewModel, FileSystemInfoEx>
+    internal class ExTreeNodeViewModel : ViewModelBase, ISupportTreeSelector<ExTreeNodeViewModel, FileSystemInfoEx>
 	{
 		#region fields
 		public static ICompareHierarchy<FileSystemInfoEx> Comparer = new ExHierarchyComparer();
@@ -103,7 +103,7 @@
 				if (this._header != value)
 				{
 					this._header = value;
-					this.NotifyOfPropertyChange(() => this.Header);
+					this.NotifyOfPropertyChanged(() => this.Header);
 				}
 			}
 		}
@@ -126,7 +126,7 @@
 				if (this._icon != value)
 				{
 					this._icon = value;
-					this.NotifyOfPropertyChange(() => this.Icon);
+					this.NotifyOfPropertyChanged(() => this.Icon);
 				}
 			}
 		}
