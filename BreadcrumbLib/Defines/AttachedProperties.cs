@@ -4,7 +4,7 @@
 	using System.Windows;
 	using System.Windows.Controls;
 
-	public static partial class AttachedProperties
+	internal static partial class AttachedProperties
 	{
 		#region fields
 		/// <summary>

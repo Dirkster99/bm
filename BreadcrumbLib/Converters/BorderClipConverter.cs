@@ -7,6 +7,9 @@
 	using System.Windows.Media;
 
 	/// <summary>
+    /// Clips inner border such that CornerRadius can be used without
+    /// having the inner border stcik out of the outer border.
+    /// 
 	/// By Marat Khasanov in http://stackoverflow.com/questions/5649875/wpf-how-to-make-the-border-trim-the-child-elements
 	/// </summary>
 	public class BorderClipConverter : IMultiValueConverter
