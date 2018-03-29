@@ -1,11 +1,6 @@
 ﻿namespace BreadcrumbLib.Models
 {
-    using BreadcrumbLib.Profile;
     using System;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Threading;
-    using System.Threading.Tasks;
 
     public static class ExtensionMethods
     {
@@ -57,102 +52,5 @@
             extension = "." + extension.TrimStart('.');
             return RemoveExtension(pathHelper, input) + extension;
         }
-
-        public static async Task<IEntryModel> LookupAsync(this IProfile profile, IEntryModel startEntry, string[] paths, CancellationToken ct, int idx = 0)
-        {
-            if (idx >= paths.Length)
-                return startEntry;
-            else
-            {
-                IEntryModel lookup = (await profile.ListAsync(startEntry, ct, em =>
-                    em.Name.Equals(paths[idx], StringComparison.CurrentCultureIgnoreCase), true)).FirstOrDefault();
-                ct.ThrowIfCancellationRequested();
-                if (lookup != null)
-                    return await LookupAsync(profile, lookup, paths, ct, idx + 1);
-                else return null;
-            }
-        }
-
-        public static async Task<IList<IEntryModel>> ListRecursiveAsync(this IProfile profile, IEntryModel entry,
-            CancellationToken ct, Func<IEntryModel, bool> filter,
-            Func<IEntryModel, bool> contLookupFilter, bool refresh = false)
-        {
-            contLookupFilter = contLookupFilter ?? (em => true);
-
-            IList<IEntryModel> retList =
-                await profile.ListAsync(entry, ct, filter, refresh);
-            List<IEntryModel> subsubItemList = new List<IEntryModel>();
-
-            if (!ct.IsCancellationRequested)
-                foreach (var subEntry in
-                    await profile.ListAsync(entry, ct, contLookupFilter, refresh))
-                    subsubItemList.AddRange(await profile.ListRecursiveAsync(subEntry, ct, filter, contLookupFilter, refresh));
-
-            return retList.Concat(subsubItemList).ToList();
-        }
-
-
-
-        public static async Task<IList<IEntryModel>> ListRecursiveAsync(this IProfile profile, IEntryModel[] entries,
-          CancellationToken ct, Func<IEntryModel, bool> filter,
-            Func<IEntryModel, bool> contLookupFilter = null,
-            bool refresh = false)
-        {
-            List<IEntryModel> retList = new List<IEntryModel>();
-            contLookupFilter = contLookupFilter ?? (em => true);
-
-            foreach (var entry in entries)
-                retList.AddRange(await profile.ListRecursiveAsync(entry, ct, filter, contLookupFilter, refresh));
-
-            return retList;
-        }
-
-        public static IEntryModel Convert(this IConverterProfile[] converterProfiles, IEntryModel entryModel)
-        {
-            IEntryModel retVal = entryModel;
-            foreach (var p in converterProfiles)
-                retVal = p.Convert(retVal);
-            return retVal;
-        }
-
-        public static async Task<IEntryModel> LookupAsync(this IProfile profile, string path, CancellationToken ct)
-        {
-            string curPath = path;
-            IEntryModel retVal = await profile.ParseAsync(path);
-            while (retVal == null && curPath != null)
-            {
-                curPath = profile.Path.GetDirectoryName(curPath);
-                retVal = await profile.ParseAsync(curPath);
-            }
-
-            if (retVal != null && curPath != path && path.StartsWith(curPath, StringComparison.CurrentCultureIgnoreCase))
-            {
-                string[] trailingPaths = path.Substring(curPath.Length).Split(new char[] { '\\', '/' }, StringSplitOptions.RemoveEmptyEntries);
-                return await LookupAsync(retVal.Profile, retVal, trailingPaths, CancellationToken.None, 0);
-            }
-
-            return retVal;
-        }
-
-        public static async Task<IEntryModel> ParseAsync(this IProfile[] profiles, string path)
-        {
-            foreach (var p in profiles)
-            {
-                var result = await p.ParseAsync(path);
-                if (result != null)
-                    return result;
-            }
-            return null;
-        }
-
-
-        public static async Task<IEntryModel> ParseThenLookupAsync(this IProfile profile, string path, CancellationToken ct)
-        {
-            IEntryModel retVal = await profile.ParseAsync(path);
-            if (retVal == null)
-                retVal = await profile.LookupAsync(path, ct);
-            return retVal;
-        }
-
     }
 }

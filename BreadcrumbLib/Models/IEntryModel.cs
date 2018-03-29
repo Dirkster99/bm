@@ -1,12 +1,11 @@
 ﻿namespace BreadcrumbLib.Models
 {
-    using BreadcrumbLib.Profile;
     using System;
     using System.ComponentModel;
 
     public interface IEntryModel : INotifyPropertyChanged, IEquatable<IEntryModel>
     {
-        IProfile Profile { get; }
+////        IProfile Profile { get; }
 
         bool IsDirectory { get; }
         IEntryModel Parent { get; }

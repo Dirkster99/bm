@@ -110,11 +110,6 @@
     <Compile Include="BaseControls\MultiContentControl.cs" />
     <Compile Include="BaseControls\OneItemPanel.cs" />
     <Compile Include="BaseControls\OverflowableStackPanel.cs" />
-    <Compile Include="Controls\SuggestBox\MultiSuggestSource.cs" />
-    <Compile Include="Controls\SuggestBox\NullSuggestSource.cs" />
-    <Compile Include="Controls\SuggestBox\SuggestBox.cs" />
-    <Compile Include="Controls\SuggestBox\SuggestBoxBase.cs" />
-    <Compile Include="Controls\SuggestBox\SuggestSourceImpl.cs" />
     <Compile Include="Controls\Switch.xaml.cs">
       <DependentUpon>Switch.xaml</DependentUpon>
     </Compile>
@@ -131,28 +126,14 @@
     <Compile Include="Defines\ExplorerCommands.cs" />
     <Compile Include="Defines\RegexPatterns.cs" />
     <Compile Include="Defines\Strings.cs" />
-    <Compile Include="Defines\Structs.cs" />
     <Compile Include="Interfaces\IHierarchyHelper.cs" />
     <Compile Include="Interfaces\IModelIconExtractor.cs" />
-    <Compile Include="Interfaces\ISuggestSource.cs" />
-    <Compile Include="IO\IODiskPatheMapper.cs" />
-    <Compile Include="Models\EntryModelBase.cs" />
     <Compile Include="Models\ExtensionMethods.cs" />
-    <Compile Include="Models\Helpers\QueryDropResult.cs" />
-    <Compile Include="Models\IConverterProfile.cs" />
     <Compile Include="Models\IDiskPathMapper.cs" />
-    <Compile Include="Models\IDragDropHandler.cs" />
     <Compile Include="Models\IEntryHierarchyComparer.cs" />
     <Compile Include="Models\IEntryModel.cs" />
     <Compile Include="Models\IPathHelper.cs" />
-    <Compile Include="Models\IWPFProfile.cs" />
-    <Compile Include="Models\PathComparer.cs" />
     <Compile Include="Models\PathHelper.cs" />
-    <Compile Include="Models\ProfileSuggestionSource.cs" />
-    <Compile Include="Models\WPF\BitmapSourceUtils.cs" />
-    <Compile Include="Models\WPF\ExtensionMethods.cs" />
-    <Compile Include="Profile\IProfile.cs" />
-    <Compile Include="Profile\ProfileBase.cs" />
     <Compile Include="Utils\WPF\PathUtils.cs" />
     <Compile Include="Utils\WPF\ResourceUtils.cs" />
     <Compile Include="Utils\WPF\StreamUtils.cs" />
@@ -160,10 +141,7 @@
     <Compile Include="ViewModels\IViewAttached.cs" />
     <Compile Include="Themes\ResourceKeys.cs" />
     <Compile Include="Themes\StaticResourceKey.cs" />
-    <Compile Include="UIEventHub\IDraggable.cs" />
-    <Compile Include="UIEventHub\IUIAware.cs" />
     <Compile Include="Utils\AsyncUtils.cs" />
-    <Compile Include="Utils\PathExistsValidationRule.cs" />
     <Compile Include="Utils\PathHierarchyHelper.cs" />
     <Compile Include="Utils\PropertyPathHelper.cs" />
     <Compile Include="Utils\RelayCommand.cs" />

@@ -1,15 +1,13 @@
 ﻿namespace BreadcrumbLib.Controls.Breadcrumbs
 {
-	using System.Collections;
-	using System.Collections.Generic;
-	using System.Windows;
-	using System.Windows.Controls;
-	using System.Windows.Controls.Primitives;
-	using BreadcrumbLib.BaseControls.Breadcrumb;
-	using BreadcrumbLib.Controls.SuggestBox;
-	using BreadcrumbLib.Utils;
+    using System.Collections;
+    using System.Windows;
+    using System.Windows.Controls;
+    using System.Windows.Controls.Primitives;
+    using BreadcrumbLib.BaseControls.Breadcrumb;
+    using BreadcrumbLib.Utils;
 
-	public class BreadcrumbBase : ItemsControl
+    public class BreadcrumbBase : ItemsControl
 	{
 		#region fields
 		public static readonly DependencyProperty SelectedValueProperty =
@@ -57,17 +55,17 @@
 			 DependencyProperty.Register("ValuePath", typeof(string), typeof(BreadcrumbBase),
 			 new PropertyMetadata("Value"));
 
-		public static readonly DependencyProperty SuggestionsProperty =
-				SuggestBox.SuggestionsProperty.AddOwner(typeof(BreadcrumbBase));
-
-		public static readonly DependencyProperty TextProperty =
-				SuggestBox.TextProperty.AddOwner(typeof(BreadcrumbBase));
+////		public static readonly DependencyProperty SuggestionsProperty =
+////				SuggestBox.SuggestionsProperty.AddOwner(typeof(BreadcrumbBase));
+////
+////		public static readonly DependencyProperty TextProperty =
+////				SuggestBox.TextProperty.AddOwner(typeof(BreadcrumbBase));
 
 		public static readonly DependencyProperty ButtonsProperty =
 				DependencyProperty.Register("Buttons", typeof(object), typeof(BreadcrumbBase));
 
 		protected BreadcrumbCore bcore;
-		protected SuggestBoxBase tbox;
+////		protected SuggestBoxBase tbox;
 		protected ToggleButton toggle;
 		#endregion fields
 
@@ -82,10 +80,10 @@
 		#endregion
 
 		#region properties
-		public SuggestBoxBase PART_SuggestBox
-		{
-			get { return this.tbox; }
-		}
+////		public SuggestBoxBase PART_SuggestBox
+////		{
+////			get { return this.tbox; }
+////		}
 
 		public BreadcrumbCore PART_BreadcrumbCore
 		{
@@ -208,20 +206,20 @@
 		/// <summary>
 		/// Suggestions shown on the SuggestionBox
 		/// </summary>
-		public IList<object> Suggestions
-		{
-			get { return (IList<object>)GetValue(SuggestionsProperty); }
-			set { this.SetValue(SuggestionsProperty, value); }
-		}
+////		public IList<object> Suggestions
+////		{
+////			get { return (IList<object>)GetValue(SuggestionsProperty); }
+////			set { this.SetValue(SuggestionsProperty, value); }
+////		}
 
 		/// <summary>
 		/// Text shown on the SuggestionBox
 		/// </summary>
-		public string Text
-		{
-			get { return (string)GetValue(TextProperty); }
-			set { this.SetValue(TextProperty, value); }
-		}
+////		public string Text
+////		{
+////			get { return (string)GetValue(TextProperty); }
+////			set { this.SetValue(TextProperty, value); }
+////		}
 
 		/// <summary>
 		/// Buttons shown in the right side of the Breadcrumb
@@ -254,7 +252,7 @@
 		{
 			base.OnApplyTemplate();
 			this.bcore = this.Template.FindName("PART_BreadcrumbCore", this) as BreadcrumbCore;
-			this.tbox = this.Template.FindName("PART_TextBox", this) as BreadcrumbLib.Controls.SuggestBox.SuggestBoxBase;
+////			this.tbox = this.Template.FindName("PART_TextBox", this) as BreadcrumbLib.Controls.SuggestBox.SuggestBoxBase;
 			this.toggle = this.Template.FindName("PART_Toggle", this) as ToggleButton;
 
 			#region BreadcrumbCore related handlers
@@ -273,17 +271,17 @@
 			}));
 
 			// Call SelectAll when text box is visible
-			this.toggle.AddValueChanged(ToggleButton.IsCheckedProperty, (o, e) =>
-			{
-				tbox.Focus();
-				tbox.SelectAll();
-			});
+////			this.toggle.AddValueChanged(ToggleButton.IsCheckedProperty, (o, e) =>
+////			{
+////				tbox.Focus();
+////				tbox.SelectAll();
+////			});
 
 			// Hide textbox on changed selected (path) value.
-			this.AddHandler(SuggestBox.ValueChangedEvent, (RoutedEventHandler)((o, e) =>
-			{
-				toggle.SetValue(ToggleButton.IsCheckedProperty, true); // Show Breadcrumb
-			}));
+////			this.AddHandler(SuggestBox.ValueChangedEvent, (RoutedEventHandler)((o, e) =>
+////			{
+////				toggle.SetValue(ToggleButton.IsCheckedProperty, true); // Show Breadcrumb
+////			}));
 
 			this.AddValueChanged(BreadcrumbList.SelectedPathValueProperty, (o, e) =>
 			{

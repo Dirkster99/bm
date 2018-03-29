@@ -1,7 +1,5 @@
 ﻿namespace BreadcrumbLib.Controls
 {
-    using BreadcrumbLib.Controls.SuggestBox;
-    using BreadcrumbLib.Interfaces;
     using BreadcrumbLib.ViewModels;
     using System.Windows;
     using System.Windows.Controls;
@@ -9,7 +7,7 @@
 	/// <summary>
 	/// Display a ToggleButton and when it's clicked, show it's content as a dropdown.
 	/// </summary>
-    [TemplatePart(Name = "PART_SuggestBox", Type = typeof(SuggestBoxBase))]
+////    [TemplatePart(Name = "PART_SuggestBox", Type = typeof(SuggestBoxBase))]
     [TemplatePart(Name = "PART_Switch", Type = typeof(Switch))]
     [TemplatePart(Name = "PART_DropDownList", Type = typeof(DropDownList))]
     public class Breadcrumb : UserControl
@@ -40,7 +38,7 @@
         #endregion constructors
 
         #region properties
-        public SuggestBoxBase Control_SuggestBox { get; set; }
+////        public SuggestBoxBase Control_SuggestBox { get; set; }
 
         public Switch Control_Switch { get; set; }
 
@@ -54,7 +52,7 @@
         public override void OnApplyTemplate()
         {
             base.OnApplyTemplate();
-            this.Control_SuggestBox = this.Template.FindName("PART_SuggestBox", this) as SuggestBoxBase;  // sbox
+////            this.Control_SuggestBox = this.Template.FindName("PART_SuggestBox", this) as SuggestBoxBase;  // sbox
             this.Control_Switch = this.Template.FindName("PART_Switch", this) as Switch;                 // switch
             this.Control_bexp = this.Template.FindName("PART_DropDownList", this) as DropDownList;      // bexp
         }

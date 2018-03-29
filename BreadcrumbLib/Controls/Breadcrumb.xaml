@@ -132,13 +132,13 @@
 										</uc:BreadcrumbTree>
 									</DockPanel>
 								</bc:Switch.ContentOn>
-								<bc:Switch.ContentOff>
+								<!-- bc:Switch.ContentOff>
                                     <sbox:SuggestBox x:Name="PART_SuggestBox" BorderThickness="0" Text="{Binding SuggestedPath, UpdateSourceTrigger=Explicit}"
                                                      DisplayMemberPath="FullPath" ValuePath="FullPath" 
                                                      IsEnabled="{Binding EnableBreadcrumb, Mode=OneWay, Converter={StaticResource fb}}"
                                                      SuggestSources="{Binding SuggestSources}" HierarchyHelper="{x:Null}">
 									</sbox:SuggestBox>
-								</bc:Switch.ContentOff>
+								</bc:Switch.ContentOff -->
 								<!--<bc:Switch.LayoutTransform>
                                     <ScaleTransform ScaleX="2" ScaleY="2" />
                                 </bc:Switch.LayoutTransform>-->

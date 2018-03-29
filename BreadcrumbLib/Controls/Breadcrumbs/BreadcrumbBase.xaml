@@ -43,18 +43,18 @@
                             Content="{Binding SelectedValue, RelativeSource={RelativeSource TemplatedParent}}" />
           </ToggleButton>
 
-          <suggest:SuggestBoxBase x:Name="PART_TextBox" Grid.Column="1" BorderBrush="Transparent"
-                                   DisplayMemberPath="{Binding DisplayMemberPath, RelativeSource={RelativeSource TemplatedParent}}"
-                                   ValuePath ="{Binding ValuePath, RelativeSource={RelativeSource TemplatedParent}}"
-                                   Text="{Binding Text, RelativeSource={RelativeSource TemplatedParent}}"
-                                   Suggestions="{Binding Suggestions, RelativeSource={RelativeSource TemplatedParent}}"
-                                   IsEnabled="{Binding IsBreadcrumbVisible, Converter={StaticResource fb}, RelativeSource={RelativeSource TemplatedParent}}" 
-                                   Visibility="{Binding IsBreadcrumbVisible, Converter={StaticResource fbtvc}, RelativeSource={RelativeSource TemplatedParent}}" >
-            <!--<bc:SuggestBoxBase.Text>
+        <!--suggest:SuggestBoxBase x:Name="PART_TextBox" Grid.Column="1" BorderBrush="Transparent"
+                        DisplayMemberPath="{Binding DisplayMemberPath, RelativeSource={RelativeSource TemplatedParent}}"
+                        ValuePath ="{Binding ValuePath, RelativeSource={RelativeSource TemplatedParent}}"
+                        Text="{Binding Text, RelativeSource={RelativeSource TemplatedParent}}"
+                        Suggestions="{Binding Suggestions, RelativeSource={RelativeSource TemplatedParent}}"
+                        IsEnabled="{Binding IsBreadcrumbVisible, Converter={StaticResource fb}, RelativeSource={RelativeSource TemplatedParent}}" 
+                        Visibility="{Binding IsBreadcrumbVisible, Converter={StaticResource fbtvc}, RelativeSource={RelativeSource TemplatedParent}}">
+            <bc:SuggestBoxBase.Text>
                             <Binding Path="SelectedPathValue" RelativeSource="{RelativeSource TemplatedParent}" UpdateSourceTrigger="Explicit">                                
                             </Binding>
-                        </bc:SuggestBoxBase.Text>-->
-          </suggest:SuggestBoxBase>
+                        </bc:SuggestBoxBase.Text>
+          </suggest:SuggestBoxBase -->
 
           <breadcrumpbc:BreadcrumbCore x:Name="PART_BreadcrumbCore" Grid.Column="1"
                                        ItemsSource="{Binding ItemsSource, RelativeSource={RelativeSource TemplatedParent}}"

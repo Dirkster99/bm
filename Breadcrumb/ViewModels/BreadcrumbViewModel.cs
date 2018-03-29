@@ -3,13 +3,9 @@ namespace Breadcrumb.ViewModels
     using Breadcrumb.DirectoryInfoEx;
     using Breadcrumb.ViewModels.Interfaces;
     using BreadcrumbLib.Controls;
-    using BreadcrumbLib.Controls.SuggestBox;
-    using BreadcrumbLib.Interfaces;
     using BreadcrumbLib.Utils;
     using BreadcrumbLib.ViewModels;
-    using System.Collections.Generic;
     using System.IO;
-    using System.Windows;
     using System.Windows.Controls;
     using System.Windows.Input;
 
@@ -22,11 +18,11 @@ namespace Breadcrumb.ViewModels
 		private bool mEnableBreadcrumb;
 		private string _suggestedPath;
 
-        private SuggestBoxBase _sbox;   // Controls attached view IAttachView
+///        private SuggestBoxBase _sbox;   // Controls attached view IAttachView
         private Switch _switch;
         private DropDownList _bexp;
         
-        private IEnumerable<ISuggestSource> _suggestSources;
+////        private IEnumerable<ISuggestSource> _suggestSources;
         #endregion fields
 
 		#region constructors
@@ -88,18 +84,18 @@ namespace Breadcrumb.ViewModels
         /// <summary>
         /// Contains a list of items that maps into the SuggestBox control.
         /// </summary>
-        public IEnumerable<ISuggestSource> SuggestSources
-        {
-            get
-            {
-                return _suggestSources;
-            }
-            set
-            {
-                _suggestSources = value;
-                NotifyOfPropertyChange(() => SuggestSources);
-            }
-        }
+////        public IEnumerable<ISuggestSource> SuggestSources
+////        {
+////            get
+////            {
+////                return _suggestSources;
+////            }
+////            set
+////            {
+////                _suggestSources = value;
+////                NotifyOfPropertyChange(() => SuggestSources);
+////            }
+////        }
         #endregion properties
 
 		#region methods
@@ -116,7 +112,7 @@ namespace Breadcrumb.ViewModels
                 if (userControl == null)
                     return;
 
-                _sbox = FindNamedControl(userControl, "PART_SuggestBox") as SuggestBoxBase;    // sbox
+///                _sbox = FindNamedControl(userControl, "PART_SuggestBox") as SuggestBoxBase;    // sbox
                 _switch = FindNamedControl(userControl, "PART_Switch") as Switch;             // switch
                 _bexp = FindNamedControl(userControl, "PART_DropDownList") as DropDownList;  // bexp
 
@@ -136,12 +132,12 @@ namespace Breadcrumb.ViewModels
                 {
                     if (!_switch.IsSwitchOn)
                     {
-                        _sbox.Dispatcher.BeginInvoke(new System.Action(() =>
-                        {
-                            Keyboard.Focus(_sbox);
-                            _sbox.Focus();
-                            _sbox.SelectAll();
-                        }), System.Windows.Threading.DispatcherPriority.Background);
+////                        _sbox.Dispatcher.BeginInvoke(new System.Action(() =>
+////                        {
+////                            Keyboard.Focus(_sbox);
+////                            _sbox.Focus();
+////                            _sbox.SelectAll();
+////                        }), System.Windows.Threading.DispatcherPriority.Background);
 
                     }
                 });
@@ -152,17 +148,17 @@ namespace Breadcrumb.ViewModels
 
             base.OnViewAttached(view, context);
 
-            _sbox.AddHandler(TextBlock.LostFocusEvent, (RoutedEventHandler)((s, e) =>
-            {
-                if (!_switch.IsSwitchOn)
-                {
-                    _switch.Dispatcher.BeginInvoke(new System.Action(() =>
-                    {
-                        _switch.IsSwitchOn = true;
-                    }));
-                }
-
-            }));
+////            _sbox.AddHandler(TextBlock.LostFocusEvent, (RoutedEventHandler)((s, e) =>
+////            {
+////                if (!_switch.IsSwitchOn)
+////                {
+////                    _switch.Dispatcher.BeginInvoke(new System.Action(() =>
+////                    {
+////                        _switch.IsSwitchOn = true;
+////                    }));
+////                }
+////
+////            }));
         }
 
         /// <summary>
