@@ -1,13 +1,9 @@
 ﻿namespace Breadcrumb.ViewModels
 {
     using Breadcrumb.Demo;
-    using Breadcrumb.DirectoryInfoEx;
-    using Breadcrumb.SystemIO;
     using Breadcrumb.Utils;
-    using Breadcrumb.ViewModels.Interfaces;
-    using BreadcrumbLiv.Viewmodels.Base;
+    using Breadcrumb.ViewModels.Breadcrumbs;
     using System;
-    using System.IO;
     using System.Reflection;
     using System.Threading;
     using System.Windows;
@@ -17,13 +13,10 @@
     using Themes.Base;
     using Themes.Interfaces;
 
-    public class AppViewModel : NotifyPropertyChanged
+    internal class AppViewModel : Base.ViewModelBase
 	{
 		#region fields
 		private IThemesManager _Themes;
-
-		private DiskTreeNodeViewModel mDiskTest;
-		////private ExTreeNodeViewModel mExTest;
 		#endregion fields
 
 		#region constructors
@@ -44,15 +37,6 @@
 					this.ChangeThemeCmd_Executed(theme, Application.Current.Dispatcher);
 				}
 			});
-
-			this.DiskTest = new DiskTreeNodeViewModel(new DirectoryInfo(@"C:\\"), new DirectoryInfo(@"D:\\"));
-			(this.DiskTest.Selection as ITreeRootSelector<DiskTreeNodeViewModel, string>).SelectAsync(@"C:\Temp");
-
-			this.ExTest = new ExTreeNodeViewModel();
-			(this.ExTest.Selection as ITreeRootSelector<ExTreeNodeViewModel, FileSystemInfoEx>).SelectAsync(DirectoryInfoEx.FromString(@"C:\temp"));
-
-			this.ExTest1 = new ExTreeNodeViewModel();
-			(this.ExTest1.Selection as ITreeRootSelector<ExTreeNodeViewModel, FileSystemInfoEx>).SelectAsync(DirectoryInfoEx.FromString(@"C:\temp"));
 
 			BreadcrumbTest = new BreadcrumbViewModel();
 			// If you want to show only root directories, try Toggle this line in TreeRootSelector.
@@ -79,23 +63,6 @@
 		{
 			get; private set;
 		}
-
-		public DiskTreeNodeViewModel DiskTest
-		{
-			get
-			{
-				return this.mDiskTest;
-			}
-
-			private set
-			{
-				this.mDiskTest = value;
-			}
-		}
-
-		public ExTreeNodeViewModel ExTest { get; private set; }
-
-		public ExTreeNodeViewModel ExTest1 { get; private set; }
 
 		public BreadcrumbViewModel BreadcrumbTest { get; private set; }
 

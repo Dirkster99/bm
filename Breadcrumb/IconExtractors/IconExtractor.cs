@@ -1,6 +1,7 @@
-﻿namespace BreadCrumbLib.IconExtractors
+﻿namespace Breadcrumb.IconExtractors
 {
-	using System;
+    using Breadcrumb.IconExtractors.Enums;
+    using System;
 	using System.Collections.Generic;
 	using System.Diagnostics;
 	using System.Drawing;
@@ -8,7 +9,6 @@
 	using System.IO.Tools;
 	using System.Runtime.InteropServices;
 	using System.Threading;
-	using Breadcrumb.Defines;
 
 	public class IconExtractor
 	{

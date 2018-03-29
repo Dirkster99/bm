@@ -1,11 +1,5 @@
 ﻿namespace Breadcrumb.ViewModels.TreeLookupProcessors
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Text;
-    using System.Threading.Tasks;
-    using Breadcrumb.Defines;
     using Breadcrumb.ViewModels.Interfaces;
     using BreadcrumbLib.Defines;
 

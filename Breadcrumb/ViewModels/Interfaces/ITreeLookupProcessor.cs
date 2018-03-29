@@ -1,6 +1,5 @@
 ﻿namespace Breadcrumb.ViewModels.Interfaces
 {
-    using Breadcrumb.Defines;
     using BreadcrumbLib.Defines;
 
     /// <summary>

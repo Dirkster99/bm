@@ -1,4 +1,4 @@
-﻿namespace Breadcrumb.DirectoryInfoEx
+﻿namespace Breadcrumb.ViewModels.Breadcrumbs
 {
     using System.Collections.Generic;
     using System.Drawing;
@@ -6,13 +6,13 @@
     using System.Linq;
     using System.Threading.Tasks;
     using System.Windows.Media;
-    using Breadcrumb.Defines;
     using Breadcrumb.ViewModels.Helpers;
     using Breadcrumb.ViewModels.Interfaces;
     using Breadcrumb.ViewModels.TreeSelectors;
     using BreadcrumbLiv.Viewmodels.Base;
     using BreadcrumbLib.Defines;
-    using BreadCrumbLib.IconExtractors;
+    using Breadcrumb.IconExtractors;
+    using Breadcrumb.IconExtractors.Enums;
 
     public class ExTreeNodeViewModel : NotifyPropertyChanged, ISupportTreeSelector<ExTreeNodeViewModel, FileSystemInfoEx>
 	{

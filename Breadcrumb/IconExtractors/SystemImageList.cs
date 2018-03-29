@@ -1,11 +1,11 @@
-﻿namespace BreadCrumbLib.IconExtractors
+﻿namespace Breadcrumb.IconExtractors
 {
-	using System;
+    using Breadcrumb.IconExtractors.Enums;
+    using System;
 	using System.Drawing;
 	using System.IO;
 	using System.Runtime.InteropServices;
 	using System.Threading;
-	using Breadcrumb.Defines;
 
 	/// <summary>
 	/// Created By LYCJ (2014), released under MIT license

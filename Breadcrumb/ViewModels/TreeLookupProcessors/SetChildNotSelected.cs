@@ -1,6 +1,5 @@
 ﻿namespace Breadcrumb.ViewModels.TreeLookupProcessors
 {
-    using Breadcrumb.Defines;
     using Breadcrumb.ViewModels.Interfaces;
     using BreadcrumbLib.Defines;
 

@@ -1,10 +1,9 @@
-﻿namespace BreadCrumbLib.IconExtractors
+﻿namespace Breadcrumb.IconExtractors
 {
-	using System;
+    using Breadcrumb.IconExtractors.Enums;
+    using System;
 	using System.Drawing;
 	using System.IO;
-	using Breadcrumb.Defines;
-	using Breadcrumb.DirectoryInfoEx;
 
 	public class ExIconExtractor : IconExtractor<FileSystemInfoEx>
 	{

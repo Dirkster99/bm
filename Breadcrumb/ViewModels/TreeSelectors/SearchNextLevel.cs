@@ -1,7 +1,6 @@
 ﻿namespace Breadcrumb.ViewModels.TreeSelectors
 {
     using System.Threading.Tasks;
-    using Breadcrumb.Defines;
     using Breadcrumb.ViewModels.Interfaces;
     using BreadcrumbLib.Defines;
 

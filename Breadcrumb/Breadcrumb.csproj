@@ -85,12 +85,14 @@
     <Compile Include="Demo\Converter\BrowseItemTypeToImageConverter.cs" />
     <Compile Include="Demo\SpecialFoldersViewModel.cs" />
     <Compile Include="Demo\SpecialFolderViewModel.cs" />
-    <Compile Include="DirectoryInfoEx\Enums.cs" />
+    <Compile Include="IconExtractors\ImageListDrawItemConstants.cs" />
+    <Compile Include="IconExtractors\Enums\ShellIconStateConstants.cs" />
+    <Compile Include="IconExtractors\Enums\IconSize.cs" />
+    <Compile Include="ViewModels\Breadcrumbs\ExTreeNodeViewModel.cs" />
     <Compile Include="IconExtractors\ExIconExtractor.cs" />
-    <Compile Include="DirectoryInfoEx\ExTreeNodeViewModel.cs" />
-    <Compile Include="DirectoryInfoEx\ExHierarchyComparer.cs" />
+    <Compile Include="ViewModels\Breadcrumbs\ExHierarchyComparer.cs" />
     <Compile Include="IconExtractors\IconExtractor.cs" />
-    <Compile Include="IconExtractors\ImageTools.cs" />
+    <Compile Include="IconExtractors\Enums\ImageTools.cs" />
     <Compile Include="IconExtractors\SystemImageList.cs" />
     <Compile Include="IconExtractors\SystemImageListCollection.cs" />
     <Compile Include="Models\Interfaces\IExportCommandBindings.cs" />
@@ -102,7 +104,7 @@
     <Compile Include="Utils\FastObservableCollection.cs" />
     <Compile Include="Utils\RelayCommand.cs" />
     <Compile Include="ViewModels\AppViewModel.cs" />
-    <Compile Include="ViewModels\BreadcrumbViewModel.cs" />
+    <Compile Include="ViewModels\Breadcrumbs\BreadcrumbViewModel.cs" />
     <Compile Include="ViewModels\Helpers\EntriesHelperViewModel.cs" />
     <Compile Include="ViewModels\Interfaces\IBreadcrumbItemViewModel.cs" />
     <Compile Include="ViewModels\Interfaces\IBreadcrumbViewModel.cs" />
@@ -121,8 +123,6 @@
     <Compile Include="ViewModels\TreeLookupProcessors\SetChildSelected.cs" />
     <Compile Include="ViewModels\TreeLookupProcessors\SetChildNotSelected.cs" />
     <Compile Include="ViewModels\TreeLookupProcessors\RefreshDirectory.cs" />
-    <Compile Include="ViewModels\TreeNodeViewModel.cs" />
-    <Compile Include="ViewModels\TreeViewModel.cs" />
     <Compile Include="ViewModels\Interfaces\IEntriesHelper.cs" />
     <Compile Include="ViewModels\Helpers\TreeRootSelectorViewModel.cs" />
     <Compile Include="ViewModels\TreeSelectors\BroadcastNextLevel.cs" />
@@ -131,6 +131,7 @@
     <Compile Include="ViewModels\TreeSelectors\SearchNextLevel.cs" />
     <Compile Include="ViewModels\TreeSelectors\SearchNextUsingReverseLookup.cs" />
     <Compile Include="ViewModels\TreeSelectors\TreeSelectorViewModel.cs" />
+    <Compile Include="ViewModels\Base\ViewModelBase.cs" />
     <Compile Include="Views\BindingProxy.cs" />
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>

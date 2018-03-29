@@ -1,6 +1,5 @@
-namespace Breadcrumb.ViewModels
+namespace Breadcrumb.ViewModels.Breadcrumbs
 {
-    using Breadcrumb.DirectoryInfoEx;
     using Breadcrumb.ViewModels.Interfaces;
     using BreadcrumbLiv.Viewmodels.Base;
     using System.IO;

@@ -1,7 +1,6 @@
 namespace Breadcrumb.SystemIO
 {
     using System;
-    using Breadcrumb.Defines;
     using Breadcrumb.ViewModels.Interfaces;
     using BreadcrumbLib.Defines;
 
