@@ -689,7 +689,7 @@ namespace DirectoryInfoExLib.IO.Tools.Wrappers.ContextMenu
             }
         }
 
-        public static bool GetNewContextMenu(DirectoryInfoEx item, out IntPtr iContextMenuPtr, out IContextMenu iContextMenu)
+        internal static bool GetNewContextMenu(DirectoryInfoEx item, out IntPtr iContextMenuPtr, out IContextMenu iContextMenu)
         {
             if (ShellAPI.CoCreateInstance(
                     ref ShellAPI.CLSID_NewMenu,

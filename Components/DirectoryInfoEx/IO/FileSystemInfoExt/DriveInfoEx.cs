@@ -11,7 +11,7 @@ namespace DirectoryInfoExLib.IO.FileSystemInfoExt
     using System.IO;
     using DirectoryInfoExLib.IO.Header.ShellDll;
 
-    public class DriveInfoEx
+    internal class DriveInfoEx
     {
         private DirectoryInfoEx _rootDirectory;
         private DriveType _driveType;
