@@ -20,8 +20,8 @@ namespace Breadcrumb.ViewModels.Breadcrumbs
         public BreadcrumbViewModel(string initialPath)
             : this()
         {
-            var selector = BreadcrumbSubTree.Selection as ITreeRootSelector<ExTreeNodeViewModel, FileSystemInfoEx>;
-            selector.SelectAsync(DirectoryInfoEx.FromString(initialPath));
+            var selector = BreadcrumbSubTree.Selection as ITreeRootSelector<ExTreeNodeViewModel, DirectoryInfoEx>;
+            selector.SelectAsync(DirectoryInfoEx.FromString(initialPath) as DirectoryInfoEx);
         }
 
         /// <summary>

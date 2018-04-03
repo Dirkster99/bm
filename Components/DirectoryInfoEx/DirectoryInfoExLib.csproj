@@ -102,6 +102,7 @@
     <Compile Include="IO\FileSystemInfoExt\FileInfoEx.cs" />
     <Compile Include="IO\FileSystemInfoExt\FileSystemInfoEx.cs" />
     <Compile Include="IO\Header\IShellFolder2.cs" />
+    <None Include="ClassDiagram1.cd" />
     <None Include="IO\Header\KnownFolders.cs" />
     <Compile Include="IO\Header\KnownFolder\Attributes\DisplayNameAttribute.cs" />
     <Compile Include="IO\Header\KnownFolder\Attributes\DefaultPathAttribute.cs" />

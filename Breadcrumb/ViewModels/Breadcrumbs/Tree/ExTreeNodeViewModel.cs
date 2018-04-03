@@ -14,10 +14,10 @@
     using Breadcrumb.ViewModels.Base;
     using DirectoryInfoExLib.IO.FileSystemInfoExt;
 
-    internal class ExTreeNodeViewModel : ViewModelBase, ISupportTreeSelector<ExTreeNodeViewModel, FileSystemInfoEx>
+    internal class ExTreeNodeViewModel : ViewModelBase, ISupportTreeSelector<ExTreeNodeViewModel, DirectoryInfoEx>
 	{
 		#region fields
-		public static ICompareHierarchy<FileSystemInfoEx> Comparer = new ExHierarchyComparer();
+		public static ICompareHierarchy<DirectoryInfoEx> Comparer = new ExHierarchyComparer();
 
 		private static IconExtractor iconExtractor = new ExIconExtractor();
 
@@ -38,7 +38,7 @@
 		{
 			this.Entries = new EntriesHelperViewModel<ExTreeNodeViewModel>();
 			this.Selection =
-				new TreeRootSelectorViewModel<ExTreeNodeViewModel, FileSystemInfoEx>(this.Entries)
+				new TreeRootSelectorViewModel<ExTreeNodeViewModel, DirectoryInfoEx>(this.Entries)
 				{
 					Comparers = new[] { ExTreeNodeViewModel.Comparer }
 				};
@@ -79,7 +79,7 @@
 				}
 			}));
 
-			this.Selection = new TreeSelectorViewModel<ExTreeNodeViewModel, FileSystemInfoEx>
+			this.Selection = new TreeSelectorViewModel<ExTreeNodeViewModel, DirectoryInfoEx>
                 (this._dir,
 				 this,
 				 this._parentNode.Selection,
@@ -88,7 +88,7 @@
 		#endregion constructors
 
 		#region properties
-		public ITreeSelector<ExTreeNodeViewModel, FileSystemInfoEx> Selection { get; set; }
+		public ITreeSelector<ExTreeNodeViewModel, DirectoryInfoEx> Selection { get; set; }
 
 		public IEntriesHelper<ExTreeNodeViewModel> Entries { get; set; }
 

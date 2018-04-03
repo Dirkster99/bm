@@ -6,7 +6,7 @@
     using DirectoryInfoExLib.IO.FileSystemInfoExt;
     using DirectoryInfoExLib.Tools;
 
-    public class ExHierarchyComparer : ICompareHierarchy<FileSystemInfoEx>
+    public class ExHierarchyComparer : ICompareHierarchy<DirectoryInfoEx>
 	{
 		#region fields
 		private PathComparer _pathComparer = new PathComparer();
@@ -22,7 +22,7 @@
 		#endregion constructors
 
 		#region mothods
-		public HierarchicalResult CompareHierarchyInner(FileSystemInfoEx a, FileSystemInfoEx b)
+		public HierarchicalResult CompareHierarchyInner(DirectoryInfoEx a, DirectoryInfoEx b)
 		{
 			if (a == null || b == null)
 				return HierarchicalResult.Unrelated;
@@ -49,7 +49,7 @@
 			return HierarchicalResult.Unrelated;
 		}
 
-		public HierarchicalResult CompareHierarchy(FileSystemInfoEx a, FileSystemInfoEx b)
+		public HierarchicalResult CompareHierarchy(DirectoryInfoEx a, DirectoryInfoEx b)
 		{
 			HierarchicalResult retVal = this.CompareHierarchyInner(a, b);
 			////Debug.WriteLine(String.Format("{2} {0},{1}", a.FullPath, b.FullPath, retVal));
@@ -57,17 +57,17 @@
 			return retVal;
 		}
 
-		private bool HasParent(FileSystemInfoEx child, DirectoryInfoEx parent)
-		{
-			DirectoryInfoEx current = child.Parent;
-			while (current != null)
-			{
-				if (current.Equals(parent))
-					return true;
-				current = current.Parent;
-			}
-			return false;
-		}
+////		private bool HasParent(FileSystemInfoEx child, DirectoryInfoEx parent)
+////		{
+////			DirectoryInfoEx current = child.Parent;
+////			while (current != null)
+////			{
+////				if (current.Equals(parent))
+////					return true;
+////				current = current.Parent;
+////			}
+////			return false;
+////		}
 		#endregion mothods
 	}
 }

@@ -164,11 +164,12 @@ namespace DirectoryInfoExLib.IO.FileSystemInfoExt
 
         #endregion
 
-
         #region Static Methods
         public static FileSystemInfoEx FromString(string FullName)
         {
-            return DirectoryEx.Exists(FullName) ? (FileSystemInfoEx)new DirectoryInfoEx(FullName) : new FileInfoEx(FullName);
+            return DirectoryEx.Exists(FullName) ?
+                  (FileSystemInfoEx)new DirectoryInfoEx(FullName)
+                : new FileInfoEx(FullName);
         }
 
         internal static ShellFolder2 getDesktopShellFolder()

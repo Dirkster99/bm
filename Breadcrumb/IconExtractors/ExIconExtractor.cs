@@ -6,40 +6,40 @@
     using System;
 	using System.Drawing;
 
-	public class ExIconExtractor : IconExtractor<FileSystemInfoEx>
+	public class ExIconExtractor : IconExtractor<DirectoryInfoEx>
 	{
 		protected static string fileBasedFSFilter = ".zip,.7z,.lha,.lzh,.sqx,.cab,.ace";
 
 		#region Methods
-		protected override Bitmap GetIconInner(FileSystemInfoEx entry, string key, IconSize size)
+		protected override Bitmap GetIconInner(DirectoryInfoEx entry, string key, IconSize size)
 		{
 			if (key.StartsWith("."))
 				throw new Exception("ext item is handled by IconExtractor");
 
-			if (entry is FileInfoEx)
-			{
-				Bitmap retVal = null;
-
-				string ext = PathEx.GetExtension(entry.Name);
-				if (IconExtractor.IsJpeg(ext))
-				{
-					retVal = IconExtractor.GetExifThumbnail(entry.FullName);
-				}
-				if (IconExtractor.IsImageIcon(ext))
-					try
-					{
-						retVal = new Bitmap(entry.FullName);
-					}
-					catch { retVal = null; }
-
-				if (retVal != null)
-					return retVal;
-			}
+////			if (entry is FileInfoEx)
+////			{
+////				Bitmap retVal = null;
+////
+////				string ext = PathEx.GetExtension(entry.Name);
+////				if (IconExtractor.IsJpeg(ext))
+////				{
+////					retVal = IconExtractor.GetExifThumbnail(entry.FullName);
+////				}
+////				if (IconExtractor.IsImageIcon(ext))
+////					try
+////					{
+////						retVal = new Bitmap(entry.FullName);
+////					}
+////					catch { retVal = null; }
+////
+////				if (retVal != null)
+////					return retVal;
+////			}
 
 			return entry.RequestPIDL(pidl => this.GetBitmap(size, pidl.Ptr, entry is DirectoryInfoEx, false));
 		}
 
-		protected override void GetIconKey(FileSystemInfoEx entry, IconSize size, out string fastKey, out string slowKey)
+		protected override void GetIconKey(DirectoryInfoEx entry, IconSize size, out string fastKey, out string slowKey)
 		{
 			string ext = PathEx.GetExtension(entry.Name);
 			if (entry is DirectoryInfoEx)
