@@ -1,10 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using System.IO;
-
-namespace System.IO
+﻿namespace DirectoryInfoExLib.Tools
 {
+    using DirectoryInfoExLib.IO.FileSystemInfoExt;
+    using System;
+    using System.IO;
+
     public static class PathEx
     {
         public static string GetDirectoryName(string path)

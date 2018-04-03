@@ -1,12 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Reflection;
-
-namespace System.IO.Utils
+﻿namespace DirectoryInfoExLib.Tools
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Text;
+    using System.Threading.Tasks;
+    using System.Reflection;
+
     public static class AttributeUtils
     {
         //http://www.minddriven.de/index.php/technology/dot-net/net-winrt-get-custom-attributes-from-enum-value

@@ -1,12 +1,12 @@
 ﻿namespace Breadcrumb.IconExtractors
 {
     using Breadcrumb.IconExtractors.Enums;
+    using DirectoryInfoExLib.IO.Tools.Wrappers;
     using System;
 	using System.Collections.Generic;
 	using System.Diagnostics;
 	using System.Drawing;
 	using System.IO;
-	using System.IO.Tools;
 	using System.Runtime.InteropServices;
 	using System.Threading;
 

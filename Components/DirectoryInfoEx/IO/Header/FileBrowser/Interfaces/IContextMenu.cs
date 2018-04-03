@@ -1,10 +1,10 @@
-using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Runtime.InteropServices;
-
-namespace ShellDll
+namespace DirectoryInfoExLib.IO.Header.ShellDll.Interfaces
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Text;
+    using System.Runtime.InteropServices;
+
     [ComImport()]
     [InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
     [GuidAttribute("000214e4-0000-0000-c000-000000000046")]

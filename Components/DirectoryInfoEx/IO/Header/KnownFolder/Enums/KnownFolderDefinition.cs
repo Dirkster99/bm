@@ -1,11 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace ShellDll
+﻿namespace DirectoryInfoExLib.IO.Header.KnownFolder.Enums
 {
+    using System;
+
     public struct KnownFolderDefinition
     {
         public KnownFolderCategory Category;        

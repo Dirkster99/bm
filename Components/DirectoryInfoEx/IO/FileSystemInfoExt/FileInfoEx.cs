@@ -4,15 +4,18 @@
 //                                                                                                               //
 // This code used part of Steven Roebert's work (http://www.codeproject.com/KB/miscctrl/FileBrowser.aspx)    //
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-using System;
-using System.IO;
-using ShellDll;
-using System.Runtime.Serialization;
-using System.Runtime.InteropServices;
-using System.Text;
-
-namespace System.IO
+namespace DirectoryInfoExLib.IO.FileSystemInfoExt
 {
+    using System;
+    using System.IO;
+    using System.Runtime.Serialization;
+    using System.Runtime.InteropServices;
+    using DirectoryInfoExLib.IO.Header.ShellDll;
+    using DirectoryInfoExLib.Tools;
+    using DirectoryInfoExLib.IO.Header;
+    using DirectoryInfoExLib.IO.FileStreamExt;
+    using DirectoryInfoExLib.IO.Tools.Interface;
+
     /// <summary>
     /// Represent a file in PIDL system
     /// </summary>

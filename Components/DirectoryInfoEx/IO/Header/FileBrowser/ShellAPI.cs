@@ -1,11 +1,12 @@
-using System;
-using System.Text;
-using System.Runtime.InteropServices;
-using System.Windows.Forms;
-using System.Drawing;
-
-namespace ShellDll
+namespace DirectoryInfoExLib.IO.Header.ShellDll
 {
+    using System;
+    using System.Text;
+    using System.Runtime.InteropServices;
+    using System.Windows.Forms;
+    using System.Drawing;
+    using DirectoryInfoExLib.IO.Header.ShellDll.Interfaces;
+
     /// <summary>
     /// This class contains every method, enumeration, struct and constants from the Windows API, which are
     /// required by the FileBrowser
@@ -419,8 +420,8 @@ namespace ShellDll
             CharSet = CharSet.Auto, 
             SetLastError = true)]
         public static extern int RegisterDragDrop(
-            IntPtr hWnd, 
-            ShellDll.IDropTarget IdropTgt);
+            IntPtr hWnd,
+            Interfaces.IDropTarget IdropTgt);
 
         // Revokes the registration of the specified application window as a potential target for 
         // OLE drag-and-drop operations

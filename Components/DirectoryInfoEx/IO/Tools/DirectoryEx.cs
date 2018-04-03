@@ -1,9 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace System.IO
+﻿namespace DirectoryInfoExLib.Tools
 {
+    using System.Collections.Generic;
+    using System.IO;
+    using DirectoryInfoExLib.IO.FileSystemInfoExt;
+
     public static class DirectoryEx
     {
         public static DirectoryInfoEx CreateDirectory(string path) 

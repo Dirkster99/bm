@@ -1,9 +1,9 @@
-﻿using System;
-using System.Diagnostics;
-using System.Runtime.InteropServices;
-
-namespace ShellDll
+﻿namespace DirectoryInfoExLib.IO.Header.KnownFolder.Interfaces
 {
+    using DirectoryInfoExLib.IO.Header.KnownFolder.Enums;
+    using System;
+    using System.Runtime.InteropServices;
+
     [ComImport, Guid("3AA7AF7E-9B36-420c-A8E3-F77D4674A488"), InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
     public interface IKnownFolder
     {

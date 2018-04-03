@@ -8,8 +8,8 @@
     <ProjectGuid>{09DF5A9A-989E-410C-BA72-5A94CF481E57}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>QuickZip.IO.PIDL</RootNamespace>
-    <AssemblyName>DirectoryInfoEx</AssemblyName>
+    <RootNamespace>DirectoryInfoExLib</RootNamespace>
+    <AssemblyName>DirectoryInfoExLib</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <SccProjectName>
@@ -75,7 +75,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="IO\FileSystemInfoEx\ExtensionMethods.cs" />
+    <Compile Include="Factory.cs" />
+    <Compile Include="Interfaces\IDirectoryInfoEx.cs" />
+    <Compile Include="IO\FileSystemInfoExt\ExtensionMethods.cs" />
     <Compile Include="IO\Header\FileBrowser\Interfaces\IExtractImage.cs" />
     <Compile Include="IO\Header\FileBrowser\Interfaces\IAdviseSink.cs" />
     <Compile Include="IO\Header\FileBrowser\Interfaces\IContextMenu.cs" />
@@ -94,14 +96,13 @@
     <Compile Include="IO\Header\FileBrowser\PIDL.cs" />
     <Compile Include="IO\Header\FileBrowser\ShellAPI.cs" />
     <Compile Include="IO\Header\FileBrowser\ShellHelper.cs" />
-    <Compile Include="IO\FileStreamEx\FileStreamEx.cs" />
-    <Compile Include="IO\FileSystemInfoEx\DirectoryInfoEx.cs" />
-    <Compile Include="IO\FileSystemInfoEx\DriveInfoEx.cs" />
-    <Compile Include="IO\FileSystemInfoEx\FileInfoEx.cs" />
-    <Compile Include="IO\FileSystemInfoEx\FileSystemInfoEx.cs" />
+    <Compile Include="IO\FileStreamExt\FileStreamExt.cs" />
+    <Compile Include="IO\FileSystemInfoExt\DirectoryInfoEx.cs" />
+    <Compile Include="IO\FileSystemInfoExt\DriveInfoEx.cs" />
+    <Compile Include="IO\FileSystemInfoExt\FileInfoEx.cs" />
+    <Compile Include="IO\FileSystemInfoExt\FileSystemInfoEx.cs" />
     <Compile Include="IO\Header\IShellFolder2.cs" />
     <None Include="IO\Header\KnownFolders.cs" />
-    <None Include="IO\Header\PreviewHandlerWPF\Interface\COMStream.cs" />
     <Compile Include="IO\Header\KnownFolder\Attributes\DisplayNameAttribute.cs" />
     <Compile Include="IO\Header\KnownFolder\Attributes\DefaultPathAttribute.cs" />
     <Compile Include="IO\Header\KnownFolder\Attributes\KnownFolderCategoryAttribute.cs" />
@@ -172,10 +173,6 @@
     <Compile Include="IO\Header\VirtualFileDataObject\VirtualFileDataObject.cs" />
     <Compile Include="IO\Tools\Wrappers\FileTypeInfoProvider.cs" />
     <Compile Include="IO\Tools\Wrappers\ImageExtractor.cs" />
-    <Compile Include="IO\Tools\Wrappers\Preview\PreviewerControl.cs">
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="IO\Tools\Wrappers\Preview\PreviewHelper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -187,9 +184,7 @@
     <Content Include="ChangeLog.txt" />
     <Content Include="License.txt" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="IO\Tools\Wrappers\DataObjectEx\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <BootstrapperPackage Include="Microsoft.Net.Client.3.5">
       <Visible>False</Visible>

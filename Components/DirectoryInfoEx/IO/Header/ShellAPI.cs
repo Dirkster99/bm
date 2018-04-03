@@ -1,10 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Runtime.InteropServices;
-
-namespace ShellDll
+﻿namespace DirectoryInfoExLib.IO.Header.ShellDll
 {
+    using System.Text;
+    using System.Runtime.InteropServices;
+
     public static partial class ShellAPI
     {
         [DllImport("kernel32.dll", CharSet = CharSet.Auto)]

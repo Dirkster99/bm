@@ -1,12 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Windows.Forms;
-using System.Runtime.InteropServices;
-using System.IO;
-
-namespace ShellDll
+﻿namespace DirectoryInfoExLib.IO.Header.ShellDll
 {
+    using System;
+    using DirectoryInfoExLib.IO.FileSystemInfoExt;
+    using DirectoryInfoExLib.IO.Tools.Interface;
+
     internal static class ShellHelper
     {
         #region Low/High Word

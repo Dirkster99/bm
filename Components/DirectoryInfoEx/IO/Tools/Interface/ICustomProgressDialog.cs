@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace System.IO.Tools
+﻿namespace DirectoryInfoExLib.IO.Tools.Interface
 {
     public delegate void CancelClickedHandler();
     public delegate void PauseClickedHandler();

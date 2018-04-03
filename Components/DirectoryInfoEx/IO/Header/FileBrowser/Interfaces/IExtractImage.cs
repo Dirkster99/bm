@@ -1,9 +1,9 @@
-using System;
-using System.Runtime.InteropServices;
-using System.Text;
-
-namespace ShellDll
+namespace DirectoryInfoExLib.IO.Header.ShellDll.Interfaces
 {
+    using System;
+    using System.Runtime.InteropServices;
+    using System.Text;
+
     //http://msdn.microsoft.com/en-us/library/bb761848(VS.85).aspx
 
     [Flags]

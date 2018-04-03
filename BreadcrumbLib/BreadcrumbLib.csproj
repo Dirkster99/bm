@@ -207,7 +207,7 @@
     <None Include="ClassDiagram1.cd" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Components\DirectoryInfoEx\DirectoryInfoEx.csproj">
+    <ProjectReference Include="..\Components\DirectoryInfoEx\DirectoryInfoExLib.csproj">
       <Project>{09df5a9a-989e-410c-ba72-5a94cf481e57}</Project>
       <Name>DirectoryInfoEx</Name>
     </ProjectReference>

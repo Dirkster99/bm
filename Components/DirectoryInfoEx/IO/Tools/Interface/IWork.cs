@@ -3,13 +3,11 @@
 // Release under LGPL license.                                                                                   //
 //                                                                                                               //
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-using System;
-using System.Collections.Generic;
-using System.Text;
-using System.ComponentModel;
-
-namespace System.IO.Tools
+namespace DirectoryInfoExLib.IO.Tools.Interface
 {
+    using System;
+    using System.ComponentModel;
+
     public enum WorkType { Unknown, List, Copy, Move, Delete };
     public enum WorkStatusType { wsCreated, wsRunning, wsAborted, wsCompleted }
     public enum WorkResultType { wrSuccess, wrAborted, wrFailed }

@@ -4,35 +4,39 @@
 //                                                                                                               //
 // This code used part of Steven Roebert's work (http://www.codeproject.com/KB/miscctrl/FileBrowser.aspx)    //
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Runtime.InteropServices;
-using ShellDll;
-using System.Runtime.Serialization;
-using System.Diagnostics;
-using System.ComponentModel;
-using System.IO.Utils;
-using System.Threading.Tasks;
-using System.Threading;
-
-namespace System.IO
+namespace DirectoryInfoExLib.IO.FileSystemInfoExt
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Runtime.InteropServices;
+    using System.Runtime.Serialization;
+    using System.ComponentModel;
+    using System.Threading.Tasks;
+    using System.Threading;
+    using DirectoryInfoExLib.IO.Header.ShellDll;
+    using DirectoryInfoExLib.Interfaces;
+    using DirectoryInfoExLib.IO.Tools.Interface;
+    using DirectoryInfoExLib.Tools;
+    using System.IO;
+    using DirectoryInfoExLib.IO.Header;
+    using DirectoryInfoExLib.IO.Header.ShellDll.Interfaces;
+    using DirectoryInfoExLib.IO.Header.KnownFolder;
+    using DirectoryInfoExLib.IO.Header.KnownFolder.Enums;
+    using DirectoryInfoExLib.IO.Header.KnownFolder.Attributes;
+
     /// <summary>
     /// Represents a directory in PIDL system.
     /// </summary>
     [Serializable]
-    public class DirectoryInfoEx : FileSystemInfoEx, IDisposable, ISerializable, ICloneable
+    public class DirectoryInfoEx : FileSystemInfoEx, IDirectoryInfoEx
     {
-        public enum DirectoryTypeEnum { dtDesktop, dtSpecial, dtDrive, dtFolder, dtRoot }
-
         #region Static Variables
-        public static readonly DirectoryInfoEx DesktopDirectory;
-        public static readonly DirectoryInfoEx MyComputerDirectory;
-        public static readonly DirectoryInfoEx CurrentUserDirectory;
-        public static readonly DirectoryInfoEx SharedDirectory;
-        public static readonly DirectoryInfoEx NetworkDirectory;
-        public static readonly DirectoryInfoEx RecycleBinDirectory;
+        internal static readonly DirectoryInfoEx DesktopDirectory;
+        internal static readonly DirectoryInfoEx MyComputerDirectory;
+        internal static readonly DirectoryInfoEx CurrentUserDirectory;
+        internal static readonly DirectoryInfoEx SharedDirectory;
+        internal static readonly DirectoryInfoEx NetworkDirectory;
+        internal static readonly DirectoryInfoEx RecycleBinDirectory;
 
         static DirectoryInfoEx()
         {
@@ -40,14 +44,14 @@ namespace System.IO
             if (LicenseManager.UsageMode == LicenseUsageMode.Designtime)
                 throw new Exception("This should not be executed when design time.");
 #endif
-            DesktopDirectory = new DirectoryInfoEx(CSIDLtoPIDL(ShellAPI.CSIDL.CSIDL_DESKTOP));
-            MyComputerDirectory = new DirectoryInfoEx(CSIDLtoPIDL(ShellAPI.CSIDL.CSIDL_DRIVES));
-            CurrentUserDirectory = new DirectoryInfoEx(CSIDLtoPIDL(ShellAPI.CSIDL.CSIDL_PROFILE));
+            DesktopDirectory = new DirectoryInfoEx(CSIDLtoPIDL(Header.ShellDll.ShellAPI.CSIDL.CSIDL_DESKTOP));
+            MyComputerDirectory = new DirectoryInfoEx(CSIDLtoPIDL(Header.ShellDll.ShellAPI.CSIDL.CSIDL_DRIVES));
+            CurrentUserDirectory = new DirectoryInfoEx(CSIDLtoPIDL(Header.ShellDll.ShellAPI.CSIDL.CSIDL_PROFILE));
             //0.17: Fixed some system cannot create shared directories. (by cwharmon)
-            try { SharedDirectory = new DirectoryInfoEx(CSIDLtoPIDL(ShellAPI.CSIDL.CSIDL_COMMON_DOCUMENTS)); }
+            try { SharedDirectory = new DirectoryInfoEx(CSIDLtoPIDL(Header.ShellDll.ShellAPI.CSIDL.CSIDL_COMMON_DOCUMENTS)); }
             catch { }
-            NetworkDirectory = new DirectoryInfoEx(CSIDLtoPIDL(ShellAPI.CSIDL.CSIDL_NETWORK));
-            RecycleBinDirectory = new DirectoryInfoEx(CSIDLtoPIDL(ShellAPI.CSIDL.CSIDL_BITBUCKET));
+            NetworkDirectory = new DirectoryInfoEx(CSIDLtoPIDL(Header.ShellDll.ShellAPI.CSIDL.CSIDL_NETWORK));
+            RecycleBinDirectory = new DirectoryInfoEx(CSIDLtoPIDL(Header.ShellDll.ShellAPI.CSIDL.CSIDL_BITBUCKET));
 
             //foreach (DirectoryInfoEx dir in DesktopDirectory.GetDirectories())
             //    if (dir.FullName.Equals(Helper.GetCurrentUserPath()))
@@ -150,7 +154,7 @@ namespace System.IO
         /// <summary>
         /// Convert CSIDL to PIDL
         /// </summary>
-        internal static PIDL CSIDLtoPIDL(ShellDll.ShellAPI.CSIDL csidl)
+        internal static PIDL CSIDLtoPIDL(Header.ShellDll.ShellAPI.CSIDL csidl)
         {
             IntPtr ptrAddr;
             PIDL pidl;
@@ -270,8 +274,8 @@ namespace System.IO
                 Parent.Create();
 
             IntPtr outPtr;
-            int hr = Parent.Storage.CreateStorage(Name, ShellDll.ShellAPI.STGM.FAILIFTHERE |
-                ShellDll.ShellAPI.STGM.CREATE, 0, 0, out outPtr);
+            int hr = Parent.Storage.CreateStorage(Name, ShellAPI.STGM.FAILIFTHERE |
+                ShellAPI.STGM.CREATE, 0, 0, out outPtr);
             Storage storage = new Storage(outPtr);
 
             if (hr != ShellAPI.S_OK)
@@ -994,7 +998,7 @@ namespace System.IO
         {
         }
 
-        public DirectoryInfoEx(ShellAPI.CSIDL csidl)
+        public DirectoryInfoEx(IO.Header.ShellDll.ShellAPI.CSIDL csidl)
         {
             PIDL pidlLookup = CSIDLtoPIDL(csidl);
             try

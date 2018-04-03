@@ -1,13 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Windows.Forms;
-using CtrlSoft.Win.UI;
-using System.Threading;
-using System.Diagnostics;
-
-namespace System.IO.Tools
+﻿namespace DirectoryInfoExLib.IO.Tools.Dialog
 {
+    using System;
+    using CtrlSoft.Win.UI;
+    using System.Threading;
+    using DirectoryInfoExLib.IO.Tools.Interface;
+
     public class ShellProgressDialog : ICustomProgressDialog
     {
         public ShellProgressDialog()

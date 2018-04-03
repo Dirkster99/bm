@@ -1,11 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace ShellDll
+﻿namespace DirectoryInfoExLib.IO.Header.KnownFolder
 {
+    using DirectoryInfoExLib.IO.Header.KnownFolder.Enums;
+    using System;
+
 #pragma warning disable 0649
     public struct InternalKnownFolderDefinition
     {

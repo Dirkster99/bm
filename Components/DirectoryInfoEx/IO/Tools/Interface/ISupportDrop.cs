@@ -3,15 +3,14 @@
 // Release under LGPL license.                                                                                   //
 //                                                                                                               //
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace System.IO.Tools
+namespace DirectoryInfoExLib.IO.Tools.Interface
 {
+    using DirectoryInfoExLib.IO.FileSystemInfoExt;
+
     public interface ISupportDrop
     {
         DirectoryInfoEx SelectedDirectory { get; }
+
         void Refresh();
     }
 }

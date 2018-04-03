@@ -1,9 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace System.IO.Tools
+﻿namespace DirectoryInfoExLib.IO.Tools.Work
 {
+    using DirectoryInfoExLib.IO.Tools.Interface;
+    using System;
+    using System.Collections.Generic;
+    using System.IO;
+
     public class FileWorkLogger : IWorkLogger
     {
         protected class logLine

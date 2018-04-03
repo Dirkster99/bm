@@ -1,14 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.IO.Utils;
-using System.Linq;
-using System.Runtime.InteropServices;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace ShellDll
+﻿namespace DirectoryInfoExLib.IO.Header.KnownFolder
 {
+    using DirectoryInfoExLib.IO.Header.KnownFolder.Attributes;
+    using DirectoryInfoExLib.IO.Header.KnownFolder.Enums;
+    using DirectoryInfoExLib.IO.Header.KnownFolder.Interfaces;
+    using DirectoryInfoExLib.IO.Header.ShellDll;
+    using DirectoryInfoExLib.Tools;
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Runtime.InteropServices;
+
     public class KnownFolder : IDisposable
     {
         #region fields

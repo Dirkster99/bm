@@ -1,11 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace ShellDll
+﻿namespace DirectoryInfoExLib.IO.Header.KnownFolder.Attributes
 {
+    using DirectoryInfoExLib.IO.Header.ShellDll;
+    using System;
+
     [AttributeUsage(AttributeTargets.Field, AllowMultiple = true)]
     public class CsidlAttribute : Attribute
     {

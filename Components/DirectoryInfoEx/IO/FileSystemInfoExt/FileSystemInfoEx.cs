@@ -4,17 +4,18 @@
 //                                                                                                               //
 // This code used part of Steven Roebert's work (http://www.codeproject.com/KB/miscctrl/FileBrowser.aspx)        //
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-using System;
-using System.IO;
-using System.Runtime.InteropServices;
-using System.Text;
-using ShellDll;
-using System.Runtime.Serialization;
-using System.Diagnostics;
-using System.Collections.Generic;
-
-namespace System.IO
+namespace DirectoryInfoExLib.IO.FileSystemInfoExt
 {
+    using System;
+    using System.IO;
+    using System.Runtime.InteropServices;
+    using System.Text;
+    using System.Runtime.Serialization;
+    using DirectoryInfoExLib.IO.Header.ShellDll;
+    using DirectoryInfoExLib.IO.Tools.Interface;
+    using DirectoryInfoExLib.IO.Header;
+    using DirectoryInfoExLib.Tools;
+
     [Serializable]
     public class FileSystemInfoEx : FileSystemInfo, IDisposable, ISerializable, ICloneable,
         IEquatable<FileSystemInfoEx>
@@ -50,15 +51,20 @@ namespace System.IO
         public override string Name { get { return _name; } }
         public new string Extension { get { return Path.GetExtension(Name); } }
         public override bool Exists { get { return getExists(); } }
+
         public DirectoryInfoEx Parent
         {
             get { initParent(); return _parent; }
+
             protected set
             {
                 if (_parent != null)
-                    throw new Exception("_parent cannot be reset."); _parent = value;
+                    throw new Exception("_parent cannot be reset.");
+
+                _parent = value;
             }
         }
+
         public string Label { get; protected set; }
         public new string FullName { get; protected set; }
         public new FileAttributes Attributes { get { checkRefresh(); return _attributes; } set { _attributes = value; } }
@@ -75,7 +81,7 @@ namespace System.IO
             if (!_parentInited)
                 if (Exists)
                 {
-                    if (FullName.Equals(IOTools.IID_Desktop)) return;
+                    if (FullName.Equals(DirectoryInfoExLib.Tools.IOTools.IID_Desktop)) return;
 
                     this.RequestPIDL((pidl) =>
                         {
@@ -121,7 +127,7 @@ namespace System.IO
                 return new PIDL(_pidl, true);
 
             if (FullName == "::{00021400-0000-0000-C000-000000000046}") //Desktop
-                return DirectoryInfoEx.CSIDLtoPIDL(ShellAPI.CSIDL.CSIDL_DESKTOP);
+                return DirectoryInfoEx.CSIDLtoPIDL(Header.ShellDll.ShellAPI.CSIDL.CSIDL_DESKTOP);
             else
                 return PathToPIDL(FullName);
         }
@@ -137,7 +143,7 @@ namespace System.IO
                     if (_pidl != null)
                     {
                         using (ShellFolder2 _desktopShellFolder = getDesktopShellFolder())
-                            loadName(_desktopShellFolder, _pidl, ShellAPI.SHGNO.FORPARSING);
+                            loadName(_desktopShellFolder, _pidl, Header.ShellDll.ShellAPI.SHGNO.FORPARSING);
                         return true;
                     }
                     else
@@ -302,7 +308,7 @@ namespace System.IO
             return null; //mute error.
         }
 
-        protected static ShellDll.ShellAPI.SFGAO shGetFileAttribute(PIDL pidl, ShellDll.ShellAPI.SFGAO lookup)
+        protected static ShellAPI.SFGAO shGetFileAttribute(PIDL pidl, ShellAPI.SFGAO lookup)
         {
             ShellAPI.SHFILEINFO shfi = new ShellAPI.SHFILEINFO();
             shfi.dwAttributes = ShellAPI.SFGAO.READONLY | ShellAPI.SFGAO.HIDDEN | ShellAPI.SFGAO.BROWSABLE |
@@ -326,33 +332,33 @@ namespace System.IO
             //ShellAPI.SFGAO attribute = shGetFileAttribute(pidlFull, ShellAPI.SFGAO.READONLY |
             //    ShellAPI.SFGAO.FOLDER | ShellAPI.SFGAO.FILESYSTEM | ShellAPI.SFGAO.STREAM | ShellAPI.SFGAO.FILESYSANCESTOR |
             //    ShellAPI.SFGAO.HIDDEN);
-            ShellAPI.SFGAO attribute = ShellAPI.SFGAO.READONLY | ShellAPI.SFGAO.FOLDER | ShellAPI.SFGAO.FILESYSTEM | ShellAPI.SFGAO.STREAM | ShellAPI.SFGAO.FILESYSANCESTOR;
+            Header.ShellDll.ShellAPI.SFGAO attribute = Header.ShellDll.ShellAPI.SFGAO.READONLY | Header.ShellDll.ShellAPI.SFGAO.FOLDER | Header.ShellDll.ShellAPI.SFGAO.FILESYSTEM | Header.ShellDll.ShellAPI.SFGAO.STREAM | Header.ShellDll.ShellAPI.SFGAO.FILESYSANCESTOR;
             iShellFolder.GetAttributesOf(1, new IntPtr[] { pidlRel.Ptr }, ref attribute);
 
-            if (!IOTools.IsZip(attribute) && (attribute & ShellAPI.SFGAO.FOLDER) != 0) retVal |= FileAttributes.Directory;
-            if ((attribute & ShellAPI.SFGAO.HIDDEN) != 0) retVal |= FileAttributes.Hidden;
-            if ((attribute & ShellAPI.SFGAO.READONLY) != 0) retVal |= FileAttributes.ReadOnly;
+            if (!IOTools.IsZip(attribute) && (attribute & Header.ShellDll.ShellAPI.SFGAO.FOLDER) != 0) retVal |= FileAttributes.Directory;
+            if ((attribute & Header.ShellDll.ShellAPI.SFGAO.HIDDEN) != 0) retVal |= FileAttributes.Hidden;
+            if ((attribute & Header.ShellDll.ShellAPI.SFGAO.READONLY) != 0) retVal |= FileAttributes.ReadOnly;
 
             return retVal;
         }
 
-        private static string loadName(IShellFolder2 iShellFolder, ShellAPI.SHGNO uFlags)
+        private static string loadName(IShellFolder2 iShellFolder, Header.ShellDll.ShellAPI.SHGNO uFlags)
         {
             return loadName(iShellFolder, new PIDL(IntPtr.Zero, false), uFlags);
         }
 
-        private static string loadName(IShellFolder2 iShellFolder,IntPtr ptr, ShellAPI.SHGNO uFlags)
+        private static string loadName(IShellFolder2 iShellFolder,IntPtr ptr, Header.ShellDll.ShellAPI.SHGNO uFlags)
         {
             if (iShellFolder == null) return null;
 
-            IntPtr ptrStr = Marshal.AllocCoTaskMem(ShellAPI.MAX_PATH * 2 + 4);
+            IntPtr ptrStr = Marshal.AllocCoTaskMem(Header.ShellDll.ShellAPI.MAX_PATH * 2 + 4);
             Marshal.WriteInt32(ptrStr, 0, 0);
-            StringBuilder buf = new StringBuilder(ShellAPI.MAX_PATH);
+            StringBuilder buf = new StringBuilder(Header.ShellDll.ShellAPI.MAX_PATH);
 
             try
             {
-                if (iShellFolder.GetDisplayNameOf(ptr, uFlags, ptrStr) == ShellAPI.S_OK)
-                    ShellAPI.StrRetToBuf(ptrStr, ptr, buf, ShellAPI.MAX_PATH);
+                if (iShellFolder.GetDisplayNameOf(ptr, uFlags, ptrStr) == Header.ShellDll.ShellAPI.S_OK)
+                    Header.ShellDll.ShellAPI.StrRetToBuf(ptrStr, ptr, buf, Header.ShellDll.ShellAPI.MAX_PATH);
             }
             finally
             {
@@ -363,7 +369,7 @@ namespace System.IO
             return buf.ToString();
         }
 
-        private static string loadName(IShellFolder2 iShellFolder, PIDL relPidl, ShellAPI.SHGNO uFlags)
+        private static string loadName(IShellFolder2 iShellFolder, PIDL relPidl, Header.ShellDll.ShellAPI.SHGNO uFlags)
         {
             return loadName(iShellFolder, relPidl.Ptr, uFlags);
         }
@@ -380,7 +386,7 @@ namespace System.IO
             {
 
                 Attributes = loadAttributes(parentShellFolder, fullPIDL, relPIDL);
-                string parseName = loadName(parentShellFolder, relPIDL, ShellAPI.SHGNO.FORPARSING);
+                string parseName = loadName(parentShellFolder, relPIDL, Header.ShellDll.ShellAPI.SHGNO.FORPARSING);
                 FullName = "";
 
                 //Console.WriteLine("relPIDL.size = {0}", relPIDL.Size);
@@ -396,7 +402,7 @@ namespace System.IO
                     if (DirectoryInfoEx.CurrentUserDirectory != null)
                     {
                         if (parseName == DirectoryInfoEx.CurrentUserDirectory.FullName &&
-                        loadName(parentShellFolder, ShellAPI.SHGNO.FORPARSING) == Environment.GetFolderPath(Environment.SpecialFolder.Desktop))
+                        loadName(parentShellFolder, Header.ShellDll.ShellAPI.SHGNO.FORPARSING) == Environment.GetFolderPath(Environment.SpecialFolder.Desktop))
                         {
                             FullName = IOTools.IID_UserFiles;
                         }
@@ -414,7 +420,7 @@ namespace System.IO
                     if (DirectoryInfoEx.SharedDirectory != null)
                     {
                         if (parseName == DirectoryInfoEx.SharedDirectory.FullName &&
-                        loadName(parentShellFolder, ShellAPI.SHGNO.FORPARSING) == Environment.GetFolderPath(Environment.SpecialFolder.Desktop))
+                        loadName(parentShellFolder, Header.ShellDll.ShellAPI.SHGNO.FORPARSING) == Environment.GetFolderPath(Environment.SpecialFolder.Desktop))
                             FullName = IOTools.IID_Public;
                         //else if (
                         //    (parseName.StartsWith(DirectoryInfoEx.SharedDirectory.FullName) &&
@@ -446,10 +452,10 @@ namespace System.IO
                 if (OriginalPath == null)
                     OriginalPath = FullName;
                 if (parseName.StartsWith("::")) //Guid
-                    parseName = loadName(parentShellFolder, relPIDL, ShellAPI.SHGNO.NORMAL);
+                    parseName = loadName(parentShellFolder, relPIDL, Header.ShellDll.ShellAPI.SHGNO.NORMAL);
 
                 _name = FullName.EndsWith("\\") ? FullName : PathEx.GetFileName(FullName);
-                Label = loadName(parentShellFolder, relPIDL, ShellAPI.SHGNO.NORMAL);
+                Label = loadName(parentShellFolder, relPIDL, Header.ShellDll.ShellAPI.SHGNO.NORMAL);
 
 
             }

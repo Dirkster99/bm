@@ -1,17 +1,22 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using ShellDll;
-using System.Runtime.InteropServices;
-using Microsoft.Win32;
-using System.Text.RegularExpressions;
-//using VistaBridge.Shell;
-using System.Diagnostics;
-using System.Linq;
-using System.IO.Utils;
-
-namespace System.IO
+﻿namespace DirectoryInfoExLib.Tools
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Runtime.InteropServices;
+    using System.Text.RegularExpressions;
+    //using VistaBridge.Shell;
+    using System.Diagnostics;
+    using System.Linq;
+    using DirectoryInfoExLib.IO.Header.ShellDll;
+    using System.IO;
+    using DirectoryInfoExLib.IO.Tools.Interface;
+    using DirectoryInfoExLib.IO.Header.ShellDll.Interfaces;
+    using DirectoryInfoExLib.IO.FileSystemInfoExt;
+    using DirectoryInfoExLib.IO.FileStreamExt;
+    using DirectoryInfoExLib.IO.Header.KnownFolder;
+    using DirectoryInfoExLib.IO.Header.KnownFolder.Enums;
+    using DirectoryInfoExLib.IO.Header.KnownFolder.Attributes;
+
     public delegate bool FileCancelDelegate(ushort completePercent);
     public delegate bool CancelDelegate();
     public static class IOTools
@@ -74,7 +79,7 @@ namespace System.IO
                 Environment.SpecialFolder sf = (Environment.SpecialFolder)enumItem;
                 try
                 {
-                    System.IO.DirectoryInfoEx di = new System.IO.DirectoryInfoEx(sf);
+                    DirectoryInfoEx di = new DirectoryInfoEx(sf);
                     retVal.Add(sf, di.FullName);
                 }
                 catch
@@ -527,7 +532,6 @@ namespace System.IO
             return (current != null);
         }
 
-
         public static bool Exists(string path)
         {
             return new FileSystemInfoEx(path).Exists;
@@ -603,9 +607,9 @@ namespace System.IO
                 Marshal.ThrowExceptionForHR(hr);
         }
 
-        public static bool IsZip(ShellAPI.SFGAO attribs)
+        public static bool IsZip(IO.Header.ShellDll.ShellAPI.SFGAO attribs)
         {
-            return ((attribs & ShellAPI.SFGAO.FOLDER) != 0 && (attribs & ShellAPI.SFGAO.STREAM) != 0);
+            return ((attribs & IO.Header.ShellDll.ShellAPI.SFGAO.FOLDER) != 0 && (attribs & IO.Header.ShellDll.ShellAPI.SFGAO.STREAM) != 0);
         }
 
         /// <summary>
@@ -880,7 +884,7 @@ namespace System.IO
 
         #endregion
 
-        public static Stream LoadEmbeddedResource(Reflection.Assembly thisAsm, string assemblyName, string resourceName)
+        public static Stream LoadEmbeddedResource(System.Reflection.Assembly thisAsm, string assemblyName, string resourceName)
         {
             string name = assemblyName + "." + resourceName;
             if (new List<string>(thisAsm.GetManifestResourceNames()).IndexOf(name) != -1)

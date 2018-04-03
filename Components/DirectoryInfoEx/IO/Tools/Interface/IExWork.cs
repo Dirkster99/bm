@@ -3,12 +3,11 @@
 // Release under LGPL license.                                                                                   //
 //                                                                                                               //
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace System.IO.Tools
+namespace DirectoryInfoExLib.IO.Tools.Interface
 {
+    using DirectoryInfoExLib.IO.FileSystemInfoExt;
+    using System;
+
     public delegate void WorkOverwriteEventHandler(object sender, WorkOverwriteEventArgs e);
     public delegate void WorkListEventHandler(object sender, WorkListEventArgs e);
 

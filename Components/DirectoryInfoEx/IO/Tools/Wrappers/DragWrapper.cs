@@ -4,18 +4,15 @@
 //                                                                                                               //
 // This code used part of Steven Roebert's work (http://www.codeproject.com/KB/miscctrl/FileBrowser.aspx)        //
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-using System;
-using System.Collections.Generic;
-using System.Text;
-using System.IO.Tools;
-using ShellDll;
-using System.IO;
-using System.Windows.Forms;
-using System.Runtime.InteropServices;
-using System.Diagnostics;
-
-namespace System.IO.Tools
+namespace DirectoryInfoExLib.IO.Tools.Wrappers
 {
+    using System;
+    using System.Windows.Forms;
+    using System.Runtime.InteropServices;
+    using DirectoryInfoExLib.IO.Header.ShellDll.Interfaces;
+    using DirectoryInfoExLib.IO.FileSystemInfoExt;
+    using DirectoryInfoExLib.IO.Header.ShellDll;
+
     public class DragWrapper : IDropSource, IDisposable
     {
         #region Variables

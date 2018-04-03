@@ -3,14 +3,14 @@
 // Release under LGPL license.                                                                                   //
 //                                                                                                               //
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-using System;
-using System.Collections.Generic;
-using System.Text;
-using System.ComponentModel;
-using System.Diagnostics;
-
-namespace System.IO.Tools
+namespace DirectoryInfoExLib.IO.Tools.Work
 {
+    using System;
+    using System.Collections.Generic;
+    using System.ComponentModel;
+    using DirectoryInfoExLib.IO.Tools.Interface;
+    using DirectoryInfoExLib.IO.FileSystemInfoExt;
+
     #region Events
     public class WorkAddedEventArgs : CancelEventArgs
     {

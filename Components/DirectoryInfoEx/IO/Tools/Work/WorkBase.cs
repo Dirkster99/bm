@@ -3,13 +3,14 @@
 // Release under LGPL license.                                                                                   //
 //                                                                                                               //
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Threading;
-
-namespace System.IO.Tools
+namespace DirectoryInfoExLib.IO.Tools.Work
 {
+    using DirectoryInfoExLib.IO.Tools.Dialog;
+    using DirectoryInfoExLib.IO.Tools.Interface;
+    using System;
+    using System.Collections.Generic;
+    using System.Threading;
+
     public abstract class WorkBase : IWork, IComparable
     {       
         #region Constructor
@@ -356,7 +357,6 @@ namespace System.IO.Tools
 
 
         #region Data
-
         private IWorkLogger _logger = new NullWorkLogger();
         OverwriteMode? _overwrite;
         Thread _worker;

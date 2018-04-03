@@ -1,14 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Runtime.InteropServices;
-using ShellDll;
-using System.Diagnostics;
-using Microsoft.Win32;
-using System.Text.RegularExpressions;
-
-namespace System.IO.Tools
+﻿namespace DirectoryInfoExLib.IO.Tools.Wrappers
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Runtime.InteropServices;
+    using System.Diagnostics;
+    using Microsoft.Win32;
+    using System.Text.RegularExpressions;
+    using DirectoryInfoExLib.IO.Header.ShellDll;
+    using System.IO;
+
     public enum OpenWithType { OpenWithList, OpenWithProgIds }
 
     public class OpenWithInfo : IComparable<OpenWithInfo>
@@ -72,7 +72,7 @@ namespace System.IO.Tools
         /// </summary>
         private static string getFileType(string fname)
         {
-            ShellDll.ShellAPI.SHFILEINFO shinfo = new ShellDll.ShellAPI.SHFILEINFO();
+            ShellAPI.SHFILEINFO shinfo = new ShellAPI.SHFILEINFO();
 
             ShellAPI.SHGetFileInfo(fname, 0, ref shinfo,
                           (int)Marshal.SizeOf(shinfo),

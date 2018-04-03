@@ -4,14 +4,12 @@
 //                                                                                                               //
 // This code used part of Steven Roebert's work (http://www.codeproject.com/KB/miscctrl/FileBrowser.aspx)    //
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-using System;
-using System.Collections.Generic;
-using System.Text;
-using ShellDll;
-using System.Runtime.InteropServices;
-
-namespace System.IO
+namespace DirectoryInfoExLib.IO.Tools.Interface
 {
+    using System;
+    using System.Runtime.InteropServices;
+    using DirectoryInfoExLib.IO.Header.ShellDll.Interfaces;
+
     public class ShellFolder : IShellFolder, IDisposable
     {
         private IShellFolder _iShellFolder = null;
@@ -31,13 +29,13 @@ namespace System.IO
 
         #region IShellFolder Members
 
-        public int ParseDisplayName(IntPtr hwnd, IntPtr pbc, string pszDisplayName, ref uint pchEaten, out IntPtr ppidl, ref ShellAPI.SFGAO pdwAttributes)
+        public int ParseDisplayName(IntPtr hwnd, IntPtr pbc, string pszDisplayName, ref uint pchEaten, out IntPtr ppidl, ref Header.ShellDll.ShellAPI.SFGAO pdwAttributes)
         {
             checkDisposed();
             return _iShellFolder.ParseDisplayName(hwnd, pbc, pszDisplayName, ref pchEaten, out ppidl, ref pdwAttributes);
         }
 
-        public int EnumObjects(IntPtr hwnd, ShellAPI.SHCONTF grfFlags, out IntPtr enumIDList)
+        public int EnumObjects(IntPtr hwnd, Header.ShellDll.ShellAPI.SHCONTF grfFlags, out IntPtr enumIDList)
         {
             checkDisposed();
             return _iShellFolder.EnumObjects(hwnd, grfFlags, out enumIDList);
@@ -67,7 +65,7 @@ namespace System.IO
             return _iShellFolder.CreateViewObject(hwndOwner, riid, out ppv);
         }
 
-        public int GetAttributesOf(uint cidl, IntPtr[] apidl, ref ShellAPI.SFGAO rgfInOut)
+        public int GetAttributesOf(uint cidl, IntPtr[] apidl, ref Header.ShellDll.ShellAPI.SFGAO rgfInOut)
         {
             checkDisposed();
             return _iShellFolder.GetAttributesOf(cidl, apidl, ref rgfInOut);
@@ -79,13 +77,13 @@ namespace System.IO
             return _iShellFolder.GetUIObjectOf(hwndOwner, cidl, apidl, ref riid, rgfReserved, out ppv);
         }
 
-        public int GetDisplayNameOf(IntPtr pidl, ShellAPI.SHGNO uFlags, IntPtr lpName)
+        public int GetDisplayNameOf(IntPtr pidl, Header.ShellDll.ShellAPI.SHGNO uFlags, IntPtr lpName)
         {
             checkDisposed();
             return _iShellFolder.GetDisplayNameOf(pidl, uFlags, lpName);
         }
 
-        public int SetNameOf(IntPtr hwnd, IntPtr pidl, string pszName, ShellAPI.SHGNO uFlags, out IntPtr ppidlOut)
+        public int SetNameOf(IntPtr hwnd, IntPtr pidl, string pszName, Header.ShellDll.ShellAPI.SHGNO uFlags, out IntPtr ppidlOut)
         {
             checkDisposed();
             return _iShellFolder.SetNameOf(hwnd, pidl, pszName, uFlags, out ppidlOut);

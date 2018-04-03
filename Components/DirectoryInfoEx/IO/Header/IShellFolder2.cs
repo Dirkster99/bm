@@ -4,14 +4,14 @@
 //                                                                                                               //
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Runtime.InteropServices;
-using ShellDll;
-
-namespace ShellDll
+namespace DirectoryInfoExLib.IO.Header
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Text;
+    using System.Runtime.InteropServices;
+    using ShellDll;
+
     [StructLayout(LayoutKind.Sequential)]
     public struct ExtraSearch
     {
@@ -105,7 +105,7 @@ namespace ShellDll
             string pszDisplayName,
             ref uint pchEaten,
             out IntPtr ppidl,
-            ref ShellAPI.SFGAO pdwAttributes);
+            ref DirectoryInfoExLib.IO.Header.ShellDll.ShellAPI.SFGAO pdwAttributes);
 
         // Allows a client to determine the contents of a folder by creating an item
         // identifier enumeration object and returning its IEnumIDList interface.
@@ -113,7 +113,7 @@ namespace ShellDll
         [PreserveSig]
         Int32 EnumObjects(
             IntPtr hwnd,
-            ShellAPI.SHCONTF grfFlags,
+            DirectoryInfoExLib.IO.Header.ShellDll.ShellAPI.SHCONTF grfFlags,
             out IntPtr enumIDList);
 
         // Retrieves an IShellFolder object for a subfolder.
@@ -166,7 +166,7 @@ namespace ShellDll
             uint cidl,
             [MarshalAs(UnmanagedType.LPArray)]
             IntPtr[] apidl,
-            ref ShellAPI.SFGAO rgfInOut);
+            ref DirectoryInfoExLib.IO.Header.ShellDll.ShellAPI.SFGAO rgfInOut);
 
         // Retrieves an OLE interface that can be used to carry out actions on the
         // specified file objects or folders.
@@ -186,7 +186,7 @@ namespace ShellDll
         [PreserveSig()]
         Int32 GetDisplayNameOf(
             IntPtr pidl,
-            ShellAPI.SHGNO uFlags,
+            DirectoryInfoExLib.IO.Header.ShellDll.ShellAPI.SHGNO uFlags,
             IntPtr lpName);
 
         // Sets the display name of a file object or subfolder, changing the item
@@ -198,7 +198,7 @@ namespace ShellDll
             IntPtr pidl,
             [MarshalAs(UnmanagedType.LPWStr)] 
             string pszName,
-            ShellAPI.SHGNO uFlags,
+            DirectoryInfoExLib.IO.Header.ShellDll.ShellAPI.SHGNO uFlags,
             out IntPtr ppidlOut);
         #endregion
 

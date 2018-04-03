@@ -1,11 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace ShellDll
+﻿namespace DirectoryInfoExLib.IO.Header.KnownFolder.Enums
 {
+    using DirectoryInfoExLib.IO.Header.KnownFolder.Attributes;
+    using DirectoryInfoExLib.IO.Header.ShellDll;
+    using System;
+
     //http://msdn.microsoft.com/en-us/library/windows/desktop/dd378457%28v=vs.85%29.aspx
     public enum KnownFolderIds
     {        

@@ -3,12 +3,12 @@
 // Release under LGPL license.                                                                                   //
 //                                                                                                               //
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace System.IO.Tools
+namespace DirectoryInfoExLib.IO.Tools.Work
 {
+    using DirectoryInfoExLib.IO.FileSystemInfoExt;
+    using DirectoryInfoExLib.Tools;
+    using System;
+
     public class ListWork : ExWorkBase
     {
         public ListWork(int id, DirectoryInfoEx[] dirs, bool listDir, bool listFile, string fileMask)
@@ -35,7 +35,7 @@ namespace System.IO.Tools
         void init(DirectoryInfoEx[] dirs)
         {
             _dirsToList = dirs;
-            WorkType = WorkType.List;
+            WorkType = Interface.WorkType.List;
         }
 
         private void ListDir(DirectoryInfoEx dir)

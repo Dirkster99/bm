@@ -4,23 +4,25 @@
 //                                                                                                               //
 // This code used part of Steven Roebert's work (http://www.codeproject.com/KB/miscctrl/FileBrowser.aspx)    //
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-using System;
-using System.Collections.Generic;
-using System.Text;
-using ShellDll;
-using System.Runtime.InteropServices;
-
-namespace System.IO
+namespace DirectoryInfoExLib.IO.FileStreamExt
 {
+    using System;
+    using System.Runtime.InteropServices;
+    using System.IO;
+    using DirectoryInfoExLib.IO.Header.ShellDll.Interfaces;
+    using DirectoryInfoExLib.IO.FileSystemInfoExt;
+    using DirectoryInfoExLib.Tools;
+
     public class FileStreamEx : Stream, IDisposable
     {
-        private IntPtr streamPtr; private IStream stream;
+        private IntPtr streamPtr;
+        private Header.ShellDll.Interfaces.IStream stream;
         private IStorage tempParentStorage; private IntPtr tempParentStoragePtr;
         private string _fileName;
         private bool _canRead, _canWrite;
         private bool _disposed = false;
         private long currentPos;
-        private ShellAPI.STATSTG streamInfo;   
+        private Header.ShellDll.ShellAPI.STATSTG streamInfo;   
 
         protected virtual void closeStream()
         {
@@ -48,7 +50,7 @@ namespace System.IO
             this._canWrite = (access == FileAccess.Write || access == FileAccess.ReadWrite);
             currentPos = 0;
             
-            if (_canRead) stream.Stat(out streamInfo, ShellAPI.STATFLAG.NONAME);
+            if (_canRead) stream.Stat(out streamInfo, Header.ShellDll.ShellAPI.STATFLAG.NONAME);
 
             switch (mode)
             {
@@ -161,7 +163,7 @@ namespace System.IO
         public override long Position { get { return currentPos; } set { Seek(currentPos, SeekOrigin.Begin); } }
 
 
-        public override void Flush() { stream.Commit(ShellAPI.STGC.DEFAULT); }
+        public override void Flush() { stream.Commit(Header.ShellDll.ShellAPI.STGC.DEFAULT); }
         public override void SetLength(long value) { if (CanWrite) stream.SetSize(value); }        
         public override int Read(byte[] buffer, int offset, int count)
         {

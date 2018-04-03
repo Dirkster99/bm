@@ -1,11 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace ShellDll
+﻿namespace DirectoryInfoExLib.IO.Header.KnownFolder.Attributes
 {
+    using DirectoryInfoExLib.IO.Header.KnownFolder.Enums;
+    using System;
+
     public class FolderCategoryAttribute : Attribute
     {
         public KnownFolderCategory Category { get; set; }

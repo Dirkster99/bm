@@ -3,15 +3,17 @@
 // Release under LGPL license.                                                                                   //
 //                                                                                                               //
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-using System;
-using System.Collections.Generic;
-using System.Text;
-using ShellDll;
-using System.Runtime.InteropServices;
-using System.Reflection;
-
-namespace System.IO.Tools
+namespace DirectoryInfoExLib.IO.Tools.Wrappers
 {
+    using DirectoryInfoExLib.IO.FileSystemInfoExt;
+    using DirectoryInfoExLib.IO.Header;
+    using DirectoryInfoExLib.IO.Header.ShellDll;
+    using DirectoryInfoExLib.IO.Tools.Interface;
+    using System;
+    using System.Collections.Generic;
+    using System.IO;
+    using System.Runtime.InteropServices;
+
     public class CollumnInfo
     {
         public PropertyKey PropertyKey { get; set; }
@@ -382,7 +384,7 @@ namespace System.IO.Tools
 
             while (i < 500)
             {
-                ShellDll.SHCOLSTATEF state;
+                SHCOLSTATEF state;
                 int hr = sf2.GetDefaultColumnState(i, out state);
                 if (hr == -2147316575) //COMException, Out of Bounds
                     break;
@@ -429,7 +431,7 @@ namespace System.IO.Tools
             if (file.Exists)
                 using (ShellFolder2 sf2 = file.Parent.ShellFolder)
                 {
-                    ShellDll.PropertyKey pkey = propKey;
+                    PropertyKey pkey = propKey;
                     return GetProperty(sf2, file, ref pkey);
                 }
             return null;

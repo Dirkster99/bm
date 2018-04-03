@@ -1,11 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace ShellDll
+﻿namespace DirectoryInfoExLib.IO.Header.KnownFolder.Attributes
 {
+    using System;
+
     public enum OSVersions
     { 
         Windows81, Windows8, Windows7, WindowsVista

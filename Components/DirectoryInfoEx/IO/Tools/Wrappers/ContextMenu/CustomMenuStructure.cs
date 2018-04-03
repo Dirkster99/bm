@@ -1,12 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Runtime.Serialization;
-using System.Drawing;
-
-namespace System.IO.Tools
+﻿namespace DirectoryInfoExLib.IO.Tools.Wrappers.ContextMenu
 {
-    
+    using System;
+    using System.Collections.Generic;
+    using System.Runtime.Serialization;
+    using System.Drawing;
 
     [Serializable]
     public class CustomMenuStructure : ISerializable

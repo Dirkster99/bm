@@ -1,7 +1,6 @@
-﻿
-namespace System.IO
+﻿namespace DirectoryInfoExLib.IO.FileSystemInfoExt
 {
-    using ShellDll;
+    using DirectoryInfoExLib.IO.Header.ShellDll;
     using System;
 
     public static class ExtensionMethods

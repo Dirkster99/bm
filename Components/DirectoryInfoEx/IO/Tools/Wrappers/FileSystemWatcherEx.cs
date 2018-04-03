@@ -1,15 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Windows.Forms;
-using ShellDll;
-using System.Runtime.InteropServices;
-using System.ComponentModel;
-using System.Threading;
-using System.Diagnostics;
-
-namespace System.IO
+﻿namespace DirectoryInfoExLib.IO.Tools.Wrappers
 {
+    using System;
+    using System.Windows.Forms;
+    using System.Runtime.InteropServices;
+    using System.ComponentModel;
+    using DirectoryInfoExLib.IO.Header.ShellDll;
+    using System.IO;
+    using DirectoryInfoExLib.Tools;
+    using DirectoryInfoExLib.IO.FileSystemInfoExt;
+
     #region Events
     internal class ShellChangeEventArgs : EventArgs
     {
@@ -118,7 +117,6 @@ namespace System.IO
     public class FileSystemWatcherEx : Component
     {
         SystemWatcherWrapper _sww;
-
 
         public DirectoryInfoEx Directory { get { return _sww.MonitorDir; } }
         public string Filter = "*.*";

@@ -4,14 +4,14 @@
 //                                                                                                               //
 // This code used part of Steven Roebert's work (http://www.codeproject.com/KB/miscctrl/FileBrowser.aspx)    //
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-using System;
-using System.Collections.Generic;
-using System.Text;
-using ShellDll;
-using System.Runtime.InteropServices;
-
-namespace System.IO
+namespace DirectoryInfoExLib.Tools
 {
+    using System.Collections.Generic;
+    using System.Text;
+    using DirectoryInfoExLib.IO.FileSystemInfoExt;
+    using System.IO;
+    using DirectoryInfoExLib.IO.FileStreamExt;
+
     public static class FileEx
     {
         public static bool Exists(string path)
@@ -109,6 +109,5 @@ namespace System.IO
         {
             return new FileInfoEx(path).Create();
         }
-
     }
 }

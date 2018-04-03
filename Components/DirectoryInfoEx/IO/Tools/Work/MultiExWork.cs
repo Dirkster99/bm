@@ -3,12 +3,12 @@
 // Release under LGPL license.                                                                                   //
 //                                                                                                               //
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace System.IO.Tools
+namespace DirectoryInfoExLib.IO.Tools.Work
 {
+    using DirectoryInfoExLib.IO.FileSystemInfoExt;
+    using DirectoryInfoExLib.IO.Tools.Interface;
+    using System.Collections.Generic;
+
     public class MultiExWork : ExWorkBase
     {
         public MultiExWork(int id, FileSystemInfoEx source, FileSystemInfoEx target, IEnumerable<IExWork> workList)

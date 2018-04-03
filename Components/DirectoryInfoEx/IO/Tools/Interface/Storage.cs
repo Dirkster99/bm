@@ -1,11 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using ShellDll;
-using System.Runtime.InteropServices;
-
-namespace System.IO
+﻿namespace DirectoryInfoExLib.IO.Tools.Interface
 {
+    using System;
+    using System.Runtime.InteropServices;
+    using DirectoryInfoExLib.IO.Header.ShellDll.Interfaces;
+
     public class Storage : IStorage, IDisposable
     {
         private IStorage _iStorage = null;
@@ -45,22 +43,22 @@ namespace System.IO
 
         #region IStorage Members
 
-        public int CreateStream(string pwcsName, ShellAPI.STGM grfMode, int reserved1, int reserved2, out IntPtr ppstm)
+        public int CreateStream(string pwcsName, Header.ShellDll.ShellAPI.STGM grfMode, int reserved1, int reserved2, out IntPtr ppstm)
         {
             return _iStorage.CreateStream(pwcsName, grfMode, reserved1, reserved2, out ppstm);
         }
 
-        public int OpenStream(string pwcsName, IntPtr reserved1, ShellAPI.STGM grfMode, int reserved2, out IntPtr ppstm)
+        public int OpenStream(string pwcsName, IntPtr reserved1, Header.ShellDll.ShellAPI.STGM grfMode, int reserved2, out IntPtr ppstm)
         {
             return _iStorage.OpenStream(pwcsName, reserved1, grfMode, reserved2, out ppstm);
         }
 
-        public int CreateStorage(string pwcsName, ShellAPI.STGM grfMode, int reserved1, int reserved2, out IntPtr ppstg)
+        public int CreateStorage(string pwcsName, Header.ShellDll.ShellAPI.STGM grfMode, int reserved1, int reserved2, out IntPtr ppstg)
         {
             return _iStorage.CreateStorage(pwcsName, grfMode, reserved1, reserved2, out ppstg);
         }
 
-        public int OpenStorage(string pwcsName, IStorage pstgPriority, ShellAPI.STGM grfMode, IntPtr snbExclude, int reserved, out IntPtr ppstg)
+        public int OpenStorage(string pwcsName, IStorage pstgPriority, Header.ShellDll.ShellAPI.STGM grfMode, IntPtr snbExclude, int reserved, out IntPtr ppstg)
         {
             return _iStorage.OpenStorage(pwcsName, pstgPriority, grfMode, snbExclude, reserved, out ppstg);
         }
@@ -70,12 +68,12 @@ namespace System.IO
             return _iStorage.CopyTo(ciidExclude, ref rgiidExclude, snbExclude, pstgDest);
         }
 
-        public int MoveElementTo(string pwcsName, IStorage pstgDest, string pwcsNewName, ShellAPI.STGMOVE grfFlags)
+        public int MoveElementTo(string pwcsName, IStorage pstgDest, string pwcsNewName, Header.ShellDll.ShellAPI.STGMOVE grfFlags)
         {
             return _iStorage.MoveElementTo(pwcsName, pstgDest, pwcsName, grfFlags);
         }
 
-        public int Commit(ShellAPI.STGC grfCommitFlags)
+        public int Commit(Header.ShellDll.ShellAPI.STGC grfCommitFlags)
         {
             return _iStorage.Commit(grfCommitFlags);
         }
@@ -100,7 +98,7 @@ namespace System.IO
             return _iStorage.RenameElement(pwcsOldName, pwcsNewName);
         }
 
-        public int SetElementTimes(string pwcsName, ShellAPI.FILETIME pctime, ShellAPI.FILETIME patime, ShellAPI.FILETIME pmtime)
+        public int SetElementTimes(string pwcsName, Header.ShellDll.ShellAPI.FILETIME pctime, Header.ShellDll.ShellAPI.FILETIME patime, Header.ShellDll.ShellAPI.FILETIME pmtime)
         {
             return _iStorage.SetElementTimes(pwcsName, pctime, patime, pmtime);
         }
@@ -115,7 +113,7 @@ namespace System.IO
             return _iStorage.SetStateBits(grfStateBits, grfMask);
         }
 
-        public int Stat(out ShellAPI.STATSTG pstatstg, ShellAPI.STATFLAG grfStatFlag)
+        public int Stat(out Header.ShellDll.ShellAPI.STATSTG pstatstg, Header.ShellDll.ShellAPI.STATFLAG grfStatFlag)
         {
             return _iStorage.Stat(out pstatstg, grfStatFlag);
         }

@@ -3,12 +3,10 @@
 // Release under LGPL license.                                                                                   //
 //                                                                                                               //
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace System.IO.Tools
+namespace DirectoryInfoExLib.IO.Tools.Work
 {
+    using DirectoryInfoExLib.IO.FileSystemInfoExt;
+
     public class DeleteWork : ExWorkBase
     {
         public DeleteWork(int id, FileSystemInfoEx[] items)
@@ -16,7 +14,7 @@ namespace System.IO.Tools
             items.Length > 0 ? items[0].Parent : null, null)
         {
             _deleteItems = items;
-            WorkType = WorkType.Delete;
+            WorkType = Interface.WorkType.Delete;
         }
 
         #region Methods

@@ -3,12 +3,12 @@
 // Release under LGPL license.                                                                                   //
 //                                                                                                               //
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace System.IO.Tools
+namespace DirectoryInfoExLib.IO.Tools.Work
 {
+    using DirectoryInfoExLib.IO.FileSystemInfoExt;
+    using DirectoryInfoExLib.IO.Tools.Interface;
+    using System;
+
     public abstract class ExWorkBase : WorkBase, IExWork
     {
         public ExWorkBase(int id, FileSystemInfoEx source, FileSystemInfoEx target)

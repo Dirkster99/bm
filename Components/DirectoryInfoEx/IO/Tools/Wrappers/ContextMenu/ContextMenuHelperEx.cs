@@ -1,16 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using System.IO.Tools;
-using ShellDll;
-using System.IO;
-using System.Runtime.InteropServices;
-using System.Diagnostics;
-using System.Runtime.Serialization;
-using System.Drawing;
-
-namespace System.IO.Tools
+﻿namespace DirectoryInfoExLib.IO.Tools.Wrappers.ContextMenu
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Text;
+    using System.Runtime.InteropServices;
+    using System.Diagnostics;
+    using DirectoryInfoExLib.IO.Header.ShellDll;
+    using DirectoryInfoExLib.IO.Header.ShellDll.Interfaces;
+
     public static class ContextMenuHelperEx
     {
         #region ConstructCustomMenu

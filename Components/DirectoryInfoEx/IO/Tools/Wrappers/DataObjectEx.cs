@@ -5,24 +5,16 @@
 // This code used part of Delay's work                                                                           //
 //(http://blogs.msdn.com/delay/archive/2009/10/26/creating-something-from-nothing-developer-friendly-virtual-file-implementation-for-net.aspx)        //
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Runtime.InteropServices.ComTypes;
-using ShellDll;
-using System.Runtime.InteropServices;
-using System.Diagnostics.CodeAnalysis;
-using Delay;
-using System.Windows.Forms;
-
-namespace System.IO.Tools
+namespace DirectoryInfoExLib.IO.Tools.Wrappers
 {
-    
+    using DirectoryInfoExLib.IO.FileSystemInfoExt;
+    using System.Windows.Forms;
+
     public class DataObjectEx : DataObject
     {
         private FileSystemInfoEx[] _entityList = new FileSystemInfoEx[0];
         //private bool _isExtracted = false;
-        public const string DataFormats_EntryString = "QuickZip.PIDL.DirectoryInfoEx.FullName";
+        public const string DataFormats_EntryString = "PIDL.DirectoryInfoEx.FullName";
 
         //private static void CreateTemporaryFileName(String fileName)
         //{

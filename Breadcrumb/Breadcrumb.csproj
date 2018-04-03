@@ -179,7 +179,7 @@
       <Project>{15bbe1fb-d9e1-4b86-be6c-b7d04a1a79f0}</Project>
       <Name>BreadcrumbLib</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Components\DirectoryInfoEx\DirectoryInfoEx.csproj">
+    <ProjectReference Include="..\Components\DirectoryInfoEx\DirectoryInfoExLib.csproj">
       <Project>{09df5a9a-989e-410c-ba72-5a94cf481e57}</Project>
       <Name>DirectoryInfoEx</Name>
     </ProjectReference>

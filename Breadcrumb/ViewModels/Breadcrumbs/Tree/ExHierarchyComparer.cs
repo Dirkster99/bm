@@ -1,9 +1,10 @@
 ﻿namespace Breadcrumb.ViewModels.Breadcrumbs
 {
-    using System.IO;
     using Breadcrumb.SystemIO;
     using Breadcrumb.ViewModels.Interfaces;
     using BreadcrumbLib.Defines;
+    using DirectoryInfoExLib.IO.FileSystemInfoExt;
+    using DirectoryInfoExLib.Tools;
 
     public class ExHierarchyComparer : ICompareHierarchy<FileSystemInfoEx>
 	{

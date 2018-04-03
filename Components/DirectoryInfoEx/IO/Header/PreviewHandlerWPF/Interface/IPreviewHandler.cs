@@ -1,11 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Runtime.InteropServices;
-using ShellDll;
-
-namespace PreviewHandlerWPF
+﻿namespace DirectoryInfoExLib.IO.Header.PreviewHandlerWPF.Interface
 {
+    using System;
+    using System.Runtime.InteropServices;
+    using DirectoryInfoExLib.IO.Header.ShellDll;
 
     [ComImport]
     [InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]

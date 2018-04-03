@@ -1,11 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Runtime.InteropServices;
-using ShellDll;
-
-namespace PreviewHandlerWPF
+﻿namespace DirectoryInfoExLib.IO.Header.PreviewHandlerWPF.Interface
 {
+    using DirectoryInfoExLib.IO.Header.ShellDll;
+    using System;
+    using System.Runtime.InteropServices;
+
     [StructLayout(LayoutKind.Sequential)]
     public struct MSG
     {
@@ -16,6 +14,4 @@ namespace PreviewHandlerWPF
         public UInt32 time;
         public ShellAPI.POINT pt;
     }
-
-   
 }

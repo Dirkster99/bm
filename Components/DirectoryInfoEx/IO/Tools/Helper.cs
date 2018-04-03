@@ -1,16 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using Microsoft.Win32;
-using System.IO;
-using System.Security.Cryptography;
-using System.Drawing;
-using ShellDll;
-using System.Runtime.InteropServices;
-
-
-namespace System.IO
+﻿namespace DirectoryInfoExLib.Tools
 {
+    using System;
+    using Microsoft.Win32;
+    using System.IO;
+    using System.Security.Cryptography;
+    using System.Drawing;
+    using System.Runtime.InteropServices;
+    using DirectoryInfoExLib.IO.FileStreamExt;
+    using DirectoryInfoExLib.IO.Header.ShellDll;
+
     public static class Helper
     {
         public static bool IsUnitTesting = false;
@@ -115,7 +113,7 @@ namespace System.IO
 
         public static Bitmap GetFileIcon(string name)
         {
-            ShellDll.ShellAPI.SHFILEINFO shinfo = new ShellAPI.SHFILEINFO();
+            ShellAPI.SHFILEINFO shinfo = new ShellAPI.SHFILEINFO();
 
             ShellAPI.SHGetFileInfo(name, ShellAPI.FILE_ATTRIBUTE.NORMAL,
                 ref shinfo, (int)Marshal.SizeOf(shinfo), 

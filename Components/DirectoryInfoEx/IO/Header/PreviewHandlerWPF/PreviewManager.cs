@@ -1,14 +1,16 @@
-﻿//Lycj : I have modify it to work with WinForms, then I use it via ElementHost in WPF.
-using System;
-using System.Collections.Generic;
-using System.Text;
-using Microsoft.Win32;
-using System.Drawing;
-using ShellDll;
-using System.IO;
-
-namespace PreviewHandlerWPF
+﻿namespace DirectoryInfoExLib.IO.Header.PreviewHandlerWPF
 {
+    //Lycj : I have modify it to work with WinForms, then I use it via ElementHost in WPF.
+    using System;
+    using System.Collections.Generic;
+    using Microsoft.Win32;
+    using System.Drawing;
+    using DirectoryInfoExLib.IO.Header.PreviewHandlerWPF.Interface;
+    using DirectoryInfoExLib.IO.Header.ShellDll;
+    using DirectoryInfoExLib.IO.FileSystemInfoExt;
+    using DirectoryInfoExLib.IO.FileStreamExt;
+    using System.Runtime.InteropServices.ComTypes;
+
     public static class PreviewManager
     {
         public static List<Previewer> CurrentPreviewers;

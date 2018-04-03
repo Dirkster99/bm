@@ -1,16 +1,21 @@
-﻿//taken from http://blogs.msdn.com/yvesdolc/default.aspx?p=4
-namespace VistaBridge.Shell
+﻿namespace DirectoryInfoExLib.IO.Header
 {
     using System;
     using System.Diagnostics;
     using System.Runtime.InteropServices;
 
+    /// <summary>
+    /// taken from http://blogs.msdn.com/yvesdolc/default.aspx?p=4
+    /// </summary>
     public enum KnownFolderFindMode : int
     {
         ExactMatch = 0,
         NearestParentMatch = ExactMatch + 1
     };
 
+    /// <summary>
+    /// taken from http://blogs.msdn.com/yvesdolc/default.aspx?p=4
+    /// </summary>
     public class KnownFolders
     {
         [Guid("8BE2D872-86AA-4d47-B776-32CCA40C7018"), InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]

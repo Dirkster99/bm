@@ -4,11 +4,13 @@
 //                                                                                                               //
 // This code used part of Steven Roebert's work (http://www.codeproject.com/KB/miscctrl/FileBrowser.aspx)    //
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-using System.Collections.Generic;
-using ShellDll;
-
-namespace System.IO
+namespace DirectoryInfoExLib.IO.FileSystemInfoExt
 {
+    using System;
+    using System.Collections.Generic;
+    using System.IO;
+    using DirectoryInfoExLib.IO.Header.ShellDll;
+
     public class DriveInfoEx
     {
         private DirectoryInfoEx _rootDirectory;

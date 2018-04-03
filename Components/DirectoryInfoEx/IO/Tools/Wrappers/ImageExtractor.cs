@@ -3,16 +3,18 @@
 // Release under LGPL license.                                                                                   //
 //                                                                                                               //
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Drawing;
-using ShellDll;
-using System.Runtime.InteropServices;
-using System.Diagnostics;
-
-namespace System.IO.Tools
+namespace DirectoryInfoExLib.IO.Tools.Wrappers
 {
+    using System;
+    using System.Text;
+    using System.Drawing;
+    using System.Runtime.InteropServices;
+    using DirectoryInfoExLib.IO.Header;
+    using DirectoryInfoExLib.IO.Header.ShellDll.Interfaces;
+    using DirectoryInfoExLib.IO.Header.ShellDll;
+    using DirectoryInfoExLib.IO.Tools.Interface;
+    using DirectoryInfoExLib.IO.FileSystemInfoExt;
+
     public class ImageExtractor
     {
         private static bool isVistaUp = Environment.OSVersion.Version.Major >= 6; //5 = XP, 6 = Vista
@@ -85,7 +87,7 @@ namespace System.IO.Tools
                 if (GetIExtractImage(entry, out iExtractImagePtr, out iExtractImage))
                     try
                     {
-                        ShellDll.ShellAPI.SIZE prgSize = new ShellAPI.SIZE() { cx = size.Width, cy = size.Height };
+                        ShellAPI.SIZE prgSize = new ShellAPI.SIZE() { cx = size.Width, cy = size.Height };
                         IExtractImageFlags flags = IExtractImageFlags.Cache | IExtractImageFlags.Aspect;
                         if (quality) flags |= IExtractImageFlags.Quality;
                         StringBuilder location = new StringBuilder(260, 260);

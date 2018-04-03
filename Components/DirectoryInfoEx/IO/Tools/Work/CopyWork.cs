@@ -3,12 +3,13 @@
 // Release under LGPL license.                                                                                   //
 //                                                                                                               //
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace System.IO.Tools
+namespace DirectoryInfoExLib.IO.Tools.Work
 {
+    using DirectoryInfoExLib.IO.FileSystemInfoExt;
+    using DirectoryInfoExLib.IO.Tools.Interface;
+    using DirectoryInfoExLib.Tools;
+    using System;
+
     public class CopyWork : ExWorkBase
     {
         public CopyWork(int id, FileSystemInfoEx[] src, DirectoryInfoEx dest)
@@ -17,7 +18,7 @@ namespace System.IO.Tools
         {
             _copyFrom = src;
             _dest = dest;
-            WorkType = WorkType.Copy;
+            WorkType = Interface.WorkType.Copy;
         }
 
         void CopyFile(FileInfoEx item, DirectoryInfoEx destDir)

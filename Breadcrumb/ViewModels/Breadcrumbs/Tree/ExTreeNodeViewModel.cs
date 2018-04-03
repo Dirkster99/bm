@@ -2,7 +2,6 @@
 {
     using System.Collections.Generic;
     using System.Drawing;
-    using System.IO;
     using System.Linq;
     using System.Threading.Tasks;
     using System.Windows.Media;
@@ -13,6 +12,7 @@
     using Breadcrumb.IconExtractors;
     using Breadcrumb.IconExtractors.Enums;
     using Breadcrumb.ViewModels.Base;
+    using DirectoryInfoExLib.IO.FileSystemInfoExt;
 
     internal class ExTreeNodeViewModel : ViewModelBase, ISupportTreeSelector<ExTreeNodeViewModel, FileSystemInfoEx>
 	{
@@ -44,9 +44,9 @@
 				};
 
 			// Find all entries below desktop (filter out recycle bin entry since its realy not that useful)
-			this._dir = DirectoryInfoEx.DesktopDirectory;
+			this._dir = DirectoryInfoExLib.Factory.DesktopDirectory;
 			this.Entries.SetEntries(UpdateMode.Update, this._dir.GetDirectories()
-							     .Where(d => !d.Equals(DirectoryInfoEx.RecycleBinDirectory))
+							     .Where(d => !d.Equals(DirectoryInfoExLib.Factory.RecycleBinDirectory))
 							     .Select(d => new ExTreeNodeViewModel(d, this)).ToArray());
 
 			this.Header = this._dir.Label;
@@ -79,10 +79,11 @@
 				}
 			}));
 
-			this.Selection = new TreeSelectorViewModel<ExTreeNodeViewModel, FileSystemInfoEx>(this._dir,
-																																											  this,
-																																											  this._parentNode.Selection,
-																																											  this.Entries);
+			this.Selection = new TreeSelectorViewModel<ExTreeNodeViewModel, FileSystemInfoEx>
+                (this._dir,
+				 this,
+				 this._parentNode.Selection,
+				 this.Entries);
 		}
 		#endregion constructors
 
@@ -135,14 +136,14 @@
 		{
 			Bitmap bitmap = null;
 
-			this._dir.RequestPIDL(pidl =>
-			{
-				bitmap = ExTreeNodeViewModel.iconExtractor.GetBitmap(IconSize.large, pidl.Ptr, true, false);
+            this._dir.RequestPIDL(pidl =>
+            {
+                bitmap = ExTreeNodeViewModel.iconExtractor.GetBitmap(IconSize.large, pidl.Ptr, true, false);
 
-				if (bitmap != null)
-					this.Icon = Breadcrumb.Utils.BitmapSourceUtils.CreateBitmapSourceFromBitmap(bitmap);
-			});
-		}
+                if (bitmap != null)
+                    this.Icon = Breadcrumb.Utils.BitmapSourceUtils.CreateBitmapSourceFromBitmap(bitmap);
+            });
+        }
 		#endregion properties
 	}
 }

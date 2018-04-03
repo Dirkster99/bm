@@ -1,12 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Runtime.InteropServices;
-using System.Runtime.InteropServices.ComTypes;
-using System.Diagnostics.CodeAnalysis;
-
-namespace ShellDll
+﻿namespace DirectoryInfoExLib.IO.Header.ShellDll
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Text;
+    using System.Runtime.InteropServices;
+    using System.Runtime.InteropServices.ComTypes;
+    using System.Diagnostics.CodeAnalysis;
+
     public static partial class ShellAPI
     {
         //public const int DRAGDROP_S_DROP = 0x00040100;
@@ -79,7 +79,7 @@ namespace ShellDll
         public static extern IStream CreateStreamOnHGlobal(IntPtr hGlobal, [MarshalAs(UnmanagedType.Bool)] bool fDeleteOnRelease);
 
         [DllImport("ole32.dll", CharSet = CharSet.Auto, ExactSpelling = true, PreserveSig = false)]
-        public static extern void DoDragDrop(System.Runtime.InteropServices.ComTypes.IDataObject dataObject, IDropSource dropSource, int allowedEffects, int[] finalEffect);
+        public static extern void DoDragDrop(System.Runtime.InteropServices.ComTypes.IDataObject dataObject, Interfaces.IDropSource dropSource, int allowedEffects, int[] finalEffect);
 
         [DllImport("kernel32.dll")]
         public static extern IntPtr GlobalLock(IntPtr hMem);

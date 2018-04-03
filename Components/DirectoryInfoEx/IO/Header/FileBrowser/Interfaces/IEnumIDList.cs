@@ -1,8 +1,8 @@
-using System;
-using System.Runtime.InteropServices;
-
-namespace ShellDll
+namespace DirectoryInfoExLib.IO.Header.ShellDll.Interfaces
 {
+    using System;
+    using System.Runtime.InteropServices;
+
     [ComImportAttribute()]
     [InterfaceTypeAttribute(ComInterfaceType.InterfaceIsIUnknown)]
     [Guid("000214F2-0000-0000-C000-000000000046")]
