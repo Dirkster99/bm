@@ -1,5 +1,5 @@
 .vs/
-package/
+packages/
 debug/
 release/
 build/
