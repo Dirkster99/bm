@@ -9,7 +9,7 @@ ECHO.
 ECHO BreadcrumbLib
 ECHO Breadcrumb
 ECHO.
-ECHO DirectoryInfoEx
+ECHO DirectoryInfoExLib
 ECHO ThemesManager
 ECHO Icons
 ECHO.
@@ -36,10 +36,10 @@ RMDIR /S /Q Breadcrumb\bin
 RMDIR /S /Q Breadcrumb\obj
 
 ECHO.
-ECHO Deleting BIN and OBJ Folders in DirectoryInfoEx folder
+ECHO Deleting BIN and OBJ Folders in DirectoryInfoExLib folder
 ECHO.
-RMDIR /S /Q Components\DirectoryInfoEx\bin
-RMDIR /S /Q Components\DirectoryInfoEx\obj
+RMDIR /S /Q Components\DirectoryInfoExLib\bin
+RMDIR /S /Q Components\DirectoryInfoExLib\obj
 
 ECHO Deleting BIN and OBJ Folders in ThemesManager folder
 ECHO.
