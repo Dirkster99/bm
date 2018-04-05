@@ -196,13 +196,6 @@ namespace DirectoryInfoExLib.IO.FileSystemInfoExt
             catch { return false; }
         }
 
-        public static FileSystemInfoEx FromString(string FullName)
-        {
-            return FileSystemInfoEx.DirectoryExists(FullName) ?
-                  (FileSystemInfoEx)new DirectoryInfoEx(FullName)
-                : new FileInfoEx(FullName);
-        }
-
         internal static ShellFolder2 getDesktopShellFolder()
         {
             IntPtr ptrShellFolder;
@@ -549,10 +542,11 @@ namespace DirectoryInfoExLib.IO.FileSystemInfoExt
         /// </summary>
         public override void Delete()
         {
-            if (this is FileInfoEx)
-                (this as FileInfoEx).Delete();
-            else
-                (this as DirectoryInfoEx).Delete();
+            throw new NotImplementedException();
+////            if (this is FileInfoEx)
+////                (this as FileInfoEx).Delete();
+////            else
+////                (this as DirectoryInfoEx).Delete();
         }
 
         /// <summary>

@@ -53,10 +53,10 @@ namespace DirectoryInfoExLib.IO.Tools.Wrappers
             }
         }
 
-        public static bool GetIExtractImage(
-           FileInfoEx file,
-           out IntPtr iExtractImagePtr,
-           out IExtractImage iExtractImage)
+        internal static bool GetIExtractImage(
+            FileInfoEx file,
+            out IntPtr iExtractImagePtr,
+            out IExtractImage iExtractImage)
         {
             using (ShellFolder2 sf2 = file.Parent.ShellFolder)
             {
@@ -75,7 +75,7 @@ namespace DirectoryInfoExLib.IO.Tools.Wrappers
 
         }
 
-        public static Bitmap ExtractImage(FileInfoEx entry, Size size, bool quality)
+        internal static Bitmap ExtractImage(FileInfoEx entry, Size size, bool quality)
         {
 
             try
@@ -119,6 +119,5 @@ namespace DirectoryInfoExLib.IO.Tools.Wrappers
             }
             catch (NotSupportedException) { return null; }
         }
-
     }
 }

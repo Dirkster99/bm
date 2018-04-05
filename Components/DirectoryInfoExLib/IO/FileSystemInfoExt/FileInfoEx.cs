@@ -18,7 +18,7 @@ namespace DirectoryInfoExLib.IO.FileSystemInfoExt
     /// <summary>
     /// Represent a file in PIDL system
     /// </summary>
-    public class FileInfoEx : FileSystemInfoEx, ISerializable, ICloneable
+    internal class FileInfoEx : FileSystemInfoEx, ISerializable, ICloneable
     {
         #region Variables
         private Int64 _length;

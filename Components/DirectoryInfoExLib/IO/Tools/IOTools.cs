@@ -389,48 +389,6 @@
         {
             return new FileSystemInfoEx(path).Exists;
         }
-        /// <summary>
-        /// Check if the file / directory exists.
-        /// </summary>
-        public static bool Exists(string path, bool isDir)
-        {
-            try
-            {
-                DirectoryInfoEx dir = new DirectoryInfoEx(Path.GetDirectoryName(path));
-                bool temp;
-                if (dir.Contains(Path.GetFileName(path), out temp))
-                    return temp == isDir;
-                else return false;
-            }
-            catch
-            {
-                return false;
-            }
-        }
-
-        //public static void Delete(string path)
-        //{
-        //    DirectoryInfoEx dir;
-        //    IStorage tempParentStorage = null;
-        //    IntPtr tempParentStoragePtr = IntPtr.Zero;
-
-        //    try
-        //    {
-        //        dir = new DirectoryInfoEx(Path.GetDirectoryName(path));
-        //        string name = Path.GetFileName(path);
-        //        IOTools.getIStorage(dir, out tempParentStoragePtr, out tempParentStorage);
-
-        //        tempParentStorage.DestroyElement(name);
-        //    }
-        //    finally
-        //    {
-        //        if (tempParentStorage != null)
-        //        {
-        //            Marshal.ReleaseComObject(tempParentStorage);
-        //            Marshal.Release(tempParentStoragePtr);
-        //        }
-        //    }
-        //}
 
         /// <summary>
         /// Move directory or file, take full path of source and dest as parameter.

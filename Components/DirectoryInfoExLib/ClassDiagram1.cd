@@ -13,7 +13,7 @@
       <Compartment Name="Fields" Collapsed="true" />
     </Compartments>
     <TypeIdentifier>
-      <HashCode>IFQGIkEsRCADgCIoicAKiAQAAMmMCEAgAAAgQQkwAhQ=</HashCode>
+      <HashCode>IBQAIkEsRCABgCIokcAKiAAAAMmMCEAgAAAgQQEgAhQ=</HashCode>
       <FileName>IO\FileSystemInfoExt\DirectoryInfoEx.cs</FileName>
     </TypeIdentifier>
     <Lollipop Position="0.2" />
@@ -25,16 +25,8 @@
       <FileName>IO\FileSystemInfoExt\ExtensionMethods.cs</FileName>
     </TypeIdentifier>
   </Class>
-  <Class Name="DirectoryInfoExLib.IO.FileSystemInfoExt.FileInfoEx">
-    <Position X="7" Y="5" Width="2.5" />
-    <TypeIdentifier>
-      <HashCode>AAAAAFAAgAAAIAIYAAAAAABAAAGoCFAAJAAAAAAAEAA=</HashCode>
-      <FileName>IO\FileSystemInfoExt\FileInfoEx.cs</FileName>
-    </TypeIdentifier>
-    <Lollipop Position="0.2" />
-  </Class>
   <Class Name="DirectoryInfoExLib.IO.FileSystemInfoExt.FileSystemInfoEx">
-    <Position X="4" Y="1.75" Width="2.25" />
+    <Position X="4" Y="1.75" Width="2.5" />
     <Compartments>
       <Compartment Name="Fields" Collapsed="true" />
     </Compartments>
@@ -46,7 +38,7 @@
       </Enum>
     </NestedTypes>
     <TypeIdentifier>
-      <HashCode>BBEkIEABMWpAQMoHlEAAQAQQBAmAAYNAEEAAgAEoERA=</HashCode>
+      <HashCode>BBEkIEABMWpAQMoHhEAAQAQQBAmAAYNAEEAAgAEoERA=</HashCode>
       <FileName>IO\FileSystemInfoExt\FileSystemInfoEx.cs</FileName>
     </TypeIdentifier>
     <Lollipop Position="0.2" />
@@ -206,9 +198,25 @@
   <Class Name="DirectoryInfoExLib.IO.Tools.Wrappers.ImageExtractor" Collapsed="true">
     <Position X="16" Y="2.5" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAAAAAQAAAAAEAAAAAAAAAAAAAAAAAAAAAAAgAAAAAA=</HashCode>
+      <HashCode>AAAAAAQAAAAAEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
       <FileName>IO\Tools\Wrappers\ImageExtractor.cs</FileName>
     </TypeIdentifier>
+  </Class>
+  <Class Name="System.IO.FileSystemInfo">
+    <Position X="7.25" Y="1.75" Width="2.5" />
+    <Compartments>
+      <Compartment Name="Fields" Collapsed="true" />
+    </Compartments>
+    <TypeIdentifier />
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="DirectoryInfoExLib.IO.FileSystemInfoExt.FileInfoEx">
+    <Position X="4" Y="13.5" Width="2.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAFAAAAAAAAIYAAAAAABAAAGICAAAJAAAAAAAEAA=</HashCode>
+      <FileName>IO\FileSystemInfoExt\FileInfoEx.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
   </Class>
   <Struct Name="DirectoryInfoExLib.IO.Header.ExtraSearch" Collapsed="true">
     <Position X="14.25" Y="5.75" Width="1.5" />
@@ -245,10 +253,10 @@
       <FileName>IO\Header\KnownFolder\InternalKnownFolderDefinition.cs</FileName>
     </TypeIdentifier>
   </Struct>
-  <Interface Name="DirectoryInfoExLib.Interfaces.IDirectoryInfoEx" Collapsed="true">
-    <Position X="14.25" Y="7.75" Width="1.5" />
+  <Interface Name="DirectoryInfoExLib.Interfaces.IDirectoryInfoEx">
+    <Position X="10.25" Y="1.75" Width="3" />
     <TypeIdentifier>
-      <HashCode>ABAGIAEoEAACACAAiEACgAAAAAAEAAAAAAAAAAkAAhA=</HashCode>
+      <HashCode>ABAAIAEoEAAAACAAgEAAgAAAAAAEAAAAAAAAAAEAAhA=</HashCode>
       <FileName>Interfaces\IDirectoryInfoEx.cs</FileName>
     </TypeIdentifier>
   </Interface>

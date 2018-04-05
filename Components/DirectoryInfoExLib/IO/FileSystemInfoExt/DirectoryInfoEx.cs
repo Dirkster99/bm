@@ -361,85 +361,6 @@ namespace DirectoryInfoExLib.IO.FileSystemInfoExt
                 { list.RemoveAt(i); return; }
         }
 
-
-        //0.17: Added DirectoryInfoEx.EnumerateFiles/EnumerateDirectories/EnumerateFileSystemInfos() methods which work similar as the one in .Net4
-        public IEnumerable<FileInfoEx> EnumerateFiles(String searchPattern, SearchOption searchOption, CancelDelegate cancel)
-        {
-            IntPtr ptrEnum = IntPtr.Zero;
-            IEnumIDList IEnum = null;
-            PIDL parentPIDL = this.getPIDL();
-
-            List<IntPtr> trashPtrList = new List<IntPtr>();
-            using (ShellFolder2 sf = this.ShellFolder)
-                try
-                {
-                    if (sf.EnumObjects(IntPtr.Zero, flag, out ptrEnum) == ShellAPI.S_OK)
-                    {
-                        IEnum = (IEnumIDList)Marshal.GetTypedObjectForIUnknown(ptrEnum, typeof(IEnumIDList));
-                        IntPtr pidlSubItemPtr;
-                        int celtFetched;
-
-                        while (!IOTools.IsCancelTriggered(cancel) && IEnum.Next(1, out pidlSubItemPtr, out celtFetched) == ShellAPI.S_OK && celtFetched == 1)
-                        {
-                            trashPtrList.Add(pidlSubItemPtr); //0.24 : Large memory Leak here.    
-
-                            ShellAPI.SFGAO attribs = ShellAPI.SFGAO.FOLDER | ShellAPI.SFGAO.FILESYSTEM | ShellAPI.SFGAO.STREAM;
-                            sf.GetAttributesOf(1, new IntPtr[] { pidlSubItemPtr }, ref attribs);
-                            //http://www.eggheadcafe.com/aspnet_answers/platformsdkshell/Mar2006/post26165601.asp
-                            bool isZip = ((attribs & ShellAPI.SFGAO.FOLDER) != 0 && (attribs & ShellAPI.SFGAO.STREAM) != 0);
-                            bool isDir = ((attribs & ShellAPI.SFGAO.FOLDER) != 0);
-                            if (isZip || !isDir)
-                            {
-                                PIDL subRelPidl = new PIDL(pidlSubItemPtr, true);
-                                //FileInfoEx fi = new FileInfoEx(sf, this, subRelPidl);
-                                FileInfoEx fi = new FileInfoEx(sf, parentPIDL, subRelPidl);
-                                if (IOTools.MatchFileMask(fi.Name, searchPattern))
-                                    yield return fi;
-                                //0.18: Fixed DirectoryInfoEx.EnumerateFiles, SearchPattern is ignored.
-                            }
-                        }
-
-                        if (searchOption == SearchOption.AllDirectories)
-                        {
-                            IEnumerator<DirectoryInfoEx> dirEnumerator = EnumerateDirectories("*", SearchOption.TopDirectoryOnly, cancel).GetEnumerator();
-
-                            while (!IOTools.IsCancelTriggered(cancel) && dirEnumerator.MoveNext())
-                            {
-                                IEnumerator<FileInfoEx> fileEnumerator = dirEnumerator.Current.EnumerateFiles(searchPattern, searchOption, cancel).GetEnumerator();
-
-                                while (fileEnumerator.MoveNext())
-                                {
-                                    //Debug.Assert(!fileEnumerator.Current.IsFolder);
-                                    yield return fileEnumerator.Current;
-                                }
-                            }
-                        }
-                    }
-                }
-                finally
-                {
-                    if (parentPIDL != null)
-                    {
-                        parentPIDL.Free();
-                        parentPIDL = null;
-                    }
-
-                    if (IEnum != null)
-                    {
-                        Marshal.ReleaseComObject(IEnum);
-                        Marshal.Release(ptrEnum);
-                    }
-
-
-                    if (trashPtrList != null)
-                        foreach (var ptr in trashPtrList)
-                            Marshal.FreeCoTaskMem(ptr); //0.24 : Large memory Leak here.  
-                }
-        }
-        public IEnumerable<FileInfoEx> EnumerateFiles(String searchPattern, SearchOption searchOption) { return EnumerateFiles(searchPattern, searchOption, null); }
-        public IEnumerable<FileInfoEx> EnumerateFiles(String searchPattern) { return EnumerateFiles(searchPattern, SearchOption.TopDirectoryOnly); }
-        public IEnumerable<FileInfoEx> EnumerateFiles() { return EnumerateFiles("*", SearchOption.TopDirectoryOnly); }
-
         public IEnumerable<DirectoryInfoEx> EnumerateDirectories(String searchPattern, SearchOption searchOption, CancelDelegate cancel)
         {
             IntPtr ptrEnum = IntPtr.Zero;
@@ -536,32 +457,6 @@ namespace DirectoryInfoExLib.IO.FileSystemInfoExt
         public IEnumerable<DirectoryInfoEx> EnumerateDirectories(String searchPattern, SearchOption searchOption) { return EnumerateDirectories(searchPattern, searchOption, null); }
         public IEnumerable<DirectoryInfoEx> EnumerateDirectories(String searchPattern) { return EnumerateDirectories(searchPattern, SearchOption.TopDirectoryOnly); }
         public IEnumerable<DirectoryInfoEx> EnumerateDirectories() { return EnumerateDirectories("*", SearchOption.TopDirectoryOnly); }
-
-        public IEnumerable<FileSystemInfoEx> EnumerateFileSystemInfos(String searchPattern, SearchOption searchOption, CancelDelegate cancel)
-        {
-            IEnumerator<DirectoryInfoEx> dirEnumerator = EnumerateDirectories(searchPattern, SearchOption.TopDirectoryOnly).GetEnumerator();
-            while (!IOTools.IsCancelTriggered(cancel) && dirEnumerator.MoveNext())
-            {
-                yield return dirEnumerator.Current;
-
-                if (searchOption == SearchOption.AllDirectories)
-                {
-                    IEnumerator<FileSystemInfoEx> fsEnumerator =
-                        dirEnumerator.Current.EnumerateFileSystemInfos(searchPattern, searchOption, cancel).GetEnumerator();
-                    while (fsEnumerator.MoveNext())
-                        yield return fsEnumerator.Current;
-                }
-            }
-
-            IEnumerator<FileInfoEx> fileEnumerator = EnumerateFiles(searchPattern, SearchOption.TopDirectoryOnly, cancel).GetEnumerator();
-            while (!IOTools.IsCancelTriggered(cancel) && fileEnumerator.MoveNext())
-                yield return fileEnumerator.Current;
-        }
-        public IEnumerable<FileSystemInfoEx> EnumerateFileSystemInfos(String searchPattern, SearchOption searchOption) { return EnumerateFileSystemInfos(searchPattern, searchOption, null); }
-        public IEnumerable<FileSystemInfoEx> EnumerateFileSystemInfos(String searchPattern) { return EnumerateFileSystemInfos(searchPattern, SearchOption.TopDirectoryOnly); }
-        public IEnumerable<FileSystemInfoEx> EnumerateFileSystemInfos() { return EnumerateFileSystemInfos("*", SearchOption.TopDirectoryOnly); }
-
-
         #region Obsolute
 
         //protected virtual bool EnumDirs(out List<FileSystemInfoEx> dirList)
@@ -716,42 +611,6 @@ namespace DirectoryInfoExLib.IO.FileSystemInfoExt
 
         #region GetXXX
         /// <summary>
-        /// Return a list of sub directories and files
-        /// </summary>
-        public FileSystemInfoEx[] GetFileSystemInfos(String searchPattern, SearchOption searchOption)
-        {
-            checkExists();
-            return new List<FileSystemInfoEx>(EnumerateFileSystemInfos(searchPattern, searchOption)).ToArray();
-        }
-
-        public Task<FileSystemInfoEx[]> GetFileSystemInfosAsync(String searchPattern, 
-            SearchOption searchOption, CancellationToken ct)
-        {
-            checkExists();
-            return Task.Run(() =>
-                new List<FileSystemInfoEx>(EnumerateFileSystemInfos(searchPattern, searchOption, 
-                    () => ct.IsCancellationRequested)).ToArray(), ct);
-        }
-
-        /// <summary>
-        /// Return a list of sub directories and files
-        /// </summary>
-        public FileSystemInfoEx[] GetFileSystemInfos(String searchPattern)
-        {
-            checkExists();
-            return new List<FileSystemInfoEx>(EnumerateFileSystemInfos(searchPattern)).ToArray();
-        }
-
-        /// <summary>
-        /// Return a list of sub directories and files
-        /// </summary>
-        public FileSystemInfoEx[] GetFileSystemInfos()
-        {
-            checkExists();
-            return new List<FileSystemInfoEx>(EnumerateFileSystemInfos()).ToArray();
-        }
-
-        /// <summary>
         /// Return a list of sub directories
         /// </summary>
         public DirectoryInfoEx[] GetDirectories(String searchPattern, SearchOption searchOption)
@@ -786,122 +645,16 @@ namespace DirectoryInfoExLib.IO.FileSystemInfoExt
                 new List<DirectoryInfoEx>(EnumerateDirectories(searchPattern, searchOption,
                     () => ct.IsCancellationRequested)).ToArray(), ct);
         }
-
-        /// <summary>
-        /// Return a list of files in that directory
-        /// </summary>
-        public FileInfoEx[] GetFiles(String searchPattern, SearchOption searchOption)
-        {
-            checkExists();
-            return new List<FileInfoEx>(EnumerateFiles(searchPattern, searchOption)).ToArray();
-        }
-
-        /// <summary>
-        /// Return a list of files in that directory
-        /// </summary>
-        public FileInfoEx[] GetFiles(String searchPattern)
-        {
-            checkExists();
-            return new List<FileInfoEx>(EnumerateFiles(searchPattern)).ToArray();
-        }
-
-        /// <summary>
-        /// Return a list of files in that directory
-        /// </summary>
-        public FileInfoEx[] GetFiles()
-        {
-            checkExists();
-            return new List<FileInfoEx>(EnumerateFiles()).ToArray();
-        }
-
-        public Task<FileInfoEx[]> GetFilesAsync(String searchPattern,
-         SearchOption searchOption, CancellationToken ct)
-        {
-            checkExists();
-            return Task.Run(() =>
-                new List<FileInfoEx>(EnumerateFiles(searchPattern, searchOption,
-                    () => ct.IsCancellationRequested)).ToArray(), ct);
-        }
         #endregion
 
-        private FileSystemInfoEx this[string name, bool lookupDir, bool lookupFile]
+        public static DirectoryInfoEx FromString(string FullName)
         {
-            get
-            {
-                if (lookupDir)
-                    foreach (FileSystemInfoEx fsi in GetDirectories())
-                        if (fsi.Name.Equals(name, StringComparison.InvariantCultureIgnoreCase))
-                            return fsi;
-                if (lookupFile)
-                    foreach (FileSystemInfoEx fsi in GetFiles())
-                        if (fsi.Name.Equals(name, StringComparison.InvariantCultureIgnoreCase))
-                            return fsi;
-                return null;
-            }
+            return (DirectoryInfoEx.DirectoryExists(FullName) ?
+                new DirectoryInfoEx(FullName) : null );
         }
-
-        public FileSystemInfoEx this[string name, bool isFile]
-        {
-            get
-            {
-                return this[name, !isFile, isFile];
-            }
-        }
-
-        public FileSystemInfoEx this[string name]
-        {
-            get
-            {
-                return this[name, true, true];
-            }
-        }
-
         #endregion
 
         #region Methods - Lookup
-
-        internal bool Contains(string name, out bool isDirectory)
-        {
-            return IndexOf(name, out isDirectory) != -1;
-        }
-
-        internal bool Contains(IntPtr pidl, out bool isDirectory)
-        {
-            return IndexOf(pidl, out isDirectory) != -1;
-        }
-
-        internal int IndexOf(string name, out bool isDirectory)
-        {
-            isDirectory = true;
-            if (!Exists) return -1;
-
-            FileSystemInfoEx[] subFSInfo = GetFileSystemInfos();
-            for (int i = 0; i < subFSInfo.Length; i++)
-                if (subFSInfo[i].Name.Equals(name, StringComparison.CurrentCultureIgnoreCase))
-                {
-                    isDirectory = subFSInfo[i] is DirectoryInfoEx;
-                    return i;
-                }
-
-            return -1;
-        }
-
-        internal int IndexOf(IntPtr pidl, out bool isDirectory)
-        {
-            isDirectory = true;
-            if (!Exists) return -1;
-
-            FileSystemInfoEx[] subFSInfo = GetFileSystemInfos();
-            for (int i = 0; i < subFSInfo.Length; i++)
-                if (subFSInfo[i].RequestRelativePIDL(relPidl => relPidl.Equals(pidl)))
-                {
-                    isDirectory = subFSInfo[i] is DirectoryInfoEx;
-                    return i;
-                }
-
-            return -1;
-        }
-
         internal DirectoryInfoEx GetSubDirectory(string name)
         {
             DirectoryInfoEx[] subFSInfo = GetDirectories();
@@ -918,26 +671,6 @@ namespace DirectoryInfoExLib.IO.FileSystemInfoExt
             for (int i = 0; i < subFSInfo.Length; i++)
                 if (subFSInfo[i].RequestRelativePIDL(relPidl => relPidl.Equals(pidl)))
                     return (DirectoryInfoEx)subFSInfo[i];
-
-            return null;
-        }
-
-        internal FileInfoEx GetSubFile(string name)
-        {
-            FileInfoEx[] subFSInfo = GetFiles();
-            for (int i = 0; i < subFSInfo.Length; i++)
-                if (subFSInfo[i].Name.Equals(name, StringComparison.CurrentCultureIgnoreCase))
-                    return (FileInfoEx)subFSInfo[i];
-
-            return null;
-        }
-
-        internal FileInfoEx GetSubFile(IntPtr pidl)
-        {
-            FileInfoEx[] subFSInfo = GetFiles();
-            for (int i = 0; i < subFSInfo.Length; i++)
-                if (subFSInfo[i].RequestRelativePIDL(relPidl => relPidl.Equals(pidl)))
-                    return (FileInfoEx)subFSInfo[i];
 
             return null;
         }

@@ -47,46 +47,13 @@
         bool Equals(FileSystemInfoEx other);
 
         #region Methods - GetSubItems
-        //0.17: Added DirectoryInfoEx.EnumerateFiles/EnumerateDirectories/EnumerateFileSystemInfos() methods which work similar as the one in .Net4
-        IEnumerable<FileInfoEx> EnumerateFiles(String searchPattern, SearchOption searchOption, CancelDelegate cancel);
-
-        IEnumerable<FileInfoEx> EnumerateFiles(String searchPattern, SearchOption searchOption);
-
-        IEnumerable<FileInfoEx> EnumerateFiles(String searchPattern);
-
-        IEnumerable<FileInfoEx> EnumerateFiles();
-
         IEnumerable<DirectoryInfoEx> EnumerateDirectories(String searchPattern, SearchOption searchOption, CancelDelegate cancel);
 
         IEnumerable<DirectoryInfoEx> EnumerateDirectories(String searchPattern, SearchOption searchOption);
         IEnumerable<DirectoryInfoEx> EnumerateDirectories(String searchPattern);
         IEnumerable<DirectoryInfoEx> EnumerateDirectories();
 
-        IEnumerable<FileSystemInfoEx> EnumerateFileSystemInfos(String searchPattern, SearchOption searchOption, CancelDelegate cancel);
-
-        IEnumerable<FileSystemInfoEx> EnumerateFileSystemInfos(String searchPattern, SearchOption searchOption);
-        IEnumerable<FileSystemInfoEx> EnumerateFileSystemInfos(String searchPattern);
-        IEnumerable<FileSystemInfoEx> EnumerateFileSystemInfos();
-
         #region GetXXX
-        /// <summary>
-        /// Return a list of sub directories and files
-        /// </summary>
-        FileSystemInfoEx[] GetFileSystemInfos(String searchPattern, SearchOption searchOption);
-
-        Task<FileSystemInfoEx[]> GetFileSystemInfosAsync(String searchPattern,
-            SearchOption searchOption, CancellationToken ct);
-
-        /// <summary>
-        /// Return a list of sub directories and files
-        /// </summary>
-        FileSystemInfoEx[] GetFileSystemInfos(String searchPattern);
-
-        /// <summary>
-        /// Return a list of sub directories and files
-        /// </summary>
-        FileSystemInfoEx[] GetFileSystemInfos();
-
         /// <summary>
         /// Return a list of sub directories
         /// </summary>
@@ -105,29 +72,7 @@
         Task<DirectoryInfoEx[]> GetDirectoriesAsync(String searchPattern,
                                                     SearchOption searchOption,
                                                     CancellationToken ct);
-
-        /// <summary>
-        /// Return a list of files in that directory
-        /// </summary>
-        FileInfoEx[] GetFiles(String searchPattern, SearchOption searchOption);
-
-        /// <summary>
-        /// Return a list of files in that directory
-        /// </summary>
-        FileInfoEx[] GetFiles(String searchPattern);
-
-        /// <summary>
-        /// Return a list of files in that directory
-        /// </summary>
-        FileInfoEx[] GetFiles();
-
-        Task<FileInfoEx[]> GetFilesAsync(String searchPattern,
-                                         SearchOption searchOption, CancellationToken ct);
         #endregion
-
-        FileSystemInfoEx this[string name, bool isFile] { get; }
-
-        FileSystemInfoEx this[string name] { get; }
         #endregion
         #endregion methods
     }
