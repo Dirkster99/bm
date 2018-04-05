@@ -6,7 +6,6 @@
     using System.Runtime.Serialization;
     using System.Threading.Tasks;
     using System.Threading;
-    using DirectoryInfoExLib.IO.FileSystemInfoExt;
     using DirectoryInfoExLib.Tools;
     using DirectoryInfoExLib.IO.Tools.Interface;
     using DirectoryInfoExLib.IO.Header.KnownFolder;
@@ -50,7 +49,7 @@
         #endregion properties
 
         #region methods
-        bool Equals(FileSystemInfoEx other);
+        bool Equals(IDirectoryInfoEx other);
 
         #region Methods - GetSubItems
         T RequestPIDL<T>(Func<PIDL, T> pidlFuncOnly);

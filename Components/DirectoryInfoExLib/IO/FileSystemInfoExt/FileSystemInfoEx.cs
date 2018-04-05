@@ -18,8 +18,7 @@ namespace DirectoryInfoExLib.IO.FileSystemInfoExt
     using DirectoryInfoExLib.IO.Tools;
     using DirectoryInfoExLib.Interfaces;
 
-    [Serializable]
-    public class FileSystemInfoEx : FileSystemInfo, IDisposable, ISerializable, ICloneable,
+    internal class FileSystemInfoEx : FileSystemInfo, IDisposable, ISerializable, ICloneable,
         IEquatable<FileSystemInfoEx>
     {
         #region Enums
@@ -654,7 +653,6 @@ namespace DirectoryInfoExLib.IO.FileSystemInfoExt
         }
 
         #endregion
-
 
         #region ISerializable Members
         protected virtual void getObjectData(SerializationInfo info, StreamingContext context)

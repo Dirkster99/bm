@@ -27,7 +27,6 @@ namespace DirectoryInfoExLib.IO.FileSystemInfoExt
     /// <summary>
     /// Represents a directory in PIDL system.
     /// </summary>
-    [Serializable]
     internal class DirectoryInfoEx : FileSystemInfoEx, IDirectoryInfoEx
     {
         #region Static Variables
@@ -278,6 +277,11 @@ namespace DirectoryInfoExLib.IO.FileSystemInfoExt
             {
                 relPidl.Free();
             }
+        }
+
+        public bool Equals(IDirectoryInfoEx other)
+        {
+            return Equals(other as FileSystemInfoEx);
         }
 
         public override bool Equals(FileSystemInfoEx other)

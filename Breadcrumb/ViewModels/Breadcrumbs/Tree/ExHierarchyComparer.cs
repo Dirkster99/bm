@@ -4,7 +4,6 @@
     using Breadcrumb.ViewModels.Interfaces;
     using BreadcrumbLib.Defines;
     using DirectoryInfoExLib.Interfaces;
-    using DirectoryInfoExLib.IO.FileSystemInfoExt;
     using DirectoryInfoExLib.Tools;
 
     public class ExHierarchyComparer : ICompareHierarchy<IDirectoryInfoEx>
@@ -34,20 +33,15 @@
 			if (a.FullName.Equals(b.FullName))
 				return HierarchicalResult.Current;
 
-			if (a is FileSystemInfoEx && b is FileSystemInfoEx)
-			{
-				string key = string.Format("{0}-compare-{1}", a.FullName, b.FullName);
+			string key = string.Format("{0}-compare-{1}", a.FullName, b.FullName);
 
-				if (a.FullName == b.FullName)
-					return HierarchicalResult.Current;
-				else if (IOTools.HasParent(b, a.FullName))
-					return HierarchicalResult.Child;
-				else if (IOTools.HasParent(a, b.FullName))
-					return HierarchicalResult.Parent;
-				else return HierarchicalResult.Unrelated;
-			}
-
-			return HierarchicalResult.Unrelated;
+			if (a.FullName == b.FullName)
+				return HierarchicalResult.Current;
+			else if (IOTools.HasParent(b, a.FullName))
+				return HierarchicalResult.Child;
+			else if (IOTools.HasParent(a, b.FullName))
+				return HierarchicalResult.Parent;
+			else return HierarchicalResult.Unrelated;
 		}
 
 		public HierarchicalResult CompareHierarchy(IDirectoryInfoEx a, IDirectoryInfoEx b)

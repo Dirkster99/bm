@@ -3,9 +3,8 @@
     using DirectoryInfoExLib.IO.Header.ShellDll;
     using System;
 
-    public static class ExtensionMethods
+    internal static class ExtensionMethods
     {
-
         public static T RequestPIDL<T>(this FileSystemInfoEx fsi, Func<PIDL, PIDL, T> pidlAndRelPidlFunc)
         {
             PIDL pidl = fsi.getPIDL();

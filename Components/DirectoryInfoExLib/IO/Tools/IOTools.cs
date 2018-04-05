@@ -58,7 +58,7 @@
         /// </summary>
         /// <param name="fullPath"></param>
         /// <returns></returns>
-        public static int GetHashCode(FileSystemInfoEx item)
+        internal static int GetHashCode(FileSystemInfoEx item)
         {
             return GetHashCode(item.FullName);
         }
@@ -160,7 +160,7 @@
         /// <param name="entry"></param>
         /// <param name="baseDirectory"></param>
         /// <returns></returns>
-        public static string GetRelativePath(FileSystemInfoEx entry, IDirectoryInfoEx baseDirectory)
+        internal static string GetRelativePath(FileSystemInfoEx entry, IDirectoryInfoEx baseDirectory)
         {
             if (entry.FullName.IndexOf(baseDirectory.FullName, StringComparison.InvariantCultureIgnoreCase) == -1)
             {
@@ -253,7 +253,7 @@
         /// <param name="item"></param>
         /// <param name="relative"></param>
         /// <returns></returns>
-        public static PIDL[] GetPIDL(FileSystemInfoEx[] items, bool relative)
+        internal static PIDL[] GetPIDL(FileSystemInfoEx[] items, bool relative)
         {
             List<PIDL> retVal = new List<PIDL>();
             foreach (FileSystemInfoEx fi in items)
@@ -271,7 +271,7 @@
         /// <param name="item"></param>
         /// <param name="relative"></param>
         /// <returns></returns>
-        public static PIDL[] GetPIDL(FileSystemInfoEx item, bool relative)
+        internal static PIDL[] GetPIDL(FileSystemInfoEx item, bool relative)
         {
             return GetPIDL(new FileSystemInfoEx[] { item }, relative);
         }
@@ -330,7 +330,7 @@
         /// <param name="child"></param>
         /// <param name="parent"></param>
         /// <returns></returns>
-        public static bool HasParent(FileSystemInfoEx child, IDirectoryInfoEx parent)
+        internal static bool HasParent(FileSystemInfoEx child, IDirectoryInfoEx parent)
         {
             if (parent == null)
             {
@@ -371,7 +371,7 @@
         /// <param name="child"></param>
         /// <param name="parentFullName"></param>
         /// <returns></returns>
-        public static bool HasParent(FileSystemInfoEx child, string parentFullName)
+        internal static bool HasParent(FileSystemInfoEx child, string parentFullName)
         {
             if (child.FullName.StartsWith(parentFullName, StringComparison.InvariantCultureIgnoreCase))
                 return true;
