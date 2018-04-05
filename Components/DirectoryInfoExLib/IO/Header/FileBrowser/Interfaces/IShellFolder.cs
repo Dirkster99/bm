@@ -6,7 +6,7 @@ namespace DirectoryInfoExLib.IO.Header.ShellDll.Interfaces
     [ComImport]
     [InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
     [Guid("000214E6-0000-0000-C000-000000000046")]
-    public interface IShellFolder 
+    internal interface IShellFolder 
     {
         // Translates a file object's or folder's display name into an item identifier list.
         // Return value: error code, if any

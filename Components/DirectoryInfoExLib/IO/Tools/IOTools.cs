@@ -69,7 +69,7 @@
         /// <param name="pidl"></param>
         /// <param name="fileMask"></param>
         /// <returns></returns>
-        public static bool MatchFileMask(PIDL pidl, string fileMask)
+        internal static bool MatchFileMask(PIDL pidl, string fileMask)
         {
             string path = FileSystemInfoEx.PIDLToPath(pidl);
             string name = PathEx.GetFileName(path);
@@ -189,7 +189,7 @@
             else return name.Substring(baseDirectory.FullName.Length + 1);
         }
 
-        public static ShellAPI.CSIDL? ShellFolderToCSIDL(Environment.SpecialFolder spFolder)
+        internal static ShellAPI.CSIDL? ShellFolderToCSIDL(Environment.SpecialFolder spFolder)
         {
             foreach (var val in Enum.GetValues(typeof(KnownFolderIds)))
             {
@@ -280,7 +280,7 @@
         /// Free up a PIDL IntPtr List.
         /// </summary>
         /// <param name="pidls"></param>
-        public static void FreePIDL(PIDL[] pidls)
+        internal static void FreePIDL(PIDL[] pidls)
         {
             foreach (PIDL pidl in pidls)
                 pidl.Free();
@@ -290,7 +290,7 @@
         /// <summary>
         /// Extract IntPtr for the specified item(s), the result pointer is still owned by the input PIDL, thus dont needed to be freed.
         /// </summary>
-        public static IntPtr[] GetPIDLPtr(PIDL[] items)
+        internal static IntPtr[] GetPIDLPtr(PIDL[] items)
         {
             List<IntPtr> retVal = new List<IntPtr>();
             foreach (PIDL pidl in items)
@@ -303,7 +303,7 @@
         /// </summary>
         /// <param name="item"></param>
         /// <returns></returns>
-        public static IntPtr[] GetPIDLPtr(PIDL item)
+        internal static IntPtr[] GetPIDLPtr(PIDL item)
         {
             return GetPIDLPtr(new PIDL[] { item });
         }
@@ -434,7 +434,7 @@
                 Marshal.ThrowExceptionForHR(hr);
         }
 
-        public static bool IsZip(IO.Header.ShellDll.ShellAPI.SFGAO attribs)
+        internal static bool IsZip(IO.Header.ShellDll.ShellAPI.SFGAO attribs)
         {
             return ((attribs & IO.Header.ShellDll.ShellAPI.SFGAO.FOLDER) != 0 && (attribs & IO.Header.ShellDll.ShellAPI.SFGAO.STREAM) != 0);
         }
@@ -452,7 +452,7 @@
                 throw new IOException("Source not exists");
 
             //0.15: Fixed ShellFolder not freed.
-            using (ShellFolder2 srcParentShellFolder = srcElement.Parent.ShellFolder)
+            using (ShellFolder2 srcParentShellFolder = (srcElement.Parent as DirectoryInfoEx).ShellFolder)
             {
                 if (srcParentShellFolder == null)
                     throw new IOException("Source directory does not support IShellFolder");
@@ -535,8 +535,8 @@
                                 out storePtr, ref pidlLast);
                         }
                         else
-                            //0.15: Fixed ShellFolder not freed correctly.
-                            using (ShellFolder2 dirParentShellFolder = dir.Parent.ShellFolder)
+                        //0.15: Fixed ShellFolder not freed correctly.
+                        using (ShellFolder2 dirParentShellFolder = (dir.Parent as DirectoryInfoEx).ShellFolder)
                                 if (dirParentShellFolder != null)
                                     hr = dirParentShellFolder.BindToStorage(
                                     dirPIDLRel.Ptr, IntPtr.Zero, ref ShellAPI.IID_IStorage,

@@ -23,6 +23,9 @@ namespace DirectoryInfoExLib.IO.FileSystemInfoExt
     using DirectoryInfoExLib.IO.Header.KnownFolder;
     using DirectoryInfoExLib.IO.Header.KnownFolder.Enums;
     using DirectoryInfoExLib.IO.Header.KnownFolder.Attributes;
+    using System.Drawing;
+    using DirectoryInfoExLib.Enums;
+    using DirectoryInfoExLib.IconExtracts;
 
     /// <summary>
     /// Represents a directory in PIDL system.
@@ -99,7 +102,7 @@ namespace DirectoryInfoExLib.IO.FileSystemInfoExt
         private ShellFolder2 getIShellFolderFromParent()
         {
             if (_parent != null)
-                using (ShellFolder2 parentShellFolder = _parent.ShellFolder)
+                using (ShellFolder2 parentShellFolder = (_parent as DirectoryInfoEx).ShellFolder)
                 {
                     IntPtr ptrShellFolder = IntPtr.Zero;
 
@@ -310,28 +313,90 @@ namespace DirectoryInfoExLib.IO.FileSystemInfoExt
                 throw new DirectoryNotFoundException(FullName + " is not exists.");
         }
 
-////        /// <summary>
-////        /// Create the directory.
-////        /// </summary>
-////        public void Create()
-////        {
-////            if (Exists)
-////                throw new IOException("Directory already exists.");
-////            if (Parent == null)
-////                throw new IOException("Cannot construct parent.");
-////            if (!Parent.Exists)
-////                Parent.Create();
-////
-////            IntPtr outPtr;
-////            int hr = Parent.Storage.CreateStorage(Name, ShellAPI.STGM.FAILIFTHERE |
-////                ShellAPI.STGM.CREATE, 0, 0, out outPtr);
-////            Storage storage = new Storage(outPtr);
-////
-////            if (hr != ShellAPI.S_OK)
-////                Marshal.ThrowExceptionForHR(hr);
-////
-////            Refresh();
-////        }
+        public Bitmap GetIconInner(IconSize size)
+        {
+            ////            if (key.StartsWith("."))
+            ////                throw new Exception("ext item is handled by IconExtractor");
+            ////            
+            ////			if (entry is FileInfoEx)
+            ////			{
+            ////				Bitmap retVal = null;
+            ////
+            ////				string ext = PathEx.GetExtension(entry.Name);
+            ////				if (IconExtractor.IsJpeg(ext))
+            ////				{
+            ////					retVal = IconExtractor.GetExifThumbnail(entry.FullName);
+            ////				}
+            ////				if (IconExtractor.IsImageIcon(ext))
+            ////					try
+            ////					{
+            ////						retVal = new Bitmap(entry.FullName);
+            ////					}
+            ////					catch { retVal = null; }
+            ////
+            ////				if (retVal != null)
+            ////					return retVal;
+            ////			}
+
+            return this.RequestPIDL(pidl => this.GetBitmap(size, pidl.Ptr, this is DirectoryInfoEx, false));
+        }
+
+        public Bitmap GetBitmap(IconSize size, IntPtr ptr, bool isDirectory, bool forceLoad)
+        {
+            Bitmap retVal = null;
+
+            using (var imgList = new SystemImageList(size))
+                retVal = imgList[ptr, isDirectory, forceLoad];
+
+            ////sysImgListLock.AcquireReaderLock(1000);
+
+            ////try
+            ////{
+            ////    if (size != sysImgList.CurrentImageListSize)
+            ////    {
+            ////        LockCookie lockCookie = sysImgListLock.UpgradeToWriterLock(lockWaitTime);
+            ////        try
+            ////        {
+            ////            SystemImageList imgList = sysImgList[size];
+            ////            retVal = imgList[ptr, isDirectory, forceLoad];
+            ////        }
+            ////        finally
+            ////        {
+            ////            sysImgListLock.DowngradeFromWriterLock(ref lockCookie);
+            ////        }
+            ////    }
+            ////    else
+            ////    {
+            ////        retVal = sysImgList[size][ptr, isDirectory, forceLoad];
+            ////    }
+            ////}
+            ////finally { sysImgListLock.ReleaseReaderLock(); }
+
+            return retVal;
+        }
+
+        ////        /// <summary>
+        ////        /// Create the directory.
+        ////        /// </summary>
+        ////        public void Create()
+        ////        {
+        ////            if (Exists)
+        ////                throw new IOException("Directory already exists.");
+        ////            if (Parent == null)
+        ////                throw new IOException("Cannot construct parent.");
+        ////            if (!Parent.Exists)
+        ////                Parent.Create();
+        ////
+        ////            IntPtr outPtr;
+        ////            int hr = Parent.Storage.CreateStorage(Name, ShellAPI.STGM.FAILIFTHERE |
+        ////                ShellAPI.STGM.CREATE, 0, 0, out outPtr);
+        ////            Storage storage = new Storage(outPtr);
+        ////
+        ////            if (hr != ShellAPI.S_OK)
+        ////                Marshal.ThrowExceptionForHR(hr);
+        ////
+        ////            Refresh();
+        ////        }
 
         /// <summary>
         /// Delete this folder. (not move it to recycle bin)
@@ -341,10 +406,11 @@ namespace DirectoryInfoExLib.IO.FileSystemInfoExt
             checkExists();
             //iStorage = null;
             //iShellFolder = null;
-            int hr = Parent.Storage.DestroyElement(Name);
+            int hr = (Parent as DirectoryInfoEx).Storage.DestroyElement(Name);
             if (hr != ShellAPI.S_OK) Marshal.ThrowExceptionForHR(hr);
             Refresh();
         }
+
         /// <summary>
         /// Move this folder to specified directory (fullpath)
         /// </summary>
@@ -571,7 +637,7 @@ namespace DirectoryInfoExLib.IO.FileSystemInfoExt
         {
             IDirectoryInfoEx[] subFSInfo = GetDirectories();
             for (int i = 0; i < subFSInfo.Length; i++)
-                if (subFSInfo[i].RequestRelativePIDL(relPidl => relPidl.Equals(pidl)))
+                if ((subFSInfo[i] as DirectoryInfoEx).RequestRelativePIDL(relPidl => relPidl.Equals(pidl)))
                     return (DirectoryInfoEx)subFSInfo[i];
 
             return null;

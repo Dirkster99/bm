@@ -1,14 +1,12 @@
 namespace DirectoryInfoExLib.IO.Header.ShellDll.Interfaces
 {
     using System;
-    using System.Collections.Generic;
-    using System.Text;
     using System.Runtime.InteropServices;
 
     [ComImport]
     [Guid("0000010e-0000-0000-C000-000000000046")]
     [InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
-    public interface IDataObject
+    internal interface IDataObject
     {
         // Renders the data described in a FORMATETC structure 
         // and transfers it through the STGMEDIUM structure

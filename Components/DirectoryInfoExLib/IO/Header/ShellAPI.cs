@@ -3,7 +3,7 @@
     using System.Text;
     using System.Runtime.InteropServices;
 
-    public static partial class ShellAPI
+    internal static partial class ShellAPI
     {
         [DllImport("kernel32.dll", CharSet = CharSet.Auto)]
         public static extern int GetShortPathName(

@@ -9,7 +9,7 @@ namespace DirectoryInfoExLib.IO.Header.ShellDll.Interfaces
     [ComImport]
     [Guid("0000000c-0000-0000-C000-000000000046")]
     [InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
-    public interface IStream
+    internal interface IStream
     {
         // Reads a specified number of bytes from the stream object into memory 
         // starting at the current seek pointer

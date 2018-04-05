@@ -1,14 +1,12 @@
 namespace DirectoryInfoExLib.IO.Header.ShellDll.Interfaces
 {
     using System;
-    using System.Collections.Generic;
-    using System.Text;
     using System.Runtime.InteropServices;
 
     [ComImport]
     [InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
     [Guid("00000103-0000-0000-C000-000000000046")]
-    public interface IEnumFORMATETC
+    internal interface IEnumFORMATETC
     {
         // Retrieves the specified number of FORMATETC structures in the enumeration 
         // sequence and advances the current position by the number of items retrieved

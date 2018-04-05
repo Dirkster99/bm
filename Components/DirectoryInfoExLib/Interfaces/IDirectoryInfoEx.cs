@@ -7,10 +7,10 @@
     using System.Threading.Tasks;
     using System.Threading;
     using DirectoryInfoExLib.Tools;
-    using DirectoryInfoExLib.IO.Tools.Interface;
     using DirectoryInfoExLib.IO.Header.KnownFolder;
     using DirectoryInfoExLib.IO.Header.KnownFolder.Enums;
-    using DirectoryInfoExLib.IO.Header.ShellDll;
+    using System.Drawing;
+    using DirectoryInfoExLib.Enums;
 
     public enum DirectoryTypeEnum { dtDesktop, dtSpecial, dtDrive, dtFolder, dtRoot }
 
@@ -25,11 +25,6 @@
         string Label { get; }
 
         IDirectoryInfoEx Parent { get; }
-
-
-        ShellFolder2 ShellFolder { get; }
-
-        Storage Storage { get; }
 
         IDirectoryInfoEx Root { get; }
 
@@ -50,12 +45,6 @@
 
         #region methods
         bool Equals(IDirectoryInfoEx other);
-
-        #region Methods - GetSubItems
-        T RequestPIDL<T>(Func<PIDL, T> pidlFuncOnly);
-        void RequestPIDL(Action<PIDL> pidlFuncOnly);
-
-        T RequestRelativePIDL<T>(Func<PIDL, T> relPidlFuncOnly);
 
         IEnumerable<IDirectoryInfoEx> EnumerateDirectories(String searchPattern, SearchOption searchOption, CancelDelegate cancel);
 
@@ -83,7 +72,9 @@
                                                      SearchOption searchOption,
                                                      CancellationToken ct);
         #endregion
-        #endregion
+
+        Bitmap GetIconInner(IconSize size);
+        Bitmap GetBitmap(IconSize size, IntPtr ptr, bool isDirectory, bool forceLoad);
         #endregion methods
     }
 }

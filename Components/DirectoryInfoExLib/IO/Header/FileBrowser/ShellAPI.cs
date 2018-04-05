@@ -11,7 +11,7 @@ namespace DirectoryInfoExLib.IO.Header.ShellDll
     /// This class contains every method, enumeration, struct and constants from the Windows API, which are
     /// required by the FileBrowser
     /// </summary>
-    public static partial class ShellAPI
+    internal static partial class ShellAPI
     {
         #region Variables and Constants
 
@@ -929,7 +929,7 @@ namespace DirectoryInfoExLib.IO.Header.ShellDll
 
         // Contains statistical data about an open storage, stream, or byte-array object
         [StructLayout(LayoutKind.Sequential)]
-        public struct STATSTG
+        internal struct STATSTG
         {
             [MarshalAs(UnmanagedType.LPWStr)]
             public string pwcsName;
@@ -997,7 +997,7 @@ namespace DirectoryInfoExLib.IO.Header.ShellDll
         #region Enums
 
         // Used to retrieve directory paths to system special folders
-        public enum CSIDL
+        internal enum CSIDL
         {
             CSIDL_ADMINTOOLS = 0x0030,
             CSIDL_ALTSTARTUP = 0x001d,
@@ -1066,7 +1066,7 @@ namespace DirectoryInfoExLib.IO.Header.ShellDll
         // Defines the values used with the IShellFolder::GetDisplayNameOf and IShellFolder::SetNameOf 
         // methods to specify the type of file or folder names used by those methods
         [Flags]
-        public enum SHGNO
+        internal enum SHGNO
         {
             NORMAL = 0x0000,
             INFOLDER = 0x0001,
@@ -1077,7 +1077,7 @@ namespace DirectoryInfoExLib.IO.Header.ShellDll
 
         // Flags to specify which path is to be returned with SHGetFolderPath
         [Flags]
-        public enum SHGFP
+        internal enum SHGFP
         {
             TYPE_CURRENT = 0,
             TYPE_DEFAULT = 1
@@ -1085,7 +1085,7 @@ namespace DirectoryInfoExLib.IO.Header.ShellDll
 
         // The attributes that the caller is requesting, when calling IShellFolder::GetAttributesOf
         [Flags]
-        public enum SFGAO : uint
+        internal enum SFGAO : uint
         {
             BROWSABLE = 0x8000000,
             CANCOPY = 1,
@@ -1125,7 +1125,7 @@ namespace DirectoryInfoExLib.IO.Header.ShellDll
         // Determines the type of items included in an enumeration. 
         // These values are used with the IShellFolder::EnumObjects method
         [Flags]
-        public enum SHCONTF
+        internal enum SHCONTF
         {
             FOLDERS = 0x0020,
             NONFOLDERS = 0x0040,
@@ -1138,7 +1138,7 @@ namespace DirectoryInfoExLib.IO.Header.ShellDll
 
         // Specifies how the shortcut menu can be changed when calling IContextMenu::QueryContextMenu
         [Flags]
-        public enum CMF : uint
+        internal enum CMF : uint
         {
             NORMAL = 0x00000000,
             DEFAULTONLY = 0x00000001,
@@ -1154,7 +1154,7 @@ namespace DirectoryInfoExLib.IO.Header.ShellDll
 
         // Flags specifying the information to return when calling IContextMenu::GetCommandString
         [Flags]
-        public enum GCS : uint
+        internal enum GCS : uint
         {
             VERBA = 0,
             HELPTEXTA = 1,
@@ -1166,7 +1166,7 @@ namespace DirectoryInfoExLib.IO.Header.ShellDll
 
         // Flags that specify the file information to retrieve with SHGetFileInfo
         [Flags]
-        public enum SHGFI : uint
+        internal enum SHGFI : uint
         {
             ADDOVERLAYS = 0x20,
             ATTR_SPECIFIED = 0x20000,
@@ -1190,7 +1190,7 @@ namespace DirectoryInfoExLib.IO.Header.ShellDll
 
         // Flags that specify the file information to retrieve with SHGetFileInfo
         [Flags]
-        public enum FILE_ATTRIBUTE
+        internal enum FILE_ATTRIBUTE
         {
             READONLY = 0x00000001,
             HIDDEN = 0x00000002,
@@ -1210,7 +1210,7 @@ namespace DirectoryInfoExLib.IO.Header.ShellDll
 
         // Specifies how TrackPopupMenuEx positions the shortcut menu horizontally
         [Flags]
-        public enum TPM : uint
+        internal enum TPM : uint
         {
             LEFTBUTTON = 0x0000,
             RIGHTBUTTON = 0x0002,
@@ -1235,7 +1235,7 @@ namespace DirectoryInfoExLib.IO.Header.ShellDll
 
         // Flags used with the CMINVOKECOMMANDINFOEX structure
         [Flags]
-        public enum CMIC : uint
+        internal enum CMIC : uint
         {
             HOTKEY = 0x00000020,
             ICON = 0x00000010,
@@ -1252,7 +1252,7 @@ namespace DirectoryInfoExLib.IO.Header.ShellDll
 
         // Flags that specify the drawing style when calling ImageList_GetIcon
         [Flags]
-        public enum ILD : uint
+        internal enum ILD : uint
         {
             NORMAL = 0x0000,
             TRANSPARENT =0x0001,
@@ -1263,7 +1263,7 @@ namespace DirectoryInfoExLib.IO.Header.ShellDll
 
         // Specifies how the window is to be shown
         [Flags]
-        public enum SW
+        internal enum SW
         {
             HIDE = 0,
             SHOWNORMAL = 1,
@@ -1282,7 +1282,7 @@ namespace DirectoryInfoExLib.IO.Header.ShellDll
 
         // Window message flags
         [Flags]
-        public enum WM : uint
+        internal enum WM : uint
         {
             ACTIVATE = 0x6,
             ACTIVATEAPP = 0x1C,
@@ -1497,9 +1497,8 @@ namespace DirectoryInfoExLib.IO.Header.ShellDll
 
         // Specifies the content of the new menu item
         [Flags]
-        public enum MFT : uint
+        internal enum MFT : uint
         {
-
             GRAYED = 0x00000003,
             DISABLED = 0x00000003,
             CHECKED = 0x00000008,
@@ -1521,7 +1520,7 @@ namespace DirectoryInfoExLib.IO.Header.ShellDll
 
         // Specifies the state of the new menu item
         [Flags]
-        public enum MFS : uint
+        internal enum MFS : uint
         {
             GRAYED  = 0x00000003,
             DISABLED = 0x00000003,
@@ -1535,7 +1534,7 @@ namespace DirectoryInfoExLib.IO.Header.ShellDll
 
         // Specifies the content of the new menu item
         [Flags]
-        public enum MIIM : uint
+        internal enum MIIM : uint
         {
             BITMAP = 0x80,
             CHECKMARKS = 0x08,
@@ -1550,7 +1549,7 @@ namespace DirectoryInfoExLib.IO.Header.ShellDll
 
         // Particular clipboard format of interest. 
         // There are three types of formats recognized by OLE
-        public enum CF
+        internal enum CF
         {
             BITMAP = 2,
             DIB = 8,
@@ -1582,7 +1581,7 @@ namespace DirectoryInfoExLib.IO.Header.ShellDll
 
         // Specifies the desired data or view aspect of the object when drawing or getting data
         [Flags]
-        public enum DVASPECT
+        internal enum DVASPECT
         {
             CONTENT = 1,
             DOCPRINT = 8,
@@ -1592,7 +1591,7 @@ namespace DirectoryInfoExLib.IO.Header.ShellDll
 
         // Indicates the type of storage medium being used in a data transfer
         [Flags]
-        public enum TYMED
+        internal enum TYMED
         {
             ENHMF = 0x40,
             FILE = 2,
@@ -1606,7 +1605,7 @@ namespace DirectoryInfoExLib.IO.Header.ShellDll
 
         // Specifies a group of flags for controlling the advisory connection
         [Flags]
-        public enum ADVF
+        internal enum ADVF
         {
             CACHE_FORCEBUILTIN = 0x10,
             CACHE_NOHANDLER = 8,
@@ -1619,7 +1618,7 @@ namespace DirectoryInfoExLib.IO.Header.ShellDll
 
         // Flags indicating which mouse buttons are clicked and which modifier keys are pressed
         [Flags]
-        public enum MK
+        internal enum MK
         {
             LBUTTON = 0x0001,
             RBUTTON = 0x0002,
@@ -1631,7 +1630,7 @@ namespace DirectoryInfoExLib.IO.Header.ShellDll
 
         // Are used in activation calls to indicate the execution contexts in which an object is to be run
         [Flags]
-        public enum CLSCTX : uint
+        internal enum CLSCTX : uint
         {
             INPROC_SERVER = 0x1,
             INPROC_HANDLER = 0x2,
@@ -1658,7 +1657,7 @@ namespace DirectoryInfoExLib.IO.Header.ShellDll
 
         // Describes the event that has occurred
         [Flags]
-        public enum SHCNE : uint
+        internal enum SHCNE : uint
         {
             RENAMEITEM = 0x00000001,
             CREATE = 0x00000002,
@@ -1689,7 +1688,7 @@ namespace DirectoryInfoExLib.IO.Header.ShellDll
 
         // Flags that indicate the meaning of the dwItem1 and dwItem2 parameters
         [Flags]
-        public enum SHCNF
+        internal enum SHCNF
         {
             IDLIST = 0x0000,
             PATHA = 0x0001,
@@ -1704,7 +1703,7 @@ namespace DirectoryInfoExLib.IO.Header.ShellDll
 
         // Indicate the type of events for which to receive notifications
         [Flags]
-        public enum SHCNRF
+        internal enum SHCNRF
         {
             InterruptLevel = 0x0001,
             ShellLevel = 0x0002,
@@ -1714,7 +1713,7 @@ namespace DirectoryInfoExLib.IO.Header.ShellDll
 
         // Indicate whether the method should try to return a name in the pwcsName member of the STATSTG structure
         [Flags]
-        public enum STATFLAG
+        internal enum STATFLAG
         {
             DEFAULT = 0,
             NONAME = 1,
@@ -1723,7 +1722,7 @@ namespace DirectoryInfoExLib.IO.Header.ShellDll
 
         // Indicate the type of locking requested for the specified range of bytes
         [Flags]
-        public enum LOCKTYPE
+        internal enum LOCKTYPE
         {
             WRITE = 1,
             EXCLUSIVE = 2,
@@ -1731,7 +1730,7 @@ namespace DirectoryInfoExLib.IO.Header.ShellDll
         }
 
         // Used in the type member of the STATSTG structure to indicate the type of the storage element
-        public enum STGTY
+        internal enum STGTY
         {
             STORAGE = 1,
             STREAM = 2,
@@ -1741,7 +1740,7 @@ namespace DirectoryInfoExLib.IO.Header.ShellDll
 
         // Indicate conditions for creating and deleting the object and access modes for the object
         [Flags]
-        public enum STGM
+        internal enum STGM
         {
             DIRECT = 0x00000000,
             TRANSACTED = 0x00010000,
@@ -1764,7 +1763,7 @@ namespace DirectoryInfoExLib.IO.Header.ShellDll
         }
 
         // Indicate whether a storage element is to be moved or copied
-        public enum STGMOVE
+        internal enum STGMOVE
         {
             MOVE = 0,
             COPY = 1,
@@ -1773,7 +1772,7 @@ namespace DirectoryInfoExLib.IO.Header.ShellDll
 
         // Specify the conditions for performing the commit operation in the IStorage::Commit and IStream::Commit methods
         [Flags]
-        public enum STGC
+        internal enum STGC
         {
             DEFAULT = 0,
             OVERWRITE = 1,
@@ -1784,7 +1783,7 @@ namespace DirectoryInfoExLib.IO.Header.ShellDll
 
         // Directing the handling of the item from which you're retrieving the info tip text
         [Flags]
-        public enum QITIPF
+        internal enum QITIPF
         {
             DEFAULT = 0x00000,
             USENAME = 0x00001,

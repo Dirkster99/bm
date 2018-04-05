@@ -11,7 +11,7 @@ namespace DirectoryInfoExLib.IO.Tools.Interface
     using System.Diagnostics;
     using DirectoryInfoExLib.IO.Header;
 
-    public class ShellFolder2 : IShellFolder2, IDisposable
+    internal class ShellFolder2 : IShellFolder2, IDisposable
     {
         private IShellFolder2 _iShellFolder2 = null;
         private IntPtr _ptrShellFolder2 = IntPtr.Zero;

@@ -4,7 +4,7 @@
     using System.Runtime.InteropServices;
     using DirectoryInfoExLib.IO.Header.ShellDll.Interfaces;
 
-    public class Storage : IStorage, IDisposable
+    internal class Storage : IStorage, IDisposable
     {
         private IStorage _iStorage = null;
         private IntPtr _ptrStorage = IntPtr.Zero;

@@ -6,14 +6,10 @@
 namespace DirectoryInfoExLib.IO.Tools.Wrappers
 {
     using System;
-    using System.Text;
-    using System.Drawing;
     using System.Runtime.InteropServices;
     using DirectoryInfoExLib.IO.Header;
     using DirectoryInfoExLib.IO.Header.ShellDll.Interfaces;
     using DirectoryInfoExLib.IO.Header.ShellDll;
-    using DirectoryInfoExLib.IO.Tools.Interface;
-    using DirectoryInfoExLib.IO.FileSystemInfoExt;
 
     public class ImageExtractor
     {
@@ -21,7 +17,7 @@ namespace DirectoryInfoExLib.IO.Tools.Wrappers
 
         //http://msdn.microsoft.com/en-us/library/bb761848(VS.85).aspx
 
-        public static bool GetIExtractImage(
+        internal static bool GetIExtractImage(
            IShellFolder2 parent,
             IntPtr filePidl,
            out IntPtr iExtractImagePtr,

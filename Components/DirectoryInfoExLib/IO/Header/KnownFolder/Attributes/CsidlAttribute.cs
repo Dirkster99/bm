@@ -4,7 +4,7 @@
     using System;
 
     [AttributeUsage(AttributeTargets.Field, AllowMultiple = true)]
-    public class CsidlAttribute : Attribute
+    internal class CsidlAttribute : Attribute
     {
         public ShellAPI.CSIDL CSIDL { get; set; }        
 

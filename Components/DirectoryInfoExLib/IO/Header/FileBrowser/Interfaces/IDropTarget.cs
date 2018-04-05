@@ -7,7 +7,7 @@ namespace DirectoryInfoExLib.IO.Header.ShellDll.Interfaces
     [ComImport]
     [InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
     [Guid("00000122-0000-0000-C000-000000000046")]
-    public interface IDropTarget
+    internal interface IDropTarget
     {
         // Determines whether a drop can be accepted and its effect if it is accepted
         [PreserveSig]

@@ -99,7 +99,7 @@
             }
         }
 
-        public ShellAPI.CSIDL? CSIDL
+        internal ShellAPI.CSIDL? CSIDL
         {
             get
             {
@@ -136,7 +136,7 @@
 
         #region static methods
 
-        public static KnownFolder FromCsidl(ShellAPI.CSIDL csidl)
+        internal static KnownFolder FromCsidl(ShellAPI.CSIDL csidl)
         {
             var folderManager = (IKnownFolderManager)new KnownFolderManager();
 
@@ -167,7 +167,7 @@
             return new KnownFolder(knowFolderInterface);
         }
 
-        public static KnownFolder FromPidl(PIDL pidl)
+        internal static KnownFolder FromPidl(PIDL pidl)
         {
             IKnownFolder knowFolderInterface;
             try

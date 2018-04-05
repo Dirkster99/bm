@@ -1,6 +1,6 @@
-﻿namespace Breadcrumb.IconExtractors
+﻿namespace DirectoryInfoExLib.IconExtracts
 {
-    using Breadcrumb.IconExtractors.Enums;
+    using DirectoryInfoExLib.Enums;
     using System;
 	using System.Drawing;
 	using System.IO;

@@ -1,13 +1,11 @@
 ﻿namespace DirectoryInfoExLib.IO.Header.ShellDll
 {
     using System;
-    using System.Collections.Generic;
-    using System.Text;
     using System.Runtime.InteropServices;
     using System.Runtime.InteropServices.ComTypes;
     using System.Diagnostics.CodeAnalysis;
 
-    public static partial class ShellAPI
+    internal static partial class ShellAPI
     {
         //public const int DRAGDROP_S_DROP = 0x00040100;
         //public const int DRAGDROP_S_CANCEL = 0x00040101;

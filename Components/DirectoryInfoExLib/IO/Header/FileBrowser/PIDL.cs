@@ -1,18 +1,17 @@
 namespace DirectoryInfoExLib.IO.Header.ShellDll
 {
     using System;
-    using System.Collections.Generic;
     using System.Text;
     using System.Runtime.InteropServices;
     using System.Collections;
-    using System.Diagnostics;
 
-    public class PIDL : IEnumerable //, IDisposable //11-01-09 : Added automatic disposer (LYCJ)
+    internal class PIDL : IEnumerable //, IDisposable //11-01-09 : Added automatic disposer (LYCJ)
     //0.13 : Removed IDisposable in PIDL as it causing AccessViolationException, user have to free calling the Free() method.
     {
-
-        private IntPtr pidl = IntPtr.Zero;
+        #region fields
         public static int Counter = 0;
+        private IntPtr pidl = IntPtr.Zero;
+        #endregion fields
 
         #region Constructors
 
@@ -294,7 +293,7 @@ namespace DirectoryInfoExLib.IO.Header.ShellDll
 
         #endregion
 
-        public class PIDLEnumerator : IEnumerator
+        internal class PIDLEnumerator : IEnumerator
         {
             private IntPtr pidl;
             private IntPtr currentPidl;
@@ -367,7 +366,5 @@ namespace DirectoryInfoExLib.IO.Header.ShellDll
 
             #endregion
         }
-
-
     }
 }

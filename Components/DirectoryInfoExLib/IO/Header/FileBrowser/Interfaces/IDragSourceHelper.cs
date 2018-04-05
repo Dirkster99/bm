@@ -1,14 +1,12 @@
 namespace DirectoryInfoExLib.IO.Header.ShellDll.Interfaces
 {
     using System;
-    using System.Collections.Generic;
-    using System.Text;
     using System.Runtime.InteropServices;
 
     [ComImport]
     [GuidAttribute("DE5BF786-477A-11d2-839D-00C04FD918D0")]
     [InterfaceTypeAttribute(ComInterfaceType.InterfaceIsIUnknown)]
-    public interface IDragSourceHelper
+    internal interface IDragSourceHelper
     {
         // Initializes the drag-image manager for a windowless control
         [PreserveSig]

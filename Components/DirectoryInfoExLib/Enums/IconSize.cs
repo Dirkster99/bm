@@ -1,5 +1,8 @@
-﻿namespace Breadcrumb.IconExtractors.Enums
+﻿namespace DirectoryInfoExLib.Enums
 {
+    /// <summary>
+    /// Gets the size of a Windows Shell icon.
+    /// </summary>
     public enum IconSize : int
     {
         small = 0x1,

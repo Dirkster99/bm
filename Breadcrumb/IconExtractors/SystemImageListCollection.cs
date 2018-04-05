@@ -1,12 +1,13 @@
-﻿using Breadcrumb.IconExtractors.Enums;
-
-namespace Breadcrumb.IconExtractors
+﻿namespace Breadcrumb.IconExtractors
 {
-	/// <summary>
-	/// Created By LYCJ (2014), released under MIT license
-	/// I did some tidy up Based on http://vbaccelerator.com/home/net/code/libraries/Shell_Projects/SysImageList/article.asp
-	/// </summary>
-	public class SystemImageListCollection
+    using DirectoryInfoExLib.Enums;
+    using DirectoryInfoExLib.IconExtracts;
+
+    /// <summary>
+    /// Created By LYCJ (2014), released under MIT license
+    /// I did some tidy up Based on http://vbaccelerator.com/home/net/code/libraries/Shell_Projects/SysImageList/article.asp
+    /// </summary>
+    public class SystemImageListCollection
 	{
 		#region fields
 		////private SystemImageList smallImageList = new SystemImageList(IconSize.small);

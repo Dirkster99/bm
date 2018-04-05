@@ -24,7 +24,7 @@ namespace DirectoryInfoExLib.IO.Header.ShellDll.Interfaces
     [ComImportAttribute()]
     [GuidAttribute("BB2E617C-0920-11d1-9A0B-00C04FC2D6C1")]
     [InterfaceTypeAttribute(ComInterfaceType.InterfaceIsIUnknown)]
-    public interface IExtractImage
+    internal interface IExtractImage
     {
         void GetLocation(
             [Out, MarshalAs(UnmanagedType.LPWStr)]

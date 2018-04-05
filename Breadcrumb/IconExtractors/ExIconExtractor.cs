@@ -1,9 +1,8 @@
 ﻿namespace Breadcrumb.IconExtractors
 {
-    using Breadcrumb.IconExtractors.Enums;
+    using DirectoryInfoExLib.Enums;
     using DirectoryInfoExLib.Interfaces;
     using DirectoryInfoExLib.Tools;
-    using System;
     using System.Drawing;
 
     public class ExIconExtractor : IconExtractor<IDirectoryInfoEx>
@@ -13,9 +12,11 @@
 		#region Methods
 		protected override Bitmap GetIconInner(IDirectoryInfoEx entry, string key, IconSize size)
 		{
-			if (key.StartsWith("."))
-				throw new Exception("ext item is handled by IconExtractor");
+            return entry.GetIconInner(size);
 
+////            if (key.StartsWith("."))
+////				throw new Exception("ext item is handled by IconExtractor");
+////
 ////			if (entry is FileInfoEx)
 ////			{
 ////				Bitmap retVal = null;
@@ -35,8 +36,8 @@
 ////				if (retVal != null)
 ////					return retVal;
 ////			}
-
-			return entry.RequestPIDL(pidl => this.GetBitmap(size, pidl.Ptr, entry is IDirectoryInfoEx, false));
+////
+////			return entry.RequestPIDL(pidl => this.GetBitmap(size, pidl.Ptr, entry is IDirectoryInfoEx, false));
 		}
 
 		protected override void GetIconKey(IDirectoryInfoEx entry, IconSize size, out string fastKey, out string slowKey)

@@ -72,7 +72,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Enums\IconSize.cs" />
+    <Compile Include="Enums\ImageListDrawItemConstants.cs" />
+    <Compile Include="Enums\ShellIconStateConstants.cs" />
     <Compile Include="Factory.cs" />
+    <Compile Include="IconExtracts\SystemImageList.cs" />
     <Compile Include="Interfaces\IDirectoryInfoEx.cs" />
     <Compile Include="IO\FileSystemInfoExt\ExtensionMethods.cs" />
     <Compile Include="IO\Header\FileBrowser\Interfaces\IExtractImage.cs" />
@@ -86,7 +90,6 @@
     <Compile Include="IO\Header\FileBrowser\Interfaces\IEnumFORMATETC.cs" />
     <Compile Include="IO\Header\FileBrowser\Interfaces\IEnumIDList.cs" />
     <Compile Include="IO\Header\FileBrowser\Interfaces\IEnumSTATSTG.cs" />
-    <Compile Include="IO\Header\FileBrowser\Interfaces\IShellExtInit.cs" />
     <Compile Include="IO\Header\FileBrowser\Interfaces\IShellFolder.cs" />
     <Compile Include="IO\Header\FileBrowser\Interfaces\IStorage.cs" />
     <Compile Include="IO\Header\FileBrowser\Interfaces\IStream.cs" />

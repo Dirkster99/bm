@@ -1,19 +1,19 @@
 ﻿namespace Breadcrumb.ViewModels.Breadcrumbs
 {
-  using System.Collections.Generic;
-  using System.Drawing;
-  using System.Linq;
-  using System.Threading.Tasks;
-  using System.Windows.Media;
-  using Breadcrumb.ViewModels.Helpers;
-  using Breadcrumb.ViewModels.Interfaces;
-  using Breadcrumb.ViewModels.TreeSelectors;
-  using BreadcrumbLib.Defines;
-  using Breadcrumb.IconExtractors;
-  using Breadcrumb.IconExtractors.Enums;
-  using Breadcrumb.ViewModels.Base;
-  using DirectoryInfoExLib.IO.FileSystemInfoExt;
+    using System.Collections.Generic;
+    using System.Drawing;
+    using System.Linq;
+    using System.Threading.Tasks;
+    using System.Windows.Media;
+    using Breadcrumb.ViewModels.Helpers;
+    using Breadcrumb.ViewModels.Interfaces;
+    using Breadcrumb.ViewModels.TreeSelectors;
+    using BreadcrumbLib.Defines;
+    using Breadcrumb.IconExtractors;
+    using Breadcrumb.IconExtractors.Enums;
+    using Breadcrumb.ViewModels.Base;
     using DirectoryInfoExLib.Interfaces;
+    using DirectoryInfoExLib.Enums;
 
     /// <summary>
     /// Class implements a ViewModel to manage a sub-tree of a Breadcrumb control.
@@ -145,13 +145,10 @@
 
     private void loadIcon()
     {
-        this._dir.RequestPIDL(pidl =>
-        {
-            Bitmap bitmap = ExTreeNodeViewModel.iconExtractor.GetBitmap(IconSize.large, pidl.Ptr, true, false);
+            Bitmap bitmap = _dir.GetIconInner(IconSize.large);
 
             if (bitmap != null)
                 this.Icon = Breadcrumb.Utils.BitmapSourceUtils.CreateBitmapSourceFromBitmap(bitmap);
-        });
     }
     #endregion properties
   }

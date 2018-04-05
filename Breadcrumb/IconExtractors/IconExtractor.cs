@@ -1,16 +1,17 @@
 ﻿namespace Breadcrumb.IconExtractors
 {
     using Breadcrumb.IconExtractors.Enums;
-    using DirectoryInfoExLib.IO.Tools.Wrappers;
+    using DirectoryInfoExLib.Enums;
+    using DirectoryInfoExLib.IconExtracts;
     using System;
-	using System.Collections.Generic;
-	using System.Diagnostics;
-	using System.Drawing;
-	using System.IO;
-	using System.Runtime.InteropServices;
-	using System.Threading;
+    using System.Collections.Generic;
+    using System.Diagnostics;
+    using System.Drawing;
+    using System.IO;
+    using System.Runtime.InteropServices;
+    using System.Threading;
 
-	public class IconExtractor
+    public class IconExtractor
 	{
 		#region fields
 		public static string ImageFilter = ".jpg,.jpeg,.png,.gif,.bmp,.tiff";
@@ -187,9 +188,9 @@
 					}
 
 					g.DrawString(ext, font,
-											System.Drawing.Brushes.Black,
-											new RectangleF(0, folderBitmap.Height - height, folderBitmap.Width - rightOffset, height),
-											new StringFormat(StringFormatFlags.DirectionRightToLeft));
+					System.Drawing.Brushes.Black,
+					new RectangleF(0, folderBitmap.Height - height, folderBitmap.Width - rightOffset, height),
+					new StringFormat(StringFormatFlags.DirectionRightToLeft));
 				}
 			}
 

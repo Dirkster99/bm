@@ -8,7 +8,7 @@ namespace DirectoryInfoExLib.IO.Header.ShellDll.Interfaces
     [ComImport]
     [Guid("0000010f-0000-0000-C000-000000000046")]
     [InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
-    public interface IAdviseSink
+    internal interface IAdviseSink
     {
         // Advises that data has changed
         [PreserveSig]

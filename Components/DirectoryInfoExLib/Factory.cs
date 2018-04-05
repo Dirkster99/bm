@@ -47,7 +47,7 @@
         /// </summary>
         /// <param name="csidl"></param>
         /// <returns></returns>
-        public static IDirectoryInfoEx CreateDirectoryInfoEx(IO.Header.ShellDll.ShellAPI.CSIDL csidl)
+        internal static IDirectoryInfoEx CreateDirectoryInfoEx(IO.Header.ShellDll.ShellAPI.CSIDL csidl)
         {
             return new DirectoryInfoEx(csidl);
         }

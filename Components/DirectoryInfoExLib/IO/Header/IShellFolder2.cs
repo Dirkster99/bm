@@ -89,7 +89,7 @@ namespace DirectoryInfoExLib.IO.Header
     [ComImport]
     [InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
     [Guid("93F2F68C-1D1B-11D3-A30E-00C04F79ABD1")]
-    public interface IShellFolder2
+    internal interface IShellFolder2
     {
         #region IShellFolder
         // Translates a file object's or folder's display name into an item identifier list.
