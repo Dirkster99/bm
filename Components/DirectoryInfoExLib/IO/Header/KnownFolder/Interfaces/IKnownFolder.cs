@@ -8,15 +8,23 @@
     public interface IKnownFolder
     {
         void GetId([Out] out Guid Id);
+
         void GetCategory([Out] out KnownFolderCategory category);
+
         void GetShellItem(KnownFolderRetrievalOptions retrievalOptions,
                           [MarshalAs(UnmanagedType.LPStruct)] Guid interfaceGuid,
                           [Out, MarshalAs(UnmanagedType.IUnknown)] out object shellItem);
+
         void GetPath(KnownFolderRetrievalOptions retrievalOptions, [Out] out IntPtr path);
+
         void SetPath(KnownFolderRetrievalOptions retrievalOptions, string path);
+
         int GetIDList(KnownFolderRetrievalOptions retrievalOptions, [Out] out IntPtr itemIdentifierListPointer);
+
         void GetFolderType([Out, MarshalAs(UnmanagedType.LPStruct)] out Guid folderTypeID);
+
         void GetRedirectionCapabilities([Out] out KnownFolderRedirectionCapabilities redirectionCapabilities);
+
         void GetFolderDefinition([Out, MarshalAs(UnmanagedType.Struct)] out InternalKnownFolderDefinition definition);
     }
 }

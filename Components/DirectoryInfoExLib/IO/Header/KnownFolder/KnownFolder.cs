@@ -10,45 +10,95 @@
     using System.Linq;
     using System.Runtime.InteropServices;
 
+    /// <summary>
+    /// Windows Vista introduces new storage scenarios and a new user profile namespace.
+    /// To address these new factors, the older system of referring to standard folders by
+    /// a CSIDL value has been replaced. As of Windows Vista, those folders are referenced
+    /// by a new set of GUID values called Known Folder IDs.
+    ///
+    /// The Known Folder system provides these advantages:
+    ///
+    /// Independent software vendors(ISVs) can extend the set of Known Folder IDs with their own.
+    /// They can define folders, give them IDs, and register them with the system.
+    /// CSIDL values could not be extended.
+    /// 
+    /// All Known Folders on a system can be enumerated. No API provided this functionality for
+    /// CSIDL values. See IKnownFolderManager::GetFolderIds for more information.
+    ///
+    /// A known folder added by an ISV can add custom properties that allow it to explain its
+    /// purpose and intended use.
+    /// 
+    /// Many known folders can be redirected to new locations, including network locations.
+    /// Under the CSIDL system, only the My Documents folder could be redirected.
+    /// 
+    /// Known folders can have custom handlers for use during creation or deletion.
+    ///
+    /// The CSIDL system and APIs that make use of CSIDL values are still supported for compatibility.
+    /// However, it is not recommended to use them in any new development.
+    /// 
+    /// https://msdn.microsoft.com/en-us/library/bb776911
+    /// </summary>
     public class KnownFolder : IDisposable
     {
         #region fields
-
+        /// <summary>
+        /// Gets the <see cref="KnownFolderManager"/> for this system.
+        /// </summary>
         public static IKnownFolderManager FolderManager = (IKnownFolderManager)new KnownFolderManager();
 
+        private IKnownFolder _knownFolder = null;
         #endregion
 
-        internal IKnownFolder _knownFolder = null;
-
+        #region constructor
+        /// <summary>
+        /// Class constructor.
+        /// </summary>
+        /// <param name="knownFolder"></param>
         internal KnownFolder(IKnownFolder knownFolder)
         {
             _knownFolder = knownFolder;
         }
 
+        /// <summary>
+        /// Destructor.
+        /// </summary>
         ~KnownFolder()
         {
             Dispose();
         }
-
+        #endregion constructor
 
         #region properties
-
+        /// <summary>
+        /// Gets the path of a known folder.
+        /// </summary>
         public string Path
         {
             get { return GetPath(0); }
-            set { SetPath(value, 0); }
+
+            protected set { SetPath(value, 0); }
         }
 
+        /// <summary>
+        /// Gets the <see cref="Guid"/> id of the known folder based
+        /// on the inner known folder interface and folder manager.
+        /// </summary>
         public Guid Id
         {
             get
             {
                 Guid id;
                 _knownFolder.GetId(out id);
+
                 return id;
             }
         }
 
+        /// <summary>
+        /// Gets the <see cref="Guid"/> id of the known folder,
+        /// if it is present in the enumeration of known folder,
+        /// or null, if the Id is not present in the enumeration.
+        /// </summary>
         public KnownFolderIds? KnownFolderId
         {
             get
@@ -57,6 +107,7 @@
                 foreach (var kfId in Enum.GetValues(typeof(KnownFolderIds)))
                 {
                     var attribute = EnumAttributeUtils<KnownFolderGuidAttribute, KnownFolderIds>.FindAttribute(kfId);
+
                     if (attribute != null && attribute.Guid.Equals(id))
                         return (KnownFolderIds)kfId;
                 }
@@ -132,6 +183,13 @@
             get { return GetDefinition(); }
         }
 
+        internal IKnownFolder KnownFolderInterface
+        {
+            get
+            {
+                return _knownFolder;
+            }
+        }
         #endregion
 
         #region static methods
@@ -167,6 +225,13 @@
             return new KnownFolder(knowFolderInterface);
         }
 
+        /// <summary>
+        /// Gets the Windows known folder (similar to <see cref="Environment.SpecialFolder"/>
+        /// but extensible and customizable at run-time) or null if the given <see cref="PIDL"/>
+        /// does not refer to a special folder in Windows.
+        /// </summary>
+        /// <param name="pidl"></param>
+        /// <returns></returns>
         internal static KnownFolder FromPidl(PIDL pidl)
         {
             IKnownFolder knowFolderInterface;
@@ -317,10 +382,5 @@
             return foldersList.OrderBy(kf => kf.Category).ToList();
         }
         #endregion
-
-
-
-
-
     }
 }

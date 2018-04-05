@@ -8,8 +8,8 @@ namespace DirectoryInfoExLib.IO.Header.ShellDll
     using DirectoryInfoExLib.IO.Header.ShellDll.Interfaces;
 
     /// <summary>
-    /// This class contains every method, enumeration, struct and constants from the Windows API, which are
-    /// required by the FileBrowser
+    /// This class contains every method, enumeration, struct and constants from
+    /// the Windows API, which are required by the FileBrowser
     /// </summary>
     internal static partial class ShellAPI
     {
@@ -761,7 +761,9 @@ namespace DirectoryInfoExLib.IO.Header.ShellDll
         }
         #endregion // enum HChangeNotifyEventID
 
-        // Contains strings returned from the IShellFolder interface methods
+        /// <summary>
+        /// Contains strings returned from the IShellFolder interface methods
+        /// </summary>
         [StructLayout(LayoutKind.Explicit)]
         public struct STRRET
         {
@@ -777,7 +779,9 @@ namespace DirectoryInfoExLib.IO.Header.ShellDll
             public IntPtr cStr;
         }
 
-        // Contains information about a file object
+        /// <summary>
+        /// Contains information about a file object
+        /// </summary>
         [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Auto)]
         public struct SHFILEINFO
         {
@@ -790,7 +794,9 @@ namespace DirectoryInfoExLib.IO.Header.ShellDll
             public string szTypeName;
         }
 
-        // Contains extended information about a shortcut menu command
+        /// <summary>
+        /// Contains extended information about a shortcut menu command
+        /// </summary>
         [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Unicode)]
         public struct CMINVOKECOMMANDINFOEX
         {
@@ -815,9 +821,11 @@ namespace DirectoryInfoExLib.IO.Header.ShellDll
             [MarshalAs(UnmanagedType.LPWStr)]
             public string lpTitleW;
             public POINT ptInvoke;
-        } 
+        }
 
-        // Contains information about a menu item
+        /// <summary>
+        /// Contains information about a menu item
+        /// </summary>
         [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Auto)]
         public struct MENUITEMINFO 
         {
@@ -852,7 +860,9 @@ namespace DirectoryInfoExLib.IO.Header.ShellDll
             public IntPtr hbmpItem;
         }
 
-        // Contains extended parameters for the TrackPopupMenuEx function
+        /// <summary>
+        /// Contains extended parameters for the TrackPopupMenuEx function
+        /// </summary>
         [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Auto)]
         public struct TPMPARAMS
         {
@@ -860,7 +870,9 @@ namespace DirectoryInfoExLib.IO.Header.ShellDll
             RECT rcExclude;
         }
 
-        // Contains combo box status information
+        /// <summary>
+        /// Contains combo box status information
+        /// </summary>
         [StructLayout(LayoutKind.Sequential)]
         public struct COMBOBOXINFO
         {
@@ -873,8 +885,10 @@ namespace DirectoryInfoExLib.IO.Header.ShellDll
             public IntPtr hwndList;
         }
 
-        // A generalized Clipboard format, it is enhanced to encompass a 
-        // target device, the aspect or view of the data, and a storage medium indicator
+        /// <summary>
+        /// A generalized Clipboard format, it is enhanced to encompass a 
+        /// target device, the aspect or view of the data, and a storage medium indicator
+        /// </summary>
         [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Auto)]
         public struct FORMATETC
         {
@@ -885,8 +899,10 @@ namespace DirectoryInfoExLib.IO.Header.ShellDll
             public TYMED Tymd;
         }
 
-        // A generalized global memory handle used for data transfer operations by the 
-        // IAdviseSink, IDataObject, and IOleCache interfaces
+        /// <summary>
+        /// A generalized global memory handle used for data transfer operations by the 
+        /// IAdviseSink, IDataObject, and IOleCache interfaces
+        /// </summary>
         [StructLayout(LayoutKind.Sequential)]
         public struct STGMEDIUM
         {
@@ -901,7 +917,9 @@ namespace DirectoryInfoExLib.IO.Header.ShellDll
             public IntPtr pUnkForRelease;
         }
 
-        // Contains the information needed to create a drag image
+        /// <summary>
+        /// Contains the information needed to create a drag image
+        /// </summary>
         [StructLayout(LayoutKind.Sequential)]
         public struct SHDRAGIMAGE
         {
@@ -911,7 +929,9 @@ namespace DirectoryInfoExLib.IO.Header.ShellDll
             public Color crColorKey;
         }
 
-        // Contains and receives information for change notifications
+        /// <summary>
+        /// Contains and receives information for change notifications
+        /// </summary>
         [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Auto)]
         public struct SHChangeNotifyEntry
         {
@@ -919,7 +939,9 @@ namespace DirectoryInfoExLib.IO.Header.ShellDll
             public bool Recursively;
         }
 
-        // Contains two PIDLs concerning the notify message
+        /// <summary>
+        /// Contains two PIDLs concerning the notify message
+        /// </summary>
         [StructLayout(LayoutKind.Sequential)]
         public struct SHNOTIFYSTRUCT
         {
@@ -927,7 +949,9 @@ namespace DirectoryInfoExLib.IO.Header.ShellDll
             public IntPtr dwItem2;
         }
 
-        // Contains statistical data about an open storage, stream, or byte-array object
+        /// <summary>
+        /// Contains statistical data about an open storage, stream, or byte-array object
+        /// </summary>
         [StructLayout(LayoutKind.Sequential)]
         internal struct STATSTG
         {
@@ -945,7 +969,9 @@ namespace DirectoryInfoExLib.IO.Header.ShellDll
             public int reserved;
         }
 
-        // Represents the number of 100-nanosecond intervals since January 1, 1601
+        /// <summary>
+        /// Represents the number of 100-nanosecond intervals since January 1, 1601
+        /// </summary>
         [StructLayout(LayoutKind.Sequential)]
         public struct FILETIME
         {
@@ -953,7 +979,9 @@ namespace DirectoryInfoExLib.IO.Header.ShellDll
             public int dwHighDateTime;
         }
 
-        // Defines the x- and y-coordinates of a point
+        /// <summary>
+        /// Defines the x- and y-coordinates of a point
+        /// </summary>
         [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Auto)]
         public struct POINT
         {
@@ -967,7 +995,9 @@ namespace DirectoryInfoExLib.IO.Header.ShellDll
             public int y;
         }
 
-        // Defines the coordinates of the upper-left and lower-right corners of a rectangle
+        /// <summary>
+        /// Defines the coordinates of the upper-left and lower-right corners of a rectangle
+        /// </summary>
         [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Auto)]
         public struct RECT
         {
@@ -985,7 +1015,9 @@ namespace DirectoryInfoExLib.IO.Header.ShellDll
             int bottom;
         }
 
-        // The SIZE structure specifies the width and height of a rectangle
+        /// <summary>
+        /// The SIZE structure specifies the width and height of a rectangle
+        /// </summary>
         [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Auto)]
         public struct SIZE 
         { 
@@ -996,7 +1028,9 @@ namespace DirectoryInfoExLib.IO.Header.ShellDll
 
         #region Enums
 
-        // Used to retrieve directory paths to system special folders
+        /// <summary>
+        /// Used to retrieve directory paths to system special folders
+        /// </summary>
         internal enum CSIDL
         {
             CSIDL_ADMINTOOLS = 0x0030,
@@ -1063,8 +1097,10 @@ namespace DirectoryInfoExLib.IO.Header.ShellDll
             CSIDL_WINDOWS = 0x0024  
         }
 
-        // Defines the values used with the IShellFolder::GetDisplayNameOf and IShellFolder::SetNameOf 
-        // methods to specify the type of file or folder names used by those methods
+        /// <summary>
+        /// Defines the values used with the IShellFolder::GetDisplayNameOf and IShellFolder::SetNameOf 
+        /// methods to specify the type of file or folder names used by those methods
+        /// </summary>
         [Flags]
         internal enum SHGNO
         {
@@ -1075,7 +1111,9 @@ namespace DirectoryInfoExLib.IO.Header.ShellDll
             FORPARSING = 0x8000
         }
 
-        // Flags to specify which path is to be returned with SHGetFolderPath
+        /// <summary>
+        /// Flags to specify which path is to be returned with SHGetFolderPath
+        /// </summary>
         [Flags]
         internal enum SHGFP
         {
@@ -1083,10 +1121,19 @@ namespace DirectoryInfoExLib.IO.Header.ShellDll
             TYPE_DEFAULT = 1
         }
 
-        // The attributes that the caller is requesting, when calling IShellFolder::GetAttributesOf
+        /// <summary>
+        /// Enumeration specifies attributes that can be retrieved on an item
+        /// (file or folder) or set of items.
+        /// 
+        /// The attributes that the caller is requesting, when calling IShellFolder::GetAttributesOf
+        /// https://msdn.microsoft.com/en-us/library/windows/desktop/bb762589(v=vs.85).aspx
+        /// </summary>
         [Flags]
         internal enum SFGAO : uint
         {
+            /// <summary>
+            /// The specified items can be hosted inside a web browser or Windows Explorer frame.
+            /// </summary>
             BROWSABLE = 0x8000000,
             CANCOPY = 1,
             CANDELETE = 0x20,
@@ -1101,11 +1148,28 @@ namespace DirectoryInfoExLib.IO.Header.ShellDll
             DROPTARGET = 0x100,
             ENCRYPTED = 0x2000,
             FILESYSANCESTOR = 0x10000000,
+
+            /// <summary>
+            /// The specified folders are either file system folders or contain at least one
+            /// descendant (child, grandchild, or later) that is a file system (SFGAO_FILESYSTEM) folder.
+            /// </summary>
             FILESYSTEM = 0x40000000,
+
             FOLDER = 0x20000000,
             GHOSTED = 0x8000,
             HASPROPSHEET = 0x40,
             HASSTORAGE = 0x400000,
+
+            /// <summary>
+            /// The specified folders have subfolders. The SFGAO_HASSUBFOLDER attribute is only advisory
+            /// and might be returned by Shell folder implementations even if they do not contain subfolders.
+            /// Note, however, that the converse—failing to return SFGAO_HASSUBFOLDER—definitively states
+            /// that the folder objects do not have subfolders.
+            ///
+            /// Returning SFGAO_HASSUBFOLDER is recommended whenever a significant amount of time is required
+            /// to determine whether any subfolders exist. For example, the Shell always returns
+            /// SFGAO_HASSUBFOLDER when a folder is located on a network drive.
+            /// </summary>
             HASSUBFOLDER = 0x80000000,
             HIDDEN = 0x80000,
             ISSLOW = 0x4000,

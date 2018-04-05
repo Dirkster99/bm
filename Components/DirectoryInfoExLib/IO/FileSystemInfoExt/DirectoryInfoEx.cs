@@ -32,14 +32,24 @@ namespace DirectoryInfoExLib.IO.FileSystemInfoExt
     /// </summary>
     internal class DirectoryInfoEx : FileSystemInfoEx, IDirectoryInfoEx
     {
-        #region Static Variables
+        #region fields
+        private DirectoryTypeEnum _dirType;
+        private bool _isBrowsable, isFileSystem, _hasSubFolder;
+
+        #region Static fields
         internal static readonly DirectoryInfoEx DesktopDirectory;
         internal static readonly DirectoryInfoEx MyComputerDirectory;
         internal static readonly DirectoryInfoEx CurrentUserDirectory;
         internal static readonly DirectoryInfoEx SharedDirectory;
         internal static readonly DirectoryInfoEx NetworkDirectory;
         internal static readonly DirectoryInfoEx RecycleBinDirectory;
+        #endregion Static fields
+        #endregion fields
 
+        #region constructors
+        /// <summary>
+        /// Static constructor
+        /// </summary>
         static DirectoryInfoEx()
         {
 #if DEBUG
@@ -62,98 +72,257 @@ namespace DirectoryInfoExLib.IO.FileSystemInfoExt
             //foreach (DirectoryInfoEx dir in DesktopDirectory.GetDirectories())
             //    if (dir.FullName.Equals(Helper.GetSharedPath()))
             //    { SharedDirectory = dir; break; }
-
-
-        }
-        #endregion
-
-        #region Variables
-        private DirectoryTypeEnum _dirType;
-        private bool _isBrowsable, isFileSystem, _hasSubFolder;
-
-        public ShellFolder2 ShellFolder { get { return getIShellFolder(); } }
-        public Storage Storage { get { return getStorage(); } }
-        public IDirectoryInfoEx Root { get { return getDirectoryRoot(this); } }
-        public bool IsBrowsable { get { checkRefresh(); return _isBrowsable; } set { _isBrowsable = value; } }
-        public bool IsFileSystem { get { checkRefresh(); return isFileSystem; } set { isFileSystem = value; } }
-        public bool HasSubFolder { get { checkRefresh(); return _hasSubFolder; } set { _hasSubFolder = value; } }
-        public DirectoryTypeEnum DirectoryType { get { return _dirType; } protected set { _dirType = value; } }
-        public Environment.SpecialFolder? ShellFolderType { get { var kf = KnownFolderType; return kf == null ? null : kf.SpecialFolder; } }
-
-        public KnownFolder KnownFolderType
-        {
-            get { return this.RequestPIDL(pidl => KnownFolder.FromPidl(pidl)); }
-        }          
-
-        public KnownFolderIds? KnownFolderId { get { var kf = KnownFolderType;  return kf == null ? null : kf.KnownFolderId; } }
-        
-        //0.12: Fixed PIDL, PIDLRel, ShellFolder, Storage properties generated on demand to avoid x-thread issues.
-        private Storage getStorage()
-        {
-            Storage iStorage = null;
-            //0.15: Fixed ShellFolder not freed correctly
-            //if (ShellFolder2 != null)
-            if (IOTools.getIStorage(this, out iStorage))
-                return iStorage;
-            return null;
         }
 
-
-        private ShellFolder2 getIShellFolderFromParent()
+        /// <summary>
+        /// Static constructor
+        /// </summary>
+        internal DirectoryInfoEx(PIDL fullPIDL)
         {
-            if (_parent != null)
-                using (ShellFolder2 parentShellFolder = (_parent as DirectoryInfoEx).ShellFolder)
-                {
-                    IntPtr ptrShellFolder = IntPtr.Zero;
-
-                    int hr = this.RequestRelativePIDL(relPIDL =>
-                        parentShellFolder.BindToObject(relPIDL.Ptr, IntPtr.Zero, ref ShellAPI.IID_IShellFolder2,
-                        out ptrShellFolder));
-
-                    if (ptrShellFolder != IntPtr.Zero && hr == ShellAPI.S_OK)
-                        return new ShellFolder2(ptrShellFolder);
-                }
-            return null;
+            init(fullPIDL);
+            checkProperties();
         }
 
-        private ShellFolder2 getIShellFolder()
+        /// <summary>
+        /// Class constructor
+        /// </summary>
+        /// <param name="fullPath"></param>
+        public DirectoryInfoEx(string fullPath)
         {
-            if (this.FullName.Equals(IOTools.IID_Desktop))
-                return getDesktopShellFolder();
-            else
+            fullPath = IOTools.ExpandPath(fullPath);
+            init(fullPath);
+            checkProperties();
+        }
+
+        /// <summary>
+        /// Class constructor
+        /// </summary>
+        /// <param name="knownFolder"></param>
+        public DirectoryInfoEx(KnownFolder knownFolder)
+        {
+            PIDL pidlLookup = KnownFolderToPIDL(knownFolder);
+            try
             {
-                ShellFolder2 retVal = getIShellFolderFromParent();
-                if (retVal != null)
-                    return retVal;
-
-                return this.RequestPIDL((pidl, relPIDL) =>
-                    {
-                        using (ShellFolder2 parentShellFolder = getParentIShellFolder(pidl, out relPIDL))
-                        {
-                            IntPtr ptrShellFolder;
-                            int hr = parentShellFolder.BindToObject(relPIDL.Ptr, IntPtr.Zero, ref ShellAPI.IID_IShellFolder2,
-                                out ptrShellFolder);
-                            if (ptrShellFolder == IntPtr.Zero || hr != ShellAPI.S_OK) Marshal.ThrowExceptionForHR(hr);
-                            return new ShellFolder2(ptrShellFolder);
-                        }
-
-                    });
+                init(pidlLookup);
+                checkProperties();
+            }
+            finally
+            {
+                //if (pidlLookup != null) pidlLookup.Free();
+                pidlLookup = null;
             }
         }
 
-        protected void initDirectoryType()
+        /// <summary>
+        /// Class constructor
+        /// </summary>
+        /// <param name="knownFolderId"></param>
+        public DirectoryInfoEx(KnownFolderIds knownFolderId)
+            : this(KnownFolder.FromKnownFolderId(
+                EnumAttributeUtils<KnownFolderGuidAttribute, KnownFolderIds>.FindAttribute(knownFolderId).Guid))
         {
-            string path = FullName != null ? FullName : OriginalPath;
+        }
 
-            if (path.Equals(IOTools.IID_Desktop))
-                _dirType = DirectoryTypeEnum.dtDesktop;
-            else
-                if (path != null)
-                    if (path.EndsWith(":\\"))
-                        _dirType = DirectoryTypeEnum.dtDrive;
-                    else if (path.StartsWith("::"))
-                        _dirType = DirectoryTypeEnum.dtSpecial;
-                    else _dirType = DirectoryTypeEnum.dtFolder;
+        /// <summary>
+        /// Class constructor
+        /// </summary>
+        /// <param name="csidl"></param>
+        public DirectoryInfoEx(IO.Header.ShellDll.ShellAPI.CSIDL csidl)
+        {
+            PIDL pidlLookup = CSIDLtoPIDL(csidl);
+            try
+            {
+                init(pidlLookup);
+                checkProperties();
+            }
+            finally
+            {
+                //if (pidlLookup != null) pidlLookup.Free();
+                pidlLookup = null;
+            }
+        }
+
+        /// <summary>
+        /// Class constructor
+        /// </summary>
+        /// <param name="shellFolder"></param>
+        public DirectoryInfoEx(Environment.SpecialFolder shellFolder)
+        {
+            var sf = IOTools.ShellFolderToCSIDL(shellFolder);
+            if (!sf.HasValue)
+                throw new ArgumentException("Cannot find CSIDL from this shell folder.");
+            PIDL pidlLookup = CSIDLtoPIDL(sf.Value);
+            try
+            {
+                init(pidlLookup);
+                checkProperties();
+            }
+            finally
+            {
+                //if (pidlLookup != null) pidlLookup.Free();
+                pidlLookup = null;
+            }
+        }
+
+        /// <summary>
+        /// Class constructor
+        /// </summary>
+        /// <param name="info"></param>
+        /// <param name="context"></param>
+        public DirectoryInfoEx(SerializationInfo info, StreamingContext context)
+            : base(info, context)
+        {
+            _dirType = (DirectoryTypeEnum)info.GetValue("DirectoryType", typeof(DirectoryTypeEnum));
+            IsBrowsable = info.GetBoolean("IsBrowsable");
+            IsFileSystem = info.GetBoolean("IsFileSystem");
+            HasSubFolder = info.GetBoolean("HasSubFolder");
+        }
+
+        /// <summary>
+        /// Class constructor
+        /// </summary>
+        /// <param name="parentShellFolder"></param>
+        /// <param name="fullPIDL"></param>
+        internal DirectoryInfoEx(IShellFolder2 parentShellFolder, PIDL fullPIDL)
+        {
+            init(parentShellFolder, fullPIDL);
+        }
+
+        /// <summary>
+        /// Class constructor
+        /// </summary>
+        /// <param name="parentShellFolder"></param>
+        /// <param name="parentPIDL"></param>
+        /// <param name="relPIDL"></param>
+        /// <param name="parentIsLibrary"></param>
+        internal DirectoryInfoEx(IShellFolder2 parentShellFolder, PIDL parentPIDL, PIDL relPIDL,
+            bool parentIsLibrary)
+        {
+            init(parentShellFolder, parentPIDL, relPIDL);
+
+            //0.22: Fix illegal PIDL for Directory under Library.ms directory
+            if (parentIsLibrary)
+            {
+                init(FullName);
+            }
+        }
+
+        /// <summary>
+        /// Class constructor
+        /// </summary>
+        /// <param name="parentDir"></param>
+        /// <param name="relPIDL"></param>
+        internal DirectoryInfoEx(DirectoryInfoEx parentDir, PIDL relPIDL)
+        {
+            Parent = parentDir;
+            parentDir.RequestPIDL(parentPIDL =>
+            {
+                //0.15: Fixed ShellFolder not freed.
+                using (ShellFolder2 parentShellFolder = parentDir.ShellFolder)
+                    init(parentShellFolder, parentPIDL, relPIDL);
+            });
+        }
+
+        /// <summary>
+        /// Hidden paremeterless class constructor
+        /// </summary>
+        protected DirectoryInfoEx()
+        {
+        }
+        #endregion constructors
+
+        #region properties
+        public ShellFolder2 ShellFolder { get { return getIShellFolder(); } }
+
+        public Storage Storage { get { return getStorage(); } }
+
+        public IDirectoryInfoEx Root { get { return getDirectoryRoot(this); } }
+
+        /// <summary>
+        /// The specified items can be hosted inside a web browser or Windows Explorer frame.
+        /// </summary>
+        public bool IsBrowsable
+        {
+            get
+            {
+                checkRefresh();
+                return _isBrowsable;
+            }
+
+            protected set { _isBrowsable = value; }
+        }
+
+        /// <summary>
+        /// Gets whether this item is either a file system folder or contain at least one
+        /// descendant (child, grandchild, or later) that is a file system (SFGAO_FILESYSTEM) folder.
+        /// </summary>
+        public bool IsFileSystem
+        {
+            get
+            {
+                checkRefresh();
+                return isFileSystem;
+            }
+
+            protected set { isFileSystem = value; }
+        }
+
+        public bool HasSubFolder
+        {
+            get
+            {
+                checkRefresh();
+                return _hasSubFolder;
+            }
+
+            protected set { _hasSubFolder = value; }
+        }
+
+        /// <summary>
+        /// Gets the folders type classification.
+        /// </summary>
+        public DirectoryTypeEnum DirectoryType
+        {
+            get { return _dirType; }
+            protected set { _dirType = value; }
+        }
+
+        /// <summary>
+        /// Gets the folder type <see cref="Environment.SpecialFolder"/> if this
+        /// folder is a special windows folder or null.
+        /// </summary>
+        public Environment.SpecialFolder? ShellFolderType
+        {
+            get
+            {
+                var kf = KnownFolderType;
+                  return kf == null ? null : kf.SpecialFolder;
+            }
+        }
+
+        /// <summary>
+        /// Gets the Windows known folder (similar to <see cref="Environment.SpecialFolder"/>
+        /// but extensible and customizable at run-time) or null if this folder
+        /// is not a special folder in Windows.
+        /// </summary>
+        /// <returns></returns>
+        public KnownFolder KnownFolderType
+        {
+            get { return this.RequestPIDL(pidl => KnownFolder.FromPidl(pidl)); }
+        }
+
+        /// <summary>
+        /// Gets the <see cref="Guid"/> Id of this folder if it is a <see cref="KnownFolder"/>
+        /// or null if this is not a special folder in Windows.
+        /// </summary>
+        public KnownFolderIds? KnownFolderId
+        {
+            get
+            {
+                var kf = KnownFolderType;
+
+                return kf == null ? null : kf.KnownFolderId;
+            }
         }
         #endregion
 
@@ -186,7 +355,7 @@ namespace DirectoryInfoExLib.IO.FileSystemInfoExt
             IntPtr ptrAddr;
             PIDL pidl;
 
-            int RetVal = (knownFolder._knownFolder).GetIDList(KnownFolderRetrievalOptions.Create, out ptrAddr);
+            int RetVal = (knownFolder.KnownFolderInterface).GetIDList(KnownFolderRetrievalOptions.Create, out ptrAddr);
             if (ptrAddr != IntPtr.Zero)
             {
                 pidl = new PIDL(ptrAddr, false);
@@ -229,9 +398,10 @@ namespace DirectoryInfoExLib.IO.FileSystemInfoExt
         internal static IDirectoryInfoEx getDirectoryRoot(IDirectoryInfoEx lookup)
         {
             IDirectoryInfoEx dir = lookup.Parent;
+
             while (dir.DirectoryType != DirectoryTypeEnum.dtDesktop &&
                 dir.DirectoryType != DirectoryTypeEnum.dtDrive &&
-                dir.DirectoryType != DirectoryTypeEnum.dtRoot &&
+////                dir.DirectoryType != DirectoryTypeEnum.dtRoot &&
                 dir != null)
                 dir = dir.Parent;
 
@@ -239,6 +409,17 @@ namespace DirectoryInfoExLib.IO.FileSystemInfoExt
                 throw new IOException("Internal exception in GetDirectoryRoot.");
 
             return dir;
+        }
+        #endregion
+
+        #region ICloneable Members
+        /// <summary>
+        /// Implements the <see cref="ICloneable"/> interface.
+        /// </summary>
+        /// <returns></returns>
+        object ICloneable.Clone()
+        {
+            return new DirectoryInfoEx(this.FullName);
         }
         #endregion
 
@@ -375,29 +556,6 @@ namespace DirectoryInfoExLib.IO.FileSystemInfoExt
             return retVal;
         }
 
-        ////        /// <summary>
-        ////        /// Create the directory.
-        ////        /// </summary>
-        ////        public void Create()
-        ////        {
-        ////            if (Exists)
-        ////                throw new IOException("Directory already exists.");
-        ////            if (Parent == null)
-        ////                throw new IOException("Cannot construct parent.");
-        ////            if (!Parent.Exists)
-        ////                Parent.Create();
-        ////
-        ////            IntPtr outPtr;
-        ////            int hr = Parent.Storage.CreateStorage(Name, ShellAPI.STGM.FAILIFTHERE |
-        ////                ShellAPI.STGM.CREATE, 0, 0, out outPtr);
-        ////            Storage storage = new Storage(outPtr);
-        ////
-        ////            if (hr != ShellAPI.S_OK)
-        ////                Marshal.ThrowExceptionForHR(hr);
-        ////
-        ////            Refresh();
-        ////        }
-
         /// <summary>
         /// Delete this folder. (not move it to recycle bin)
         /// </summary>
@@ -424,6 +582,73 @@ namespace DirectoryInfoExLib.IO.FileSystemInfoExt
             FullName = destDirName;
             OriginalPath = FullName;
             Refresh();
+        }
+
+        private ShellFolder2 getIShellFolderFromParent()
+        {
+            if (_parent != null)
+                using (ShellFolder2 parentShellFolder = (_parent as DirectoryInfoEx).ShellFolder)
+                {
+                    IntPtr ptrShellFolder = IntPtr.Zero;
+
+                    int hr = this.RequestRelativePIDL(relPIDL =>
+                        parentShellFolder.BindToObject(relPIDL.Ptr, IntPtr.Zero, ref ShellAPI.IID_IShellFolder2,
+                        out ptrShellFolder));
+
+                    if (ptrShellFolder != IntPtr.Zero && hr == ShellAPI.S_OK)
+                        return new ShellFolder2(ptrShellFolder);
+                }
+            return null;
+        }
+
+        private ShellFolder2 getIShellFolder()
+        {
+            if (this.FullName.Equals(IOTools.IID_Desktop))
+                return getDesktopShellFolder();
+            else
+            {
+                ShellFolder2 retVal = getIShellFolderFromParent();
+                if (retVal != null)
+                    return retVal;
+
+                return this.RequestPIDL((pidl, relPIDL) =>
+                {
+                    using (ShellFolder2 parentShellFolder = getParentIShellFolder(pidl, out relPIDL))
+                    {
+                        IntPtr ptrShellFolder;
+                        int hr = parentShellFolder.BindToObject(relPIDL.Ptr, IntPtr.Zero, ref ShellAPI.IID_IShellFolder2,
+                            out ptrShellFolder);
+                        if (ptrShellFolder == IntPtr.Zero || hr != ShellAPI.S_OK) Marshal.ThrowExceptionForHR(hr);
+                        return new ShellFolder2(ptrShellFolder);
+                    }
+
+                });
+            }
+        }
+
+        protected void initDirectoryType()
+        {
+            _dirType = DirectoryTypeEnum.dtFolder;   // default value
+
+            string path = FullName != null ? FullName : OriginalPath;
+
+            if (path != null)
+            {
+                if (path.Equals(IOTools.IID_Desktop))
+                    _dirType = DirectoryTypeEnum.dtDesktop;
+                else
+                if (path.EndsWith(":\\"))
+                {
+                    _dirType = DirectoryTypeEnum.dtDrive;
+                }
+                else
+                {
+                    if (path.StartsWith("::"))
+                        _dirType = DirectoryTypeEnum.dtSpecial;
+                    else
+                        _dirType = DirectoryTypeEnum.dtFolder;
+                }
+            }
         }
 
         protected override void refresh(IShellFolder2 parentShellFolder, PIDL relPIDL, PIDL fullPIDL, RefreshModeEnum mode)
@@ -456,8 +681,6 @@ namespace DirectoryInfoExLib.IO.FileSystemInfoExt
         #endregion
 
         #region Methods - GetSubItems
-
-
         static ShellAPI.SHCONTF flag = ShellAPI.SHCONTF.NONFOLDERS | ShellAPI.SHCONTF.FOLDERS | ShellAPI.SHCONTF.INCLUDEHIDDEN;
         //static ShellAPI.SHCONTF folderflag = ShellAPI.SHCONTF.FOLDERS | ShellAPI.SHCONTF.INCLUDEHIDDEN;
         //static ShellAPI.SHCONTF fileflag = ShellAPI.SHCONTF.NONFOLDERS | ShellAPI.SHCONTF.INCLUDEHIDDEN;
@@ -618,7 +841,7 @@ namespace DirectoryInfoExLib.IO.FileSystemInfoExt
         public static IDirectoryInfoEx FromString(string FullName)
         {
             return (DirectoryInfoEx.DirectoryExists(FullName) ?
-                new DirectoryInfoEx(FullName) : null );
+                new DirectoryInfoEx(FullName) : null);
         }
         #endregion
 
@@ -644,7 +867,17 @@ namespace DirectoryInfoExLib.IO.FileSystemInfoExt
         }
         #endregion
 
-        #region Constructors
+        //0.12: Fixed PIDL, PIDLRel, ShellFolder, Storage properties generated on demand to avoid x-thread issues.
+        private Storage getStorage()
+        {
+            Storage iStorage = null;
+            //0.15: Fixed ShellFolder not freed correctly
+            //if (ShellFolder2 != null)
+            if (IOTools.getIStorage(this, out iStorage))
+                return iStorage;
+            return null;
+        }
+
         protected override void checkProperties()
         {
             base.checkProperties();
@@ -652,118 +885,7 @@ namespace DirectoryInfoExLib.IO.FileSystemInfoExt
             //    throw new IOException(FullName + " is not a folder.");
         }
 
-        internal DirectoryInfoEx(PIDL fullPIDL)
-        {
-            init(fullPIDL);
-            checkProperties();
-        }
-
-        public DirectoryInfoEx(string fullPath)
-        {
-            fullPath = IOTools.ExpandPath(fullPath);
-            init(fullPath);
-            checkProperties();
-        }
-
-        public DirectoryInfoEx(KnownFolder knownFolder)
-        {
-            PIDL pidlLookup = KnownFolderToPIDL(knownFolder);
-            try
-            {
-                init(pidlLookup);
-                checkProperties();
-            }
-            finally
-            {
-                //if (pidlLookup != null) pidlLookup.Free();
-                pidlLookup = null;
-            }
-        }
-
-        public DirectoryInfoEx(KnownFolderIds knownFolderId)
-            : this(KnownFolder.FromKnownFolderId(
-                EnumAttributeUtils<KnownFolderGuidAttribute, KnownFolderIds>.FindAttribute(knownFolderId).Guid))
-        {
-        }
-
-        public DirectoryInfoEx(IO.Header.ShellDll.ShellAPI.CSIDL csidl)
-        {
-            PIDL pidlLookup = CSIDLtoPIDL(csidl);
-            try
-            {
-                init(pidlLookup);
-                checkProperties();
-            }
-            finally
-            {
-                //if (pidlLookup != null) pidlLookup.Free();
-                pidlLookup = null;
-            }
-        }
-
-        public DirectoryInfoEx(Environment.SpecialFolder shellFolder)
-        {
-            var sf = IOTools.ShellFolderToCSIDL(shellFolder);
-            if (!sf.HasValue)
-                throw new ArgumentException("Cannot find CSIDL from this shell folder.");
-            PIDL pidlLookup = CSIDLtoPIDL(sf.Value);
-            try
-            {
-                init(pidlLookup);
-                checkProperties();
-            }
-            finally
-            {
-                //if (pidlLookup != null) pidlLookup.Free();
-                pidlLookup = null;
-            }
-        }
-
-        public DirectoryInfoEx(SerializationInfo info, StreamingContext context)
-            : base(info, context)
-        {
-            _dirType = (DirectoryTypeEnum)info.GetValue("DirectoryType", typeof(DirectoryTypeEnum));
-            IsBrowsable = info.GetBoolean("IsBrowsable");
-            IsFileSystem = info.GetBoolean("IsFileSystem");
-            HasSubFolder = info.GetBoolean("HasSubFolder");
-        }
-
-        internal DirectoryInfoEx(IShellFolder2 parentShellFolder, PIDL fullPIDL)
-        {
-            init(parentShellFolder, fullPIDL);
-        }
-
-        internal DirectoryInfoEx(IShellFolder2 parentShellFolder, PIDL parentPIDL, PIDL relPIDL,
-            bool parentIsLibrary)
-        {
-            init(parentShellFolder, parentPIDL, relPIDL);
-
-            //0.22: Fix illegal PIDL for Directory under Library.ms directory
-            if (parentIsLibrary)
-            {
-                init(FullName);
-            }
-        }
-
-        internal DirectoryInfoEx(DirectoryInfoEx parentDir, PIDL relPIDL)
-        {
-            Parent = parentDir;
-            parentDir.RequestPIDL(parentPIDL =>
-                {
-                    //0.15: Fixed ShellFolder not freed.
-                    using (ShellFolder2 parentShellFolder = parentDir.ShellFolder)
-                        init(parentShellFolder, parentPIDL, relPIDL);
-                });
-        }
-
-        protected DirectoryInfoEx()
-        {
-
-        }
-        #endregion
-
         #region IDisposable Members
-
         ~DirectoryInfoEx()
         {
             ((IDisposable)this).Dispose();
@@ -772,12 +894,7 @@ namespace DirectoryInfoExLib.IO.FileSystemInfoExt
         public new void Dispose()
         {
             base.Dispose();
-            //if (iShellFolder != null) iShellFolder.Dispose();
-            //if (iStorage != null) iStorage.Dispose();
-            //iShellFolder = null;
-            //iStorage = null;
         }
-
         #endregion
 
         #region ISerializable Members
@@ -794,16 +911,6 @@ namespace DirectoryInfoExLib.IO.FileSystemInfoExt
         {
             getObjectData(info, context);
         }
-
-        #endregion
-
-        #region ICloneable Members
-
-        object ICloneable.Clone()
-        {
-            return new DirectoryInfoEx(this.FullName);
-        }
-
-        #endregion
+        #endregion ISerializable Members
     }
 }

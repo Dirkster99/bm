@@ -12,7 +12,34 @@
     using System.Drawing;
     using DirectoryInfoExLib.Enums;
 
-    public enum DirectoryTypeEnum { dtDesktop, dtSpecial, dtDrive, dtFolder, dtRoot }
+    /// <summary>
+    /// Implements a classification for folders.
+    /// </summary>
+    public enum DirectoryTypeEnum
+    {
+        /// <summary>
+        /// The folder is the users <see cref="Environment.SpecialFolder.DesktopDirectory"/>.
+        /// </summary>
+        dtDesktop,
+
+        /// <summary>
+        /// This folder is a known folder in Windows.
+        /// https://msdn.microsoft.com/en-us/library/bb776911
+        /// </summary>
+        dtSpecial,
+
+        /// <summary>
+        /// This folder is a drive.
+        /// </summary>
+        dtDrive,
+
+        /// <summary>
+        /// This folder is a normal (non-special or in Windows known) directory.
+        /// </summary>
+        dtFolder
+
+//        ,dtRoot
+    }
 
     /// <summary>
     /// Represents a directory in PIDL system.
@@ -20,26 +47,70 @@
     public interface IDirectoryInfoEx : IDisposable, ISerializable, ICloneable
     {
         #region properties
+        /// <summary>
+        /// Gets the name of a directory.
+        /// </summary>
         string Name { get; }
+
+        /// <summary>
+        /// Gets the name including path and extensions.
+        /// </summary>
         string FullName { get; }
+
+        /// <summary>
+        /// Gets the label of a directory, ehich can be different to a name in case of a drive.
+        /// </summary>
         string Label { get; }
 
+        /// <summary>
+        /// Gets the parent directory of a directory (if any) or null (if none).
+        /// </summary>
         IDirectoryInfoEx Parent { get; }
 
+        /// <summary>
+        /// Gets the root directory of a directory.
+        /// </summary>
         IDirectoryInfoEx Root { get; }
 
-        bool IsBrowsable { get; set; }
+        /// <summary>
+        /// The specified items can be hosted inside a web browser or Windows Explorer frame.
+        /// </summary>
+        bool IsBrowsable { get; }
 
-        bool IsFileSystem { get; set; }
+        /// <summary>
+        /// Gets whether this item is either a file system folder or contain at least one
+        /// descendant (child, grandchild, or later) that is a file system (SFGAO_FILESYSTEM) folder.
+        /// </summary>
+        bool IsFileSystem { get; }
 
-        bool HasSubFolder { get; set; }
+        /// <summary>
+        /// Determines whether folder has sub-folders or not.
+        /// </summary>
+        bool HasSubFolder { get; }
 
+        /// <summary>
+        /// Gets the folders type classification.
+        /// </summary>
         DirectoryTypeEnum DirectoryType { get; }
 
+        /// <summary>
+        /// Gets the folder type <see cref="Environment.SpecialFolder"/> if this
+        /// folder is a special windows folder or null.
+        /// </summary>
         Environment.SpecialFolder? ShellFolderType { get; }
 
+        /// <summary>
+        /// Gets the Windows known folder (similar to <see cref="Environment.SpecialFolder"/>
+        /// but extensible and customizable at run-time) or null if this folder
+        /// is not a special folder in Windows.
+        /// </summary>
+        /// <returns></returns>
         KnownFolder KnownFolderType { get; }
 
+        /// <summary>
+        /// Gets the <see cref="Guid"/> Id of this folder if it is a <see cref="KnownFolder"/>
+        /// or null if this is not a special folder in Windows.
+        /// </summary>
         KnownFolderIds? KnownFolderId { get; }
         #endregion properties
 
