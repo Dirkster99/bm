@@ -13,7 +13,6 @@ namespace DirectoryInfoExLib.IO.FileSystemInfoExt
     using DirectoryInfoExLib.IO.Header.ShellDll;
     using DirectoryInfoExLib.Tools;
     using DirectoryInfoExLib.IO.Header;
-    using DirectoryInfoExLib.IO.FileStreamExt;
     using DirectoryInfoExLib.IO.Tools.Interface;
 
     /// <summary>
@@ -85,44 +84,6 @@ namespace DirectoryInfoExLib.IO.FileSystemInfoExt
             FullName = destFileName;
             OriginalPath = FullName;
             Refresh();
-        }
-
-        public FileStreamEx OpenRead()
-        {
-            return Open(FileMode.Open, FileAccess.Read);
-        }
-
-        public StreamWriter AppendText()
-        {
-            return new StreamWriter(Open(FileMode.Append, FileAccess.ReadWrite));
-        }
-
-        public StreamReader OpenText()
-        {
-            return new StreamReader(OpenRead());
-        }
-
-        public FileStreamEx Open(FileMode mode, FileAccess access)
-        {
-            return new FileStreamEx(FullName, mode, access);
-        }
-
-        public FileStreamEx Open(FileMode mode)
-        {
-            return new FileStreamEx(FullName, mode);
-        }
-
-        public FileStreamEx Open()
-        {
-            return new FileStreamEx(FullName, FileAccess.ReadWrite);
-        }
-
-        /// <summary>
-        /// Create a file, returns it's filestream.
-        /// </summary>
-        public FileStreamEx Create()
-        {
-            return new FileStreamEx(FullName, FileMode.Create, FileAccess.ReadWrite);
         }
         #endregion
 

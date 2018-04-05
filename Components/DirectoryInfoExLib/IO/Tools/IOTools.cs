@@ -12,8 +12,6 @@
     using DirectoryInfoExLib.IO.Tools.Interface;
     using DirectoryInfoExLib.IO.Header.ShellDll.Interfaces;
     using DirectoryInfoExLib.IO.FileSystemInfoExt;
-    using DirectoryInfoExLib.IO.FileStreamExt;
-    using DirectoryInfoExLib.IO.Header.KnownFolder;
     using DirectoryInfoExLib.IO.Header.KnownFolder.Enums;
     using DirectoryInfoExLib.IO.Header.KnownFolder.Attributes;
     using DirectoryInfoExLib.IO.Tools;

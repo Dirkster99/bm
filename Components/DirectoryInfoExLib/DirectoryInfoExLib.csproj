@@ -93,11 +93,11 @@
     <Compile Include="IO\Header\FileBrowser\PIDL.cs" />
     <Compile Include="IO\Header\FileBrowser\ShellAPI.cs" />
     <Compile Include="IO\Header\FileBrowser\ShellHelper.cs" />
-    <Compile Include="IO\FileStreamExt\FileStreamExt.cs" />
     <Compile Include="IO\FileSystemInfoExt\DirectoryInfoEx.cs" />
     <Compile Include="IO\FileSystemInfoExt\FileInfoEx.cs" />
     <Compile Include="IO\FileSystemInfoExt\FileSystemInfoEx.cs" />
     <Compile Include="IO\Header\IShellFolder2.cs" />
+    <None Include="ClassDiagram1.cd" />
     <None Include="IO\Header\KnownFolders.cs" />
     <Compile Include="IO\Header\KnownFolder\Attributes\DefaultPathAttribute.cs" />
     <Compile Include="IO\Header\KnownFolder\Attributes\DisplayNameAttribute.cs" />
