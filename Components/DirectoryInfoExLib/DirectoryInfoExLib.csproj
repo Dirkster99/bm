@@ -125,7 +125,6 @@
     <Compile Include="IO\Tools\PathEx.cs" />
     <Compile Include="IO\Tools\Helper.cs" />
     <Compile Include="IO\Tools\IOTools.cs" />
-    <Compile Include="IO\Tools\Interface\ShellFolder.cs" />
     <Compile Include="IO\Tools\Interface\Storage.cs" />
     <Compile Include="IO\Header\VirtualFileDataObject\ShellAPI.cs" />
     <Compile Include="IO\Tools\Wrappers\ImageExtractor.cs" />
