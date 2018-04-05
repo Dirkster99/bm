@@ -1,4 +1,4 @@
-﻿namespace Breadcrumb.IconExtractors
+﻿namespace Breadcrumb.IconExtractors.Enums
 {
     using System;
 

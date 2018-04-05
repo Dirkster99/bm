@@ -83,17 +83,17 @@
 						return IconSize.thumbnail;
 		}
 
-		public Bitmap GetThumbnail(string path, IconSize size)
-		{
-			if (path != null)
-				if (File.Exists(path))
-				{
-					Bitmap thumbnail = ImageExtractor.ExtractImage(path, IconSizeToSize(size), false);
-					if (thumbnail == null)
-						return thumbnail;
-				}
-			return null;
-		}
+////		public Bitmap GetThumbnail(string path, IconSize size)
+////		{
+////			if (path != null)
+////				if (File.Exists(path))
+////				{
+////					Bitmap thumbnail = ImageExtractor.ExtractImage(path, IconSizeToSize(size), false);
+////					if (thumbnail == null)
+////						return thumbnail;
+////				}
+////			return null;
+////		}
 
 		public Bitmap GetBitmap(IconSize size, IntPtr ptr, bool isDirectory, bool forceLoad)
 		{

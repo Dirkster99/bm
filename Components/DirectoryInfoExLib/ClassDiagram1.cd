@@ -3,7 +3,7 @@
   <Class Name="DirectoryInfoExLib.Factory" Collapsed="true">
     <Position X="17.75" Y="1.5" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>IAAAAgAEAAAAAAAAAAAIAAAAAEAAAAAAAAAAgAAAAAQ=</HashCode>
+      <HashCode>IAAAAgAEAAAAAAAAEAAIAAAAAEAAAAAAAAAAgAAAAAQ=</HashCode>
       <FileName>Factory.cs</FileName>
     </TypeIdentifier>
   </Class>
@@ -13,7 +13,7 @@
       <Compartment Name="Fields" Collapsed="true" />
     </Compartments>
     <TypeIdentifier>
-      <HashCode>IBQAIkEsRCABgCIokcAKiAAAAMmMCEAgAAAgQQEgAhQ=</HashCode>
+      <HashCode>IBQAIkEsRCABgCIokcAKiAAAAMmMCAAgEAAgQQEgAhQ=</HashCode>
       <FileName>IO\FileSystemInfoExt\DirectoryInfoEx.cs</FileName>
     </TypeIdentifier>
     <Lollipop Position="0.2" />
@@ -56,13 +56,6 @@
     <TypeIdentifier>
       <HashCode>gQ2QoqWScgCUiFDQj6cBKVEISHQSDRKXhD1FrTIiAJM=</HashCode>
       <FileName>IO\Header\FileBrowser\ShellAPI.cs</FileName>
-    </TypeIdentifier>
-  </Class>
-  <Class Name="DirectoryInfoExLib.IO.Header.ShellDll.ShellHelper" Collapsed="true">
-    <Position X="17.75" Y="4.5" Width="1.5" />
-    <TypeIdentifier>
-      <HashCode>AAAAAAAAAAAEAAABAAAAAAAAAAAAAAAIAAAAAAAAAAA=</HashCode>
-      <FileName>IO\Header\FileBrowser\ShellHelper.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="DirectoryInfoExLib.IO.Header.KnownFolder.Attributes.CsidlAttribute" Collapsed="true">
@@ -171,14 +164,6 @@
       <FileName>IO\Tools\Helper.cs</FileName>
     </TypeIdentifier>
   </Class>
-  <Class Name="DirectoryInfoExLib.IO.Tools.Interface.ShellFolder" Collapsed="true" BaseTypeListCollapsed="true">
-    <Position X="14.25" Y="4.5" Width="1.5" />
-    <TypeIdentifier>
-      <HashCode>AAAgAAAgACAEAQABAAAAQAAEQCAIAAAEAAICAAAAAAg=</HashCode>
-      <FileName>IO\Tools\Interface\ShellFolder.cs</FileName>
-    </TypeIdentifier>
-    <Lollipop Position="0.2" Collapsed="true" />
-  </Class>
   <Class Name="DirectoryInfoExLib.IO.Tools.Interface.ShellFolder2" Collapsed="true" BaseTypeListCollapsed="true">
     <Position X="16" Y="4.5" Width="1.5" />
     <TypeIdentifier>
@@ -198,7 +183,7 @@
   <Class Name="DirectoryInfoExLib.IO.Tools.Wrappers.ImageExtractor" Collapsed="true">
     <Position X="16" Y="2.5" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAAAAAQAAAAAEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <HashCode>AAAAAAQAAAAAEAAAAAAAAAAAAAAAAAAAAAAAgAAAAAA=</HashCode>
       <FileName>IO\Tools\Wrappers\ImageExtractor.cs</FileName>
     </TypeIdentifier>
   </Class>
@@ -256,7 +241,7 @@
   <Interface Name="DirectoryInfoExLib.Interfaces.IDirectoryInfoEx">
     <Position X="10.25" Y="1.75" Width="3" />
     <TypeIdentifier>
-      <HashCode>ABAAIAEoEAAAACAAgEAAgAAAAAAEAAAAAAAAAAEAAhA=</HashCode>
+      <HashCode>ABAAIAEoEAAAgKAAgEAAwAQAAAAEAAAAEAAAAAEAAhA=</HashCode>
       <FileName>Interfaces\IDirectoryInfoEx.cs</FileName>
     </TypeIdentifier>
   </Interface>

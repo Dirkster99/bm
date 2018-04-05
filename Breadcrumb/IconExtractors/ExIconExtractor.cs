@@ -2,12 +2,11 @@
 {
     using Breadcrumb.IconExtractors.Enums;
     using DirectoryInfoExLib.Interfaces;
-    using DirectoryInfoExLib.IO.FileSystemInfoExt;
     using DirectoryInfoExLib.Tools;
     using System;
-	using System.Drawing;
+    using System.Drawing;
 
-	public class ExIconExtractor : IconExtractor<IDirectoryInfoEx>
+    public class ExIconExtractor : IconExtractor<IDirectoryInfoEx>
 	{
 		protected static string fileBasedFSFilter = ".zip,.7z,.lha,.lzh,.sqx,.cab,.ace";
 

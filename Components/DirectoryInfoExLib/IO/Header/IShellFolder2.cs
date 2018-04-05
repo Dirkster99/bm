@@ -7,10 +7,7 @@
 namespace DirectoryInfoExLib.IO.Header
 {
     using System;
-    using System.Collections.Generic;
-    using System.Text;
     using System.Runtime.InteropServices;
-    using ShellDll;
 
     [StructLayout(LayoutKind.Sequential)]
     public struct ExtraSearch

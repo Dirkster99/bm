@@ -85,7 +85,7 @@
     <Compile Include="Demo\Converter\BrowseItemTypeToImageConverter.cs" />
     <Compile Include="Demo\SpecialFoldersViewModel.cs" />
     <Compile Include="Demo\SpecialFolderViewModel.cs" />
-    <Compile Include="IconExtractors\ImageListDrawItemConstants.cs" />
+    <Compile Include="IconExtractors\Enums\ImageListDrawItemConstants.cs" />
     <Compile Include="IconExtractors\Enums\ShellIconStateConstants.cs" />
     <Compile Include="IconExtractors\Enums\IconSize.cs" />
     <Compile Include="ViewModels\Breadcrumbs\Tree\ExTreeNodeViewModel.cs" />
