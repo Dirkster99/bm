@@ -674,7 +674,7 @@
             switch (mode)
             {
                 case FileMode.Create:
-                    if (FileEx.Exists(filename))
+                    if (FileSystemInfoEx.FileExists(filename))
                         grfmode |= ShellAPI.STGM.CREATE;
                     break;
                 case FileMode.CreateNew:

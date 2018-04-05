@@ -181,6 +181,21 @@ namespace DirectoryInfoExLib.IO.FileSystemInfoExt
             catch { return false; }
         }
 
+        /// <summary>
+        /// Gets wether a file exists at a given path or not.
+        /// </summary>
+        /// <param name="path"></param>
+        /// <returns></returns>
+        public static bool FileExists(string path)
+        {
+            try
+            {
+                FileSystemInfoEx fsInfo = new FileSystemInfoEx(path);
+                return fsInfo != null && !fsInfo.IsFolder && fsInfo.Exists;
+            }
+            catch { return false; }
+        }
+
         public static FileSystemInfoEx FromString(string FullName)
         {
             return FileSystemInfoEx.DirectoryExists(FullName) ?

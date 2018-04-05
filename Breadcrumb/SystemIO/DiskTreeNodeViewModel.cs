@@ -25,32 +25,31 @@
 		#region constructors
 		public DiskTreeNodeViewModel(params DirectoryInfo[] dir)
 		{
-			this.Entries = new EntriesHelperViewModel<DiskTreeNodeViewModel>();
-			this.Selection = new TreeRootSelectorViewModel<DiskTreeNodeViewModel, string>(this.Entries)
+			Entries = new EntriesHelperViewModel<DiskTreeNodeViewModel>();
+			Selection = new TreeRootSelectorViewModel<DiskTreeNodeViewModel, string>(this.Entries)
 			{
 				Comparers = new[] { DiskTreeNodeViewModel.Comparer }
 			};
 
-			this.Entries.SetEntries(UpdateMode.Update, dir.Select(d => new DiskTreeNodeViewModel(d, this)).ToArray());
-			this.Header = string.Empty;
+			Entries.SetEntries(UpdateMode.Update, dir.Select(d => new DiskTreeNodeViewModel(d, this)).ToArray());
+			Header = string.Empty;
 		}
-		#endregion constructors
 
 		internal DiskTreeNodeViewModel(DirectoryInfo dir, DiskTreeNodeViewModel parentNode)
 		{
-			this._dir = dir;
+			_dir = dir;
 
 			// If parentNode == null => Root.
-			this._rootNode = parentNode == null ? this : parentNode._rootNode;
+			_rootNode = parentNode == null ? this : parentNode._rootNode;
 
-			this._parentNode = parentNode;
-			this.Header = this._dir.Name;
+			_parentNode = parentNode;
+			Header = _dir.Name;
 
 			this.Entries = new EntriesHelperViewModel<DiskTreeNodeViewModel>((ct) => Task.Run(() =>
 			{
 				try
 				{
-					return this._dir.GetDirectories().Select(d => new DiskTreeNodeViewModel(d, this));
+					return _dir.GetDirectories().Select(d => new DiskTreeNodeViewModel(d, this));
 				}
 				catch
 				{
@@ -58,13 +57,15 @@
 				}
 			}));
 
-			this.Selection = new TreeSelectorViewModel<DiskTreeNodeViewModel, string>(this._dir.FullName,
-			                                                                          this,
-																																								this._parentNode.Selection,
-																																								this.Entries);
+			this.Selection = new TreeSelectorViewModel<DiskTreeNodeViewModel, string>
+                (_dir.FullName,
+                 this,
+				 _parentNode.Selection,
+				 Entries);
 		}
+        #endregion constructors
 
-		public ITreeSelector<DiskTreeNodeViewModel, string> Selection { get; set; }
+        public ITreeSelector<DiskTreeNodeViewModel, string> Selection { get; set; }
 
 		public IEntriesHelper<DiskTreeNodeViewModel> Entries { get; set; }
 
