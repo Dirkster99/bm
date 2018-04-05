@@ -1,15 +1,13 @@
-﻿namespace DirectoryInfoExLib.Tools
+﻿namespace DirectoryInfoExLib.IO.Tools
 {
     using System;
     using Microsoft.Win32;
     using System.IO;
-    using System.Security.Cryptography;
     using System.Drawing;
     using System.Runtime.InteropServices;
-    using DirectoryInfoExLib.IO.FileStreamExt;
     using DirectoryInfoExLib.IO.Header.ShellDll;
 
-    public static class Helper
+    internal static class Helper
     {
         public static bool IsUnitTesting = false;
 

@@ -16,6 +16,7 @@
     using DirectoryInfoExLib.IO.Header.KnownFolder;
     using DirectoryInfoExLib.IO.Header.KnownFolder.Enums;
     using DirectoryInfoExLib.IO.Header.KnownFolder.Attributes;
+    using DirectoryInfoExLib.IO.Tools;
 
     public delegate bool FileCancelDelegate(ushort completePercent);
     public delegate bool CancelDelegate();

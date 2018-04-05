@@ -15,6 +15,7 @@ namespace DirectoryInfoExLib.IO.FileSystemInfoExt
     using DirectoryInfoExLib.IO.Tools.Interface;
     using DirectoryInfoExLib.IO.Header;
     using DirectoryInfoExLib.Tools;
+    using DirectoryInfoExLib.IO.Tools;
 
     [Serializable]
     public class FileSystemInfoEx : FileSystemInfo, IDisposable, ISerializable, ICloneable,
