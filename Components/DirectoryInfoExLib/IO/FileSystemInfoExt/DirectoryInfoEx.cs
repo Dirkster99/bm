@@ -234,7 +234,6 @@ namespace DirectoryInfoExLib.IO.FileSystemInfoExt
         #endregion
 
         #region Methods
-
         public override bool Equals(FileSystemInfoEx other)
         {
             if (other is DirectoryInfoEx)
@@ -337,18 +336,6 @@ namespace DirectoryInfoExLib.IO.FileSystemInfoExt
                 initDirectoryType();
             }
         }
-
-        /// <summary>
-        /// Create a subdirectory
-        /// </summary>
-        /// <param name="path"> directory name.</param>
-        public DirectoryInfoEx CreateDirectory(string path)
-        {
-            checkExists();
-            return DirectoryEx.CreateDirectory(PathEx.Combine(FullName, path));
-        }
-
-
         #endregion
 
         #region Methods - GetSubItems

@@ -166,9 +166,24 @@ namespace DirectoryInfoExLib.IO.FileSystemInfoExt
         #endregion
 
         #region Static Methods
+        /// <summary>
+        /// Gets wether a directory exists at a given path or not.
+        /// </summary>
+        /// <param name="path"></param>
+        /// <returns></returns>
+        public static bool DirectoryExists(string path)
+        {
+            try
+            {
+                FileSystemInfoEx fsInfo = new FileSystemInfoEx(path);
+                return fsInfo != null && fsInfo.IsFolder && fsInfo.Exists;
+            }
+            catch { return false; }
+        }
+
         public static FileSystemInfoEx FromString(string FullName)
         {
-            return DirectoryEx.Exists(FullName) ?
+            return FileSystemInfoEx.DirectoryExists(FullName) ?
                   (FileSystemInfoEx)new DirectoryInfoEx(FullName)
                 : new FileInfoEx(FullName);
         }

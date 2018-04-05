@@ -123,7 +123,6 @@
     <Compile Include="IO\Tools\EnumAttributeUtils.cs" />
     <Compile Include="IO\Tools\Interface\ShellFolder2.cs" />
     <Compile Include="IO\Tools\PathEx.cs" />
-    <Compile Include="IO\Tools\DirectoryEx.cs" />
     <Compile Include="IO\Tools\FileEx.cs" />
     <Compile Include="IO\Tools\Helper.cs" />
     <Compile Include="IO\Tools\IOTools.cs" />

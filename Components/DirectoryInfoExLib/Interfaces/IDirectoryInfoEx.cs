@@ -46,27 +46,6 @@
         #region methods
         bool Equals(FileSystemInfoEx other);
 
-        /// <summary>
-        /// Create the directory.
-        /// </summary>
-        void Create();
-
-        /// <summary>
-        /// Delete this folder. (not move it to recycle bin)
-        /// </summary>
-        void Delete();
-
-        /// <summary>
-        /// Move this folder to specified directory (fullpath)
-        /// </summary>
-        void MoveTo(string destDirName);
-
-        /// <summary>
-        /// Create a subdirectory
-        /// </summary>
-        /// <param name="path"> directory name.</param>
-        DirectoryInfoEx CreateDirectory(string path);
-
         #region Methods - GetSubItems
         //0.17: Added DirectoryInfoEx.EnumerateFiles/EnumerateDirectories/EnumerateFileSystemInfos() methods which work similar as the one in .Net4
         IEnumerable<FileInfoEx> EnumerateFiles(String searchPattern, SearchOption searchOption, CancelDelegate cancel);
