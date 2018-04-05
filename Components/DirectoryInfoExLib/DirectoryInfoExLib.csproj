@@ -92,7 +92,6 @@
     <Compile Include="IO\Header\FileBrowser\Interfaces\IStream.cs" />
     <Compile Include="IO\Header\FileBrowser\PIDL.cs" />
     <Compile Include="IO\Header\FileBrowser\ShellAPI.cs" />
-    <Compile Include="IO\Header\FileBrowser\ShellHelper.cs" />
     <Compile Include="IO\FileSystemInfoExt\DirectoryInfoEx.cs" />
     <Compile Include="IO\FileSystemInfoExt\FileInfoEx.cs" />
     <Compile Include="IO\FileSystemInfoExt\FileSystemInfoEx.cs" />

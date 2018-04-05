@@ -13,22 +13,23 @@
   using Breadcrumb.IconExtractors.Enums;
   using Breadcrumb.ViewModels.Base;
   using DirectoryInfoExLib.IO.FileSystemInfoExt;
+    using DirectoryInfoExLib.Interfaces;
 
-  /// <summary>
-  /// Class implements a ViewModel to manage a sub-tree of a Breadcrumb control.
-  /// This sub-tree includes
-  /// - a specific item (see Header property),
-  /// - a SelectedItem (see Selection property), and
-  /// - a list of items below this item.
-  /// </summary>
-  internal class ExTreeNodeViewModel : ViewModelBase, ISupportTreeSelector<ExTreeNodeViewModel, DirectoryInfoEx>
+    /// <summary>
+    /// Class implements a ViewModel to manage a sub-tree of a Breadcrumb control.
+    /// This sub-tree includes
+    /// - a specific item (see Header property),
+    /// - a SelectedItem (see Selection property), and
+    /// - a list of items below this item.
+    /// </summary>
+    internal class ExTreeNodeViewModel : ViewModelBase, ISupportTreeSelector<ExTreeNodeViewModel, IDirectoryInfoEx>
   {
     #region fields
-    public static ICompareHierarchy<DirectoryInfoEx> Comparer = new ExHierarchyComparer();
+    public static ICompareHierarchy<IDirectoryInfoEx> Comparer = new ExHierarchyComparer();
 
     private static IconExtractor iconExtractor = new ExIconExtractor();
 
-    private DirectoryInfoEx _dir;
+    private IDirectoryInfoEx _dir;
     private ExTreeNodeViewModel _rootNode, _parentNode;
 
     private string _header;
@@ -45,7 +46,7 @@
     {
       Entries = new EntriesHelperViewModel<ExTreeNodeViewModel>();
       Selection =
-        new TreeRootSelectorViewModel<ExTreeNodeViewModel, DirectoryInfoEx>(this.Entries)
+        new TreeRootSelectorViewModel<ExTreeNodeViewModel, IDirectoryInfoEx>(this.Entries)
         {
           Comparers = new[] { ExTreeNodeViewModel.Comparer }
         };
@@ -66,7 +67,7 @@
     /// </summary>
     /// <param name="dir"></param>
     /// <param name="parentNode"></param>
-    internal ExTreeNodeViewModel(DirectoryInfoEx dir, ExTreeNodeViewModel parentNode)
+    internal ExTreeNodeViewModel(IDirectoryInfoEx dir, ExTreeNodeViewModel parentNode)
     {
       _dir = dir;
 
@@ -88,13 +89,13 @@
         }
       }));
 
-      this.Selection = new TreeSelectorViewModel<ExTreeNodeViewModel, DirectoryInfoEx>
+      this.Selection = new TreeSelectorViewModel<ExTreeNodeViewModel, IDirectoryInfoEx>
       (  _dir, this, this._parentNode.Selection, this.Entries);
     }
     #endregion constructors
 
     #region properties
-    public ITreeSelector<ExTreeNodeViewModel, DirectoryInfoEx> Selection { get; set; }
+    public ITreeSelector<ExTreeNodeViewModel, IDirectoryInfoEx> Selection { get; set; }
 
     public IEntriesHelper<ExTreeNodeViewModel> Entries { get; set; }
 

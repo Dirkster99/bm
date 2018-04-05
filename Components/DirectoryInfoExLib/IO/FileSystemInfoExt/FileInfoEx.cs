@@ -14,6 +14,7 @@ namespace DirectoryInfoExLib.IO.FileSystemInfoExt
     using DirectoryInfoExLib.Tools;
     using DirectoryInfoExLib.IO.Header;
     using DirectoryInfoExLib.IO.Tools.Interface;
+    using DirectoryInfoExLib.Interfaces;
 
     /// <summary>
     /// Represent a file in PIDL system
@@ -27,7 +28,7 @@ namespace DirectoryInfoExLib.IO.FileSystemInfoExt
 
         public Int64 Length { get { checkRefresh(); return _length; } set { _length = value; } } //Size of the file
         public bool IsReadOnly { get { checkRefresh(); return _isReadOnly; } set { _isReadOnly = value; } }//Is the file readonly?
-        public DirectoryInfoEx Directory { get { return Parent; } } //Owner of the file.
+        public IDirectoryInfoEx Directory { get { return Parent; } } //Owner of the file.
         public string DirectoryName { get { return Directory.FullName; } } //Full path of the owner.
         #endregion
 

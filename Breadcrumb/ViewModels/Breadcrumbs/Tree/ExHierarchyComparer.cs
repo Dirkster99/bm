@@ -3,10 +3,11 @@
     using Breadcrumb.SystemIO;
     using Breadcrumb.ViewModels.Interfaces;
     using BreadcrumbLib.Defines;
+    using DirectoryInfoExLib.Interfaces;
     using DirectoryInfoExLib.IO.FileSystemInfoExt;
     using DirectoryInfoExLib.Tools;
 
-    public class ExHierarchyComparer : ICompareHierarchy<DirectoryInfoEx>
+    public class ExHierarchyComparer : ICompareHierarchy<IDirectoryInfoEx>
 	{
 		#region fields
 		private PathComparer _pathComparer = new PathComparer();
@@ -22,7 +23,7 @@
 		#endregion constructors
 
 		#region mothods
-		public HierarchicalResult CompareHierarchyInner(DirectoryInfoEx a, DirectoryInfoEx b)
+		public HierarchicalResult CompareHierarchyInner(IDirectoryInfoEx a, IDirectoryInfoEx b)
 		{
 			if (a == null || b == null)
 				return HierarchicalResult.Unrelated;
@@ -49,7 +50,7 @@
 			return HierarchicalResult.Unrelated;
 		}
 
-		public HierarchicalResult CompareHierarchy(DirectoryInfoEx a, DirectoryInfoEx b)
+		public HierarchicalResult CompareHierarchy(IDirectoryInfoEx a, IDirectoryInfoEx b)
 		{
 			HierarchicalResult retVal = this.CompareHierarchyInner(a, b);
 			////Debug.WriteLine(String.Format("{2} {0},{1}", a.FullPath, b.FullPath, retVal));

@@ -15,6 +15,7 @@
     using DirectoryInfoExLib.IO.Header.KnownFolder.Enums;
     using DirectoryInfoExLib.IO.Header.KnownFolder.Attributes;
     using DirectoryInfoExLib.IO.Tools;
+    using DirectoryInfoExLib.Interfaces;
 
     public delegate bool FileCancelDelegate(ushort completePercent);
     public delegate bool CancelDelegate();
@@ -159,7 +160,7 @@
         /// <param name="entry"></param>
         /// <param name="baseDirectory"></param>
         /// <returns></returns>
-        public static string GetRelativePath(FileSystemInfoEx entry, DirectoryInfoEx baseDirectory)
+        public static string GetRelativePath(FileSystemInfoEx entry, IDirectoryInfoEx baseDirectory)
         {
             if (entry.FullName.IndexOf(baseDirectory.FullName, StringComparison.InvariantCultureIgnoreCase) == -1)
             {
@@ -177,7 +178,7 @@
         /// <param name="entry"></param>
         /// <param name="baseDirectory"></param>
         /// <returns></returns>
-        public static string GetRelativePath(string name, DirectoryInfoEx baseDirectory)
+        public static string GetRelativePath(string name, IDirectoryInfoEx baseDirectory)
         {
             if (name.IndexOf(baseDirectory.FullName, StringComparison.InvariantCultureIgnoreCase) == -1)
             {
@@ -329,7 +330,7 @@
         /// <param name="child"></param>
         /// <param name="parent"></param>
         /// <returns></returns>
-        public static bool HasParent(FileSystemInfoEx child, DirectoryInfoEx parent)
+        public static bool HasParent(FileSystemInfoEx child, IDirectoryInfoEx parent)
         {
             if (parent == null)
             {
@@ -354,14 +355,15 @@
 
                 if (child.FullName.StartsWith(IID_UserFiles) || child.FullName.StartsWith(IID_Public))
                     return false;
-                FileSystemInfoEx current = child.Parent;
+
+                var current = child.Parent;
                 while (current != null && !parent.Equals(current))
                     current = current.Parent;
+
                 return (current != null);
             }
         }
 
-        //0.13: Added HasParent
         /// <summary>
         /// Return whether parent directory contain child directory.
         /// Aware UserFiles and Public directory too.
@@ -379,10 +381,24 @@
 
             if ((child.FullName.StartsWith(IID_UserFiles) || child.FullName.StartsWith(IID_Public)))
                 return false;
-            FileSystemInfoEx current = child.Parent;
+
+            var current = child.Parent;
             while (current != null && parentFullName != current.FullName)
                 current = current.Parent;
+
             return (current != null);
+        }
+
+        /// <summary>
+        /// Return whether parent directory contain child directory.
+        /// Aware UserFiles and Public directory too.
+        /// </summary>
+        /// <param name="child"></param>
+        /// <param name="parentFullName"></param>
+        /// <returns></returns>
+        public static bool HasParent(IDirectoryInfoEx child, string parentFullName)
+        {
+            return HasParent(child as FileSystemInfoEx, parentFullName);
         }
 
         public static bool Exists(string path)

@@ -11,6 +11,7 @@
     using DirectoryInfoExLib.IO.Tools.Interface;
     using DirectoryInfoExLib.IO.Header.KnownFolder;
     using DirectoryInfoExLib.IO.Header.KnownFolder.Enums;
+    using DirectoryInfoExLib.IO.Header.ShellDll;
 
     public enum DirectoryTypeEnum { dtDesktop, dtSpecial, dtDrive, dtFolder, dtRoot }
 
@@ -20,13 +21,18 @@
     public interface IDirectoryInfoEx : IDisposable, ISerializable, ICloneable
     {
         #region properties
+        string Name { get; }
+        string FullName { get; }
         string Label { get; }
+
+        IDirectoryInfoEx Parent { get; }
+
 
         ShellFolder2 ShellFolder { get; }
 
         Storage Storage { get; }
 
-        DirectoryInfoEx Root { get; }
+        IDirectoryInfoEx Root { get; }
 
         bool IsBrowsable { get; set; }
 
@@ -47,31 +53,36 @@
         bool Equals(FileSystemInfoEx other);
 
         #region Methods - GetSubItems
-        IEnumerable<DirectoryInfoEx> EnumerateDirectories(String searchPattern, SearchOption searchOption, CancelDelegate cancel);
+        T RequestPIDL<T>(Func<PIDL, T> pidlFuncOnly);
+        void RequestPIDL(Action<PIDL> pidlFuncOnly);
 
-        IEnumerable<DirectoryInfoEx> EnumerateDirectories(String searchPattern, SearchOption searchOption);
-        IEnumerable<DirectoryInfoEx> EnumerateDirectories(String searchPattern);
-        IEnumerable<DirectoryInfoEx> EnumerateDirectories();
+        T RequestRelativePIDL<T>(Func<PIDL, T> relPidlFuncOnly);
+
+        IEnumerable<IDirectoryInfoEx> EnumerateDirectories(String searchPattern, SearchOption searchOption, CancelDelegate cancel);
+
+        IEnumerable<IDirectoryInfoEx> EnumerateDirectories(String searchPattern, SearchOption searchOption);
+        IEnumerable<IDirectoryInfoEx> EnumerateDirectories(String searchPattern);
+        IEnumerable<IDirectoryInfoEx> EnumerateDirectories();
 
         #region GetXXX
         /// <summary>
         /// Return a list of sub directories
         /// </summary>
-        DirectoryInfoEx[] GetDirectories(String searchPattern, SearchOption searchOption);
+        IDirectoryInfoEx[] GetDirectories(String searchPattern, SearchOption searchOption);
 
         /// <summary>
         /// Return a list of sub directories
         /// </summary>
-        DirectoryInfoEx[] GetDirectories(String searchPattern);
+        IDirectoryInfoEx[] GetDirectories(String searchPattern);
 
         /// <summary>
         /// Return a list of sub directories
         /// </summary>
-        DirectoryInfoEx[] GetDirectories();
+        IDirectoryInfoEx[] GetDirectories();
 
-        Task<DirectoryInfoEx[]> GetDirectoriesAsync(String searchPattern,
-                                                    SearchOption searchOption,
-                                                    CancellationToken ct);
+        Task<IDirectoryInfoEx[]> GetDirectoriesAsync(String searchPattern,
+                                                     SearchOption searchOption,
+                                                     CancellationToken ct);
         #endregion
         #endregion
         #endregion methods

@@ -1,6 +1,7 @@
 namespace Breadcrumb.ViewModels.Breadcrumbs
 {
     using Breadcrumb.ViewModels.Interfaces;
+    using DirectoryInfoExLib.Interfaces;
     using DirectoryInfoExLib.IO.FileSystemInfoExt;
 
     /// <summary>
@@ -91,8 +92,8 @@ namespace Breadcrumb.ViewModels.Breadcrumbs
         /// </summary>
         public void InitPath(string initialPath)
         {
-            var selector = BreadcrumbSubTree.Selection as ITreeRootSelector<ExTreeNodeViewModel, DirectoryInfoEx>;
-            selector.SelectAsync(DirectoryInfoEx.FromString(initialPath) as DirectoryInfoEx);
+            var selector = BreadcrumbSubTree.Selection as ITreeRootSelector<ExTreeNodeViewModel, IDirectoryInfoEx>;
+            selector.SelectAsync(DirectoryInfoExLib.Factory.FromString(initialPath));
         }
         
         /// <summary>

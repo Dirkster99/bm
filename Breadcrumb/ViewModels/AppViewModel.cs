@@ -5,6 +5,7 @@
     using Breadcrumb.Utils;
     using Breadcrumb.ViewModels.Breadcrumbs;
     using Breadcrumb.ViewModels.Interfaces;
+    using DirectoryInfoExLib.Interfaces;
     using DirectoryInfoExLib.IO.FileSystemInfoExt;
     using System;
     using System.IO;
@@ -111,8 +112,8 @@
             var selection = DiskTest.Selection as ITreeRootSelector<DiskTreeNodeViewModel, string>;
             selection.SelectAsync(@"C:\tmp");
 
-            var sel2 = ExTest.Selection as ITreeRootSelector<ExTreeNodeViewModel, DirectoryInfoEx>;
-            sel2.SelectAsync(DirectoryInfoEx.FromString(@"C:\tmp") as DirectoryInfoEx);
+            var sel2 = ExTest.Selection as ITreeRootSelector<ExTreeNodeViewModel, IDirectoryInfoEx>;
+            sel2.SelectAsync(DirectoryInfoExLib.Factory.FromString(@"C:\tmp"));
 
             BreadcrumbTest.InitPath(initialPath);
         }

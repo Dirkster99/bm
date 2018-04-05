@@ -16,6 +16,7 @@ namespace DirectoryInfoExLib.IO.FileSystemInfoExt
     using DirectoryInfoExLib.IO.Header;
     using DirectoryInfoExLib.Tools;
     using DirectoryInfoExLib.IO.Tools;
+    using DirectoryInfoExLib.Interfaces;
 
     [Serializable]
     public class FileSystemInfoEx : FileSystemInfo, IDisposable, ISerializable, ICloneable,
@@ -31,7 +32,7 @@ namespace DirectoryInfoExLib.IO.FileSystemInfoExt
         #region Variables and Properties
         public static int counter = 0;
         private string _name;
-        internal DirectoryInfoEx _parent;
+        internal IDirectoryInfoEx _parent;
         private bool _parentInited = false;
         private PIDL _pidlRel = null;
         private PIDL _pidl = null;
@@ -53,7 +54,7 @@ namespace DirectoryInfoExLib.IO.FileSystemInfoExt
         public new string Extension { get { return Path.GetExtension(Name); } }
         public override bool Exists { get { return getExists(); } }
 
-        public DirectoryInfoEx Parent
+        public IDirectoryInfoEx Parent
         {
             get { initParent(); return _parent; }
 

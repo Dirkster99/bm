@@ -1,17 +1,18 @@
 ﻿namespace Breadcrumb.IconExtractors
 {
     using Breadcrumb.IconExtractors.Enums;
+    using DirectoryInfoExLib.Interfaces;
     using DirectoryInfoExLib.IO.FileSystemInfoExt;
     using DirectoryInfoExLib.Tools;
     using System;
 	using System.Drawing;
 
-	public class ExIconExtractor : IconExtractor<DirectoryInfoEx>
+	public class ExIconExtractor : IconExtractor<IDirectoryInfoEx>
 	{
 		protected static string fileBasedFSFilter = ".zip,.7z,.lha,.lzh,.sqx,.cab,.ace";
 
 		#region Methods
-		protected override Bitmap GetIconInner(DirectoryInfoEx entry, string key, IconSize size)
+		protected override Bitmap GetIconInner(IDirectoryInfoEx entry, string key, IconSize size)
 		{
 			if (key.StartsWith("."))
 				throw new Exception("ext item is handled by IconExtractor");
@@ -36,13 +37,13 @@
 ////					return retVal;
 ////			}
 
-			return entry.RequestPIDL(pidl => this.GetBitmap(size, pidl.Ptr, entry is DirectoryInfoEx, false));
+			return entry.RequestPIDL(pidl => this.GetBitmap(size, pidl.Ptr, entry is IDirectoryInfoEx, false));
 		}
 
-		protected override void GetIconKey(DirectoryInfoEx entry, IconSize size, out string fastKey, out string slowKey)
+		protected override void GetIconKey(IDirectoryInfoEx entry, IconSize size, out string fastKey, out string slowKey)
 		{
 			string ext = PathEx.GetExtension(entry.Name);
-			if (entry is DirectoryInfoEx)
+			if (entry is IDirectoryInfoEx)
 			{
 				fastKey = entry.FullName;
 				slowKey = entry.FullName;

@@ -72,7 +72,7 @@
             return new DirectoryInfoEx(info, context);
         }
 
-        public static DirectoryInfoEx DesktopDirectory
+        public static IDirectoryInfoEx DesktopDirectory
         {
             get
             {
@@ -80,7 +80,7 @@
             }
         }
 
-        public static DirectoryInfoEx MyComputerDirectory
+        public static IDirectoryInfoEx MyComputerDirectory
         {
             get
             {
@@ -88,7 +88,7 @@
             }
         }
 
-        public static DirectoryInfoEx CurrentUserDirectory
+        public static IDirectoryInfoEx CurrentUserDirectory
         {
             get
             {
@@ -96,7 +96,7 @@
             }
         }
 
-        public static DirectoryInfoEx SharedDirectory
+        public static IDirectoryInfoEx SharedDirectory
         {
             get
             {
@@ -104,7 +104,7 @@
             }
         }
 
-        public static DirectoryInfoEx NetworkDirectory
+        public static IDirectoryInfoEx NetworkDirectory
         {
             get
             {
@@ -112,12 +112,17 @@
             }
         }
 
-        public static DirectoryInfoEx RecycleBinDirectory
+        public static IDirectoryInfoEx RecycleBinDirectory
         {
             get
             {
                 return DirectoryInfoEx.RecycleBinDirectory;
             }
+        }
+
+        public static IDirectoryInfoEx FromString(string path)
+        {
+            return DirectoryInfoEx.FromString(path);
         }
     }
 }
