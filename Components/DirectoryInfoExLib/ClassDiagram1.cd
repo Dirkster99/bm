@@ -13,7 +13,7 @@
       <Compartment Name="Fields" Collapsed="true" />
     </Compartments>
     <TypeIdentifier>
-      <HashCode>IBQAIkEsRCABgCIokcAKiAAAAMmMCAAgEAAgQQEgAhQ=</HashCode>
+      <HashCode>IBQAIkEsRCABgCIokcAKiAAEAMmMCAAgEAAgQQEgAhQ=</HashCode>
       <FileName>IO\FileSystemInfoExt\DirectoryInfoEx.cs</FileName>
     </TypeIdentifier>
     <Lollipop Position="0.2" />
@@ -110,7 +110,7 @@
   <Class Name="DirectoryInfoExLib.IO.Header.KnownFolder.KnownFolder" Collapsed="true" BaseTypeListCollapsed="true">
     <Position X="19.5" Y="2.5" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AgACABAAACBACCIAAABAEAAAAAEGIAAAAASAIAAECIA=</HashCode>
+      <HashCode>AgACABAAACBACCIAAAFAEAAAAAEGIAAAAASAIAAECIA=</HashCode>
       <FileName>IO\Header\KnownFolder\KnownFolder.cs</FileName>
     </TypeIdentifier>
     <Lollipop Position="0.2" Collapsed="true" />
@@ -183,7 +183,7 @@
   <Class Name="DirectoryInfoExLib.IO.Tools.Wrappers.ImageExtractor" Collapsed="true">
     <Position X="16" Y="2.5" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAAAAAQAAAAAEAAAAAAAAAAAAAAAAAAAAAAAgAAAAAA=</HashCode>
+      <HashCode>AAAAAAQAAAAAEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
       <FileName>IO\Tools\Wrappers\ImageExtractor.cs</FileName>
     </TypeIdentifier>
   </Class>
@@ -241,7 +241,7 @@
   <Interface Name="DirectoryInfoExLib.Interfaces.IDirectoryInfoEx">
     <Position X="10.25" Y="1.75" Width="3" />
     <TypeIdentifier>
-      <HashCode>ABAAIAEoEAAAgKAAgEAAwAQAAAAEAAAAEAAAAAEAAhA=</HashCode>
+      <HashCode>ABAAIAEgEAAAAKAAgEAAwAQEAAAECAAAAAAAAAEAABA=</HashCode>
       <FileName>Interfaces\IDirectoryInfoEx.cs</FileName>
     </TypeIdentifier>
   </Interface>
@@ -263,13 +263,6 @@
     <Position X="17.75" Y="7" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAIEAAAAAAAAAAAAAAAAAAAABAAAAAAAAACAAAA=</HashCode>
-      <FileName>IO\Header\FileBrowser\Interfaces\IContextMenu.cs</FileName>
-    </TypeIdentifier>
-  </Interface>
-  <Interface Name="DirectoryInfoExLib.IO.Header.ShellDll.Interfaces.IContextMenu3" Collapsed="true">
-    <Position X="19.5" Y="7" Width="1.5" />
-    <TypeIdentifier>
-      <HashCode>AAAAAAIEAAAAAAAAAAAAAAAAAAAABAEAAAAAAACAAAA=</HashCode>
       <FileName>IO\Header\FileBrowser\Interfaces\IContextMenu.cs</FileName>
     </TypeIdentifier>
   </Interface>
@@ -336,13 +329,6 @@
       <FileName>IO\Header\FileBrowser\Interfaces\IExtractImage.cs</FileName>
     </TypeIdentifier>
   </Interface>
-  <Interface Name="DirectoryInfoExLib.IO.Header.ShellDll.Interfaces.IShellExtInit" Collapsed="true">
-    <Position X="17.75" Y="9.25" Width="1.5" />
-    <TypeIdentifier>
-      <HashCode>AAAAAAAAAAAAAQAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
-      <FileName>IO\Header\FileBrowser\Interfaces\IShellExtInit.cs</FileName>
-    </TypeIdentifier>
-  </Interface>
   <Interface Name="DirectoryInfoExLib.IO.Header.ShellDll.Interfaces.IShellFolder" Collapsed="true">
     <Position X="19.5" Y="9.25" Width="1.5" />
     <TypeIdentifier>
@@ -395,7 +381,7 @@
   <Enum Name="DirectoryInfoExLib.Interfaces.DirectoryTypeEnum" Collapsed="true">
     <Position X="14.25" Y="11" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AgAAAAAAAAAAgAAAAAAAAABAAAAABAAAAAAAABAAAAA=</HashCode>
+      <HashCode>AgAAAAAAAAAAgAAAAAAAAABAAAAABAAAAAAAAAAAAAA=</HashCode>
       <FileName>Interfaces\IDirectoryInfoEx.cs</FileName>
     </TypeIdentifier>
   </Enum>

@@ -2,7 +2,6 @@ namespace Breadcrumb.ViewModels.Breadcrumbs
 {
     using Breadcrumb.ViewModels.Interfaces;
     using DirectoryInfoExLib.Interfaces;
-    using DirectoryInfoExLib.IO.FileSystemInfoExt;
 
     /// <summary>
     /// Class implements the viewmodel that manages the complete breadcrump control.

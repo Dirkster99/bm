@@ -5,6 +5,14 @@ namespace DirectoryInfoExLib.IO.Header.ShellDll
     using System.Runtime.InteropServices;
     using System.Collections;
 
+    /// <summary>
+    /// The Shell namespace organizes the file system and other objects managed
+    /// by the Shell into a single tree-structured hierarchy. Conceptually, it is
+    /// a larger and more inclusive version of the file system.
+    /// 
+    /// https://msdn.microsoft.com/en-us/library/windows/desktop/cc144090(v=vs.85).aspx
+    /// https://www.codeproject.com/Articles/88/Namespace-extensions-the-undocumented-Windows-Shel
+    /// </summary>
     internal class PIDL : IEnumerable //, IDisposable //11-01-09 : Added automatic disposer (LYCJ)
     //0.13 : Removed IDisposable in PIDL as it causing AccessViolationException, user have to free calling the Free() method.
     {
@@ -14,7 +22,11 @@ namespace DirectoryInfoExLib.IO.Header.ShellDll
         #endregion fields
 
         #region Constructors
-
+        /// <summary>
+        /// Class constructor
+        /// </summary>
+        /// <param name="pidl"></param>
+        /// <param name="clone"></param>
         public PIDL(IntPtr pidl, bool clone)
         {
             System.Threading.Interlocked.Increment(ref Counter);
@@ -24,6 +36,11 @@ namespace DirectoryInfoExLib.IO.Header.ShellDll
                 this.pidl = pidl;
         }
 
+        /// <summary>
+        /// Class constructor
+        /// </summary>
+        /// <param name="pidl"></param>
+        /// <param name="clone"></param>
         public PIDL(PIDL pidl, bool clone)
         {
             if (clone)
@@ -34,7 +51,6 @@ namespace DirectoryInfoExLib.IO.Header.ShellDll
             else
                 this.pidl = pidl.Ptr;
         }
-
         #endregion
 
         #region Public
@@ -120,6 +136,140 @@ namespace DirectoryInfoExLib.IO.Header.ShellDll
         #endregion
 
         #region Shell
+        /// <summary>
+        /// Clones an ITEMIDLIST structure
+        /// </summary>
+        /// <param name="pidl"></param>
+        /// <returns></returns>
+        public static IntPtr ILClone(IntPtr pidl)
+        {
+            int size = ItemIDListSize(pidl);
+
+            byte[] bytes = new byte[size + 2];
+            Marshal.Copy(pidl, bytes, 0, size);
+
+            IntPtr newPidl = Marshal.AllocCoTaskMem(size + 2);
+            Marshal.Copy(bytes, 0, newPidl, size + 2);
+
+            return newPidl;
+        }
+
+        /// <summary>
+        /// Clones the first SHITEMID structure in an ITEMIDLIST structure
+        /// </summary>
+        /// <param name="pidl"></param>
+        /// <returns></returns>
+        public static IntPtr ILCloneFirst(IntPtr pidl)
+        {
+            int size = ItemIDSize(pidl);
+
+            byte[] bytes = new byte[size + 2];
+            Marshal.Copy(pidl, bytes, 0, size);
+
+            IntPtr newPidl = Marshal.AllocCoTaskMem(size + 2);
+            Marshal.Copy(bytes, 0, newPidl, size + 2);
+
+            return newPidl;
+        }
+
+        /// <summary>
+        /// Gets the next SHITEMID structure in an ITEMIDLIST structure
+        /// </summary>
+        /// <param name="pidl"></param>
+        /// <returns></returns>
+        public static IntPtr ILGetNext(IntPtr pidl)
+        {
+            int size = ItemIDSize(pidl);
+            IntPtr nextPidl = new IntPtr((Int64)pidl + size);
+            return nextPidl;
+        }
+
+        /// <summary>
+        /// Returns a pointer to the last SHITEMID structure in an ITEMIDLIST structure
+        /// </summary>
+        /// <param name="pidl"></param>
+        /// <returns></returns>
+        public static IntPtr ILFindLastID(IntPtr pidl)
+        {
+            IntPtr ptr1 = pidl;
+            IntPtr ptr2 = ILGetNext(ptr1);
+
+            while (ItemIDSize(ptr2) > 0)
+            {
+                ptr1 = ptr2;
+                ptr2 = ILGetNext(ptr1);
+            }
+
+            return ptr1;
+        }
+
+        /// <summary>
+        /// Removes the last SHITEMID structure from an ITEMIDLIST structure
+        /// </summary>
+        /// <param name="pidl"></param>
+        /// <returns></returns>
+        public static bool ILRemoveLastID(IntPtr pidl)
+        {
+            IntPtr lastPidl = ILFindLastID(pidl);
+
+            if (lastPidl != pidl)
+            {
+                int newSize = (int)lastPidl - (int)pidl + 2;
+                Marshal.ReAllocCoTaskMem(pidl, newSize);
+                Marshal.Copy(new byte[] { 0, 0 }, 0, new IntPtr((int)pidl + newSize - 2), 2);
+
+                return true;
+            }
+            else
+                return false;
+        }
+
+        /// <summary>
+        /// 11-01-09 New version of ILRemoveLastID is developed because last version is not working properly (lycj)
+        /// </summary>
+        /// <param name="pidl"></param>
+        /// <returns></returns>
+        public static bool ILRemoveLastID2(ref IntPtr pidl)
+        {
+            IntPtr lastPidl = ILFindLastID(pidl);
+
+            if (lastPidl != pidl)
+            {
+                int newSize = (int)((Int64)lastPidl - (Int64)pidl + 2);
+                IntPtr newPidl = Marshal.AllocCoTaskMem(newSize);
+                byte[] bytes = new byte[newSize];
+
+                Marshal.Copy(pidl, bytes, 0, newSize - 2);
+                Marshal.Copy(bytes, 0, newPidl, bytes.Length);
+                Marshal.FreeCoTaskMem(pidl);
+                pidl = newPidl;
+                return true;
+            }
+            else
+                return false;
+        }
+
+        /// <summary>
+        /// Combines two ITEMIDLIST structures
+        /// </summary>
+        /// <param name="pidl1"></param>
+        /// <param name="pidl2"></param>
+        /// <returns></returns>
+        public static IntPtr ILCombine(IntPtr pidl1, IntPtr pidl2)
+        {
+            int size1 = ItemIDListSize(pidl1);
+            int size2 = ItemIDListSize(pidl2);
+
+            IntPtr newPidl = Marshal.AllocCoTaskMem(size1 + size2 + 2);
+            byte[] bytes = new byte[size1 + size2 + 2];
+
+            Marshal.Copy(pidl1, bytes, 0, size1);
+            Marshal.Copy(pidl2, bytes, size1, size2);
+
+            Marshal.Copy(bytes, 0, newPidl, bytes.Length);
+
+            return newPidl;
+        }
 
         private static int ItemIDSize(IntPtr pidl)
         {
@@ -150,112 +300,6 @@ namespace DirectoryInfoExLib.IO.Header.ShellDll
                 return size;
             }
         }
-
-        // Clones an ITEMIDLIST structure
-        public static IntPtr ILClone(IntPtr pidl)
-        {
-            int size = ItemIDListSize(pidl);
-
-            byte[] bytes = new byte[size + 2];
-            Marshal.Copy(pidl, bytes, 0, size);
-
-            IntPtr newPidl = Marshal.AllocCoTaskMem(size + 2);
-            Marshal.Copy(bytes, 0, newPidl, size + 2);
-
-            return newPidl;
-        }
-
-        // Clones the first SHITEMID structure in an ITEMIDLIST structure
-        public static IntPtr ILCloneFirst(IntPtr pidl)
-        {
-            int size = ItemIDSize(pidl);
-
-            byte[] bytes = new byte[size + 2];
-            Marshal.Copy(pidl, bytes, 0, size);
-
-            IntPtr newPidl = Marshal.AllocCoTaskMem(size + 2);
-            Marshal.Copy(bytes, 0, newPidl, size + 2);
-
-            return newPidl;
-        }
-
-        // Gets the next SHITEMID structure in an ITEMIDLIST structure
-        public static IntPtr ILGetNext(IntPtr pidl)
-        {
-            int size = ItemIDSize(pidl);
-            IntPtr nextPidl = new IntPtr((Int64)pidl + size);
-            return nextPidl;
-        }
-
-        // Returns a pointer to the last SHITEMID structure in an ITEMIDLIST structure
-        public static IntPtr ILFindLastID(IntPtr pidl)
-        {
-            IntPtr ptr1 = pidl;
-            IntPtr ptr2 = ILGetNext(ptr1);
-
-            while (ItemIDSize(ptr2) > 0)
-            {
-                ptr1 = ptr2;
-                ptr2 = ILGetNext(ptr1);
-            }
-
-            return ptr1;
-        }
-
-        // Removes the last SHITEMID structure from an ITEMIDLIST structure
-        public static bool ILRemoveLastID(IntPtr pidl)
-        {
-            IntPtr lastPidl = ILFindLastID(pidl);
-
-            if (lastPidl != pidl)
-            {
-                int newSize = (int)lastPidl - (int)pidl + 2;
-                Marshal.ReAllocCoTaskMem(pidl, newSize);
-                Marshal.Copy(new byte[] { 0, 0 }, 0, new IntPtr((int)pidl + newSize - 2), 2);
-
-                return true;
-            }
-            else
-                return false;
-        }
-        //11-01-09 New version of ILRemoveLastID is developed because last version is not working properly (lycj)
-        public static bool ILRemoveLastID2(ref IntPtr pidl)
-        {
-            IntPtr lastPidl = ILFindLastID(pidl);
-
-            if (lastPidl != pidl)
-            {
-                int newSize = (int)((Int64)lastPidl - (Int64)pidl + 2);
-                IntPtr newPidl = Marshal.AllocCoTaskMem(newSize);
-                byte[] bytes = new byte[newSize];
-
-                Marshal.Copy(pidl, bytes, 0, newSize - 2);
-                Marshal.Copy(bytes, 0, newPidl, bytes.Length);
-                Marshal.FreeCoTaskMem(pidl);
-                pidl = newPidl;
-                return true;
-            }
-            else
-                return false;
-        }
-
-        // Combines two ITEMIDLIST structures
-        public static IntPtr ILCombine(IntPtr pidl1, IntPtr pidl2)
-        {
-            int size1 = ItemIDListSize(pidl1);
-            int size2 = ItemIDListSize(pidl2);
-
-            IntPtr newPidl = Marshal.AllocCoTaskMem(size1 + size2 + 2);
-            byte[] bytes = new byte[size1 + size2 + 2];
-
-            Marshal.Copy(pidl1, bytes, 0, size1);
-            Marshal.Copy(pidl2, bytes, size1, size2);
-
-            Marshal.Copy(bytes, 0, newPidl, bytes.Length);
-
-            return newPidl;
-        }
-
         #endregion
 
         #region IEnumerable Members
@@ -293,7 +337,8 @@ namespace DirectoryInfoExLib.IO.Header.ShellDll
 
         #endregion
 
-        internal class PIDLEnumerator : IEnumerator
+        #region private classes
+        private class PIDLEnumerator : IEnumerator
         {
             private IntPtr pidl;
             private IntPtr currentPidl;
@@ -366,5 +411,6 @@ namespace DirectoryInfoExLib.IO.Header.ShellDll
 
             #endregion
         }
+        #endregion private classes
     }
 }

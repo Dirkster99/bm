@@ -6,7 +6,6 @@
     using Breadcrumb.ViewModels.Breadcrumbs;
     using Breadcrumb.ViewModels.Interfaces;
     using DirectoryInfoExLib.Interfaces;
-    using DirectoryInfoExLib.IO.FileSystemInfoExt;
     using System;
     using System.IO;
     using System.Reflection;

@@ -26,6 +26,7 @@ namespace DirectoryInfoExLib.IO.FileSystemInfoExt
     using System.Drawing;
     using DirectoryInfoExLib.Enums;
     using DirectoryInfoExLib.IconExtracts;
+    using DirectoryInfoExLib.IO.Header.FileBrowser;
 
     /// <summary>
     /// Represents a directory in PIDL system.
@@ -56,14 +57,15 @@ namespace DirectoryInfoExLib.IO.FileSystemInfoExt
             if (LicenseManager.UsageMode == LicenseUsageMode.Designtime)
                 throw new Exception("This should not be executed when design time.");
 #endif
-            DesktopDirectory = new DirectoryInfoEx(CSIDLtoPIDL(Header.ShellDll.ShellAPI.CSIDL.CSIDL_DESKTOP));
-            MyComputerDirectory = new DirectoryInfoEx(CSIDLtoPIDL(Header.ShellDll.ShellAPI.CSIDL.CSIDL_DRIVES));
-            CurrentUserDirectory = new DirectoryInfoEx(CSIDLtoPIDL(Header.ShellDll.ShellAPI.CSIDL.CSIDL_PROFILE));
+            DesktopDirectory = new DirectoryInfoEx(KnownFolder.FromKnownFolderId(KnownFolder_GUIDS.Desktop));
+            MyComputerDirectory = new DirectoryInfoEx(KnownFolder.FromKnownFolderId(KnownFolder_GUIDS.Computer));
+            CurrentUserDirectory = new DirectoryInfoEx(KnownFolder.FromKnownFolderId(KnownFolder_GUIDS.UsersFiles));
             //0.17: Fixed some system cannot create shared directories. (by cwharmon)
-            try { SharedDirectory = new DirectoryInfoEx(CSIDLtoPIDL(Header.ShellDll.ShellAPI.CSIDL.CSIDL_COMMON_DOCUMENTS)); }
+            try { SharedDirectory = new DirectoryInfoEx(KnownFolder.FromKnownFolderId(KnownFolder_GUIDS.PublicDocuments)); }
             catch { }
-            NetworkDirectory = new DirectoryInfoEx(CSIDLtoPIDL(Header.ShellDll.ShellAPI.CSIDL.CSIDL_NETWORK));
+            NetworkDirectory = new DirectoryInfoEx(KnownFolder.FromKnownFolderId(KnownFolder_GUIDS.Network));
             RecycleBinDirectory = new DirectoryInfoEx(CSIDLtoPIDL(Header.ShellDll.ShellAPI.CSIDL.CSIDL_BITBUCKET));
+            RecycleBinDirectory = new DirectoryInfoEx(KnownFolder.FromKnownFolderId(KnownFolder_GUIDS.RecycleBin));
 
             //foreach (DirectoryInfoEx dir in DesktopDirectory.GetDirectories())
             //    if (dir.FullName.Equals(Helper.GetCurrentUserPath()))

@@ -10,7 +10,6 @@
     using Breadcrumb.ViewModels.TreeSelectors;
     using BreadcrumbLib.Defines;
     using Breadcrumb.IconExtractors;
-    using Breadcrumb.IconExtractors.Enums;
     using Breadcrumb.ViewModels.Base;
     using DirectoryInfoExLib.Interfaces;
     using DirectoryInfoExLib.Enums;
@@ -55,7 +54,7 @@
       _dir = DirectoryInfoExLib.Factory.DesktopDirectory;
       Entries.SetEntries(UpdateMode.Update,
                          _dir.GetDirectories()
-                           .Where(d => !d.Equals(DirectoryInfoExLib.Factory.RecycleBinDirectory))
+                           //.Where(d => !d.Equals(DirectoryInfoExLib.Factory.RecycleBinDirectory))
                            .Select(d => new ExTreeNodeViewModel(d, this)).ToArray());
 
       Header = _dir.Label;
