@@ -5,21 +5,6 @@
 
     internal static class ExtensionMethods
     {
-        public static T RequestPIDL<T>(this FileSystemInfoEx fsi, Func<PIDL, PIDL, T> pidlAndRelPidlFunc)
-        {
-            PIDL pidl = fsi.getPIDL();
-            PIDL relPidl = fsi.getRelPIDL();
-            try
-            {
-                return pidlAndRelPidlFunc(pidl, relPidl);
-            }
-            finally
-            {
-                pidl.Free();
-                relPidl.Free();
-            }
-        }
-
         public static void RequestPIDL(this FileSystemInfoEx fsi, Action<PIDL, PIDL> pidlAndRelPidlFunc)
         {
             PIDL pidl = fsi.getPIDL();
@@ -67,19 +52,6 @@
             try
             {
                 return relPidlFuncOnly(relPidl);
-            }
-            finally
-            {
-                relPidl.Free();
-            }
-        }
-
-        public static void RequestRelativePIDL(this FileSystemInfoEx fsi, Action<PIDL> relPidlFuncOnly)
-        {
-            PIDL relPidl = fsi.getRelPIDL();
-            try
-            {
-                relPidlFuncOnly(relPidl);
             }
             finally
             {

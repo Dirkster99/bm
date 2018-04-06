@@ -3,7 +3,6 @@
     using DirectoryInfoExLib.Interfaces;
     using DirectoryInfoExLib.IO.FileSystemInfoExt;
     using DirectoryInfoExLib.IO.Header.KnownFolder;
-    using DirectoryInfoExLib.IO.Header.KnownFolder.Enums;
     using System.Runtime.Serialization;
 
     /// <summary>
@@ -32,33 +31,6 @@
         public static IDirectoryInfoEx CreateDirectoryInfoEx(KnownFolder knownFolder)
         {
             return new DirectoryInfoEx(knownFolder);
-        }
-
-        /// <summary>
-        /// </summary>
-        /// <param name="knownFolderId"></param>
-        /// <returns></returns>
-        public static IDirectoryInfoEx CreateDirectoryInfoEx(KnownFolderIds knownFolderId)
-        {
-            return new DirectoryInfoEx(knownFolderId);
-        }
-
-        /// <summary>
-        /// </summary>
-        /// <param name="csidl"></param>
-        /// <returns></returns>
-        internal static IDirectoryInfoEx CreateDirectoryInfoEx(IO.Header.ShellDll.ShellAPI.CSIDL csidl)
-        {
-            return new DirectoryInfoEx(csidl);
-        }
-
-        /// <summary>
-        /// </summary>
-        /// <param name="shellFolder"></param>
-        /// <returns></returns>
-        public static IDirectoryInfoEx CreateDirectoryInfoEx(System.Environment.SpecialFolder shellFolder)
-        {
-            return new DirectoryInfoEx(shellFolder);
         }
 
         /// <summary>

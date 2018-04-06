@@ -26,7 +26,6 @@ namespace DirectoryInfoExLib.IO.FileSystemInfoExt
     using System.Drawing;
     using DirectoryInfoExLib.Enums;
     using DirectoryInfoExLib.IconExtracts;
-    using DirectoryInfoExLib.IO.Header.FileBrowser;
 
     /// <summary>
     /// Represents a directory in PIDL system.
@@ -64,7 +63,6 @@ namespace DirectoryInfoExLib.IO.FileSystemInfoExt
             try { SharedDirectory = new DirectoryInfoEx(KnownFolder.FromKnownFolderId(KnownFolder_GUIDS.PublicDocuments)); }
             catch { }
             NetworkDirectory = new DirectoryInfoEx(KnownFolder.FromKnownFolderId(KnownFolder_GUIDS.Network));
-            RecycleBinDirectory = new DirectoryInfoEx(CSIDLtoPIDL(Header.ShellDll.ShellAPI.CSIDL.CSIDL_BITBUCKET));
             RecycleBinDirectory = new DirectoryInfoEx(KnownFolder.FromKnownFolderId(KnownFolder_GUIDS.RecycleBin));
 
             //foreach (DirectoryInfoEx dir in DesktopDirectory.GetDirectories())
@@ -103,57 +101,6 @@ namespace DirectoryInfoExLib.IO.FileSystemInfoExt
         public DirectoryInfoEx(KnownFolder knownFolder)
         {
             PIDL pidlLookup = KnownFolderToPIDL(knownFolder);
-            try
-            {
-                init(pidlLookup);
-                checkProperties();
-            }
-            finally
-            {
-                //if (pidlLookup != null) pidlLookup.Free();
-                pidlLookup = null;
-            }
-        }
-
-        /// <summary>
-        /// Class constructor
-        /// </summary>
-        /// <param name="knownFolderId"></param>
-        public DirectoryInfoEx(KnownFolderIds knownFolderId)
-            : this(KnownFolder.FromKnownFolderId(
-                EnumAttributeUtils<KnownFolderGuidAttribute, KnownFolderIds>.FindAttribute(knownFolderId).Guid))
-        {
-        }
-
-        /// <summary>
-        /// Class constructor
-        /// </summary>
-        /// <param name="csidl"></param>
-        public DirectoryInfoEx(IO.Header.ShellDll.ShellAPI.CSIDL csidl)
-        {
-            PIDL pidlLookup = CSIDLtoPIDL(csidl);
-            try
-            {
-                init(pidlLookup);
-                checkProperties();
-            }
-            finally
-            {
-                //if (pidlLookup != null) pidlLookup.Free();
-                pidlLookup = null;
-            }
-        }
-
-        /// <summary>
-        /// Class constructor
-        /// </summary>
-        /// <param name="shellFolder"></param>
-        public DirectoryInfoEx(Environment.SpecialFolder shellFolder)
-        {
-            var sf = IOTools.ShellFolderToCSIDL(shellFolder);
-            if (!sf.HasValue)
-                throw new ArgumentException("Cannot find CSIDL from this shell folder.");
-            PIDL pidlLookup = CSIDLtoPIDL(sf.Value);
             try
             {
                 init(pidlLookup);
@@ -235,8 +182,6 @@ namespace DirectoryInfoExLib.IO.FileSystemInfoExt
 
         #region properties
         public ShellFolder2 ShellFolder { get { return getIShellFolder(); } }
-
-        public Storage Storage { get { return getStorage(); } }
 
         public IDirectoryInfoEx Root { get { return getDirectoryRoot(this); } }
 
@@ -329,29 +274,6 @@ namespace DirectoryInfoExLib.IO.FileSystemInfoExt
         #endregion
 
         #region Static Methods
-        /// <summary>
-        /// Convert CSIDL to PIDL
-        /// </summary>
-        internal static PIDL CSIDLtoPIDL(Header.ShellDll.ShellAPI.CSIDL csidl)
-        {
-            IntPtr ptrAddr;
-            PIDL pidl;
-
-            //if (csidl == ShellAPI.CSIDL.CSIDL_MYDOCUMENTS)
-            //    return PathtoPIDL(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments));
-
-            {
-                int RetVal = ShellAPI.SHGetSpecialFolderLocation(IntPtr.Zero, csidl, out ptrAddr);
-                if (ptrAddr != IntPtr.Zero)
-                {
-                    pidl = new PIDL(ptrAddr, false);
-                    return pidl;
-                }
-                else throw new ArgumentException("Invalid csidl " + RetVal);
-            }
-            //return null;
-        }
-
         internal static PIDL KnownFolderToPIDL(KnownFolder knownFolder)
         {
             IntPtr ptrAddr;
@@ -364,20 +286,6 @@ namespace DirectoryInfoExLib.IO.FileSystemInfoExt
                 return pidl;
             }
             else throw new ArgumentException("Invalid knownFolder " + RetVal);
-        }
-
-        /// <summary>
-        /// Gets the path to the system special folder identified by the specified enumeration.
-        /// </summary>
-        public static string GetFolderPath(ShellAPI.CSIDL folder)
-        {
-            PIDL pidlLookup = CSIDLtoPIDL(folder);
-            try
-            {
-                return FileSystemInfoEx.PIDLToPath(pidlLookup);
-            }
-            finally { if (pidlLookup != null) pidlLookup.Free(); }
-
         }
 
         /// <summary>
@@ -426,6 +334,21 @@ namespace DirectoryInfoExLib.IO.FileSystemInfoExt
         #endregion
 
         #region Methods
+        public T RequestPIDL<T>(Func<PIDL, PIDL, T> pidlAndRelPidlFunc)
+        {
+            PIDL pidl = this.getPIDL();
+            PIDL relPidl = this.getRelPIDL();
+            try
+            {
+                return pidlAndRelPidlFunc(pidl, relPidl);
+            }
+            finally
+            {
+                pidl.Free();
+                relPidl.Free();
+            }
+        }
+
         public T RequestPIDL<T>(Func<PIDL, T> pidlFuncOnly)
         {
             PIDL pidl = this.getPIDL();
@@ -563,12 +486,7 @@ namespace DirectoryInfoExLib.IO.FileSystemInfoExt
         /// </summary>
         public override void Delete()
         {
-            checkExists();
-            //iStorage = null;
-            //iShellFolder = null;
-            int hr = (Parent as DirectoryInfoEx).Storage.DestroyElement(Name);
-            if (hr != ShellAPI.S_OK) Marshal.ThrowExceptionForHR(hr);
-            Refresh();
+            throw new NotImplementedException();
         }
 
         /// <summary>
@@ -576,14 +494,7 @@ namespace DirectoryInfoExLib.IO.FileSystemInfoExt
         /// </summary>
         public void MoveTo(string destDirName)
         {
-            checkExists();
-            //iStorage = null;
-            //iShellFolder = null;
-            destDirName = IOTools.ExpandPath(destDirName);
-            IOTools.Move(FullName, destDirName);
-            FullName = destDirName;
-            OriginalPath = FullName;
-            Refresh();
+            throw new NotImplementedException();
         }
 
         private ShellFolder2 getIShellFolderFromParent()
@@ -650,34 +561,6 @@ namespace DirectoryInfoExLib.IO.FileSystemInfoExt
                     else
                         _dirType = DirectoryTypeEnum.dtFolder;
                 }
-            }
-        }
-
-        protected override void refresh(IShellFolder2 parentShellFolder, PIDL relPIDL, PIDL fullPIDL, RefreshModeEnum mode)
-        {
-            base.refresh(parentShellFolder, relPIDL, fullPIDL, mode);
-
-            if ((mode & RefreshModeEnum.FullProps) != 0 &&
-                parentShellFolder != null && relPIDL != null && fullPIDL != null)
-            {
-                ShellAPI.SFGAO attribute = shGetFileAttribute(fullPIDL, ShellAPI.SFGAO.BROWSABLE |
-                    ShellAPI.SFGAO.FILESYSTEM | ShellAPI.SFGAO.HASSUBFOLDER);
-                IsBrowsable = (attribute & ShellAPI.SFGAO.BROWSABLE) != 0 || (attribute & ShellAPI.SFGAO.CONTENTSMASK) != 0;
-                IsFileSystem = (attribute & ShellAPI.SFGAO.FILESYSTEM) != 0;
-                HasSubFolder = (attribute & ShellAPI.SFGAO.HASSUBFOLDER) != 0;
-
-                if (!FullName.StartsWith("::") && Directory.Exists(FullName))
-                    try
-                    {
-                        DirectoryInfo di = new DirectoryInfo(FullName);
-                        Attributes = di.Attributes;
-                        LastAccessTime = di.LastAccessTime;
-                        LastWriteTime = di.LastWriteTime;
-                        CreationTime = di.CreationTime;
-                    }
-                    catch { }
-
-                initDirectoryType();
             }
         }
         #endregion
@@ -868,17 +751,6 @@ namespace DirectoryInfoExLib.IO.FileSystemInfoExt
             return null;
         }
         #endregion
-
-        //0.12: Fixed PIDL, PIDLRel, ShellFolder, Storage properties generated on demand to avoid x-thread issues.
-        private Storage getStorage()
-        {
-            Storage iStorage = null;
-            //0.15: Fixed ShellFolder not freed correctly
-            //if (ShellFolder2 != null)
-            if (IOTools.getIStorage(this, out iStorage))
-                return iStorage;
-            return null;
-        }
 
         protected override void checkProperties()
         {

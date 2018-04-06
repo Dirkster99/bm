@@ -17,6 +17,8 @@ namespace DirectoryInfoExLib.IO.FileSystemInfoExt
     using DirectoryInfoExLib.Tools;
     using DirectoryInfoExLib.IO.Tools;
     using DirectoryInfoExLib.Interfaces;
+    using DirectoryInfoExLib.Enums;
+    using DirectoryInfoExLib.IO.Header.KnownFolder;
 
     internal class FileSystemInfoEx : FileSystemInfo, IDisposable, ISerializable, ICloneable,
         IEquatable<FileSystemInfoEx>
@@ -128,7 +130,7 @@ namespace DirectoryInfoExLib.IO.FileSystemInfoExt
                 return new PIDL(_pidl, true);
 
             if (FullName == "::{00021400-0000-0000-C000-000000000046}") //Desktop
-                return DirectoryInfoEx.CSIDLtoPIDL(Header.ShellDll.ShellAPI.CSIDL.CSIDL_DESKTOP);
+                return DirectoryInfoEx.KnownFolderToPIDL(KnownFolder.FromKnownFolderId(KnownFolder_GUIDS.Desktop));
             else
                 return PathToPIDL(FullName);
         }
@@ -275,7 +277,8 @@ namespace DirectoryInfoExLib.IO.FileSystemInfoExt
             if (pParent == IntPtr.Zero || !PIDL.ILRemoveLastID2(ref pParent))
             {
                 new PIDL(pParent, false).Free();
-                return DirectoryInfoEx.CSIDLtoPIDL(ShellAPI.CSIDL.CSIDL_DESKTOP);
+
+                return DirectoryInfoEx.KnownFolderToPIDL(KnownFolder.FromKnownFolderId(KnownFolder_GUIDS.Desktop));
             }
 
             return new PIDL(pParent, false); //pParent will be freed by the PIDL.
@@ -332,22 +335,6 @@ namespace DirectoryInfoExLib.IO.FileSystemInfoExt
 
             return null; //mute error.
         }
-
-        protected static ShellAPI.SFGAO shGetFileAttribute(PIDL pidl, ShellAPI.SFGAO lookup)
-        {
-            ShellAPI.SHFILEINFO shfi = new ShellAPI.SHFILEINFO();
-            shfi.dwAttributes = ShellAPI.SFGAO.READONLY | ShellAPI.SFGAO.HIDDEN | ShellAPI.SFGAO.BROWSABLE |
-                ShellAPI.SFGAO.FILESYSTEM | ShellAPI.SFGAO.HASSUBFOLDER;
-            ShellAPI.SHGFI dwFlag = ShellAPI.SHGFI.PIDL | ShellAPI.SHGFI.ATTRIBUTES | ShellAPI.SHGFI.ATTR_SPECIFIED | ShellAPI.SHGFI.USEFILEATTRIBUTES;
-            ShellAPI.FILE_ATTRIBUTE dwAttr = 0;
-            int cbFileInfo = Marshal.SizeOf(shfi.GetType());
-            IntPtr retPtr = ShellAPI.SHGetFileInfo(pidl.Ptr, dwAttr, ref shfi, cbFileInfo, dwFlag);
-
-            if (retPtr.ToInt32() != ShellAPI.S_OK && retPtr.ToInt32() != 1)
-                Marshal.ThrowExceptionForHR(retPtr.ToInt32());
-            return shfi.dwAttributes;
-        }
-
 
         private static FileAttributes loadAttributes(IShellFolder2 iShellFolder, PIDL pidlFull, PIDL pidlRel)
         {

@@ -193,18 +193,15 @@
         #endregion
 
         #region static methods
-
-        internal static KnownFolder FromCsidl(ShellAPI.CSIDL csidl)
-        {
-            var folderManager = (IKnownFolderManager)new KnownFolderManager();
-
-            Guid knownFolderID;
-            folderManager.FolderIdFromCsidl((int)csidl, out knownFolderID);
-            IKnownFolder knowFolderInterface;
-            folderManager.GetFolder(knownFolderID, out knowFolderInterface);
-            return new KnownFolder(knowFolderInterface);
-        }
-
+        /// <summary>
+        /// Creates a <see cref="KnownFolder"/> object from a <see cref="Guid"/>
+        /// that represents a known shell folder.
+        /// <seealso cref="DirectoryInfoExLib.Enums.KnownFolder_GUIDS"/>
+        /// 
+        /// https://msdn.microsoft.com/en-us/library/bb762584(VS.85).aspx
+        /// </summary>
+        /// <param name="knownFolderID"></param>
+        /// <returns></returns>
         public static KnownFolder FromKnownFolderId(Guid knownFolderID)
         {
             IKnownFolder knowFolderInterface;
@@ -261,7 +258,6 @@
                 return null;
             }
         }
-
         #endregion
 
         #region methods
@@ -309,7 +305,12 @@
             }
         }
 
-        // This is not a small operation so let's make it a method
+        /// <summary>
+        /// Gets the definition for a known folder.
+        /// 
+        /// This is not a small operation so let's make it a method
+        /// </summary>
+        /// <returns></returns>
         private KnownFolderDefinition GetDefinition()
         {
             InternalKnownFolderDefinition internalDefinition;

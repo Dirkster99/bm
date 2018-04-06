@@ -63,18 +63,6 @@
             return input.Substring(idx);
         }
 
-
-        public static Bitmap GetFileIcon(string name)
-        {
-            ShellAPI.SHFILEINFO shinfo = new ShellAPI.SHFILEINFO();
-
-            ShellAPI.SHGetFileInfo(name, ShellAPI.FILE_ATTRIBUTE.NORMAL,
-                ref shinfo, (int)Marshal.SizeOf(shinfo), 
-                ShellAPI.SHGFI.ICON | ShellAPI.SHGFI.USEFILEATTRIBUTES);
-
-            return Icon.FromHandle(shinfo.hIcon).ToBitmap();
-        }
-
         /// <summary>
         /// Return Current user path.
         /// </summary>    

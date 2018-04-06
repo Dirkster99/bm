@@ -189,33 +189,6 @@
             else return name.Substring(baseDirectory.FullName.Length + 1);
         }
 
-        internal static ShellAPI.CSIDL? ShellFolderToCSIDL(Environment.SpecialFolder spFolder)
-        {
-            foreach (var val in Enum.GetValues(typeof(KnownFolderIds)))
-            {
-                var csidlAttributes = EnumAttributeUtils<CsidlAttribute, KnownFolderIds>.FindAllAttributes(val).ToArray();
-                var spFolderAttributes = EnumAttributeUtils<SpecialFolderAttribute, KnownFolderIds>.FindAllAttributes(val).ToArray();
-
-                for (int i = 0; i < spFolderAttributes.Length; i++)
-                {
-                    if (spFolderAttributes[i].SpecialFolder == spFolder)
-                        if (csidlAttributes.Length >= spFolderAttributes.Length)
-                            return csidlAttributes[i].CSIDL;
-                        else if (spFolderAttributes.Length >= 0)
-                            return csidlAttributes[0].CSIDL;
-                }
-            }
-            return null;
-
-            //var enumerator = _shellFolderLookupDic.Value.GetEnumerator();
-
-            //while (enumerator.MoveNext())
-            //    if (enumerator.Current.Key.Equals(shellFolder))
-            //        return enumerator.Current.Value;
-
-            //throw new ArgumentException("This SpecialFolder path not supported");
-        }
-
         //public static Environment.SpecialFolder? PathToSpecialFolder(string path)
         //{            
         //    var foundKey =
@@ -406,34 +379,6 @@
             return new FileSystemInfoEx(path).Exists;
         }
 
-        /// <summary>
-        /// Move directory or file, take full path of source and dest as parameter.
-        /// </summary>
-        public static void Move(string source, string dest)
-        {
-            DirectoryInfoEx fromDir, toDir;
-
-            fromDir = new DirectoryInfoEx(Path.GetDirectoryName(source));
-            toDir = new DirectoryInfoEx(Path.GetDirectoryName(dest));
-            if (fromDir.Equals(toDir))
-            {
-                Rename(source, Path.GetFileName(dest));
-                return;
-            }
-
-
-            if (fromDir.Storage == null)
-                throw new IOException("Source directory does not support IStorage");
-            if (toDir.Storage == null)
-                throw new IOException("Destination directory does not support IStorage");
-
-            int hr = fromDir.Storage.MoveElementTo(Path.GetFileName(source), toDir.Storage,
-                Path.GetFileName(dest), ShellAPI.STGMOVE.MOVE);
-
-            if (hr != ShellAPI.S_OK)
-                Marshal.ThrowExceptionForHR(hr);
-        }
-
         internal static bool IsZip(IO.Header.ShellDll.ShellAPI.SFGAO attribs)
         {
             return ((attribs & IO.Header.ShellDll.ShellAPI.SFGAO.FOLDER) != 0 && (attribs & IO.Header.ShellDll.ShellAPI.SFGAO.STREAM) != 0);
@@ -483,31 +428,6 @@
         {
             return cancel != null && cancel(completePercent);
         }
-
-        /// <summary>
-        /// Copy directory or file, take full path of source and dest as parameter.
-        /// </summary>
-        public static void Copy(string source, string dest)
-        {
-            DirectoryInfoEx fromDir, toDir;
-
-            fromDir = new DirectoryInfoEx(PathEx.GetDirectoryName(source));
-            toDir = new DirectoryInfoEx(PathEx.GetDirectoryName(dest));
-
-
-            if (fromDir.Storage == null)
-                throw new IOException("Source directory does not support IStorage");
-            if (toDir.Storage == null)
-                throw new IOException("Destination directory does not support IStorage");
-
-
-            int hr = fromDir.Storage.MoveElementTo(PathEx.GetFileName(source), toDir.Storage,
-                Path.GetFileName(dest), ShellAPI.STGMOVE.COPY);
-
-            if (hr != ShellAPI.S_OK)
-                Marshal.ThrowExceptionForHR(hr);
-        }
-
         #endregion
 
         #region Obtain Shell interface (ShellAPI)
@@ -562,127 +482,6 @@
                 storagePtr = storePtr;
             }
         }
-        /// <summary>
-        /// Take a directory and return the IStorage PTr interface.
-        /// </summary>
-        internal static bool getIStorage(DirectoryInfoEx dir, out IntPtr storagePtr, out IStorage storage)
-        {
-            bool retVal = getIStorage(dir, out storagePtr);
-            storage = null;
-            if (retVal)
-                storage = (IStorage)Marshal.GetTypedObjectForIUnknown(storagePtr, typeof(IStorage));
-            return retVal;
-        }
-
-        internal static bool getIStorage(DirectoryInfoEx dir, out Storage storage)
-        {
-            IntPtr storagePtr;
-            bool retVal = getIStorage(dir, out storagePtr);
-            storage = null;
-            if (getIStorage(dir, out storagePtr))
-                storage = new Storage(storagePtr);
-            return retVal;
-        }
-
-        /// <summary>
-        /// return STATSTG info of a file.
-        /// </summary>
-        internal static bool getFileStat(IStorage parentStorage, string filename, out ShellAPI.STATSTG statstg)
-        {
-            IntPtr streamPtr = IntPtr.Zero;
-            IStream stream = null;
-            statstg = new ShellAPI.STATSTG();
-
-            try
-            {
-                if (parentStorage.OpenStream(
-                            filename,
-                            IntPtr.Zero,
-                            ShellAPI.STGM.READ,
-                            0,
-                            out streamPtr) == ShellAPI.S_OK)
-                {
-                    stream = (IStream)Marshal.GetTypedObjectForIUnknown(streamPtr, typeof(IStream));
-                    stream.Stat(out statstg, ShellAPI.STATFLAG.DEFAULT);
-                    return true;
-                }
-            }
-            finally
-            {
-                if (stream != null)
-                {
-                    Marshal.ReleaseComObject(stream);
-                    stream = null;
-                }
-
-                if (streamPtr != IntPtr.Zero)
-                {
-                    Marshal.Release(streamPtr);
-                    streamPtr = IntPtr.Zero;
-                }
-
-            }
-            return false;
-        }
-
-        /// <summary>
-        /// Open a file stream, used by FileStreamEx
-        /// </summary>
-        internal static void openStream(IStorage parentStorage, string filename, ref FileMode mode, ref FileAccess access, out IntPtr streamPtr, out IStream stream)
-        {
-            ShellAPI.STGM grfmode = ShellAPI.STGM.SHARE_DENY_WRITE;
-
-            switch (access)
-            {
-                case FileAccess.ReadWrite:
-                    grfmode |= ShellAPI.STGM.READWRITE;
-                    break;
-
-                case FileAccess.Write:
-                    grfmode |= ShellAPI.STGM.WRITE;
-                    break;
-            }
-
-            switch (mode)
-            {
-                case FileMode.Create:
-                    if (FileSystemInfoEx.FileExists(filename))
-                        grfmode |= ShellAPI.STGM.CREATE;
-                    break;
-                case FileMode.CreateNew:
-                    grfmode |= ShellAPI.STGM.CREATE;
-                    break;
-            }
-
-            if (parentStorage != null)
-            {
-                if (parentStorage.OpenStream(
-                        filename,
-                        IntPtr.Zero,
-                        grfmode,
-                        0,
-                        out streamPtr) == ShellAPI.S_OK)
-                {
-                    stream = (IStream)Marshal.GetTypedObjectForIUnknown(streamPtr, typeof(IStream));
-                }
-                else if (access != FileAccess.Read)
-                {
-                    //Create file if not exists
-                    if (parentStorage.CreateStream(
-                        filename, ShellAPI.STGM.WRITE, 0, 0, out streamPtr) == ShellAPI.S_OK)
-                    {
-                        stream = (IStream)Marshal.GetTypedObjectForIUnknown(streamPtr, typeof(IStream));
-                    }
-                    else
-                        throw new IOException(String.Format("Can't open stream: {0}", filename));
-                }
-                else
-                    throw new IOException(String.Format("Can't open stream: {0}", filename));
-            }
-            else
-                throw new IOException(String.Format("Can't open stream: {0}", filename));
-        }
-
         #endregion
 
         public static Stream LoadEmbeddedResource(System.Reflection.Assembly thisAsm, string assemblyName, string resourceName)

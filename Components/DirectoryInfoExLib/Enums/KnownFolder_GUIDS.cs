@@ -1,15 +1,21 @@
-﻿namespace DirectoryInfoExLib.IO.Header.FileBrowser
+﻿namespace DirectoryInfoExLib.Enums
 {
     using System;
 
     /// <summary>
-    /// https://msdn.microsoft.com/en-us/library/bb776911(v=vs.85).aspx
+    /// The KNOWNFOLDERID constants represent GUIDs that identify standard folders registered with the
+    /// system as Known Folders. These folders are installed with Windows Vista and later operating
+    /// systems, and a computer will have only folders appropriate to it installed. These values are
+    /// defined in Knownfolders.h.
+    /// 
+    /// https://msdn.microsoft.com/en-us/library/bb762584(VS.85).aspx
     /// </summary>
     public class KnownFolder_GUIDS
     {
         #region KnownFolder Guids
         /// <summary>
         /// Computer
+        /// 
         /// </summary>
         internal static Guid Computer = new Guid(0x0AC0837C, 0xBBF8, 0x452A, 0x85, 0x0D, 0x79, 0xD0, 0x8E, 0x66, 0x7C, 0xA7);
 
@@ -244,12 +250,22 @@
         internal static Guid ProgramFilesCommon = new Guid(0xF7F1ED05, 0x9F6D, 0x47A2, 0xAA, 0xAE, 0x29, 0xD3, 0x17, 0xC6, 0xF0, 0x66);
 
         /// <summary>
-        /// Administrative Tools
+        /// Display Name        Administrative Tools
+        /// Folder Type         PERUSER
+        /// Default Path        %APPDATA%\Microsoft\Windows\Start Menu\Programs\Administrative Tools
+        /// CSIDL Equivalent    CSIDL_ADMINTOOLS
+        /// Legacy Display Name Administrative Tools
+        /// Legacy Default Path %USERPROFILE%\Start Menu\Programs\Administrative Tools
         /// </summary>
         internal static Guid AdminTools = new Guid(0x724EF170, 0xA42D, 0x4FEF, 0x9F, 0x26, 0xB6, 0x0E, 0x84, 0x6F, 0xBA, 0x4F);
 
         /// <summary>
-        /// Administrative Tools
+        /// Display Name            Administrative Tools
+        /// Folder Type             COMMON
+        /// Default Path            %ALLUSERSPROFILE%\Microsoft\Windows\Start Menu\Programs\Administrative Tools
+        /// CSIDL Equivalent        CSIDL_COMMON_ADMINTOOLS
+        /// Legacy Display Name     Administrative Tools
+        /// Legacy Default Path     %ALLUSERSPROFILE%\Start Menu\Programs\Administrative Tools
         /// </summary>
         internal static Guid CommonAdminTools = new Guid(0xD0384E7D, 0xBAC3, 0x4797, 0x8F, 0x14, 0xCB, 0xA2, 0x29, 0xB3, 0x92, 0xB5);
 
@@ -289,12 +305,22 @@
         internal static Guid LocalizedResourcesDir = new Guid(0x2A00375E, 0x224C, 0x49DE, 0xB8, 0xD1, 0x44, 0x0D, 0xF7, 0xEF, 0x3D, 0xDC);
 
         /// <summary>
-        /// OEM Links
+        /// Display Name        OEM Links
+        /// Folder Type         COMMON
+        /// Default Path        %ALLUSERSPROFILE%\OEM Links
+        /// CSIDL Equivalent    CSIDL_COMMON_OEM_LINKS
+        /// Legacy Display Name OEM Links
+        /// Legacy Default Path %ALLUSERSPROFILE%\OEM Links
         /// </summary>
         internal static Guid CommonOEMLinks = new Guid(0xC1BAE2D0, 0x10DF, 0x4334, 0xBE, 0xDD, 0x7A, 0xA2, 0x0B, 0x22, 0x7A, 0x9D);
 
         /// <summary>
-        /// Temporary Burn Folder
+        /// Display Name        Temporary Burn Folder
+        /// Folder Type         PERUSER
+        /// Default Path        %LOCALAPPDATA%\Microsoft\Windows\Burn\Burn
+        /// CSIDL Equivalent    CSIDL_CDBURN_AREA
+        /// Legacy Display Name CD Burning
+        /// Legacy Default Path %USERPROFILE%\Local Settings\Application Data\Microsoft\CD Burning
         /// </summary>
         internal static Guid CDBurning = new Guid(0x9E52AB10, 0xF80D, 0x49DF, 0xAC, 0xB8, 0x43, 0x30, 0xF5, 0x68, 0x78, 0x55);
 
@@ -339,17 +365,32 @@
         internal static Guid Public = new Guid(0xDFDF76A2, 0xC82A, 0x4D63, 0x90, 0x6A, 0x56, 0x44, 0xAC, 0x45, 0x73, 0x85);
 
         /// <summary>
-        /// Programs and Features
+        /// Display Name        Programs and Features
+        /// Folder Type         VIRTUAL
+        /// Default Path        Not applicable—virtual folder
+        /// CSIDL Equivalent    None
+        /// Legacy Display Name Add or Remove Programs
+        /// Legacy Default Path Not applicable—virtual folder
         /// </summary>
         internal static Guid ChangeRemovePrograms = new Guid(0xdf7266ac, 0x9274, 0x4867, 0x8d, 0x55, 0x3b, 0xd6, 0x61, 0xde, 0x87, 0x2d);
 
         /// <summary>
-        /// Installed Updates
+        /// Display Name        Installed Updates
+        /// Folder Type         VIRTUAL
+        /// Default Path        Not applicable—virtual folder
+        /// CSIDL Equivalent    None
+        /// Legacy Display Name None, new in Windows Vista. In earlier versions of Microsoft Windows, the information on this page was included in Add or Remove Programs if the Show updates box was checked.
+        /// Legacy Default Path Not applicable
         /// </summary>
         internal static Guid AppUpdates = new Guid(0xa305ce99, 0xf527, 0x492b, 0x8b, 0x1a, 0x7e, 0x76, 0xfa, 0x98, 0xd6, 0xe4);
 
         /// <summary>
-        /// Get Programs
+        /// Display Name        Get Programs
+        /// Folder Type         VIRTUAL
+        /// Default Path        Not applicable—virtual folder
+        /// CSIDL Equivalent    None
+        /// Legacy Display Name Add New Programs (found in the Add or Remove Programs item in the Control Panel)
+        /// Legacy Default Path Not applicable—virtual folder
         /// </summary>
         internal static Guid AddNewPrograms = new Guid(0xde61d971, 0x5ebc, 0x4f02, 0xa3, 0xa9, 0x6c, 0x82, 0x89, 0x5e, 0x5c, 0x04);
 
