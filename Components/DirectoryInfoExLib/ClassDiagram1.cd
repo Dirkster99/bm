@@ -13,7 +13,7 @@
       <Compartment Name="Fields" Collapsed="true" />
     </Compartments>
     <TypeIdentifier>
-      <HashCode>IBQAIkEsRCABgCIokcAKiAAEAMmMCAAgEAAgQQEgAhQ=</HashCode>
+      <HashCode>IAQAIgEsRCABgCIokcAIiAAEAMmICAAgEAAgQQEgABQ=</HashCode>
       <FileName>IO\FileSystemInfoExt\DirectoryInfoEx.cs</FileName>
     </TypeIdentifier>
     <Lollipop Position="0.2" />
@@ -38,7 +38,7 @@
       </Enum>
     </NestedTypes>
     <TypeIdentifier>
-      <HashCode>BBEkIEABMWpAQMoHhEAAQAQQBAmAAYNAEEAAgAEoERA=</HashCode>
+      <HashCode>BBEkIEABMWpAQMoGhEAAQAQQBAmAAYNAEEAAgAEoERA=</HashCode>
       <FileName>IO\FileSystemInfoExt\FileSystemInfoEx.cs</FileName>
     </TypeIdentifier>
     <Lollipop Position="0.2" />
@@ -54,15 +54,8 @@
   <Class Name="DirectoryInfoExLib.IO.Header.ShellDll.ShellAPI" Collapsed="true">
     <Position X="21.25" Y="3.5" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>gQ2QoqWScgCUiFDQj6cBKVEISHQSDRKXhD1FrTIiAJM=</HashCode>
+      <HashCode>AACAAAGAAACAgAAAgwEBAAAIACAQCQAFBChABBAAAAA=</HashCode>
       <FileName>IO\Header\FileBrowser\ShellAPI.cs</FileName>
-    </TypeIdentifier>
-  </Class>
-  <Class Name="DirectoryInfoExLib.IO.Header.KnownFolder.Attributes.CsidlAttribute" Collapsed="true">
-    <Position X="17.75" Y="0.5" Width="1.5" />
-    <TypeIdentifier>
-      <HashCode>AAAAAAAAAAAAAAAAAAAAEAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
-      <FileName>IO\Header\KnownFolder\Attributes\CsidlAttribute.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="DirectoryInfoExLib.IO.Header.KnownFolder.Attributes.DefaultPathAttribute" Collapsed="true">
@@ -110,7 +103,7 @@
   <Class Name="DirectoryInfoExLib.IO.Header.KnownFolder.KnownFolder" Collapsed="true" BaseTypeListCollapsed="true">
     <Position X="19.5" Y="2.5" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AgACABAAACBACCIAAAFAEAAAAAEGIAAAAASAIAAECIA=</HashCode>
+      <HashCode>AgACABAAACBACCIAAAFAAAAAAAACIAAAAAQAIAAECIA=</HashCode>
       <FileName>IO\Header\KnownFolder\KnownFolder.cs</FileName>
     </TypeIdentifier>
     <Lollipop Position="0.2" Collapsed="true" />
@@ -146,7 +139,7 @@
   <Class Name="DirectoryInfoExLib.Tools.IOTools" Collapsed="true">
     <Position X="17.75" Y="2.5" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>QAgAAAAABIAAAAAAACCGQgACAhAAAIAEDAAABEGEgAQ=</HashCode>
+      <HashCode>QAgAAAAABAAAAAAAACACQgACABAAAIAADAAABEGAgAQ=</HashCode>
       <FileName>IO\Tools\IOTools.cs</FileName>
     </TypeIdentifier>
   </Class>
@@ -160,7 +153,7 @@
   <Class Name="DirectoryInfoExLib.IO.Tools.Helper" Collapsed="true">
     <Position X="14.25" Y="2.5" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AEAAAAAAAAAAEAAEAEAAABCAAAAAAABAAACAACAAAAA=</HashCode>
+      <HashCode>AEAAAAAAAAAAAAAEAEAAABCAAAAAAABAAACAACAAAAA=</HashCode>
       <FileName>IO\Tools\Helper.cs</FileName>
     </TypeIdentifier>
   </Class>
@@ -172,35 +165,12 @@
     </TypeIdentifier>
     <Lollipop Position="0.2" Collapsed="true" />
   </Class>
-  <Class Name="DirectoryInfoExLib.IO.Tools.Interface.Storage" Collapsed="true" BaseTypeListCollapsed="true">
-    <Position X="21.25" Y="4.5" Width="1.5" />
-    <TypeIdentifier>
-      <HashCode>AgAAAEAAACAAAAAAAIAAAACggKAAAAAAAgYAAAAQIMI=</HashCode>
-      <FileName>IO\Tools\Interface\Storage.cs</FileName>
-    </TypeIdentifier>
-    <Lollipop Position="0.2" Collapsed="true" />
-  </Class>
-  <Class Name="DirectoryInfoExLib.IO.Tools.Wrappers.ImageExtractor" Collapsed="true">
-    <Position X="16" Y="2.5" Width="1.5" />
-    <TypeIdentifier>
-      <HashCode>AAAAAAQAAAAAEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
-      <FileName>IO\Tools\Wrappers\ImageExtractor.cs</FileName>
-    </TypeIdentifier>
-  </Class>
   <Class Name="System.IO.FileSystemInfo">
     <Position X="7.25" Y="1.75" Width="2.5" />
     <Compartments>
       <Compartment Name="Fields" Collapsed="true" />
     </Compartments>
     <TypeIdentifier />
-    <Lollipop Position="0.2" />
-  </Class>
-  <Class Name="DirectoryInfoExLib.IO.FileSystemInfoExt.FileInfoEx">
-    <Position X="4" Y="13.5" Width="2.5" />
-    <TypeIdentifier>
-      <HashCode>AAAAAFAAAAAAAAIYAAAAAABAAAGICAAAJAAAAAAAEAA=</HashCode>
-      <FileName>IO\FileSystemInfoExt\FileInfoEx.cs</FileName>
-    </TypeIdentifier>
     <Lollipop Position="0.2" />
   </Class>
   <Struct Name="DirectoryInfoExLib.IO.Header.ExtraSearch" Collapsed="true">
@@ -241,71 +211,8 @@
   <Interface Name="DirectoryInfoExLib.Interfaces.IDirectoryInfoEx">
     <Position X="10.25" Y="1.75" Width="3" />
     <TypeIdentifier>
-      <HashCode>ABAAIAEgEAAAAKAAgEAAwAQEAAAECAAAAAAAAAEAABA=</HashCode>
+      <HashCode>AAAAIAEgEAAAAKAAgEAAwAQEAAAACAAAAAAAAAEAABA=</HashCode>
       <FileName>Interfaces\IDirectoryInfoEx.cs</FileName>
-    </TypeIdentifier>
-  </Interface>
-  <Interface Name="DirectoryInfoExLib.IO.Header.ShellDll.Interfaces.IAdviseSink" Collapsed="true">
-    <Position X="14.25" Y="7" Width="1.5" />
-    <TypeIdentifier>
-      <HashCode>EABAAAAAAEAAAAAAAAAAAAAAAAAAAAAAACIAAAAAAAA=</HashCode>
-      <FileName>IO\Header\FileBrowser\Interfaces\IAdviseSink.cs</FileName>
-    </TypeIdentifier>
-  </Interface>
-  <Interface Name="DirectoryInfoExLib.IO.Header.ShellDll.Interfaces.IContextMenu" Collapsed="true">
-    <Position X="16" Y="7" Width="1.5" />
-    <TypeIdentifier>
-      <HashCode>AAAAAAIAAAAAAAAAAAAAAAAAAAAABAAAAAAAAACAAAA=</HashCode>
-      <FileName>IO\Header\FileBrowser\Interfaces\IContextMenu.cs</FileName>
-    </TypeIdentifier>
-  </Interface>
-  <Interface Name="DirectoryInfoExLib.IO.Header.ShellDll.Interfaces.IContextMenu2" Collapsed="true">
-    <Position X="17.75" Y="7" Width="1.5" />
-    <TypeIdentifier>
-      <HashCode>AAAAAAIEAAAAAAAAAAAAAAAAAAAABAAAAAAAAACAAAA=</HashCode>
-      <FileName>IO\Header\FileBrowser\Interfaces\IContextMenu.cs</FileName>
-    </TypeIdentifier>
-  </Interface>
-  <Interface Name="DirectoryInfoExLib.IO.Header.ShellDll.Interfaces.IDataObject" Collapsed="true">
-    <Position X="21.25" Y="7" Width="1.5" />
-    <TypeIdentifier>
-      <HashCode>AAAAAIABEAAAAAAAAgAAAACAAAAAMAAAQAACAAAAAAA=</HashCode>
-      <FileName>IO\Header\FileBrowser\Interfaces\IDataObject.cs</FileName>
-    </TypeIdentifier>
-  </Interface>
-  <Interface Name="DirectoryInfoExLib.IO.Header.ShellDll.Interfaces.IDragSourceHelper" Collapsed="true">
-    <Position X="16" Y="7.75" Width="1.5" />
-    <TypeIdentifier>
-      <HashCode>AAAAAAAAAAAAAAAAAAhAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
-      <FileName>IO\Header\FileBrowser\Interfaces\IDragSourceHelper.cs</FileName>
-    </TypeIdentifier>
-  </Interface>
-  <Interface Name="DirectoryInfoExLib.IO.Header.ShellDll.Interfaces.IDropSource" Collapsed="true">
-    <Position X="17.75" Y="7.75" Width="1.5" />
-    <TypeIdentifier>
-      <HashCode>AAAAAAAAAAAAAAAAAAAAEAAEAAAAAAAAAAAAAAAAAAA=</HashCode>
-      <FileName>IO\Header\FileBrowser\Interfaces\IDropSource.cs</FileName>
-    </TypeIdentifier>
-  </Interface>
-  <Interface Name="DirectoryInfoExLib.IO.Header.ShellDll.Interfaces.IDropTarget" Collapsed="true">
-    <Position X="19.5" Y="7.75" Width="1.5" />
-    <TypeIdentifier>
-      <HashCode>AAEAAQAAAAAACAAAAAAAAAAAAAAgAAAAAAAAAAAAAAA=</HashCode>
-      <FileName>IO\Header\FileBrowser\Interfaces\IDropTarget.cs</FileName>
-    </TypeIdentifier>
-  </Interface>
-  <Interface Name="DirectoryInfoExLib.IO.Header.ShellDll.Interfaces.IDropTargetHelper" Collapsed="true">
-    <Position X="21.25" Y="7.75" Width="1.5" />
-    <TypeIdentifier>
-      <HashCode>AAEAAAAAAAAQCAAAAAAAAAAAAAAkAAAAAAAAAAAAAAA=</HashCode>
-      <FileName>IO\Header\FileBrowser\Interfaces\IDropTargetHelper.cs</FileName>
-    </TypeIdentifier>
-  </Interface>
-  <Interface Name="DirectoryInfoExLib.IO.Header.ShellDll.Interfaces.IEnumFORMATETC" Collapsed="true">
-    <Position X="16" Y="8.5" Width="1.5" />
-    <TypeIdentifier>
-      <HashCode>AAAAAAAAAAAABAAAAAAAAAAAAAAAAAIAAAAAAAAAEBA=</HashCode>
-      <FileName>IO\Header\FileBrowser\Interfaces\IEnumFORMATETC.cs</FileName>
     </TypeIdentifier>
   </Interface>
   <Interface Name="DirectoryInfoExLib.IO.Header.ShellDll.Interfaces.IEnumIDList" Collapsed="true">
@@ -315,39 +222,11 @@
       <FileName>IO\Header\FileBrowser\Interfaces\IEnumIDList.cs</FileName>
     </TypeIdentifier>
   </Interface>
-  <Interface Name="DirectoryInfoExLib.IO.Header.ShellDll.Interfaces.IEnumSTATSTG" Collapsed="true">
-    <Position X="19.5" Y="8.5" Width="1.5" />
-    <TypeIdentifier>
-      <HashCode>AgAAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAEBA=</HashCode>
-      <FileName>IO\Header\FileBrowser\Interfaces\IEnumSTATSTG.cs</FileName>
-    </TypeIdentifier>
-  </Interface>
-  <Interface Name="DirectoryInfoExLib.IO.Header.ShellDll.Interfaces.IExtractImage" Collapsed="true">
-    <Position X="21.25" Y="8.5" Width="1.5" />
-    <TypeIdentifier>
-      <HashCode>AAAAAAACAAAAQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
-      <FileName>IO\Header\FileBrowser\Interfaces\IExtractImage.cs</FileName>
-    </TypeIdentifier>
-  </Interface>
   <Interface Name="DirectoryInfoExLib.IO.Header.ShellDll.Interfaces.IShellFolder" Collapsed="true">
     <Position X="19.5" Y="9.25" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAgAAAgAAAAAQABAAAAQAAEQCAIAAAEAAAAAAAAAAA=</HashCode>
       <FileName>IO\Header\FileBrowser\Interfaces\IShellFolder.cs</FileName>
-    </TypeIdentifier>
-  </Interface>
-  <Interface Name="DirectoryInfoExLib.IO.Header.ShellDll.Interfaces.IStorage" Collapsed="true">
-    <Position X="14.25" Y="10" Width="1.5" />
-    <TypeIdentifier>
-      <HashCode>AgAAAEAAAAAAAAAAAIAAAACggIAAAAAAAgYAAAAQIMI=</HashCode>
-      <FileName>IO\Header\FileBrowser\Interfaces\IStorage.cs</FileName>
-    </TypeIdentifier>
-  </Interface>
-  <Interface Name="DirectoryInfoExLib.IO.Header.ShellDll.Interfaces.IStream" Collapsed="true">
-    <Position X="16" Y="10" Width="1.5" />
-    <TypeIdentifier>
-      <HashCode>AAAAAEAAAAAAAAAACQAMAAAgAAAAAAAAAAIAAAEQIBA=</HashCode>
-      <FileName>IO\Header\FileBrowser\Interfaces\IStream.cs</FileName>
     </TypeIdentifier>
   </Interface>
   <Interface Name="DirectoryInfoExLib.IO.Header.IEnumExtraSearch" Collapsed="true">
@@ -385,13 +264,6 @@
       <FileName>Interfaces\IDirectoryInfoEx.cs</FileName>
     </TypeIdentifier>
   </Enum>
-  <Enum Name="DirectoryInfoExLib.IO.Header.ShellDll.Interfaces.IExtractImageFlags" Collapsed="true">
-    <Position X="16" Y="11" Width="1.5" />
-    <TypeIdentifier>
-      <HashCode>AAAAAAAgAAAAIEBEBAgAAAAAAAAAAggAACAAAAAAAAA=</HashCode>
-      <FileName>IO\Header\FileBrowser\Interfaces\IExtractImage.cs</FileName>
-    </TypeIdentifier>
-  </Enum>
   <Enum Name="DirectoryInfoExLib.IO.Header.SHCOLSTATEF" Collapsed="true">
     <Position X="21.25" Y="11.75" Width="1.5" />
     <TypeIdentifier>
@@ -425,13 +297,6 @@
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAAACAAAAAAAAAAAAAgAAAAAAAAAAAAAAA=</HashCode>
       <FileName>IO\Header\KnownFolder\Enums\KnownFolderFindMode.cs</FileName>
-    </TypeIdentifier>
-  </Enum>
-  <Enum Name="DirectoryInfoExLib.IO.Header.KnownFolder.Enums.KnownFolderIds" Collapsed="true">
-    <Position X="14.25" Y="11.75" Width="1.5" />
-    <TypeIdentifier>
-      <HashCode>ZjVWKc/oRM0gAECUIg0HAWJBTA04IULLGjOPiEIpcD0=</HashCode>
-      <FileName>IO\Header\KnownFolder\Enums\KnownFolderIds.cs</FileName>
     </TypeIdentifier>
   </Enum>
   <Enum Name="DirectoryInfoExLib.IO.Header.KnownFolder.Enums.KnownFolderRedirectionCapabilities" Collapsed="true">

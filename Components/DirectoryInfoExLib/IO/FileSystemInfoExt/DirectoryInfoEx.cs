@@ -235,19 +235,6 @@ namespace DirectoryInfoExLib.IO.FileSystemInfoExt
         }
 
         /// <summary>
-        /// Gets the folder type <see cref="Environment.SpecialFolder"/> if this
-        /// folder is a special windows folder or null.
-        /// </summary>
-        public Environment.SpecialFolder? ShellFolderType
-        {
-            get
-            {
-                var kf = KnownFolderType;
-                  return kf == null ? null : kf.SpecialFolder;
-            }
-        }
-
-        /// <summary>
         /// Gets the Windows known folder (similar to <see cref="Environment.SpecialFolder"/>
         /// but extensible and customizable at run-time) or null if this folder
         /// is not a special folder in Windows.
@@ -256,20 +243,6 @@ namespace DirectoryInfoExLib.IO.FileSystemInfoExt
         public KnownFolder KnownFolderType
         {
             get { return this.RequestPIDL(pidl => KnownFolder.FromPidl(pidl)); }
-        }
-
-        /// <summary>
-        /// Gets the <see cref="Guid"/> Id of this folder if it is a <see cref="KnownFolder"/>
-        /// or null if this is not a special folder in Windows.
-        /// </summary>
-        public KnownFolderIds? KnownFolderId
-        {
-            get
-            {
-                var kf = KnownFolderType;
-
-                return kf == null ? null : kf.KnownFolderId;
-            }
         }
         #endregion
 

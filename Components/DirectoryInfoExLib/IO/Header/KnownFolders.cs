@@ -41,15 +41,6 @@
 
         static IKnownFolderManager _knownFolderManager = (IKnownFolderManager)new KnownFolderManager();
 
-        public static KnownFolder GetKnownFolder(int csidl)
-        {
-            Guid knownFolderID;
-            _knownFolderManager.FolderIdFromCsidl(csidl, out knownFolderID);
-            KnownFolder.IKnownFolder knowFolderInterface;
-            _knownFolderManager.GetFolder(knownFolderID, out knowFolderInterface);
-            return new KnownFolder(knowFolderInterface);
-        }
-
         public static KnownFolder GetKnownFolder(Guid knownFolderID)
         {
             KnownFolder.IKnownFolder knowFolderInterface;
@@ -69,13 +60,6 @@
             KnownFolder.IKnownFolder knowFolderInterface;
             _knownFolderManager.FindFolderFromPath(path, mode, out knowFolderInterface);
             return new KnownFolder(knowFolderInterface);
-        }
-
-        public static int GetCsidl(Guid knownFolderID)
-        {
-            int csidl;
-            _knownFolderManager.FolderIdToCsidl(knownFolderID, out csidl);
-            return csidl;
         }
 
         private static string GetPath(Guid knownFolderID)

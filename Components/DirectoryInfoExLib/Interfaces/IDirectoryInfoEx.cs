@@ -94,24 +94,12 @@
         DirectoryTypeEnum DirectoryType { get; }
 
         /// <summary>
-        /// Gets the folder type <see cref="Environment.SpecialFolder"/> if this
-        /// folder is a special windows folder or null.
-        /// </summary>
-        Environment.SpecialFolder? ShellFolderType { get; }
-
-        /// <summary>
         /// Gets the Windows known folder (similar to <see cref="Environment.SpecialFolder"/>
         /// but extensible and customizable at run-time) or null if this folder
         /// is not a special folder in Windows.
         /// </summary>
         /// <returns></returns>
         KnownFolder KnownFolderType { get; }
-
-        /// <summary>
-        /// Gets the <see cref="Guid"/> Id of this folder if it is a <see cref="KnownFolder"/>
-        /// or null if this is not a special folder in Windows.
-        /// </summary>
-        KnownFolderIds? KnownFolderId { get; }
         #endregion properties
 
         #region methods

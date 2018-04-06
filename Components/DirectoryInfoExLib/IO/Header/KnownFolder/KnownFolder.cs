@@ -94,43 +94,6 @@
             }
         }
 
-        /// <summary>
-        /// Gets the <see cref="Guid"/> id of the known folder,
-        /// if it is present in the enumeration of known folder,
-        /// or null, if the Id is not present in the enumeration.
-        /// </summary>
-        public KnownFolderIds? KnownFolderId
-        {
-            get
-            {
-                Guid id = Id;
-                foreach (var kfId in Enum.GetValues(typeof(KnownFolderIds)))
-                {
-                    var attribute = EnumAttributeUtils<KnownFolderGuidAttribute, KnownFolderIds>.FindAttribute(kfId);
-
-                    if (attribute != null && attribute.Guid.Equals(id))
-                        return (KnownFolderIds)kfId;
-                }
-
-                return null;
-            }
-        }
-
-        public Environment.SpecialFolder? SpecialFolder
-        {
-            get
-            {
-                var kfId = KnownFolderId;
-                if (kfId != null)
-                {
-                    var attribute = EnumAttributeUtils<SpecialFolderAttribute, KnownFolderIds>.FindAttribute(kfId);
-                    if (attribute != null)
-                        return attribute.SpecialFolder;
-                }
-                return null;
-            }
-        }
-
         public Guid FolderType
         {
             get
@@ -147,24 +110,6 @@
                 KnownFolderCategory category;
                 _knownFolder.GetCategory(out category);
                 return category;
-            }
-        }
-
-        internal ShellAPI.CSIDL? CSIDL
-        {
-            get
-            {
-                try
-                {
-                    int csidl;
-                    FolderManager.FolderIdToCsidl(this.Id, out csidl);
-                    ShellAPI.CSIDL result;
-                    if (Enum.TryParse<ShellAPI.CSIDL>(csidl.ToString(), out result))
-                        return result;
-                }
-                catch (ArgumentException) { }
-
-                return null;
             }
         }
 
@@ -206,19 +151,6 @@
         {
             IKnownFolder knowFolderInterface;
             KnownFolder.FolderManager.GetFolder(knownFolderID, out knowFolderInterface);
-            return new KnownFolder(knowFolderInterface);
-        }
-
-        public static KnownFolder FromKnownFolderId(KnownFolderIds kfId)
-        {
-            var guidAtb = EnumAttributeUtils<KnownFolderGuidAttribute, KnownFolderIds>.FindAttribute(kfId);
-            return FromKnownFolderId(guidAtb.Guid);
-        }
-
-        public static KnownFolder FromKnownFolderName(string canonicalName)
-        {
-            IKnownFolder knowFolderInterface;
-            KnownFolder.FolderManager.GetFolderByName(canonicalName, out knowFolderInterface);
             return new KnownFolder(knowFolderInterface);
         }
 

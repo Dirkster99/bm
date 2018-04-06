@@ -3,7 +3,6 @@ namespace DirectoryInfoExLib.IO.Header.ShellDll
     using System;
     using System.Text;
     using System.Runtime.InteropServices;
-    using DirectoryInfoExLib.IO.Header.ShellDll.Interfaces;
 
     /// <summary>
     /// This class contains every method, enumeration, struct and constants from
@@ -21,89 +20,17 @@ namespace DirectoryInfoExLib.IO.Header.ShellDll
         #region DLL Import
 
         #region Shell32
-        // Takes the CSIDL of a folder and returns the pathname.
-        [DllImport("shell32.dll")]
-        public static extern Int32 SHGetFolderPath(
-            IntPtr hwndOwner,
-            CSIDL nFolder,
-            IntPtr hToken,
-            SHGFP dwFlags,
-            StringBuilder pszPath);
-
         // Retrieves the IShellFolder interface for the desktop folder,
         // which is the root of the Shell's namespace. 
         [DllImport("shell32.dll")]
         public static extern Int32 SHGetDesktopFolder(
             out IntPtr ppshf);
 
-        // Retrieves ppidl of special folder
-        [DllImport("Shell32", 
-            EntryPoint = "SHGetSpecialFolderLocation", 
-            ExactSpelling = true, 
-            CharSet = CharSet.Ansi, 
-            SetLastError = true)]
-        public static extern Int32 SHGetSpecialFolderLocation(
-            IntPtr hwndOwner, 
-            CSIDL nFolder, 
-            out IntPtr ppidl);
-
-        //// This function takes the fully-qualified pointer to an item
-        //// identifier list (PIDL) of a namespace object, and returns a specified
-        //// interface pointer on the parent object.
-        //[DllImport("shell32.dll")]
-        //public static extern Int32 SHBindToParent(
-        //    IntPtr pidl,            
-        //    ref Guid riid,
-        //    out IntPtr ppv,
-        //    out IntPtr ppidlLast);
-
-        [DllImport("shell32.dll")]
-        public static extern Int32 SHBindToParent(
-            IntPtr pidl,            // The item's PIDL. 
-            [MarshalAs(UnmanagedType.LPStruct)]
-            Guid riid,              // The REFIID of one of the interfaces exposed by
-                                    // the item's parent object. 
-            out IntPtr ppv,         // A pointer to the interface specified by riid. You
-                                    // must release the object when 
-                                    // you are finished. 
-            ref IntPtr ppidlLast);  // The item's PIDL relative to the parent folder. This
-
-        // PIDL can be used with many
-
-        // of the methods supported by the parent folder's
-
-        // interfaces. If you set ppidlLast 
-
-        // to NULL, the PIDL will not be returned. 
-
-        // Registers a window that receives notifications from the file system or shell
-        [DllImport("shell32.dll", EntryPoint = "#2", CharSet = CharSet.Auto)]
-        public static extern uint SHChangeNotifyRegister(
-            IntPtr hwnd,
-            SHCNRF fSources,
-            SHCNE fEvents,
-            WM wMsg,
-            int cEntries,
-            [MarshalAs(UnmanagedType.LPArray)]
-            SHChangeNotifyEntry[] pfsne);
-
-        // Unregisters the client's window process from receiving SHChangeNotify
-        [DllImport("shell32.dll", EntryPoint = "#4", CharSet = CharSet.Auto)]
-        public static extern bool SHChangeNotifyDeregister(
-            uint hNotify);
-
         // Converts an item identifier list to a file system path
         [DllImport("shell32.dll")]
         public static extern bool SHGetPathFromIDList(
             IntPtr pidl,
             StringBuilder pszPath);
-
-        // SHGetRealIDL converts a simple PIDL to a full PIDL
-        [DllImport("shell32.dll")]
-        public static extern Int32 SHGetRealIDL(
-            IShellFolder psf,
-            IntPtr pidlSimple,
-            out IntPtr ppidlReal);
 
         // Tests whether two ITEMIDLIST structures are equal in a binary comparison
         [DllImport("shell32.dll",
@@ -231,76 +158,6 @@ namespace DirectoryInfoExLib.IO.Header.ShellDll
         #endregion
 
         #region Enums
-
-        /// <summary>
-        /// Used to retrieve directory paths to system special folders
-        /// </summary>
-        internal enum CSIDL
-        {
-            CSIDL_ADMINTOOLS = 0x0030,
-            CSIDL_ALTSTARTUP = 0x001d,
-            CSIDL_APPDATA = 0x001a,
-            CSIDL_BITBUCKET = 0x000a,
-            CSIDL_CDBURN_AREA = 0x003b,
-            CSIDL_COMMON_ADMINTOOLS = 0x002f,
-            CSIDL_COMMON_ALTSTARTUP = 0x001e,
-            CSIDL_COMMON_APPDATA = 0x0023,
-            CSIDL_COMMON_DESKTOPDIRECTORY = 0x0019,
-            CSIDL_COMMON_DOCUMENTS = 0x002e,
-            CSIDL_COMMON_FAVORITES = 0x001f,
-            CSIDL_COMMON_MUSIC = 0x0035,
-            CSIDL_COMMON_OEM_LINKS = 0x003a,
-            CSIDL_COMMON_PICTURES = 0x0036,
-            CSIDL_COMMON_PROGRAMS = 0X0017,
-            CSIDL_COMMON_STARTMENU = 0x0016,
-            CSIDL_COMMON_STARTUP = 0x0018,
-            CSIDL_COMMON_TEMPLATES = 0x002d,
-            CSIDL_COMMON_VIDEO = 0x0037,
-            CSIDL_COMPUTERSNEARME = 0x003d,
-            CSIDL_CONNECTIONS = 0x0031,
-            CSIDL_CONTROLS = 0x0003,
-            CSIDL_COOKIES = 0x0021,
-            CSIDL_DESKTOP = 0x0000,
-            CSIDL_DESKTOPDIRECTORY = 0x0010,
-            CSIDL_DRIVES = 0x0011,
-            CSIDL_FAVORITES = 0x0006,
-            CSIDL_FLAG_CREATE = 0x8000,
-            CSIDL_FLAG_DONT_VERIFY = 0x4000,
-            CSIDL_FLAG_MASK = 0xFF00,
-            CSIDL_FLAG_NO_ALIAS = 0x1000,
-            CSIDL_FLAG_PER_USER_INIT = 0x0800,
-            CSIDL_FONTS = 0x0014,
-            CSIDL_HISTORY = 0x0022,
-            CSIDL_INTERNET = 0x0001,
-            CSIDL_INTERNET_CACHE = 0x0020,
-            CSIDL_LOCAL_APPDATA = 0x001c,
-            CSIDL_MYDOCUMENTS = 0x000c,
-            CSIDL_MYMUSIC = 0x000d,
-            CSIDL_MYPICTURES = 0x0027,
-            CSIDL_MYVIDEO = 0x000e,
-            CSIDL_NETHOOD = 0x0013,
-            CSIDL_NETWORK = 0x0012,
-            CSIDL_PERSONAL = 0x0005,
-            CSIDL_PRINTERS = 0x0004,
-            CSIDL_PRINTHOOD = 0x001b,
-            CSIDL_PROFILE = 0x0028,
-            CSIDL_PROGRAM_FILES = 0x0026,
-            CSIDL_PROGRAM_FILES_COMMON = 0x002b,
-            CSIDL_PROGRAM_FILES_COMMONX86 = 0x002c,
-            CSIDL_PROGRAM_FILESX86 = 0x002a,
-            CSIDL_PROGRAMS = 0x0002,
-            CSIDL_RECENT = 0x0008,
-            CSIDL_RESOURCES = 0x0038,
-            CSIDL_RESOURCES_LOCALIZED = 0x0039,
-            CSIDL_SENDTO = 0x0009,
-            CSIDL_STARTMENU = 0x000b,
-            CSIDL_STARTUP = 0x0007,
-            CSIDL_SYSTEM = 0x0025,
-            CSIDL_SYSTEMX86 = 0x0029,
-            CSIDL_TEMPLATES = 0x0015,
-            CSIDL_WINDOWS = 0x0024  
-        }
-
         /// <summary>
         /// Defines the values used with the IShellFolder::GetDisplayNameOf and IShellFolder::SetNameOf 
         /// methods to specify the type of file or folder names used by those methods

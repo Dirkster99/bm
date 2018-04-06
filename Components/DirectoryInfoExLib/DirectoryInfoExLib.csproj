@@ -93,14 +93,12 @@
     <Compile Include="IO\Header\KnownFolder\Attributes\DisplayNameAttribute.cs" />
     <Compile Include="IO\Header\KnownFolder\Attributes\KnownFolderCategoryAttribute.cs" />
     <Compile Include="IO\Header\KnownFolder\Attributes\KnownFolderGuidAttribute .cs" />
-    <Compile Include="IO\Header\KnownFolder\Attributes\CsidlAttribute.cs" />
     <Compile Include="IO\Header\KnownFolder\Attributes\MinVersionAttribute.cs" />
     <Compile Include="IO\Header\KnownFolder\Attributes\SpecialFolderAttribute.cs" />
     <Compile Include="IO\Header\KnownFolder\Enums\KnownFolderCategory.cs" />
     <Compile Include="IO\Header\KnownFolder\Enums\KnownFolderFindMode.cs" />
     <Compile Include="IO\Header\KnownFolder\Enums\KnownFolderDefinitionFlags.cs" />
     <Compile Include="IO\Header\KnownFolder\Enums\KnownFolderDefinition.cs" />
-    <Compile Include="IO\Header\KnownFolder\Enums\KnownFolderIds.cs" />
     <Compile Include="IO\Header\KnownFolder\Enums\KnownFolderRedirectionCapabilities.cs" />
     <Compile Include="IO\Header\KnownFolder\Enums\KnownFolderRetrievalOptions.cs" />
     <Compile Include="IO\Header\KnownFolder\Interfaces\IKnownFolder.cs" />
