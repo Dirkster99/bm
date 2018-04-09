@@ -105,20 +105,6 @@ namespace DirectoryInfoExLib.IO.Header.ShellDll
         }
 
         /// <summary>
-        /// A generalized Clipboard format, it is enhanced to encompass a 
-        /// target device, the aspect or view of the data, and a storage medium indicator
-        /// </summary>
-        [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Auto)]
-        public struct FORMATETC
-        {
-            public CF cfFormat;
-            public IntPtr ptd;
-            public DVASPECT dwAspect;
-            public int lindex;
-            public TYMED Tymd;
-        }
-
-        /// <summary>
         /// A generalized global memory handle used for data transfer operations by the 
         /// IAdviseSink, IDataObject, and IOleCache interfaces
         /// </summary>
@@ -374,17 +360,6 @@ namespace DirectoryInfoExLib.IO.Header.ShellDll
             FLAG_LOG_USAGE = 0x04000000,
             PTINVOKE = 0x20000000
         }
-
-        // Flags that specify the drawing style when calling ImageList_GetIcon
-        [Flags]
-        internal enum ILD : uint
-        {
-            NORMAL = 0x0000,
-            TRANSPARENT =0x0001,
-            MASK = 0x0010,
-            BLEND25 = 0x0002,
-            BLEND50 = 0x0004
-        }        
 
         // Specifies how the window is to be shown
         [Flags]
@@ -702,16 +677,6 @@ namespace DirectoryInfoExLib.IO.Header.ShellDll
             TIFF = 6,
             UNICODETEXT = 13,
             WAVE = 12
-        }
-
-        // Specifies the desired data or view aspect of the object when drawing or getting data
-        [Flags]
-        internal enum DVASPECT
-        {
-            CONTENT = 1,
-            DOCPRINT = 8,
-            ICON = 4,
-            THUMBNAIL = 2
         }
 
         // Indicates the type of storage medium being used in a data transfer

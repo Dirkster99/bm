@@ -8,9 +8,6 @@
     using System.Threading;
     using DirectoryInfoExLib.Tools;
     using DirectoryInfoExLib.IO.Header.KnownFolder;
-    using DirectoryInfoExLib.IO.Header.KnownFolder.Enums;
-    using System.Drawing;
-    using DirectoryInfoExLib.Enums;
     using DirectoryInfoExLib.IO.Header.ShellDll;
 
     /// <summary>
