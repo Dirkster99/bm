@@ -30,29 +30,106 @@ namespace DirectoryInfoExLib.IO.FileSystemInfoExt
 
         #endregion
 
-        #region Variables and Properties
+        #region fields
         public static int counter = 0;
-        private string _name;
+
         internal IDirectoryInfoEx _parent;
+        private string _name;
         private bool _parentInited = false;
         private PIDL _pidlRel = null;
         private PIDL _pidl = null;
         private FileAttributes _attributes;
         private DateTime _lastWriteTime, _lastAccessTime, _creationTime;
+        #endregion fields
   
+        #region Constructors
+        internal FileSystemInfoEx(string fullPath)
+            : this()
+        {
+            init(fullPath);
+        }
 
-        //public PIDL PIDLRel
-        //{
-        //    get { return getRelPIDL(); ; }
-        //}
-        //public PIDL PIDL
-        //{
-        //    get { return getPIDL(); }
-        //}
+        protected FileSystemInfoEx(SerializationInfo info, StreamingContext context)
+            : this()
+        {
+            init(info, context);
+        }
 
+
+        protected FileSystemInfoEx()
+            : base()
+        {
+            System.Threading.Interlocked.Increment(ref counter);
+        }
+
+        ~FileSystemInfoEx()
+        {
+            ((IDisposable)this).Dispose();
+        }
+
+        protected virtual void checkProperties()
+        {
+        }
+
+        protected void init(PIDL fullPIDL)
+        {
+            PIDL relPIDL = null;
+            //0.16: Fixed ShellFolder not freed
+            using (ShellFolder2 parentShellFolder = getParentIShellFolder(fullPIDL, out relPIDL))
+                refresh(parentShellFolder, relPIDL, fullPIDL, RefreshModeEnum.BaseProps);
+            _pidl = new PIDL(fullPIDL, false); //0.14 : FileSystemInfoEx record the pidl when construct, as some path do not parasable (e.g. EntireNetwork)
+            _pidlRel = relPIDL;
+        }
+
+        protected void init(IShellFolder2 parentShellFolder, PIDL fullPIDL)
+        {
+            PIDL relPIDL = null;
+            getParentPIDL(fullPIDL, out relPIDL);
+            refresh(parentShellFolder, relPIDL, fullPIDL, RefreshModeEnum.BaseProps);
+            _pidl = new PIDL(fullPIDL, false);
+            _pidlRel = relPIDL;
+        }
+
+        protected void init(IShellFolder2 parentShellFolder, PIDL parentPIDl, PIDL relPIDL)
+        {
+            PIDL fullPIDL = new PIDL(PIDL.ILCombine(parentPIDl.Ptr, relPIDL.Ptr), false);
+
+            refresh(parentShellFolder, relPIDL, fullPIDL, RefreshModeEnum.BaseProps);
+            _pidl = fullPIDL;
+            _pidlRel = relPIDL; // new PIDL(relPIDL, false);
+        }
+
+
+        protected void init(string path)
+        {
+            //0.22: Fix illegal PIDL for Directory under Library.ms directory
+            _pidl = null;
+            _pidlRel = null;
+            OriginalPath = path;
+            FullName = path;
+            Refresh(RefreshModeEnum.BaseProps);
+        }
+
+        protected void init(SerializationInfo info, StreamingContext context)
+        {
+            OriginalPath = info.GetString("OriginalPath");
+            Label = info.GetString("Label");
+            _name = info.GetString("Name");
+            FullName = info.GetString("FullName");
+            Attributes = (FileAttributes)info.GetValue("Attributes", typeof(FileAttributes));
+            LastWriteTime = info.GetDateTime("LastWriteTime");
+            LastAccessTime = info.GetDateTime("LastAccessTime");
+            CreationTime = info.GetDateTime("CreationTime");
+        }
+        #endregion
+
+        #region properties
         public RefreshModeEnum RefreshMode { get; private set; }
+        
         public override string Name { get { return _name; } }
+        
         public new string Extension { get { return Path.GetExtension(Name); } }
+        
         public override bool Exists { get { return getExists(); } }
 
         public IDirectoryInfoEx Parent
@@ -69,107 +146,68 @@ namespace DirectoryInfoExLib.IO.FileSystemInfoExt
         }
 
         public string Label { get; protected set; }
+        
         public new string FullName { get; protected set; }
-        public new FileAttributes Attributes { get { checkRefresh(); return _attributes; } set { _attributes = value; } }
-        public new DateTime LastWriteTime { get { checkRefresh(); return _lastWriteTime; } set { _lastWriteTime = value; } }
-        public new DateTime LastWriteTimeUtc { get { return LastWriteTime.ToUniversalTime(); } }
-        public new DateTime LastAccessTime { get { checkRefresh(); return _lastAccessTime; } set { _lastAccessTime = value; } }
-        public new DateTime LastAccessTimeUtc { get { return LastAccessTime.ToUniversalTime(); } }
-        public new DateTime CreationTime { get { checkRefresh(); return _creationTime; } set { _creationTime = value; } }
-        public new DateTime CreationTimeUtc { get { return CreationTime.ToUniversalTime(); } }
-        public bool IsFolder { get { return (Attributes & FileAttributes.Directory) == FileAttributes.Directory; } }
-
-        protected void initParent()
+        
+        public new FileAttributes Attributes
         {
-            if (!_parentInited)
-                if (Exists)
-                {
-                    if (FullName.Equals(DirectoryInfoExLib.Tools.IOTools.IID_Desktop)) return;
-
-                    this.RequestPIDL((pidl) =>
-                        {
-////                            PIDL relPIDL;
-                            _parent = new DirectoryInfoEx(getParentPIDL(pidl));                            
-                            _parentInited = true;
-                            
-                        });
-                }
-                else
-                {
-                    _parent = new DirectoryInfoEx(PathEx.GetDirectoryName(FullName));
-                    _parentInited = true;
-                }
+          get { checkRefresh(); return _attributes; } set { _attributes = value; }
         }
 
-
-
-        //0.12: Fixed PIDL, PIDLRel, ShellFolder, Storage properties generated on demand to avoid x-thread issues.
-        internal PIDL getRelPIDL()
+        public new DateTime LastWriteTime
         {
-            if (_pidlRel != null) //0.14 : FileSystemInfoEx now stored a copy of PIDL/Rel, will return copy of it when properties is called (to avoid AccessViolation). 
-                return new PIDL(_pidlRel, true);
-
-
-            //0.16: Fixed getRelPIDL() cannot return correct value if File/DirInfoEx construct with string. (attemp to return a freed up pointer).                       
-            PIDL pidlLookup = getPIDL();
-            try
-            {
-                return getRelativePIDL(pidlLookup);
-            }
-            finally
-            {
-                if (pidlLookup != null)
-                    pidlLookup.Free();
-                pidlLookup = null;
-            }
+          get
+          {
+            checkRefresh();
+            return _lastWriteTime;
+          }
+          
+          set { _lastWriteTime = value; }
+        }
+        
+        public new DateTime LastWriteTimeUtc
+        {
+          get { return LastWriteTime.ToUniversalTime(); }
         }
 
-        internal PIDL getPIDL()
+        public new DateTime LastAccessTime
         {
-            if (_pidl != null)
-                return new PIDL(_pidl, true);
-
-            if (FullName == "::{00021400-0000-0000-C000-000000000046}") //Desktop
-                return DirectoryInfoEx.KnownFolderToPIDL(KnownFolder.FromKnownFolderId(KnownFolder_GUIDS.Desktop));
-            else
-                return PathToPIDL(FullName);
+          get
+          { 
+            checkRefresh();
+            return _lastAccessTime;
+          }
+          
+          set
+          {
+            _lastAccessTime = value;
+          }
+        }
+        
+        public new DateTime LastAccessTimeUtc
+        {
+          get { return LastAccessTime.ToUniversalTime(); }
         }
 
-        private bool getExists()
+        public new DateTime CreationTime
         {
-            if (FullName == "::{00021400-0000-0000-C000-000000000046}") //Desktop
-                return true;
-            else if (FullName == null) return false;
-            else
-                try
-                {
-                    if (_pidl != null)
-                    {
-                        using (ShellFolder2 _desktopShellFolder = getDesktopShellFolder())
-                            loadName(_desktopShellFolder, _pidl, Header.ShellDll.ShellAPI.SHGNO.FORPARSING);
-                        return true;
-                    }
-                    else
-                    {
-                        PIDL pidlLookup = PathToPIDL(FullName);
-                        try
-                        {
-                            return pidlLookup != null;
-                        }
-                        finally { if (pidlLookup != null) pidlLookup.Free(); }
-                    }
-                }
-                catch (FileNotFoundException)
-                {
-                    return false;
-                }
+          get { checkRefresh(); return _creationTime; } set { _creationTime = value; }
+        }
+        
+        public new DateTime CreationTimeUtc
+        {
+          get { return CreationTime.ToUniversalTime(); }
         }
 
-        #endregion
+        public bool IsFolder
+        {
+          get { return (Attributes & FileAttributes.Directory) == FileAttributes.Directory; }
+        }
+        #endregion properties
 
-        #region Static Methods
+        #region methods
         /// <summary>
-        /// Gets wether a directory exists at a given path or not.
+        /// Gets whether a directory exists at a given path or not.
         /// </summary>
         /// <param name="path"></param>
         /// <returns></returns>
@@ -178,13 +216,14 @@ namespace DirectoryInfoExLib.IO.FileSystemInfoExt
             try
             {
                 FileSystemInfoEx fsInfo = new FileSystemInfoEx(path);
+
                 return fsInfo != null && fsInfo.IsFolder && fsInfo.Exists;
             }
             catch { return false; }
         }
 
         /// <summary>
-        /// Gets wether a file exists at a given path or not.
+        /// Gets whether a file exists at a given path or not.
         /// </summary>
         /// <param name="path"></param>
         /// <returns></returns>
@@ -193,9 +232,83 @@ namespace DirectoryInfoExLib.IO.FileSystemInfoExt
             try
             {
                 FileSystemInfoEx fsInfo = new FileSystemInfoEx(path);
+
                 return fsInfo != null && !fsInfo.IsFolder && fsInfo.Exists;
             }
             catch { return false; }
+        }
+
+        /// <summary>
+        /// Refresh the file / directory info. Does not refresh directory contents 
+        /// because it refresh every time GetFiles/Directories/FileSystemInfos is called.
+        /// </summary>
+        /// <param name="mode"></param>
+        public void Refresh(RefreshModeEnum mode = RefreshModeEnum.AllProps )
+        {
+            RefreshMode |= mode; //0.23 : Delay loading some properties.
+
+            PIDL relPIDL = null;
+            if (!Exists)
+                refresh(null, null, null, mode);
+            else
+                try
+                {                    
+                    //0.16: Fixed ShellFolder not freed
+                    this.RequestPIDL(pidlLookup =>
+                        {
+                            using (ShellFolder2 sf = getParentIShellFolder(pidlLookup, out relPIDL))
+                                refresh(sf, relPIDL, pidlLookup, mode);
+                        });
+                }
+                catch (NullReferenceException)
+                {
+                    refresh(null, null, null, mode);
+                }
+                finally
+                {               
+                    if (relPIDL != null)
+                        relPIDL.Free();
+                    relPIDL = null;
+                }
+
+        }
+
+        /// <summary>
+        /// Delete the current item.
+        /// </summary>
+        public override void Delete()
+        {
+            throw new NotImplementedException();
+////            if (this is FileInfoEx)
+////                (this as FileInfoEx).Delete();
+////            else
+////                (this as DirectoryInfoEx).Delete();
+        }
+
+        /// <summary>
+        /// Return if two FileSystemInfoEx is equal (using PIDL if possible, otherwise Path)
+        /// </summary>
+        public virtual bool Equals(FileSystemInfoEx other)
+        {            
+            return this.RequestPIDL(thisPidl => 
+                other.RequestPIDL(otherPidl => thisPidl.Equals(otherPidl)));
+        }
+
+        public override bool Equals(object obj)
+        {
+            if (obj is FileSystemInfoEx)
+                return Equals((FileSystemInfoEx)obj);
+            return false;
+        }
+
+        public override int GetHashCode()
+        {
+            return IOTools.GetHashCode(this);
+        }
+
+        public override string ToString()
+        {
+            return Label;
         }
 
         internal static ShellFolder2 getDesktopShellFolder()
@@ -233,6 +346,37 @@ namespace DirectoryInfoExLib.IO.FileSystemInfoExt
             return new PIDL(pidlPtr, false);
         }
 
+        //0.12: Fixed PIDL, PIDLRel, ShellFolder, Storage properties generated on demand to avoid x-thread issues.
+        internal PIDL getRelPIDL()
+        {
+            if (_pidlRel != null) //0.14 : FileSystemInfoEx now stored a copy of PIDL/Rel, will return copy of it when properties is called (to avoid AccessViolation). 
+                return new PIDL(_pidlRel, true);
+
+
+            //0.16: Fixed getRelPIDL() cannot return correct value if File/DirInfoEx construct with string. (attemp to return a freed up pointer).                       
+            PIDL pidlLookup = getPIDL();
+            try
+            {
+                return getRelativePIDL(pidlLookup);
+            }
+            finally
+            {
+                if (pidlLookup != null)
+                    pidlLookup.Free();
+                pidlLookup = null;
+            }
+        }
+
+        internal PIDL getPIDL()
+        {
+            if (_pidl != null)
+                return new PIDL(_pidl, true);
+
+            if (FullName == "::{00021400-0000-0000-C000-000000000046}") //Desktop
+                return DirectoryInfoEx.KnownFolderToPIDL(KnownFolder.FromKnownFolderId(KnownFolder_GUIDS.Desktop));
+            else
+                return PathToPIDL(FullName);
+        }
 
         internal static string PtrToPath(IntPtr ptr)
         {            
@@ -336,61 +480,27 @@ namespace DirectoryInfoExLib.IO.FileSystemInfoExt
             return null; //mute error.
         }
 
-        private static FileAttributes loadAttributes(IShellFolder2 iShellFolder, PIDL pidlFull, PIDL pidlRel)
+        protected void initParent()
         {
-            FileAttributes retVal = new FileAttributes();
+            if (!_parentInited)
+                if (Exists)
+                {
+                    if (FullName.Equals(DirectoryInfoExLib.Tools.IOTools.IID_Desktop)) return;
 
-
-            //ShellAPI.SFGAO attribute = shGetFileAttribute(pidlFull, ShellAPI.SFGAO.READONLY |
-            //    ShellAPI.SFGAO.FOLDER | ShellAPI.SFGAO.FILESYSTEM | ShellAPI.SFGAO.STREAM | ShellAPI.SFGAO.FILESYSANCESTOR |
-            //    ShellAPI.SFGAO.HIDDEN);
-            Header.ShellDll.ShellAPI.SFGAO attribute = Header.ShellDll.ShellAPI.SFGAO.READONLY | Header.ShellDll.ShellAPI.SFGAO.FOLDER | Header.ShellDll.ShellAPI.SFGAO.FILESYSTEM | Header.ShellDll.ShellAPI.SFGAO.STREAM | Header.ShellDll.ShellAPI.SFGAO.FILESYSANCESTOR;
-            iShellFolder.GetAttributesOf(1, new IntPtr[] { pidlRel.Ptr }, ref attribute);
-
-            if (!IOTools.IsZip(attribute) && (attribute & Header.ShellDll.ShellAPI.SFGAO.FOLDER) != 0) retVal |= FileAttributes.Directory;
-            if ((attribute & Header.ShellDll.ShellAPI.SFGAO.HIDDEN) != 0) retVal |= FileAttributes.Hidden;
-            if ((attribute & Header.ShellDll.ShellAPI.SFGAO.READONLY) != 0) retVal |= FileAttributes.ReadOnly;
-
-            return retVal;
+                    this.RequestPIDL((pidl) =>
+                        {
+////                            PIDL relPIDL;
+                            _parent = new DirectoryInfoEx(getParentPIDL(pidl));                            
+                            _parentInited = true;
+                            
+                        });
+                }
+                else
+                {
+                    _parent = new DirectoryInfoEx(PathEx.GetDirectoryName(FullName));
+                    _parentInited = true;
+                }
         }
-
-        private static string loadName(IShellFolder2 iShellFolder, Header.ShellDll.ShellAPI.SHGNO uFlags)
-        {
-            return loadName(iShellFolder, new PIDL(IntPtr.Zero, false), uFlags);
-        }
-
-        private static string loadName(IShellFolder2 iShellFolder,IntPtr ptr, Header.ShellDll.ShellAPI.SHGNO uFlags)
-        {
-            if (iShellFolder == null) return null;
-
-            IntPtr ptrStr = Marshal.AllocCoTaskMem(Header.ShellDll.ShellAPI.MAX_PATH * 2 + 4);
-            Marshal.WriteInt32(ptrStr, 0, 0);
-            StringBuilder buf = new StringBuilder(Header.ShellDll.ShellAPI.MAX_PATH);
-
-            try
-            {
-                if (iShellFolder.GetDisplayNameOf(ptr, uFlags, ptrStr) == Header.ShellDll.ShellAPI.S_OK)
-                    Header.ShellDll.ShellAPI.StrRetToBuf(ptrStr, ptr, buf, Header.ShellDll.ShellAPI.MAX_PATH);
-            }
-            finally
-            {
-                if (ptrStr != IntPtr.Zero)
-                    Marshal.FreeCoTaskMem(ptrStr);
-                ptrStr = IntPtr.Zero;
-            }
-            return buf.ToString();
-        }
-
-        private static string loadName(IShellFolder2 iShellFolder, PIDL relPidl, Header.ShellDll.ShellAPI.SHGNO uFlags)
-        {
-            return loadName(iShellFolder, relPidl.Ptr, uFlags);
-        }
-
-
-        #endregion
-
-        #region Methods
-
 
         protected virtual void refresh(IShellFolder2 parentShellFolder, PIDL relPIDL, PIDL fullPIDL, RefreshModeEnum mode)
         {
@@ -489,156 +599,85 @@ namespace DirectoryInfoExLib.IO.FileSystemInfoExt
                 Refresh(mode);
         }
 
-        /// <summary>
-        /// Refresh the file / directory info. Does not refresh directory contents 
-        /// because it refresh every time GetFiles/Directories/FileSystemInfos is called.
-        /// </summary>
-        /// <param name="mode"></param>
-        public void Refresh(RefreshModeEnum mode = RefreshModeEnum.AllProps )
+        private static FileAttributes loadAttributes(IShellFolder2 iShellFolder, PIDL pidlFull, PIDL pidlRel)
         {
-            RefreshMode |= mode; //0.23 : Delay loading some properties.
+            FileAttributes retVal = new FileAttributes();
 
-            PIDL relPIDL = null;
-            if (!Exists)
-                refresh(null, null, null, mode);
+
+            //ShellAPI.SFGAO attribute = shGetFileAttribute(pidlFull, ShellAPI.SFGAO.READONLY |
+            //    ShellAPI.SFGAO.FOLDER | ShellAPI.SFGAO.FILESYSTEM | ShellAPI.SFGAO.STREAM | ShellAPI.SFGAO.FILESYSANCESTOR |
+            //    ShellAPI.SFGAO.HIDDEN);
+            Header.ShellDll.ShellAPI.SFGAO attribute = Header.ShellDll.ShellAPI.SFGAO.READONLY | Header.ShellDll.ShellAPI.SFGAO.FOLDER | Header.ShellDll.ShellAPI.SFGAO.FILESYSTEM | Header.ShellDll.ShellAPI.SFGAO.STREAM | Header.ShellDll.ShellAPI.SFGAO.FILESYSANCESTOR;
+            iShellFolder.GetAttributesOf(1, new IntPtr[] { pidlRel.Ptr }, ref attribute);
+
+            if (!IOTools.IsZip(attribute) && (attribute & Header.ShellDll.ShellAPI.SFGAO.FOLDER) != 0) retVal |= FileAttributes.Directory;
+            if ((attribute & Header.ShellDll.ShellAPI.SFGAO.HIDDEN) != 0) retVal |= FileAttributes.Hidden;
+            if ((attribute & Header.ShellDll.ShellAPI.SFGAO.READONLY) != 0) retVal |= FileAttributes.ReadOnly;
+
+            return retVal;
+        }
+
+        private static string loadName(IShellFolder2 iShellFolder, Header.ShellDll.ShellAPI.SHGNO uFlags)
+        {
+            return loadName(iShellFolder, new PIDL(IntPtr.Zero, false), uFlags);
+        }
+
+        private static string loadName(IShellFolder2 iShellFolder,IntPtr ptr, Header.ShellDll.ShellAPI.SHGNO uFlags)
+        {
+            if (iShellFolder == null) return null;
+
+            IntPtr ptrStr = Marshal.AllocCoTaskMem(Header.ShellDll.ShellAPI.MAX_PATH * 2 + 4);
+            Marshal.WriteInt32(ptrStr, 0, 0);
+            StringBuilder buf = new StringBuilder(Header.ShellDll.ShellAPI.MAX_PATH);
+
+            try
+            {
+                if (iShellFolder.GetDisplayNameOf(ptr, uFlags, ptrStr) == Header.ShellDll.ShellAPI.S_OK)
+                    Header.ShellDll.ShellAPI.StrRetToBuf(ptrStr, ptr, buf, Header.ShellDll.ShellAPI.MAX_PATH);
+            }
+            finally
+            {
+                if (ptrStr != IntPtr.Zero)
+                    Marshal.FreeCoTaskMem(ptrStr);
+                ptrStr = IntPtr.Zero;
+            }
+            return buf.ToString();
+        }
+
+        private static string loadName(IShellFolder2 iShellFolder, PIDL relPidl, Header.ShellDll.ShellAPI.SHGNO uFlags)
+        {
+            return loadName(iShellFolder, relPidl.Ptr, uFlags);
+        }
+
+        private bool getExists()
+        {
+            if (FullName == "::{00021400-0000-0000-C000-000000000046}") //Desktop
+                return true;
+            else if (FullName == null) return false;
             else
                 try
-                {                    
-                    //0.16: Fixed ShellFolder not freed
-                    this.RequestPIDL(pidlLookup =>
-                        {
-                            using (ShellFolder2 sf = getParentIShellFolder(pidlLookup, out relPIDL))
-                                refresh(sf, relPIDL, pidlLookup, mode);
-                        });
-                }
-                catch (NullReferenceException)
                 {
-                    refresh(null, null, null, mode);
+                    if (_pidl != null)
+                    {
+                        using (ShellFolder2 _desktopShellFolder = getDesktopShellFolder())
+                            loadName(_desktopShellFolder, _pidl, Header.ShellDll.ShellAPI.SHGNO.FORPARSING);
+                        return true;
+                    }
+                    else
+                    {
+                        PIDL pidlLookup = PathToPIDL(FullName);
+                        try
+                        {
+                            return pidlLookup != null;
+                        }
+                        finally { if (pidlLookup != null) pidlLookup.Free(); }
+                    }
                 }
-                finally
-                {               
-                    if (relPIDL != null)
-                        relPIDL.Free();
-                    relPIDL = null;
+                catch (FileNotFoundException)
+                {
+                    return false;
                 }
-
         }
-
-        /// <summary>
-        /// Delete the current item.
-        /// </summary>
-        public override void Delete()
-        {
-            throw new NotImplementedException();
-////            if (this is FileInfoEx)
-////                (this as FileInfoEx).Delete();
-////            else
-////                (this as DirectoryInfoEx).Delete();
-        }
-
-        /// <summary>
-        /// Return if two FileSystemInfoEx is equal (using PIDL if possible, otherwise Path)
-        /// </summary>
-        public virtual bool Equals(FileSystemInfoEx other)
-        {            
-            return this.RequestPIDL(thisPidl => 
-                other.RequestPIDL(otherPidl => thisPidl.Equals(otherPidl)));
-        }
-
-        public override bool Equals(object obj)
-        {
-            if (obj is FileSystemInfoEx)
-                return Equals((FileSystemInfoEx)obj);
-            return false;
-        }
-
-        public override int GetHashCode()
-        {
-            return IOTools.GetHashCode(this);
-        }
-
-        public override string ToString()
-        {
-            return Label;
-        }
-
-        #endregion
-
-        #region Constructors
-        protected virtual void checkProperties()
-        {
-        }
-
-        protected void init(PIDL fullPIDL)
-        {
-            PIDL relPIDL = null;
-            //0.16: Fixed ShellFolder not freed
-            using (ShellFolder2 parentShellFolder = getParentIShellFolder(fullPIDL, out relPIDL))
-                refresh(parentShellFolder, relPIDL, fullPIDL, RefreshModeEnum.BaseProps);
-            _pidl = new PIDL(fullPIDL, false); //0.14 : FileSystemInfoEx record the pidl when construct, as some path do not parasable (e.g. EntireNetwork)
-            _pidlRel = relPIDL;
-        }
-
-        protected void init(IShellFolder2 parentShellFolder, PIDL fullPIDL)
-        {
-            PIDL relPIDL = null;
-            getParentPIDL(fullPIDL, out relPIDL);
-            refresh(parentShellFolder, relPIDL, fullPIDL, RefreshModeEnum.BaseProps);
-            _pidl = new PIDL(fullPIDL, false);
-            _pidlRel = relPIDL;
-        }
-
-        protected void init(IShellFolder2 parentShellFolder, PIDL parentPIDl, PIDL relPIDL)
-        {
-            PIDL fullPIDL = new PIDL(PIDL.ILCombine(parentPIDl.Ptr, relPIDL.Ptr), false);
-
-            refresh(parentShellFolder, relPIDL, fullPIDL, RefreshModeEnum.BaseProps);
-            _pidl = fullPIDL;
-            _pidlRel = relPIDL; // new PIDL(relPIDL, false);
-        }
-
-
-        protected void init(string path)
-        {
-            //0.22: Fix illegal PIDL for Directory under Library.ms directory
-            _pidl = null;
-            _pidlRel = null;
-            OriginalPath = path;
-            FullName = path;
-            Refresh(RefreshModeEnum.BaseProps);
-        }
-
-        protected void init(SerializationInfo info, StreamingContext context)
-        {
-            OriginalPath = info.GetString("OriginalPath");
-            Label = info.GetString("Label");
-            _name = info.GetString("Name");
-            FullName = info.GetString("FullName");
-            Attributes = (FileAttributes)info.GetValue("Attributes", typeof(FileAttributes));
-            LastWriteTime = info.GetDateTime("LastWriteTime");
-            LastAccessTime = info.GetDateTime("LastAccessTime");
-            CreationTime = info.GetDateTime("CreationTime");
-        }
-
-        internal FileSystemInfoEx(string fullPath)
-            : this()
-        {
-            init(fullPath);
-        }
-
-        protected FileSystemInfoEx(SerializationInfo info, StreamingContext context)
-            : this()
-        {
-            init(info, context);
-        }
-
-
-        protected FileSystemInfoEx()
-            : base()
-        {
-            System.Threading.Interlocked.Increment(ref counter);
-        }
-
         #endregion
 
         #region ISerializable Members
@@ -664,10 +703,6 @@ namespace DirectoryInfoExLib.IO.FileSystemInfoExt
 
         #region IDisposable Members
 
-        ~FileSystemInfoEx()
-        {
-            ((IDisposable)this).Dispose();
-        }
 
         public void Dispose()
         {

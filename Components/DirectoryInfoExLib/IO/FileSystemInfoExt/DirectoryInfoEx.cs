@@ -181,8 +181,6 @@ namespace DirectoryInfoExLib.IO.FileSystemInfoExt
         #endregion constructors
 
         #region properties
-        public ShellFolder2 ShellFolder { get { return getIShellFolder(); } }
-
         public IDirectoryInfoEx Root { get { return getDirectoryRoot(this); } }
 
         /// <summary>
@@ -244,6 +242,8 @@ namespace DirectoryInfoExLib.IO.FileSystemInfoExt
         {
             get { return this.RequestPIDL(pidl => KnownFolder.FromPidl(pidl)); }
         }
+
+        internal ShellFolder2 ShellFolder { get { return getIShellFolder(); } }
         #endregion
 
         #region Static Methods
