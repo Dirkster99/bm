@@ -11,6 +11,7 @@
     using DirectoryInfoExLib.IO.Header.KnownFolder.Enums;
     using System.Drawing;
     using DirectoryInfoExLib.Enums;
+    using DirectoryInfoExLib.IO.Header.ShellDll;
 
     /// <summary>
     /// Implements a classification for folders.
@@ -132,8 +133,10 @@
                                                      CancellationToken ct);
         #endregion
 
-        Bitmap GetIconInner(IconSize size);
-        Bitmap GetBitmap(IconSize size, IntPtr ptr, bool isDirectory, bool forceLoad);
+        T RequestPIDL<T>(Func<PIDL, PIDL, T> pidlAndRelPidlFunc);
+        T RequestPIDL<T>(Func<PIDL, T> pidlFuncOnly);
+        void RequestPIDL(Action<PIDL> pidlFuncOnly);
+        T RequestRelativePIDL<T>(Func<PIDL, T> relPidlFuncOnly);
         #endregion methods
     }
 }

@@ -1,29 +1,26 @@
 ﻿namespace Breadcrumb.Utils
 {
-	using System;
-	using System.Collections.Generic;
+    using System;
 
 #if !NETFX_CORE
-	using System.Drawing;
-	using System.Drawing.Imaging;
+    using System.Drawing;
+    using System.Drawing.Imaging;
 #endif
 
-	using System.IO;
-	using System.Linq;
-	using System.Text;
-	using System.Threading.Tasks;
-	using System.Windows;
+    using System.IO;
+    using System.Linq;
+    using System.Windows;
 
 #if !NETFX_CORE
-	using System.Windows.Media.Imaging;
-	using System.Windows.Threading;
+    using System.Windows.Media.Imaging;
+    using System.Windows.Threading;
 #endif
 
 #if !NETFX_CORE
-	/// <summary>
-	/// http://www.codeproject.com/Articles/104929/Bitmap-to-BitmapSource
-	/// </summary>
-	public static class BitmapSourceUtils
+    /// <summary>
+    /// http://www.codeproject.com/Articles/104929/Bitmap-to-BitmapSource
+    /// </summary>
+    public static class BitmapSourceUtils
 	{
 		private static bool InvokeRequired
 		{

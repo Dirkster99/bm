@@ -1,4 +1,4 @@
-﻿namespace DirectoryInfoExLib.Enums
+﻿namespace BreadcrumbLib.IconExtractors.Enums
 {
     /// <summary>
     /// Flags specifying the state of the icon to draw from the Shell

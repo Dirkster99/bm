@@ -113,6 +113,10 @@
     <Compile Include="Converters\FlipBoolToVisibilityConverter.cs" />
     <Compile Include="Defines\AttachedProperties.cs" />
     <Compile Include="Defines\Enums.cs" />
+    <Compile Include="IconExtractors\Enums\IconSize.cs" />
+    <Compile Include="IconExtractors\Enums\ImageListDrawItemConstants.cs" />
+    <Compile Include="IconExtractors\Enums\ShellIconStateConstants.cs" />
+    <Compile Include="IconExtractors\SystemImageList.cs" />
     <Compile Include="Interfaces\IEntryViewModel.cs" />
     <Compile Include="Models\ExtensionMethods.cs" />
     <Compile Include="Models\IDiskPathMapper.cs" />

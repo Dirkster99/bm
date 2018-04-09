@@ -7,6 +7,6 @@
 	/// <typeparam name="T">Type to identify a node, commonly string.</typeparam>
 	public interface ISupportTreeSelector<VM, T> : ISupportEntriesHelper<VM>
 	{
-		ITreeSelector<VM, T> Selection { get; set; }
+		ITreeSelector<VM, T> Selection { get; }
 	}
 }

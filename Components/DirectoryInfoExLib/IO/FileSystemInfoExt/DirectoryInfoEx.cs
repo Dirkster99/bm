@@ -22,10 +22,7 @@ namespace DirectoryInfoExLib.IO.FileSystemInfoExt
     using DirectoryInfoExLib.IO.Header.ShellDll.Interfaces;
     using DirectoryInfoExLib.IO.Header.KnownFolder;
     using DirectoryInfoExLib.IO.Header.KnownFolder.Enums;
-    using DirectoryInfoExLib.IO.Header.KnownFolder.Attributes;
-    using System.Drawing;
     using DirectoryInfoExLib.Enums;
-    using DirectoryInfoExLib.IconExtracts;
 
     /// <summary>
     /// Represents a directory in PIDL system.
@@ -389,69 +386,7 @@ namespace DirectoryInfoExLib.IO.FileSystemInfoExt
         {
             //0.18: checkExists() ignore network directory.
             if (!FullName.StartsWith("\\") && !Exists)
-                throw new DirectoryNotFoundException(FullName + " is not exists.");
-        }
-
-        public Bitmap GetIconInner(IconSize size)
-        {
-            ////            if (key.StartsWith("."))
-            ////                throw new Exception("ext item is handled by IconExtractor");
-            ////            
-            ////			if (entry is FileInfoEx)
-            ////			{
-            ////				Bitmap retVal = null;
-            ////
-            ////				string ext = PathEx.GetExtension(entry.Name);
-            ////				if (IconExtractor.IsJpeg(ext))
-            ////				{
-            ////					retVal = IconExtractor.GetExifThumbnail(entry.FullName);
-            ////				}
-            ////				if (IconExtractor.IsImageIcon(ext))
-            ////					try
-            ////					{
-            ////						retVal = new Bitmap(entry.FullName);
-            ////					}
-            ////					catch { retVal = null; }
-            ////
-            ////				if (retVal != null)
-            ////					return retVal;
-            ////			}
-
-            return this.RequestPIDL(pidl => this.GetBitmap(size, pidl.Ptr, this is DirectoryInfoEx, false));
-        }
-
-        public Bitmap GetBitmap(IconSize size, IntPtr ptr, bool isDirectory, bool forceLoad)
-        {
-            Bitmap retVal = null;
-
-            using (var imgList = new SystemImageList(size))
-                retVal = imgList[ptr, isDirectory, forceLoad];
-
-            ////sysImgListLock.AcquireReaderLock(1000);
-
-            ////try
-            ////{
-            ////    if (size != sysImgList.CurrentImageListSize)
-            ////    {
-            ////        LockCookie lockCookie = sysImgListLock.UpgradeToWriterLock(lockWaitTime);
-            ////        try
-            ////        {
-            ////            SystemImageList imgList = sysImgList[size];
-            ////            retVal = imgList[ptr, isDirectory, forceLoad];
-            ////        }
-            ////        finally
-            ////        {
-            ////            sysImgListLock.DowngradeFromWriterLock(ref lockCookie);
-            ////        }
-            ////    }
-            ////    else
-            ////    {
-            ////        retVal = sysImgList[size][ptr, isDirectory, forceLoad];
-            ////    }
-            ////}
-            ////finally { sysImgListLock.ReleaseReaderLock(); }
-
-            return retVal;
+                throw new DirectoryNotFoundException(FullName + " does not exist.");
         }
 
         /// <summary>
@@ -507,7 +442,6 @@ namespace DirectoryInfoExLib.IO.FileSystemInfoExt
                         if (ptrShellFolder == IntPtr.Zero || hr != ShellAPI.S_OK) Marshal.ThrowExceptionForHR(hr);
                         return new ShellFolder2(ptrShellFolder);
                     }
-
                 });
             }
         }

@@ -1,4 +1,4 @@
-﻿namespace DirectoryInfoExLib.Enums
+﻿namespace BreadcrumbLib.IconExtractors.Enums
 {
     using System;
 

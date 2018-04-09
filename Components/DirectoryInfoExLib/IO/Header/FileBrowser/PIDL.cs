@@ -13,7 +13,7 @@ namespace DirectoryInfoExLib.IO.Header.ShellDll
     /// https://msdn.microsoft.com/en-us/library/windows/desktop/cc144090(v=vs.85).aspx
     /// https://www.codeproject.com/Articles/88/Namespace-extensions-the-undocumented-Windows-Shel
     /// </summary>
-    internal class PIDL : IEnumerable //, IDisposable //11-01-09 : Added automatic disposer (LYCJ)
+    public class PIDL : IEnumerable //, IDisposable //11-01-09 : Added automatic disposer (LYCJ)
     //0.13 : Removed IDisposable in PIDL as it causing AccessViolationException, user have to free calling the Free() method.
     {
         #region fields

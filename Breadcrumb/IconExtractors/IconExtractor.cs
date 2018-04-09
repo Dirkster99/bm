@@ -1,10 +1,10 @@
 ﻿namespace Breadcrumb.IconExtractors
 {
+/***
     using Breadcrumb.IconExtractors.Enums;
     using DirectoryInfoExLib.Enums;
     using DirectoryInfoExLib.IconExtracts;
     using System;
-    using System.Collections.Generic;
     using System.Diagnostics;
     using System.Drawing;
     using System.IO;
@@ -53,7 +53,6 @@
 		/// </summary>
 		public IconExtractor()
 		{
-			////Debug.WriteLine("AAA");
 		}
 		#endregion constructors
 
@@ -65,11 +64,20 @@
 		{
 			switch (size)
 			{
-				case IconSize.thumbnail: return new System.Drawing.Size(128, 128);
-				case IconSize.jumbo: return new System.Drawing.Size(80, 80);
-				case IconSize.extraLarge: return new System.Drawing.Size(64, 64);
-				case IconSize.large: return new System.Drawing.Size(32, 32);
-				default: return new System.Drawing.Size(16, 16);
+				case IconSize.thumbnail:
+                    return new System.Drawing.Size(128, 128);
+
+                case IconSize.jumbo:
+                    return new System.Drawing.Size(80, 80);
+
+				case IconSize.extraLarge:
+                    return new System.Drawing.Size(64, 64);
+
+				case IconSize.large:
+                    return new System.Drawing.Size(32, 32);
+
+				default:
+                    return new System.Drawing.Size(16, 16);
 			}
 		}
 
@@ -84,48 +92,12 @@
 						return IconSize.thumbnail;
 		}
 
-////		public Bitmap GetThumbnail(string path, IconSize size)
-////		{
-////			if (path != null)
-////				if (File.Exists(path))
-////				{
-////					Bitmap thumbnail = ImageExtractor.ExtractImage(path, IconSizeToSize(size), false);
-////					if (thumbnail == null)
-////						return thumbnail;
-////				}
-////			return null;
-////		}
-
 		public Bitmap GetBitmap(IconSize size, IntPtr ptr, bool isDirectory, bool forceLoad)
 		{
 			Bitmap retVal = null;
 
 			using (var imgList = new SystemImageList(size))
 				retVal = imgList[ptr, isDirectory, forceLoad];
-
-			////sysImgListLock.AcquireReaderLock(1000);
-
-			////try
-			////{
-			////    if (size != sysImgList.CurrentImageListSize)
-			////    {
-			////        LockCookie lockCookie = sysImgListLock.UpgradeToWriterLock(lockWaitTime);
-			////        try
-			////        {
-			////            SystemImageList imgList = sysImgList[size];
-			////            retVal = imgList[ptr, isDirectory, forceLoad];
-			////        }
-			////        finally
-			////        {
-			////            sysImgListLock.DowngradeFromWriterLock(ref lockCookie);
-			////        }
-			////    }
-			////    else
-			////    {
-			////        retVal = sysImgList[size][ptr, isDirectory, forceLoad];
-			////    }
-			////}
-			////finally { sysImgListLock.ReleaseReaderLock(); }
 
 			return retVal;
 		}
@@ -136,29 +108,6 @@
 
 			using (var imgList = new SystemImageList(size))
 				retVal = imgList[fileName, isDirectory, forceLoad];
-
-			////sysImgListLock.AcquireReaderLock(1000);
-			////try
-			////{
-			////    if (!sysImgList.IsImageListInited || size != sysImgList.CurrentImageListSize)
-			////    {
-			////        LockCookie lockCookie = sysImgListLock.UpgradeToWriterLock(lockWaitTime);
-			////        try
-			////        {
-			////            SystemImageList imgList = sysImgList[size];
-			////            retVal = imgList[fileName, isDirectory, forceLoad];
-			////        }
-			////        finally
-			////        {
-			////            sysImgListLock.DowngradeFromWriterLock(ref lockCookie);
-			////        }
-			////    }
-			////    else
-			////    {
-			////        retVal = sysImgList[size][fileName, isDirectory, forceLoad];
-			////    }
-			////}
-			////finally { sysImgListLock.ReleaseReaderLock(); }
 
 			return retVal;
 		}
@@ -269,7 +218,6 @@
 		[DllImport("shell32.dll")]
 		protected static extern IntPtr SHGetFileInfo(string pszPath, uint dwFileAttributes,
 																							ref SHFILEINFO psfi, uint cbSizeFileInfo, uint uFlags);
-
 		protected Bitmap GetGenericIcon(string fullPathOrExt, IconSize size, bool isFolder = false, bool forceLoad = false)
 		{
 			try
@@ -404,168 +352,5 @@
 		}
 		#endregion structs
 	}
-
-	/// <summary>
-	/// .Net 2.0 WinForms level icon extractor with cache support.
-	/// </summary>
-	/// <typeparam name="FSI"></typeparam>
-	public abstract class IconExtractor<FSI> : IconExtractor // T may be FileSystemInfo, Ex or ExA
-	{
-		#region fields
-		private Dictionary<Tuple<string, IconSize>, Bitmap> _iconCache = new Dictionary<Tuple<string, IconSize>, Bitmap>();
-		private ReaderWriterLock _iconCacheLock = new ReaderWriterLock();
-		#endregion fields
-
-		#region constructors
-		/// <summary>
-		/// Constructor
-		/// </summary>
-		public IconExtractor()
-		{
-			this.initCache();
-		}
-		#endregion constructors
-
-		#region methods
-		public bool IsDelayLoading(FSI entry, IconSize size)
-		{
-			string fastKey, slowKey;
-			this.GetIconKey(entry, size, out fastKey, out slowKey);
-
-			return fastKey != slowKey;
-		}
-
-		public Bitmap GetIcon(FSI entry, string key, bool isDir, IconSize size)
-		{
-			Func<string, IconSize, Bitmap> getIconFromCache =
-			(k, s) =>
-			{
-				Tuple<string, IconSize> dicKey = new Tuple<string, IconSize>(k, s);
-
-				try
-				{
-					this._iconCacheLock.AcquireReaderLock(0);
-
-					if (_iconCache.ContainsKey(dicKey))
-					{
-						lock (this._iconCache[dicKey])
-							return this._iconCache[dicKey];
-					}
-				}
-				catch
-				{
-					return null;
-				}
-				finally
-				{
-					this._iconCacheLock.ReleaseReaderLock();
-				}
-
-				return null;
-			};
-
-			Action<string, IconSize, Bitmap> addIconToCache =
-			(k, s, b) =>
-			{
-				Tuple<string, IconSize> dicKey = new Tuple<string, IconSize>(k, s);
-
-				if (k.StartsWith("."))
-				{
-					try
-					{
-						this._iconCacheLock.AcquireWriterLock(Timeout.Infinite);
-
-						if (!_iconCache.ContainsKey(dicKey))
-							this._iconCache.Add(dicKey, b);
-						else
-							this._iconCache[dicKey] = b;
-					}
-					finally
-					{
-						this._iconCacheLock.ReleaseWriterLock();
-					}
-				}
-			};
-
-			Bitmap retImg = null;
-			retImg = getIconFromCache(key, size);
-
-			////if (retImg != null && !key.StartsWith("::")) retImg.Save(@"C:\temp\" + "AAA" + key + ".png");
-
-			if (retImg != null)
-				return retImg;
-
-			try
-			{
-				if (key.StartsWith(".")) // ext, retrieve automatically
-					retImg = this.GetGenericIcon(key, size);
-				else
-					if (IconExtractor.IsSpecialIcon(key) && File.Exists(key))
-						retImg = this.GetGenericIcon(key, size, isDir, true);
-					else
-						retImg = this.GetIconInner(entry, key, size);
-			}
-			catch (Exception ex)
-			{
-				retImg = null;
-				Debug.WriteLine("IconExtractor.GetIcon" + ex.Message);
-			}
-
-			if (retImg != null)
-			{
-				Size destSize = IconSizeToSize(size);
-
-				if (size == IconSize.jumbo && IconExtractor.IsImageIcon(key))
-					retImg = ImageTools.resizeImage(retImg, destSize, 5);
-				else
-					retImg = ImageTools.resizeImage(retImg, destSize, 0);
-
-				addIconToCache(key, size, retImg);
-			}
-
-			return retImg;
-		}
-
-		public Bitmap GetIcon(string fileName, IconSize size, bool isDir)
-		{
-			return this.GetBitmap(size, fileName, isDir, true);
-		}
-
-		public Bitmap GetIcon(FSI entry, IconSize size, bool isDir, bool fast)
-		{
-			string fastKey, slowKey;
-			this.GetIconKey(entry, size, out fastKey, out slowKey);
-
-			////return GetIcon(entry, slowKey, size);
-
-			if (fast || size <= IconSize.large)
-				return this.GetIcon(entry, fastKey, isDir, size);
-			else
-			{
-				Bitmap icon = this.GetIcon(entry, slowKey, isDir, size);
-
-				return icon;
-			}
-		}
-
-		protected abstract void GetIconKey(FSI entry, IconSize size, out string fastKey, out string slowKey);
-
-		protected abstract Bitmap GetIconInner(FSI entry, string key, IconSize size);
-
-		protected void initCache()
-		{
-			Action<IconSize> addToDic = (size) =>
-			{
-				Tuple<string, IconSize> iconKey = new Tuple<string, IconSize>(tempPath, size);
-				this._iconCache.Add(iconKey, this.GetGenericIcon(tempPath, size, true, false));
-			};
-
-			lock (this._iconCache)
-			{
-				foreach (IconSize size in Enum.GetValues(typeof(IconSize)))
-					addToDic(size);
-			}
-		}
-		#endregion methods
-	}
+***/
 }

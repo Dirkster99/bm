@@ -1,6 +1,6 @@
-﻿namespace DirectoryInfoExLib.IconExtracts
+﻿namespace BreadcrumbLib.IconExtractors.IconExtracts
 {
-    using DirectoryInfoExLib.Enums;
+    using IconExtractors.Enums;
     using System;
 	using System.Drawing;
 	using System.IO;
@@ -40,23 +40,23 @@
 				throw new NotSupportedException("Windows XP or above required.");
 
 			// There is no thumbnail mode in shell.
-			this._size = size == IconSize.thumbnail ? IconSize.jumbo : size;
+			_size = size == IconSize.thumbnail ? IconSize.jumbo : size;
 
-			// XP do not have extra large or jumbo.
-			if (!isVistaUp() && (this._size == IconSize.jumbo || this._size == IconSize.extraLarge))
-				this._size = IconSize.large;
+			// XP does not have extra large or jumbo icon size.
+			if (!isVistaUp() && (_size == IconSize.jumbo || _size == IconSize.extraLarge))
+				_size = IconSize.large;
 
 			Guid iidImageList = new Guid("46EB5926-582E-4017-9FDF-E8998DAA0950");
 
 			// Get the System IImageList object from the Shell:
-			int hr = SHGetImageList((int)this._size, ref iidImageList, ref this._iImageList);
+			int hr = SHGetImageList((int)_size, ref iidImageList, ref _iImageList);
 
 			if (hr != 0)
 				Marshal.ThrowExceptionForHR(hr);
 
 			// the image list handle is the IUnknown pointer, but using Marshal.GetIUnknownForObject doesn't return
 			// the right value.  It really doesn't hurt to make a second call to get the handle:            
-			SHGetImageListHandle((int)this._size, ref iidImageList, ref this._ptrImageList);
+			SHGetImageListHandle((int)_size, ref iidImageList, ref _ptrImageList);
 
 			////int cx = 0, cy = 0;
 			////ImageList_GetIconSize(_ptrImageList, ref cx, ref cy);
@@ -270,18 +270,18 @@
 		{
 			////logger.Debug(String.Format("Dispose, disposing : {0}", disposing));
 
-			if (!this._disposed)
+			if (!_disposed)
 			{
 				if (disposing)
 				{
-					if (this._iImageList != null)
-						Marshal.ReleaseComObject(this._iImageList);
+					if (_iImageList != null)
+						Marshal.ReleaseComObject(_iImageList);
 
-					this._iImageList = null;
+					_iImageList = null;
 				}
 			}
 
-			this._disposed = true;
+			_disposed = true;
 		}
 
 		private static IImageList getImageListInterface(IconSize size)
@@ -394,7 +394,7 @@
 			dwFlags = SHGetFileInfoConstants.SHGFI_SYSICONINDEX;
 			dwAttr = 0;
 
-			if (this._size == IconSize.small)
+			if (_size == IconSize.small)
 				dwFlags |= SHGetFileInfoConstants.SHGFI_SMALLICON;
 
 			if (isDirectory)
@@ -475,7 +475,7 @@
 
 			////if (_iImageList == null || Thread.CurrentThread.GetApartmentState() == ApartmentState.MTA)
 			////{
-			hIcon = ImageList_GetIcon(this._ptrImageList, index,
+			hIcon = ImageList_GetIcon(_ptrImageList, index,
 					                     (int)(ImageListDrawItemConstants.ILD_TRANSPARENT | ImageListDrawItemConstants.ILD_SCALE));
 			////}
 			////else
@@ -526,13 +526,13 @@
 					////pimldp.dwRop = (int)(dwRop.BLACKNESS);
 					pimldp.FStyle = (int)flags;
 
-					if (this._iImageList == null || Thread.CurrentThread.GetApartmentState() == ApartmentState.MTA)
+					if (_iImageList == null || Thread.CurrentThread.GetApartmentState() == ApartmentState.MTA)
 					{
 						int ret = ImageList_DrawIndirect(ref pimldp);
 					}
 					else
 					{
-						this._iImageList.Draw(ref pimldp);
+						_iImageList.Draw(ref pimldp);
 					}
 				}
 				finally
@@ -581,10 +581,10 @@
 			IMAGEINFO imgInfo = new IMAGEINFO();
 			int hr = 0;
 
-			if (this._iImageList == null || Thread.CurrentThread.GetApartmentState() == ApartmentState.MTA)
-				hr = ImageList_GetImageInfo(this._ptrImageList, index, ref imgInfo);
+			if (_iImageList == null || Thread.CurrentThread.GetApartmentState() == ApartmentState.MTA)
+				hr = ImageList_GetImageInfo(_ptrImageList, index, ref imgInfo);
 			else
-				hr = this._iImageList.GetImageInfo(index, ref imgInfo);
+				hr = _iImageList.GetImageInfo(index, ref imgInfo);
 
 			if (hr != 0)
 				Marshal.ThrowExceptionForHR(hr);
@@ -598,10 +598,10 @@
 		{
 			int cx = 0, cy = 0;
 
-			if (this._iImageList == null || Thread.CurrentThread.GetApartmentState() == ApartmentState.MTA)
-				ImageList_GetIconSize(this._ptrImageList, ref cx, ref cy);
+			if (_iImageList == null || Thread.CurrentThread.GetApartmentState() == ApartmentState.MTA)
+				ImageList_GetIconSize(_ptrImageList, ref cx, ref cy);
 			else
-				this._iImageList.GetIconSize(ref cx, ref cy);
+				_iImageList.GetIconSize(ref cx, ref cy);
 
 			return new Size(cx, cy);
 		}

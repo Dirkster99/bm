@@ -13,7 +13,7 @@
       <Compartment Name="Fields" Collapsed="true" />
     </Compartments>
     <TypeIdentifier>
-      <HashCode>IAQAIgEsRCABgCIokcAIiAAEAMmICAAgEAAgQQEgABQ=</HashCode>
+      <HashCode>IAQAIgEsRCABgCIokcAIiAAAAMmICAAgEAAgQQEgABQ=</HashCode>
       <FileName>IO\FileSystemInfoExt\DirectoryInfoEx.cs</FileName>
     </TypeIdentifier>
     <Lollipop Position="0.2" />
@@ -211,7 +211,7 @@
   <Interface Name="DirectoryInfoExLib.Interfaces.IDirectoryInfoEx">
     <Position X="10.25" Y="1.75" Width="3" />
     <TypeIdentifier>
-      <HashCode>AAAAIAEgEAAAAKAAgEAAwAQEAAAACAAAAAAAAAEAABA=</HashCode>
+      <HashCode>AAAAIAEgEAAAgKAAgEAAwAQAAAAAAAAAEAAAAAEAABA=</HashCode>
       <FileName>Interfaces\IDirectoryInfoEx.cs</FileName>
     </TypeIdentifier>
   </Interface>

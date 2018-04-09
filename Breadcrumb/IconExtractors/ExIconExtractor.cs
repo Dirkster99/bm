@@ -1,5 +1,6 @@
 ﻿namespace Breadcrumb.IconExtractors
 {
+/***
     using DirectoryInfoExLib.Enums;
     using DirectoryInfoExLib.Interfaces;
     using DirectoryInfoExLib.Tools;
@@ -76,4 +77,5 @@
 		}
 		#endregion
 	}
+***/
 }

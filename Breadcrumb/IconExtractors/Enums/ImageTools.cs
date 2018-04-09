@@ -1,5 +1,6 @@
 ﻿namespace Breadcrumb.IconExtractors.Enums
 {
+/***
 	using System;
 	using System.Diagnostics;
 	using System.Drawing;
@@ -294,4 +295,5 @@
 		#endregion Win32API
 		#endregion
 	}
+***/
 }

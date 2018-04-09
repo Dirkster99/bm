@@ -10,7 +10,7 @@
 
     public interface ISupportEntriesHelper<VM>
 	{
-		IEntriesHelper<VM> Entries { get; set; }
+		IEntriesHelper<VM> Entries { get; }
 	}
 
 	/// <summary>

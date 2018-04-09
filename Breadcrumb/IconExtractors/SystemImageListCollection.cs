@@ -1,5 +1,6 @@
 ﻿namespace Breadcrumb.IconExtractors
 {
+/***
     using DirectoryInfoExLib.Enums;
     using DirectoryInfoExLib.IconExtracts;
 
@@ -39,13 +40,13 @@
 		{
 			get
 			{
-				return this._currentImageListSize;
+				return _currentImageListSize;
 			}
 		}
 
 		public bool IsImageListInited
 		{
-			get { return this._currentImageList != null; }
+			get { return _currentImageList != null; }
 		}
 
 		public SystemImageList this[IconSize size]
@@ -60,17 +61,17 @@
 			if (size == IconSize.thumbnail)
 				size = IconSize.jumbo;
 
-			if (this._currentImageList != null && this._currentImageListSize == size)
-				return this._currentImageList;
+			if (_currentImageList != null && _currentImageListSize == size)
+				return _currentImageList;
 
-			if (this._currentImageList != null)
+			if (_currentImageList != null)
 			{
-				this._currentImageList.Dispose();
-				this._currentImageList = null;
+				_currentImageList.Dispose();
+				_currentImageList = null;
 			}
 
-			this._currentImageListSize = size;
-			return this._currentImageList = new SystemImageList(this._currentImageListSize);
+			_currentImageListSize = size;
+			return _currentImageList = new SystemImageList(_currentImageListSize);
 		}
 
 		public void Dispose()
@@ -96,12 +97,13 @@
 			////    jumboImageList = null;
 			////}
 
-			if (this._currentImageList != null)
+			if (_currentImageList != null)
 			{
-				this._currentImageList.Dispose();
-				this._currentImageList = null;
+				_currentImageList.Dispose();
+				_currentImageList = null;
 			}
 		}
 		#endregion methods
 	}
+***/
 }
