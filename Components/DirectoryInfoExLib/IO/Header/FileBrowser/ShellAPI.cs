@@ -62,30 +62,44 @@ namespace DirectoryInfoExLib.IO.Header.ShellDll
         #endregion
         #endregion
 
-        #region Shell GUIDs
+        #region Shell CLSID GUIDs
+        /// <summary>
+        /// https://msdn.microsoft.com/en-us/library/bb762494(VS.85).aspx
+        ///
+        /// Note  As of Windows Vista, these values have been replaced by KNOWNFOLDERID values.
+        /// See that topic for a list of the new constants and their corresponding CSIDL values.
+        /// For convenience, corresponding KNOWNFOLDERID values are also noted here for each CSIDL
+        /// value.
+        /// 
+        /// The CSIDL system is supported under Windows Vista for compatibility reasons.
+        /// However, new development should use KNOWNFOLDERID values rather than CSIDL values.
+        ///
+        /// CLSID is short for Class ID. CLSID is the identification of a COM object.
+        /// Applications that support Microsoft's COM architecture register their objects as class IDs.
+        /// https://www.codeproject.com/articles/14693/use-clsid-to-secure-folders-in-winxp
+        /// </summary>
+        internal static Guid IID_DesktopGUID = new Guid("{00021400-0000-0000-C000-000000000046}");
 
-        public static Guid IID_DesktopGUID = new Guid("{00021400-0000-0000-C000-000000000046}");
+        internal static Guid IID_IShellFolder = new Guid("{000214E6-0000-0000-C000-000000000046}");
+        internal static Guid IID_IShellFolder2 = new Guid("{93F2F68C-1D1B-11D3-A30E-00C04F79ABD1}");
+        internal static Guid IID_IContextMenu = new Guid("{000214e4-0000-0000-c000-000000000046}");
+        internal static Guid IID_IContextMenu2 = new Guid("{000214f4-0000-0000-c000-000000000046}");
+        internal static Guid IID_IContextMenu3 = new Guid("{bcfce0a0-ec17-11d0-8d10-00a0c90f2719}");
 
-        public static Guid IID_IShellFolder = new Guid("{000214E6-0000-0000-C000-000000000046}");
-        public static Guid IID_IShellFolder2 = new Guid("{93F2F68C-1D1B-11D3-A30E-00C04F79ABD1}");
-        public static Guid IID_IContextMenu = new Guid("{000214e4-0000-0000-c000-000000000046}");
-        public static Guid IID_IContextMenu2 = new Guid("{000214f4-0000-0000-c000-000000000046}");
-        public static Guid IID_IContextMenu3 = new Guid("{bcfce0a0-ec17-11d0-8d10-00a0c90f2719}");
+        internal static Guid IID_IDropTarget = new Guid("{00000122-0000-0000-C000-000000000046}");
+        internal static Guid IID_IDataObject = new Guid("{0000010e-0000-0000-C000-000000000046}");
 
-        public static Guid IID_IDropTarget = new Guid("{00000122-0000-0000-C000-000000000046}");
-        public static Guid IID_IDataObject = new Guid("{0000010e-0000-0000-C000-000000000046}");
+        internal static Guid IID_IQueryInfo = new Guid("{00021500-0000-0000-C000-000000000046}");
+        internal static Guid IID_IPersistFile = new Guid("{0000010b-0000-0000-C000-000000000046}");
 
-        public static Guid IID_IQueryInfo = new Guid("{00021500-0000-0000-C000-000000000046}");
-        public static Guid IID_IPersistFile = new Guid("{0000010b-0000-0000-C000-000000000046}");
+        internal static Guid IID_IDragSourceHelper = new Guid("{DE5BF786-477A-11d2-839D-00C04FD918D0}");
+        internal static Guid IID_IDropTargetHelper = new Guid("{4657278B-411B-11d2-839A-00C04FD918D0}");
 
-        public static Guid IID_IDragSourceHelper = new Guid("{DE5BF786-477A-11d2-839D-00C04FD918D0}");
-        public static Guid IID_IDropTargetHelper = new Guid("{4657278B-411B-11d2-839A-00C04FD918D0}");
+        internal static Guid IID_IShellExtInit = new Guid("{000214e8-0000-0000-c000-000000000046}");
+        internal static Guid IID_IStream = new Guid("{0000000c-0000-0000-c000-000000000046}");
+        internal static Guid IID_IStorage = new Guid("{0000000B-0000-0000-C000-000000000046}");
 
-        public static Guid IID_IShellExtInit = new Guid("{000214e8-0000-0000-c000-000000000046}");
-        public static Guid IID_IStream = new Guid("{0000000c-0000-0000-c000-000000000046}");
-        public static Guid IID_IStorage = new Guid("{0000000B-0000-0000-C000-000000000046}");
-
-        public static Guid IID_IExtractImage = new Guid("{BB2E617C-0920-11d1-9A0B-00C04FC2D6C1}");
+        internal static Guid IID_IExtractImage = new Guid("{BB2E617C-0920-11d1-9A0B-00C04FC2D6C1}");
         #endregion
 
         #region Structs

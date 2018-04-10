@@ -3,7 +3,6 @@
     using DirectoryInfoExLib.Interfaces;
     using DirectoryInfoExLib.IO.FileSystemInfoExt;
     using DirectoryInfoExLib.IO.Header.KnownFolder;
-    using System.Runtime.Serialization;
 
     /// <summary>
     /// Implements a factory for generating internal classes that are otherwise
@@ -38,11 +37,11 @@
         /// <param name="info"></param>
         /// <param name="context"></param>
         /// <returns></returns>
-        public static IDirectoryInfoEx CreateDirectoryInfoEx(SerializationInfo info,
-                                                             StreamingContext context)
-        {
-            return new DirectoryInfoEx(info, context);
-        }
+////        public static IDirectoryInfoEx CreateDirectoryInfoEx(SerializationInfo info,
+////                                                             StreamingContext context)
+////        {
+////            return new DirectoryInfoEx(info, context);
+////        }
 
         public static IDirectoryInfoEx DesktopDirectory
         {

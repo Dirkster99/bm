@@ -26,8 +26,13 @@ namespace DirectoryInfoExLib.IO.FileSystemInfoExt
         #region Enums
 
         [Flags]
-        public enum RefreshModeEnum : int { None = 1 << 0, BaseProps = 1 << 1, FullProps =  1 << 2, AllProps = BaseProps | FullProps }
-
+        public enum RefreshModeEnum : int
+        {
+          None = 1 << 0,
+          BaseProps = 1 << 1,
+          FullProps =  1 << 2,
+          AllProps = BaseProps | FullProps
+        }
         #endregion
 
         #region fields
@@ -49,11 +54,11 @@ namespace DirectoryInfoExLib.IO.FileSystemInfoExt
             init(fullPath);
         }
 
-        protected FileSystemInfoEx(SerializationInfo info, StreamingContext context)
-            : this()
-        {
-            init(info, context);
-        }
+////        protected FileSystemInfoEx(SerializationInfo info, StreamingContext context)
+////            : this()
+////        {
+////            init(info, context);
+////        }
 
 
         protected FileSystemInfoEx()
@@ -110,17 +115,17 @@ namespace DirectoryInfoExLib.IO.FileSystemInfoExt
             Refresh(RefreshModeEnum.BaseProps);
         }
 
-        protected void init(SerializationInfo info, StreamingContext context)
-        {
-            OriginalPath = info.GetString("OriginalPath");
-            Label = info.GetString("Label");
-            _name = info.GetString("Name");
-            FullName = info.GetString("FullName");
-            Attributes = (FileAttributes)info.GetValue("Attributes", typeof(FileAttributes));
-            LastWriteTime = info.GetDateTime("LastWriteTime");
-            LastAccessTime = info.GetDateTime("LastAccessTime");
-            CreationTime = info.GetDateTime("CreationTime");
-        }
+////        protected void init(SerializationInfo info, StreamingContext context)
+////        {
+////            OriginalPath = info.GetString("OriginalPath");
+////            Label = info.GetString("Label");
+////            _name = info.GetString("Name");
+////            FullName = info.GetString("FullName");
+////            Attributes = (FileAttributes)info.GetValue("Attributes", typeof(FileAttributes));
+////            LastWriteTime = info.GetDateTime("LastWriteTime");
+////            LastAccessTime = info.GetDateTime("LastAccessTime");
+////            CreationTime = info.GetDateTime("CreationTime");
+////        }
         #endregion
 
         #region properties
@@ -389,6 +394,7 @@ namespace DirectoryInfoExLib.IO.FileSystemInfoExt
         {            
             if (DirectoryInfoEx.DesktopDirectory.RequestPIDL(desktopPIDL => pidlFull.Equals(desktopPIDL)))
                 return "::{00021400-0000-0000-C000-000000000046}";
+
             using (ShellFolder2 _desktopShellFolder = getDesktopShellFolder())
                 return loadName(_desktopShellFolder, pidlFull, ShellAPI.SHGNO.FORPARSING);
                 
@@ -610,9 +616,14 @@ namespace DirectoryInfoExLib.IO.FileSystemInfoExt
             Header.ShellDll.ShellAPI.SFGAO attribute = Header.ShellDll.ShellAPI.SFGAO.READONLY | Header.ShellDll.ShellAPI.SFGAO.FOLDER | Header.ShellDll.ShellAPI.SFGAO.FILESYSTEM | Header.ShellDll.ShellAPI.SFGAO.STREAM | Header.ShellDll.ShellAPI.SFGAO.FILESYSANCESTOR;
             iShellFolder.GetAttributesOf(1, new IntPtr[] { pidlRel.Ptr }, ref attribute);
 
-            if (!IOTools.IsZip(attribute) && (attribute & Header.ShellDll.ShellAPI.SFGAO.FOLDER) != 0) retVal |= FileAttributes.Directory;
-            if ((attribute & Header.ShellDll.ShellAPI.SFGAO.HIDDEN) != 0) retVal |= FileAttributes.Hidden;
-            if ((attribute & Header.ShellDll.ShellAPI.SFGAO.READONLY) != 0) retVal |= FileAttributes.ReadOnly;
+            if (!IOTools.IsZip(attribute) && (attribute & Header.ShellDll.ShellAPI.SFGAO.FOLDER) != 0)
+              retVal |= FileAttributes.Directory;
+
+            if ((attribute & Header.ShellDll.ShellAPI.SFGAO.HIDDEN) != 0)
+              retVal |= FileAttributes.Hidden;
+
+            if ((attribute & Header.ShellDll.ShellAPI.SFGAO.READONLY) != 0)
+              retVal |= FileAttributes.ReadOnly;
 
             return retVal;
         }
@@ -680,29 +691,28 @@ namespace DirectoryInfoExLib.IO.FileSystemInfoExt
         }
         #endregion
 
-        #region ISerializable Members
-        protected virtual void getObjectData(SerializationInfo info, StreamingContext context)
-        {
-            info.AddValue("OriginalPath", OriginalPath);
-            info.AddValue("Label", Label);
-            info.AddValue("Name", Name);
-            info.AddValue("FullName", FullName);
-            info.AddValue("Attributes", Attributes);
-            info.AddValue("LastWriteTime", LastWriteTime);
-            info.AddValue("LastAccessTime", LastAccessTime);
-            info.AddValue("CreationTime", CreationTime);
+////        #region ISerializable Members
+////        protected virtual void getObjectData(SerializationInfo info, StreamingContext context)
+////        {
+////            info.AddValue("OriginalPath", OriginalPath);
+////            info.AddValue("Label", Label);
+////            info.AddValue("Name", Name);
+////            info.AddValue("FullName", FullName);
+////            info.AddValue("Attributes", Attributes);
+////            info.AddValue("LastWriteTime", LastWriteTime);
+////            info.AddValue("LastAccessTime", LastAccessTime);
+////            info.AddValue("CreationTime", CreationTime);
+////
+////        }
+////
+////        void ISerializable.GetObjectData(SerializationInfo info, StreamingContext context)
+////        {
+////            getObjectData(info, context);
+////        }
+////
+////        #endregion
 
-        }
-
-        void ISerializable.GetObjectData(SerializationInfo info, StreamingContext context)
-        {
-            getObjectData(info, context);
-        }
-
-        #endregion
-
-        #region IDisposable Members
-
+    #region IDisposable Members
 
         public void Dispose()
         {
@@ -716,16 +726,13 @@ namespace DirectoryInfoExLib.IO.FileSystemInfoExt
             _pidl = null;
             
         }
-
         #endregion
 
         #region ICloneable Members
-
         public object Clone()
         {
             return new FileSystemInfoEx(this.FullName);
         }
-
-        #endregion
+        #endregion ICloneable Members
     }
 }

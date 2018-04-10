@@ -42,7 +42,7 @@
     /// <summary>
     /// Represents a directory in PIDL system.
     /// </summary>
-    public interface IDirectoryInfoEx : IDisposable, ISerializable, ICloneable
+    public interface IDirectoryInfoEx : IDisposable, ICloneable
     {
         #region properties
         /// <summary>

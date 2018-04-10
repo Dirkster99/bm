@@ -23,7 +23,7 @@ namespace DirectoryInfoExLib.IO.Header.ShellDll
 
         #region Constructors
         /// <summary>
-        /// Class constructor
+        /// Class constructor from IntPtr
         /// </summary>
         /// <param name="pidl"></param>
         /// <param name="clone"></param>
@@ -37,7 +37,7 @@ namespace DirectoryInfoExLib.IO.Header.ShellDll
         }
 
         /// <summary>
-        /// Class constructor
+        /// Copy constructor
         /// </summary>
         /// <param name="pidl"></param>
         /// <param name="clone"></param>
@@ -54,9 +54,16 @@ namespace DirectoryInfoExLib.IO.Header.ShellDll
         #endregion
 
         #region Public
-
+        /// <summary>
+        /// Gets the item id list that describes the path of a shell object
+        /// through an Item Id List (an ordered sequence if items).
+        /// https://msdn.microsoft.com/en-us/library/windows/desktop/cc144090(v=vs.85).aspx
+        /// </summary>
         public IntPtr Ptr { get { return pidl; } }
 
+        /// <summary>
+        /// Gets the size of an item id list that describes the path of a PIDL object.
+        /// </summary>
         public int Size { get { return ItemIDListSize(Ptr); } }
 
         public void Append(IntPtr appendPidl)
@@ -91,7 +98,7 @@ namespace DirectoryInfoExLib.IO.Header.ShellDll
             parent = ILClone(pidl);
             child = ILClone(ILFindLastID(pidl));
 
-            if (!ILRemoveLastID(parent))
+            if (!ILRemoveLastID2(ref parent))
             {
                 Marshal.FreeCoTaskMem(parent);
                 Marshal.FreeCoTaskMem(child);
@@ -123,6 +130,10 @@ namespace DirectoryInfoExLib.IO.Header.ShellDll
             Console.Out.WriteLine(Marshal.ReadByte(pidl, size + 3));
         }
 
+        /// <summary>
+        /// Frees the internal ITEMIDLIST structure to support disposing
+        /// of allocated memory.
+        /// </summary>
         public void Free()
         {
             if (pidl != IntPtr.Zero)
@@ -132,7 +143,6 @@ namespace DirectoryInfoExLib.IO.Header.ShellDll
                 pidl = IntPtr.Zero;
             }
         }
-
         #endregion
 
         #region Shell
@@ -208,27 +218,6 @@ namespace DirectoryInfoExLib.IO.Header.ShellDll
         /// </summary>
         /// <param name="pidl"></param>
         /// <returns></returns>
-        public static bool ILRemoveLastID(IntPtr pidl)
-        {
-            IntPtr lastPidl = ILFindLastID(pidl);
-
-            if (lastPidl != pidl)
-            {
-                int newSize = (int)lastPidl - (int)pidl + 2;
-                Marshal.ReAllocCoTaskMem(pidl, newSize);
-                Marshal.Copy(new byte[] { 0, 0 }, 0, new IntPtr((int)pidl + newSize - 2), 2);
-
-                return true;
-            }
-            else
-                return false;
-        }
-
-        /// <summary>
-        /// 11-01-09 New version of ILRemoveLastID is developed because last version is not working properly (lycj)
-        /// </summary>
-        /// <param name="pidl"></param>
-        /// <returns></returns>
         public static bool ILRemoveLastID2(ref IntPtr pidl)
         {
             IntPtr lastPidl = ILFindLastID(pidl);
@@ -243,6 +232,7 @@ namespace DirectoryInfoExLib.IO.Header.ShellDll
                 Marshal.Copy(bytes, 0, newPidl, bytes.Length);
                 Marshal.FreeCoTaskMem(pidl);
                 pidl = newPidl;
+
                 return true;
             }
             else
@@ -271,12 +261,17 @@ namespace DirectoryInfoExLib.IO.Header.ShellDll
             return newPidl;
         }
 
+        /// <summary>
+        /// Copies the ITEMIDLIST structure from the given IntPtr
+        /// and returns the size of the copy as int.
+        /// </summary>
         private static int ItemIDSize(IntPtr pidl)
         {
             if (!pidl.Equals(IntPtr.Zero))
             {
                 byte[] buffer = new byte[2];
                 Marshal.Copy(pidl, buffer, 0, 2);
+
                 return buffer[1] * 256 + buffer[0];
             }
             else
@@ -340,56 +335,66 @@ namespace DirectoryInfoExLib.IO.Header.ShellDll
         #region private classes
         private class PIDLEnumerator : IEnumerator
         {
-            private IntPtr pidl;
-            private IntPtr currentPidl;
-            private IntPtr clonePidl;
-            private bool start;
+          #region fields
+            private IntPtr _pidl;
+            private IntPtr _currentPidl;
+            private IntPtr _clonePidl;
+            private bool _start;
+          #endregion fields
 
+          #region constructors
+            /// <summary>
+            /// Class constructor
+            /// </summary>
             public PIDLEnumerator(IntPtr pidl)
             {
-                start = true;
-                this.pidl = pidl;
-                currentPidl = pidl;
-                clonePidl = IntPtr.Zero;
+                _start = true;
+                _pidl = pidl;
+                _currentPidl = _pidl;
+                _clonePidl = IntPtr.Zero;
             }
+          #endregion constructors
 
-            #region IEnumerator Members
-
+          #region IEnumerator Members
+            /// <summary>
+            /// Gets the current item from the ItemIdList. 
+            /// </summary>
             public object Current
             {
                 get
                 {
-                    if (clonePidl != IntPtr.Zero)
+                    if (_clonePidl != IntPtr.Zero)
                     {
-                        Marshal.FreeCoTaskMem(clonePidl);
-                        clonePidl = IntPtr.Zero;
+                        Marshal.FreeCoTaskMem(_clonePidl);
+                        _clonePidl = IntPtr.Zero;
                     }
 
-                    clonePidl = PIDL.ILCloneFirst(currentPidl);
-                    return clonePidl;
+                    _clonePidl = PIDL.ILCloneFirst(_currentPidl);
+
+                    return _clonePidl;
                 }
             }
 
             public bool MoveNext()
             {
-                if (clonePidl != IntPtr.Zero)
+                if (_clonePidl != IntPtr.Zero)
                 {
-                    Marshal.FreeCoTaskMem(clonePidl);
-                    clonePidl = IntPtr.Zero;
+                    Marshal.FreeCoTaskMem(_clonePidl);
+                    _clonePidl = IntPtr.Zero;
                 }
 
-                if (start)
+                if (_start)
                 {
-                    start = false;
+                    _start = false;
                     return true;
                 }
                 else
                 {
-                    IntPtr newPidl = ILGetNext(currentPidl);
+                    IntPtr newPidl = ILGetNext(_currentPidl);
 
                     if (!PIDL.IsEmpty(newPidl))
                     {
-                        currentPidl = newPidl;
+                        _currentPidl = newPidl;
                         return true;
                     }
                     else
@@ -399,13 +404,13 @@ namespace DirectoryInfoExLib.IO.Header.ShellDll
 
             public void Reset()
             {
-                start = true;
-                currentPidl = pidl;
+                _start = true;
+                _currentPidl = _pidl;
 
-                if (clonePidl != IntPtr.Zero)
+                if (_clonePidl != IntPtr.Zero)
                 {
-                    Marshal.FreeCoTaskMem(clonePidl);
-                    clonePidl = IntPtr.Zero;
+                    Marshal.FreeCoTaskMem(_clonePidl);
+                    _clonePidl = IntPtr.Zero;
                 }
             }
 

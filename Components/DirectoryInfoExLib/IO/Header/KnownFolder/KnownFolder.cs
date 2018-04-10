@@ -10,6 +10,7 @@
     using System.Linq;
     using System.Runtime.InteropServices;
 
+    
     /// <summary>
     /// Windows Vista introduces new storage scenarios and a new user profile namespace.
     /// To address these new factors, the older system of referring to standard folders by
@@ -37,14 +38,17 @@
     /// However, it is not recommended to use them in any new development.
     /// 
     /// https://msdn.microsoft.com/en-us/library/bb776911
+    ///
+    /// Microsoft.SDK.Samples.VistaBridge.Library.Shell
+    /// https://blogs.msdn.microsoft.com/yvesdolc/2007/02/14/known-folders-the-return/
     /// </summary>
     public class KnownFolder : IDisposable
     {
         #region fields
         /// <summary>
-        /// Gets the <see cref="KnownFolderManager"/> for this system.
+        /// Gets the <see cref="NativeKnownFolderManager "/> for this system.
         /// </summary>
-        public static IKnownFolderManager FolderManager = (IKnownFolderManager)new KnownFolderManager();
+        private static IKnownFolderManager _FolderManager = (IKnownFolderManager)new KnownFolderManager();
 
         private IKnownFolder _knownFolder = null;
         #endregion
@@ -81,7 +85,7 @@
 
         /// <summary>
         /// Gets the <see cref="Guid"/> id of the known folder based
-        /// on the inner known folder interface and folder manager.
+        /// on the inner native known folder interface and folder manager.
         /// </summary>
         public Guid Id
         {
@@ -103,6 +107,7 @@
                 return type;
             }
         }
+
         public KnownFolderCategory Category
         {
             get
@@ -150,7 +155,7 @@
         public static KnownFolder FromKnownFolderId(Guid knownFolderID)
         {
             IKnownFolder knowFolderInterface;
-            KnownFolder.FolderManager.GetFolder(knownFolderID, out knowFolderInterface);
+            KnownFolder._FolderManager.GetFolder(knownFolderID, out knowFolderInterface);
             return new KnownFolder(knowFolderInterface);
         }
 
@@ -166,10 +171,12 @@
             IKnownFolder knowFolderInterface;
             try
             {
-                int hr = KnownFolder.FolderManager.FindFolderFromIDList(pidl.Ptr, out knowFolderInterface);
+                int hr = KnownFolder._FolderManager.FindFolderFromIDList(pidl.Ptr, out knowFolderInterface);
+                
                 if (knowFolderInterface != null && hr == ShellAPI.S_OK)
                     return new KnownFolder(knowFolderInterface);
-                else return null;
+                else
+                  return null;
             }
             catch
             {
@@ -182,7 +189,7 @@
             IKnownFolder knowFolderInterface;
             try
             {
-                KnownFolder.FolderManager.FindFolderFromPath(path, mode, out knowFolderInterface);
+                KnownFolder._FolderManager.FindFolderFromPath(path, mode, out knowFolderInterface);
                 return new KnownFolder(knowFolderInterface);
             }
             catch
@@ -285,8 +292,8 @@
 
             try
             {
-                //Microsoft.WindowsAPICodePack.Shell                
-                KnownFolder.FolderManager.GetFolderIds(out folders, out count);
+                // Microsoft.WindowsAPICodePack.Shell                
+                KnownFolder._FolderManager.GetFolderIds(out folders, out count);
 
                 if (count > 0 && folders != IntPtr.Zero)
                 {

@@ -119,8 +119,8 @@
             return match.Success;
         }
 
-        //http://stackoverflow.com/questions/725341/c-file-mask
         /// <summary>
+        /// http://stackoverflow.com/questions/725341/c-file-mask
         /// Return whether filename match fileMask ( * and ? supported)
         /// </summary>
         /// <param name="fileName"></param>
@@ -160,16 +160,16 @@
         /// <param name="entry"></param>
         /// <param name="baseDirectory"></param>
         /// <returns></returns>
-        internal static string GetRelativePath(FileSystemInfoEx entry, IDirectoryInfoEx baseDirectory)
-        {
-            if (entry.FullName.IndexOf(baseDirectory.FullName, StringComparison.InvariantCultureIgnoreCase) == -1)
-            {
-                if (Debugger.IsAttached)
-                    Debugger.Break();
-                return entry.Name;
-            }
-            else return entry.FullName.Substring(baseDirectory.FullName.Length + 1);
-        }
+////        internal static string GetRelativePath(FileSystemInfoEx entry, IDirectoryInfoEx baseDirectory)
+////        {
+////            if (entry.FullName.IndexOf(baseDirectory.FullName, StringComparison.InvariantCultureIgnoreCase) == -1)
+////            {
+////                if (Debugger.IsAttached)
+////                    Debugger.Break();
+////                return entry.Name;
+////            }
+////            else return entry.FullName.Substring(baseDirectory.FullName.Length + 1);
+////        }
 
         /// <summary>
         /// Get relative path of a entry based on baseDirectory.
@@ -178,44 +178,16 @@
         /// <param name="entry"></param>
         /// <param name="baseDirectory"></param>
         /// <returns></returns>
-        public static string GetRelativePath(string name, IDirectoryInfoEx baseDirectory)
-        {
-            if (name.IndexOf(baseDirectory.FullName, StringComparison.InvariantCultureIgnoreCase) == -1)
-            {
-                if (Debugger.IsAttached)
-                    Debugger.Break();
-                return PathEx.GetFileName(name);
-            }
-            else return name.Substring(baseDirectory.FullName.Length + 1);
-        }
-
-        //public static Environment.SpecialFolder? PathToSpecialFolder(string path)
-        //{            
-        //    var foundKey =
-        //        _directoryFullNameLookupDic.Value
-        //        .Where(kvp => kvp.Value.Equals(path, StringComparison.CurrentCultureIgnoreCase))
-        //        .Select(kvp => kvp.Key);
-        //    if (foundKey.Count() >= 1)
-        //        return foundKey.First();
-        //    else return null;
-        //}
-
-        //public static string SpecialFolderToPath(Environment.SpecialFolder shellFolder)
-        //{
-        //    if (_directoryFullNameLookupDic.Value.ContainsKey(shellFolder))
-        //        return _directoryFullNameLookupDic.Value[shellFolder];
-
-        //    throw new ArgumentException("This SpecialFolder path not supported");
-        //}
-
-        //public static KnownFolder PathToKnownFolder(string path)
-        //{
-        //    var dic = _pathToKnownFolderLookupDic.Value;
-        //    if (dic.ContainsKey(path))
-        //        return dic[path];
-        //    return null;
-        //}
-
+////        public static string GetRelativePath(string name, IDirectoryInfoEx baseDirectory)
+////        {
+////            if (name.IndexOf(baseDirectory.FullName, StringComparison.InvariantCultureIgnoreCase) == -1)
+////            {
+////                if (Debugger.IsAttached)
+////                    Debugger.Break();
+////                return PathEx.GetFileName(name);
+////            }
+////            else return name.Substring(baseDirectory.FullName.Length + 1);
+////        }
         #endregion
 
         #region PIDL Array routines

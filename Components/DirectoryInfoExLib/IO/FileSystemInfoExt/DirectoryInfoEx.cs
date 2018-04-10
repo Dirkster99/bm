@@ -25,7 +25,10 @@ namespace DirectoryInfoExLib.IO.FileSystemInfoExt
     using DirectoryInfoExLib.Enums;
 
     /// <summary>
-    /// Represents a directory in PIDL system.
+    /// Represents a directory in PIDL (Pointer to an ID List) system.
+    ///
+    /// https://www.codeproject.com/Articles/1649/The-Complete-Idiot-s-Guide-to-Writing-Namespace-Ex
+    /// https://msdn.microsoft.com/en-us/library/windows/desktop/cc144090(v=vs.85).aspx
     /// </summary>
     internal class DirectoryInfoEx : FileSystemInfoEx, IDirectoryInfoEx
     {
@@ -115,14 +118,14 @@ namespace DirectoryInfoExLib.IO.FileSystemInfoExt
         /// </summary>
         /// <param name="info"></param>
         /// <param name="context"></param>
-        public DirectoryInfoEx(SerializationInfo info, StreamingContext context)
-            : base(info, context)
-        {
-            _dirType = (DirectoryTypeEnum)info.GetValue("DirectoryType", typeof(DirectoryTypeEnum));
-            IsBrowsable = info.GetBoolean("IsBrowsable");
-            IsFileSystem = info.GetBoolean("IsFileSystem");
-            HasSubFolder = info.GetBoolean("HasSubFolder");
-        }
+////        public DirectoryInfoEx(SerializationInfo info, StreamingContext context)
+////            : base(info, context)
+////        {
+////            _dirType = (DirectoryTypeEnum)info.GetValue("DirectoryType", typeof(DirectoryTypeEnum));
+////            IsBrowsable = info.GetBoolean("IsBrowsable");
+////            IsFileSystem = info.GetBoolean("IsFileSystem");
+////            HasSubFolder = info.GetBoolean("HasSubFolder");
+////        }
 
         /// <summary>
         /// Class constructor
@@ -174,6 +177,11 @@ namespace DirectoryInfoExLib.IO.FileSystemInfoExt
         /// </summary>
         protected DirectoryInfoEx()
         {
+        }
+
+        ~DirectoryInfoEx()
+        {
+            ((IDisposable)this).Dispose();
         }
         #endregion constructors
 
@@ -256,20 +264,6 @@ namespace DirectoryInfoExLib.IO.FileSystemInfoExt
                 return pidl;
             }
             else throw new ArgumentException("Invalid knownFolder " + RetVal);
-        }
-
-        /// <summary>
-        /// Convert a Parsable path to PIDL
-        /// </summary>
-        private static PIDL PathtoPIDL(string path)
-        {
-            IntPtr pidlPtr;
-            uint pchEaten = 0;
-            ShellAPI.SFGAO pdwAttributes = 0;
-            using (ShellFolder2 _desktopShellFolder = getDesktopShellFolder())
-                _desktopShellFolder.ParseDisplayName(IntPtr.Zero, IntPtr.Zero, path, ref pchEaten, out pidlPtr, ref pdwAttributes);
-            PIDL pidl = new PIDL(pidlPtr, false);
-            return pidl;
         }
 
         /// <summary>
@@ -382,13 +376,6 @@ namespace DirectoryInfoExLib.IO.FileSystemInfoExt
             return base.Equals(other);
         }
 
-        protected void checkExists()
-        {
-            //0.18: checkExists() ignore network directory.
-            if (!FullName.StartsWith("\\") && !Exists)
-                throw new DirectoryNotFoundException(FullName + " does not exist.");
-        }
-
         /// <summary>
         /// Delete this folder. (not move it to recycle bin)
         /// </summary>
@@ -405,6 +392,30 @@ namespace DirectoryInfoExLib.IO.FileSystemInfoExt
             throw new NotImplementedException();
         }
 
+        protected void checkExists()
+        {
+            //0.18: checkExists() ignore network directory.
+            if (!FullName.StartsWith("\\") && !Exists)
+                throw new DirectoryNotFoundException(FullName + " does not exist.");
+        }
+
+        /// <summary>
+        /// Convert a Parsable path to PIDL
+        /// </summary>
+        private static PIDL PathtoPIDL(string path)
+        {
+            IntPtr pidlPtr;
+            uint pchEaten = 0;
+            ShellAPI.SFGAO pdwAttributes = 0;
+
+            using (ShellFolder2 _desktopShellFolder = getDesktopShellFolder())
+                _desktopShellFolder.ParseDisplayName(IntPtr.Zero, IntPtr.Zero, path, ref pchEaten, out pidlPtr, ref pdwAttributes);
+
+            PIDL pidl = new PIDL(pidlPtr, false);
+
+            return pidl;
+        }
+
         private ShellFolder2 getIShellFolderFromParent()
         {
             if (_parent != null)
@@ -419,6 +430,7 @@ namespace DirectoryInfoExLib.IO.FileSystemInfoExt
                     if (ptrShellFolder != IntPtr.Zero && hr == ShellAPI.S_OK)
                         return new ShellFolder2(ptrShellFolder);
                 }
+
             return null;
         }
 
@@ -446,54 +458,54 @@ namespace DirectoryInfoExLib.IO.FileSystemInfoExt
             }
         }
 
-        protected void initDirectoryType()
-        {
-            _dirType = DirectoryTypeEnum.dtFolder;   // default value
-
-            string path = FullName != null ? FullName : OriginalPath;
-
-            if (path != null)
-            {
-                if (path.Equals(IOTools.IID_Desktop))
-                    _dirType = DirectoryTypeEnum.dtDesktop;
-                else
-                if (path.EndsWith(":\\"))
-                {
-                    _dirType = DirectoryTypeEnum.dtDrive;
-                }
-                else
-                {
-                    if (path.StartsWith("::"))
-                        _dirType = DirectoryTypeEnum.dtSpecial;
-                    else
-                        _dirType = DirectoryTypeEnum.dtFolder;
-                }
-            }
-        }
+////    protected void initDirectoryType()
+////    {
+////        _dirType = DirectoryTypeEnum.dtFolder;   // default value
+////
+////        string path = FullName != null ? FullName : OriginalPath;
+////
+////        if (path != null)
+////        {
+////            if (path.Equals(IOTools.IID_Desktop))
+////                _dirType = DirectoryTypeEnum.dtDesktop;
+////            else
+////            if (path.EndsWith(":\\"))
+////            {
+////                _dirType = DirectoryTypeEnum.dtDrive;
+////            }
+////            else
+////            {
+////                if (path.StartsWith("::"))
+////                    _dirType = DirectoryTypeEnum.dtSpecial;
+////                else
+////                    _dirType = DirectoryTypeEnum.dtFolder;
+////            }
+////        }
+////    }
         #endregion
 
         #region Methods - GetSubItems
         static ShellAPI.SHCONTF flag = ShellAPI.SHCONTF.NONFOLDERS | ShellAPI.SHCONTF.FOLDERS | ShellAPI.SHCONTF.INCLUDEHIDDEN;
-        //static ShellAPI.SHCONTF folderflag = ShellAPI.SHCONTF.FOLDERS | ShellAPI.SHCONTF.INCLUDEHIDDEN;
-        //static ShellAPI.SHCONTF fileflag = ShellAPI.SHCONTF.NONFOLDERS | ShellAPI.SHCONTF.INCLUDEHIDDEN;
+////    //static ShellAPI.SHCONTF folderflag = ShellAPI.SHCONTF.FOLDERS | ShellAPI.SHCONTF.INCLUDEHIDDEN;
+////    //static ShellAPI.SHCONTF fileflag = ShellAPI.SHCONTF.NONFOLDERS | ShellAPI.SHCONTF.INCLUDEHIDDEN;
 
-        private List<FileSystemInfoEx> _cachedDirList = new List<FileSystemInfoEx>();
-        //private List<FileSystemInfoEx> _cachedFileList = new List<FileSystemInfoEx>();
-
-        private static bool listContains(List<FileSystemInfoEx> list, PIDL pidl)
-        {
-            foreach (FileSystemInfoEx item in list)
-                if (item.RequestRelativePIDL((relPidl) => relPidl.Equals(pidl)))
-                    return true;
-
-            return false;
-        }
-        private static void listRemove(List<FileSystemInfoEx> list, PIDL pidl)
-        {
-            for (int i = list.Count - 1; i >= 0; i--)
-                if (list[i].RequestRelativePIDL((relPidl) => relPidl.Equals(pidl)))
-                { list.RemoveAt(i); return; }
-        }
+////    private List<FileSystemInfoEx> _cachedDirList = new List<FileSystemInfoEx>();
+////    //private List<FileSystemInfoEx> _cachedFileList = new List<FileSystemInfoEx>();
+////
+////    private static bool listContains(List<FileSystemInfoEx> list, PIDL pidl)
+////    {
+////        foreach (FileSystemInfoEx item in list)
+////            if (item.RequestRelativePIDL((relPidl) => relPidl.Equals(pidl)))
+////                return true;
+////
+////        return false;
+////    }
+////    private static void listRemove(List<FileSystemInfoEx> list, PIDL pidl)
+////    {
+////        for (int i = list.Count - 1; i >= 0; i--)
+////            if (list[i].RequestRelativePIDL((relPidl) => relPidl.Equals(pidl)))
+////            { list.RemoveAt(i); return; }
+////    }
 
         public IEnumerable<IDirectoryInfoEx> EnumerateDirectories(String searchPattern, SearchOption searchOption, CancelDelegate cancel)
         {
@@ -553,6 +565,7 @@ namespace DirectoryInfoExLib.IO.FileSystemInfoExt
 
                                 if (IOTools.MatchFileMask(di.Name, searchPattern))
                                     yield return di;
+
                                 if (searchOption == SearchOption.AllDirectories)
                                 {
                                     IEnumerator<IDirectoryInfoEx> dirEnumerator = di.EnumerateDirectories(searchPattern, searchOption, cancel).GetEnumerator();
@@ -637,27 +650,27 @@ namespace DirectoryInfoExLib.IO.FileSystemInfoExt
         }
         #endregion
 
-        #region Methods - Lookup
-        internal IDirectoryInfoEx GetSubDirectory(string name)
-        {
-            IDirectoryInfoEx[] subFSInfo = GetDirectories();
-            for (int i = 0; i < subFSInfo.Length; i++)
-                if (subFSInfo[i].Name.Equals(name, StringComparison.CurrentCultureIgnoreCase))
-                    return (DirectoryInfoEx)subFSInfo[i];
-
-            return null;
-        }
-
-        internal IDirectoryInfoEx GetSubDirectory(IntPtr pidl)
-        {
-            IDirectoryInfoEx[] subFSInfo = GetDirectories();
-            for (int i = 0; i < subFSInfo.Length; i++)
-                if ((subFSInfo[i] as DirectoryInfoEx).RequestRelativePIDL(relPidl => relPidl.Equals(pidl)))
-                    return (DirectoryInfoEx)subFSInfo[i];
-
-            return null;
-        }
-        #endregion
+////        #region Methods - Lookup
+////        internal IDirectoryInfoEx GetSubDirectory(string name)
+////        {
+////            IDirectoryInfoEx[] subFSInfo = GetDirectories();
+////            for (int i = 0; i < subFSInfo.Length; i++)
+////                if (subFSInfo[i].Name.Equals(name, StringComparison.CurrentCultureIgnoreCase))
+////                    return (DirectoryInfoEx)subFSInfo[i];
+////
+////            return null;
+////        }
+////
+////        internal IDirectoryInfoEx GetSubDirectory(IntPtr pidl)
+////        {
+////            IDirectoryInfoEx[] subFSInfo = GetDirectories();
+////            for (int i = 0; i < subFSInfo.Length; i++)
+////                if ((subFSInfo[i] as DirectoryInfoEx).RequestRelativePIDL(relPidl => relPidl.Equals(pidl)))
+////                    return (DirectoryInfoEx)subFSInfo[i];
+////
+////            return null;
+////        }
+////        #endregion
 
         protected override void checkProperties()
         {
@@ -667,31 +680,26 @@ namespace DirectoryInfoExLib.IO.FileSystemInfoExt
         }
 
         #region IDisposable Members
-        ~DirectoryInfoEx()
-        {
-            ((IDisposable)this).Dispose();
-        }
-
         public new void Dispose()
         {
             base.Dispose();
         }
         #endregion
 
-        #region ISerializable Members
-        protected override void getObjectData(SerializationInfo info, StreamingContext context)
-        {
-            base.getObjectData(info, context);
-            info.AddValue("DirectoryType", DirectoryType);
-            info.AddValue("IsBrowsable", IsBrowsable);
-            info.AddValue("IsFileSystem", IsFileSystem);
-            info.AddValue("HasSubFolder", HasSubFolder);
-        }
-
-        void ISerializable.GetObjectData(SerializationInfo info, StreamingContext context)
-        {
-            getObjectData(info, context);
-        }
-        #endregion ISerializable Members
+////        #region ISerializable Members
+////        protected override void getObjectData(SerializationInfo info, StreamingContext context)
+////        {
+////            base.getObjectData(info, context);
+////            info.AddValue("DirectoryType", DirectoryType);
+////            info.AddValue("IsBrowsable", IsBrowsable);
+////            info.AddValue("IsFileSystem", IsFileSystem);
+////            info.AddValue("HasSubFolder", HasSubFolder);
+////        }
+////
+////        void ISerializable.GetObjectData(SerializationInfo info, StreamingContext context)
+////        {
+////            getObjectData(info, context);
+////        }
+////        #endregion ISerializable Members
     }
 }
