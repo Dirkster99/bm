@@ -34,7 +34,6 @@ namespace DirectoryInfoExLib.IO.FileSystemInfoExt
     {
         #region fields
         private DirectoryTypeEnum _dirType;
-        private bool _isBrowsable, isFileSystem, _hasSubFolder;
 
         #region Static fields
         internal static readonly DirectoryInfoEx DesktopDirectory;
@@ -186,47 +185,10 @@ namespace DirectoryInfoExLib.IO.FileSystemInfoExt
         #endregion constructors
 
         #region properties
+        /// <summary>
+        /// Gets the root of this item.
+        /// </summary>
         public IDirectoryInfoEx Root { get { return getDirectoryRoot(this); } }
-
-        /// <summary>
-        /// The specified items can be hosted inside a web browser or Windows Explorer frame.
-        /// </summary>
-        public bool IsBrowsable
-        {
-            get
-            {
-                checkRefresh();
-                return _isBrowsable;
-            }
-
-            protected set { _isBrowsable = value; }
-        }
-
-        /// <summary>
-        /// Gets whether this item is either a file system folder or contain at least one
-        /// descendant (child, grandchild, or later) that is a file system (SFGAO_FILESYSTEM) folder.
-        /// </summary>
-        public bool IsFileSystem
-        {
-            get
-            {
-                checkRefresh();
-                return isFileSystem;
-            }
-
-            protected set { isFileSystem = value; }
-        }
-
-        public bool HasSubFolder
-        {
-            get
-            {
-                checkRefresh();
-                return _hasSubFolder;
-            }
-
-            protected set { _hasSubFolder = value; }
-        }
 
         /// <summary>
         /// Gets the folders type classification.

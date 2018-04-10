@@ -66,25 +66,10 @@
         IDirectoryInfoEx Parent { get; }
 
         /// <summary>
-        /// Gets the root directory of a directory.
+        /// Gets the root directory of a directory with
+        /// which is either desktop or drive.
         /// </summary>
         IDirectoryInfoEx Root { get; }
-
-        /// <summary>
-        /// The specified items can be hosted inside a web browser or Windows Explorer frame.
-        /// </summary>
-        bool IsBrowsable { get; }
-
-        /// <summary>
-        /// Gets whether this item is either a file system folder or contain at least one
-        /// descendant (child, grandchild, or later) that is a file system (SFGAO_FILESYSTEM) folder.
-        /// </summary>
-        bool IsFileSystem { get; }
-
-        /// <summary>
-        /// Determines whether folder has sub-folders or not.
-        /// </summary>
-        bool HasSubFolder { get; }
 
         /// <summary>
         /// Gets the folders type classification.
