@@ -100,10 +100,7 @@
     <Compile Include="IO\Header\KnownFolder\InternalKnownFolderDefinition.cs" />
     <Compile Include="IO\Header\KnownFolder\KnownFolder.cs" />
     <Compile Include="IO\Header\KnownFolder\KnownFolderManager.cs" />
-    <Compile Include="IO\Tools\AttributeUtils.cs" />
-    <Compile Include="IO\Tools\EnumAttributeUtils.cs" />
     <Compile Include="IO\Tools\Interface\ShellFolder2.cs" />
-    <Compile Include="IO\Tools\PathEx.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

@@ -98,7 +98,6 @@ namespace DirectoryInfoExLib.IO.Tools.Interface
             checkDisposed();
             return _iShellFolder2.SetNameOf(hwnd, pidl, pszName, uFlags, out ppidlOut);
         }
-
         #endregion
 
         #region IShellFolder2 Members

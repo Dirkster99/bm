@@ -15,14 +15,12 @@ namespace DirectoryInfoExLib.IO.FileSystemInfoExt
     using DirectoryInfoExLib.IO.Header.ShellDll;
     using DirectoryInfoExLib.Interfaces;
     using DirectoryInfoExLib.IO.Tools.Interface;
-    using DirectoryInfoExLib.Tools;
     using System.IO;
     using DirectoryInfoExLib.IO.Header;
     using DirectoryInfoExLib.IO.Header.ShellDll.Interfaces;
     using DirectoryInfoExLib.IO.Header.KnownFolder;
     using DirectoryInfoExLib.IO.Header.KnownFolder.Enums;
     using DirectoryInfoExLib.Enums;
-    using DirectoryInfoExLib.IO.Tools;
     using System.Text.RegularExpressions;
 
     /// <summary>
@@ -34,6 +32,9 @@ namespace DirectoryInfoExLib.IO.FileSystemInfoExt
     internal class DirectoryInfoEx : FileSystemInfoEx, IDirectoryInfoEx
     {
         #region fields
+        private IDirectoryInfoEx _parent;
+        private bool _parentInited = false;
+
         private DirectoryTypeEnum _dirType;
 
         #region Static fields
@@ -170,6 +171,25 @@ namespace DirectoryInfoExLib.IO.FileSystemInfoExt
         #endregion constructors
 
         #region properties
+        /// <summary>
+        /// Gets the parent folder item of this item.
+        /// </summary>
+        public IDirectoryInfoEx Parent
+        {
+            get
+            {
+                return initParent();
+            }
+
+            protected set
+            {
+                if (_parent != null)
+                    throw new Exception("_parent cannot be reset.");
+
+                _parent = value;
+            }
+        }
+
         /// <summary>
         /// Gets the root of this item.
         /// </summary>
@@ -351,6 +371,46 @@ namespace DirectoryInfoExLib.IO.FileSystemInfoExt
             //0.18: checkExists() ignore network directory.
             if (!FullName.StartsWith("\\") && !Exists)
                 throw new DirectoryNotFoundException(FullName + " does not exist.");
+        }
+
+        protected IDirectoryInfoEx initParent()
+        {
+            if (!_parentInited)
+            {
+                if (Exists)
+                {
+                    if (FullName.Equals(DirectoryInfoEx.IID_Desktop))
+                        return _parent;
+
+                    this.RequestPIDL((pidl) =>
+                    {
+                        ////                            PIDL relPIDL;
+                        _parent = new DirectoryInfoEx(getParentPIDL(pidl));
+                        _parentInited = true;
+
+                    });
+                }
+                else
+                {
+                    _parent = new DirectoryInfoEx(GetDirectoryName(FullName));
+                    _parentInited = true;
+                }
+            }
+
+            return _parent;
+        }
+
+        protected string GetDirectoryName(string path)
+        {
+            if (path.EndsWith("\\"))
+                path = path.Substring(0, path.Length - 1); // Remove ending slash.
+
+            int idx = path.LastIndexOf('\\');
+
+            if (idx == -1)
+                return "";
+
+            return path.Substring(0, idx);
         }
 
         /// <summary>
@@ -620,7 +680,7 @@ namespace DirectoryInfoExLib.IO.FileSystemInfoExt
         public bool MatchFileMask(PIDL pidl, string fileMask)
         {
             string path = DirectoryInfoEx.PIDLToPath(pidl);
-            string name = PathEx.GetFileName(path);
+            string name = GetFileName(path);
             return MatchFileMask(name, fileMask);
         }
 

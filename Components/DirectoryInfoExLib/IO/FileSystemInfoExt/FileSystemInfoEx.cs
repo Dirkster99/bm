@@ -14,9 +14,6 @@ namespace DirectoryInfoExLib.IO.FileSystemInfoExt
     using DirectoryInfoExLib.IO.Header.ShellDll;
     using DirectoryInfoExLib.IO.Tools.Interface;
     using DirectoryInfoExLib.IO.Header;
-    using DirectoryInfoExLib.Tools;
-    using DirectoryInfoExLib.IO.Tools;
-    using DirectoryInfoExLib.Interfaces;
     using DirectoryInfoExLib.Enums;
     using DirectoryInfoExLib.IO.Header.KnownFolder;
 
@@ -28,25 +25,22 @@ namespace DirectoryInfoExLib.IO.FileSystemInfoExt
         [Flags]
         public enum RefreshModeEnum : int
         {
-          None = 1 << 0,
-          BaseProps = 1 << 1,
-          FullProps =  1 << 2,
-          AllProps = BaseProps | FullProps
+            None = 1 << 0,
+            BaseProps = 1 << 1,
+            FullProps = 1 << 2,
+            AllProps = BaseProps | FullProps
         }
         #endregion
 
         #region fields
         public static int counter = 0;
-
-        internal IDirectoryInfoEx _parent;
         private string _name;
-        private bool _parentInited = false;
         private PIDL _pidlRel = null;
         private PIDL _pidl = null;
         private FileAttributes _attributes;
         private DateTime _lastWriteTime, _lastAccessTime, _creationTime;
         #endregion fields
-  
+
         #region Constructors
         internal FileSystemInfoEx(string fullPath)
             : this()
@@ -54,11 +48,11 @@ namespace DirectoryInfoExLib.IO.FileSystemInfoExt
             init(fullPath);
         }
 
-////        protected FileSystemInfoEx(SerializationInfo info, StreamingContext context)
-////            : this()
-////        {
-////            init(info, context);
-////        }
+        ////        protected FileSystemInfoEx(SerializationInfo info, StreamingContext context)
+        ////            : this()
+        ////        {
+        ////            init(info, context);
+        ////        }
 
 
         protected FileSystemInfoEx()
@@ -115,98 +109,92 @@ namespace DirectoryInfoExLib.IO.FileSystemInfoExt
             Refresh(RefreshModeEnum.BaseProps);
         }
 
-////        protected void init(SerializationInfo info, StreamingContext context)
-////        {
-////            OriginalPath = info.GetString("OriginalPath");
-////            Label = info.GetString("Label");
-////            _name = info.GetString("Name");
-////            FullName = info.GetString("FullName");
-////            Attributes = (FileAttributes)info.GetValue("Attributes", typeof(FileAttributes));
-////            LastWriteTime = info.GetDateTime("LastWriteTime");
-////            LastAccessTime = info.GetDateTime("LastAccessTime");
-////            CreationTime = info.GetDateTime("CreationTime");
-////        }
+        ////        protected void init(SerializationInfo info, StreamingContext context)
+        ////        {
+        ////            OriginalPath = info.GetString("OriginalPath");
+        ////            Label = info.GetString("Label");
+        ////            _name = info.GetString("Name");
+        ////            FullName = info.GetString("FullName");
+        ////            Attributes = (FileAttributes)info.GetValue("Attributes", typeof(FileAttributes));
+        ////            LastWriteTime = info.GetDateTime("LastWriteTime");
+        ////            LastAccessTime = info.GetDateTime("LastAccessTime");
+        ////            CreationTime = info.GetDateTime("CreationTime");
+        ////        }
         #endregion
 
         #region properties
         public RefreshModeEnum RefreshMode { get; private set; }
-        
+
         public override string Name { get { return _name; } }
-        
+
         public new string Extension { get { return Path.GetExtension(Name); } }
-        
+
         public override bool Exists { get { return getExists(); } }
 
-        public IDirectoryInfoEx Parent
-        {
-            get { initParent(); return _parent; }
-
-            protected set
-            {
-                if (_parent != null)
-                    throw new Exception("_parent cannot be reset.");
-
-                _parent = value;
-            }
-        }
-
         public string Label { get; protected set; }
-        
+
         public new string FullName { get; protected set; }
-        
+
         public new FileAttributes Attributes
         {
-          get { checkRefresh(); return _attributes; } set { _attributes = value; }
+            get
+            {
+                checkRefresh();
+                return _attributes;
+            }
+
+            set { _attributes = value; }
         }
 
         public new DateTime LastWriteTime
         {
-          get
-          {
-            checkRefresh();
-            return _lastWriteTime;
-          }
-          
-          set { _lastWriteTime = value; }
+            get
+            {
+                checkRefresh();
+                return _lastWriteTime;
+            }
+
+            set { _lastWriteTime = value; }
         }
-        
+
         public new DateTime LastWriteTimeUtc
         {
-          get { return LastWriteTime.ToUniversalTime(); }
+            get { return LastWriteTime.ToUniversalTime(); }
         }
 
         public new DateTime LastAccessTime
         {
-          get
-          { 
-            checkRefresh();
-            return _lastAccessTime;
-          }
-          
-          set
-          {
-            _lastAccessTime = value;
-          }
+            get
+            {
+                checkRefresh();
+                return _lastAccessTime;
+            }
+
+            set
+            {
+                _lastAccessTime = value;
+            }
         }
-        
+
         public new DateTime LastAccessTimeUtc
         {
-          get { return LastAccessTime.ToUniversalTime(); }
+            get { return LastAccessTime.ToUniversalTime(); }
         }
 
         public new DateTime CreationTime
         {
-          get { checkRefresh(); return _creationTime; } set { _creationTime = value; }
+            get { checkRefresh(); return _creationTime; }
+            set { _creationTime = value; }
         }
-        
+
         public new DateTime CreationTimeUtc
         {
-          get { return CreationTime.ToUniversalTime(); }
+            get { return CreationTime.ToUniversalTime(); }
         }
 
         public bool IsFolder
         {
-          get { return (Attributes & FileAttributes.Directory) == FileAttributes.Directory; }
+            get { return (Attributes & FileAttributes.Directory) == FileAttributes.Directory; }
         }
         #endregion properties
 
@@ -248,7 +236,7 @@ namespace DirectoryInfoExLib.IO.FileSystemInfoExt
         /// because it refresh every time GetFiles/Directories/FileSystemInfos is called.
         /// </summary>
         /// <param name="mode"></param>
-        public void Refresh(RefreshModeEnum mode = RefreshModeEnum.AllProps )
+        public void Refresh(RefreshModeEnum mode = RefreshModeEnum.AllProps)
         {
             RefreshMode |= mode; //0.23 : Delay loading some properties.
 
@@ -257,7 +245,7 @@ namespace DirectoryInfoExLib.IO.FileSystemInfoExt
                 refresh(null, null, null, mode);
             else
                 try
-                {                    
+                {
                     //0.16: Fixed ShellFolder not freed
                     this.RequestPIDL(pidlLookup =>
                         {
@@ -270,7 +258,7 @@ namespace DirectoryInfoExLib.IO.FileSystemInfoExt
                     refresh(null, null, null, mode);
                 }
                 finally
-                {               
+                {
                     if (relPIDL != null)
                         relPIDL.Free();
                     relPIDL = null;
@@ -284,18 +272,18 @@ namespace DirectoryInfoExLib.IO.FileSystemInfoExt
         public override void Delete()
         {
             throw new NotImplementedException();
-////            if (this is FileInfoEx)
-////                (this as FileInfoEx).Delete();
-////            else
-////                (this as DirectoryInfoEx).Delete();
+            ////            if (this is FileInfoEx)
+            ////                (this as FileInfoEx).Delete();
+            ////            else
+            ////                (this as DirectoryInfoEx).Delete();
         }
 
         /// <summary>
         /// Return if two FileSystemInfoEx is equal (using PIDL if possible, otherwise Path)
         /// </summary>
         public virtual bool Equals(FileSystemInfoEx other)
-        {            
-            return this.RequestPIDL(thisPidl => 
+        {
+            return this.RequestPIDL(thisPidl =>
                 other.RequestPIDL(otherPidl => thisPidl.Equals(otherPidl)));
         }
 
@@ -384,19 +372,19 @@ namespace DirectoryInfoExLib.IO.FileSystemInfoExt
         }
 
         internal string PtrToPath(IntPtr ptr)
-        {            
+        {
             using (ShellFolder2 _desktopShellFolder = getDesktopShellFolder())
                 return loadName(_desktopShellFolder, ptr, ShellAPI.SHGNO.FORPARSING);
         }
 
         internal static string PIDLToPath(PIDL pidlFull)
-        {            
+        {
             if (DirectoryInfoEx.DesktopDirectory.RequestPIDL(desktopPIDL => pidlFull.Equals(desktopPIDL)))
                 return DirectoryInfoEx.IID_Desktop;
 
             using (ShellFolder2 _desktopShellFolder = getDesktopShellFolder())
                 return loadName(_desktopShellFolder, pidlFull, ShellAPI.SHGNO.FORPARSING);
-                
+
         }
 
         internal static string PIDLToPath(IShellFolder2 iShellFolder, PIDL pidlRel)
@@ -485,29 +473,6 @@ namespace DirectoryInfoExLib.IO.FileSystemInfoExt
             return null; //mute error.
         }
 
-        protected void initParent()
-        {
-            if (!_parentInited)
-                if (Exists)
-                {
-                    if (FullName.Equals(DirectoryInfoEx.IID_Desktop))
-                        return;
-
-                    this.RequestPIDL((pidl) =>
-                        {
-////                            PIDL relPIDL;
-                            _parent = new DirectoryInfoEx(getParentPIDL(pidl));                            
-                            _parentInited = true;
-                            
-                        });
-                }
-                else
-                {
-                    _parent = new DirectoryInfoEx(PathEx.GetDirectoryName(FullName));
-                    _parentInited = true;
-                }
-        }
-
         protected virtual void refresh(IShellFolder2 parentShellFolder, PIDL relPIDL, PIDL fullPIDL, RefreshModeEnum mode)
         {
             if (parentShellFolder != null && fullPIDL != null && relPIDL != null)
@@ -580,7 +545,7 @@ namespace DirectoryInfoExLib.IO.FileSystemInfoExt
                 if (parseName.StartsWith("::")) //Guid
                     parseName = loadName(parentShellFolder, relPIDL, Header.ShellDll.ShellAPI.SHGNO.NORMAL);
 
-                _name = FullName.EndsWith("\\") ? FullName : PathEx.GetFileName(FullName);
+                _name = FullName.EndsWith("\\") ? FullName : GetFileName(FullName);
                 Label = loadName(parentShellFolder, relPIDL, Header.ShellDll.ShellAPI.SHGNO.NORMAL);
 
 
@@ -603,6 +568,16 @@ namespace DirectoryInfoExLib.IO.FileSystemInfoExt
                 Refresh(mode);
         }
 
+        protected static string GetFileName(string path)
+        {
+            int idx = path.LastIndexOf('\\');
+
+            if (idx == -1)
+                return path;
+
+            return path.Substring(idx + 1);
+        }
+
         private static FileAttributes loadAttributes(IShellFolder2 iShellFolder, PIDL pidlFull, PIDL pidlRel)
         {
             FileAttributes retVal = new FileAttributes();
@@ -620,13 +595,13 @@ namespace DirectoryInfoExLib.IO.FileSystemInfoExt
             iShellFolder.GetAttributesOf(1, new IntPtr[] { pidlRel.Ptr }, ref attribute);
 
             if ((attribute & Header.ShellDll.ShellAPI.SFGAO.FOLDER) != 0)
-              retVal |= FileAttributes.Directory;
+                retVal |= FileAttributes.Directory;
 
             if ((attribute & Header.ShellDll.ShellAPI.SFGAO.HIDDEN) != 0)
-              retVal |= FileAttributes.Hidden;
+                retVal |= FileAttributes.Hidden;
 
             if ((attribute & Header.ShellDll.ShellAPI.SFGAO.READONLY) != 0)
-              retVal |= FileAttributes.ReadOnly;
+                retVal |= FileAttributes.ReadOnly;
 
             return retVal;
         }
@@ -726,40 +701,40 @@ namespace DirectoryInfoExLib.IO.FileSystemInfoExt
         }
         #endregion
 
-////        #region ISerializable Members
-////        protected virtual void getObjectData(SerializationInfo info, StreamingContext context)
-////        {
-////            info.AddValue("OriginalPath", OriginalPath);
-////            info.AddValue("Label", Label);
-////            info.AddValue("Name", Name);
-////            info.AddValue("FullName", FullName);
-////            info.AddValue("Attributes", Attributes);
-////            info.AddValue("LastWriteTime", LastWriteTime);
-////            info.AddValue("LastAccessTime", LastAccessTime);
-////            info.AddValue("CreationTime", CreationTime);
-////
-////        }
-////
-////        void ISerializable.GetObjectData(SerializationInfo info, StreamingContext context)
-////        {
-////            getObjectData(info, context);
-////        }
-////
-////        #endregion
+        ////        #region ISerializable Members
+        ////        protected virtual void getObjectData(SerializationInfo info, StreamingContext context)
+        ////        {
+        ////            info.AddValue("OriginalPath", OriginalPath);
+        ////            info.AddValue("Label", Label);
+        ////            info.AddValue("Name", Name);
+        ////            info.AddValue("FullName", FullName);
+        ////            info.AddValue("Attributes", Attributes);
+        ////            info.AddValue("LastWriteTime", LastWriteTime);
+        ////            info.AddValue("LastAccessTime", LastAccessTime);
+        ////            info.AddValue("CreationTime", CreationTime);
+        ////
+        ////        }
+        ////
+        ////        void ISerializable.GetObjectData(SerializationInfo info, StreamingContext context)
+        ////        {
+        ////            getObjectData(info, context);
+        ////        }
+        ////
+        ////        #endregion
 
-    #region IDisposable Members
+        #region IDisposable Members
 
         public void Dispose()
         {
             if (_pidlRel != null || _pidl != null)
                 System.Threading.Interlocked.Decrement(ref counter);
 
-            if (_pidlRel != null)            
-                _pidlRel.Free();                
+            if (_pidlRel != null)
+                _pidlRel.Free();
             if (_pidl != null) _pidl.Free();
             _pidlRel = null;
             _pidl = null;
-            
+
         }
         #endregion
 
