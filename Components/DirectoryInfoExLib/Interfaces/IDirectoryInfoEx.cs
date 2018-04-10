@@ -3,10 +3,8 @@
     using System;
     using System.Collections.Generic;
     using System.IO;
-    using System.Runtime.Serialization;
     using System.Threading.Tasks;
     using System.Threading;
-    using DirectoryInfoExLib.Tools;
     using DirectoryInfoExLib.IO.Header.KnownFolder;
     using DirectoryInfoExLib.IO.Header.ShellDll;
 
@@ -38,6 +36,8 @@
 
 ////        ,dtRoot
     }
+
+    public delegate bool CancelDelegate();
 
     /// <summary>
     /// Represents a directory in PIDL system.
@@ -88,13 +88,36 @@
         #region methods
         bool Equals(IDirectoryInfoEx other);
 
+        /// <summary>
+        /// Enumerates all items in this directory with the given search parameters.
+        /// </summary>
+        /// <param name="searchPattern"></param>
+        /// <param name="searchOption"></param>
+        /// <param name="cancel"></param>
+        /// <returns></returns>
         IEnumerable<IDirectoryInfoEx> EnumerateDirectories(String searchPattern, SearchOption searchOption, CancelDelegate cancel);
 
+        /// <summary>
+        /// Enumerates all items in this directory with the given search parameters.
+        /// </summary>
+        /// <param name="searchPattern"></param>
+        /// <param name="searchOption"></param>
+        /// <returns></returns>
         IEnumerable<IDirectoryInfoEx> EnumerateDirectories(String searchPattern, SearchOption searchOption);
+
+        /// <summary>
+        /// Enumerates all items in this directory with the given search parameters.
+        /// </summary>
+        /// <param name="searchPattern"></param>
+        /// <returns></returns>
         IEnumerable<IDirectoryInfoEx> EnumerateDirectories(String searchPattern);
+
+        /// <summary>
+        /// Enumerates all items in this directory with the given search parameters.
+        /// </summary>
+        /// <returns></returns>
         IEnumerable<IDirectoryInfoEx> EnumerateDirectories();
 
-        #region GetXXX
         /// <summary>
         /// Return a list of sub directories
         /// </summary>
@@ -110,10 +133,16 @@
         /// </summary>
         IDirectoryInfoEx[] GetDirectories();
 
+        /// <summary>
+        /// Return a task that returns a list of sub directories.
+        /// </summary>
+        /// <param name="searchPattern"></param>
+        /// <param name="searchOption"></param>
+        /// <param name="ct"></param>
+        /// <returns></returns>
         Task<IDirectoryInfoEx[]> GetDirectoriesAsync(String searchPattern,
                                                      SearchOption searchOption,
                                                      CancellationToken ct);
-        #endregion
 
         T RequestPIDL<T>(Func<PIDL, PIDL, T> pidlAndRelPidlFunc);
         T RequestPIDL<T>(Func<PIDL, T> pidlFuncOnly);

@@ -308,7 +308,7 @@ namespace DirectoryInfoExLib.IO.FileSystemInfoExt
 
         public override int GetHashCode()
         {
-            return IOTools.GetHashCode(this);
+            return FullPath.ToLower().GetHashCode();
         }
 
         public override string ToString()
@@ -334,7 +334,7 @@ namespace DirectoryInfoExLib.IO.FileSystemInfoExt
 
         internal static PIDL PathToPIDL(string path)
         {
-            path = Helper.RemoveSlash(path);
+            path = RemoveSlash(path);
             IntPtr pidlPtr;
             uint pchEaten = 0;
             ShellAPI.SFGAO pdwAttributes = 0;
@@ -377,23 +377,22 @@ namespace DirectoryInfoExLib.IO.FileSystemInfoExt
             if (_pidl != null)
                 return new PIDL(_pidl, true);
 
-            if (FullName == "::{00021400-0000-0000-C000-000000000046}") //Desktop
+            if (FullName == DirectoryInfoEx.IID_Desktop) // Desktop
                 return DirectoryInfoEx.KnownFolderToPIDL(KnownFolder.FromKnownFolderId(KnownFolder_GUIDS.Desktop));
             else
                 return PathToPIDL(FullName);
         }
 
-        internal static string PtrToPath(IntPtr ptr)
+        internal string PtrToPath(IntPtr ptr)
         {            
             using (ShellFolder2 _desktopShellFolder = getDesktopShellFolder())
                 return loadName(_desktopShellFolder, ptr, ShellAPI.SHGNO.FORPARSING);
-
         }
 
         internal static string PIDLToPath(PIDL pidlFull)
         {            
             if (DirectoryInfoEx.DesktopDirectory.RequestPIDL(desktopPIDL => pidlFull.Equals(desktopPIDL)))
-                return "::{00021400-0000-0000-C000-000000000046}";
+                return DirectoryInfoEx.IID_Desktop;
 
             using (ShellFolder2 _desktopShellFolder = getDesktopShellFolder())
                 return loadName(_desktopShellFolder, pidlFull, ShellAPI.SHGNO.FORPARSING);
@@ -454,7 +453,7 @@ namespace DirectoryInfoExLib.IO.FileSystemInfoExt
         //    return loadName(sf, relPIDL, ShellAPI.SHGNO.FORPARSING);
         //}
 
-        internal static ShellFolder2 getParentIShellFolder(PIDL pidl, out PIDL relPIDL)
+        internal ShellFolder2 getParentIShellFolder(PIDL pidl, out PIDL relPIDL)
         {
             int hr;
             IntPtr ptrShellFolder = IntPtr.Zero;
@@ -491,7 +490,8 @@ namespace DirectoryInfoExLib.IO.FileSystemInfoExt
             if (!_parentInited)
                 if (Exists)
                 {
-                    if (FullName.Equals(DirectoryInfoExLib.Tools.IOTools.IID_Desktop)) return;
+                    if (FullName.Equals(DirectoryInfoEx.IID_Desktop))
+                        return;
 
                     this.RequestPIDL((pidl) =>
                         {
@@ -512,7 +512,6 @@ namespace DirectoryInfoExLib.IO.FileSystemInfoExt
         {
             if (parentShellFolder != null && fullPIDL != null && relPIDL != null)
             {
-
                 Attributes = loadAttributes(parentShellFolder, fullPIDL, relPIDL);
                 string parseName = loadName(parentShellFolder, relPIDL, Header.ShellDll.ShellAPI.SHGNO.FORPARSING);
                 FullName = "";
@@ -520,9 +519,8 @@ namespace DirectoryInfoExLib.IO.FileSystemInfoExt
                 //Console.WriteLine("relPIDL.size = {0}", relPIDL.Size);
                 //Console.WriteLine("PIDL.size = {0}", _pidl.Size); 
 
-
                 if (relPIDL.Size == 0)
-                    FullName = IOTools.IID_Desktop;
+                    FullName = DirectoryInfoEx.IID_Desktop;
                 else
                 //0.12: Fixed Fullname of User/Shared directory under desktop is now it's GUID instead of it's file path.
                 //0.13: Fixed All subdirectory under User/Shared directory uses GUID now.
@@ -532,7 +530,7 @@ namespace DirectoryInfoExLib.IO.FileSystemInfoExt
                         if (parseName == DirectoryInfoEx.CurrentUserDirectory.FullName &&
                         loadName(parentShellFolder, Header.ShellDll.ShellAPI.SHGNO.FORPARSING) == Environment.GetFolderPath(Environment.SpecialFolder.Desktop))
                         {
-                            FullName = IOTools.IID_UserFiles;
+                            FullName = DirectoryInfoEx.IID_UserFiles;
                         }
                         //else if (
                         //    (parseName.StartsWith(DirectoryInfoEx.CurrentUserDirectory.FullName) &&
@@ -549,7 +547,7 @@ namespace DirectoryInfoExLib.IO.FileSystemInfoExt
                     {
                         if (parseName == DirectoryInfoEx.SharedDirectory.FullName &&
                         loadName(parentShellFolder, Header.ShellDll.ShellAPI.SHGNO.FORPARSING) == Environment.GetFolderPath(Environment.SpecialFolder.Desktop))
-                            FullName = IOTools.IID_Public;
+                            FullName = DirectoryInfoEx.IID_Public;
                         //else if (
                         //    (parseName.StartsWith(DirectoryInfoEx.SharedDirectory.FullName) &&
                         //    _parent != null && _parent.FullName.StartsWith(IOTools.IID_Public))
@@ -591,7 +589,7 @@ namespace DirectoryInfoExLib.IO.FileSystemInfoExt
             {
                 if (OriginalPath != null)
                 {
-                    string origPath = Helper.RemoveSlash(OriginalPath);
+                    string origPath = RemoveSlash(OriginalPath);
                     _name = Path.GetFileName(origPath);
                     Label = _name;
                     FullName = origPath;
@@ -613,10 +611,15 @@ namespace DirectoryInfoExLib.IO.FileSystemInfoExt
             //ShellAPI.SFGAO attribute = shGetFileAttribute(pidlFull, ShellAPI.SFGAO.READONLY |
             //    ShellAPI.SFGAO.FOLDER | ShellAPI.SFGAO.FILESYSTEM | ShellAPI.SFGAO.STREAM | ShellAPI.SFGAO.FILESYSANCESTOR |
             //    ShellAPI.SFGAO.HIDDEN);
-            Header.ShellDll.ShellAPI.SFGAO attribute = Header.ShellDll.ShellAPI.SFGAO.READONLY | Header.ShellDll.ShellAPI.SFGAO.FOLDER | Header.ShellDll.ShellAPI.SFGAO.FILESYSTEM | Header.ShellDll.ShellAPI.SFGAO.STREAM | Header.ShellDll.ShellAPI.SFGAO.FILESYSANCESTOR;
+            Header.ShellDll.ShellAPI.SFGAO attribute = Header.ShellDll.ShellAPI.SFGAO.READONLY |
+                                                       Header.ShellDll.ShellAPI.SFGAO.FOLDER |
+                                                       Header.ShellDll.ShellAPI.SFGAO.FILESYSTEM |
+                                                       Header.ShellDll.ShellAPI.SFGAO.STREAM |
+                                                       Header.ShellDll.ShellAPI.SFGAO.FILESYSANCESTOR;
+
             iShellFolder.GetAttributesOf(1, new IntPtr[] { pidlRel.Ptr }, ref attribute);
 
-            if (!IOTools.IsZip(attribute) && (attribute & Header.ShellDll.ShellAPI.SFGAO.FOLDER) != 0)
+            if ((attribute & Header.ShellDll.ShellAPI.SFGAO.FOLDER) != 0)
               retVal |= FileAttributes.Directory;
 
             if ((attribute & Header.ShellDll.ShellAPI.SFGAO.HIDDEN) != 0)
@@ -628,14 +631,24 @@ namespace DirectoryInfoExLib.IO.FileSystemInfoExt
             return retVal;
         }
 
-        private static string loadName(IShellFolder2 iShellFolder, Header.ShellDll.ShellAPI.SHGNO uFlags)
+        protected string loadName(IShellFolder2 iShellFolder, Header.ShellDll.ShellAPI.SHGNO uFlags)
         {
             return loadName(iShellFolder, new PIDL(IntPtr.Zero, false), uFlags);
         }
 
-        private static string loadName(IShellFolder2 iShellFolder,IntPtr ptr, Header.ShellDll.ShellAPI.SHGNO uFlags)
+        /// <summary>
+        /// Gets the name of a shell folder item based on its <seealso cref="IntPtr"/>.
+        /// </summary>
+        /// <param name="iShellFolder"></param>
+        /// <param name="ptr"></param>
+        /// <param name="uFlags"></param>
+        /// <returns></returns>
+        protected static string loadName(IShellFolder2 iShellFolder,
+                                         IntPtr ptr,
+                                         Header.ShellDll.ShellAPI.SHGNO uFlags)
         {
-            if (iShellFolder == null) return null;
+            if (iShellFolder == null)
+                return null;
 
             IntPtr ptrStr = Marshal.AllocCoTaskMem(Header.ShellDll.ShellAPI.MAX_PATH * 2 + 4);
             Marshal.WriteInt32(ptrStr, 0, 0);
@@ -652,42 +665,64 @@ namespace DirectoryInfoExLib.IO.FileSystemInfoExt
                     Marshal.FreeCoTaskMem(ptrStr);
                 ptrStr = IntPtr.Zero;
             }
+
             return buf.ToString();
         }
 
-        private static string loadName(IShellFolder2 iShellFolder, PIDL relPidl, Header.ShellDll.ShellAPI.SHGNO uFlags)
+        protected static string loadName(IShellFolder2 iShellFolder,
+                                  PIDL relPidl,
+                                  Header.ShellDll.ShellAPI.SHGNO uFlags)
         {
             return loadName(iShellFolder, relPidl.Ptr, uFlags);
         }
 
+        /// <summary>
+        /// Remove slash end of input.
+        /// </summary>
+        protected static string RemoveSlash(string input)
+        {
+            if (!input.EndsWith(@":\") && input.EndsWith(@"\"))
+            {
+                return input.Substring(0, input.Length - 1);
+            }
+            else
+                return input;
+        }
+
         private bool getExists()
         {
-            if (FullName == "::{00021400-0000-0000-C000-000000000046}") //Desktop
+            if (FullName == DirectoryInfoEx.IID_Desktop) // Desktop
                 return true;
-            else if (FullName == null) return false;
             else
-                try
-                {
-                    if (_pidl != null)
-                    {
-                        using (ShellFolder2 _desktopShellFolder = getDesktopShellFolder())
-                            loadName(_desktopShellFolder, _pidl, Header.ShellDll.ShellAPI.SHGNO.FORPARSING);
-                        return true;
-                    }
-                    else
-                    {
-                        PIDL pidlLookup = PathToPIDL(FullName);
-                        try
-                        {
-                            return pidlLookup != null;
-                        }
-                        finally { if (pidlLookup != null) pidlLookup.Free(); }
-                    }
-                }
-                catch (FileNotFoundException)
-                {
+            {
+                if (FullName == null)
                     return false;
+                else
+                {
+                    try
+                    {
+                        if (_pidl != null)
+                        {
+                            using (ShellFolder2 _desktopShellFolder = getDesktopShellFolder())
+                                loadName(_desktopShellFolder, _pidl, Header.ShellDll.ShellAPI.SHGNO.FORPARSING);
+                            return true;
+                        }
+                        else
+                        {
+                            PIDL pidlLookup = PathToPIDL(FullName);
+                            try
+                            {
+                                return pidlLookup != null;
+                            }
+                            finally { if (pidlLookup != null) pidlLookup.Free(); }
+                        }
+                    }
+                    catch (FileNotFoundException)
+                    {
+                        return false;
+                    }
                 }
+            }
         }
         #endregion
 

@@ -37,9 +37,9 @@
 
 			if (a.FullName == b.FullName)
 				return HierarchicalResult.Current;
-			else if (IOTools.HasParent(b, a.FullName))
+			else if (DirectoryInfoExLib.Factory.HasParent(b, a.FullName))
 				return HierarchicalResult.Child;
-			else if (IOTools.HasParent(a, b.FullName))
+			else if (DirectoryInfoExLib.Factory.HasParent(a, b.FullName))
 				return HierarchicalResult.Parent;
 			else return HierarchicalResult.Unrelated;
 		}

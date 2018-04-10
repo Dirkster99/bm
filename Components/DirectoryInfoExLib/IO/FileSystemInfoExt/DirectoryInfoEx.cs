@@ -9,7 +9,6 @@ namespace DirectoryInfoExLib.IO.FileSystemInfoExt
     using System;
     using System.Collections.Generic;
     using System.Runtime.InteropServices;
-    using System.Runtime.Serialization;
     using System.ComponentModel;
     using System.Threading.Tasks;
     using System.Threading;
@@ -23,6 +22,8 @@ namespace DirectoryInfoExLib.IO.FileSystemInfoExt
     using DirectoryInfoExLib.IO.Header.KnownFolder;
     using DirectoryInfoExLib.IO.Header.KnownFolder.Enums;
     using DirectoryInfoExLib.Enums;
+    using DirectoryInfoExLib.IO.Tools;
+    using System.Text.RegularExpressions;
 
     /// <summary>
     /// Represents a directory in PIDL (Pointer to an ID List) system.
@@ -36,6 +37,31 @@ namespace DirectoryInfoExLib.IO.FileSystemInfoExt
         private DirectoryTypeEnum _dirType;
 
         #region Static fields
+        /// <summary>
+        /// Defines the (CLSID Guid) path of the Desktop shell item.
+        /// </summary>
+        internal const string IID_Desktop = "::{00021400-0000-0000-C000-000000000046}";
+
+        /// <summary>
+        /// Defines the (CLSID Guid) path of the User Files shell item.
+        /// </summary>
+        internal const string IID_UserFiles = "::{59031A47-3F72-44A7-89C5-5595FE6b30EE}";
+
+        /// <summary>
+        /// Defines the (CLSID Guid) path of the Public shell item.
+        /// </summary>
+        internal const string IID_Public = "::{4336A54D-038B-4685-AB02-99BB52D3FB8B}";
+
+        /// <summary>
+        /// Defines the (PLID Guid) path of the Libraries shell item.
+        /// </summary>
+        internal const string IID_Library = "::{031E4825-7B94-4DC3-B131-E946B44C8DD5}";
+
+        /// <summary>
+        /// Defines the (CLSID Guid) path of the Recycle Bin shell item.
+        /// </summary>
+        private const string IDD_RecycleBin = "::{645FF040-5081-101B-9F08-00AA002F954E}";
+
         internal static readonly DirectoryInfoEx DesktopDirectory;
         internal static readonly DirectoryInfoEx MyComputerDirectory;
         internal static readonly DirectoryInfoEx CurrentUserDirectory;
@@ -58,19 +84,16 @@ namespace DirectoryInfoExLib.IO.FileSystemInfoExt
             DesktopDirectory = new DirectoryInfoEx(KnownFolder.FromKnownFolderId(KnownFolder_GUIDS.Desktop));
             MyComputerDirectory = new DirectoryInfoEx(KnownFolder.FromKnownFolderId(KnownFolder_GUIDS.Computer));
             CurrentUserDirectory = new DirectoryInfoEx(KnownFolder.FromKnownFolderId(KnownFolder_GUIDS.UsersFiles));
+
             //0.17: Fixed some system cannot create shared directories. (by cwharmon)
-            try { SharedDirectory = new DirectoryInfoEx(KnownFolder.FromKnownFolderId(KnownFolder_GUIDS.PublicDocuments)); }
+            try
+            {
+                SharedDirectory = new DirectoryInfoEx(KnownFolder.FromKnownFolderId(KnownFolder_GUIDS.PublicDocuments));
+            }
             catch { }
+
             NetworkDirectory = new DirectoryInfoEx(KnownFolder.FromKnownFolderId(KnownFolder_GUIDS.Network));
             RecycleBinDirectory = new DirectoryInfoEx(KnownFolder.FromKnownFolderId(KnownFolder_GUIDS.RecycleBin));
-
-            //foreach (DirectoryInfoEx dir in DesktopDirectory.GetDirectories())
-            //    if (dir.FullName.Equals(Helper.GetCurrentUserPath()))
-            //    { CurrentUserDirectory = dir; break; }
-
-            //foreach (DirectoryInfoEx dir in DesktopDirectory.GetDirectories())
-            //    if (dir.FullName.Equals(Helper.GetSharedPath()))
-            //    { SharedDirectory = dir; break; }
         }
 
         /// <summary>
@@ -88,7 +111,7 @@ namespace DirectoryInfoExLib.IO.FileSystemInfoExt
         /// <param name="fullPath"></param>
         public DirectoryInfoEx(string fullPath)
         {
-            fullPath = IOTools.ExpandPath(fullPath);
+            fullPath = ExpandPath(fullPath);
             init(fullPath);
             checkProperties();
         }
@@ -115,36 +138,14 @@ namespace DirectoryInfoExLib.IO.FileSystemInfoExt
         /// <summary>
         /// Class constructor
         /// </summary>
-        /// <param name="info"></param>
-        /// <param name="context"></param>
-////        public DirectoryInfoEx(SerializationInfo info, StreamingContext context)
-////            : base(info, context)
-////        {
-////            _dirType = (DirectoryTypeEnum)info.GetValue("DirectoryType", typeof(DirectoryTypeEnum));
-////            IsBrowsable = info.GetBoolean("IsBrowsable");
-////            IsFileSystem = info.GetBoolean("IsFileSystem");
-////            HasSubFolder = info.GetBoolean("HasSubFolder");
-////        }
-
-        /// <summary>
-        /// Class constructor
-        /// </summary>
-        /// <param name="parentShellFolder"></param>
-        /// <param name="fullPIDL"></param>
-        internal DirectoryInfoEx(IShellFolder2 parentShellFolder, PIDL fullPIDL)
-        {
-            init(parentShellFolder, fullPIDL);
-        }
-
-        /// <summary>
-        /// Class constructor
-        /// </summary>
         /// <param name="parentShellFolder"></param>
         /// <param name="parentPIDL"></param>
         /// <param name="relPIDL"></param>
         /// <param name="parentIsLibrary"></param>
-        internal DirectoryInfoEx(IShellFolder2 parentShellFolder, PIDL parentPIDL, PIDL relPIDL,
-            bool parentIsLibrary)
+        protected DirectoryInfoEx(IShellFolder2 parentShellFolder,
+                                  PIDL parentPIDL,
+                                  PIDL relPIDL,
+                                  bool parentIsLibrary)
         {
             init(parentShellFolder, parentPIDL, relPIDL);
 
@@ -153,22 +154,6 @@ namespace DirectoryInfoExLib.IO.FileSystemInfoExt
             {
                 init(FullName);
             }
-        }
-
-        /// <summary>
-        /// Class constructor
-        /// </summary>
-        /// <param name="parentDir"></param>
-        /// <param name="relPIDL"></param>
-        internal DirectoryInfoEx(DirectoryInfoEx parentDir, PIDL relPIDL)
-        {
-            Parent = parentDir;
-            parentDir.RequestPIDL(parentPIDL =>
-            {
-                //0.15: Fixed ShellFolder not freed.
-                using (ShellFolder2 parentShellFolder = parentDir.ShellFolder)
-                    init(parentShellFolder, parentPIDL, relPIDL);
-            });
         }
 
         /// <summary>
@@ -210,7 +195,7 @@ namespace DirectoryInfoExLib.IO.FileSystemInfoExt
             get { return this.RequestPIDL(pidl => KnownFolder.FromPidl(pidl)); }
         }
 
-        internal ShellFolder2 ShellFolder { get { return getIShellFolder(); } }
+        private ShellFolder2 ShellFolder { get { return getIShellFolder(); } }
         #endregion
 
         #region Static Methods
@@ -314,6 +299,12 @@ namespace DirectoryInfoExLib.IO.FileSystemInfoExt
             }
         }
 
+        /// <summary>
+        /// Returns whether this directory item is
+        /// the same as the <paramref name="other"/> or not.
+        /// </summary>
+        /// <param name="other"></param>
+        /// <returns></returns>
         public bool Equals(IDirectoryInfoEx other)
         {
             return Equals(other as FileSystemInfoEx);
@@ -327,10 +318,11 @@ namespace DirectoryInfoExLib.IO.FileSystemInfoExt
                     return true;
 
                 DirectoryInfoEx dirObj = other as DirectoryInfoEx;
-                if (dirObj.FullName.Equals(IOTools.IID_UserFiles))
+                if (dirObj.FullName.Equals(DirectoryInfoEx.IID_UserFiles))
                     if (this.FullName.Equals(DirectoryInfoEx.CurrentUserDirectory.FullName, StringComparison.InvariantCultureIgnoreCase))
                         return true;
-                if (dirObj.FullName.Equals(IOTools.IID_Public))
+
+                if (dirObj.FullName.Equals(DirectoryInfoEx.IID_Public))
                     if (this.FullName.Equals(DirectoryInfoEx.SharedDirectory.FullName, StringComparison.InvariantCultureIgnoreCase))
                         return true;
             }
@@ -398,7 +390,7 @@ namespace DirectoryInfoExLib.IO.FileSystemInfoExt
 
         private ShellFolder2 getIShellFolder()
         {
-            if (this.FullName.Equals(IOTools.IID_Desktop))
+            if (this.FullName.Equals(DirectoryInfoEx.IID_Desktop))
                 return getDesktopShellFolder();
             else
             {
@@ -419,80 +411,53 @@ namespace DirectoryInfoExLib.IO.FileSystemInfoExt
                 });
             }
         }
-
-////    protected void initDirectoryType()
-////    {
-////        _dirType = DirectoryTypeEnum.dtFolder;   // default value
-////
-////        string path = FullName != null ? FullName : OriginalPath;
-////
-////        if (path != null)
-////        {
-////            if (path.Equals(IOTools.IID_Desktop))
-////                _dirType = DirectoryTypeEnum.dtDesktop;
-////            else
-////            if (path.EndsWith(":\\"))
-////            {
-////                _dirType = DirectoryTypeEnum.dtDrive;
-////            }
-////            else
-////            {
-////                if (path.StartsWith("::"))
-////                    _dirType = DirectoryTypeEnum.dtSpecial;
-////                else
-////                    _dirType = DirectoryTypeEnum.dtFolder;
-////            }
-////        }
-////    }
         #endregion
 
         #region Methods - GetSubItems
-        static ShellAPI.SHCONTF flag = ShellAPI.SHCONTF.NONFOLDERS | ShellAPI.SHCONTF.FOLDERS | ShellAPI.SHCONTF.INCLUDEHIDDEN;
-////    //static ShellAPI.SHCONTF folderflag = ShellAPI.SHCONTF.FOLDERS | ShellAPI.SHCONTF.INCLUDEHIDDEN;
-////    //static ShellAPI.SHCONTF fileflag = ShellAPI.SHCONTF.NONFOLDERS | ShellAPI.SHCONTF.INCLUDEHIDDEN;
-
-////    private List<FileSystemInfoEx> _cachedDirList = new List<FileSystemInfoEx>();
-////    //private List<FileSystemInfoEx> _cachedFileList = new List<FileSystemInfoEx>();
-////
-////    private static bool listContains(List<FileSystemInfoEx> list, PIDL pidl)
-////    {
-////        foreach (FileSystemInfoEx item in list)
-////            if (item.RequestRelativePIDL((relPidl) => relPidl.Equals(pidl)))
-////                return true;
-////
-////        return false;
-////    }
-////    private static void listRemove(List<FileSystemInfoEx> list, PIDL pidl)
-////    {
-////        for (int i = list.Count - 1; i >= 0; i--)
-////            if (list[i].RequestRelativePIDL((relPidl) => relPidl.Equals(pidl)))
-////            { list.RemoveAt(i); return; }
-////    }
-
-        public IEnumerable<IDirectoryInfoEx> EnumerateDirectories(String searchPattern, SearchOption searchOption, CancelDelegate cancel)
+        /// <summary>
+        /// Enumerates all items in this directory with the given search parameters.
+        /// </summary>
+        /// <param name="searchPattern"></param>
+        /// <param name="searchOption"></param>
+        /// <param name="cancel"></param>
+        /// <returns></returns>
+        public IEnumerable<IDirectoryInfoEx> EnumerateDirectories(
+            String searchPattern,
+            SearchOption searchOption,
+            CancelDelegate cancel)
         {
+            const ShellAPI.SHCONTF flag = ShellAPI.SHCONTF.NONFOLDERS | ShellAPI.SHCONTF.FOLDERS | ShellAPI.SHCONTF.INCLUDEHIDDEN;
             IntPtr ptrEnum = IntPtr.Zero;
             IEnumIDList IEnum = null;
             PIDL parentPIDL = this.getPIDL();
 
             List<IntPtr> trashPtrList = new List<IntPtr>();
             using (ShellFolder2 sf = this.ShellFolder)
+            {
                 try
                 {
                     if (sf.EnumObjects(IntPtr.Zero, flag, out ptrEnum) == ShellAPI.S_OK)
                     {
+                        // Initialize query for sub-items below this item (folder)
                         IEnum = (IEnumIDList)Marshal.GetTypedObjectForIUnknown(ptrEnum, typeof(IEnumIDList));
                         IntPtr pidlSubItemPtr;
                         int celtFetched;
 
-
-                        while (!IOTools.IsCancelTriggered(cancel) && IEnum.Next(1, out pidlSubItemPtr, out celtFetched) == ShellAPI.S_OK && celtFetched == 1)
+                        // Process one item at a time sub-items below this item (folder)
+                        while (!IsCancelTriggered(cancel) &&
+                               IEnum.Next(1, out pidlSubItemPtr, out celtFetched) == ShellAPI.S_OK &&
+                               celtFetched == 1)
                         {
                             trashPtrList.Add(pidlSubItemPtr); //0.24 : Large memory Leak here.                                
 
-                            ShellAPI.SFGAO attribs = ShellAPI.SFGAO.FOLDER | ShellAPI.SFGAO.FILESYSTEM | ShellAPI.SFGAO.STREAM |
-                                ShellAPI.SFGAO.FILESYSANCESTOR | ShellAPI.SFGAO.NONENUMERATED;
+                            ShellAPI.SFGAO attribs = ShellAPI.SFGAO.FOLDER |
+                                                     ShellAPI.SFGAO.FILESYSTEM |
+                                                     ShellAPI.SFGAO.STREAM |
+                                                     ShellAPI.SFGAO.FILESYSANCESTOR |
+                                                     ShellAPI.SFGAO.NONENUMERATED;
+
                             sf.GetAttributesOf(1, new IntPtr[] { pidlSubItemPtr }, ref attribs);
+
                             bool isZip = ((attribs & ShellAPI.SFGAO.FOLDER) != 0 && (attribs & ShellAPI.SFGAO.STREAM) != 0);
                             bool isDir = ((attribs & ShellAPI.SFGAO.FOLDER) != 0);
                             //0.18 Added a check for NonEnumerated items so DirectoryInfoEx.EnumerateDirectories wont return some system directories (e.g. C:\MSOCache)
@@ -502,30 +467,26 @@ namespace DirectoryInfoExLib.IO.FileSystemInfoExt
 
                             if (!isZip && !isFileAncestor) //0.14 : Added allowed folder list so Non-FileAncestor directory (e.g. recycle-bin) is listed.
                             {
-                                string[] allowedPaths = new string[]
-                                {
-                                    "::{645FF040-5081-101B-9F08-00AA002F954E}"
-                                };
+                                string[] allowedPaths = new string[]{ IDD_RecycleBin };
 
                                 string path = PtrToPath(pidlSubItemPtr);
                                 foreach (string allowedPath in allowedPaths)
+                                {
                                     if (allowedPath == path)
                                         includedFolder = true;
-                                //if (!includedFolder)
-                                //    if (IOTools.HasParent(this, NetworkDirectory))
-                                //        includedFolder = true;
-
+                                }
                             }
+
                             if (isDir && !isZip /*&& !isNonEnumerated*/ && (isFileAncestor || includedFolder))
                             {
                                 PIDL subPidl = new PIDL(pidlSubItemPtr, true);
                                 //DirectoryInfoEx di = new DirectoryInfoEx(this, subPidl);
 
                                 //0.22: Fix illegal PIDL for Directory under Library.ms directory
-                                bool isLibraryItem = IOTools.IsLibraryItem(FullName);
+                                bool isLibraryItem = Factory.IsLibraryItem(FullName);
                                 DirectoryInfoEx di = new DirectoryInfoEx(sf, parentPIDL, subPidl, isLibraryItem);
 
-                                if (IOTools.MatchFileMask(di.Name, searchPattern))
+                                if (this.MatchFileMask(di.Name, searchPattern))
                                     yield return di;
 
                                 if (searchOption == SearchOption.AllDirectories)
@@ -559,13 +520,40 @@ namespace DirectoryInfoExLib.IO.FileSystemInfoExt
 
                     if (trashPtrList != null)
                         foreach (var ptr in trashPtrList)
-                            Marshal.FreeCoTaskMem(ptr); //0.24 : Large memory Leak here.                                
-
+                            Marshal.FreeCoTaskMem(ptr);    // 0.24 : Large memory Leak here.
                 }
+            }
         }
-        public IEnumerable<IDirectoryInfoEx> EnumerateDirectories(String searchPattern, SearchOption searchOption) { return EnumerateDirectories(searchPattern, searchOption, null); }
-        public IEnumerable<IDirectoryInfoEx> EnumerateDirectories(String searchPattern) { return EnumerateDirectories(searchPattern, SearchOption.TopDirectoryOnly); }
-        public IEnumerable<IDirectoryInfoEx> EnumerateDirectories() { return EnumerateDirectories("*", SearchOption.TopDirectoryOnly); }
+
+        /// <summary>
+        /// Enumerates all items in this directory with the given search parameters.
+        /// </summary>
+        /// <param name="searchPattern"></param>
+        /// <param name="searchOption"></param>
+        /// <returns></returns>
+        public IEnumerable<IDirectoryInfoEx> EnumerateDirectories(String searchPattern, SearchOption searchOption)
+        {
+            return EnumerateDirectories(searchPattern, searchOption, null);
+        }
+
+        /// <summary>
+        /// Enumerates all items in this directory with the given search parameters.
+        /// </summary>
+        /// <param name="searchPattern"></param>
+        /// <returns></returns>
+        public IEnumerable<IDirectoryInfoEx> EnumerateDirectories(String searchPattern)
+        {
+            return EnumerateDirectories(searchPattern, SearchOption.TopDirectoryOnly);
+        }
+
+        /// <summary>
+        /// Enumerates all items in this directory with the given search parameters.
+        /// </summary>
+        /// <returns></returns>
+        public IEnumerable<IDirectoryInfoEx> EnumerateDirectories()
+        {
+            return EnumerateDirectories("*", SearchOption.TopDirectoryOnly);
+        }
 
         #region GetXXX
         /// <summary>
@@ -612,27 +600,112 @@ namespace DirectoryInfoExLib.IO.FileSystemInfoExt
         }
         #endregion
 
-////        #region Methods - Lookup
-////        internal IDirectoryInfoEx GetSubDirectory(string name)
-////        {
-////            IDirectoryInfoEx[] subFSInfo = GetDirectories();
-////            for (int i = 0; i < subFSInfo.Length; i++)
-////                if (subFSInfo[i].Name.Equals(name, StringComparison.CurrentCultureIgnoreCase))
-////                    return (DirectoryInfoEx)subFSInfo[i];
-////
-////            return null;
-////        }
-////
-////        internal IDirectoryInfoEx GetSubDirectory(IntPtr pidl)
-////        {
-////            IDirectoryInfoEx[] subFSInfo = GetDirectories();
-////            for (int i = 0; i < subFSInfo.Length; i++)
-////                if ((subFSInfo[i] as DirectoryInfoEx).RequestRelativePIDL(relPidl => relPidl.Equals(pidl)))
-////                    return (DirectoryInfoEx)subFSInfo[i];
-////
-////            return null;
-////        }
-////        #endregion
+        #region IDisposable Members
+        /// <summary>
+        /// Implements standard disposable method.
+        /// </summary>
+        public new void Dispose()
+        {
+            base.Dispose();
+        }
+        #endregion
+
+        #region Match File Mask Filter
+        /// <summary>
+        /// Return whether PIDL match fileMask ( * and ? supported)
+        /// </summary>
+        /// <param name="pidl"></param>
+        /// <param name="fileMask"></param>
+        /// <returns></returns>
+        public bool MatchFileMask(PIDL pidl, string fileMask)
+        {
+            string path = DirectoryInfoEx.PIDLToPath(pidl);
+            string name = PathEx.GetFileName(path);
+            return MatchFileMask(name, fileMask);
+        }
+
+        /// <summary>
+        /// Return whether filename match fileMask ( * and ? supported)
+        /// </summary>
+        /// <param name="fileName"></param>
+        /// <param name="fileMask"></param>
+        /// <returns></returns>
+        public bool MatchFileMask(string fileName, string fileMask)
+        {
+            return MatchFileMask(fileName, fileMask, false);
+        }
+
+        /// <summary>
+        /// http://stackoverflow.com/questions/725341/c-file-mask
+        /// Return whether filename match fileMask ( * and ? supported)
+        /// </summary>
+        /// <param name="fileName"></param>
+        /// <param name="fileMask"></param>
+        /// <returns></returns>
+        protected bool MatchFileMask(string fileName, string fileMask, bool forceSlashCheck)
+        {
+            if (fileName.Equals(fileMask, StringComparison.InvariantCultureIgnoreCase))
+                return true;
+            if (fileMask == "*.*" || fileMask == "*" && !forceSlashCheck)
+                return true;
+
+            string pattern = constructFileMaskRegexPattern(fileMask, forceSlashCheck);
+
+            return new Regex(pattern, RegexOptions.IgnoreCase).IsMatch(fileName);
+        }
+
+        public bool MatchFileMask(string fileName, string fileMask, bool forceSlashCheck, out Match match)
+        {
+            string pattern = constructFileMaskRegexPattern(fileMask, forceSlashCheck);
+            match = new Regex(pattern, RegexOptions.IgnoreCase).Match(fileName);
+            return match.Success;
+        }
+
+        public bool MatchFileMasks(string fileName, string fileMasks)
+        {
+            string[] fileMaskList = fileMasks.Split(new char[] { ',', ';' });
+            foreach (string fileMask in fileMaskList)
+                if (MatchFileMask(fileName, fileMask))
+                    return true;
+            return false;
+        }
+
+        protected string constructFileMaskRegexPattern(string fileMask, bool forceSlashCheck)
+        {
+            if (!forceSlashCheck)
+            {
+                return '^' +
+                Regex.Escape(fileMask.Replace(".", "__DOT__")
+                                .Replace("*", "__STAR__")
+                                .Replace("?", "__QM__"))
+                    .Replace("__DOT__", "[.]")
+                    .Replace("__STAR__", ".*")
+                    .Replace("__QM__", ".")
+                + '$';
+            }
+            else
+            {
+                return '^' +
+                 Regex.Escape(fileMask.Replace(".", "__DOT__")
+                                 .Replace("\\", "__SLASH__")
+                                 .Replace("**", "__DOUBLESTAR__")
+                                 .Replace("*", "__STAR__")
+                                 .Replace("#", "__VARIABLE__")
+                                 .Replace("(", "__OPENQUOTE__")
+                                 .Replace(")", "__CLOSEQUOTE__")
+                                 .Replace("?", "__QM__"))
+                     .Replace("__DOT__", "[.]")
+                     .Replace("__DOUBLESTAR__", ".*")
+                     .Replace("__STAR__", "[^\\\\]*")
+                     .Replace("__SLASH__", "[\\\\]")
+                     .Replace("__VARIABLE__", "?")
+                     .Replace("__OPENQUOTE__", "(")
+                     .Replace("__CLOSEQUOTE__", ")")
+                     .Replace("__QM__", ".")
+                 + '$';
+            }
+        }
+        #endregion Match File Mask Filter
 
         protected override void checkProperties()
         {
@@ -641,27 +714,24 @@ namespace DirectoryInfoExLib.IO.FileSystemInfoExt
             //    throw new IOException(FullName + " is not a folder.");
         }
 
-        #region IDisposable Members
-        public new void Dispose()
+        private bool IsCancelTriggered(CancelDelegate cancel)
         {
-            base.Dispose();
+            return cancel != null && cancel();
         }
-        #endregion
 
-////        #region ISerializable Members
-////        protected override void getObjectData(SerializationInfo info, StreamingContext context)
-////        {
-////            base.getObjectData(info, context);
-////            info.AddValue("DirectoryType", DirectoryType);
-////            info.AddValue("IsBrowsable", IsBrowsable);
-////            info.AddValue("IsFileSystem", IsFileSystem);
-////            info.AddValue("HasSubFolder", HasSubFolder);
-////        }
-////
-////        void ISerializable.GetObjectData(SerializationInfo info, StreamingContext context)
-////        {
-////            getObjectData(info, context);
-////        }
-////        #endregion ISerializable Members
+        /// <summary>
+        /// Expand environment path to parasable path.
+        /// </summary>
+        /// <param name="fullPath"></param>
+        /// <returns></returns>
+        private string ExpandPath(string fullPath)
+        {
+            fullPath = RemoveSlash(fullPath);
+
+            if (fullPath.StartsWith("%"))
+                fullPath = Environment.ExpandEnvironmentVariables(fullPath);
+
+            return fullPath;
+        }
     }
 }

@@ -36,6 +36,15 @@ namespace DirectoryInfoExLib.IO.Tools.Interface
             return _iShellFolder2.ParseDisplayName(hwnd, pbc, pszDisplayName, ref pchEaten, out ppidl, ref pdwAttributes);
         }
 
+        /// <summary>
+        /// Allows a client to determine the contents of a folder by creating an item
+        /// identifier enumeration object and returning its IEnumIDList interface.
+        /// Return value: error code, if any
+        /// </summary>
+        /// <param name="hwnd"></param>
+        /// <param name="grfFlags"></param>
+        /// <param name="enumIDList"></param>
+        /// <returns></returns>
         public int EnumObjects(IntPtr hwnd, Header.ShellDll.ShellAPI.SHCONTF grfFlags, out IntPtr enumIDList)
         {
             checkDisposed();
