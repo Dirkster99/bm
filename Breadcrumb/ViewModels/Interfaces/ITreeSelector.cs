@@ -84,11 +84,12 @@
 		void ReportChildDeselected(Stack<ITreeSelector<VM, T>> path);
 
 		/// <summary>        
-		/// Find requested node using lookupProc using type T, after any HierarchicalResult, use processors to perform further action.
+		/// Find requested node using lookupProc using type T, after any HierarchicalResult,
+        /// use processors to perform further action.
 		/// </summary>
 		/// <example>
 		/// //This will select the C:\Temp Node.
-		/// await LookupAsync(@"c:\temp", RecrusiveSearch.LoadSubentriesIfNotLoaded, SetSelected.WhenSelected);
+		/// await LookupAsync(@"c:\temp", RecursiveSearch.LoadSubentriesIfNotLoaded, SetSelected.WhenSelected);
 		/// </example>
 		/// <param name="value"></param>
 		/// <param name="lookupProc"></param>

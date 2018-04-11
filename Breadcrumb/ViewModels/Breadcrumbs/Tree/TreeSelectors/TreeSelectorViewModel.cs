@@ -10,261 +10,270 @@
     using BreadcrumbLib.Defines;
 
     /// <summary>
-    /// Base class of ITreeSelector, which implement Tree based structure and support LookupProcessing.
+    /// Base class of ITreeSelector, which implements Tree
+    /// based structure and supports LookupProcessing.
     /// </summary>
     /// <typeparam name="VM"></typeparam>
     /// <typeparam name="T"></typeparam>
     internal class TreeSelectorViewModel<VM, T> : Base.ViewModelBase, ITreeSelector<VM, T>
-	{
-		#region fields
-		private readonly AsyncLock _lookupLock = new AsyncLock();
-		private T _currentValue = default(T);
-		private bool _isSelected = false;
-		private T _selectedValue = default(T);
-		private ITreeSelector<VM, T> _prevSelected = null;
+    {
+        #region fields
+        private readonly AsyncLock _lookupLock = new AsyncLock();
+        private T _currentValue = default(T);
+        private bool _isSelected = false;
+        private T _selectedValue = default(T);
+        private ITreeSelector<VM, T> _prevSelected = null;
 
-		private VM _currentViewModel;
-		private bool _isRoot = false;
-		private bool _isOverflowed;
-		#endregion fields
+        private VM _currentViewModel;
+        private bool _isRoot = false;
+        private bool _isOverflowed;
+        #endregion fields
 
-		#region constructors
-		public TreeSelectorViewModel(T currentValue, VM currentViewModel,
-																 ITreeSelector<VM, T> parentSelector,
-																 IEntriesHelper<VM> entryHelper)
-		{
-			this.RootSelector = parentSelector.RootSelector;
-			this.ParentSelector = parentSelector;
-			this.EntryHelper = entryHelper;
+        #region constructors
+        /// <summary>
+        /// Class constructor
+        /// </summary>
+        public TreeSelectorViewModel(T currentValue, VM currentViewModel,
+                                     ITreeSelector<VM, T> parentSelector,
+                                     IEntriesHelper<VM> entryHelper)
+        {
+            RootSelector = parentSelector.RootSelector;
+            ParentSelector = parentSelector;
+            EntryHelper = entryHelper;
 
-			this._currentValue = currentValue;
-			this._currentViewModel = currentViewModel;
-		}
+            _currentValue = currentValue;
+            _currentViewModel = currentViewModel;
+        }
 
-		protected TreeSelectorViewModel(IEntriesHelper<VM> entryHelper)
-		{
-			this.EntryHelper = entryHelper;
-			this.RootSelector = this as ITreeRootSelector<VM, T>;
-		}
-		#endregion
+        /// <summary>
+        /// Internal base classe constructor for inheriting classes.
+        /// </summary>
+        protected TreeSelectorViewModel(IEntriesHelper<VM> entryHelper)
+        {
+            EntryHelper = entryHelper;
+            RootSelector = this as ITreeRootSelector<VM, T>;
+        }
+        #endregion
 
-		#region Public Properties
-		public T Value
-		{
-			get { return this._currentValue; }
-		}
+        #region Public Properties
+        public T Value
+        {
+            get { return _currentValue; }
+        }
 
-		public VM ViewModel
-		{
-			get { return this._currentViewModel; }
-		}
+        public VM ViewModel
+        {
+            get { return _currentViewModel; }
+        }
 
-		public ITreeSelector<VM, T> ParentSelector { get; private set; }
+        public ITreeSelector<VM, T> ParentSelector { get; private set; }
 
-		public ITreeRootSelector<VM, T> RootSelector { get; private set; }
+        public ITreeRootSelector<VM, T> RootSelector { get; private set; }
 
-		public IEntriesHelper<VM> EntryHelper { get; private set; }
+        public IEntriesHelper<VM> EntryHelper { get; private set; }
 
-		public bool IsSelected
-		{
-			get
-			{
-				return this._isSelected;
-			}
+        public bool IsSelected
+        {
+            get
+            {
+                return _isSelected;
+            }
 
-			set
-			{
-				if (this._isSelected != value)
-				{
-					this._isSelected = value;
-					this.NotifyOfPropertyChanged(() => this.IsSelected);
-					this.SelectedChild = default(T);
+            set
+            {
+                if (_isSelected != value)
+                {
+                    _isSelected = value;
+                    NotifyPropertyChanged(() => IsSelected);
+                    SelectedChild = default(T);
 
-					if (value)
-						this.ReportChildSelected(new Stack<ITreeSelector<VM, T>>());
-					else
-						this.ReportChildDeselected(new Stack<ITreeSelector<VM, T>>());
-				}
-			}
-		}
+                    if (value)
+                        ReportChildSelected(new Stack<ITreeSelector<VM, T>>());
+                    else
+                        ReportChildDeselected(new Stack<ITreeSelector<VM, T>>());
+                }
+            }
+        }
 
-		public bool IsRoot
-		{
-			get
-			{
-				return this._isRoot;
-			}
+        public bool IsRoot
+        {
+            get
+            {
+                return _isRoot;
+            }
 
-			set
-			{
-				this._isRoot = value;
-				this.NotifyOfPropertyChanged(() => this.IsRoot);
-				this.NotifyOfPropertyChanged(() => this.IsRootAndIsChildSelected);
-			}
-		}
+            set
+            {
+                _isRoot = value;
+                NotifyPropertyChanged(() => this.IsRoot);
+                NotifyPropertyChanged(() => this.IsRootAndIsChildSelected);
+            }
+        }
 
-		public virtual bool IsChildSelected
-		{
-			get { return this._selectedValue != null; }
-		}
+        public virtual bool IsChildSelected
+        {
+            get { return _selectedValue != null; }
+        }
 
-		public virtual bool IsRootAndIsChildSelected
-		{
-			get { return this.IsRoot && this.IsChildSelected; }
-		}
+        public virtual bool IsRootAndIsChildSelected
+        {
+            get { return IsRoot && IsChildSelected; }
+        }
 
-		public T SelectedChild
-		{
-			get
-			{
-				return this._selectedValue;
-			}
+        public T SelectedChild
+        {
+            get
+            {
+                return _selectedValue;
+            }
 
-			set
-			{
-				this._selectedValue = value;
+            set
+            {
+                _selectedValue = value;
 
-				this.NotifyOfPropertyChanged(() => this.SelectedChild);
-				this.NotifyOfPropertyChanged(() => this.SelectedChildUI);
-				this.NotifyOfPropertyChanged(() => this.IsChildSelected);
-				this.NotifyOfPropertyChanged(() => this.IsRootAndIsChildSelected);
-			}
-		}
+                NotifyPropertyChanged(() => this.SelectedChild);
+                NotifyPropertyChanged(() => this.SelectedChildUI);
+                NotifyPropertyChanged(() => this.IsChildSelected);
+                NotifyPropertyChanged(() => this.IsRootAndIsChildSelected);
+            }
+        }
 
-		public T SelectedChildUI
-		{
-			get
-			{
-				return this._selectedValue;
-			}
+        public T SelectedChildUI
+        {
+            get
+            {
+                return _selectedValue;
+            }
 
-			set
-			{
-				this.IsSelected = false;
-				this.NotifyOfPropertyChanged(() => this.IsSelected);
+            set
+            {
+                IsSelected = false;
+                NotifyPropertyChanged(() => this.IsSelected);
 
-				if (this._selectedValue == null || !this._selectedValue.Equals(value))
-				{
-					if (this._prevSelected != null)
-					{
-						this._prevSelected.IsSelected = false;
-					}
+                if (_selectedValue == null || !_selectedValue.Equals(value))
+                {
+                    if (_prevSelected != null)
+                    {
+                        _prevSelected.IsSelected = false;
+                    }
 
-					this.SelectedChild = value;
+                    SelectedChild = value;
 
-					if (value != null)
-					{
-						AsyncUtils.RunAsync(async () => await this.LookupAsync(value,
-														SearchNextLevel<VM, T>.LoadSubentriesIfNotLoaded,
-														new TreeLookupProcessor<VM, T>(HierarchicalResult.Related, (hr, p, c) =>
-														{
-															c.IsSelected = true;
-															this._prevSelected = c;
+                    if (value != null)
+                    {
+                        AsyncUtils.RunAsync(async () => await LookupAsync(value,
+                                        SearchNextLevel<VM, T>.LoadSubentriesIfNotLoaded,
+                                        new TreeLookupProcessor<VM, T>(HierarchicalResult.Related, (hr, p, c) =>
+                                        {
+                                            c.IsSelected = true;
+                                            _prevSelected = c;
 
-															return true;
-														})));
-					}
-				}
-			}
-		}
+                                            return true;
+                                        })));
+                    }
+                }
+            }
+        }
 
-		public bool IsOverflowedOrRoot
-		{
-			get { return this._isOverflowed || this.IsRoot; }
+        public bool IsOverflowedOrRoot
+        {
+            get { return _isOverflowed || IsRoot; }
 
-			set { }
-		}
+            set { }
+        }
 
-		public bool IsOverflowed
-		{
-			get
-			{
-				return this._isOverflowed;
-			}
+        public bool IsOverflowed
+        {
+            get
+            {
+                return _isOverflowed;
+            }
 
-			set
-			{
-				this._isOverflowed = value;
-				this.NotifyOfPropertyChanged(() => this.IsOverflowed);
-				this.NotifyOfPropertyChanged(() => this.IsOverflowedOrRoot);
-			}
-		}
-		#endregion
+            set
+            {
+                _isOverflowed = value;
+                NotifyPropertyChanged(() => this.IsOverflowed);
+                NotifyPropertyChanged(() => this.IsOverflowedOrRoot);
+            }
+        }
+        #endregion
 
-		#region methods
-		public override string ToString()
-		{
-			return this._currentValue == null ? string.Empty : this._currentValue.ToString();
-		}
+        #region methods
+        public override string ToString()
+        {
+            return _currentValue == null ? string.Empty : _currentValue.ToString();
+        }
 
-		/// <summary>
-		/// Bubble up to TreeSelectionHelper for selection.
-		/// </summary>
-		/// <param name="path"></param>
-		public virtual void ReportChildSelected(Stack<ITreeSelector<VM, T>> path)
-		{
-			if (path.Count() > 0)
-			{
-				this._selectedValue = path.Peek().Value;
+        /// <summary>
+        /// Bubble up to TreeSelectionHelper for selection.
+        /// </summary>
+        /// <param name="path"></param>
+        public virtual void ReportChildSelected(Stack<ITreeSelector<VM, T>> path)
+        {
+            if (path.Count() > 0)
+            {
+                _selectedValue = path.Peek().Value;
 
-				this.NotifyOfPropertyChanged(() => this.SelectedChild);
-				this.NotifyOfPropertyChanged(() => this.SelectedChildUI);
-			}
+                NotifyPropertyChanged(() => this.SelectedChild);
+                NotifyPropertyChanged(() => this.SelectedChildUI);
+            }
 
-			path.Push(this);
+            path.Push(this);
 
-			if (this.ParentSelector != null)
-				this.ParentSelector.ReportChildSelected(path);
-		}
+            if (ParentSelector != null)
+                ParentSelector.ReportChildSelected(path);
+        }
 
-		public virtual void ReportChildDeselected(Stack<ITreeSelector<VM, T>> path)
-		{
-			if (this.EntryHelper.IsLoaded)
-			{
-				// Clear child node selection.
-				this.SelectedChild = default(T);
+        public virtual void ReportChildDeselected(Stack<ITreeSelector<VM, T>> path)
+        {
+            if (EntryHelper.IsLoaded)
+            {
+                // Clear child node selection.
+                SelectedChild = default(T);
 
-				// And just in case if the new selected value is child of this node.
-				if (this.RootSelector.SelectedValue != null)
-				{
-					AsyncUtils.RunAsync(() => this.LookupAsync(
-		this.RootSelector.SelectedValue,
-		new SearchNextUsingReverseLookup<VM, T>(this.RootSelector.SelectedSelector),
-		new TreeLookupProcessor<VM, T>(HierarchicalResult.All, (hr, p, c) =>
-		{
-			this.SelectedChild = c == null ? default(T) : c.Value;
+                // And just in case if the new selected value is child of this node.
+                if (RootSelector.SelectedValue != null)
+                {
+                    AsyncUtils.RunAsync(() =>
+                    LookupAsync
+                    (
+                      RootSelector.SelectedValue,
+                      new SearchNextUsingReverseLookup<VM, T>(RootSelector.SelectedSelector),
+                      new TreeLookupProcessor<VM, T>(HierarchicalResult.All, (hr, p, c) =>
+                      {
+                          SelectedChild = c == null ? default(T) : c.Value;
 
-			return true;
-		})));
-				}
+                          return true;
+                      })));
+                }
 
-				// SetSelectedChild(lookupResult == null ? default(T) : lookupResult.Value);
-				this.NotifyOfPropertyChanged(() => this.IsChildSelected);
-				this.NotifyOfPropertyChanged(() => this.SelectedChild);
-				this.NotifyOfPropertyChanged(() => this.SelectedChildUI);
-			}
+                // SetSelectedChild(lookupResult == null ? default(T) : lookupResult.Value);
+                NotifyPropertyChanged(() => this.IsChildSelected);
+                NotifyPropertyChanged(() => this.SelectedChild);
+                NotifyPropertyChanged(() => this.SelectedChildUI);
+            }
 
-			path.Push(this);
+            path.Push(this);
 
-			if (this.ParentSelector != null)
-				this.ParentSelector.ReportChildDeselected(path);
-		}
+            if (ParentSelector != null)
+                ParentSelector.ReportChildDeselected(path);
+        }
 
-		/// <summary>
-		/// Tunnel down to select the specified item.
-		/// </summary>
-		/// <param name="model"></param>
-		/// <param name="currentAction"></param>
-		/// <returns></returns>
-		public async Task LookupAsync(T value,
-				ITreeLookup<VM, T> lookupProc,
-				params ITreeLookupProcessor<VM, T>[] processors)
-		{
-			using (await this._lookupLock.LockAsync())
-			{
-				await lookupProc.LookupAsync(value, this, this.RootSelector, processors);
-			}
-		}
-		#endregion
-	}
+        /// <summary>
+        /// Tunnel down to select the specified item.
+        /// </summary>
+        /// <param name="model"></param>
+        /// <param name="currentAction"></param>
+        /// <returns></returns>
+        public async Task LookupAsync(T value,
+                                      ITreeLookup<VM, T> lookupProc,
+                                      params ITreeLookupProcessor<VM, T>[] processors)
+        {
+            using (await _lookupLock.LockAsync())
+            {
+                await lookupProc.LookupAsync(value, this, this.RootSelector, processors);
+            }
+        }
+        #endregion
+    }
 }

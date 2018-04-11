@@ -58,7 +58,7 @@
 			set
 			{
 				this._rootItems = value;
-				this.NotifyOfPropertyChanged(() => this.OverflowedAndRootItems);
+				this.NotifyPropertyChanged(() => this.OverflowedAndRootItems);
 			}
 		}
 
@@ -124,8 +124,8 @@
 				prevSelector.IsSelected = false;
 			}
 
-			this.NotifyOfPropertyChanged(() => this.SelectedValue);
-			this.NotifyOfPropertyChanged(() => this.SelectedViewModel);
+			this.NotifyPropertyChanged(() => this.SelectedValue);
+			this.NotifyPropertyChanged(() => this.SelectedViewModel);
 
 			if (this.SelectionChanged != null)
 				this.SelectionChanged(this, EventArgs.Empty);

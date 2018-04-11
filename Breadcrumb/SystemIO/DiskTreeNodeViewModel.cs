@@ -69,28 +69,28 @@
 
 		public IEntriesHelper<DiskTreeNodeViewModel> Entries { get; set; }
 
-		// Lycj: Moved to Selection.IsOverflowed/IsOverflowedOrRoot
-		////public bool IsOverflowedOrRoot { get { return _isOverflowed || _parentNode == null; } set { } }
-		////public bool IsOverflowed
-		////{
-		////    get { return _isOverflowed; }
-		////    set
-		////    {
-		////        _isOverflowed = value;
-		////        NotifyOfPropertyChanged(() => IsOverflowed);
-		////        NotifyOfPropertyChanged(() => IsOverflowedOrRoot);
-		////    }
-		////}
-		public string Header
+        // Lycj: Moved to Selection.IsOverflowed/IsOverflowedOrRoot
+        ////public bool IsOverflowedOrRoot { get { return _isOverflowed || _parentNode == null; } set { } }
+        ////public bool IsOverflowed
+        ////{
+        ////    get { return _isOverflowed; }
+        ////    set
+        ////    {
+        ////        _isOverflowed = value;
+        ////        NotifyPropertyChanged(() => IsOverflowed);
+        ////        NotifyPropertyChanged(() => IsOverflowedOrRoot);
+        ////    }
+        ////}
+        public string Header
 		{ get
 			{
-				return this._header;
+				return _header;
 			}
 			
 			set
 			{
-				this._header = value;
-				this.NotifyOfPropertyChanged(() => this.Header);
+				_header = value;
+				NotifyPropertyChanged(() => this.Header);
 			}
 		}
 	}

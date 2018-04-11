@@ -49,10 +49,11 @@
                   Comparers = new[] { ExTreeNodeViewModel.Comparer }
               };
 
-            // Find all entries below desktop (filter out recycle bin entry since its realy not that useful)
+            // Find all entries below desktop
             _dir = DirectoryInfoExLib.Factory.DesktopDirectory;
             Entries.SetEntries(UpdateMode.Update,
                                _dir.GetDirectories()
+                                 //(filter out recycle bin entry if its not that useful...)
                                  //.Where(d => !d.Equals(DirectoryInfoExLib.Factory.RecycleBinDirectory))
                                  .Select(d => new ExTreeNodeViewModel(d, this)).ToArray());
 
@@ -116,7 +117,7 @@
                 if (_header != value)
                 {
                     _header = value;
-                    NotifyOfPropertyChanged(() => Header);
+                    NotifyPropertyChanged(() => Header);
                 }
             }
         }
@@ -143,7 +144,7 @@
                 if (_icon != value)
                 {
                     _icon = value;
-                    NotifyOfPropertyChanged(() => Icon);
+                    NotifyPropertyChanged(() => Icon);
                 }
             }
         }

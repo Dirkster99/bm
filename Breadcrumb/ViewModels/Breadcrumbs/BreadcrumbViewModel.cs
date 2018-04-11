@@ -8,80 +8,80 @@ namespace Breadcrumb.ViewModels.Breadcrumbs
     /// </summary>
     internal class BreadcrumbViewModel : Base.ViewModelBase
     {
-      #region fields
-        private bool mEnableBreadcrumb;
+        #region fields
+        private bool _EnableBreadcrumb;
         private string _suggestedPath;
-      #endregion fields
+        #endregion fields
 
-      #region constructors
-      /// <summary>
-      /// Class constructor
-      /// </summary>
-      public BreadcrumbViewModel()
-      {
-        this.BreadcrumbSubTree = new ExTreeNodeViewModel();
-        mEnableBreadcrumb = true;
-      }
-      #endregion constructors
-
-      #region properties
-      /// <summary>
-      /// Gets a viewmodel that manages the sub-tree brwosing and
-      /// selection within the sub-tree component
-      /// </summary>
-      public ExTreeNodeViewModel BreadcrumbSubTree { get; }
-
-      /// <summary>
-      /// Gets/sets a property that determines whether a breadcrumb
-      /// switch is turned on or off.
-      /// 
-      /// On false: A Breadcrumb switch turned off shows the text editable path
-      ///  On true: A Breadcrumb switch turned  on shows the BreadcrumbSubTree for browsing
-      /// </summary>
-      public bool EnableBreadcrumb
-      {
-        get
-        { 
-          return mEnableBreadcrumb;
-        }
-
-        set
+        #region constructors
+        /// <summary>
+        /// Class constructor
+        /// </summary>
+        public BreadcrumbViewModel()
         {
-          if (mEnableBreadcrumb != value)
-          {
-            mEnableBreadcrumb = value;
-            NotifyOfPropertyChanged(() => EnableBreadcrumb);
-          }
+            BreadcrumbSubTree = new ExTreeNodeViewModel();
+            _EnableBreadcrumb = true;
         }
-      }
+        #endregion constructors
 
-      public string SuggestedPath
-      {
-        get { return _suggestedPath; }
-        set
+        #region properties
+        /// <summary>
+        /// Gets a viewmodel that manages the sub-tree brwosing and
+        /// selection within the sub-tree component
+        /// </summary>
+        public ExTreeNodeViewModel BreadcrumbSubTree { get; }
+
+        /// <summary>
+        /// Gets/sets a property that determines whether a breadcrumb
+        /// switch is turned on or off.
+        /// 
+        /// On false: A Breadcrumb switch turned off shows the text editable path
+        ///  On true: A Breadcrumb switch turned  on shows the BreadcrumbSubTree for browsing
+        /// </summary>
+        public bool EnableBreadcrumb
         {
-          _suggestedPath = value;
+            get
+            {
+                return _EnableBreadcrumb;
+            }
 
-          NotifyOfPropertyChanged(() => SuggestedPath);
-          OnSuggestPathChanged();
+            set
+            {
+                if (_EnableBreadcrumb != value)
+                {
+                    _EnableBreadcrumb = value;
+                    NotifyPropertyChanged(() => EnableBreadcrumb);
+                }
+            }
         }
-      }
+
+        public string SuggestedPath
+        {
+            get { return _suggestedPath; }
+            set
+            {
+                _suggestedPath = value;
+
+                NotifyPropertyChanged(() => SuggestedPath);
+                OnSuggestPathChanged();
+            }
+        }
 
         /// <summary>
         /// Contains a list of items that maps into the SuggestBox control.
         /// </summary>
-////        public IEnumerable<ISuggestSource> SuggestSources
-////        {
-////            get
-////            {
-////                return _suggestSources;
-////            }
-////            set
-////            {
-////                _suggestSources = value;
-////                NotifyOfPropertyChange(() => SuggestSources);
-////            }
-////        }
+        ////        public IEnumerable<ISuggestSource> SuggestSources
+        ////        {
+        ////            get
+        ////            {
+        ////                return _suggestSources;
+        ////            }
+        ////            set
+        ////            {
+        ////                _suggestSources = value;
+        ////                NotifyOfPropertyChange(() => SuggestSources);
+        ////            }
+        ////        }
         #endregion properties
 
         #region methods
@@ -94,37 +94,37 @@ namespace Breadcrumb.ViewModels.Breadcrumbs
             var selector = BreadcrumbSubTree.Selection as ITreeRootSelector<ExTreeNodeViewModel, IDirectoryInfoEx>;
             selector.SelectAsync(DirectoryInfoExLib.Factory.FromString(initialPath));
         }
-        
+
         /// <summary>
         /// Method executes when the text path portion in the
         /// Breadcrumb control has been edit.
         /// </summary>
         private void OnSuggestPathChanged()
         {
-          /***
-          if (!ShowBreadcrumb)
-          {
-            Task.Run(async () =>
+            /***
+            if (!ShowBreadcrumb)
             {
-              foreach (var p in _profiles)
-                if (p.MatchPathPattern(SuggestedPath))
-                {
-                  if (String.IsNullOrEmpty(SuggestedPath) && Entries.AllNonBindable.Count() > 0)
-                    SuggestedPath = Entries.AllNonBindable.First().EntryModel.FullPath;
-
-                  var found = await p.ParseThenLookupAsync(SuggestedPath, CancellationToken.None);
-                  if (found != null)
+              Task.Run(async () =>
+              {
+                foreach (var p in _profiles)
+                  if (p.MatchPathPattern(SuggestedPath))
                   {
-                    _sbox.Dispatcher.BeginInvoke(new System.Action(() => { SelectAsync(found); }));
-                    ShowBreadcrumb = true;
-                    BroadcastDirectoryChanged(EntryViewModel.FromEntryModel(found));
+                    if (String.IsNullOrEmpty(SuggestedPath) && Entries.AllNonBindable.Count() > 0)
+                      SuggestedPath = Entries.AllNonBindable.First().EntryModel.FullPath;
+
+                    var found = await p.ParseThenLookupAsync(SuggestedPath, CancellationToken.None);
+                    if (found != null)
+                    {
+                      _sbox.Dispatcher.BeginInvoke(new System.Action(() => { SelectAsync(found); }));
+                      ShowBreadcrumb = true;
+                      BroadcastDirectoryChanged(EntryViewModel.FromEntryModel(found));
+                    }
+                    //else not found
                   }
-                  //else not found
-                }
-            });//.Start();
-          }
-           ***/
+              });//.Start();
+            }
+             ***/
         }
         #endregion methods
-  }
+    }
 }

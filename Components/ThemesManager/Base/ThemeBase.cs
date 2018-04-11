@@ -97,7 +97,7 @@
 		/// </summary>
 		public void UpdateIsSelected()
 		{
-			this.NotifyOfPropertyChanged(() => this.IsSelected);
+            NotifyPropertyChanged(() => this.IsSelected);
 		}
 	}
 }

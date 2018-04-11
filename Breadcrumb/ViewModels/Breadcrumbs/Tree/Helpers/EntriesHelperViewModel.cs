@@ -114,7 +114,7 @@
 					////	AsyncUtils.RunAsync(() => this.LoadAsync());
 
 					this._isExpanded = value;
-					this.NotifyOfPropertyChanged(() => this.IsExpanded);
+					this.NotifyPropertyChanged(() => this.IsExpanded);
 				}
 			}
 		}
@@ -134,7 +134,7 @@
 				if (this._isLoaded != value)
 				{
 					this._isLoaded = value;
-					this.NotifyOfPropertyChanged(() => this.IsLoaded);
+					this.NotifyPropertyChanged(() => this.IsLoaded);
 				}
 			}
 		}
@@ -154,7 +154,7 @@
 				if (this._isLoading != value)
 				{
 					this._isLoading = value;
-					this.NotifyOfPropertyChanged(() => this.IsLoading);
+					this.NotifyPropertyChanged(() => this.IsLoading);
 				}
 			}
 		}

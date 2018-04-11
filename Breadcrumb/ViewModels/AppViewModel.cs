@@ -94,7 +94,7 @@
             private set
             {
                 _DiskTest = value;
-                NotifyOfPropertyChanged(() => DiskTest);
+                NotifyPropertyChanged(() => DiskTest);
             }
         }
 
