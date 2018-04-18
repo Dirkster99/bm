@@ -85,8 +85,8 @@
     <Compile Include="Demo\Converter\BrowseItemTypeToImageConverter.cs" />
     <Compile Include="Demo\SpecialFoldersViewModel.cs" />
     <Compile Include="Demo\SpecialFolderViewModel.cs" />
-    <Compile Include="ViewModels\Breadcrumbs\Tree\ExTreeNodeViewModel.cs" />
-    <Compile Include="ViewModels\Breadcrumbs\Tree\ExHierarchyComparer.cs" />
+    <Compile Include="ViewModels\Breadcrumbs\ExTreeNodeViewModel.cs" />
+    <Compile Include="ViewModels\Breadcrumbs\ExHierarchyComparer.cs" />
     <Compile Include="SystemIO\DiskTreeNodeViewModel.cs" />
     <Compile Include="SystemIO\PathComparer.cs" />
     <Compile Include="Utils\AsyncLock.cs" />
@@ -96,7 +96,7 @@
     <Compile Include="Utils\RelayCommand.cs" />
     <Compile Include="ViewModels\AppViewModel.cs" />
     <Compile Include="ViewModels\Breadcrumbs\BreadcrumbViewModel.cs" />
-    <Compile Include="ViewModels\Breadcrumbs\Tree\Helpers\EntriesHelperViewModel.cs" />
+    <Compile Include="ViewModels\Breadcrumbs\EntriesHelperViewModel.cs" />
     <Compile Include="ViewModels\Interfaces\IBreadcrumbItemViewModel.cs" />
     <Compile Include="ViewModels\Interfaces\IBreadcrumbViewModel.cs" />
     <Compile Include="ViewModels\Interfaces\ITreeLookup.cs" />
@@ -115,7 +115,7 @@
     <Compile Include="ViewModels\Breadcrumbs\Tree\TreeLookupProcessors\SetChildNotSelected.cs" />
     <Compile Include="ViewModels\Breadcrumbs\Tree\TreeLookupProcessors\RefreshDirectory.cs" />
     <Compile Include="ViewModels\Interfaces\IEntriesHelper.cs" />
-    <Compile Include="ViewModels\Breadcrumbs\Tree\Helpers\TreeRootSelectorViewModel.cs" />
+    <Compile Include="ViewModels\Breadcrumbs\Tree\TreeSelectors\TreeRootSelectorViewModel.cs" />
     <Compile Include="ViewModels\Breadcrumbs\Tree\TreeSelectors\BroadcastNextLevel.cs" />
     <Compile Include="ViewModels\Breadcrumbs\Tree\TreeSelectors\RecrusiveBroadcast.cs" />
     <Compile Include="ViewModels\Breadcrumbs\Tree\TreeSelectors\RecrusiveSearch.cs" />

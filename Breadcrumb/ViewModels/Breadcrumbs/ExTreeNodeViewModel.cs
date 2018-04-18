@@ -5,7 +5,6 @@
     using System.Linq;
     using System.Threading.Tasks;
     using System.Windows.Media;
-    using Breadcrumb.ViewModels.Helpers;
     using Breadcrumb.ViewModels.Interfaces;
     using Breadcrumb.ViewModels.TreeSelectors;
     using BreadcrumbLib.Defines;
