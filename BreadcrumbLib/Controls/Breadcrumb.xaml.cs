@@ -13,11 +13,9 @@
     [TemplatePart(Name = "PART_DropDownList", Type = typeof(DropDownList))]
     public class Breadcrumb : UserControl
     {
-
-
         #region fields
-        private object mLockObject = new object();
-        private bool mIsLoaded = false;
+        private object _LockObject = new object();
+        private bool _IsLoaded = false;
         #endregion fields
 
         #region constructors
@@ -97,9 +95,9 @@
         /// <param name="e"></param>
         private void Breadcrumb_Loaded(object sender, System.Windows.RoutedEventArgs e)
         {
-            lock (this.mLockObject)
+            lock (_LockObject)
             {
-                mIsLoaded = true;
+                _IsLoaded = true;
 
                 if (DataContext != null)
                     OnViewAttached();
@@ -113,9 +111,9 @@
         /// <param name="e"></param>
         private void Breadcrumb_DataContextChanged(object sender, System.Windows.DependencyPropertyChangedEventArgs e)
         {
-            lock (mLockObject)
+            lock (_LockObject)
             {
-                if (mIsLoaded == true)
+                if (_IsLoaded == true)
                 {
                     if (e.NewValue != null)
                         OnViewAttached();

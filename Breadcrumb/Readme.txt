@@ -17,3 +17,8 @@ Next items to re-factor:
 
    -> Enable OnSuggestPathChanged
 
+-> Refactoring History:
+
+- 20180418 Introduced ProgressViewModel, Custom TaskScheduler, BrowseRequest and FinalBrowseResult
+
+- 20180416 refactored DirectoryInfoEx to its bare bones (whats really needed for Breadcrumb)
