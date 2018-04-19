@@ -35,16 +35,16 @@
             <conv:FlipBoolToVisibilityConverter x:Key="fbtv" />
           </ControlTemplate.Resources>
           <Border BorderBrush="{TemplateBinding BorderBrush}" IsHitTestVisible="True"  
-                            BorderThickness="{TemplateBinding BorderThickness}" MinHeight="25">
+                  BorderThickness="{TemplateBinding BorderThickness}" MinHeight="25">
             <DockPanel Margin="1,0" Background="Transparent" IsHitTestVisible="True" >
               <DockPanel.Resources>
                 <conv:BoolToVisibilityConverter x:Key="btv" />
               </DockPanel.Resources>
               <ctrls:DropDown DockPanel.Dock="Left" 
-                                         Visibility="{Binding ShowDropDown, RelativeSource={RelativeSource TemplatedParent}, Converter={StaticResource btvc}}"
-                                         IsDropDownOpen="{Binding IsDropDownOpen, Mode=TwoWay, 
-                                            RelativeSource={RelativeSource TemplatedParent}}" 
-                                         VerticalAlignment="Stretch" >
+                              Visibility="{Binding ShowDropDown, RelativeSource={RelativeSource TemplatedParent}, Converter={StaticResource btvc}}"
+                              IsDropDownOpen="{Binding IsDropDownOpen, Mode=TwoWay, 
+                              RelativeSource={RelativeSource TemplatedParent}}" 
+                              VerticalAlignment="Stretch" >
                 <ctrls:DropDown.Header>
                   <Grid>
                     <Path StrokeThickness="1.2" Data="{StaticResource ExpanderArrow}"
@@ -62,27 +62,26 @@
                 <ctrls:DropDown.Content>
 
                   <ScrollViewer MaxHeight="{TemplateBinding DropDownHeight}" 
-                                                  Width="{TemplateBinding DropDownWidth}"
-                                                  HorizontalScrollBarVisibility="Hidden" VerticalScrollBarVisibility="Auto">
+                                Width="{TemplateBinding DropDownWidth}"
+                                HorizontalScrollBarVisibility="Hidden" VerticalScrollBarVisibility="Auto">
                     <StackPanel Orientation="Vertical" >
                       <breadcrumpbc:BreadcrumbOverflowPanel ItemsSource="{TemplateBinding OverflowedItems}" />
-                      <Separator HorizontalAlignment="Stretch" Visibility="{Binding IsOverflowed, 
-                                                            RelativeSource={RelativeSource TemplatedParent},
-                                                            Converter={StaticResource btv}}" />
+                      <Separator HorizontalAlignment="Stretch"
+                                 Visibility="{Binding IsOverflowed, 
+                                                      RelativeSource={RelativeSource TemplatedParent},
+                                                      Converter={StaticResource btv}}" />
                       <breadcrumpbc:BreadcrumbOverflowPanel ItemsSource="{TemplateBinding RootItemsSource}" />
                     </StackPanel>
 
                   </ScrollViewer>
                 </ctrls:DropDown.Content>
-
               </ctrls:DropDown>
-              <ItemsPresenter x:Name="PART_BreadcrumbList" HorizontalAlignment="Left" VerticalAlignment="Center" 
-                                                     SnapsToDevicePixels="{TemplateBinding UIElement.SnapsToDevicePixels}"                                        
-                                                     KeyboardNavigation.DirectionalNavigation="None"
-                                            
-                                            >
+              <ItemsPresenter x:Name="PART_BreadcrumbList"
+                              HorizontalAlignment="Left" VerticalAlignment="Center" 
+                              SnapsToDevicePixels="{TemplateBinding UIElement.SnapsToDevicePixels}"                                        
+                              KeyboardNavigation.DirectionalNavigation="None"
+                            >
               </ItemsPresenter>
-
             </DockPanel>
           </Border>
         </ControlTemplate>

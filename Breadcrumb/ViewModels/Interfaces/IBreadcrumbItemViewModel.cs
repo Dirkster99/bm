@@ -1,8 +1,8 @@
-﻿using BreadcrumbLib.Interfaces;
-
-namespace Breadcrumb.ViewModels.Interfaces
+﻿namespace Breadcrumb.ViewModels.Interfaces
 {
-	public interface IBreadcrumbItemViewModel : IEntryViewModel ////, ISupportTreeSelector<IBreadcrumbItemViewModel, IEntryModel>
+    using BreadcrumbLib.Interfaces;
+
+    public interface IBreadcrumbItemViewModel : IEntryViewModel ////, ISupportTreeSelector<IBreadcrumbItemViewModel, IEntryModel>
     {
         bool ShowCaption { get; set; }
         IEntriesHelper<IBreadcrumbItemViewModel> Entries { get; set; }

@@ -97,8 +97,10 @@
     <Compile Include="ViewModels\AppViewModel.cs" />
     <Compile Include="ViewModels\Breadcrumbs\BreadcrumbViewModel.cs" />
     <Compile Include="ViewModels\Breadcrumbs\EntriesHelperViewModel.cs" />
+    <Compile Include="ViewModels\Breadcrumbs\ProgressViewModel.cs" />
     <Compile Include="ViewModels\Interfaces\IBreadcrumbItemViewModel.cs" />
     <Compile Include="ViewModels\Interfaces\IBreadcrumbViewModel.cs" />
+    <Compile Include="ViewModels\Interfaces\IProgressViewModel.cs" />
     <Compile Include="ViewModels\Interfaces\ITreeLookup.cs" />
     <Compile Include="ViewModels\Interfaces\ITreeLookupProcessor.cs" />
     <Compile Include="ViewModels\Interfaces\ISupportTreeSelector.cs" />
@@ -156,6 +158,7 @@
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
     </EmbeddedResource>
+    <None Include="ClassDiagram1.cd" />
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>

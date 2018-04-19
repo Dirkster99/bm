@@ -22,7 +22,8 @@
     /// - a SelectedItem (see Selection property), and
     /// - a list of items below this item.
     /// </summary>
-    internal class ExTreeNodeViewModel : ViewModelBase, ISupportTreeSelector<ExTreeNodeViewModel, IDirectoryInfoEx>
+    internal class ExTreeNodeViewModel : ViewModelBase,
+                                         ISupportTreeSelector<ExTreeNodeViewModel, IDirectoryInfoEx>
     {
         #region fields
         public static ICompareHierarchy<IDirectoryInfoEx> Comparer = new ExHierarchyComparer();

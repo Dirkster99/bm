@@ -8,6 +8,7 @@
     using Breadcrumb.ViewModels.TreeLookupProcessors;
     using BreadcrumbLib.Utils;
     using BreadcrumbLib.Defines;
+    using System.Threading;
 
     /// <summary>
     /// Base class of ITreeSelector, which implements Tree

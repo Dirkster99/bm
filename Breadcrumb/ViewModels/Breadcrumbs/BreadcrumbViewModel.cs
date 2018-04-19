@@ -2,11 +2,12 @@ namespace Breadcrumb.ViewModels.Breadcrumbs
 {
     using Breadcrumb.ViewModels.Interfaces;
     using DirectoryInfoExLib.Interfaces;
+    using System.Threading.Tasks;
 
     /// <summary>
     /// Class implements the viewmodel that manages the complete breadcrump control.
     /// </summary>
-    internal class BreadcrumbViewModel : Base.ViewModelBase
+    internal class BreadcrumbViewModel : Base.ViewModelBase, IBreadcrumbViewModel
     {
         #region fields
         private bool _EnableBreadcrumb;
@@ -19,12 +20,19 @@ namespace Breadcrumb.ViewModels.Breadcrumbs
         /// </summary>
         public BreadcrumbViewModel()
         {
+            Progressing = new ProgressViewModel();
             BreadcrumbSubTree = new ExTreeNodeViewModel();
             _EnableBreadcrumb = true;
         }
         #endregion constructors
 
         #region properties
+        /// <summary>
+        /// Gets a viewmodel that manages the progress display that is shown to inform
+        /// users of long running processings.
+        /// </summary>
+        public IProgressViewModel Progressing { get; private set; }
+
         /// <summary>
         /// Gets a viewmodel that manages the sub-tree brwosing and
         /// selection within the sub-tree component
@@ -89,10 +97,11 @@ namespace Breadcrumb.ViewModels.Breadcrumbs
         /// Method should be called after construction to initialize the viewmodel
         /// to view a default content.
         /// </summary>
-        public void InitPath(string initialPath)
+        public Task InitPath(string initialPath)
         {
             var selector = BreadcrumbSubTree.Selection as ITreeRootSelector<ExTreeNodeViewModel, IDirectoryInfoEx>;
-            selector.SelectAsync(DirectoryInfoExLib.Factory.FromString(initialPath));
+
+            return selector.SelectAsync(DirectoryInfoExLib.Factory.FromString(initialPath), Progressing);
         }
 
         /// <summary>

@@ -114,6 +114,7 @@
             var sel2 = ExTest.Selection as ITreeRootSelector<ExTreeNodeViewModel, IDirectoryInfoEx>;
             sel2.SelectAsync(DirectoryInfoExLib.Factory.FromString(@"C:\tmp"));
 
+            // TODO XXX Add Task managed and synchronization via Custom TaskScheduler
             BreadcrumbTest.InitPath(initialPath);
         }
 

@@ -14,20 +14,6 @@
 				DependencyProperty.Register("SelectedValue", typeof(object),
 				typeof(BreadcrumbBase), new UIPropertyMetadata(null, OnSelectedValueChanged));
 
-		#region ProgressBar related - IsIndeterminate, IsProgressbarVisible, ProgressBarValue
-		public static readonly DependencyProperty IsIndeterminateProperty =
-				DependencyProperty.Register("IsIndeterminate", typeof(bool),
-				typeof(BreadcrumbBase), new UIPropertyMetadata(true));
-
-		public static readonly DependencyProperty IsProgressbarVisibleProperty =
-				DependencyProperty.Register("IsProgressbarVisible", typeof(bool),
-				typeof(BreadcrumbBase), new UIPropertyMetadata(false));
-
-		public static readonly DependencyProperty ProgressProperty =
-				DependencyProperty.Register("Progress", typeof(int),
-				typeof(BreadcrumbBase), new UIPropertyMetadata(0));
-		#endregion ProgressBar related - IsIndeterminate, IsProgressbarVisible, ProgressBarValue
-
 		#region IsBreadcrumbVisible, DropDownHeight, DropDownWidth
 		public static readonly DependencyProperty IsBreadcrumbVisibleProperty =
 				DependencyProperty.Register("IsBreadcrumbVisible", typeof(bool),
@@ -103,35 +89,6 @@
 			get { return this.GetValue(SelectedValueProperty); }
 			set { this.SetValue(SelectedValueProperty, value); }
 		}
-
-		#region ProgressBar related - IsIndeterminate, IsProgressbarVisible, ProgressBarValue
-		/// <summary>
-		/// Toggle whether the progress bar is indertminate
-		/// </summary>
-		public bool IsIndeterminate
-		{
-			get { return (bool)GetValue(IsIndeterminateProperty); }
-			set { this.SetValue(IsIndeterminateProperty, value); }
-		}
-
-		/// <summary>
-		/// Toggle whether Progressbar visible
-		/// </summary>
-		public bool IsProgressbarVisible
-		{
-			get { return (bool)GetValue(IsProgressbarVisibleProperty); }
-			set { this.SetValue(IsProgressbarVisibleProperty, value); }
-		}
-
-		/// <summary>
-		/// Value of Progressbar.
-		/// </summary>
-		public int Progress
-		{
-			get { return (int)GetValue(ProgressProperty); }
-			set { this.SetValue(ProgressProperty, value); }
-		}
-		#endregion
 
 		#region IsBreadcrumbVisible, DropDownHeight, DropDownWidth
 

@@ -13,6 +13,8 @@
     [TemplatePart(Name = "PART_DropDownList", Type = typeof(DropDownList))]
     public class Breadcrumb : UserControl
     {
+
+
         #region fields
         private object mLockObject = new object();
         private bool mIsLoaded = false;

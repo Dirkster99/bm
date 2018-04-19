@@ -43,11 +43,17 @@
 								<ColumnDefinition Width="*" />
 							</Grid.ColumnDefinitions>
 
-							<!-- Visibility="{Binding IsProgressbarVisible, RelativeSource={RelativeSource TemplatedParent}, Converter={StaticResource btv}}"-->
-							<ProgressBar Background="Transparent" Foreground="{DynamicResource {x:Static SystemColors.HotTrackBrushKey}}"
-										 IsIndeterminate="{Binding IsIndeterminate, RelativeSource={RelativeSource TemplatedParent}}" Opacity="0.5" Grid.ColumnSpan="2"
-										 Value="{Binding Progress, RelativeSource={RelativeSource TemplatedParent}}"
-										 Visibility="Hidden"
+							<!-- Show a progressbar to indicate long running processings -->
+                            <ProgressBar Grid.ColumnSpan="2"
+                                         IsIndeterminate="{Binding  Progressing.IsIndeterminate, Mode=OneWay,UpdateSourceTrigger=PropertyChanged}"
+										 Value="{Binding Progressing.ProgressValue, Mode=OneWay,UpdateSourceTrigger=PropertyChanged}"
+                                         Minimum="{Binding Progressing.MinimumProgressValue, Mode=OneWay,UpdateSourceTrigger=PropertyChanged}"
+                                         Maximum="{Binding Progressing.MaximumProgressValue, Mode=OneWay,UpdateSourceTrigger=PropertyChanged}"
+										 Visibility="{Binding Progressing.IsProgressbarVisible, Mode=OneWay,UpdateSourceTrigger=PropertyChanged, Converter={StaticResource btv}}"
+                                         
+                                         Opacity="0.5"
+                                         Background="Transparent"
+                                         Foreground="{DynamicResource {x:Static SystemColors.HotTrackBrushKey}}"
                                          BorderBrush="Transparent" BorderThickness="0"/>
 
 							<bc:Switch x:Name="PART_Switch" Grid.Column="0"

@@ -1,0 +1,385 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="Breadcrumb.App" Collapsed="true">
+    <Position X="20" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>App.xaml.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Breadcrumb.MainWindow" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="28.75" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABAAAAAAAA=</HashCode>
+      <FileName>MainWindow.xaml.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="Breadcrumb.Demo.Converter.BrowseItemTypeToImageConverter" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="20" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AABgCAAAAAAAAAAAAIAAAAAAAAgAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Demo\Converter\BrowseItemTypeToImageConverter.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="Breadcrumb.Demo.SpecialFoldersViewModel" Collapsed="true">
+    <Position X="25.25" Y="4.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Demo\SpecialFoldersViewModel.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Breadcrumb.Demo.SpecialFolderViewModel" Collapsed="true">
+    <Position X="27" Y="4.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAABAAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Demo\SpecialFolderViewModel.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Breadcrumb.Properties.Resources" Collapsed="true">
+    <Position X="28.75" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAABEAAAAQAAAAAAAAAAAAAAAIA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Breadcrumb.Properties.Settings" Collapsed="true">
+    <Position X="23.5" Y="4.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAIAAAAAABAAAAAAAAAAAAAAA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Breadcrumb.SystemIO.DiskTreeNodeViewModel">
+    <Position X="0.5" Y="7.75" Width="2" />
+    <Compartments>
+      <Compartment Name="Fields" Collapsed="true" />
+    </Compartments>
+    <TypeIdentifier>
+      <HashCode>BAAAAAAAAAAAAGAAACAAAAAAACACAAAAAAAAAAAAQQA=</HashCode>
+      <FileName>SystemIO\DiskTreeNodeViewModel.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="Breadcrumb.SystemIO.PathComparer" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="20" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAQAAAAAgAAAAAAAAAAAAA=</HashCode>
+      <FileName>SystemIO\PathComparer.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="Breadcrumb.Utils.AsyncLock" Collapsed="true">
+    <Position X="21.75" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAgAAAAAAAAAAEAAAAAAAAIAAAAAAAAA=</HashCode>
+      <FileName>Utils\AsyncLock.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Breadcrumb.Utils.AsyncSemaphore" Collapsed="true">
+    <Position X="23.5" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAACAAAAAAAAAAAQAAAAAAAAEAAAAAAAAAFAAAAA=</HashCode>
+      <FileName>Utils\AsyncSemaphore.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Breadcrumb.Utils.BitmapSourceUtils" Collapsed="true">
+    <Position X="27" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAACAAAAAAAAAAAAAAAAAAEAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Utils\BitmapSourceUtils.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Breadcrumb.Utils.FastObservableCollection&lt;T&gt;" Collapsed="true">
+    <Position X="23.5" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>gAAAAMAAAEAAEAAAAAAAgAAIAAAAABAAAAACAAAAAAA=</HashCode>
+      <FileName>Utils\FastObservableCollection.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Breadcrumb.Utils.RelayCommand" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="27" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AIAAAAAAAIACAAQAAEEAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Utils\RelayCommand.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="Breadcrumb.ViewModels.AppViewModel" Collapsed="true">
+    <Position X="3.25" Y="9.5" Width="1.75" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAgAARAAAEAAgIAAAAAhAAAAEQAAAAIAA=</HashCode>
+      <FileName>ViewModels\AppViewModel.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Breadcrumb.ViewModels.Base.ViewModelBase" Collapsed="true">
+    <Position X="6.5" Y="6.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAIAAAAAAAAAAgAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>ViewModels\Base\ViewModelBase.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="Breadcrumb.ViewModels.Breadcrumbs.BreadcrumbViewModel">
+    <Position X="8.5" Y="8" Width="2" />
+    <Compartments>
+      <Compartment Name="Fields" Collapsed="true" />
+    </Compartments>
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAABAAAAAAAAAAABAACAAIgo=</HashCode>
+      <FileName>ViewModels\Breadcrumbs\BreadcrumbViewModel.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Breadcrumb.ViewModels.Breadcrumbs.EntriesHelperViewModel&lt;VM&gt;">
+    <Position X="10.75" Y="8" Width="2.5" />
+    <Compartments>
+      <Compartment Name="Fields" Collapsed="true" />
+    </Compartments>
+    <TypeIdentifier>
+      <HashCode>wAgBAQAgAACAAAIMAAAgAAAAABEKAEQAAIIAAFgACAI=</HashCode>
+      <FileName>ViewModels\Breadcrumbs\EntriesHelperViewModel.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="Breadcrumb.ViewModels.Breadcrumbs.ExHierarchyComparer" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="21.75" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAABAAAAAAAgAAAAAAAAAAgAA=</HashCode>
+      <FileName>ViewModels\Breadcrumbs\ExHierarchyComparer.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="Breadcrumb.ViewModels.Breadcrumbs.ExTreeNodeViewModel">
+    <Position X="13.5" Y="8" Width="2" />
+    <Compartments>
+      <Compartment Name="Fields" Collapsed="true" />
+    </Compartments>
+    <TypeIdentifier>
+      <HashCode>BAAAAAAAAAAAAGAAACAAAAAAACAiCACAAAAAIAEAQQA=</HashCode>
+      <FileName>ViewModels\Breadcrumbs\ExTreeNodeViewModel.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="Breadcrumb.ViewModels.Breadcrumbs.TreeRootSelectorViewModel&lt;VM, T&gt;">
+    <Position X="5.25" Y="13.75" Width="2.75" />
+    <Compartments>
+      <Compartment Name="Fields" Collapsed="true" />
+    </Compartments>
+    <TypeIdentifier>
+      <HashCode>AAAACAAKAAgQAAAYACADAAAAAAAIAgAAAgAgQAIAAQA=</HashCode>
+      <FileName>ViewModels\Breadcrumbs\Tree\TreeSelectors\TreeRootSelectorViewModel.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="Breadcrumb.ViewModels.TreeLookupProcessors.LoadSubEntries&lt;VM, T&gt;" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="27" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAhAAAAAIAAAAAAgAAEQAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>ViewModels\Breadcrumbs\Tree\TreeLookupProcessors\LoadSubEntries.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="Breadcrumb.ViewModels.TreeLookupProcessors.RefreshDirectory&lt;VM, T&gt;" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="25.25" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>BAAAAAAAAAAAAAAAAgAAAAAAAAAAAAAAAAAACAAAAAA=</HashCode>
+      <FileName>ViewModels\Breadcrumbs\Tree\TreeLookupProcessors\RefreshDirectory.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="Breadcrumb.ViewModels.TreeLookupProcessors.SetChildNotSelected&lt;VM, T&gt;" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="23.5" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAACgAAAAAAAAAAAAAAAAAACAAAAIA=</HashCode>
+      <FileName>ViewModels\Breadcrumbs\Tree\TreeLookupProcessors\SetChildNotSelected.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="Breadcrumb.ViewModels.TreeLookupProcessors.SetChildSelected&lt;VM, T&gt;" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="25.25" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAgAAAAAAAAAAAAAAgAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>ViewModels\Breadcrumbs\Tree\TreeLookupProcessors\SetChildSelected.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="Breadcrumb.ViewModels.TreeLookupProcessors.SetCollapsed&lt;VM, T&gt;" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="27" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAIAAAAAIgAAAAAAAAQAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>ViewModels\Breadcrumbs\Tree\TreeLookupProcessors\SetCollapsed.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="Breadcrumb.ViewModels.TreeLookupProcessors.SetExpanded&lt;VM, T&gt;" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="28.75" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAABAAAAAIAAAAAAgAAAAAAAAQAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>ViewModels\Breadcrumbs\Tree\TreeLookupProcessors\SetExpanded.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="Breadcrumb.ViewModels.TreeLookupProcessors.SetNotSelected&lt;VM, T&gt;" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="20" Y="4.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAEAAAAAAAAAAAQAAgAAAAAAAAAAAAAAAAAACAAAAAA=</HashCode>
+      <FileName>ViewModels\Breadcrumbs\Tree\TreeLookupProcessors\SetNotSelected.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="Breadcrumb.ViewModels.TreeLookupProcessors.SetSelected&lt;VM, T&gt;" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="21.75" Y="4.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAABAAAAAAAAAAAAgAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>ViewModels\Breadcrumbs\Tree\TreeLookupProcessors\SetSelected.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="Breadcrumb.ViewModels.TreeLookupProcessors.TreeLookupProcessor&lt;VM, T&gt;" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="28.75" Y="4.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAgAAAAAAAAAAAAAACABAAAAAAAA=</HashCode>
+      <FileName>ViewModels\Breadcrumbs\Tree\TreeLookupProcessors\TreeLookupProcessor.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="Breadcrumb.ViewModels.TreeSelectors.BroadcastNextLevel&lt;VM, T&gt;" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="28.75" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQAAAQA=</HashCode>
+      <FileName>ViewModels\Breadcrumbs\Tree\TreeSelectors\BroadcastNextLevel.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="Breadcrumb.ViewModels.TreeSelectors.RecrusiveBroadcast&lt;VM, T&gt;" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="21.75" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAgAAAAAAAAAAAAABAAAAAAAAAAAAAAAAAAQAAAQA=</HashCode>
+      <FileName>ViewModels\Breadcrumbs\Tree\TreeSelectors\RecrusiveBroadcast.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="Breadcrumb.ViewModels.TreeSelectors.RecrusiveSearch&lt;VM, T&gt;" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="23.5" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAgAAAAAAAAAAAAABAAAAAAAAAAAAAAAAAAQAAAQA=</HashCode>
+      <FileName>ViewModels\Breadcrumbs\Tree\TreeSelectors\RecrusiveSearch.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="Breadcrumb.ViewModels.TreeSelectors.SearchNextLevel&lt;VM, T&gt;" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="20" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQAAAQA=</HashCode>
+      <FileName>ViewModels\Breadcrumbs\Tree\TreeSelectors\SearchNextLevel.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="Breadcrumb.ViewModels.TreeSelectors.SearchNextUsingReverseLookup&lt;VM, T&gt;" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="21.75" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAgAAAAAAAAQEAAAA=</HashCode>
+      <FileName>ViewModels\Breadcrumbs\Tree\TreeSelectors\SearchNextUsingReverseLookup.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="Breadcrumb.ViewModels.TreeSelectors.TreeSelectorViewModel&lt;VM, T&gt;">
+    <Position X="5.25" Y="8" Width="2.75" />
+    <Compartments>
+      <Compartment Name="Fields" Collapsed="true" />
+    </Compartments>
+    <TypeIdentifier>
+      <HashCode>CgAoDCIAAAAAEAAEAGAAAAGAFEAQAAAAAQAgAQAAAAA=</HashCode>
+      <FileName>ViewModels\Breadcrumbs\Tree\TreeSelectors\TreeSelectorViewModel.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="Breadcrumb.ViewModels.Interfaces.ITreeSelectionProcessorExtension" Collapsed="true">
+    <Position X="25.25" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAgAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>ViewModels\Interfaces\ITreeLookupProcessor.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Breadcrumb.Views.BindingProxy" Collapsed="true">
+    <Position X="25.25" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAABAAAAAAAAAgACA=</HashCode>
+      <FileName>Views\BindingProxy.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Interface Name="Breadcrumb.ViewModels.Interfaces.IBreadcrumbItemViewModel">
+    <Position X="13.75" Y="1.75" Width="2.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAACAAAAAAAAAAAAAAAAAAAAAAAAQAAAA=</HashCode>
+      <FileName>ViewModels\Interfaces\IBreadcrumbItemViewModel.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="Breadcrumb.ViewModels.Interfaces.IBreadcrumbViewModel">
+    <Position X="13.75" Y="3.75" Width="2.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAIAAAAAAAAIAAAAAAAAAAAAAAAABAAAAAAAAAg=</HashCode>
+      <FileName>ViewModels\Interfaces\IBreadcrumbViewModel.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="Breadcrumb.ViewModels.Interfaces.ISupportEntriesHelper&lt;VM&gt;">
+    <Position X="5.75" Y="0.5" Width="2.25" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAACAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>ViewModels\Interfaces\IEntriesHelper.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="Breadcrumb.ViewModels.Interfaces.IEntriesHelper&lt;VM&gt;">
+    <Position X="8.5" Y="0.5" Width="2" />
+    <TypeIdentifier>
+      <HashCode>AAgAAQAgAAAAAAAIAAAAAAAAAAAIAAQAAIIAABAAAAI=</HashCode>
+      <FileName>ViewModels\Interfaces\IEntriesHelper.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="Breadcrumb.ViewModels.Interfaces.ICompareHierarchy&lt;T&gt;">
+    <Position X="0.5" Y="0.5" Width="2.25" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAgAAAAAAAAAAAAA=</HashCode>
+      <FileName>ViewModels\Interfaces\IEntryHierarchyComparer.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="Breadcrumb.ViewModels.Interfaces.ISupportTreeSelector&lt;VM, T&gt;">
+    <Position X="5.75" Y="2" Width="2.25" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQAA=</HashCode>
+      <FileName>ViewModels\Interfaces\ISupportTreeSelector.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="Breadcrumb.ViewModels.Interfaces.ITreeLookup&lt;VM, T&gt;">
+    <Position X="10.75" Y="0.5" Width="2.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQAAAAA=</HashCode>
+      <FileName>ViewModels\Interfaces\ITreeLookup.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="Breadcrumb.ViewModels.Interfaces.ITreeLookupProcessor&lt;VM, T&gt;">
+    <Position X="10.75" Y="2" Width="2.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAgAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>ViewModels\Interfaces\ITreeLookupProcessor.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="Breadcrumb.ViewModels.Interfaces.ITreeRootSelector&lt;VM, T&gt;">
+    <Position X="0.5" Y="2.25" Width="2.25" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAACAAAAAAAYAAAAAAAAAAAIAAAAAAAAQAIAAQA=</HashCode>
+      <FileName>ViewModels\Interfaces\ITreeRootSelector.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="Breadcrumb.ViewModels.Interfaces.ITreeSelector&lt;VM, T&gt;">
+    <Position X="3.25" Y="1.25" Width="2" />
+    <TypeIdentifier>
+      <HashCode>AgAgBAIAAAAAEAAAACAAAAEAFAAAAAAAAQAgAQAAAAA=</HashCode>
+      <FileName>ViewModels\Interfaces\ITreeSelector.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="BreadcrumbLib.Interfaces.IEntryViewModel" Collapsed="true">
+    <Position X="13.75" Y="0.75" Width="2.5" />
+    <TypeIdentifier />
+  </Interface>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>

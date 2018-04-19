@@ -45,15 +45,16 @@
 		/// There's another Filter in xaml that only 
 		/// </summary>
 		ObservableCollection<VM> OverflowedAndRootItems { get; set; }
-		#endregion properties
+        #endregion properties
 
-		#region methods
-		/// <summary>
-		/// Select a tree node by value.
-		/// </summary>
-		/// <param name="value"></param>
-		/// <returns></returns>
-		Task SelectAsync(T value);
+        #region methods
+        /// <summary>
+        /// Method can be invoked on the tree root to select a tree node by value.
+        /// </summary>
+        /// <param name="value"></param>
+        /// <param name="progress"></param>
+        /// <returns>Returns a task that selects the requested tree node.</returns>
+        Task SelectAsync(T value, IProgressViewModel progress = null);
 		#endregion methods
 	}
 }
