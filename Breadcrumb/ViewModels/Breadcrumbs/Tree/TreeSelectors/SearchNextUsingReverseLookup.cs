@@ -1,6 +1,7 @@
 ﻿namespace Breadcrumb.ViewModels.TreeSelectors
 {
     using System.Collections.Generic;
+    using System.Threading;
     using System.Threading.Tasks;
     using Breadcrumb.ViewModels.Interfaces;
     using BreadcrumbLib.Defines;
@@ -31,21 +32,41 @@
 				current = current.ParentSelector;
 			}
 		}
-		#endregion constructors
+        #endregion constructors
 
-		#region methods
-		public async Task LookupAsync(T value, ITreeSelector<VM, T> parentSelector,
-				ICompareHierarchy<T> comparer, params ITreeLookupProcessor<VM, T>[] processors)
+        #region methods
+        /// <summary>
+        /// Lookup an item from a multi-level tree based ViewModels, and run processors on the way.
+        /// </summary>
+        /// <param name="value">Value of the lookup node.</param>
+        /// <param name="parentSelector">Where to start lookup.</param>
+        /// <param name="comparer">Compare two value and return it's hierarchy.</param>
+        /// <param name="cancelToken"></param>
+        /// <param name="processors">Processors's Process() method is run whether it's parent, child, current or unrelated node of lookup node.</param>
+        /// <returns></returns>
+        public async Task LookupAsync(T value,
+                                      ITreeSelector<VM, T> parentSelector,
+				                      ICompareHierarchy<T> comparer,
+                                      CancellationToken cancelToken,
+                                      params ITreeLookupProcessor<VM, T>[] processors)
 		{
             await Task.FromResult(0);
+
+            if (cancelToken != CancellationToken.None)
+                cancelToken.ThrowIfCancellationRequested();
+
 			if (parentSelector.EntryHelper.IsLoaded)
 			{
 				foreach (VM current in parentSelector.EntryHelper.AllNonBindable)
 				{
-					if (current is ISupportTreeSelector<VM, T> && current is ISupportEntriesHelper<VM>)
+                    if (cancelToken != CancellationToken.None)
+                        cancelToken.ThrowIfCancellationRequested();
+
+                    if (current is ISupportTreeSelector<VM, T> && current is ISupportEntriesHelper<VM>)
 					{
 						var currentSelectionHelper = (current as ISupportTreeSelector<VM, T>).Selection;
 						var compareResult = comparer.CompareHierarchy(currentSelectionHelper.Value, value);
+
 						switch (compareResult)
 						{
 							case HierarchicalResult.Child:

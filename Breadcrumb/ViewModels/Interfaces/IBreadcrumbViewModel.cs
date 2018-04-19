@@ -1,6 +1,8 @@
 ﻿namespace Breadcrumb.ViewModels.Interfaces
 {
+    using Breadcrumb.Models;
     using Breadcrumb.ViewModels.Breadcrumbs;
+    using DirectoryInfoExLib.Interfaces;
     using System.ComponentModel;
     using System.Threading.Tasks;
 
@@ -10,6 +12,7 @@
     /// </summary>
     internal interface IBreadcrumbViewModel : INotifyPropertyChanged
     {
+        #region properties
         /// <summary>
         /// Gets the root tree of the breadcrumb control tree
         /// </summary>
@@ -30,13 +33,15 @@
         IProgressViewModel Progressing { get; }
 
         string SuggestedPath { get; set; }
+        #endregion properties
 
+        #region methods
         /// <summary>
-        /// Returns a task that is used to initialize the control with
-        /// an initial path and corresponding selected items.
+        /// Method should be called after construction to initialize the viewmodel
+        /// to view a default content.
         /// </summary>
-        /// <param name="initialPath"></param>
-        /// <returns></returns>
-        Task InitPath(string initialPath);
+        /// <param name="initialRequest"></param>
+        Task<FinalBrowseResult<IDirectoryInfoEx>> InitPathAsync(BrowseRequest<string> initialRequest);
+        #endregion methods
     }
 }

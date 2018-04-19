@@ -1,5 +1,6 @@
 ﻿namespace Breadcrumb.ViewModels.Breadcrumbs
 {
+    using Breadcrumb.Models;
     using Breadcrumb.ViewModels.Interfaces;
     using Breadcrumb.ViewModels.TreeLookupProcessors;
     using Breadcrumb.ViewModels.TreeSelectors;
@@ -90,7 +91,7 @@
 
             set
             {
-                AsyncUtils.RunAsync(() => this.SelectAsync(value));
+                AsyncUtils.RunAsync(() => this.SelectAsync(value, CancellationToken.None));
             }
         }
 
@@ -147,34 +148,44 @@
         /// <param name="value"></param>
         /// <param name="progress"></param>
         /// <returns>Returns a task that selects the requested tree node.</returns>
-        public async Task SelectAsync(T value,
-                                      IProgressViewModel progress = null)
+        public async Task<FinalBrowseResult<T>> SelectAsync(
+            T value,
+            CancellationToken cancelToken = default(CancellationToken),
+            IProgressViewModel progress = null)
         {
-            if (this._selectedValue == null ||
-                this.CompareHierarchy(this._selectedValue, value) != HierarchicalResult.Current)
+            if (_selectedValue == null ||
+                CompareHierarchy(_selectedValue, value) != HierarchicalResult.Current)
             {
-                if (progress != null)                     // Show indeterminate progress
-                    progress.ShowIndeterminatedProgress();
-
                 try
                 {
-                    await Task.Delay(1000);
+                    if (progress != null)                     // Show indeterminate progress
+                        progress.ShowIndeterminatedProgress();
 
-                    await Application.Current.Dispatcher.Invoke(async () =>
-                     {
-                         await this.LookupAsync(value, RecrusiveSearch<VM, T>.LoadSubentriesIfNotLoaded,
-                                         SetSelected<VM, T>.WhenSelected,
-                                         SetChildSelected<VM, T>.ToSelectedChild,
-                                         LoadSubEntries<VM, T>.WhenSelected(UpdateMode.Replace,
-                                         false, null));
-                     });
+                    try
+                    {
+                        await this.LookupAsync(value,
+                                               RecrusiveSearch<VM, T>.LoadSubentriesIfNotLoaded,
+                                               cancelToken,
+                                               SetSelected<VM, T>.WhenSelected,
+                                               SetChildSelected<VM, T>.ToSelectedChild,
+                                               LoadSubEntries<VM, T>.WhenSelected(UpdateMode.Replace,
+                                               false, null));
+
+                        return new FinalBrowseResult<T>(value, default(System.Guid), BrowseResult.Complete);
+                    }
+                    catch (Exception)
+                    {
+                        return new FinalBrowseResult<T>(value, default(System.Guid), BrowseResult.InComplete);
+                    }
                 }
                 finally
                 {
-                    if (progress != null)              // Remove progresss display
+                    if (progress != null)              // Remove progress display
                         progress.ProgressDisplayOff();
                 }
             }
+
+            return new FinalBrowseResult<T>(value, default(System.Guid), BrowseResult.InComplete);
         }
 
         public HierarchicalResult CompareHierarchy(T value1, T value2)
@@ -198,12 +209,13 @@
             // Perform a lookup and for all directories in next level of current directory (load asynchronously if not loaded), 
             // add directories's Selector to rootTreeSelectors.
             await selector.LookupAsync(default(T),
-                    BroadcastNextLevel<VM, T>.LoadSubentriesIfNotLoaded,
-                    new TreeLookupProcessor<VM, T>(HierarchicalResult.All, (hr, p, c) =>
-                            {
-                                rootTreeSelectors.Add(c);
-                                return true;
-                            }));
+                                       BroadcastNextLevel<VM, T>.LoadSubentriesIfNotLoaded,
+                                       CancellationToken.None,
+                                       new TreeLookupProcessor<VM, T>(HierarchicalResult.All, (hr, p, c) =>
+                                       {
+                                           rootTreeSelectors.Add(c);
+                                           return true;
+                                       }));
 
             // Then foreach rootTreeSelectors, add to rootItems and preferm updateRootItemAsync.
             foreach (var c in rootTreeSelectors)

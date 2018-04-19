@@ -85,6 +85,10 @@
     <Compile Include="Demo\Converter\BrowseItemTypeToImageConverter.cs" />
     <Compile Include="Demo\SpecialFoldersViewModel.cs" />
     <Compile Include="Demo\SpecialFolderViewModel.cs" />
+    <Compile Include="Models\BrowseRequest.cs" />
+    <Compile Include="Models\BrowseResult.cs" />
+    <Compile Include="Models\FinalBrowseResult.cs" />
+    <Compile Include="Tasks\OneTaskLimitedScheduler.cs" />
     <Compile Include="ViewModels\Breadcrumbs\ExTreeNodeViewModel.cs" />
     <Compile Include="ViewModels\Breadcrumbs\ExHierarchyComparer.cs" />
     <Compile Include="SystemIO\DiskTreeNodeViewModel.cs" />

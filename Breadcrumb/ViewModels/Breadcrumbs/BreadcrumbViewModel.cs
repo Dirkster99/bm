@@ -1,5 +1,6 @@
 namespace Breadcrumb.ViewModels.Breadcrumbs
 {
+    using Breadcrumb.Models;
     using Breadcrumb.ViewModels.Interfaces;
     using DirectoryInfoExLib.Interfaces;
     using System.Threading.Tasks;
@@ -97,11 +98,15 @@ namespace Breadcrumb.ViewModels.Breadcrumbs
         /// Method should be called after construction to initialize the viewmodel
         /// to view a default content.
         /// </summary>
-        public Task InitPath(string initialPath)
+        /// <param name="initialRequest"></param>
+        public async Task<FinalBrowseResult<IDirectoryInfoEx>> InitPathAsync(
+            BrowseRequest<string> initialRequest)
         {
             var selector = BreadcrumbSubTree.Selection as ITreeRootSelector<ExTreeNodeViewModel, IDirectoryInfoEx>;
 
-            return selector.SelectAsync(DirectoryInfoExLib.Factory.FromString(initialPath), Progressing);
+            return await Task.Run(() => selector.SelectAsync(DirectoryInfoExLib.Factory.FromString(initialRequest.NewLocation),
+                                              initialRequest.CancelTok,
+                                              Progressing));
         }
 
         /// <summary>

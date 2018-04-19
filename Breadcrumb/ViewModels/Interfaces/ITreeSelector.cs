@@ -2,7 +2,8 @@
 {
 	using System.Collections.Generic;
 	using System.ComponentModel;
-	using System.Threading.Tasks;
+    using System.Threading;
+    using System.Threading.Tasks;
 
 	/// <summary>
 	/// Implement Tree based structure and support LookupProcessing.
@@ -93,10 +94,13 @@
 		/// </example>
 		/// <param name="value"></param>
 		/// <param name="lookupProc"></param>
+        /// <param name="cancelToken"></param>
 		/// <param name="processors"></param>
 		/// <returns></returns>
-		Task LookupAsync(T value, ITreeLookup<VM, T> lookupProc,
-				params ITreeLookupProcessor<VM, T>[] processors);
+		Task LookupAsync(T value,
+                         ITreeLookup<VM, T> lookupProc,
+				         CancellationToken cancelToken,
+                         params ITreeLookupProcessor<VM, T>[] processors);
 		#endregion methods
 	}
 }

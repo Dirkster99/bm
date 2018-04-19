@@ -1,15 +1,19 @@
 ﻿namespace Breadcrumb.ViewModels
 {
     using Breadcrumb.Demo;
+    using Breadcrumb.Models;
     using Breadcrumb.SystemIO;
+    using Breadcrumb.Tasks;
     using Breadcrumb.Utils;
     using Breadcrumb.ViewModels.Breadcrumbs;
     using Breadcrumb.ViewModels.Interfaces;
     using DirectoryInfoExLib.Interfaces;
     using System;
+    using System.Diagnostics;
     using System.IO;
     using System.Reflection;
     using System.Threading;
+    using System.Threading.Tasks;
     using System.Windows;
     using System.Windows.Input;
     using System.Windows.Threading;
@@ -17,11 +21,16 @@
     using Themes.Base;
     using Themes.Interfaces;
 
-    internal class AppViewModel : Base.ViewModelBase
+    internal class AppViewModel : Base.ViewModelBase, IDisposable
     {
         #region fields
         private IThemesManager _Themes;
         private DiskTreeNodeViewModel _DiskTest;
+
+        private readonly SemaphoreSlim _SlowStuffSemaphore;
+        private readonly OneTaskLimitedScheduler _OneTaskScheduler;
+        private readonly CancellationTokenSource _CancelTokenSource;
+        private bool _disposed = false;
         #endregion fields
 
         #region constructors
@@ -30,6 +39,10 @@
         /// </summary>
         public AppViewModel()
         {
+            _SlowStuffSemaphore = new SemaphoreSlim(1, 1);
+            _OneTaskScheduler = new OneTaskLimitedScheduler();
+            _CancelTokenSource = new CancellationTokenSource();
+
             // Initialize Breadcrumb Tree ViewModel and SpecialFolders Test ViewModel
             BreadcrumbTest = new BreadcrumbViewModel();
             SpecialFoldersTest = new SpecialFoldersViewModel();
@@ -114,8 +127,7 @@
             var sel2 = ExTest.Selection as ITreeRootSelector<ExTreeNodeViewModel, IDirectoryInfoEx>;
             sel2.SelectAsync(DirectoryInfoExLib.Factory.FromString(@"C:\tmp"));
 
-            // TODO XXX Add Task managed and synchronization via Custom TaskScheduler
-            BreadcrumbTest.InitPath(initialPath);
+            NavigateToFolder(initialPath);
         }
 
         /// <summary>
@@ -188,6 +200,85 @@
             // Get WPF Theme definition from Themes Assembly
             IThemeBase nextThemeToSwitchTo = this._Themes.SelectedTheme;
             this.SwitchToSelectedTheme(nextThemeToSwitchTo);
+        }
+
+        #region Disposable Interfaces
+        /// <summary>
+        /// Standard dispose method of the <seealso cref="IDisposable" /> interface.
+        /// </summary>
+        public void Dispose()
+        {
+            Dispose(true);
+        }
+
+        /// <summary>
+        /// Source: http://www.codeproject.com/Articles/15360/Implementing-IDisposable-and-the-Dispose-Pattern-P
+        /// </summary>
+        /// <param name="disposing"></param>
+        protected virtual void Dispose(bool disposing)
+        {
+            if (_disposed == false)
+            {
+                if (disposing == true)
+                {
+                    // Dispose of the curently displayed content
+                    _OneTaskScheduler.Dispose();
+                    _SlowStuffSemaphore.Dispose();
+                    _CancelTokenSource.Dispose();
+                }
+
+                // There are no unmanaged resources to release, but
+                // if we add them, they need to be released here.
+            }
+
+            _disposed = true;
+
+            //// If it is available, make the call to the
+            //// base class's Dispose(Boolean) method
+            ////base.Dispose(disposing);
+        }
+        #endregion Disposable Interfaces
+
+        /// <summary>
+        /// Master controller interface method to navigate all views
+        /// to the folder indicated in <paramref name="folder"/>
+        /// - updates all related viewmodels.
+        /// </summary>
+        /// <param name="itemPath"></param>
+        /// <param name="requestor"</param>
+        private void NavigateToFolder(string itemPath)
+        {
+            // XXX Todo Keep task reference, support cancel, and remove on end?
+            try
+            {
+                // XXX Todo Keep task reference, support cancel, and remove on end?
+                var timeout = TimeSpan.FromSeconds(5);
+                var actualTask = new Task(() =>
+                {
+                    var request = new BrowseRequest<string>(itemPath, _CancelTokenSource.Token);
+                    var t = Task.Factory.StartNew(() => BreadcrumbTest.InitPathAsync(request),
+                                                        request.CancelTok,
+                                                        TaskCreationOptions.LongRunning,
+                                                        _OneTaskScheduler);
+
+                    if (t.Wait(timeout) == true)
+                        return;
+
+                    _CancelTokenSource.Cancel();       // Task timed out so lets abort it
+                    return;                     // Signal timeout here...
+                });
+
+                actualTask.Start();
+                actualTask.Wait();
+            }
+            catch (System.AggregateException e)
+            {
+                Debug.WriteLine(e);
+            }
+            catch (Exception e)
+            {
+                Debug.WriteLine(e);
+            }
         }
 
         /// <summary>

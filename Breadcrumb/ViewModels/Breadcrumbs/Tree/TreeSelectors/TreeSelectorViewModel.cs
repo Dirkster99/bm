@@ -9,6 +9,7 @@
     using BreadcrumbLib.Utils;
     using BreadcrumbLib.Defines;
     using System.Threading;
+    using System.Windows;
 
     /// <summary>
     /// Base class of ITreeSelector, which implements Tree
@@ -162,15 +163,18 @@
 
                     if (value != null)
                     {
-                        AsyncUtils.RunAsync(async () => await LookupAsync(value,
-                                        SearchNextLevel<VM, T>.LoadSubentriesIfNotLoaded,
-                                        new TreeLookupProcessor<VM, T>(HierarchicalResult.Related, (hr, p, c) =>
-                                        {
-                                            c.IsSelected = true;
-                                            _prevSelected = c;
+                        AsyncUtils.RunAsync(async () => await LookupAsync
+                        (
+                            value,
+                            SearchNextLevel<VM, T>.LoadSubentriesIfNotLoaded,
+                            CancellationToken.None,
+                            new TreeLookupProcessor<VM, T>(HierarchicalResult.Related, (hr, p, c) =>
+                            {
+                                c.IsSelected = true;
+                                _prevSelected = c;
 
-                                            return true;
-                                        })));
+                                return true;
+                            })));
                     }
                 }
             }
@@ -235,11 +239,11 @@
                 // And just in case if the new selected value is child of this node.
                 if (RootSelector.SelectedValue != null)
                 {
-                    AsyncUtils.RunAsync(() =>
-                    LookupAsync
+                    AsyncUtils.RunAsync(() => LookupAsync
                     (
                       RootSelector.SelectedValue,
                       new SearchNextUsingReverseLookup<VM, T>(RootSelector.SelectedSelector),
+                      CancellationToken.None,
                       new TreeLookupProcessor<VM, T>(HierarchicalResult.All, (hr, p, c) =>
                       {
                           SelectedChild = c == null ? default(T) : c.Value;
@@ -268,11 +272,15 @@
         /// <returns></returns>
         public async Task LookupAsync(T value,
                                       ITreeLookup<VM, T> lookupProc,
+                                      CancellationToken cancelToken,
                                       params ITreeLookupProcessor<VM, T>[] processors)
         {
             using (await _lookupLock.LockAsync())
             {
-                await lookupProc.LookupAsync(value, this, this.RootSelector, processors);
+                await Application.Current.Dispatcher.Invoke(async () =>
+                {
+                    await lookupProc.LookupAsync(value, this, this.RootSelector, cancelToken, processors);
+                });
             }
         }
         #endregion

@@ -1,6 +1,7 @@
 ﻿namespace Breadcrumb.ViewModels.TreeSelectors
 {
-	using System.Threading.Tasks;
+    using System.Threading;
+    using System.Threading.Tasks;
 	using Breadcrumb.ViewModels.Interfaces;
 
 	/// <summary>
@@ -15,16 +16,24 @@
 		/// </summary>
 		public static BroadcastNextLevel<VM, T> LoadSubentriesIfNotLoaded = new BroadcastNextLevel<VM, T>();
 
-		public async Task LookupAsync(T value, ITreeSelector<VM, T> parentSelector,
-				ICompareHierarchy<T> comparer, params ITreeLookupProcessor<VM, T>[] processors)
+		public async Task LookupAsync(T value,
+                                      ITreeSelector<VM, T> parentSelector,
+				                      ICompareHierarchy<T> comparer,
+                                      CancellationToken cancelToken,
+                                      params ITreeLookupProcessor<VM, T>[] processors)
 		{
 			foreach (VM current in await parentSelector.EntryHelper.LoadAsync())
-				if (current is ISupportTreeSelector<VM, T>)
-				{
-					var currentSelectionHelper = (current as ISupportTreeSelector<VM, T>).Selection;
-					var compareResult = comparer.CompareHierarchy(currentSelectionHelper.Value, value);
-					processors.Process(compareResult, parentSelector, currentSelectionHelper);
-				}
-		}
+            {
+                if (cancelToken != CancellationToken.None)
+                    cancelToken.ThrowIfCancellationRequested();
+
+                if (current is ISupportTreeSelector<VM, T>)
+                {
+                    var currentSelectionHelper = (current as ISupportTreeSelector<VM, T>).Selection;
+                    var compareResult = comparer.CompareHierarchy(currentSelectionHelper.Value, value);
+                    processors.Process(compareResult, parentSelector, currentSelectionHelper);
+                }
+            }
+        }
 	}
 }

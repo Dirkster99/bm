@@ -1,9 +1,11 @@
 ﻿namespace Breadcrumb.ViewModels.Interfaces
 {
-	using System;
+    using Breadcrumb.Models;
+    using System;
 	using System.Collections.Generic;
 	using System.Collections.ObjectModel;
-	using System.Threading.Tasks;
+    using System.Threading;
+    using System.Threading.Tasks;
 
 	/// <summary>
 	/// Implemented in tree node view model, to provide selection support.
@@ -52,9 +54,13 @@
         /// Method can be invoked on the tree root to select a tree node by value.
         /// </summary>
         /// <param name="value"></param>
+        /// <param name="cancelToken"></param>
         /// <param name="progress"></param>
         /// <returns>Returns a task that selects the requested tree node.</returns>
-        Task SelectAsync(T value, IProgressViewModel progress = null);
+        Task<FinalBrowseResult<T>> SelectAsync(
+            T value,
+            CancellationToken cancelToken = default(CancellationToken),
+            IProgressViewModel progress = null);
 		#endregion methods
 	}
 }

@@ -1,5 +1,6 @@
 ﻿namespace Breadcrumb.ViewModels.TreeSelectors
 {
+    using System.Threading;
     using System.Threading.Tasks;
     using Breadcrumb.ViewModels.Interfaces;
     using BreadcrumbLib.Defines;
@@ -17,22 +18,31 @@
 		/// </summary>
 		public static SearchNextLevel<VM, T> LoadSubentriesIfNotLoaded = new SearchNextLevel<VM, T>();
 
-		public async Task LookupAsync(T value, ITreeSelector<VM, T> parentSelector,
-				ICompareHierarchy<T> comparer, params ITreeLookupProcessor<VM, T>[] processors)
+		public async Task LookupAsync(T value,
+                                      ITreeSelector<VM, T> parentSelector,
+				                      ICompareHierarchy<T> comparer,
+                                      CancellationToken cancelToken,
+                                      params ITreeLookupProcessor<VM, T>[] processors)
 		{
 			foreach (VM current in await parentSelector.EntryHelper.LoadAsync())
-				if (current is ISupportTreeSelector<VM, T>)
-				{
-					var currentSelectionHelper = (current as ISupportTreeSelector<VM, T>).Selection;
-					var compareResult = comparer.CompareHierarchy(currentSelectionHelper.Value, value);
-					switch (compareResult)
-					{
-						case HierarchicalResult.Current:
-						case HierarchicalResult.Child:
-							processors.Process(compareResult, parentSelector, currentSelectionHelper);
-							return;
-					}
-				}
-		}
+            {
+                if (cancelToken != CancellationToken.None)
+                    cancelToken.ThrowIfCancellationRequested();
+
+                if (current is ISupportTreeSelector<VM, T>)
+                {
+                    var currentSelectionHelper = (current as ISupportTreeSelector<VM, T>).Selection;
+                    var compareResult = comparer.CompareHierarchy(currentSelectionHelper.Value, value);
+
+                    switch (compareResult)
+                    {
+                        case HierarchicalResult.Current:
+                        case HierarchicalResult.Child:
+                            processors.Process(compareResult, parentSelector, currentSelectionHelper);
+                            return;
+                    }
+                }
+            }
+        }
 	}
 }

@@ -1,6 +1,7 @@
 ﻿namespace Breadcrumb.ViewModels.TreeSelectors
 {
     using System.Collections.Generic;
+    using System.Threading;
     using System.Threading.Tasks;
     using Breadcrumb.ViewModels.Interfaces;
     using BreadcrumbLib.Defines;
@@ -38,8 +39,11 @@
 		}
 		#endregion constructors
 
-		public async Task LookupAsync(T value, ITreeSelector<VM, T> parentSelector,
-			 ICompareHierarchy<T> comparer, params ITreeLookupProcessor<VM, T>[] processors)
+		public async Task LookupAsync(T value,
+                                      ITreeSelector<VM, T> parentSelector,
+			                          ICompareHierarchy<T> comparer,
+                                      CancellationToken cancelToken,
+                                      params ITreeLookupProcessor<VM, T>[] processors)
 		{
 			IEnumerable<VM> subentries = this._loadSubEntries ?
 					await parentSelector.EntryHelper.LoadAsync() :
@@ -49,11 +53,15 @@
 			{
 				foreach (VM current in subentries)
 				{
-					if (current is ISupportTreeSelector<VM, T> && current is ISupportEntriesHelper<VM>)
+                    if (cancelToken != CancellationToken.None)
+                        cancelToken.ThrowIfCancellationRequested();
+
+                    if (current is ISupportTreeSelector<VM, T> && current is ISupportEntriesHelper<VM>)
 					{
 						var currentSelectionHelper = (current as ISupportTreeSelector<VM, T>).Selection;
 						var compareResult = comparer.CompareHierarchy(currentSelectionHelper.Value, value);
-						switch (compareResult)
+
+                        switch (compareResult)
 						{
 							case HierarchicalResult.Current:
 								processors.Process(compareResult, parentSelector, currentSelectionHelper);
@@ -62,9 +70,10 @@
 							case HierarchicalResult.Child:
 								if (processors.Process(compareResult, parentSelector, currentSelectionHelper))
 								{
-									await this.LookupAsync(value, currentSelectionHelper, comparer, processors);
+									await this.LookupAsync(value, currentSelectionHelper,
+                                                           comparer, cancelToken, processors);
 
-									return;
+                                    return;
 								}
 
 								break;
