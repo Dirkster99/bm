@@ -74,7 +74,10 @@
         /// <returns></returns>
         public static FinalBrowseResult <T>FromRequest(BrowseRequest<T> request, BrowseResult result)
         {
-            return new FinalBrowseResult<T>(request.NewLocation, request.RequestId, result);
+            if (request != null)
+              return new FinalBrowseResult<T>(request.NewLocation, request.RequestId, result);
+
+            return new FinalBrowseResult<T>(default(T), request.RequestId, result);
         }
     }
 }

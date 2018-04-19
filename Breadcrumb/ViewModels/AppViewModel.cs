@@ -256,7 +256,7 @@
                 var actualTask = new Task(() =>
                 {
                     var request = new BrowseRequest<string>(itemPath, _CancelTokenSource.Token);
-                    var t = Task.Factory.StartNew(() => BreadcrumbTest.InitPathAsync(request),
+                    var t = Task.Factory.StartNew(() => NavigateToFolderAsync(request, null),
                                                         request.CancelTok,
                                                         TaskCreationOptions.LongRunning,
                                                         _OneTaskScheduler);
@@ -278,6 +278,43 @@
             catch (Exception e)
             {
                 Debug.WriteLine(e);
+            }
+        }
+
+        /// <summary>
+        /// Master controler interface method to navigate all views
+        /// to the folder indicated in <paramref name="folder"/>
+        /// - updates all related viewmodels.
+        /// </summary>
+        /// <param name="request"></param>
+        /// <param name="requestor"</param>
+        private async Task<FinalBrowseResult<IDirectoryInfoEx>> NavigateToFolderAsync(
+                                                                BrowseRequest<string> request,
+                                                                       object sender)
+        {
+            // Make sure the task always processes the last input but is not started twice
+            await _SlowStuffSemaphore.WaitAsync();
+            try
+            {
+                var newPath = request.NewLocation;
+                var cancel = request.CancelTok;
+
+                if (cancel != null)
+                    cancel.ThrowIfCancellationRequested();
+
+                var browseResult = await BreadcrumbTest.InitPathAsync(request);
+
+                return browseResult;
+            }
+            catch (Exception exp)
+            {
+                var result = FinalBrowseResult<IDirectoryInfoEx>.FromRequest(null, BrowseResult.InComplete);
+                result.UnexpectedError = exp;
+                return result;
+            }
+            finally
+            {
+                _SlowStuffSemaphore.Release();
             }
         }
 
