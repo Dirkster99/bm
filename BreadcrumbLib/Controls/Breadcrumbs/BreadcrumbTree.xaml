@@ -7,21 +7,21 @@
     xmlns:uc="clr-namespace:BreadcrumbLib.Controls.Breadcrumbs"
     xmlns:conv="clr-namespace:BreadcrumbLib.Converters"
     >
-  <ResourceDictionary.MergedDictionaries>
-    <ResourceDictionary Source="/BreadcrumbLib;component/Themes/Default/Geometry.xaml" />
-    <ResourceDictionary Source="/BreadcrumbLib;component/Themes/Default/Buttons.xaml" />
+    <ResourceDictionary.MergedDictionaries>
+        <ResourceDictionary Source="/BreadcrumbLib;component/Themes/Default/Geometry.xaml" />
+        <ResourceDictionary Source="/BreadcrumbLib;component/Themes/Default/Buttons.xaml" />
 
-    <ResourceDictionary Source="/BreadcrumbLib;component/Controls/Breadcrumbs/BreadcrumbTreeItem.xaml" />
-    <ResourceDictionary Source="/BreadcrumbLib;component/Themes/Default/Brushes.xaml" />
-		<!-- ResourceDictionary Source="/BreadcrumbLib;component/Controls/Breadcrumbs/BreadcrumbExpander.xaml" / -->
-  </ResourceDictionary.MergedDictionaries>
+        <ResourceDictionary Source="/BreadcrumbLib;component/Controls/Breadcrumbs/BreadcrumbTreeItem.xaml" />
+        <ResourceDictionary Source="/BreadcrumbLib;component/Themes/Default/Brushes.xaml" />
+        <!-- ResourceDictionary Source="/BreadcrumbLib;component/Controls/Breadcrumbs/BreadcrumbExpander.xaml" / -->
+    </ResourceDictionary.MergedDictionaries>
 
-  <Style TargetType="{x:Type uc:BreadcrumbTree}">
-    <!--<Setter Property="Background" Value="Gray"></Setter>-->
-    <!-- Setter Property="ItemTemplate" Value="{StaticResource {x:Type uc:BreadcrumbTreeItem}}" / -->
-    <Setter Property="BorderThickness" Value="0" />
-    <Setter Property="VerticalContentAlignment" Value="Stretch" />
-    <Setter Property="ItemContainerStyle">
+    <Style TargetType="{x:Type uc:BreadcrumbTree}">
+        <!--<Setter Property="Background" Value="Gray"></Setter>-->
+        <!-- Setter Property="ItemTemplate" Value="{StaticResource {x:Type uc:BreadcrumbTreeItem}}" / -->
+        <Setter Property="BorderThickness" Value="0" />
+        <Setter Property="VerticalContentAlignment" Value="Stretch" />
+        <!-- Setter Property="ItemContainerStyle">
       <Setter.Value>
         <Style TargetType="{x:Type uc:BreadcrumbTreeItem}">
           <Setter Property="Background" Value="Transparent"/>
@@ -29,7 +29,7 @@
           <Setter Property="BorderBrush" Value="{DynamicResource {x:Static SystemColors.ActiveBorderBrushKey}}" />
           <Setter Property="OverflowedItemContainerStyle" Value="{Binding OverflowedItemContainerStyle, 
                 RelativeSource={RelativeSource AncestorType={x:Type uc:BreadcrumbTree}}}" />
-          <!--<Setter Property="FocusVisualStyle" Value="{StaticResource TreeViewItemFocusVisual}"/>-->
+          -<Setter Property="FocusVisualStyle" Value="{StaticResource TreeViewItemFocusVisual}"/>-
           <Setter Property="Padding" Value="1,0,0,0"/>
           <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}"/>
           <Setter Property="Template">
@@ -58,7 +58,7 @@
                       <VisualState x:Name="HideCaption"  >
                         <Storyboard>
                           <DoubleAnimation Storyboard.TargetName="headerHL"  Duration="0:0:0"
-                                             Storyboard.TargetProperty="MaxWidth" To="{Binding ActualWidth, ElementName=PART_CaptionButton}"  />
+                                             Storyboard.TargetProperty="MaxWidth" To="1000"  />- {Binding ActualWidth, ElementName=PART_CaptionButton} -
                           <DoubleAnimation Storyboard.TargetName="headerHL"  Duration="0:0:1"
                                              Storyboard.TargetProperty="MaxWidth" To="0"  />
                           <ObjectAnimationUsingKeyFrames Storyboard.TargetName="headerHL"
@@ -105,8 +105,6 @@
                     </StackPanel>
                   </ctrls:HotTrack>
 
-
-
                   <ItemsPresenter x:Name="ItemsHost" Grid.Column="1" />
 
                 </bc:OverflowableStackPanel>
@@ -123,12 +121,12 @@
                   <Trigger  SourceName="headerHL" Property="IsMouseDirectlyOver" Value="True">
                     <Setter TargetName="headerToggleHL" Property="IsEnabled" Value="False" />
                   </Trigger>
-                  <!--<Trigger Property="IsExpanded" Value="true">
+                  -<Trigger Property="IsExpanded" Value="true">
                 <Setter Property="Visibility" Value="Visible"/>
-            </Trigger>-->
-                  <!--<Trigger Property="HasItems" Value="false">
+            </Trigger>-
+                  -<Trigger Property="HasItems" Value="false">
                 <Setter Property="Visibility" TargetName="Expander" Value="Hidden"/>
-            </Trigger>-->
+            </Trigger>-
                 </ControlTemplate.Triggers>
               </ControlTemplate>
             </Setter.Value>
@@ -137,14 +135,14 @@
             <Setter.Value>
               <ItemsPanelTemplate>
                 <bc:OneItemPanel />
-                <!--<VirtualizingStackPanel VirtualizingPanel.IsVirtualizing="True" VirtualizingPanel.VirtualizationMode="Standard"  
-                                            HorizontalAlignment="Stretch" Orientation="Horizontal" VerticalAlignment="Stretch" />-->
+                -<VirtualizingStackPanel VirtualizingPanel.IsVirtualizing="True" VirtualizingPanel.VirtualizationMode="Standard"  
+                                            HorizontalAlignment="Stretch" Orientation="Horizontal" VerticalAlignment="Stretch" />-
               </ItemsPanelTemplate>
             </Setter.Value>
           </Setter>
           <Setter Property="MenuItemTemplate" Value="{Binding MenuItemTemplate, RelativeSource={RelativeSource AncestorType={x:Type uc:BreadcrumbTree}}}" />
           <Style.Triggers>
-            <!--This trigger is needed, because RelativeSource binding can only succeeds if the current MenuItem is already connected to its visual parent-->
+            -This trigger is needed, because RelativeSource binding can only succeeds if the current MenuItem is already connected to its visual parent-
             <Trigger Property="IsVisible" Value="True">
               <Setter Property="HorizontalContentAlignment" Value="{Binding Path=HorizontalContentAlignment, RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}}}"/>
               <Setter Property="VerticalContentAlignment" Value="{Binding Path=VerticalContentAlignment, RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}}}"/>
@@ -152,25 +150,26 @@
           </Style.Triggers>
         </Style>
       </Setter.Value>
-    </Setter>
-    <Setter Property="ItemsPanel">
+    </ -->
+        <!-- Setter Property="ItemsPanel">
       <Setter.Value>
         <ItemsPanelTemplate>
           <bc:OneItemPanel />
-          <!--<VirtualizingStackPanel VirtualizingPanel.IsVirtualizing="True" VirtualizingPanel.VirtualizationMode="Standard"  
-                                            HorizontalAlignment="Stretch" Orientation="Horizontal" VerticalAlignment="Stretch" />-->
+          -<VirtualizingStackPanel VirtualizingPanel.IsVirtualizing="True" VirtualizingPanel.VirtualizationMode="Standard"  
+                                            HorizontalAlignment="Stretch" Orientation="Horizontal" VerticalAlignment="Stretch" />-
         </ItemsPanelTemplate>
       </Setter.Value>
-    </Setter>
-    <Setter Property="Template">
-      <Setter.Value>
-        <ControlTemplate TargetType="{x:Type uc:BreadcrumbTree}">
-          <Border BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}">
-            <ItemsPresenter VerticalAlignment="Center" />
-          </Border>
-        </ControlTemplate>
-      </Setter.Value>
-    </Setter>
-  </Style>
+    </Setter -->
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type uc:BreadcrumbTree}">
+                    <Border BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}">
+                        <ItemsPresenter VerticalAlignment="Center"
+                                        />
+                    </Border>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
 
 </ResourceDictionary>

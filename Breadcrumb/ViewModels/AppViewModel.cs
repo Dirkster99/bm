@@ -51,7 +51,7 @@
             _Themes = Factory.CreateThemesManager();
 
             // Select default theme and attach theme change command
-            ChangeThemeCmd_Executed("Metro Dark", Application.Current.Dispatcher);
+            //ChangeThemeCmd_Executed("Metro Dark", Application.Current.Dispatcher);
 
             ViewThemeCommand = new RelayCommand(obj =>
             {

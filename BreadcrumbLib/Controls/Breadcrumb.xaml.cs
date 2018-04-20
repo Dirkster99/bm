@@ -2,6 +2,7 @@
 {
     using BreadcrumbLib.Interfaces;
     using BreadcrumbLib.Utils;
+    using System.Diagnostics;
     using System.Windows;
     using System.Windows.Controls;
 
@@ -58,6 +59,24 @@
             Control_bexp = this.Template.FindName("PART_DropDownList", this) as DropDownList;      // bexp
 
             OnViewAttached();
+        }
+
+        /// <summary>
+        /// Measures the child elements of a <seealso cref="StackPanel"/> 
+        /// in anticipation of arranging them during the
+        /// <seealso cref="StackPanel.ArrangeOverride(System.Windows.Size)"/>
+        /// </summary>
+        /// <param name="constraint">An upper limit <seealso cref="Size"/> that should not be exceeded.</param>
+        /// <returns>The System.Windows.Size that represents the desired size of the element.</returns>
+        protected override Size MeasureOverride(Size constraint)
+        {
+            if (double.IsPositiveInfinity(constraint.Width)) // || double.IsPositiveInfinity(constraint.Height))
+            {
+                // This constrain hints a layout proplem that can cause items to NOT Overflow.
+                Debug.WriteLine("    +---> Warning: Breadcrumb.MeasureOverride(Size constraint) with constraint == Infinity");
+            }
+
+            return base.MeasureOverride(constraint);
         }
 
         private void OnViewAttached()

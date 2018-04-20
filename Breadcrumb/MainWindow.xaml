@@ -11,7 +11,7 @@
         xmlns:conv="clr-namespace:Breadcrumb.Demo.Converter"
         xmlns:convLib="clr-namespace:BreadcrumbLib.Converters;assembly=BreadcrumbLib"
 
-        Title="MainWindow" Height="550" Width="525"
+        Title="MainWindow" Height="550" Width="825"
         >
     <Window.Resources>
         <ResourceDictionary>
@@ -25,6 +25,7 @@
           Margin="12"
           >
         <Grid.Resources>
+            <convLib:BoolToVisibilityPropConverter TrueValue="Visible" FalseValue="Collapsed" x:Key="BoolToVisibilityConverter" />
             <convLib:BoolToVisibilityCollapsedConverter x:Key="btv" />
             <convLib:BoolToVisibilityCollapsedConverter x:Key="btvc" />
         </Grid.Resources>
@@ -36,7 +37,13 @@
             <RowDefinition Height="*" />
 		</Grid.RowDefinitions>
 
-		<Menu Grid.Row="0">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto" />
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="Auto" />
+        </Grid.ColumnDefinitions>
+        
+		<Menu Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="3">
 			<Menu.Resources>
 				<!-- Use a proxy to bind items to root object of this collection -->
 				<bindLocal:BindingProxy  x:Key="MenuDataContextProxy" Data="{Binding}" />
@@ -58,14 +65,18 @@
 		</Menu>
 
         <!-- Display a Disk Drive dropdown list at the left most button in the control -->
-        <Grid DataContext="{Binding DiskTest}" Grid.Row="1" MinHeight="16">
+        <TextBlock Text="DiskTest" Grid.Column="0" Grid.Row="1" Margin="3" HorizontalAlignment="Right" VerticalAlignment="Top" />
+        <Grid Grid.Column="1" Grid.Row="1" MinHeight="16"
+              DataContext="{Binding DiskTest}"
+              Visibility="{Binding Path=IsChecked,ElementName=ShowDiskTest,Mode=OneWay, UpdateSourceTrigger=PropertyChanged,Converter={StaticResource BoolToVisibilityConverter}}"
+              >
             <!-- Display a dropdown list at the left most button in the control -->
             <ctrls:DropDownList
-                    HorizontalAlignment="Left"
-                    ItemsSource="{Binding Selection.OverflowedAndRootItems}"
-                    SelectedValuePath="Selection.Value"
-                    SelectedValue="{Binding Selection.SelectedValue}"                               
-                    ItemTemplate="{Binding MenuItemTemplate, ElementName=btree}"
+                HorizontalAlignment="Left"
+                ItemsSource="{Binding Selection.OverflowedAndRootItems}"
+                SelectedValuePath="Selection.Value"
+                SelectedValue="{Binding Selection.SelectedValue}"                               
+                ItemTemplate="{Binding MenuItemTemplate, ElementName=btree}"
                 >
                 <ctrls:DropDownList.Header>
                     <Path Stroke="{DynamicResource {x:Static themes:ResourceKeys.ControlForeground}}"
@@ -108,7 +119,7 @@
                                 <ColumnDefinition Width="*" />
                             </Grid.ColumnDefinitions>
 
-                            <Image Source="{Binding Icon}" Margin="3,0" DockPanel.Dock="Left" />
+                            <Image Source="{Binding Icon}" Margin="3,0" HorizontalAlignment="Left" VerticalAlignment="Center" />
                             <TextBlock Text="{Binding Header}"
                                  Foreground="{DynamicResource {x:Static themes:ResourceKeys.ForegroundTextBrush}}"
                                  VerticalAlignment="Center"
@@ -136,8 +147,17 @@
                     </uc:BreadcrumbTree.LayoutTransform>-->
             </uc:BreadcrumbTree>
         </Grid>
+        <StackPanel Grid.Column="2" Grid.Row="1" VerticalAlignment="Top" Margin="3">
+            <!-- For Debugging only -->
+            <CheckBox Content="Show DiskTest" Name="ShowDiskTest"
+                      IsChecked="False"
+                      />
+        </StackPanel>
 
-        <Grid DataContext="{Binding ExTest}" Grid.Row="2" MinHeight="16">
+        <TextBlock Text="ExTest" Grid.Column="0" Grid.Row="2" Margin="3" HorizontalAlignment="Right" VerticalAlignment="Top" />
+        <Grid Grid.Column="1" Grid.Row="2" MinHeight="16" DataContext="{Binding ExTest}"
+              Visibility="{Binding Path=IsChecked,ElementName=ShowExTest,Mode=OneWay, UpdateSourceTrigger=PropertyChanged,Converter={StaticResource BoolToVisibilityConverter}}"
+              >
             <!-- Display a dropdown list at the left most button in the control -->
             <ctrls:DropDownList
                     HorizontalAlignment="Left"
@@ -215,15 +235,56 @@
                     </uc:BreadcrumbTree.LayoutTransform>-->
             </uc:BreadcrumbTree>
         </Grid>
-        
-        <ctrls:Breadcrumb DataContext="{Binding BreadcrumbTest}" MinHeight="16"
-                          Grid.Row="3"
-                          Margin="3,12"
-                          />
+        <StackPanel Grid.Column="2" Grid.Row="2" VerticalAlignment="Top" Margin="3">
+            <!-- For Debugging only -->
+            <CheckBox Content="Show ExTest" Name="ShowExTest"
+                      IsChecked="False"
+                      />
+        </StackPanel>
 
-		<ListBox ItemsSource="{Binding SpecialFoldersTest.Folders}"
-                 Grid.Row="4"
-                 Margin="3,12"
+        <TextBlock Text="BreadCrumb" Grid.Column="0" Grid.Row="3" Margin="3" HorizontalAlignment="Right" VerticalAlignment="Top" />
+        <Grid Grid.Column="1" Grid.Row="3">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+            <ctrls:Breadcrumb DataContext="{Binding BreadcrumbTest}" Name="BreadcrumbDemoControl"
+                              Visibility="{Binding Path=IsChecked,ElementName=ShowBreadCrumbControl,Mode=OneWay, UpdateSourceTrigger=PropertyChanged,Converter={StaticResource BoolToVisibilityConverter}}"
+                              VerticalAlignment="Top" HorizontalAlignment="Stretch"
+                              MinHeight="16" Margin="3" />
+        </Grid>
+        <StackPanel Grid.Column="2" Grid.Row="3" VerticalAlignment="Top" Margin="3">
+            <!-- For Debugging only -->
+            <CheckBox Content="Show BreadCrumb Control" Name="ShowBreadCrumbControl"
+                      IsChecked="True" />
+
+            <CheckBox Content="EnableBreadcrumb"
+                      IsChecked="{Binding BreadcrumbTest.EnableBreadcrumb}" />
+
+            <Grid Background="#20000000"
+>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+
+                <TextBlock Text="Selection:" VerticalAlignment="Top"/>
+
+                <StackPanel 
+                    Grid.Column="1"
+                    HorizontalAlignment="Stretch" VerticalAlignment="Top"
+                    Orientation="Vertical">
+                <Image Source="{Binding Path=BreadcrumbTest.BreadcrumbSubTree.Selection.SelectedViewModel.Icon}" />
+                <Label Content="{Binding Path=BreadcrumbTest.BreadcrumbSubTree.Selection.SelectedViewModel.Header}" />
+                </StackPanel>
+            </Grid>
+        </StackPanel>
+
+        <TextBlock Text="Converter Test" Grid.Column="0" Grid.Row="4" Margin="3" HorizontalAlignment="Right" VerticalAlignment="Top" />
+        <ListBox ItemsSource="{Binding SpecialFoldersTest.Folders}"
+                 Visibility="{Binding Path=IsChecked,ElementName=ShowConverterTest,Mode=OneWay, UpdateSourceTrigger=PropertyChanged,Converter={StaticResource BoolToVisibilityConverter}}"
+                 Grid.Column="1" Grid.Row="4"
+                 Margin="3"
                  >
 			<ListBox.ItemTemplate>
 				<DataTemplate>
@@ -240,5 +301,10 @@
 				</DataTemplate>
 			</ListBox.ItemTemplate>
 		</ListBox>
-	</Grid>
+        <StackPanel Grid.Column="2" Grid.Row="4" VerticalAlignment="Top" Margin="3">
+            <!-- For Debugging only -->
+            <CheckBox Content="Show Converter Test" Name="ShowConverterTest"
+                      IsChecked="False" />
+        </StackPanel>
+    </Grid>
 </Window>

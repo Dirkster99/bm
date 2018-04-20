@@ -1,6 +1,7 @@
 ﻿namespace BreadcrumbLib.Controls.Breadcrumbs
 {
-	using System.Windows;
+    using System.Diagnostics;
+    using System.Windows;
 	using System.Windows.Controls;
 
 	public class BreadcrumbTree : TreeView
@@ -35,10 +36,28 @@
 			get { return (DataTemplate)GetValue(MenuItemTemplateProperty); }
 			set { this.SetValue(MenuItemTemplateProperty, value); }
 		}
-		#endregion properties
+        #endregion properties
 
-		#region methods
-		protected override DependencyObject GetContainerForItemOverride()
+        #region methods
+        /// <summary>
+        /// Measures the child elements of a <seealso cref="StackPanel"/> 
+        /// in anticipation of arranging them during the
+        /// <seealso cref="StackPanel.ArrangeOverride(System.Windows.Size)"/>
+        /// </summary>
+        /// <param name="constraint">An upper limit <seealso cref="Size"/> that should not be exceeded.</param>
+        /// <returns>The System.Windows.Size that represents the desired size of the element.</returns>
+        protected override Size MeasureOverride(Size constraint)
+        {
+            if (double.IsPositiveInfinity(constraint.Width)) // || double.IsPositiveInfinity(constraint.Height))
+            {
+                // This constrain hints a layout proplem that can cause items to NOT Overflow.
+                Debug.WriteLine("  +---> Warning: BreadcrumbTree.MeasureOverride(Size constraint) with constraint == Infinity");
+            }
+
+            return base.MeasureOverride(constraint);
+        }
+
+        protected override DependencyObject GetContainerForItemOverride()
 		{
 			return new BreadcrumbTreeItem() { };
 		}

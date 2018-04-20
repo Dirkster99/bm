@@ -17,8 +17,9 @@
         <Grid>
             <ContentPresenter Content="{TemplateBinding ContentOn}" 
                               Visibility="{Binding IsSwitchOn, RelativeSource={RelativeSource TemplatedParent}, Converter={StaticResource btvc}}" />
-            <ContentPresenter Content="{TemplateBinding ContentOff}" Visibility="{Binding IsSwitchOn,
-                RelativeSource={RelativeSource TemplatedParent},Converter={StaticResource fbtvc}}" />
+            <ContentPresenter Content="{TemplateBinding ContentOff}"
+                              Visibility="{Binding IsSwitchOn,
+                                                   RelativeSource={RelativeSource TemplatedParent},Converter={StaticResource fbtvc}}" />
         </Grid>
     </ControlTemplate>
 
@@ -30,10 +31,14 @@
         </ControlTemplate.Resources>
 
         <Border BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}">
-            <ToggleButton x:Name="PART_Toggle"  Grid.Column="0"  Padding="2,0" VerticalAlignment="Stretch"
-                                  IsChecked="{Binding IsSwitchOn, RelativeSource={RelativeSource TemplatedParent}, Mode=TwoWay}" 
-                                  Focusable="False"
-                                  Template="{StaticResource BlankButton}" Background="Transparent" >
+            <ToggleButton x:Name="PART_Toggle" 
+                          Grid.Column="0"
+                          Padding="2,0"
+                          VerticalAlignment="Center"
+                          IsChecked="{Binding IsSwitchOn, RelativeSource={RelativeSource TemplatedParent}, Mode=TwoWay}" 
+                          Focusable="False"
+                          Template="{StaticResource BlankButton}"
+                          Background="Transparent" >
                 <Grid>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="Auto" />

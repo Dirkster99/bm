@@ -183,10 +183,12 @@
         public bool IsOverflowedOrRoot
         {
             get { return _isOverflowed || IsRoot; }
-
-            set { }
         }
 
+        /// <summary>
+        /// Gets/sets whether the BreadCrumb Tree item is currently overflowed
+        /// (does not fit into the view display area) or not.
+        /// </summary>
         public bool IsOverflowed
         {
             get
@@ -196,9 +198,12 @@
 
             set
             {
-                _isOverflowed = value;
-                NotifyPropertyChanged(() => this.IsOverflowed);
-                NotifyPropertyChanged(() => this.IsOverflowedOrRoot);
+                if (_isOverflowed != value)
+                {
+                    _isOverflowed = value;
+                    NotifyPropertyChanged(() => this.IsOverflowed);
+                    NotifyPropertyChanged(() => this.IsOverflowedOrRoot);
+                }
             }
         }
         #endregion

@@ -107,6 +107,7 @@
     </Compile>
     <Compile Include="Converters\BoolToVisibilityCollapsedConverter.cs" />
     <Compile Include="Converters\BoolToVisibilityConverter.cs" />
+    <Compile Include="Converters\BoolToVisibilityPropConverter.cs" />
     <Compile Include="Converters\BorderClipConverter.cs" />
     <Compile Include="Converters\FlipBoolConverter.cs" />
     <Compile Include="Converters\FlipBoolToVisibilityCollapsedConverter.cs" />

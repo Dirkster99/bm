@@ -298,13 +298,16 @@ namespace BreadcrumbLib.BaseControls.Breadcrumb
 		{
 			BreadcrumbItem retVal = new BreadcrumbItem(false)
 			{
-				//// Dirkster this code looks strange to me
+				// Dirkster this code looks strange to me
 				////HeaderTemplate = HeaderTemplate,
 				////IconTemplate = IconTemplate,
 			};
 
+            retVal.HeaderTemplate = this.HeaderTemplate;
+            retVal.IconTemplate = this.IconTemplate;
 			retVal.ShowToggle = false;
-			return retVal;
+
+            return retVal;
 		}
 		#endregion methods
 	}

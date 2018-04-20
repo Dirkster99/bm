@@ -32,20 +32,24 @@
 					<Border Background="{TemplateBinding Background}"
 							BorderBrush="{TemplateBinding BorderBrush}"
 							BorderThickness="{TemplateBinding BorderThickness}">
-						<Grid>
+						<Grid HorizontalAlignment="Stretch">
 							<Grid.Resources>
 								<conv:BoolToVisibilityCollapsedConverter x:Key="btv" />
 								<conv:FlipBoolConverter x:Key="fb" />
 							</Grid.Resources>
 
 							<Grid.ColumnDefinitions>
-								<ColumnDefinition Width="Auto" />
+                                <!-- This needs to be * because OverflowableStackpanel inside
+                                     Switch inside BreadCrumbTree cannot function when this is set to Auto
+                                
+                                     Defect: The items in the BreadcrumbTree will no longer overflow
+                                             (dissappear when space is limited).
+                                -->
 								<ColumnDefinition Width="*" />
-							</Grid.ColumnDefinitions>
+                            </Grid.ColumnDefinitions>
 
 							<!-- Show a progressbar to indicate long running processings -->
-                            <ProgressBar Grid.ColumnSpan="2"
-                                         IsIndeterminate="{Binding  Progressing.IsIndeterminate, Mode=OneWay,UpdateSourceTrigger=PropertyChanged}"
+                            <ProgressBar IsIndeterminate="{Binding  Progressing.IsIndeterminate, Mode=OneWay,UpdateSourceTrigger=PropertyChanged}"
 										 Value="{Binding Progressing.ProgressValue, Mode=OneWay,UpdateSourceTrigger=PropertyChanged}"
                                          Minimum="{Binding Progressing.MinimumProgressValue, Mode=OneWay,UpdateSourceTrigger=PropertyChanged}"
                                          Maximum="{Binding Progressing.MaximumProgressValue, Mode=OneWay,UpdateSourceTrigger=PropertyChanged}"
@@ -56,16 +60,23 @@
                                          Foreground="{DynamicResource {x:Static SystemColors.HotTrackBrushKey}}"
                                          BorderBrush="Transparent" BorderThickness="0"/>
 
-							<bc:Switch x:Name="PART_Switch" Grid.Column="0"
+							<bc:Switch x:Name="PART_Switch"
                                        Template="{StaticResource BreadcrumbSwitchTemplate}"                   
                                        IsSwitchOn="{Binding EnableBreadcrumb, Mode=TwoWay}"
+                                       VerticalAlignment="Center" VerticalContentAlignment="Center"
+                                       Margin="0,3"
                                        >
 								<bc:Switch.Header>
-									<Image Source="{Binding BreadcrumbSubTree.Selection.SelectedViewModel.Icon}" />
+                                    <Image Source="{Binding BreadcrumbSubTree.Selection.SelectedViewModel.Icon}" VerticalAlignment="Center" HorizontalAlignment="Center" />
 								</bc:Switch.Header>
 								<bc:Switch.ContentOn>
-									<DockPanel>
-										<!-- Display a dropdown list at the left most button in the control -->
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="Auto"/>
+                                            <ColumnDefinition Width="*"/>
+                                        </Grid.ColumnDefinitions>
+                                        
+                                        <!-- Display a dropdown list at the left most button in the control -->
 										<ctrls:DropDownList Grid.Column="0"
                                                             x:Name="PART_DropDownList"
                                                             VerticalAlignment="Stretch" 
@@ -76,12 +87,12 @@
                                             >
 											<ctrls:DropDownList.Header>
 												<Path Stroke="{DynamicResource {x:Static themes:ResourceKeys.ControlForeground}}"
-                                                StrokeThickness="1.2"
-                                                Data="{StaticResource ExpanderArrow}"
-                                                HorizontalAlignment="Center"
-                                                VerticalAlignment="Center"
-                                                IsHitTestVisible="True"                          
-                                              />
+                                                      StrokeThickness="1.2"
+                                                      Data="{StaticResource ExpanderArrow}"
+                                                      HorizontalAlignment="Center"
+                                                      VerticalAlignment="Center"
+                                                      IsHitTestVisible="True"                          
+                                                />
 											</ctrls:DropDownList.Header><!--ItemContainerStyle already assigned in DropDownList.xaml -->
 											<ctrls:DropDownList.ItemContainerStyle>
 												<Style TargetType="{x:Type ComboBoxItem}" BasedOn="{StaticResource ComboboxNullAsSeparatorStyle}">
@@ -91,7 +102,9 @@
 										</ctrls:DropDownList>
 
 										<!-- The BreadcrumbTree control displays the complete path and each drop down list -->
-										<uc:BreadcrumbTree Grid.Column="1" ItemsSource="{Binding BreadcrumbSubTree.Entries.All}" x:Name="btree">
+										<uc:BreadcrumbTree Grid.Column="1"
+                                                           ItemsSource="{Binding BreadcrumbSubTree.Entries.All}"
+                                                           x:Name="btree">
 											<uc:BreadcrumbTree.ItemContainerStyle>
 												<Style TargetType="{x:Type uc:BreadcrumbTreeItem}" BasedOn="{StaticResource {x:Type uc:BreadcrumbTreeItem}}">
 													<Setter Property="ValuePath" Value="Selection.Value" />
@@ -114,8 +127,8 @@
 															<ColumnDefinition Width="*" />
 														</Grid.ColumnDefinitions>
 
-														<Image Source="{Binding Icon}" Margin="3,0" DockPanel.Dock="Left" />
-														<TextBlock Text="{Binding Header}"
+                                                        <Image Source="{Binding Icon}" Margin="3,0" HorizontalAlignment="Left" VerticalAlignment="Center"/>
+                                                        <TextBlock Text="{Binding Header}"
 																	Foreground="{DynamicResource {x:Static themes:ResourceKeys.ForegroundTextBrush}}"
 																	VerticalAlignment="Center"
 																	Grid.Column="1" />
@@ -140,7 +153,7 @@
 													<ScaleTransform ScaleX="2" ScaleY="2" />
 												</uc:BreadcrumbTree.LayoutTransform>-->
 										</uc:BreadcrumbTree>
-									</DockPanel>
+									</Grid>
 								</bc:Switch.ContentOn>
 								<!-- bc:Switch.ContentOff>
                                     <sbox:SuggestBox x:Name="PART_SuggestBox" BorderThickness="0" Text="{Binding SuggestedPath, UpdateSourceTrigger=Explicit}"

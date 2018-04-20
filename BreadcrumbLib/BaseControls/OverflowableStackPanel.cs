@@ -1,7 +1,8 @@
 ﻿namespace BreadcrumbLib.BaseControls
 {
 	using System;
-	using System.Linq;
+    using System.Diagnostics;
+    using System.Linq;
 	using System.Windows;
 	using System.Windows.Controls;
 
@@ -19,10 +20,15 @@
 
 		private double overflowableWH = 0;
 		private double nonoverflowableWH = 0;
-		#endregion fields
+        #endregion fields
 
-		#region Constructor
-
+        #region Constructor
+        /// <summary>
+        /// Class consructor
+        /// </summary>
+        public OverflowableStackPanel()
+        {
+        }
 		#endregion
 
 		#region properties
@@ -51,13 +57,23 @@
 		{
 			obj.SetValue(IsOverflowProperty, value);
 		}
-		#endregion properties
+        #endregion properties
 
-		#region methods
-		protected override Size MeasureOverride(Size constraint)
+        #region methods
+        /// <summary>
+        /// Measures the child elements of a <seealso cref="StackPanel"/> 
+        /// in anticipation of arranging them during the
+        /// <seealso cref="StackPanel.ArrangeOverride(System.Windows.Size)"/>
+        /// </summary>
+        /// <param name="constraint">An upper limit <seealso cref="Size"/> that should not be exceeded.</param>
+        /// <returns>The System.Windows.Size that represents the desired size of the element.</returns>
+        protected override Size MeasureOverride(Size constraint)
 		{
-			////if (double.IsPositiveInfinity(constraint.Width) || double.IsPositiveInfinity(constraint.Height))
-			////    return base.MeasureOverride(constraint);
+            if (double.IsPositiveInfinity(constraint.Width)) // || double.IsPositiveInfinity(constraint.Height))
+            {
+                // This constrain hints a layout proplem that can cause items to NOT Overflow.
+                Debug.WriteLine("---> Warning: OverflowableStackPanel.MeasureOverride(Size constraint) with constraint == Infinity");
+            }
 
 			var items = InternalChildren.Cast<UIElement>();
 
@@ -66,11 +82,13 @@
 			int overflowCount = 0;
 			double maxHW = 0;
 
+            // list of each breadcrumb item and ask each item in turn what their preferred size is
 			foreach (var item in items)
 			{
 				item.Measure(constraint);
 				maxHW = Math.Max(this.getHW(item.DesiredSize, this.Orientation), maxHW);
-				if (GetCanOverflow(item))
+
+                if (GetCanOverflow(item) == true)
 					this.overflowableWH += this.getWH(item.DesiredSize, this.Orientation);
 				else
 					this.nonoverflowableWH += this.getWH(item.DesiredSize, this.Orientation);
@@ -78,7 +96,7 @@
 
 			foreach (var ele in items.Reverse())
 			{
-				if (GetCanOverflow(ele))
+				if (GetCanOverflow(ele) == true)
 				{
 					if (this.overflowableWH + this.nonoverflowableWH > this.getWH(constraint, this.Orientation))
 					{
