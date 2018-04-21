@@ -80,12 +80,13 @@
         /// <returns>The System.Windows.Size that represents the desired size of the element.</returns>
         protected override Size MeasureOverride(Size constraint)
         {
+#if DEBUG
             if (double.IsPositiveInfinity(constraint.Width)) // || double.IsPositiveInfinity(constraint.Height))
             {
                 // This constrain hints a layout proplem that can cause items to NOT Overflow.
                 Debug.WriteLine("   +---> Warning: Switch.MeasureOverride(Size constraint) with constraint == Infinity");
             }
-
+#endif
             return base.MeasureOverride(constraint);
         }
         #endregion

@@ -278,6 +278,54 @@
                 <Label Content="{Binding Path=BreadcrumbTest.BreadcrumbSubTree.Selection.SelectedViewModel.Header}" />
                 </StackPanel>
             </Grid>
+            <Grid Margin="3,9">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+
+                <TextBlock Text="MinWidth:"
+                           ToolTip="Defines the Minimum size of the Breadcrumb control display"
+                           VerticalAlignment="Top" HorizontalAlignment="Right"/>
+                <TextBlock Grid.Column="1"
+                           Text="{Binding ElementName=BreadcrumbDemoControl,Path=MinWidth,Mode=OneWay,UpdateSourceTrigger=PropertyChanged,StringFormat=N2}"
+                           VerticalAlignment="Top" HorizontalAlignment="Left"/>
+
+                <Slider Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="1"
+                        Value="{Binding ElementName=BreadcrumbDemoControl,Path=MinWidth}"
+                        Minimum="10"
+                        Maximum="400"
+                        HorizontalAlignment="Stretch"
+                        />
+            </Grid>
+            <Grid Margin="3,9">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+
+                <TextBlock Text="OverflowGap:"
+                           ToolTip="Defines the right most gap of the BreadcrumbTree control display"
+                           VerticalAlignment="Top" HorizontalAlignment="Right"/>
+                <TextBlock Grid.Column="1"
+                           Text="{Binding ElementName=BreadcrumbDemoControl,Path=OverflowGap,Mode=OneWay,UpdateSourceTrigger=PropertyChanged,StringFormat=N2}"
+                           VerticalAlignment="Top" HorizontalAlignment="Left"/>
+
+                <Slider Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="1"
+                        Value="{Binding ElementName=BreadcrumbDemoControl,Path=OverflowGap}"
+                        Minimum="5"
+                        Maximum="200"
+                        HorizontalAlignment="Stretch"
+                        />
+            </Grid>
         </StackPanel>
 
         <TextBlock Text="Converter Test" Grid.Column="0" Grid.Row="4" Margin="3" HorizontalAlignment="Right" VerticalAlignment="Top" />

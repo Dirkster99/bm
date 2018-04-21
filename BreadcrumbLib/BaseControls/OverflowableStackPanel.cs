@@ -69,13 +69,14 @@
         /// <returns>The System.Windows.Size that represents the desired size of the element.</returns>
         protected override Size MeasureOverride(Size constraint)
 		{
+#if DEBUG
             if (double.IsPositiveInfinity(constraint.Width)) // || double.IsPositiveInfinity(constraint.Height))
             {
                 // This constrain hints a layout proplem that can cause items to NOT Overflow.
                 Debug.WriteLine("---> Warning: OverflowableStackPanel.MeasureOverride(Size constraint) with constraint == Infinity");
             }
-
-			var items = InternalChildren.Cast<UIElement>();
+#endif
+            var items = InternalChildren.Cast<UIElement>();
 
 			this.overflowableWH = 0;
 			this.nonoverflowableWH = 0;
@@ -111,9 +112,10 @@
 
 			this.SetValue(OverflowItemCountProperty, overflowCount);
 
-			return this.Orientation == Orientation.Horizontal ?
-							new Size(this.overflowableWH + this.nonoverflowableWH, maxHW) :
-							new Size(maxHW, this.overflowableWH + this.nonoverflowableWH);
+            if (this.Orientation == Orientation.Horizontal)
+                return new Size(this.overflowableWH + this.nonoverflowableWH, maxHW);
+            else
+                return new Size(maxHW, this.overflowableWH + this.nonoverflowableWH);
 		}
 
 		protected override Size ArrangeOverride(Size arrangeSize)

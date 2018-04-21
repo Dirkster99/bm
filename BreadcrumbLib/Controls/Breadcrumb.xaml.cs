@@ -7,7 +7,21 @@
     using System.Windows.Controls;
 
     /// <summary>
-    /// Display a ToggleButton and when it's clicked, show it's content as a dropdown.
+    /// BreadcrumbControl contains 3 main displays:
+    /// 1 - Display a BreadcrumbTree control with a switch to
+    ///     2 - A SuggestBox (textbox with suggested drop down options)
+    ///     
+    ///       2.1 - Switch is toggled ON via toggle button on root of BreadcrumbTree
+    ///       2.2 - Switch is toggled ON via mouse click in OverflowGap (right most part of BreadcrumbTree view)
+    ///             2.3 - Switch is toggled OFF via Cancel (Escape) or
+    ///                                             OK (Enter) on SuggestBox
+    ///                                                -> new path navigation or error
+    ///     
+    /// and
+    /// 3 - A ToggleButton,
+    ///     and when ToggleButton is clicked, show it's content as a
+    ///     combobox dropdown.
+    /// 
     /// </summary>
     ////    [TemplatePart(Name = "PART_SuggestBox", Type = typeof(SuggestBoxBase))]
     [TemplatePart(Name = "PART_Switch", Type = typeof(Switch))]
@@ -15,6 +29,18 @@
     public class Breadcrumb : UserControl
     {
         #region fields
+        /// <summary>
+        /// Implements the backing store field of the OverflowGap dependency property.
+        /// 
+        /// The OverflowGap dependency property defines the gap
+        /// that is displayed in the right most part of the BreadcrumbTree
+        /// view to let the user click into this area when the switch should
+        /// be turned on to display the text display with the SuggestBox.
+        /// </summary>
+        public static readonly DependencyProperty OverflowGapProperty =
+            DependencyProperty.Register("OverflowGap",
+                typeof(double), typeof(Breadcrumb), new PropertyMetadata(10.0));
+
         private object _LockObject = new object();
         private bool _IsLoaded = false;
         #endregion fields
@@ -40,7 +66,19 @@
         #endregion constructors
 
         #region properties
-////        public SuggestBoxBase Control_SuggestBox { get; set; }
+        /// <summary>
+        /// Implements the OverflowGap dependency property which is the gap
+        /// that is displayed in the right most part of the BreadcrumbTree
+        /// view to let the user click into this area when the switch should
+        /// be turned on to display the text display with the SuggestBox.
+        /// </summary>
+        public double OverflowGap
+        {
+            get { return (double)GetValue(OverflowGapProperty); }
+            set { SetValue(OverflowGapProperty, value); }
+        }
+
+        ////        public SuggestBoxBase Control_SuggestBox { get; set; }
 
         public Switch Control_Switch { get; set; }
 
@@ -70,12 +108,13 @@
         /// <returns>The System.Windows.Size that represents the desired size of the element.</returns>
         protected override Size MeasureOverride(Size constraint)
         {
+#if DEBUG
             if (double.IsPositiveInfinity(constraint.Width)) // || double.IsPositiveInfinity(constraint.Height))
             {
                 // This constrain hints a layout proplem that can cause items to NOT Overflow.
                 Debug.WriteLine("    +---> Warning: Breadcrumb.MeasureOverride(Size constraint) with constraint == Infinity");
             }
-
+#endif
             return base.MeasureOverride(constraint);
         }
 
@@ -84,8 +123,8 @@
             this.Control_bexp.AddValueChanged(ComboBox.SelectedValueProperty, (o, e) =>
             {
                 IEntryViewModel evm = this.Control_bexp.SelectedItem as IEntryViewModel;
-                ////                    if (evm != null)
-                ////                        BroadcastDirectoryChanged(evm);
+////                    if (evm != null)
+////                        BroadcastDirectoryChanged(evm);
 
                 Control_Switch.Dispatcher.BeginInvoke(new System.Action(() =>
                 {
@@ -97,12 +136,12 @@
             {
                 if (!this.Control_Switch.IsSwitchOn)
                 {
-                    ////                        _sbox.Dispatcher.BeginInvoke(new System.Action(() =>
-                    ////                        {
-                    ////                            Keyboard.Focus(_sbox);
-                    ////                            _sbox.Focus();
-                    ////                            _sbox.SelectAll();
-                    ////                        }), System.Windows.Threading.DispatcherPriority.Background);
+////                        _sbox.Dispatcher.BeginInvoke(new System.Action(() =>
+////                        {
+////                            Keyboard.Focus(_sbox);
+////                            _sbox.Focus();
+////                            _sbox.SelectAll();
+////                        }), System.Windows.Threading.DispatcherPriority.Background);
                 }
             });
         }

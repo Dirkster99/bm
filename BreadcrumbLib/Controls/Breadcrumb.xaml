@@ -20,6 +20,9 @@
 	</ResourceDictionary.MergedDictionaries>
 
 	<Style TargetType="{x:Type ctrls:Breadcrumb}">
+        <!-- MinWidth assures nice Breadcrumb display when UI gets too small
+             because Window may be resized to a small portion of its normal size -->
+        <Setter Property="MinWidth" Value="100" />
         <Setter Property="BorderBrush" Value="Gray"/>
         <Setter Property="BorderThickness" Value="1"/>
         <Setter Property="Template">
@@ -46,6 +49,8 @@
                                              (dissappear when space is limited).
                                 -->
 								<ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="Auto" MinWidth="{TemplateBinding OverflowGap}" />
+
                             </Grid.ColumnDefinitions>
 
 							<!-- Show a progressbar to indicate long running processings -->
