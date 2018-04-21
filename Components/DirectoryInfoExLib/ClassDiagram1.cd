@@ -3,7 +3,7 @@
   <Class Name="DirectoryInfoExLib.Factory" Collapsed="true">
     <Position X="17.75" Y="1.5" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>IAAAAgAEAAAAAAAAEAAKAAAAAEAAAAAAAAAAgAAAAAQ=</HashCode>
+      <HashCode>AAAAAgAAAAAAAEAAEAACAAAAAEAAAAACAAAAgAQAAAQ=</HashCode>
       <FileName>Factory.cs</FileName>
     </TypeIdentifier>
   </Class>
@@ -13,7 +13,7 @@
       <Compartment Name="Fields" Collapsed="true" />
     </Compartments>
     <TypeIdentifier>
-      <HashCode>IAAAAgEsBCAAgCIIkGAIyEASAFkICAAgFEAgRUCAEBQ=</HashCode>
+      <HashCode>IAAAAgEsBKAAgCIIkGAIyEASABkICAAgFEAgRUCAEBQ=</HashCode>
       <FileName>IO\FileSystemInfoExt\DirectoryInfoEx.cs</FileName>
     </TypeIdentifier>
     <Lollipop Position="0.2" />
@@ -29,6 +29,7 @@
     <Position X="4" Y="1.75" Width="2.5" />
     <Compartments>
       <Compartment Name="Fields" Collapsed="true" />
+      <Compartment Name="Nested Types" Collapsed="false" />
     </Compartments>
     <NestedTypes>
       <Enum Name="DirectoryInfoExLib.IO.FileSystemInfoExt.FileSystemInfoEx.RefreshModeEnum" Collapsed="true">
@@ -46,7 +47,7 @@
   <Class Name="DirectoryInfoExLib.IO.Header.ShellDll.PIDL" Collapsed="true" BaseTypeListCollapsed="true">
     <Position X="19.5" Y="3.5" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AABAAGAAAAAAgBAAgAAAEAABYQAIAZAIAAAAAAEAQgI=</HashCode>
+      <HashCode>AABAAGAAAAAAgBAAgAAAEAABYQAIAZAIAAAAAAEAQAI=</HashCode>
       <FileName>IO\Header\FileBrowser\PIDL.cs</FileName>
     </TypeIdentifier>
     <Lollipop Position="0.2" Collapsed="true" />
@@ -56,48 +57,6 @@
     <TypeIdentifier>
       <HashCode>AAAAAAGAAAAAAAAAggAAAAAIAAAAAAAAAAhAABAAAAA=</HashCode>
       <FileName>IO\Header\FileBrowser\ShellAPI.cs</FileName>
-    </TypeIdentifier>
-  </Class>
-  <Class Name="DirectoryInfoExLib.IO.Header.KnownFolder.Attributes.DefaultPathAttribute" Collapsed="true">
-    <Position X="19.5" Y="0.5" Width="1.5" />
-    <TypeIdentifier>
-      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAgAAAAAAAAA=</HashCode>
-      <FileName>IO\Header\KnownFolder\Attributes\DefaultPathAttribute.cs</FileName>
-    </TypeIdentifier>
-  </Class>
-  <Class Name="DirectoryInfoExLib.IO.Header.KnownFolder.Attributes.DisplayNameAttribute" Collapsed="true">
-    <Position X="21.25" Y="0.5" Width="1.5" />
-    <TypeIdentifier>
-      <HashCode>AAAAEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
-      <FileName>IO\Header\KnownFolder\Attributes\DisplayNameAttribute.cs</FileName>
-    </TypeIdentifier>
-  </Class>
-  <Class Name="DirectoryInfoExLib.IO.Header.KnownFolder.Attributes.FolderCategoryAttribute" Collapsed="true">
-    <Position X="21.25" Y="1.5" Width="1.5" />
-    <TypeIdentifier>
-      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACAA=</HashCode>
-      <FileName>IO\Header\KnownFolder\Attributes\KnownFolderCategoryAttribute.cs</FileName>
-    </TypeIdentifier>
-  </Class>
-  <Class Name="DirectoryInfoExLib.IO.Header.KnownFolder.Attributes.KnownFolderGuidAttribute" Collapsed="true">
-    <Position X="21.25" Y="2.5" Width="1.5" />
-    <TypeIdentifier>
-      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAABAAAAAAAAAAAAAA=</HashCode>
-      <FileName>IO\Header\KnownFolder\Attributes\KnownFolderGuidAttribute .cs</FileName>
-    </TypeIdentifier>
-  </Class>
-  <Class Name="DirectoryInfoExLib.IO.Header.KnownFolder.Attributes.MinVersionAttribute" Collapsed="true">
-    <Position X="16" Y="3.5" Width="1.5" />
-    <TypeIdentifier>
-      <HashCode>IAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
-      <FileName>IO\Header\KnownFolder\Attributes\MinVersionAttribute.cs</FileName>
-    </TypeIdentifier>
-  </Class>
-  <Class Name="DirectoryInfoExLib.IO.Header.KnownFolder.Attributes.SpecialFolderAttribute" Collapsed="true">
-    <Position X="19.5" Y="4.5" Width="1.5" />
-    <TypeIdentifier>
-      <HashCode>AAAAAAAAACAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
-      <FileName>IO\Header\KnownFolder\Attributes\SpecialFolderAttribute.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="DirectoryInfoExLib.IO.Header.KnownFolder.KnownFolder" Collapsed="true" BaseTypeListCollapsed="true">
@@ -227,13 +186,6 @@
     <TypeIdentifier>
       <HashCode>gAEAQAAAAAIgAAkBAQAAgAAAABAAIBBoCAAAAACAACA=</HashCode>
       <FileName>IO\Header\IShellFolder2.cs</FileName>
-    </TypeIdentifier>
-  </Enum>
-  <Enum Name="DirectoryInfoExLib.IO.Header.KnownFolder.Attributes.OSVersions" Collapsed="true">
-    <Position X="19.5" Y="11.75" Width="1.5" />
-    <TypeIdentifier>
-      <HashCode>AAAAACAAAAAAAAAAAAIAAAAAAAAAAAAAAAAQAAAAAAA=</HashCode>
-      <FileName>IO\Header\KnownFolder\Attributes\MinVersionAttribute.cs</FileName>
     </TypeIdentifier>
   </Enum>
   <Enum Name="DirectoryInfoExLib.IO.Header.KnownFolder.Enums.KnownFolderCategory" Collapsed="true">
