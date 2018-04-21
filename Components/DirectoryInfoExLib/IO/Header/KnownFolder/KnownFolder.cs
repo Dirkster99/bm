@@ -44,7 +44,7 @@
     {
         #region fields
         /// <summary>
-        /// Gets the <see cref="NativeKnownFolderManager "/> for this system.
+        /// Gets the <see cref="KnownFolderManager"/> for this system.
         /// </summary>
         private static IKnownFolderManager _FolderManager = (IKnownFolderManager)new KnownFolderManager();
 
@@ -96,36 +96,59 @@
             }
         }
 
+        /// <summary>
+        /// Gets the folder type.
+        /// 
+        /// Returns a a GUID that identifies the known folder type.
+        /// </summary>
         public Guid FolderType
         {
             get
             {
                 Guid type;
                 _knownFolder.GetFolderType(out type);
+
                 return type;
             }
         }
 
+        /// <summary>
+        /// Retrieves the category—virtual,
+        /// fixed, common,
+        /// or per-user—of the selected folder.
+        /// </summary>
         public KnownFolderCategory Category
         {
             get
             {
                 KnownFolderCategory category;
                 _knownFolder.GetCategory(out category);
+
                 return category;
             }
         }
 
+        /// <summary>
+        /// Gets a value that states whether the known folder
+        /// can have its path set to a new value or what specific restrictions
+        /// or prohibitions are placed on that redirection.
+        /// </summary>
         public KnownFolderRedirectionCapabilities RedirectionCapabilities
         {
             get
             {
                 KnownFolderRedirectionCapabilities redirectionCapabilities;
                 _knownFolder.GetRedirectionCapabilities(out redirectionCapabilities);
+
                 return redirectionCapabilities;
             }
         }
 
+        /// <summary>
+        /// Retrieves a structure that contains the defining elements
+        /// of a known folder, which includes the folder's category,
+        /// name, path, description, tooltip, icon, and other properties.
+        /// </summary>
         public KnownFolderDefinition Definition
         {
             get { return GetDefinition(); }
@@ -154,6 +177,7 @@
         {
             IKnownFolder knowFolderInterface;
             KnownFolder._FolderManager.GetFolder(knownFolderID, out knowFolderInterface);
+
             return new KnownFolder(knowFolderInterface);
         }
 
@@ -182,12 +206,25 @@
             }
         }
 
-        public static KnownFolder FromDirectoryPath(string path, KnownFolderFindMode mode)
+        /// <summary>
+        /// Gets an object that represents a known folder based on a file
+        /// system path. The object allows you to query certain folder
+        /// properties, get the current path of the folder, redirect
+        /// the folder to another location, and get the path of the folder
+        /// as an ITEMIDLIST.
+        /// </summary>
+        /// <param name="path"></param>
+        /// <param name="mode"></param>
+        /// <returns></returns>
+        public static KnownFolder FromDirectoryPath(
+            string path,
+            KnownFolderFindMode mode)
         {
             IKnownFolder knowFolderInterface;
             try
             {
                 KnownFolder._FolderManager.FindFolderFromPath(path, mode, out knowFolderInterface);
+
                 return new KnownFolder(knowFolderInterface);
             }
             catch
@@ -198,90 +235,10 @@
         #endregion
 
         #region methods
-
-        public string GetPath(KnownFolderRetrievalOptions options)
-        {
-            IntPtr pointerToPath = IntPtr.Zero;
-            string path;
-            try
-            {
-                if (Category == KnownFolderCategory.Virtual)
-                    return null;
-                else
-                {
-                    _knownFolder.GetPath(options, out pointerToPath);
-                    path = Marshal.PtrToStringUni(pointerToPath);
-                }
-            }
-            catch (System.IO.FileNotFoundException)
-            {
-                path = null;
-            }
-            catch (System.IO.DirectoryNotFoundException)
-            {
-                path = null;
-            }
-            finally
-            {
-                Marshal.FreeCoTaskMem(pointerToPath);
-            }
-            return path;
-        }
-
-        public void SetPath(string path, KnownFolderRetrievalOptions options)
-        {
-            _knownFolder.SetPath(options, path);
-        }
-
-        public void Dispose()
-        {
-            if (_knownFolder != null)
-            {
-                Marshal.ReleaseComObject(_knownFolder);
-                _knownFolder = null;
-            }
-        }
-
         /// <summary>
-        /// Gets the definition for a known folder.
-        /// 
-        /// This is not a small operation so let's make it a method
+        /// Gets all known folders of the Shell and returns them as a list.
         /// </summary>
         /// <returns></returns>
-        private KnownFolderDefinition GetDefinition()
-        {
-            InternalKnownFolderDefinition internalDefinition;
-            KnownFolderDefinition definition = new KnownFolderDefinition();
-            _knownFolder.GetFolderDefinition(out internalDefinition);
-            try
-            {
-                definition.Category = internalDefinition.Category;
-                definition.Name = Marshal.PtrToStringUni(internalDefinition.pszName);
-                definition.Description = Marshal.PtrToStringUni(internalDefinition.pszDescription);
-                definition.ParentID = internalDefinition.ParentID;
-                definition.ParsingName = Marshal.PtrToStringUni(internalDefinition.pszParsingName);
-                definition.Tooltip = Marshal.PtrToStringUni(internalDefinition.pszTooltip);
-                definition.LocalizedName = Marshal.PtrToStringUni(internalDefinition.pszLocalizedName);
-                definition.Icon = Marshal.PtrToStringUni(internalDefinition.pszIcon);
-                definition.Security = Marshal.PtrToStringUni(internalDefinition.pszSecurity);
-                definition.Attributes = internalDefinition.dwAttributes;
-                definition.DefinitionFlags = internalDefinition.DefinitionFlags;
-                definition.FolderTypeID = internalDefinition.FolderTypeID;
-            }
-            finally
-            {
-                Marshal.FreeCoTaskMem(internalDefinition.pszName);
-                Marshal.FreeCoTaskMem(internalDefinition.pszDescription);
-                Marshal.FreeCoTaskMem(internalDefinition.pszRelativePath);
-                Marshal.FreeCoTaskMem(internalDefinition.pszParsingName);
-                Marshal.FreeCoTaskMem(internalDefinition.pszTooltip);
-                Marshal.FreeCoTaskMem(internalDefinition.pszLocalizedName);
-                Marshal.FreeCoTaskMem(internalDefinition.pszIcon);
-                Marshal.FreeCoTaskMem(internalDefinition.pszSecurity);
-            }
-            return definition;
-        }
-
         public static List<KnownFolder> GetKnownFolders()
         {
             IList<KnownFolder> foldersList = new List<KnownFolder>();
@@ -318,6 +275,107 @@
             }
 
             return foldersList.OrderBy(kf => kf.Category).ToList();
+        }
+
+        /// <summary>
+        /// Gets the string based path of a real folder or null
+        /// if the folder is virtual etc...
+        /// </summary>
+        /// <param name="options"></param>
+        /// <returns></returns>
+        public string GetPath(KnownFolderRetrievalOptions options)
+        {
+            IntPtr pointerToPath = IntPtr.Zero;
+            string path;
+            try
+            {
+                if (Category == KnownFolderCategory.Virtual)
+                    return null;
+                else
+                {
+                    _knownFolder.GetPath(options, out pointerToPath);
+                    path = Marshal.PtrToStringUni(pointerToPath);
+                }
+            }
+            catch (System.IO.FileNotFoundException)
+            {
+                path = null;
+            }
+            catch (System.IO.DirectoryNotFoundException)
+            {
+                path = null;
+            }
+            finally
+            {
+                Marshal.FreeCoTaskMem(pointerToPath);
+            }
+            return path;
+        }
+
+        /// <summary>
+        /// Implements standard disposable interface.
+        /// </summary>
+        public void Dispose()
+        {
+            if (_knownFolder != null)
+            {
+                Marshal.ReleaseComObject(_knownFolder);
+                _knownFolder = null;
+            }
+        }
+
+        /// <summary>
+        /// Gets the string based path for this known folder.
+        /// </summary>
+        /// <param name="path"></param>
+        /// <param name="options"></param>
+        protected void SetPath(string path, KnownFolderRetrievalOptions options)
+        {
+            _knownFolder.SetPath(options, path);
+        }
+
+        /// <summary>
+        /// Gets the public definition for a known folder.
+        /// 
+        /// Retrieves a structure that contains the defining elements
+        /// of a known folder, which includes the folder's category,
+        /// name, path, description, tooltip, icon, and other properties.
+        /// 
+        /// This is not a small operation so let's make it a method
+        /// </summary>
+        /// <returns></returns>
+        private KnownFolderDefinition GetDefinition()
+        {
+            InternalKnownFolderDefinition internalDefinition;
+            KnownFolderDefinition definition = new KnownFolderDefinition();
+            _knownFolder.GetFolderDefinition(out internalDefinition);
+            try
+            {
+                definition.Category = internalDefinition.Category;
+                definition.Name = Marshal.PtrToStringUni(internalDefinition.pszName);
+                definition.Description = Marshal.PtrToStringUni(internalDefinition.pszDescription);
+                definition.ParentID = internalDefinition.ParentID;
+                definition.ParsingName = Marshal.PtrToStringUni(internalDefinition.pszParsingName);
+                definition.Tooltip = Marshal.PtrToStringUni(internalDefinition.pszTooltip);
+                definition.LocalizedName = Marshal.PtrToStringUni(internalDefinition.pszLocalizedName);
+                definition.Icon = Marshal.PtrToStringUni(internalDefinition.pszIcon);
+                definition.Security = Marshal.PtrToStringUni(internalDefinition.pszSecurity);
+                definition.Attributes = internalDefinition.dwAttributes;
+                definition.DefinitionFlags = internalDefinition.DefinitionFlags;
+                definition.FolderTypeID = internalDefinition.FolderTypeID;
+            }
+            finally
+            {
+                Marshal.FreeCoTaskMem(internalDefinition.pszName);
+                Marshal.FreeCoTaskMem(internalDefinition.pszDescription);
+                Marshal.FreeCoTaskMem(internalDefinition.pszRelativePath);
+                Marshal.FreeCoTaskMem(internalDefinition.pszParsingName);
+                Marshal.FreeCoTaskMem(internalDefinition.pszTooltip);
+                Marshal.FreeCoTaskMem(internalDefinition.pszLocalizedName);
+                Marshal.FreeCoTaskMem(internalDefinition.pszIcon);
+                Marshal.FreeCoTaskMem(internalDefinition.pszSecurity);
+            }
+            return definition;
         }
         #endregion
     }

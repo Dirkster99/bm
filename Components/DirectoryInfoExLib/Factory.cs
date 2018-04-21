@@ -34,16 +34,9 @@
         }
 
         /// <summary>
+        /// Gets the <see cref="IDirectoryInfoEx"/> interface
+        /// for a user's desktop folder.
         /// </summary>
-        /// <param name="info"></param>
-        /// <param name="context"></param>
-        /// <returns></returns>
-////        public static IDirectoryInfoEx CreateDirectoryInfoEx(SerializationInfo info,
-////                                                             StreamingContext context)
-////        {
-////            return new DirectoryInfoEx(info, context);
-////        }
-
         public static IDirectoryInfoEx DesktopDirectory
         {
             get
@@ -52,7 +45,11 @@
             }
         }
 
-        public static IDirectoryInfoEx MyComputerDirectory
+        /// <summary>
+        /// Gets the <see cref="IDirectoryInfoEx"/> interface
+        /// for a user's MyComputer (virtual folder).
+        /// </summary>
+        public static IDirectoryInfoEx MyComputer
         {
             get
             {
@@ -60,14 +57,22 @@
             }
         }
 
+        /// <summary>
+        /// Gets the <see cref="IDirectoryInfoEx"/> interface
+        /// for a user's full name (virtual folder).
+        /// </summary>
         public static IDirectoryInfoEx CurrentUserDirectory
         {
             get
             {
-                return DirectoryInfoEx.CurrentUserDirectory;
+                return DirectoryInfoEx.CurrentUser;
             }
         }
 
+        /// <summary>
+        /// Gets the <see cref="IDirectoryInfoEx"/> interface
+        /// for the Public Documents folder (%PUBLIC%\Documents).
+        /// </summary>
         public static IDirectoryInfoEx SharedDirectory
         {
             get
@@ -76,7 +81,11 @@
             }
         }
 
-        public static IDirectoryInfoEx NetworkDirectory
+        /// <summary>
+        /// Gets the <see cref="IDirectoryInfoEx"/> interface
+        /// for the Network (virtual folder, Legacy: My Network Places).
+        /// </summary>
+        public static IDirectoryInfoEx Network
         {
             get
             {
@@ -84,7 +93,11 @@
             }
         }
 
-        public static IDirectoryInfoEx RecycleBinDirectory
+        /// <summary>
+        /// Gets the <see cref="IDirectoryInfoEx"/> interface
+        /// for the Rycycle Bin (virtual folder).
+        /// </summary>
+        public static IDirectoryInfoEx RecycleBin
         {
             get
             {
@@ -92,6 +105,13 @@
             }
         }
 
+        /// <summary>
+        /// Gets the <see cref="IDirectoryInfoEx"/> interface
+        /// for the string representation in <paramref name="path"/>
+        /// or null if directory does not exist.
+        /// </summary>
+        /// <param name="path"></param>
+        /// <returns></returns>
         public static IDirectoryInfoEx FromString(string path)
         {
             return DirectoryInfoEx.FromString(path);
@@ -123,7 +143,6 @@
             return (current != null);
         }
 
-        //0.13: Added HasParent
         /// <summary>
         /// Return whether parent directory contain child directory.
         /// Aware Library, UserFiles and Public directory too.
@@ -133,6 +152,7 @@
         /// <returns></returns>
         public static bool HasParent(IDirectoryInfoEx child, IDirectoryInfoEx parent)
         {
+            //0.13: Added HasParent
             if (parent == null)
             {
                 //if (Debugger.IsAttached)

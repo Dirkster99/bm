@@ -17,7 +17,7 @@ namespace DirectoryInfoExLib.IO.Header.ShellDll
     //0.13 : Removed IDisposable in PIDL as it causing AccessViolationException, user have to free calling the Free() method.
     {
         #region fields
-        public static int Counter = 0;
+        private static int Counter = 0;
         private IntPtr pidl = IntPtr.Zero;
         #endregion fields
 
@@ -66,6 +66,11 @@ namespace DirectoryInfoExLib.IO.Header.ShellDll
         /// </summary>
         public int Size { get { return ItemIDListSize(Ptr); } }
 
+        /// <summary>
+        /// Appends the given <paramref name="appendPidl"/> into
+        /// the current representation of this instances PIDL.
+        /// </summary>
+        /// <param name="appendPidl"></param>
         public void Append(IntPtr appendPidl)
         {
             IntPtr newPidl = ILCombine(pidl, appendPidl);
@@ -74,6 +79,11 @@ namespace DirectoryInfoExLib.IO.Header.ShellDll
             pidl = newPidl;
         }
 
+        /// <summary>
+        /// Inserts the given <paramref name="insertPidl"/> at the
+        /// beginning of the current representation of this instances PIDL.
+        /// </summary>
+        /// <param name="insertPidl"></param>
         public void Insert(IntPtr insertPidl)
         {
             IntPtr newPidl = ILCombine(insertPidl, pidl);
@@ -82,6 +92,12 @@ namespace DirectoryInfoExLib.IO.Header.ShellDll
             pidl = newPidl;
         }
 
+        /// <summary>
+        /// Gets whether a given PIDL is empty
+        /// (has no internal representation) or not.
+        /// </summary>
+        /// <param name="pidl"></param>
+        /// <returns></returns>
         public static bool IsEmpty(IntPtr pidl)
         {
             if (pidl == IntPtr.Zero)
@@ -90,33 +106,26 @@ namespace DirectoryInfoExLib.IO.Header.ShellDll
             byte[] bytes = new byte[2];
             Marshal.Copy(pidl, bytes, 0, 2);
             int size = bytes[0] + bytes[1] * 256;
+
             return (size <= 2);
         }
 
-        public static bool SplitPidl(IntPtr pidl, out IntPtr parent, out IntPtr child)
-        {
-            parent = ILClone(pidl);
-            child = ILClone(ILFindLastID(pidl));
-
-            if (!ILRemoveLastID2(ref parent))
-            {
-                Marshal.FreeCoTaskMem(parent);
-                Marshal.FreeCoTaskMem(child);
-                return false;
-            }
-            else
-            {
-                return true;
-            }
-        }
-
+        /// <summary>
+        /// Writes a PIDL out to the console.
+        /// </summary>
+        /// <param name="pidl"></param>
         public static void Write(IntPtr pidl)
         {
             StringBuilder path = new StringBuilder(256);
             ShellAPI.SHGetPathFromIDList(pidl, path);
+
             Console.Out.WriteLine("Pidl: {0}", path);
         }
 
+        /// <summary>
+        /// Writes byte values of a PIDL out to the console.
+        /// </summary>
+        /// <param name="pidl"></param>
         public static void WriteBytes(IntPtr pidl)
         {
             int size = Marshal.ReadByte(pidl, 0) + Marshal.ReadByte(pidl, 1) * 256 - 2;
@@ -298,7 +307,11 @@ namespace DirectoryInfoExLib.IO.Header.ShellDll
         #endregion
 
         #region IEnumerable Members
-
+        /// <summary>
+        /// Gets an enumerator over all SHITEMID structures
+        /// in an ITEMIDLIST structure of a PIDL.
+        /// </summary>
+        /// <returns></returns>
         public IEnumerator GetEnumerator()
         {
             return new PIDLEnumerator(pidl);
@@ -307,7 +320,11 @@ namespace DirectoryInfoExLib.IO.Header.ShellDll
         #endregion
 
         #region Override
-
+        /// <summary>
+        /// Determines if thé given object is equal to this PIDL or not.
+        /// </summary>
+        /// <param name="obj"></param>
+        /// <returns></returns>
         public override bool Equals(object obj)
         {
             try
@@ -325,6 +342,10 @@ namespace DirectoryInfoExLib.IO.Header.ShellDll
             }
         }
 
+        /// <summary>
+        /// Gets the HashCode for this PIDL object.
+        /// </summary>
+        /// <returns></returns>
         public override int GetHashCode()
         {
             return pidl.GetHashCode();
@@ -333,6 +354,10 @@ namespace DirectoryInfoExLib.IO.Header.ShellDll
         #endregion
 
         #region private classes
+        /// <summary>
+        /// Implements an enumerator over all SHITEMID structures
+        /// SHITEMID structure in an ITEMIDLIST structure
+        /// </summary>
         private class PIDLEnumerator : IEnumerator
         {
           #region fields

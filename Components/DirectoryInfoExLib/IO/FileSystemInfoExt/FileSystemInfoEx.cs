@@ -490,9 +490,9 @@ namespace DirectoryInfoExLib.IO.FileSystemInfoExt
                 //0.12: Fixed Fullname of User/Shared directory under desktop is now it's GUID instead of it's file path.
                 //0.13: Fixed All subdirectory under User/Shared directory uses GUID now.
                 {
-                    if (DirectoryInfoEx.CurrentUserDirectory != null)
+                    if (DirectoryInfoEx.CurrentUser != null)
                     {
-                        if (parseName == DirectoryInfoEx.CurrentUserDirectory.FullName &&
+                        if (parseName == DirectoryInfoEx.CurrentUser.FullName &&
                         loadName(parentShellFolder, Header.ShellDll.ShellAPI.SHGNO.FORPARSING) == Environment.GetFolderPath(Environment.SpecialFolder.Desktop))
                         {
                             FullName = DirectoryInfoEx.IID_UserFiles;

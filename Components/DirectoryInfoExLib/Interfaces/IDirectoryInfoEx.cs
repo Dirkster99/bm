@@ -37,6 +37,10 @@
 ////        ,dtRoot
     }
 
+    /// <summary>
+    /// Defines a delegate that determines whether processing has been canceled or not.
+    /// </summary>
+    /// <returns></returns>
     public delegate bool CancelDelegate();
 
     /// <summary>
@@ -86,6 +90,12 @@
         #endregion properties
 
         #region methods
+        /// <summary>
+        /// Fetermines whether this instance equals the <paramref name="other"/>
+        /// instance or not.
+        /// </summary>
+        /// <param name="other"></param>
+        /// <returns></returns>
         bool Equals(IDirectoryInfoEx other);
 
         /// <summary>
@@ -144,9 +154,46 @@
                                                      SearchOption searchOption,
                                                      CancellationToken ct);
 
+        /// <summary>
+        /// Executes a delegate function that returns T and
+        /// accepts 2 <see cref="PIDL"/> parameters.
+        /// 
+        /// Function takes care of freeing <see cref="PIDL"/> objects after execution.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="pidlAndRelPidlFunc"></param>
+        /// <returns></returns>
         T RequestPIDL<T>(Func<PIDL, PIDL, T> pidlAndRelPidlFunc);
+
+        /// <summary>
+        /// Executes a delegate function that returns T and
+        /// accepts 1 <see cref="PIDL"/> parameter.
+        /// 
+        /// Function takes care of freeing <see cref="PIDL"/> object after execution.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="pidlFuncOnly"></param>
+        /// <returns></returns>
         T RequestPIDL<T>(Func<PIDL, T> pidlFuncOnly);
+
+        /// <summary>
+        /// Executes an Action that returns void and
+        /// accepts 1 <see cref="PIDL"/> parameter.
+        /// 
+        /// Function takes care of freeing <see cref="PIDL"/> object after execution.
+        /// </summary>
+        /// <param name="pidlFuncOnly"></param>
+        /// <returns></returns>
         void RequestPIDL(Action<PIDL> pidlFuncOnly);
+
+        /// <summary>
+        /// Executes an delegate function that returns T and
+        /// accepts 1 relative <see cref="PIDL"/> parameter.
+        /// 
+        /// Function takes care of freeing <see cref="PIDL"/> object after execution.
+        /// </summary>
+        /// <param name="relPidlFuncOnly"></param>
+        /// <returns></returns>
         T RequestRelativePIDL<T>(Func<PIDL, T> relPidlFuncOnly);
         #endregion methods
     }

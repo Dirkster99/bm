@@ -65,7 +65,7 @@ namespace DirectoryInfoExLib.IO.FileSystemInfoExt
 
         internal static readonly DirectoryInfoEx DesktopDirectory;
         internal static readonly DirectoryInfoEx MyComputerDirectory;
-        internal static readonly DirectoryInfoEx CurrentUserDirectory;
+        internal static readonly DirectoryInfoEx CurrentUser;
         internal static readonly DirectoryInfoEx SharedDirectory;
         internal static readonly DirectoryInfoEx NetworkDirectory;
         internal static readonly DirectoryInfoEx RecycleBinDirectory;
@@ -82,9 +82,11 @@ namespace DirectoryInfoExLib.IO.FileSystemInfoExt
             if (LicenseManager.UsageMode == LicenseUsageMode.Designtime)
                 throw new Exception("This should not be executed when design time.");
 #endif
-            DesktopDirectory = new DirectoryInfoEx(KnownFolder.FromKnownFolderId(KnownFolder_GUIDS.Desktop));
+
+            var desktopId = KnownFolder.FromKnownFolderId(KnownFolder_GUIDS.Desktop);
+            DesktopDirectory = new DirectoryInfoEx(desktopId);
             MyComputerDirectory = new DirectoryInfoEx(KnownFolder.FromKnownFolderId(KnownFolder_GUIDS.Computer));
-            CurrentUserDirectory = new DirectoryInfoEx(KnownFolder.FromKnownFolderId(KnownFolder_GUIDS.UsersFiles));
+            CurrentUser = new DirectoryInfoEx(KnownFolder.FromKnownFolderId(KnownFolder_GUIDS.UsersFiles));
 
             //0.17: Fixed some system cannot create shared directories. (by cwharmon)
             try
@@ -265,6 +267,15 @@ namespace DirectoryInfoExLib.IO.FileSystemInfoExt
         #endregion
 
         #region Methods
+        /// <summary>
+        /// Executes a delegate function that returns T and
+        /// accepts 2 <see cref="PIDL"/> parameters.
+        /// 
+        /// Function takes care of freeing <see cref="PIDL"/> objects after execution.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="pidlAndRelPidlFunc"></param>
+        /// <returns></returns>
         public T RequestPIDL<T>(Func<PIDL, PIDL, T> pidlAndRelPidlFunc)
         {
             PIDL pidl = this.getPIDL();
@@ -280,6 +291,15 @@ namespace DirectoryInfoExLib.IO.FileSystemInfoExt
             }
         }
 
+        /// <summary>
+        /// Executes a delegate function that returns T and
+        /// accepts 1 <see cref="PIDL"/> parameter.
+        /// 
+        /// Function takes care of freeing <see cref="PIDL"/> object after execution.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="pidlFuncOnly"></param>
+        /// <returns></returns>
         public T RequestPIDL<T>(Func<PIDL, T> pidlFuncOnly)
         {
             PIDL pidl = this.getPIDL();
@@ -293,6 +313,14 @@ namespace DirectoryInfoExLib.IO.FileSystemInfoExt
             }
         }
 
+        /// <summary>
+        /// Executes an Action that returns void and
+        /// accepts 1 <see cref="PIDL"/> parameter.
+        /// 
+        /// Function takes care of freeing <see cref="PIDL"/> object after execution.
+        /// </summary>
+        /// <param name="pidlFuncOnly"></param>
+        /// <returns></returns>
         public void RequestPIDL(Action<PIDL> pidlFuncOnly)
         {
             PIDL pidl = this.getPIDL();
@@ -306,6 +334,14 @@ namespace DirectoryInfoExLib.IO.FileSystemInfoExt
             }
         }
 
+        /// <summary>
+        /// Executes an delegate function that returns T and
+        /// accepts 1 relative <see cref="PIDL"/> parameter.
+        /// 
+        /// Function takes care of freeing <see cref="PIDL"/> object after execution.
+        /// </summary>
+        /// <param name="relPidlFuncOnly"></param>
+        /// <returns></returns>
         public T RequestRelativePIDL<T>(Func<PIDL, T> relPidlFuncOnly)
         {
             PIDL relPidl = this.getRelPIDL();
@@ -339,7 +375,7 @@ namespace DirectoryInfoExLib.IO.FileSystemInfoExt
 
                 DirectoryInfoEx dirObj = other as DirectoryInfoEx;
                 if (dirObj.FullName.Equals(DirectoryInfoEx.IID_UserFiles))
-                    if (this.FullName.Equals(DirectoryInfoEx.CurrentUserDirectory.FullName, StringComparison.InvariantCultureIgnoreCase))
+                    if (this.FullName.Equals(DirectoryInfoEx.CurrentUser.FullName, StringComparison.InvariantCultureIgnoreCase))
                         return true;
 
                 if (dirObj.FullName.Equals(DirectoryInfoEx.IID_Public))
@@ -653,10 +689,17 @@ namespace DirectoryInfoExLib.IO.FileSystemInfoExt
         }
         #endregion
 
-        public static IDirectoryInfoEx FromString(string FullName)
+        /// <summary>
+        /// Gets the <see cref="IDirectoryInfoEx"/> interface
+        /// for the string representation in <paramref name="path"/>
+        /// or null if directory does not exist.
+        /// </summary>
+        /// <param name="path"></param>
+        /// <returns></returns>
+        public static IDirectoryInfoEx FromString(string path)
         {
-            return (DirectoryInfoEx.DirectoryExists(FullName) ?
-                new DirectoryInfoEx(FullName) : null);
+            return (DirectoryInfoEx.DirectoryExists(path) ?
+                new DirectoryInfoEx(path) : null);
         }
         #endregion
 
@@ -701,6 +744,7 @@ namespace DirectoryInfoExLib.IO.FileSystemInfoExt
         /// </summary>
         /// <param name="fileName"></param>
         /// <param name="fileMask"></param>
+        /// <param name="forceSlashCheck"></param>
         /// <returns></returns>
         protected bool MatchFileMask(string fileName, string fileMask, bool forceSlashCheck)
         {
@@ -774,6 +818,11 @@ namespace DirectoryInfoExLib.IO.FileSystemInfoExt
             //    throw new IOException(FullName + " is not a folder.");
         }
 
+        /// <summary>
+        /// Determines via delegate whether processing was meanwhile cancelled or not.
+        /// </summary>
+        /// <param name="cancel"></param>
+        /// <returns></returns>
         private bool IsCancelTriggered(CancelDelegate cancel)
         {
             return cancel != null && cancel();

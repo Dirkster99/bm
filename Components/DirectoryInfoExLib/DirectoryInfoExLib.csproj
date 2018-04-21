@@ -51,6 +51,7 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <Prefer32Bit>false</Prefer32Bit>
+    <DocumentationFile>bin\Debug\DirectoryInfoExLib.xml</DocumentationFile>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -60,6 +61,7 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <Prefer32Bit>false</Prefer32Bit>
+    <DocumentationFile>bin\Release\DirectoryInfoExLib.xml</DocumentationFile>
   </PropertyGroup>
   <PropertyGroup>
     <SignAssembly>false</SignAssembly>
@@ -82,12 +84,6 @@
     <Compile Include="IO\FileSystemInfoExt\FileSystemInfoEx.cs" />
     <Compile Include="IO\Header\IShellFolder2.cs" />
     <None Include="ClassDiagram1.cd" />
-    <Compile Include="IO\Header\KnownFolder\Attributes\DefaultPathAttribute.cs" />
-    <Compile Include="IO\Header\KnownFolder\Attributes\DisplayNameAttribute.cs" />
-    <Compile Include="IO\Header\KnownFolder\Attributes\KnownFolderCategoryAttribute.cs" />
-    <Compile Include="IO\Header\KnownFolder\Attributes\KnownFolderGuidAttribute .cs" />
-    <Compile Include="IO\Header\KnownFolder\Attributes\MinVersionAttribute.cs" />
-    <Compile Include="IO\Header\KnownFolder\Attributes\SpecialFolderAttribute.cs" />
     <Compile Include="IO\Header\KnownFolder\Enums\KnownFolderCategory.cs" />
     <Compile Include="IO\Header\KnownFolder\Enums\KnownFolderFindMode.cs" />
     <Compile Include="IO\Header\KnownFolder\Enums\KnownFolderDefinitionFlags.cs" />
