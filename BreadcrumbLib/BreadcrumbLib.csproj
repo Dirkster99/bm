@@ -200,11 +200,11 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Themes\Metro\MetroLightBrushes.xaml">
+    <Page Include="Themes\LightBrushs.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Themes\Metro\MetroDarkBrushes.xaml">
+    <Page Include="Themes\DarkBrushs.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
@@ -216,7 +216,7 @@
   <ItemGroup>
     <ProjectReference Include="..\Components\DirectoryInfoExLib\DirectoryInfoExLib.csproj">
       <Project>{09df5a9a-989e-410c-ba72-5a94cf481e57}</Project>
-      <Name>DirectoryInfoEx</Name>
+      <Name>DirectoryInfoExLib</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
