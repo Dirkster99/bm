@@ -9,12 +9,13 @@
                     >
   <ResourceDictionary.MergedDictionaries>
     <ResourceDictionary Source="/BreadcrumbLib;component/Themes/Default/Buttons.xaml" />
-    <ResourceDictionary Source="/BreadcrumbLib;component/Themes/Default/Brushes.xaml" />
-	</ResourceDictionary.MergedDictionaries>
+    <!-- ResourceDictionary Source="/BreadcrumbLib;component/Themes/Default/Brushes.xaml" / -->
+  </ResourceDictionary.MergedDictionaries>
 
   <ControlTemplate x:Key="BreadcrumbTemplate" TargetType="{x:Type uc:BreadcrumbBase}">
     <Border x:Name="bdr">
-      <Border BorderBrush="{DynamicResource {x:Static SystemColors.ActiveBorderBrushKey}}" BorderThickness="1">
+      <Border BorderBrush="{DynamicResource {x:Static SystemColors.ActiveBorderBrushKey}}"
+              BorderThickness="1">
         <Grid x:Name="BreadcrumbBackgroundGrid" Background="{DynamicResource {x:Static SystemColors.WindowBrushKey}}" >
           <Grid.Resources>
             <conv:BoolToVisibilityCollapsedConverter x:Key="btv" />
@@ -30,9 +31,9 @@
           </Grid.ColumnDefinitions>
 
           <ProgressBar Background="Transparent" Foreground="{DynamicResource {x:Static SystemColors.HotTrackBrushKey}}"
-                             IsIndeterminate="{Binding IsIndeterminate, RelativeSource={RelativeSource TemplatedParent}}" Opacity="0.5" Grid.ColumnSpan="3"
-                             Visibility="{Binding IsProgressbarVisible, RelativeSource={RelativeSource TemplatedParent}, Converter={StaticResource btv}}"
-                             Value="{Binding Progress, RelativeSource={RelativeSource TemplatedParent}}" />
+                       IsIndeterminate="{Binding IsIndeterminate, RelativeSource={RelativeSource TemplatedParent}}" Opacity="0.5" Grid.ColumnSpan="3"
+                       Visibility="{Binding IsProgressbarVisible, RelativeSource={RelativeSource TemplatedParent}, Converter={StaticResource btv}}"
+                       Value="{Binding Progress, RelativeSource={RelativeSource TemplatedParent}}" />
 
           <ToggleButton x:Name="PART_Toggle"  Grid.Column="0"  Padding="2,0" VerticalAlignment="Stretch"
                         IsChecked="{Binding IsBreadcrumbVisible, RelativeSource={RelativeSource TemplatedParent}}" 

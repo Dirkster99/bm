@@ -127,7 +127,6 @@
     <Compile Include="Models\PathHelper.cs" />
     <Compile Include="Utils\AsyncUtils.cs" />
     <Compile Include="Themes\ResourceKeys.cs" />
-    <Compile Include="Themes\StaticResourceKey.cs" />
     <Compile Include="Utils\UITools.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

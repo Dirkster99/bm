@@ -12,7 +12,7 @@
         <ResourceDictionary Source="/BreadcrumbLib;component/Themes/Default/Buttons.xaml" />
 
         <ResourceDictionary Source="/BreadcrumbLib;component/Controls/Breadcrumbs/BreadcrumbTreeItem.xaml" />
-        <ResourceDictionary Source="/BreadcrumbLib;component/Themes/Default/Brushes.xaml" />
+        <!-- ResourceDictionary Source="/BreadcrumbLib;component/Themes/Default/Brushes.xaml" / -->
         <!-- ResourceDictionary Source="/BreadcrumbLib;component/Controls/Breadcrumbs/BreadcrumbExpander.xaml" / -->
     </ResourceDictionary.MergedDictionaries>
 

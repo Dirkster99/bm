@@ -7,9 +7,10 @@
     xmlns:uc="clr-namespace:BreadcrumbLib.Controls.Breadcrumbs"
     xmlns:ctrls="clr-namespace:BreadcrumbLib.Controls"
     xmlns:conv="clr-namespace:BreadcrumbLib.Converters"
+    xmlns:reskeys="clr-namespace:BreadcrumbLib.Themes"
     >
   <ResourceDictionary.MergedDictionaries>
-    <ResourceDictionary Source="/BreadcrumbLib;component/Themes/Default/Brushes.xaml" />
+    <!-- ResourceDictionary Source="/BreadcrumbLib;component/Themes/Default/Brushes.xaml" / -->
     <ResourceDictionary Source="/BreadcrumbLib;component/Themes/Default/Geometry.xaml" />
     <ResourceDictionary Source="/BreadcrumbLib;component/Themes/Default/Buttons.xaml" />
   </ResourceDictionary.MergedDictionaries>
@@ -40,6 +41,8 @@
               <DockPanel.Resources>
                 <conv:BoolToVisibilityConverter x:Key="btv" />
               </DockPanel.Resources>
+              
+              <!-- Display a dropdown list at the left most button in the control -->
               <ctrls:DropDown DockPanel.Dock="Left" 
                               Visibility="{Binding ShowDropDown, RelativeSource={RelativeSource TemplatedParent}, Converter={StaticResource btvc}}"
                               IsDropDownOpen="{Binding IsDropDownOpen, Mode=TwoWay, 
@@ -47,10 +50,12 @@
                               VerticalAlignment="Stretch" >
                 <ctrls:DropDown.Header>
                   <Grid>
-                    <Path StrokeThickness="1.2" Data="{StaticResource ExpanderArrow}"
+                    <Path StrokeThickness="1.2"
+                          Data="{DynamicResource {x:Static reskeys:ResourceKeys.ExpanderArrow}}"
                           HorizontalAlignment="Center" VerticalAlignment="Center" 
                           Visibility="{Binding IsOverflowed, RelativeSource={RelativeSource TemplatedParent}, Converter={StaticResource btv}}"
-                          Margin="{TemplateBinding Padding}" IsHitTestVisible="True" />
+                          Margin="{TemplateBinding Padding}"
+                          IsHitTestVisible="True" />
 
                     <ToggleButton Template="{DynamicResource BasicArrowButton}"
                                   IsHitTestVisible="False" 

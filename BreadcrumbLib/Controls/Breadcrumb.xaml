@@ -6,182 +6,181 @@
                     
     xmlns:bc="clr-namespace:BreadcrumbLib.Controls"
     xmlns:conv="clr-namespace:BreadcrumbLib.Converters"
-	xmlns:themes="clr-namespace:BreadcrumbLib.Themes"
+    xmlns:reskeys="clr-namespace:BreadcrumbLib.Themes"
    >
     <!--
     xmlns:sbox="clr-namespace:BreadcrumbLib.Controls.SuggestBox"
     -->
-	<ResourceDictionary.MergedDictionaries>
-		<ResourceDictionary Source="/BreadcrumbLib;component/Themes/Default/Geometry.xaml" />
-		<ResourceDictionary Source="/BreadcrumbLib;component/Themes/Default/ComboboxNullAsSeparatorStyle.xaml" />
-		<ResourceDictionary Source="/BreadcrumbLib;component/Controls/Breadcrumbs/BreadcrumbTreeItem.xaml" />
-		<ResourceDictionary Source="/BreadcrumbLib;component/Themes/Default/Brushes.xaml" />
-		<ResourceDictionary Source="/BreadcrumbLib;component/Controls/Switch.xaml" />
-	</ResourceDictionary.MergedDictionaries>
+  <ResourceDictionary.MergedDictionaries>
+    <ResourceDictionary Source="/BreadcrumbLib;component/Themes/Default/Geometry.xaml" />
+    <ResourceDictionary Source="/BreadcrumbLib;component/Themes/Default/ComboboxNullAsSeparatorStyle.xaml" />
+    <ResourceDictionary Source="/BreadcrumbLib;component/Controls/Breadcrumbs/BreadcrumbTreeItem.xaml" />
+    <!-- ResourceDictionary Source="/BreadcrumbLib;component/Themes/Default/Brushes.xaml" / -->
+    <ResourceDictionary Source="/BreadcrumbLib;component/Controls/Switch.xaml" />
+  </ResourceDictionary.MergedDictionaries>
 
-	<Style TargetType="{x:Type ctrls:Breadcrumb}">
+  <Style TargetType="{x:Type ctrls:Breadcrumb}">
         <!-- MinWidth assures nice Breadcrumb display when UI gets too small
              because Window may be resized to a small portion of its normal size -->
         <Setter Property="MinWidth" Value="100" />
         <Setter Property="BorderBrush" Value="Gray"/>
         <Setter Property="BorderThickness" Value="1"/>
         <Setter Property="Template">
-			<Setter.Value>
-				<ControlTemplate TargetType="{x:Type ctrls:Breadcrumb}">
-					<ControlTemplate.Resources>
-						<conv:FlipBoolToVisibilityCollapsedConverter x:Key="fbtvc" />
-						<conv:BoolToVisibilityCollapsedConverter x:Key="btvc" />
-					</ControlTemplate.Resources>
-					<Border Background="{TemplateBinding Background}"
-							BorderBrush="{TemplateBinding BorderBrush}"
-							BorderThickness="{TemplateBinding BorderThickness}">
-						<Grid HorizontalAlignment="Stretch">
-							<Grid.Resources>
-								<conv:BoolToVisibilityCollapsedConverter x:Key="btv" />
-								<conv:FlipBoolConverter x:Key="fb" />
-							</Grid.Resources>
+      <Setter.Value>
+        <ControlTemplate TargetType="{x:Type ctrls:Breadcrumb}">
+          <ControlTemplate.Resources>
+            <conv:FlipBoolToVisibilityCollapsedConverter x:Key="fbtvc" />
+            <conv:BoolToVisibilityCollapsedConverter x:Key="btvc" />
+          </ControlTemplate.Resources>
+          <Border Background="{TemplateBinding Background}"
+                  BorderBrush="{TemplateBinding BorderBrush}"
+                  BorderThickness="{TemplateBinding BorderThickness}">
+            <Grid HorizontalAlignment="Stretch">
+              <Grid.Resources>
+                <conv:BoolToVisibilityCollapsedConverter x:Key="btv" />
+                <conv:FlipBoolConverter x:Key="fb" />
+              </Grid.Resources>
 
-							<Grid.ColumnDefinitions>
-                                <!-- This needs to be * because OverflowableStackpanel inside
-                                     Switch inside BreadCrumbTree cannot function when this is set to Auto
-                                
-                                     Defect: The items in the BreadcrumbTree will no longer overflow
-                                             (dissappear when space is limited).
-                                -->
-								<ColumnDefinition Width="*" />
-                                <ColumnDefinition Width="Auto" MinWidth="{TemplateBinding OverflowGap}" />
+              <Grid.ColumnDefinitions>
+                <!-- This needs to be * because OverflowableStackpanel inside
+                     Switch inside BreadCrumbTree cannot function when this is set to Auto
+                
+                     Defect: The items in the BreadcrumbTree will no longer overflow
+                             (dissappear when space is limited).
+                -->
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="Auto" MinWidth="{TemplateBinding OverflowGap}" />
 
-                            </Grid.ColumnDefinitions>
+              </Grid.ColumnDefinitions>
 
-							<!-- Show a progressbar to indicate long running processings -->
-                            <ProgressBar IsIndeterminate="{Binding  Progressing.IsIndeterminate, Mode=OneWay,UpdateSourceTrigger=PropertyChanged}"
-										 Value="{Binding Progressing.ProgressValue, Mode=OneWay,UpdateSourceTrigger=PropertyChanged}"
-                                         Minimum="{Binding Progressing.MinimumProgressValue, Mode=OneWay,UpdateSourceTrigger=PropertyChanged}"
-                                         Maximum="{Binding Progressing.MaximumProgressValue, Mode=OneWay,UpdateSourceTrigger=PropertyChanged}"
-										 Visibility="{Binding Progressing.IsProgressbarVisible, Mode=OneWay,UpdateSourceTrigger=PropertyChanged, Converter={StaticResource btv}}"
-                                         
-                                         Opacity="0.5"
-                                         Background="Transparent"
-                                         Foreground="{DynamicResource {x:Static SystemColors.HotTrackBrushKey}}"
-                                         BorderBrush="Transparent" BorderThickness="0"/>
+              <!-- Show a progressbar to indicate long running processings -->
+              <ProgressBar IsIndeterminate="{Binding  Progressing.IsIndeterminate, Mode=OneWay,UpdateSourceTrigger=PropertyChanged}"
+                           Value="{Binding Progressing.ProgressValue, Mode=OneWay,UpdateSourceTrigger=PropertyChanged}"
+                           Minimum="{Binding Progressing.MinimumProgressValue, Mode=OneWay,UpdateSourceTrigger=PropertyChanged}"
+                           Maximum="{Binding Progressing.MaximumProgressValue, Mode=OneWay,UpdateSourceTrigger=PropertyChanged}"
+                           Visibility="{Binding Progressing.IsProgressbarVisible, Mode=OneWay,UpdateSourceTrigger=PropertyChanged, Converter={StaticResource btv}}"
+                                               
+                           Opacity="0.5"
+                           Background="Transparent"
+                           Foreground="{DynamicResource {x:Static SystemColors.HotTrackBrushKey}}"
+                           BorderBrush="Transparent" BorderThickness="0"/>
 
-							<bc:Switch x:Name="PART_Switch"
-                                       Template="{StaticResource BreadcrumbSwitchTemplate}"                   
-                                       IsSwitchOn="{Binding EnableBreadcrumb, Mode=TwoWay}"
-                                       VerticalAlignment="Center" VerticalContentAlignment="Center"
-                                       Margin="0,3"
-                                       >
-								<bc:Switch.Header>
-                                    <Image Source="{Binding BreadcrumbSubTree.Selection.SelectedViewModel.Icon}" VerticalAlignment="Center" HorizontalAlignment="Center" />
-								</bc:Switch.Header>
-								<bc:Switch.ContentOn>
-                                    <Grid>
-                                        <Grid.ColumnDefinitions>
-                                            <ColumnDefinition Width="Auto"/>
-                                            <ColumnDefinition Width="*"/>
-                                        </Grid.ColumnDefinitions>
+              <bc:Switch x:Name="PART_Switch"
+                         Template="{StaticResource BreadcrumbSwitchTemplate}"                   
+                         IsSwitchOn="{Binding EnableBreadcrumb, Mode=TwoWay}"
+                         VerticalAlignment="Center" VerticalContentAlignment="Center"
+                         Margin="0,3"
+                         >
+                <bc:Switch.Header>
+                    <Image Source="{Binding BreadcrumbSubTree.Selection.SelectedViewModel.Icon}" VerticalAlignment="Center" HorizontalAlignment="Center" />
+                </bc:Switch.Header>
+                <bc:Switch.ContentOn>
+                <Grid>
+                  <Grid.ColumnDefinitions>
+                      <ColumnDefinition Width="Auto"/>
+                      <ColumnDefinition Width="*"/>
+                  </Grid.ColumnDefinitions>
                                         
-                                        <!-- Display a dropdown list at the left most button in the control -->
-										<ctrls:DropDownList Grid.Column="0"
-                                                            x:Name="PART_DropDownList"
-                                                            VerticalAlignment="Stretch" 
-                                                            ItemsSource="{Binding BreadcrumbSubTree.Selection.OverflowedAndRootItems}"
-                                                            SelectedValuePath="Selection.Value"
-                                                            SelectedValue="{Binding BreadcrumbSubTree.Selection.SelectedValue}"                               
-                                                            ItemTemplate="{Binding MenuItemTemplate, ElementName=btree}"
-                                            >
-											<ctrls:DropDownList.Header>
-												<Path Stroke="{DynamicResource {x:Static themes:ResourceKeys.ControlForeground}}"
-                                                      StrokeThickness="1.2"
-                                                      Data="{StaticResource ExpanderArrow}"
-                                                      HorizontalAlignment="Center"
-                                                      VerticalAlignment="Center"
-                                                      IsHitTestVisible="True"                          
-                                                />
-											</ctrls:DropDownList.Header><!--ItemContainerStyle already assigned in DropDownList.xaml -->
-											<ctrls:DropDownList.ItemContainerStyle>
-												<Style TargetType="{x:Type ComboBoxItem}" BasedOn="{StaticResource ComboboxNullAsSeparatorStyle}">
-													<Setter Property="Visibility" Value="{Binding Selection.IsOverflowedOrRoot, Mode=OneWay, Converter={StaticResource btvc}}"  />
-												</Style>
-											</ctrls:DropDownList.ItemContainerStyle>
-										</ctrls:DropDownList>
+                    <!-- Display a dropdown list at the left most button in the control -->
+                    <ctrls:DropDownList Grid.Column="0"
+                                        x:Name="PART_DropDownList"
+                                        VerticalAlignment="Stretch" 
+                                        ItemsSource="{Binding BreadcrumbSubTree.Selection.OverflowedAndRootItems}"
+                                        SelectedValuePath="Selection.Value"
+                                        SelectedValue="{Binding BreadcrumbSubTree.Selection.SelectedValue}"                               
+                                        ItemTemplate="{Binding MenuItemTemplate, ElementName=btree}">
+                      <ctrls:DropDownList.Header>
+                        <Path Stroke="{DynamicResource {x:Static reskeys:ResourceKeys.ControlNormalForegroundBrushKey}}"
+                              StrokeThickness="1.2"
+                              Data="{DynamicResource {x:Static reskeys:ResourceKeys.ExpanderArrow}}"
+                              HorizontalAlignment="Center"
+                              VerticalAlignment="Center"
+                              IsHitTestVisible="True"                          
+                        />
+                      </ctrls:DropDownList.Header><!--ItemContainerStyle already assigned in DropDownList.xaml -->
+                      <ctrls:DropDownList.ItemContainerStyle>
+                        <Style TargetType="{x:Type ComboBoxItem}" BasedOn="{StaticResource ComboboxNullAsSeparatorStyle}">
+                          <Setter Property="Visibility" Value="{Binding Selection.IsOverflowedOrRoot, Mode=OneWay, Converter={StaticResource btvc}}"  />
+                        </Style>
+                      </ctrls:DropDownList.ItemContainerStyle>
+                    </ctrls:DropDownList>
 
-										<!-- The BreadcrumbTree control displays the complete path and each drop down list -->
-										<uc:BreadcrumbTree Grid.Column="1"
+                    <!-- The BreadcrumbTree control displays the complete path and each drop down list -->
+                    <uc:BreadcrumbTree Grid.Column="1"
                                                            ItemsSource="{Binding BreadcrumbSubTree.Entries.All}"
                                                            x:Name="btree">
-											<uc:BreadcrumbTree.ItemContainerStyle>
-												<Style TargetType="{x:Type uc:BreadcrumbTreeItem}" BasedOn="{StaticResource {x:Type uc:BreadcrumbTreeItem}}">
-													<Setter Property="ValuePath" Value="Selection.Value" />
-													<Setter Property="IsExpanded" Value="{Binding Entries.IsExpanded, Mode=TwoWay}"  />
-													<Setter Property="IsCurrentSelected" Value="{Binding Selection.IsSelected, Mode=TwoWay}"  />
-													<Setter Property="SelectedChild" Value="{Binding Selection.SelectedChildUI, Mode=TwoWay}"  />
-													<Setter Property="IsChildSelected" Value="{Binding Selection.IsChildSelected, Mode=OneWay}"  />
+                      <uc:BreadcrumbTree.ItemContainerStyle>
+                        <Style TargetType="{x:Type uc:BreadcrumbTreeItem}" BasedOn="{StaticResource {x:Type uc:BreadcrumbTreeItem}}">
+                          <Setter Property="ValuePath" Value="Selection.Value" />
+                          <Setter Property="IsExpanded" Value="{Binding Entries.IsExpanded, Mode=TwoWay}"  />
+                          <Setter Property="IsCurrentSelected" Value="{Binding Selection.IsSelected, Mode=TwoWay}"  />
+                          <Setter Property="SelectedChild" Value="{Binding Selection.SelectedChildUI, Mode=TwoWay}"  />
+                          <Setter Property="IsChildSelected" Value="{Binding Selection.IsChildSelected, Mode=OneWay}"  />
 
-													<!--Updated by BreadcrumbTreeItem and it's OverflowableStackPanel-->
-													<Setter Property="IsOverflowed" Value="{Binding Selection.IsOverflowed, Mode=OneWayToSource}"  />
-												</Style>
-											</uc:BreadcrumbTree.ItemContainerStyle>
+                          <!--Updated by BreadcrumbTreeItem and it's OverflowableStackPanel-->
+                          <Setter Property="IsOverflowed" Value="{Binding Selection.IsOverflowed, Mode=OneWayToSource}"  />
+                        </Style>
+                      </uc:BreadcrumbTree.ItemContainerStyle>
 
-											<!-- Each element in the vertical drop down list has an icon and a textual name -->
-											<uc:BreadcrumbTree.MenuItemTemplate>
-												<DataTemplate>
-													<Grid>
-														<Grid.ColumnDefinitions>
-															<ColumnDefinition Width="Auto" />
-															<ColumnDefinition Width="*" />
-														</Grid.ColumnDefinitions>
+                      <!-- Each element in the vertical drop down list has an icon and a textual name -->
+                      <uc:BreadcrumbTree.MenuItemTemplate>
+                        <DataTemplate>
+                          <Grid>
+                            <Grid.ColumnDefinitions>
+                              <ColumnDefinition Width="Auto" />
+                              <ColumnDefinition Width="*" />
+                            </Grid.ColumnDefinitions>
 
-                                                        <Image Source="{Binding Icon}" Margin="3,0" HorizontalAlignment="Left" VerticalAlignment="Center"/>
-                                                        <TextBlock Text="{Binding Header}"
-																	Foreground="{DynamicResource {x:Static themes:ResourceKeys.ForegroundTextBrush}}"
-																	VerticalAlignment="Center"
-																	Grid.Column="1" />
-													</Grid>
-												</DataTemplate>
-											</uc:BreadcrumbTree.MenuItemTemplate>
+                            <Image Source="{Binding Icon}" Margin="3,0" HorizontalAlignment="Left" VerticalAlignment="Center"/>
+                            <TextBlock Text="{Binding Header}"
+                                       Foreground="{DynamicResource {x:Static reskeys:ResourceKeys.ControlTextBrushKey}}"
+                                       VerticalAlignment="Center"
+                                       Grid.Column="1" />
+                          </Grid>
+                        </DataTemplate>
+                      </uc:BreadcrumbTree.MenuItemTemplate>
 
-											<uc:BreadcrumbTree.ItemTemplate>
-												<!-- Display of path elements within the HORIZONTAL Breadcrumb tree control
+                      <uc:BreadcrumbTree.ItemTemplate>
+                        <!-- Display of path elements within the HORIZONTAL Breadcrumb tree control
                                                eg "C:\" |> "Program Files" "|>"  -->
-												<HierarchicalDataTemplate ItemsSource="{Binding Entries.All}">
-													<Border Background="{DynamicResource {x:Static themes:ResourceKeys.ControlBackground}}" BorderThickness="0">
-														<TextBlock Text="{Binding Header}"
-																	VerticalAlignment="Center"
-																	Foreground="{DynamicResource {x:Static themes:ResourceKeys.ForegroundTextBrush}}"
-																	/>
-													</Border>
-												</HierarchicalDataTemplate>
-											</uc:BreadcrumbTree.ItemTemplate>
+                        <HierarchicalDataTemplate ItemsSource="{Binding Entries.All}">
+                          <Border Background="{DynamicResource {x:Static reskeys:ResourceKeys.ControlNormalBackgroundKey}}" BorderThickness="0">
+                            <TextBlock Text="{Binding Header}"
+                                  VerticalAlignment="Center"
+                                  Foreground="{DynamicResource {x:Static reskeys:ResourceKeys.ControlTextBrushKey}}"
+                                  />
+                          </Border>
+                        </HierarchicalDataTemplate>
+                      </uc:BreadcrumbTree.ItemTemplate>
 
-											<!--<uc:BreadcrumbTree.LayoutTransform>
-													<ScaleTransform ScaleX="2" ScaleY="2" />
-												</uc:BreadcrumbTree.LayoutTransform>-->
-										</uc:BreadcrumbTree>
-									</Grid>
-								</bc:Switch.ContentOn>
-								<!-- bc:Switch.ContentOff>
-                                    <sbox:SuggestBox x:Name="PART_SuggestBox" BorderThickness="0" Text="{Binding SuggestedPath, UpdateSourceTrigger=Explicit}"
-                                                     DisplayMemberPath="FullPath" ValuePath="FullPath" 
-                                                     IsEnabled="{Binding EnableBreadcrumb, Mode=OneWay, Converter={StaticResource fb}}"
-                                                     SuggestSources="{Binding SuggestSources}" HierarchyHelper="{x:Null}">
-									</sbox:SuggestBox>
-								</bc:Switch.ContentOff -->
-								<!--<bc:Switch.LayoutTransform>
-                                    <ScaleTransform ScaleX="2" ScaleY="2" />
-                                </bc:Switch.LayoutTransform>-->
-							</bc:Switch>
-						</Grid>
+                      <!--<uc:BreadcrumbTree.LayoutTransform>
+                          <ScaleTransform ScaleX="2" ScaleY="2" />
+                        </uc:BreadcrumbTree.LayoutTransform>-->
+                    </uc:BreadcrumbTree>
+                  </Grid>
+                </bc:Switch.ContentOn>
+                <!-- bc:Switch.ContentOff>
+                  <sbox:SuggestBox x:Name="PART_SuggestBox" BorderThickness="0" Text="{Binding SuggestedPath, UpdateSourceTrigger=Explicit}"
+                                   DisplayMemberPath="FullPath" ValuePath="FullPath" 
+                                   IsEnabled="{Binding EnableBreadcrumb, Mode=OneWay, Converter={StaticResource fb}}"
+                                   SuggestSources="{Binding SuggestSources}" HierarchyHelper="{x:Null}">
+                  </sbox:SuggestBox>
+                </bc:Switch.ContentOff -->
+                <!--<bc:Switch.LayoutTransform>
+                    <ScaleTransform ScaleX="2" ScaleY="2" />
+                </bc:Switch.LayoutTransform>-->
+              </bc:Switch>
+            </Grid>
 
-					</Border>
-                    <ControlTemplate.Triggers>
-                        <Trigger Property="IsMouseOver" Value="True">
-                            <Setter Property="BorderBrush" Value="Blue" />
-                        </Trigger>
-                    </ControlTemplate.Triggers>
-				</ControlTemplate>
-			</Setter.Value>
-		</Setter>
-	</Style>
+          </Border>
+          <ControlTemplate.Triggers>
+              <Trigger Property="IsMouseOver" Value="True">
+                  <Setter Property="BorderBrush" Value="Blue" />
+              </Trigger>
+          </ControlTemplate.Triggers>
+        </ControlTemplate>
+      </Setter.Value>
+    </Setter>
+  </Style>
 
 </ResourceDictionary>

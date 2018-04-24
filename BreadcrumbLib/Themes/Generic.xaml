@@ -4,6 +4,9 @@
 
 >
   <ResourceDictionary.MergedDictionaries>
+    <ResourceDictionary Source="/BreadcrumbLib;component/Themes/Default/Brushes.xaml" />
+    <ResourceDictionary Source="/BreadcrumbLib;component/Themes/Default/Buttons.xaml" />
+
     <ResourceDictionary Source="/BreadcrumbLib;component/Controls/HotTrack.xaml" />
     <ResourceDictionary Source="/BreadcrumbLib;component/Controls/Switch.xaml" />
 
@@ -22,8 +25,6 @@
 
     <ResourceDictionary Source="/BreadcrumbLib;component/controls/Breadcrumb.xaml" />
 
-    <ResourceDictionary Source="/BreadcrumbLib;component/Themes/Default/Buttons.xaml" />
-    <ResourceDictionary Source="/BreadcrumbLib;component/Themes/Default/Brushes.xaml" />
-	</ResourceDictionary.MergedDictionaries>
+  </ResourceDictionary.MergedDictionaries>
 
 </ResourceDictionary>

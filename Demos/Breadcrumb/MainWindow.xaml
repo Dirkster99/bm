@@ -64,12 +64,12 @@
                 ItemTemplate="{Binding MenuItemTemplate, ElementName=btree}"
                 >
                 <ctrls:DropDownList.Header>
-                    <Path Stroke="{DynamicResource {x:Static themes:ResourceKeys.ControlForeground}}"
-                        StrokeThickness="1.2"
-                        Data="{StaticResource ExpanderArrow}"
-                        HorizontalAlignment="Center"
-                        VerticalAlignment="Center"
-                        IsHitTestVisible="True"                          
+                    <Path Stroke="{DynamicResource {x:Static themes:ResourceKeys.ControlNormalForegroundBrushKey}}"
+                          StrokeThickness="1.2"
+                          Data="{x:Static themes:ResourceKeys.ExpanderArrow}"
+                          HorizontalAlignment="Center"
+                          VerticalAlignment="Center"
+                          IsHitTestVisible="True"                          
                       />
                 </ctrls:DropDownList.Header>
                 <!--ItemContainerStyle already assigned in DropDownList.xaml -->
@@ -106,7 +106,7 @@
 
                             <Image Source="{Binding Icon}" Margin="3,0" HorizontalAlignment="Left" VerticalAlignment="Center" />
                             <TextBlock Text="{Binding Header}"
-                                 Foreground="{DynamicResource {x:Static themes:ResourceKeys.ForegroundTextBrush}}"
+                                 Foreground="{DynamicResource {x:Static themes:ResourceKeys.ControlTextBrushKey}}"
                                  VerticalAlignment="Center"
                                  Grid.Column="1" />
                         </Grid>
@@ -118,10 +118,10 @@
                        eg "C:\" |> "Program Files" "|>" 
                   -->
                     <HierarchicalDataTemplate ItemsSource="{Binding Entries.All}">
-                        <Border Background="{DynamicResource {x:Static themes:ResourceKeys.ControlBackground}}" BorderThickness="0">
+                        <Border Background="{DynamicResource {x:Static themes:ResourceKeys.ControlNormalBackgroundKey}}" BorderThickness="0">
                             <TextBlock Text="{Binding Header}"
                                  VerticalAlignment="Center"
-                                 Foreground="{DynamicResource {x:Static themes:ResourceKeys.ForegroundTextBrush}}"
+                                 Foreground="{DynamicResource {x:Static themes:ResourceKeys.ControlTextBrushKey}}"
                                  />
                         </Border>
                     </HierarchicalDataTemplate>
@@ -153,9 +153,9 @@
                     ItemTemplate="{Binding MenuItemTemplate, ElementName=btree1}"
                 >
                 <ctrls:DropDownList.Header>
-                    <Path Stroke="{DynamicResource {x:Static themes:ResourceKeys.ControlForeground}}"
+                    <Path Stroke="{DynamicResource {x:Static themes:ResourceKeys.ControlNormalForegroundBrushKey}}"
                         StrokeThickness="1.2"
-                        Data="{StaticResource ExpanderArrow}"
+                        Data="{x:Static themes:ResourceKeys.ExpanderArrow}"
                         HorizontalAlignment="Center"
                         VerticalAlignment="Center"
                         IsHitTestVisible="True"                          
@@ -195,7 +195,7 @@
 
                             <Image Source="{Binding Icon}" Margin="3,0" DockPanel.Dock="Left" />
                             <TextBlock Text="{Binding Header}"
-                                 Foreground="{DynamicResource {x:Static themes:ResourceKeys.ForegroundTextBrush}}"
+                                 Foreground="{DynamicResource {x:Static themes:ResourceKeys.ControlTextBrushKey}}"
                                  VerticalAlignment="Center"
                                  Grid.Column="1" />
                         </Grid>
@@ -207,10 +207,10 @@
                        eg "C:\" |> "Program Files" "|>" 
                   -->
                     <HierarchicalDataTemplate ItemsSource="{Binding Entries.All}">
-                        <Border Background="{DynamicResource {x:Static themes:ResourceKeys.ControlBackground}}" BorderThickness="0">
+                        <Border Background="{DynamicResource {x:Static themes:ResourceKeys.ControlNormalBackgroundKey}}" BorderThickness="0">
                             <TextBlock Text="{Binding Header}"
                                  VerticalAlignment="Center"
-                                 Foreground="{DynamicResource {x:Static themes:ResourceKeys.ForegroundTextBrush}}"
+                                 Foreground="{DynamicResource {x:Static themes:ResourceKeys.ControlTextBrushKey}}"
                                  />
                         </Border>
                     </HierarchicalDataTemplate>
