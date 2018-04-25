@@ -20,7 +20,6 @@
             Loaded -= MainWindow_Loaded;
 
             var viewModel = this.DataContext as AppViewModel;
-
         }
     }
 }

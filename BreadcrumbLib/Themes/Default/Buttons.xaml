@@ -3,8 +3,6 @@
   xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
 
   xmlns:ctrls="clr-namespace:BreadcrumbLib.Controls"
-  xmlns:bc="clr-namespace:BreadcrumbLib.BaseControls"
-  xmlns:conv="clr-namespace:BreadcrumbLib.Converters"
   xmlns:reskeys="clr-namespace:BreadcrumbLib.Themes"
 >
   <!--ResourceDictionary.MergedDictionaries>

@@ -6,14 +6,11 @@
     
     <!--Geometry x:Key="ReversedNormalArrow">M7,0 L6,3.5 7,7 z</Geometry -->
     <!--Breadcrumb-->
-    <Geometry x:Key="{ComponentResourceKey TypeInTargetAssembly={x:Type reskeys:ResourceKeys},
-                     ResourceId=NormalArrow}">M0,0 L4,3.5 0,7 z</Geometry>
+    <Geometry x:Key="{x:Static reskeys:ResourceKeys.NormalArrow}">M0,0 L4,3.5 0,7 z</Geometry>
 
-    <Geometry x:Key="{ComponentResourceKey TypeInTargetAssembly={x:Type reskeys:ResourceKeys},
-                     ResourceId=ExpandedArrow}">M0,3 L7,3 3.5,7 z</Geometry>
+    <Geometry x:Key="{x:Static reskeys:ResourceKeys.ExpandedArrow}">M0,3 L7,3 3.5,7 z</Geometry>
 
-    <Geometry x:Key="{ComponentResourceKey TypeInTargetAssembly={x:Type reskeys:ResourceKeys},
-                     ResourceId=ExpanderArrow}">M6,1 L2,4 L6,7 M11,1 L7,4 L11,7</Geometry>
+    <Geometry x:Key="{x:Static reskeys:ResourceKeys.ExpanderArrow}">M6,1 L2,4 L6,7 M11,1 L7,4 L11,7</Geometry>
 
     <!-- Geometry x:Key="RefreshBranch">M6,3 A6,10,0,0,0,4,8 M8,12 A6,10,0,0,0,10,7</Geometry -->
     <!-- Geometry x:Key="RefreshArrow">M2,7 L7,7 4,9.5z M7,8 L10,5.5 12,8 z</Geometry -->

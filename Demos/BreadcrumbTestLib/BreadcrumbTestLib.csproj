@@ -94,6 +94,9 @@
     <Compile Include="ViewModels\Interfaces\ITreeRootSelector.cs" />
     <Compile Include="ViewModels\Interfaces\ITreeSelector.cs" />
     <Compile Include="Views\BindingProxy.cs" />
+    <Compile Include="Views\DemoView.xaml.cs">
+      <DependentUpon>DemoView.xaml</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <Content Include="SystemIO\folder.ico" />
@@ -107,6 +110,12 @@
       <Project>{09df5a9a-989e-410c-ba72-5a94cf481e57}</Project>
       <Name>DirectoryInfoExLib</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Page Include="Views\DemoView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

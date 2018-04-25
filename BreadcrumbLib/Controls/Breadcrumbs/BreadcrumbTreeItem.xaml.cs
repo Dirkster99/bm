@@ -15,8 +15,8 @@
 		public static readonly DependencyProperty IsOverflowedProperty = DependencyProperty.Register("IsOverflowed", typeof(bool),
 		 typeof(BreadcrumbTreeItem), new PropertyMetadata(false));
 
-		public static readonly DependencyProperty OverflowedItemContainerStyleProperty =
-						BreadcrumbTree.OverflowedItemContainerStyleProperty.AddOwner(typeof(BreadcrumbTreeItem));
+////		public static readonly DependencyProperty OverflowedItemContainerStyleProperty =
+////						BreadcrumbTree.OverflowedItemContainerStyleProperty.AddOwner(typeof(BreadcrumbTreeItem));
 
 		public static readonly DependencyProperty SelectedChildProperty =
 			DependencyProperty.Register("SelectedChild", typeof(object), typeof(BreadcrumbTreeItem),
@@ -73,11 +73,11 @@
 			set { this.SetValue(IsOverflowedProperty, value); }
 		}
 
-		public Style OverflowedItemContainerStyle
-		{
-			get { return (Style)GetValue(OverflowedItemContainerStyleProperty); }
-			set { this.SetValue(OverflowedItemContainerStyleProperty, value); }
-		}
+////		public Style OverflowedItemContainerStyle
+////		{
+////			get { return (Style)GetValue(OverflowedItemContainerStyleProperty); }
+////			set { this.SetValue(OverflowedItemContainerStyleProperty, value); }
+////		}
 
 		public object SelectedChild
 		{

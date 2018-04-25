@@ -1,28 +1,28 @@
 ﻿namespace Breadcrumb
 {
-  using System.Windows;
-  using BreadcrumbTestLib.ViewModels;
+    using System.Windows;
+    using BreadcrumbTestLib.ViewModels;
 
-  /// <summary>
-  /// Interaction logic for MainWindow.xaml
-  /// </summary>
-  public partial class MainWindow : Window
-  {
-    public MainWindow()
+    /// <summary>
+    /// Interaction logic for MainWindow.xaml
+    /// </summary>
+    public partial class MainWindow : Window
     {
-      InitializeComponent();
+        public MainWindow()
+        {
+            InitializeComponent();
 
-      Loaded += MainWindow_Loaded;
-    }
-    
-    private void MainWindow_Loaded(object sender, RoutedEventArgs e)
-    {
-        Loaded -= MainWindow_Loaded;
+            Loaded += MainWindow_Loaded;
+        }
 
-        var appVM = new AppViewModel();
-        DataContext = appVM;
-        
-        appVM.InitPath(@"C:\");
+        private void MainWindow_Loaded(object sender, RoutedEventArgs e)
+        {
+            Loaded -= MainWindow_Loaded;
+
+            var appVM = new AppViewModel();
+            DataContext = appVM;
+
+            appVM.InitPath(@"C:\");
+        }
     }
-  }
 }

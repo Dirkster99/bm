@@ -112,9 +112,6 @@
     </ApplicationDefinition>
     <Compile Include="Behaviors\SelectionChangedCommand.cs" />
     <Compile Include="Demos\ViewModels\DemoViewModel.cs" />
-    <Compile Include="Demos\Views\DemoView.xaml.cs">
-      <DependentUpon>DemoView.xaml</DependentUpon>
-    </Compile>
     <Compile Include="Models\AppCore.cs" />
     <Compile Include="Models\SettingDefaults.cs" />
     <Compile Include="ServiceInjector.cs" />
@@ -126,10 +123,6 @@
     <Compile Include="ViewModels\ThemeDefinitionViewModel.cs" />
     <Compile Include="ViewModels\ThemeViewModel.cs" />
     <Page Include="BindToMLib\MWindowLib\DarkLightBrushs.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Demos\Views\DemoView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

@@ -6,7 +6,7 @@
 
                      
         xmlns:behav="clr-namespace:ThemedDemo.Behaviors"
-        xmlns:demoviews="clr-namespace:ThemedDemo.Demos.Views"
+        xmlns:demoviews="clr-namespace:BreadcrumbTestLib.Views;assembly=BreadcrumbTestLib"
         xmlns:MWindow="clr-namespace:MWindowLib;assembly=MWindowLib"
                      
         mc:Ignorable="d"

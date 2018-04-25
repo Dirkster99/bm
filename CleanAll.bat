@@ -42,11 +42,6 @@ ECHO.
 RMDIR /S /Q Components\DirectoryInfoExLib\bin
 RMDIR /S /Q Components\DirectoryInfoExLib\obj
 
-ECHO Deleting BIN and OBJ Folders in ThemesManager folder
-ECHO.
-RMDIR /S /Q Components\ThemesManager\bin
-RMDIR /S /Q Components\ThemesManager\obj
-
 ECHO Deleting BIN and OBJ Folders in Icons folder
 ECHO.
 RMDIR /S /Q Components\Icons\bin

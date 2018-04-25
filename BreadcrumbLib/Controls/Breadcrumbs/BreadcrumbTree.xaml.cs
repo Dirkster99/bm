@@ -7,8 +7,8 @@
 	public class BreadcrumbTree : TreeView
 	{
 		#region fields
-		public static readonly DependencyProperty OverflowedItemContainerStyleProperty =
-					 DependencyProperty.Register("OverflowedItemContainerStyle", typeof(Style), typeof(BreadcrumbTree));
+////		public static readonly DependencyProperty OverflowedItemContainerStyleProperty =
+////					 DependencyProperty.Register("OverflowedItemContainerStyle", typeof(Style), typeof(BreadcrumbTree));
 
 		public static readonly DependencyProperty MenuItemTemplateProperty =
 						 DependencyProperty.Register("MenuItemTemplate", typeof(DataTemplate), typeof(BreadcrumbTree));
@@ -25,11 +25,11 @@
 		#endregion
 
 		#region properties
-		public Style OverflowedItemContainerStyle
-		{
-			get { return (Style)GetValue(OverflowedItemContainerStyleProperty); }
-			set { this.SetValue(OverflowedItemContainerStyleProperty, value); }
-		}
+////		public Style OverflowedItemContainerStyle
+////		{
+////			get { return (Style)GetValue(OverflowedItemContainerStyleProperty); }
+////			set { this.SetValue(OverflowedItemContainerStyleProperty, value); }
+////		}
 
 		public DataTemplate MenuItemTemplate
 		{

@@ -4,7 +4,6 @@
   xmlns:sys="clr-namespace:System;assembly=mscorlib"
   xmlns:reskeys="clr-namespace:BreadcrumbLib.Themes"
   >
-
     <!-- Accent Color Brush Definition
              - Look for references on ControlAccentBrushKey to find where this is being set in code -->
     <Color x:Key="{ComponentResourceKey TypeInTargetAssembly={x:Type reskeys:ResourceKeys},

@@ -63,20 +63,9 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="BaseControls\Breadcrumb\BreacrumbCorePanel.cs" />
-    <Compile Include="BaseControls\Breadcrumb\BreadcrumbCore.xaml.cs">
-      <DependentUpon>BreadcrumbCore.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="BaseControls\Breadcrumb\BreadcrumbItem.xaml.cs">
-      <DependentUpon>BreadcrumbItem.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="BaseControls\Breadcrumb\BreadcrumbOverflowPanel.xaml.cs">
-      <DependentUpon>BreadcrumbOverflowPanel.xaml</DependentUpon>
-    </Compile>
     <Compile Include="BaseControls\ClipCorner.xaml.cs">
       <DependentUpon>ClipCorner.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Controls\Breadcrumbs\BreadcrumbList.cs" />
     <Compile Include="Controls\Breadcrumbs\BreadcrumbTree.xaml.cs">
       <DependentUpon>BreadcrumbTree.xaml</DependentUpon>
     </Compile>
@@ -97,18 +86,15 @@
     </Compile>
     <Compile Include="BaseControls\Invert.cs" />
     <Compile Include="BaseControls\MultiContentControl.cs" />
-    <Compile Include="BaseControls\OneItemPanel.cs" />
     <Compile Include="BaseControls\OverflowableStackPanel.cs" />
     <Compile Include="Controls\Switch.xaml.cs">
       <DependentUpon>Switch.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Controls\Breadcrumbs\BreadcrumbBase.cs">
-      <DependentUpon>BreadcrumbBase.xaml</DependentUpon>
     </Compile>
     <Compile Include="Converters\BoolToVisibilityCollapsedConverter.cs" />
     <Compile Include="Converters\BoolToVisibilityConverter.cs" />
     <Compile Include="Converters\BoolToVisibilityPropConverter.cs" />
     <Compile Include="Converters\BorderClipConverter.cs" />
+    <Compile Include="Converters\BoolToOneOfTwoBindingsConverter.cs" />
     <Compile Include="Converters\FlipBoolConverter.cs" />
     <Compile Include="Converters\FlipBoolToVisibilityCollapsedConverter.cs" />
     <Compile Include="Converters\FlipBoolToVisibilityConverter.cs" />
@@ -131,23 +117,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Page Include="BaseControls\Breadcrumb\BreadcrumbCore.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="BaseControls\Breadcrumb\BreadcrumbOverflowPanel.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="BaseControls\Breadcrumb\BreadcrumbItem.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
     <Page Include="BaseControls\ClipCorner.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Controls\Breadcrumbs\BreadcrumbBase.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
@@ -163,11 +133,11 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Themes\Default\Buttons.xaml">
+    <Page Include="Themes\Default\Brushes.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Themes\Default\Brushes.xaml">
+    <Page Include="Themes\Default\Buttons.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>

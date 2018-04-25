@@ -13,6 +13,7 @@ namespace BreadcrumbTestLib.ViewModels.Breadcrumbs
         #region fields
         private bool _EnableBreadcrumb;
         private string _suggestedPath;
+        private bool _IsRootOverflowed;
         #endregion fields
 
         #region constructors
@@ -24,6 +25,7 @@ namespace BreadcrumbTestLib.ViewModels.Breadcrumbs
             Progressing = new ProgressViewModel();
             BreadcrumbSubTree = new ExTreeNodeViewModel();
             _EnableBreadcrumb = true;
+            _IsRootOverflowed = false;
         }
         #endregion constructors
 
@@ -60,6 +62,23 @@ namespace BreadcrumbTestLib.ViewModels.Breadcrumbs
                 {
                     _EnableBreadcrumb = value;
                     NotifyPropertyChanged(() => EnableBreadcrumb);
+                }
+            }
+        }
+
+        public bool IsRootOverflowed
+        {
+            get
+            {
+                return _IsRootOverflowed;
+            }
+
+            set
+            {
+                if (_IsRootOverflowed != value)
+                {
+                    _IsRootOverflowed = value;
+                    NotifyPropertyChanged(() => IsRootOverflowed);
                 }
             }
         }

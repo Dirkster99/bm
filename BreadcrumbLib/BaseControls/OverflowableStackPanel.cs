@@ -6,6 +6,10 @@
 	using System.Windows;
 	using System.Windows.Controls;
 
+    /// <summary>
+    /// Implements a StackPanel that can re-arrange its childrens depending
+    /// on whether enough space is available or not.
+    /// </summary>
 	public class OverflowableStackPanel : StackPanel
 	{
 		#region fields

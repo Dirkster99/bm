@@ -6,95 +6,73 @@
 
     <!-- Accent Color Brush Definition
              - Look for references on ControlAccentBrushKey to find where this is being set in code -->
-    <Color x:Key="{ComponentResourceKey TypeInTargetAssembly={x:Type reskeys:ResourceKeys},
-           ResourceId=ControlAccentColorKey}">#1ba1e2</Color>
+    <Color x:Key="{x:Static reskeys:ResourceKeys.ControlAccentColorKey}">#1ba1e2</Color>
 
-    <SolidColorBrush x:Key="{ComponentResourceKey TypeInTargetAssembly={x:Type reskeys:ResourceKeys},
-                     ResourceId=ControlAccentBrushKey}"
+    <SolidColorBrush x:Key="{x:Static reskeys:ResourceKeys.ControlAccentBrushKey}"
                      Color="{DynamicResource {x:Static reskeys:ResourceKeys.ControlAccentColorKey}}" />
 
     <!-- SolidColorBrush x:Key="SystemButtonMouseOverBackgroundColor" Color="#20FFFFFF" / -->
 
     <!-- MetroLight Theme -->
-    <SolidColorBrush x:Key="{ComponentResourceKey TypeInTargetAssembly={x:Type reskeys:ResourceKeys},
-                     ResourceId=ControlNormalBackgroundKey}"
+    <SolidColorBrush x:Key="{x:Static reskeys:ResourceKeys.ControlNormalBackgroundKey}"
                      Color="White" />
 
-    <SolidColorBrush x:Key="{ComponentResourceKey TypeInTargetAssembly={x:Type reskeys:ResourceKeys},
-                     ResourceId=ControlTextBrushKey}"
+    <SolidColorBrush x:Key="{x:Static reskeys:ResourceKeys.ControlTextBrushKey}"
                      Color="Black" />
 
-    <SolidColorBrush x:Key="{ComponentResourceKey TypeInTargetAssembly={x:Type reskeys:ResourceKeys},
-                     ResourceId=ControlNormalForegroundBrushKey}"
+    <SolidColorBrush x:Key="{x:Static reskeys:ResourceKeys.ControlNormalForegroundBrushKey}"
                      Color="Black" />
 
-    <SolidColorBrush x:Key="{ComponentResourceKey TypeInTargetAssembly={x:Type reskeys:ResourceKeys},
-                     ResourceId=ControlBorderBrushKey}"
+    <SolidColorBrush x:Key="{x:Static reskeys:ResourceKeys.ControlBorderBrushKey}"
                      Color="#FFe9def5" />
 
-    <SolidColorBrush x:Key="{ComponentResourceKey TypeInTargetAssembly={x:Type reskeys:ResourceKeys},
-                     ResourceId=ArrowBorderForeground}"
+    <SolidColorBrush x:Key="{x:Static reskeys:ResourceKeys.ArrowBorderForeground}"
                      Color="#80999999" />
 
-    <SolidColorBrush x:Key="{ComponentResourceKey TypeInTargetAssembly={x:Type reskeys:ResourceKeys},
-                     ResourceId=ArrowFillForeground}"
+    <SolidColorBrush x:Key="{x:Static reskeys:ResourceKeys.ArrowFillForeground}"
                      Color="#FF000000" />
 
-    <SolidColorBrush x:Key="{ComponentResourceKey TypeInTargetAssembly={x:Type reskeys:ResourceKeys},
-                     ResourceId=ArrowFillMouseOverForeground}"
+    <SolidColorBrush x:Key="{x:Static reskeys:ResourceKeys.ArrowFillMouseOverForeground}"
                      Color="{DynamicResource {x:Static reskeys:ResourceKeys.ControlAccentColorKey}}" />
 
-    <SolidColorBrush x:Key="{ComponentResourceKey TypeInTargetAssembly={x:Type reskeys:ResourceKeys},
-                     ResourceId=ArrowBorderMouseOverForeground}"
+    <SolidColorBrush x:Key="{x:Static reskeys:ResourceKeys.ArrowBorderMouseOverForeground}"
                      Color="{DynamicResource {x:Static reskeys:ResourceKeys.ControlAccentColorKey}}" />
 
-    <SolidColorBrush x:Key="{ComponentResourceKey TypeInTargetAssembly={x:Type reskeys:ResourceKeys},
-                     ResourceId=ArrowFillCheckedForeground}"
+    <SolidColorBrush x:Key="{x:Static reskeys:ResourceKeys.ArrowFillCheckedForeground}"
                      Color="White" />
 
-    <SolidColorBrush x:Key="{ComponentResourceKey TypeInTargetAssembly={x:Type reskeys:ResourceKeys},
-                     ResourceId=ArrowBorderCheckedForeground}"
+    <SolidColorBrush x:Key="{x:Static reskeys:ResourceKeys.ArrowBorderCheckedForeground}"
                      Color="White" />
 
-    <SolidColorBrush x:Key="{ComponentResourceKey TypeInTargetAssembly={x:Type reskeys:ResourceKeys},
-                     ResourceId=ButtonSelectedColor}"
+    <SolidColorBrush x:Key="{x:Static reskeys:ResourceKeys.ButtonSelectedColor}"
                      Color="White"  />
 
-    <SolidColorBrush x:Key="{ComponentResourceKey TypeInTargetAssembly={x:Type reskeys:ResourceKeys},
-                     ResourceId=ButtonBackgoundColor}"
+    <SolidColorBrush x:Key="{x:Static reskeys:ResourceKeys.ButtonBackgoundColor}"
                      Color="White" />
 
     <!-- Decide whether styling is using a 3D depth effect or not -->
-    <sys:Boolean x:Key="{ComponentResourceKey TypeInTargetAssembly={x:Type reskeys:ResourceKeys},
-                     ResourceId=ThreeDStyleBrushes}">False</sys:Boolean>
+    <sys:Boolean x:Key="{x:Static reskeys:ResourceKeys.ThreeDStyleBrushes}">False</sys:Boolean>
 
-    <SolidColorBrush x:Key="{ComponentResourceKey TypeInTargetAssembly={x:Type reskeys:ResourceKeys},
-                     ResourceId=HotTrack_SelectedBrush}"
+    <SolidColorBrush x:Key="{x:Static reskeys:ResourceKeys.HotTrack_SelectedBrush}"
                      Color="#FFd9eee5"/>
 
-    <SolidColorBrush x:Key="{ComponentResourceKey TypeInTargetAssembly={x:Type reskeys:ResourceKeys},
-                     ResourceId=HotTrack_BackgroundBrush}"
+    <SolidColorBrush x:Key="{x:Static reskeys:ResourceKeys.HotTrack_BackgroundBrush}"
                      Color="#FFd9eee5"/>
 
-    <SolidColorBrush x:Key="{ComponentResourceKey TypeInTargetAssembly={x:Type reskeys:ResourceKeys},
-                     ResourceId=HotTrack_HighlightBrush}"
+    <SolidColorBrush x:Key="{x:Static reskeys:ResourceKeys.HotTrack_HighlightBrush}"
                      Color="#25d9eee5" />
 
     <!-- This color is applied to the drop down button (Hottrack) when it is selected and the drop down is open -->
-    <SolidColorBrush x:Key="{ComponentResourceKey TypeInTargetAssembly={x:Type reskeys:ResourceKeys},
-                     ResourceId=OpenDropDownButton_Background}"
+    <SolidColorBrush x:Key="{x:Static reskeys:ResourceKeys.OpenDropDownButton_Background}"
                      Color="{DynamicResource {x:Static reskeys:ResourceKeys.ControlAccentColorKey}}" />
 
-    <SolidColorBrush x:Key="{ComponentResourceKey TypeInTargetAssembly={x:Type reskeys:ResourceKeys},
-                     ResourceId=ControlInputBackgroundKey}"
+    <SolidColorBrush x:Key="{x:Static reskeys:ResourceKeys.ControlInputBackgroundKey}"
                      Color="#ffffff" />
 
-    <SolidColorBrush x:Key="{ComponentResourceKey TypeInTargetAssembly={x:Type reskeys:ResourceKeys},
-                     ResourceId=ControlInputBorderKey}"
+    <SolidColorBrush x:Key="{x:Static reskeys:ResourceKeys.ControlInputBorderKey}"
                      Color="#cccccc" />
 
-    <SolidColorBrush x:Key="{ComponentResourceKey TypeInTargetAssembly={x:Type reskeys:ResourceKeys},
-                     ResourceId=ControlDisabledBackgroundKey}"
+    <SolidColorBrush x:Key="{x:Static reskeys:ResourceKeys.ControlDisabledBackgroundKey}"
                      Color="#20000000" />
 
 </ResourceDictionary>

@@ -10,6 +10,7 @@
     using BreadcrumbLib.Defines;
     using System.Threading;
     using System.Windows;
+    using System.Diagnostics;
 
     /// <summary>
     /// Base class of ITreeSelector, which implements Tree
@@ -200,6 +201,9 @@
             {
                 if (_isOverflowed != value)
                 {
+                    if (value == true)
+                        Debug.WriteLine("--> Item is Overflowed: " + this);
+
                     _isOverflowed = value;
                     NotifyPropertyChanged(() => this.IsOverflowed);
                     NotifyPropertyChanged(() => this.IsOverflowedOrRoot);
