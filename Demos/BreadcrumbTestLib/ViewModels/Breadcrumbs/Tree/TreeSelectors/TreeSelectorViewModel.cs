@@ -109,6 +109,7 @@
             {
                 _isRoot = value;
                 NotifyPropertyChanged(() => this.IsRoot);
+                NotifyPropertyChanged(() => this.IsOverflowedOrRoot);
                 NotifyPropertyChanged(() => this.IsRootAndIsChildSelected);
             }
         }
@@ -183,7 +184,7 @@
 
         public bool IsOverflowedOrRoot
         {
-            get { return _isOverflowed || IsRoot; }
+            get { return IsOverflowed || IsRoot; }
         }
 
         /// <summary>

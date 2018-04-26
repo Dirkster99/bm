@@ -12,7 +12,6 @@
     using System.Linq;
     using System.Threading;
     using System.Threading.Tasks;
-    using System.Windows;
 
     internal class TreeRootSelectorViewModel<VM, T> : TreeSelectorViewModel<VM, T>, ITreeRootSelector<VM, T>
     {
@@ -21,7 +20,7 @@
         private ITreeSelector<VM, T> _selectedSelector;
         private Stack<ITreeSelector<VM, T>> _prevPath = null;
         private IEnumerable<ICompareHierarchy<T>> _comparers;
-        private ObservableCollection<VM> _rootItems = null;
+        private ObservableCollection<VM> _OverflowedAndRootItems = null;
         #endregion fields
 
         #region constructors
@@ -39,6 +38,7 @@
             ////_rootLevel = rootLevel;
             ////_compareFuncs = compareFuncs;
             ////Comparers = new [] { PathComparer.LocalDefault };
+
         }
 
         #endregion constructors
@@ -52,22 +52,22 @@
         {
             get
             {
-                if (this._rootItems == null)
+                if (_OverflowedAndRootItems == null)
                     this.updateRootItems();
 
-                return this._rootItems;
+                return _OverflowedAndRootItems;
             }
 
             set
             {
-                this._rootItems = value;
+                _OverflowedAndRootItems = value;
                 this.NotifyPropertyChanged(() => this.OverflowedAndRootItems);
             }
         }
 
         public ITreeSelector<VM, T> SelectedSelector
         {
-            get { return this._selectedSelector; }
+            get { return _selectedSelector; }
         }
 
         public VM SelectedViewModel
@@ -86,7 +86,7 @@
         {
             get
             {
-                return this._selectedValue;
+                return _selectedValue;
             }
 
             set
@@ -101,12 +101,12 @@
         {
             get
             {
-                return this._comparers;
+                return _comparers;
             }
 
             set
             {
-                this._comparers = value;
+                _comparers = value;
             }
         }
         #endregion properties
@@ -114,13 +114,13 @@
         #region methods
         public override void ReportChildSelected(Stack<ITreeSelector<VM, T>> path)
         {
-            ITreeSelector<VM, T> prevSelector = this._selectedSelector;
+            ITreeSelector<VM, T> prevSelector = _selectedSelector;
 
-            T prevSelectedValue = this._selectedValue;
-            this._prevPath = path;
+            T prevSelectedValue = _selectedValue;
+            _prevPath = path;
 
-            this._selectedSelector = path.Last();
-            this._selectedValue = path.Last().Value;
+            _selectedSelector = path.Last();
+            _selectedValue = path.Last().Value;
 
             if (prevSelectedValue != null && !prevSelectedValue.Equals(path.Last().Value))
             {
@@ -163,11 +163,13 @@
 
                     try
                     {
+                        SetChildSelected<VM, T> toSelectedChild = new SetChildSelected<VM, T>();
+
                         await this.LookupAsync(value,
                                                RecrusiveSearch<VM, T>.LoadSubentriesIfNotLoaded,
                                                cancelToken,
                                                SetSelected<VM, T>.WhenSelected,
-                                               SetChildSelected<VM, T>.ToSelectedChild,
+                                               toSelectedChild,
                                                LoadSubEntries<VM, T>.WhenSelected(UpdateMode.Replace,
                                                false, null));
 
@@ -199,6 +201,41 @@
             return HierarchicalResult.Unrelated;
         }
 
+        /// <summary>
+        /// Method is executed when the control navigates to a new location -
+        /// it re-computes the rootitems along with the overflowed items displayed
+        /// in the root items drop down collection.
+        /// </summary>
+        /// <param name="path"></param>
+        private void updateRootItems(Stack<ITreeSelector<VM, T>> path = null)
+        {
+            if (_OverflowedAndRootItems == null)
+                _OverflowedAndRootItems = new ObservableCollection<VM>();
+            else
+                _OverflowedAndRootItems.Clear();
+
+            if (path != null && path.Count() > 0)
+            {
+                // Get all items that belong to the current path and add them into the
+                // OverflowedAndRootItems collection
+                // The item.IsOverflowed property is (re)-set by OverflowableStackPanel
+                // when the UI changes - a converter in the binding shows only those entries
+                // in the root drop down list with item.IsOverflowed == true
+                foreach (var p in path.Reverse())
+                {
+                    if (!(this.EntryHelper.AllNonBindable.Contains(p.ViewModel)))
+                    {
+                        _OverflowedAndRootItems.Add(p.ViewModel);
+                    }
+                }
+
+                _OverflowedAndRootItems.Add(default(VM)); // Separator
+            }
+
+            // Get all items for display in the root drop down list
+            AsyncUtils.RunAsync(() => this.updateRootItemsAsync(this, _OverflowedAndRootItems, 1));
+        }
+
         private async Task updateRootItemsAsync(ITreeSelector<VM, T> selector, ObservableCollection<VM> rootItems, int level)
         {
             if (level == 0)
@@ -225,31 +262,6 @@
 
                 await this.updateRootItemsAsync(c, rootItems, level - 1);
             }
-        }
-
-        /// <summary>
-        /// Method is executed when the user clicks the RootDropDown button.
-        /// </summary>
-        /// <param name="path"></param>
-        private void updateRootItems(Stack<ITreeSelector<VM, T>> path = null)
-        {
-            ////if (_rootItems == null)
-            this._rootItems = new ObservableCollection<VM>();
-            ////else _rootItems.Clear();
-
-            if (path != null && path.Count() > 0)
-            {
-                foreach (var p in path.Reverse())
-                {
-                    if (!(this.EntryHelper.AllNonBindable.Contains(p.ViewModel)))
-                        this._rootItems.Add(p.ViewModel);
-                }
-
-                this._rootItems.Add(default(VM)); // Separator
-            }
-
-            // Get all items for display in the root drop down list
-            AsyncUtils.RunAsync(() => this.updateRootItemsAsync(this, this._rootItems, 1));
         }
         #endregion
     }

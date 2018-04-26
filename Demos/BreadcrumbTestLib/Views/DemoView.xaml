@@ -248,82 +248,85 @@
             <ctrls:Breadcrumb DataContext="{Binding BreadcrumbTest}" Name="BreadcrumbDemoControl"
                               Visibility="{Binding Path=IsChecked,ElementName=ShowBreadCrumbControl,Mode=OneWay, UpdateSourceTrigger=PropertyChanged,Converter={StaticResource BoolToVisibilityConverter}}"
                               VerticalAlignment="Top" HorizontalAlignment="Stretch"
-                              MinHeight="16" Margin="3" />
+                              MinHeight="16" Margin="3"
+                              />
         </Grid>
-        <StackPanel Grid.Column="2" Grid.Row="3" VerticalAlignment="Top" Margin="3">
-            <!-- For Debugging only -->
-            <CheckBox Content="Show BreadCrumb Control" Name="ShowBreadCrumbControl"
+        <ScrollViewer Grid.Column="2" Grid.Row="3">
+            <StackPanel VerticalAlignment="Top" Margin="3" Width="200">
+                <!-- For Debugging only -->
+                <CheckBox Content="Show BreadCrumb Control" Name="ShowBreadCrumbControl"
                       IsChecked="True" />
 
-            <CheckBox Content="EnableBreadcrumb"
+                <CheckBox Content="EnableBreadcrumb"
                       IsChecked="{Binding BreadcrumbTest.EnableBreadcrumb}" />
 
-            <Grid Background="#20000000"
+                <Grid Background="#20000000"
 >
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="Auto" />
-                    <ColumnDefinition Width="*" />
-                </Grid.ColumnDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
 
-                <TextBlock Text="Selection:" VerticalAlignment="Top"/>
+                    <TextBlock Text="Selection:" VerticalAlignment="Top"/>
 
-                <StackPanel 
-                    Grid.Column="1"
-                    HorizontalAlignment="Stretch" VerticalAlignment="Top"
-                    Orientation="Vertical">
-                    <Image Source="{Binding Path=BreadcrumbTest.BreadcrumbSubTree.Selection.SelectedViewModel.Icon}" />
-                    <Label Content="{Binding Path=BreadcrumbTest.BreadcrumbSubTree.Selection.SelectedViewModel.Header}" />
-                </StackPanel>
-            </Grid>
-            <Grid Margin="3,9">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="Auto" />
-                    <ColumnDefinition Width="*" />
-                </Grid.ColumnDefinitions>
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="Auto"/>
-                </Grid.RowDefinitions>
+                    <StackPanel Grid.Column="1"
+                                HorizontalAlignment="Stretch" VerticalAlignment="Top"
+                                Orientation="Vertical">
+                        <Image Source="{Binding Path=BreadcrumbTest.BreadcrumbSubTree.Selection.SelectedViewModel.Icon}"
+                               VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                        <Label Content="{Binding Path=BreadcrumbTest.BreadcrumbSubTree.Selection.SelectedViewModel.Header}" />
+                    </StackPanel>
+                </Grid>
+                <Grid Margin="3,9">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
 
-                <TextBlock Text="MinWidth:"
+                    <TextBlock Text="MinWidth:"
                            ToolTip="Defines the Minimum size of the Breadcrumb control display"
                            VerticalAlignment="Top" HorizontalAlignment="Right"/>
-                <TextBlock Grid.Column="1"
+                    <TextBlock Grid.Column="1"
                            Text="{Binding ElementName=BreadcrumbDemoControl,Path=MinWidth,Mode=OneWay,UpdateSourceTrigger=PropertyChanged,StringFormat=N2}"
                            VerticalAlignment="Top" HorizontalAlignment="Left"/>
 
-                <Slider Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="1"
+                    <Slider Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="1"
                         Value="{Binding ElementName=BreadcrumbDemoControl,Path=MinWidth}"
                         Minimum="10"
                         Maximum="400"
                         HorizontalAlignment="Stretch"
                         />
-            </Grid>
-            <Grid Margin="3,9">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="Auto" />
-                    <ColumnDefinition Width="*" />
-                </Grid.ColumnDefinitions>
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="Auto"/>
-                </Grid.RowDefinitions>
+                </Grid>
+                <Grid Margin="3,9">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
 
-                <TextBlock Text="OverflowGap:"
+                    <TextBlock Text="OverflowGap:"
                            ToolTip="Defines the right most gap of the BreadcrumbTree control display"
                            VerticalAlignment="Top" HorizontalAlignment="Right"/>
-                <TextBlock Grid.Column="1"
+                    <TextBlock Grid.Column="1"
                            Text="{Binding ElementName=BreadcrumbDemoControl,Path=OverflowGap,Mode=OneWay,UpdateSourceTrigger=PropertyChanged,StringFormat=N2}"
                            VerticalAlignment="Top" HorizontalAlignment="Left"/>
 
-                <Slider Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="1"
+                    <Slider Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="1"
                         Value="{Binding ElementName=BreadcrumbDemoControl,Path=OverflowGap}"
                         Minimum="5"
                         Maximum="200"
                         HorizontalAlignment="Stretch"
                         />
-            </Grid>
-        </StackPanel>
+                </Grid>
+            </StackPanel>
+        </ScrollViewer>
 
         <TextBlock Text="Converter Test" Grid.Column="0" Grid.Row="4" Margin="3" HorizontalAlignment="Right" VerticalAlignment="Top" />
         <ListBox ItemsSource="{Binding SpecialFoldersTest.Folders}"

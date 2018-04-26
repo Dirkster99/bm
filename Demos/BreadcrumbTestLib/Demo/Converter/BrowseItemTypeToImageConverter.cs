@@ -326,7 +326,7 @@
             // Last ressort to finally get an image if everything else fails
             string pathValue = null;
 
-            pathValue = "pack://application:,,,/Themes;component/FolderImages/Light/SpecialFolder_Default.ico";
+            pathValue = "/Icons;component/Light/SpecialFolder_Default.ico";
 
             try
             {
@@ -347,7 +347,7 @@
             else
             {
                 // Attempt to load fallback folder from fixed Uri
-                pathValue = "pack://application:,,,/Themes;component/FolderImages/Light/SpecialFolder_Default.ico";
+                pathValue = "/Icons;component/Light/SpecialFolder_Default.ico";
 
                 try
                 {

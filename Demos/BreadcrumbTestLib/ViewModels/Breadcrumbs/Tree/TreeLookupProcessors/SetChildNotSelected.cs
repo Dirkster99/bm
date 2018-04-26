@@ -13,7 +13,7 @@
         /// <summary>
         /// Set ViewModel's ITreeSelector.SelectedChild to null if it's child of current lookup.
         /// </summary>
-        public static SetChildNotSelected<VM, T> WhenChild = new SetChildNotSelected<VM, T>(HierarchicalResult.Child);
+////        public static SetChildNotSelected<VM, T> WhenChild = new SetChildNotSelected<VM, T>(HierarchicalResult.Child);
 
         /// <summary>
         ///  Set ViewModel's ITreeSelector.SelectedChild to null if it's NOT a child of current lookup.

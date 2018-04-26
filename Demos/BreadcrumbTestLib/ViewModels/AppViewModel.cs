@@ -80,11 +80,15 @@
         /// </summary>
         public void InitPath(string initialPath)
         {
+            // Revert request to default if requested path is non-existing
+            if (System.IO.Directory.Exists(initialPath) == false)
+                initialPath = new DirectoryInfo(Environment.SystemDirectory).Root.Name;
+
             var selection = DiskTest.Selection as ITreeRootSelector<DiskTreeNodeViewModel, string>;
-            selection.SelectAsync(@"C:\tmp");
+            selection.SelectAsync(initialPath);
 
             var sel2 = ExTest.Selection as ITreeRootSelector<ExTreeNodeViewModel, IDirectoryInfoEx>;
-            sel2.SelectAsync(DirectoryInfoExLib.Factory.FromString(@"C:\tmp"));
+            sel2.SelectAsync(DirectoryInfoExLib.Factory.FromString(initialPath));
 
             NavigateToFolder(initialPath);
         }

@@ -13,7 +13,7 @@
         /// <summary>
         /// Set Parent ViewModel's ITreeSelector.SelectedChild to Current ViewModel's Value, if is child of lookup value of current lookup.
         /// </summary>
-        public static SetChildSelected<VM, T> ToSelectedChild = new SetChildSelected<VM, T>();
+////        public static SetChildSelected<VM, T> ToSelectedChild = new SetChildSelected<VM, T>();
 
         public bool Process(HierarchicalResult hr, ITreeSelector<VM, T> parentSelector, ITreeSelector<VM, T> selector)
         {
