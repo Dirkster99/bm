@@ -4,6 +4,7 @@
     using BreadcrumbTestLib.ViewModels.Interfaces;
     using BreadcrumbLib.Defines;
     using DirectoryInfoExLib.Interfaces;
+    using BreadcrumbLib.Enums;
 
     public class ExHierarchyComparer : ICompareHierarchy<IDirectoryInfoEx>
     {

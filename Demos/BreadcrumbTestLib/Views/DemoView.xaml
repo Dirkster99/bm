@@ -44,7 +44,7 @@
                    FontSize="20"
                    HorizontalAlignment="Left" VerticalAlignment="Top">
             <TextBlock Text="Welcome to the " />
-            <TextBlock Text="Themed" FontWeight="Bold" />
+            <TextBlock Text="{Binding DemoTitle}" FontWeight="Bold" />
             <TextBlock Text=" Breadcrumb Demo" />
         </TextBlock>
 
@@ -248,7 +248,8 @@
             <ctrls:Breadcrumb DataContext="{Binding BreadcrumbTest}" Name="BreadcrumbDemoControl"
                               Visibility="{Binding Path=IsChecked,ElementName=ShowBreadCrumbControl,Mode=OneWay, UpdateSourceTrigger=PropertyChanged,Converter={StaticResource BoolToVisibilityConverter}}"
                               VerticalAlignment="Top" HorizontalAlignment="Stretch"
-                              MinHeight="16" Margin="3"
+                              RootItems="{Binding BreadcrumbSubTree.Selection.OverflowedAndRootItems,Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"
+                              Margin="3"
                               />
         </Grid>
         <ScrollViewer Grid.Column="2" Grid.Row="3">
@@ -259,6 +260,9 @@
 
                 <CheckBox Content="EnableBreadcrumb"
                       IsChecked="{Binding BreadcrumbTest.EnableBreadcrumb}" />
+                
+                <CheckBox Content="IsOverflown"
+                      IsChecked="{Binding ElementName=BreadcrumbDemoControl,Path=IsOverflown}" />
 
                 <Grid Background="#20000000"
 >
@@ -273,7 +277,7 @@
                                 HorizontalAlignment="Stretch" VerticalAlignment="Top"
                                 Orientation="Vertical">
                         <Image Source="{Binding Path=BreadcrumbTest.BreadcrumbSubTree.Selection.SelectedViewModel.Icon}"
-                               VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                               VerticalAlignment="Center" HorizontalAlignment="Center" Width="64" />
                         <Label Content="{Binding Path=BreadcrumbTest.BreadcrumbSubTree.Selection.SelectedViewModel.Header}" />
                     </StackPanel>
                 </Grid>

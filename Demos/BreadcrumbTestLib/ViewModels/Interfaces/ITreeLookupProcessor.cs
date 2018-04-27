@@ -1,6 +1,6 @@
 ﻿namespace BreadcrumbTestLib.ViewModels.Interfaces
 {
-    using BreadcrumbLib.Defines;
+    using BreadcrumbLib.Enums;
 
     /// <summary>
     /// Used with ITreeSelector and ITreeLookup, when ITreeSelector.LookupAsync return any HierarchicalResult, 

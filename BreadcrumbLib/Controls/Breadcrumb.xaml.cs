@@ -1,7 +1,9 @@
 ﻿namespace BreadcrumbLib.Controls
 {
+    using BreadcrumbLib.Controls.Breadcrumbs;
     using BreadcrumbLib.Interfaces;
     using BreadcrumbLib.Utils;
+    using System.Collections.Generic;
     using System.Diagnostics;
     using System.Windows;
     using System.Windows.Controls;
@@ -41,6 +43,20 @@
             DependencyProperty.Register("OverflowGap",
                 typeof(double), typeof(Breadcrumb), new PropertyMetadata(10.0));
 
+        public static readonly DependencyProperty RootItemsProperty =
+            DependencyProperty.Register("RootItems",
+                typeof(IEnumerable<object>),
+                typeof(Breadcrumb), new PropertyMetadata(null));
+
+        /// <summary>
+        /// Implement a dependency property to determine whether crumbs fit
+        /// into the current breadcrumb display or not.
+        /// </summary>
+        public static readonly DependencyProperty IsOverflownProperty =
+            DependencyProperty.Register("IsOverflown",
+                typeof(bool),
+                typeof(Breadcrumb), new PropertyMetadata(false));
+
         private object _LockObject = new object();
         private bool _IsLoaded = false;
         #endregion fields
@@ -66,6 +82,22 @@
         #endregion constructors
 
         #region properties
+        public IEnumerable<object> RootItems
+        {
+            get { return (IEnumerable<object>)GetValue(RootItemsProperty); }
+            set { SetValue(RootItemsProperty, value); }
+        }
+
+        /// <summary>
+        /// Implement a dependency property to determine whether crumbs fit
+        /// into the current breadcrumb display or not.
+        /// </summary>
+        public bool IsOverflown
+        {
+            get { return (bool)GetValue(IsOverflownProperty); }
+            set { SetValue(IsOverflownProperty, value); }
+        }
+
         /// <summary>
         /// Implements the OverflowGap dependency property which is the gap
         /// that is displayed in the right most part of the BreadcrumbTree
@@ -83,6 +115,8 @@
         public Switch Control_Switch { get; set; }
 
         public DropDownList Control_bexp { get; set; }
+
+        private BreadcrumbTree Control_Tree { get; set; }
         #endregion properties
 
         #region methods
@@ -115,7 +149,27 @@
                 Debug.WriteLine("    +---> Warning: Breadcrumb.MeasureOverride(Size constraint) with constraint == Infinity");
             }
 #endif
-            return base.MeasureOverride(constraint);
+            var sz = base.MeasureOverride(constraint);
+
+            if (RootItems != null)         // Go through root items and
+            {                             // count those that are overflown
+                int overflowCount = 0;
+                foreach (var item in RootItems)
+                {
+                    if (item is IOverflown)
+                    {
+                        if ((item as IOverflown).IsOverflown)
+                            overflowCount++;
+                    }
+                    else
+                        break;
+                }
+
+                // Set dependency property to determine whether control is overlown or not
+                IsOverflown = (overflowCount > 0 ? true : false);
+            }
+
+            return sz; // Return current size constrain
         }
 
         private void OnViewAttached()

@@ -1,8 +1,8 @@
 ﻿namespace BreadcrumbTestLib.ViewModels.TreeLookupProcessors
 {
     using BreadcrumbTestLib.ViewModels.Interfaces;
-    using BreadcrumbLib.Defines;
     using System;
+    using BreadcrumbLib.Enums;
 
     /// <summary>
     /// Implementation of ITreeLookupProcessor, which used with ITreeSelector and ITreeLookup, 

@@ -38,11 +38,15 @@
     <SolidColorBrush x:Key="{x:Static reskeys:ResourceKeys.ArrowBorderMouseOverForeground}"
                      Color="{DynamicResource {x:Static reskeys:ResourceKeys.ControlAccentColorKey}}" />
 
-    <SolidColorBrush x:Key="{x:Static reskeys:ResourceKeys.ArrowFillCheckedForeground}"
-                     Color="White" />
+    <!-- Defines the inner color of the chevron symbol in the arrow drop down button -->
+    <SolidColorBrush x:Key="{ComponentResourceKey TypeInTargetAssembly={x:Type reskeys:ResourceKeys},
+                     ResourceId=ArrowFillCheckedForeground}"
+                     Color="{DynamicResource {x:Static reskeys:ResourceKeys.ControlAccentColorKey}}" />
 
-    <SolidColorBrush x:Key="{x:Static reskeys:ResourceKeys.ArrowBorderCheckedForeground}"
-                     Color="White" />
+    <!-- Defines the outer (border) color of the chevron symbol in the arrow drop down button -->
+    <SolidColorBrush x:Key="{ComponentResourceKey TypeInTargetAssembly={x:Type reskeys:ResourceKeys},
+                     ResourceId=ArrowBorderCheckedForeground}"
+                     Color="{DynamicResource {x:Static reskeys:ResourceKeys.ControlAccentColorKey}}" />
 
     <SolidColorBrush x:Key="{x:Static reskeys:ResourceKeys.ButtonSelectedColor}"
                      Color="White"  />
@@ -51,10 +55,15 @@
                      Color="White" />
 
     <!-- Decide whether styling is using a 3D depth effect or not -->
-    <sys:Boolean x:Key="{x:Static reskeys:ResourceKeys.ThreeDStyleBrushes}">False</sys:Boolean>
+    <sys:Boolean x:Key="{ComponentResourceKey TypeInTargetAssembly={x:Type reskeys:ResourceKeys},
+                 ResourceId=ThreeDStyleBrushes}">False</sys:Boolean>
 
-    <SolidColorBrush x:Key="{x:Static reskeys:ResourceKeys.HotTrack_SelectedBrush}"
-                     Color="#FFd9eee5"/>
+    <!-- Is applied on root drop button when list is open -->
+    <SolidColorBrush x:Key="{ComponentResourceKey TypeInTargetAssembly={x:Type reskeys:ResourceKeys},
+                     ResourceId=HotTrack_SelectedBrush}"
+                     Color="{DynamicResource {x:Static reskeys:ResourceKeys.ControlAccentColorKey}}"
+                     Opacity=".5"
+                     />
 
     <SolidColorBrush x:Key="{x:Static reskeys:ResourceKeys.HotTrack_BackgroundBrush}"
                      Color="#FFd9eee5"/>

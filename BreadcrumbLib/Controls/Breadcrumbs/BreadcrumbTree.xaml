@@ -3,14 +3,11 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
 
     xmlns:uc="clr-namespace:BreadcrumbLib.Controls.Breadcrumbs"
-    xmlns:base="clr-namespace:BreadcrumbLib.BaseControls"
     >
     <ResourceDictionary.MergedDictionaries>
         <ResourceDictionary Source="/BreadcrumbLib;component/Themes/Default/Buttons.xaml" />
         <ResourceDictionary Source="/BreadcrumbLib;component/Controls/Breadcrumbs/BreadcrumbTreeItem.xaml" />
     </ResourceDictionary.MergedDictionaries>
-
-    <base:OverflowableStackPanel x:Key="TreeItemsPanel" />
 
     <Style TargetType="{x:Type uc:BreadcrumbTree}">
         <Setter Property="ItemTemplate" Value="{StaticResource {x:Type uc:BreadcrumbTreeItem}}" />

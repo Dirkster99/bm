@@ -25,6 +25,7 @@
         <Setter Property="MinWidth" Value="100" />
         <Setter Property="BorderBrush" Value="Gray"/>
         <Setter Property="BorderThickness" Value="1"/>
+        <Setter Property="MinHeight" Value="24" />
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type ctrls:Breadcrumb}">
@@ -38,8 +39,11 @@
                     </ControlTemplate.Resources>
                     <Border Background="{TemplateBinding Background}"
                             BorderBrush="{TemplateBinding BorderBrush}"
-                            BorderThickness="{TemplateBinding BorderThickness}">
-                        <Grid HorizontalAlignment="Stretch">
+                            BorderThickness="{TemplateBinding BorderThickness}"
+                            HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
+                            MinHeight="{TemplateBinding MinHeight}"
+                            >
+                        <Grid HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
                             <Grid.Resources>
                                 <conv:BoolToVisibilityCollapsedConverter x:Key="btv" />
                                 <conv:FlipBoolConverter x:Key="fb" />
@@ -73,7 +77,7 @@
                                        Template="{StaticResource BreadcrumbSwitchTemplate}"                   
                                        IsSwitchOn="{Binding EnableBreadcrumb, Mode=TwoWay}"
                                        VerticalAlignment="Center" VerticalContentAlignment="Center"
-                                       Margin="0,3"
+                                       Margin="0,1"
                                      >
                                 <bc:Switch.Header>
                                     <Image Source="{Binding BreadcrumbSubTree.Selection.SelectedViewModel.Icon}" VerticalAlignment="Center" HorizontalAlignment="Center" />
@@ -101,7 +105,7 @@
                                                       VerticalAlignment="Center"
                                                       IsHitTestVisible="True"
                                                       DataContext="{Binding BreadcrumbSubTree}"
-                                                      Data="{Binding Selection.IsOverflowed,Converter={StaticResource BoolToOneOfTwoBindingsConverter},Mode=OneWay,UpdateSourceTrigger=PropertyChanged}"
+                                                      Data="{Binding IsOverflown,RelativeSource={RelativeSource AncestorType={x:Type bc:Breadcrumb}}, Converter={StaticResource BoolToOneOfTwoBindingsConverter},Mode=OneWay,UpdateSourceTrigger=PropertyChanged}"
                                                 />
 
                                             </ctrls:DropDownList.Header>
@@ -117,7 +121,7 @@
                                         <uc:BreadcrumbTree Grid.Column="1"
                                                            ItemsSource="{Binding BreadcrumbSubTree.Entries.All}"
                                                            MenuItemTemplate="{StaticResource DropDownListItemDataTemplate}"
-                                                           x:Name="btree"
+                                                           x:Name="PART_BreadcrumbTree"
                                                            >
                                             <uc:BreadcrumbTree.ItemContainerStyle>
                                                 <Style TargetType="{x:Type uc:BreadcrumbTreeItem}" BasedOn="{StaticResource {x:Type uc:BreadcrumbTreeItem}}">
@@ -136,12 +140,11 @@
                                                 <!-- Display of path elements within the HORIZONTAL Breadcrumb tree control
                                                eg "C:\" |> "Program Files" "|>"  -->
                                                 <HierarchicalDataTemplate ItemsSource="{Binding Entries.All}">
-                                                    <Border Background="{DynamicResource {x:Static reskeys:ResourceKeys.ControlNormalBackgroundKey}}" BorderThickness="0">
-                                                        <TextBlock Text="{Binding Header}"
-                                                                   VerticalAlignment="Center"
-                                                                   Foreground="{DynamicResource {x:Static reskeys:ResourceKeys.ControlTextBrushKey}}"
-                                                                  />
-                                                    </Border>
+                                                    <TextBlock Text="{Binding Header}"
+                                                                VerticalAlignment="Center"
+                                                                Background="Transparent"
+                                                                Foreground="{DynamicResource {x:Static reskeys:ResourceKeys.ControlTextBrushKey}}"
+                                                                />
                                                 </HierarchicalDataTemplate>
                                             </uc:BreadcrumbTree.ItemTemplate>
 
@@ -167,7 +170,7 @@
                     </Border>
                     <ControlTemplate.Triggers>
                         <Trigger Property="IsMouseOver" Value="True">
-                            <Setter Property="BorderBrush" Value="Blue" />
+                            <Setter Property="BorderBrush" Value="{DynamicResource {x:Static reskeys:ResourceKeys.ControlAccentBrushKey}}" />
                         </Trigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>

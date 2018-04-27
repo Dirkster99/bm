@@ -2,6 +2,7 @@
 {
     using BreadcrumbTestLib.ViewModels.Interfaces;
     using BreadcrumbLib.Defines;
+    using BreadcrumbLib.Enums;
 
     /// <summary>
     /// Set ViewModel's ITreeSelector.SelectedChild to null.

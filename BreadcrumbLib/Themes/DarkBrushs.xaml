@@ -48,13 +48,15 @@
                      ResourceId=ArrowBorderMouseOverForeground}"
                      Color="{DynamicResource {x:Static reskeys:ResourceKeys.ControlAccentColorKey}}" />
 
+    <!-- Defines the inner color of the chevron symbol in the arrow drop down button -->
     <SolidColorBrush x:Key="{ComponentResourceKey TypeInTargetAssembly={x:Type reskeys:ResourceKeys},
                      ResourceId=ArrowFillCheckedForeground}"
-                     Color="White" />
-                     
+                     Color="{DynamicResource {x:Static reskeys:ResourceKeys.ControlAccentColorKey}}" />
+
+    <!-- Defines the outer (border) color of the chevron symbol in the arrow drop down button -->
     <SolidColorBrush x:Key="{ComponentResourceKey TypeInTargetAssembly={x:Type reskeys:ResourceKeys},
                      ResourceId=ArrowBorderCheckedForeground}"
-                     Color="White" />
+                     Color="{DynamicResource {x:Static reskeys:ResourceKeys.ControlAccentColorKey}}" />
 
     <SolidColorBrush x:Key="{ComponentResourceKey TypeInTargetAssembly={x:Type reskeys:ResourceKeys},
                      ResourceId=ButtonSelectedColor}" 
@@ -68,17 +70,20 @@
     <sys:Boolean x:Key="{ComponentResourceKey TypeInTargetAssembly={x:Type reskeys:ResourceKeys},
                      ResourceId=ThreeDStyleBrushes}">False</sys:Boolean>
 
+    <!-- Is applied on root drop button when list is open -->
     <SolidColorBrush x:Key="{ComponentResourceKey TypeInTargetAssembly={x:Type reskeys:ResourceKeys},
                      ResourceId=HotTrack_SelectedBrush}"
-                     Color="#25FFFFFF"/>
-                     
+                     Color="{DynamicResource {x:Static reskeys:ResourceKeys.ControlAccentColorKey}}"
+                     Opacity=".5"
+                     />
+
     <SolidColorBrush x:Key="{ComponentResourceKey TypeInTargetAssembly={x:Type reskeys:ResourceKeys},
                      ResourceId=HotTrack_BackgroundBrush}"
                      Color="#25FFFFFF"/>
                      
     <SolidColorBrush x:Key="{ComponentResourceKey TypeInTargetAssembly={x:Type reskeys:ResourceKeys},
                      ResourceId=HotTrack_HighlightBrush}"
-                     Color="#253e3e40" />
+                     Color="Transparent" />
 
     <!-- This color is applied to the drop down button (Hottrack) when it is selected and the drop down is open -->
     <SolidColorBrush x:Key="{ComponentResourceKey TypeInTargetAssembly={x:Type reskeys:ResourceKeys},

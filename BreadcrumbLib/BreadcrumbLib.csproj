@@ -98,13 +98,15 @@
     <Compile Include="Converters\FlipBoolConverter.cs" />
     <Compile Include="Converters\FlipBoolToVisibilityCollapsedConverter.cs" />
     <Compile Include="Converters\FlipBoolToVisibilityConverter.cs" />
-    <Compile Include="Defines\AttachedProperties.cs" />
-    <Compile Include="Defines\Enums.cs" />
+    <Compile Include="Enums\AttachedProperties.cs" />
+    <Compile Include="Enums\UpdateMode.cs" />
+    <Compile Include="Enums\HierarchicalResult.cs" />
     <Compile Include="IconExtractors\Enums\IconSize.cs" />
     <Compile Include="IconExtractors\Enums\ImageListDrawItemConstants.cs" />
     <Compile Include="IconExtractors\Enums\ShellIconStateConstants.cs" />
     <Compile Include="IconExtractors\SystemImageList.cs" />
     <Compile Include="Interfaces\IEntryViewModel.cs" />
+    <Compile Include="Interfaces\IOverflown.cs" />
     <Compile Include="Models\ExtensionMethods.cs" />
     <Compile Include="Models\IDiskPathMapper.cs" />
     <Compile Include="Models\IEntryHierarchyComparer.cs" />

@@ -4,7 +4,7 @@
     using System.Threading;
     using System.Threading.Tasks;
     using BreadcrumbTestLib.ViewModels.Interfaces;
-    using BreadcrumbLib.Defines;
+    using BreadcrumbLib.Enums;
 
     /// <summary>
     /// Given a child selector (ITreeSelector), lookup only next level of tree nodes for the selector, and process only the child or matched node.

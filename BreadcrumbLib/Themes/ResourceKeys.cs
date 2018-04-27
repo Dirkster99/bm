@@ -88,7 +88,7 @@
         /// <summary>
         /// Decide whether styling is using a 3D depth effect or not
         /// </summary>
-        public static readonly ComponentResourceKey ThreeDStyleBrushes = new ComponentResourceKey(typeof(bool), "ThreeDStyleBrushes");
+        public static readonly ComponentResourceKey ThreeDStyleBrushes = new ComponentResourceKey(typeof(ResourceKeys), "ThreeDStyleBrushes");
 
         #region HotTrack BrushKeys
         /// <summary>

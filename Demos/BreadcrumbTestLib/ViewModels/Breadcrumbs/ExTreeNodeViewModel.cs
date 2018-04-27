@@ -7,12 +7,13 @@
     using System.Windows.Media;
     using BreadcrumbTestLib.ViewModels.Interfaces;
     using BreadcrumbTestLib.ViewModels.TreeSelectors;
-    using BreadcrumbLib.Defines;
     using BreadcrumbTestLib.ViewModels.Base;
     using DirectoryInfoExLib.Interfaces;
     using System;
     using BreadcrumbLib.IconExtractors.Enums;
     using BreadcrumbLib.IconExtractors.IconExtracts;
+    using BreadcrumbLib.Interfaces;
+    using BreadcrumbLib.Enums;
 
     /// <summary>
     /// Class implements a ViewModel to manage a sub-tree of a Breadcrumb control.
@@ -146,6 +147,17 @@
                     _icon = value;
                     NotifyPropertyChanged(() => Icon);
                 }
+            }
+        }
+
+        bool IOverflown.IsOverflown
+        {
+            get
+            {
+                if (Selection != null)
+                    return Selection.IsOverflowed;
+
+                return false;
             }
         }
         #endregion properties

@@ -34,6 +34,12 @@
         bool IsRootAndIsChildSelected { get; }
 
         /// <summary>
+        /// Gets/sets whether the BreadCrumb Tree item is currently overflowed
+        /// (does not fit into the view display area) or not.
+        /// </summary>
+        bool IsOverflowed { get; }
+
+        /// <summary>
         /// The selected child of current view model.          
         /// </summary>
         T SelectedChild { get; set; }

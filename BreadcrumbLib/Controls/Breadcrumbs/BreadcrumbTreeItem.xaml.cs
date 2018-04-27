@@ -73,12 +73,6 @@
 			set { this.SetValue(IsOverflowedProperty, value); }
 		}
 
-////		public Style OverflowedItemContainerStyle
-////		{
-////			get { return (Style)GetValue(OverflowedItemContainerStyleProperty); }
-////			set { this.SetValue(OverflowedItemContainerStyleProperty, value); }
-////		}
-
 		public object SelectedChild
 		{
 			get { return (object)GetValue(SelectedChildProperty); }

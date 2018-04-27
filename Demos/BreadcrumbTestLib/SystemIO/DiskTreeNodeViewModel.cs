@@ -4,12 +4,13 @@
     using BreadcrumbTestLib.ViewModels.Breadcrumbs;
     using BreadcrumbTestLib.ViewModels.Interfaces;
     using BreadcrumbTestLib.ViewModels.TreeSelectors;
-    using BreadcrumbLib.Defines;
     using System;
     using System.Collections.Generic;
     using System.IO;
     using System.Linq;
     using System.Threading.Tasks;
+    using BreadcrumbLib.Interfaces;
+    using BreadcrumbLib.Enums;
 
     public class DiskTreeNodeViewModel : ViewModelBase, ISupportTreeSelector<DiskTreeNodeViewModel, string>
     {
@@ -103,6 +104,17 @@
                     _header = value;
                     NotifyPropertyChanged(() => this.Header);
                 }
+            }
+        }
+
+        bool IOverflown.IsOverflown
+        {
+            get
+            {
+                if (Selection != null)
+                    return Selection.IsOverflowed;
+
+                return false;
             }
         }
     }

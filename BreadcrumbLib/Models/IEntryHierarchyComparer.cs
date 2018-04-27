@@ -1,6 +1,6 @@
 ﻿namespace BreadcrumbLib.Models
 {
-    using BreadcrumbLib.Defines;
+    using BreadcrumbLib.Enums;
 
     public interface ICompareHierarchy<T>
     {

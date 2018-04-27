@@ -314,14 +314,14 @@
       <FileName>Models\IPathHelper.cs</FileName>
     </TypeIdentifier>
   </Interface>
-  <Enum Name="BreadcrumbLib.Defines.HierarchicalResult" Collapsed="true">
+  <Enum Name="BreadcrumbLib.Enums.HierarchicalResult" Collapsed="true">
     <Position X="16.25" Y="7.75" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAACIAAAACAQAAAAAAAAAAAAIAAAAAEAAA=</HashCode>
       <FileName>Defines\Enums.cs</FileName>
     </TypeIdentifier>
   </Enum>
-  <Enum Name="BreadcrumbLib.Defines.UpdateMode" Collapsed="true">
+  <Enum Name="BreadcrumbLib.Enums.UpdateMode" Collapsed="true">
     <Position X="23.25" Y="7.75" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACA=</HashCode>

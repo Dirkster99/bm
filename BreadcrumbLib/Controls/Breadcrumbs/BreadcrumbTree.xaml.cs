@@ -7,9 +7,6 @@
 	public class BreadcrumbTree : TreeView
 	{
 		#region fields
-////		public static readonly DependencyProperty OverflowedItemContainerStyleProperty =
-////					 DependencyProperty.Register("OverflowedItemContainerStyle", typeof(Style), typeof(BreadcrumbTree));
-
 		public static readonly DependencyProperty MenuItemTemplateProperty =
 						 DependencyProperty.Register("MenuItemTemplate", typeof(DataTemplate), typeof(BreadcrumbTree));
 		#endregion fields
@@ -25,12 +22,6 @@
 		#endregion
 
 		#region properties
-////		public Style OverflowedItemContainerStyle
-////		{
-////			get { return (Style)GetValue(OverflowedItemContainerStyleProperty); }
-////			set { this.SetValue(OverflowedItemContainerStyleProperty, value); }
-////		}
-
 		public DataTemplate MenuItemTemplate
 		{
 			get { return (DataTemplate)GetValue(MenuItemTemplateProperty); }
@@ -54,7 +45,14 @@
                 Debug.WriteLine("  +---> Warning: BreadcrumbTree.MeasureOverride(Size constraint) with constraint == Infinity");
             }
 
-            return base.MeasureOverride(constraint);
+            var sz = base.MeasureOverride(constraint);
+
+            if (constraint.Width <= sz.Width)
+            {
+                Debug.WriteLine("");
+            }
+
+            return sz;
         }
 
         protected override DependencyObject GetContainerForItemOverride()

@@ -36,7 +36,8 @@
     </LinearGradientBrush>
 
     <!-- Decide whether styling is using a 3D depth effect or not -->
-    <sys:Boolean x:Key="{x:Static reskeys:ResourceKeys.ThreeDStyleBrushes}">True</sys:Boolean>
+    <sys:Boolean x:Key="{ComponentResourceKey TypeInTargetAssembly={x:Type reskeys:ResourceKeys},
+                 ResourceId=ThreeDStyleBrushes}">False</sys:Boolean>
 
     <LinearGradientBrush x:Key="{x:Static reskeys:ResourceKeys.HotTrack_SelectedBrush}" StartPoint="0,0" EndPoint="0,1" >
         <GradientStop Color="#FFeaf6fd" Offset="0" />

@@ -1,7 +1,7 @@
 ﻿namespace BreadcrumbTestLib.ViewModels.TreeLookupProcessors
 {
     using BreadcrumbTestLib.ViewModels.Interfaces;
-    using BreadcrumbLib.Defines;
+    using BreadcrumbLib.Enums;
 
     /// <summary>
     /// Set Parent ViewModel's ITreeSelector.SelectedChild to Current ViewModel's Value.
@@ -10,11 +10,6 @@
     /// <typeparam name="T"></typeparam>
     public class SetChildSelected<VM, T> : ITreeLookupProcessor<VM, T>
     {
-        /// <summary>
-        /// Set Parent ViewModel's ITreeSelector.SelectedChild to Current ViewModel's Value, if is child of lookup value of current lookup.
-        /// </summary>
-////        public static SetChildSelected<VM, T> ToSelectedChild = new SetChildSelected<VM, T>();
-
         public bool Process(HierarchicalResult hr, ITreeSelector<VM, T> parentSelector, ITreeSelector<VM, T> selector)
         {
             if (hr == HierarchicalResult.Child || hr == HierarchicalResult.Current)

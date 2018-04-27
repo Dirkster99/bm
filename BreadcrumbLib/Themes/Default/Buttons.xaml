@@ -5,99 +5,86 @@
   xmlns:ctrls="clr-namespace:BreadcrumbLib.Controls"
   xmlns:reskeys="clr-namespace:BreadcrumbLib.Themes"
 >
-  <!--ResourceDictionary.MergedDictionaries>
-    <ResourceDictionary Source="/BreadcrumbLib;component/Themes/Default/Brushes.xaml" />
-    <ResourceDictionary Source="/BreadcrumbLib;component/Themes/Default/Geometry.xaml" />
-  </ResourceDictionary.MergedDictionaries -->
-
-  <ControlTemplate x:Key="BaseToggleButton" TargetType="{x:Type ToggleButton}">
-    <ctrls:HotTrack IsSelected="{TemplateBinding IsChecked}"
+    <!-- Implements the left most arrow drop down toggle button next to the root toggle button -->
+    <ControlTemplate x:Key="BaseToggleButton" TargetType="{x:Type ToggleButton}">
+        <ctrls:HotTrack IsSelected="{TemplateBinding IsChecked}"
                     SelectedBrush="{DynamicResource {x:Static reskeys:ResourceKeys.HotTrack_SelectedBrush}}"
                     BackgroundBrush="{DynamicResource HotTrack_BackgroundBrush}"
                     HighlightBrush="{DynamicResource HotTrack_HighlightBrush}"
                     ThreeDStyle="{DynamicResource {x:Static reskeys:ResourceKeys.ThreeDStyleBrushes}}"
                     SelectedBorderBrush="{DynamicResource {x:Static SystemColors.ActiveBorderBrushKey}}"
                     BorderThickness="{TemplateBinding BorderThickness}"
+                    Padding="3,0,3,0"
                     >
-      <ContentPresenter HorizontalAlignment="{TemplateBinding HorizontalAlignment}" 
+            <ContentPresenter HorizontalAlignment="{TemplateBinding HorizontalAlignment}" 
                         VerticalAlignment="Center"
                         Grid.RowSpan="2" />
-    </ctrls:HotTrack>
-  </ControlTemplate>
+        </ctrls:HotTrack>
+    </ControlTemplate>
 
-  <!-- This button is displayed when the user makes a mouse over on a Breadcrumb ToggleButton -->
-  <ControlTemplate x:Key="BasicArrowButton" TargetType="{x:Type ToggleButton}" >
-    <Border x:Name="border"
-            Padding="2,0"
-            Background="Transparent" 
-            BorderBrush="Transparent"
-            BorderThickness="1" 
-            MinHeight="20"
-            MinWidth ="12"
-            SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}">
+    <!-- Implements the button that displays the path string -->
+    <ControlTemplate x:Key="BaseButton" TargetType="{x:Type ButtonBase}">
+        <Border Background="Transparent"
+                Padding="3,0,6,0"
+                Margin="0,0,0,0">
+            <ContentPresenter HorizontalAlignment="Center" 
+                              VerticalAlignment="Center" />
+        </Border>
+    </ControlTemplate>
 
-      <Grid>
-        <Path x:Name="path"
-              Fill="{DynamicResource {x:Static reskeys:ResourceKeys.ArrowFillForeground}}"
-              Stroke="{DynamicResource {x:Static reskeys:ResourceKeys.ArrowBorderForeground}}"
-              Data="{DynamicResource {x:Static reskeys:ResourceKeys.NormalArrow}}"
-              HorizontalAlignment="Center"
-              VerticalAlignment="Center" 
-              Margin="{TemplateBinding Padding}"
-              IsHitTestVisible="True"
-              Visibility="Visible"  />
-      </Grid>
-    </Border>
-    <ControlTemplate.Triggers>
-      <Trigger Property="IsPressed" Value="True">
-        <Setter TargetName="path" Property="Data" Value="{DynamicResource {x:Static reskeys:ResourceKeys.ExpandedArrow}}"/>
-        <Setter TargetName="path" Property="Fill" Value="{DynamicResource {x:Static reskeys:ResourceKeys.ArrowFillCheckedForeground}}" />
-        <Setter TargetName="path" Property="Fill" Value="{DynamicResource {x:Static reskeys:ResourceKeys.ArrowBorderCheckedForeground}}" />
-      </Trigger>
-      <Trigger Property="IsChecked" Value="True">
-        <Setter TargetName="path" Property="Data" Value="{DynamicResource {x:Static reskeys:ResourceKeys.ExpandedArrow}}"/>
-        <Setter TargetName="path" Property="Fill" Value="{DynamicResource {x:Static reskeys:ResourceKeys.ArrowFillCheckedForeground}}" />
-        <Setter TargetName="path" Property="Fill" Value="{DynamicResource {x:Static reskeys:ResourceKeys.ArrowBorderCheckedForeground}}" />
-      </Trigger>
-      <MultiTrigger>
-        <MultiTrigger.Conditions>
-          <Condition Property="IsMouseOver" Value="True" />
-          <Condition Property="IsChecked" Value="False" />
-        </MultiTrigger.Conditions>
-        <MultiTrigger.Setters>
-          <Setter TargetName="path" Property="Fill"   Value="{DynamicResource {x:Static reskeys:ResourceKeys.ArrowFillMouseOverForeground}}" />
-          <Setter TargetName="path" Property="Stroke" Value="{DynamicResource {x:Static reskeys:ResourceKeys.ArrowBorderMouseOverForeground}}" />
-        </MultiTrigger.Setters>
-      </MultiTrigger>
-    </ControlTemplate.Triggers>
-  </ControlTemplate>
+    <!-- This button is displayed when the user makes a mouse over on a Breadcrumb ToggleButton -->
+    <ControlTemplate x:Key="BasicArrowButton" TargetType="{x:Type ToggleButton}" >
+        <Border x:Name="border"
+                Background="Transparent" 
+                BorderBrush="Transparent"
+                BorderThickness="0"
+                VerticalAlignment="Center"
+                HorizontalAlignment="Stretch"
+                Margin="0"
+                Padding="3,0"
+                SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"
+                MinWidth="15"
+            >
+            <Path x:Name="path"
+                    Fill="{DynamicResource {x:Static reskeys:ResourceKeys.ArrowFillForeground}}"
+                    Stroke="{DynamicResource {x:Static reskeys:ResourceKeys.ArrowBorderForeground}}"
+                    Data="{DynamicResource {x:Static reskeys:ResourceKeys.NormalArrow}}"
+                    Margin="0"
+                    IsHitTestVisible="True"
+                    Visibility="Visible"  />
+        </Border>
+        <ControlTemplate.Triggers>
+            <Trigger Property="IsPressed" Value="True">
+                <Setter TargetName="path" Property="Data" Value="{DynamicResource {x:Static reskeys:ResourceKeys.ExpandedArrow}}"/>
+                <Setter TargetName="path" Property="Fill" Value="{DynamicResource {x:Static reskeys:ResourceKeys.ArrowFillCheckedForeground}}" />
+                <Setter TargetName="path" Property="Stroke" Value="{DynamicResource {x:Static reskeys:ResourceKeys.ArrowBorderCheckedForeground}}" />
+            </Trigger>
+            <Trigger Property="IsChecked" Value="True">
+                <Setter TargetName="path" Property="Data" Value="{DynamicResource {x:Static reskeys:ResourceKeys.ExpandedArrow}}"/>
+                <Setter TargetName="path" Property="Fill" Value="{DynamicResource {x:Static reskeys:ResourceKeys.ArrowFillCheckedForeground}}" />
+                <Setter TargetName="path" Property="Stroke" Value="{DynamicResource {x:Static reskeys:ResourceKeys.ArrowBorderCheckedForeground}}" />
+            </Trigger>
+            <MultiTrigger>
+                <MultiTrigger.Conditions>
+                    <Condition Property="IsMouseOver" Value="True" />
+                    <Condition Property="IsChecked" Value="False" />
+                </MultiTrigger.Conditions>
+                <MultiTrigger.Setters>
+                    <Setter TargetName="path" Property="Fill"   Value="{DynamicResource {x:Static reskeys:ResourceKeys.ArrowFillMouseOverForeground}}" />
+                    <Setter TargetName="path" Property="Stroke" Value="{DynamicResource {x:Static reskeys:ResourceKeys.ArrowBorderMouseOverForeground}}" />
+                </MultiTrigger.Setters>
+            </MultiTrigger>
+        </ControlTemplate.Triggers>
+    </ControlTemplate>
 
-  <ControlTemplate x:Key="BlankButton" TargetType="{x:Type ButtonBase}">
-    <Border BorderThickness="0" Background="Transparent">
-      <ContentPresenter HorizontalAlignment="{TemplateBinding HorizontalAlignment}" 
-                        VerticalAlignment="{TemplateBinding VerticalAlignment}" />
-    </Border>
-  </ControlTemplate>
-
-  <ControlTemplate x:Key="BaseButton" TargetType="{x:Type ButtonBase}">
-    <ctrls:HotTrack x:Name="HotTrack"
-                    SelectedBorderBrush="{TemplateBinding BorderBrush}"
-                    Padding="{TemplateBinding Padding}" Background="Transparent" 
-                    SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"
-                    BorderThickness="{TemplateBinding BorderThickness}"
-                    >
-      <ContentPresenter HorizontalAlignment="{TemplateBinding HorizontalAlignment}" 
-                        VerticalAlignment="{TemplateBinding VerticalAlignment}" />
-    </ctrls:HotTrack>
-
-    <ControlTemplate.Triggers>
-      <Trigger Property="IsEnabled" Value="False">
-        <Setter TargetName="HotTrack"
-                Property="Background"
-                Value="{DynamicResource {x:Static reskeys:ResourceKeys.ControlDisabledBackgroundKey}}" />
-        <Setter TargetName="HotTrack" Property="Opacity" Value="0.4"/>
-      </Trigger>
-    </ControlTemplate.Triggers>
-  </ControlTemplate>
+    <!-- Implements the background of the Switch control
+         to switch content with click on background -->
+    <ControlTemplate x:Key="BlankButton" TargetType="{x:Type ButtonBase}">
+        <Border BorderThickness="0"
+                Background="Transparent">
+            <ContentPresenter HorizontalAlignment="{TemplateBinding HorizontalAlignment}" 
+                              VerticalAlignment="{TemplateBinding VerticalAlignment}" />
+        </Border>
+    </ControlTemplate>
 
 </ResourceDictionary>

@@ -46,7 +46,7 @@
         /// Used by Breadcrumb, items that are root items or ALL items in the selected path, 
         /// There's another Filter in xaml that only 
         /// </summary>
-        ObservableCollection<VM> OverflowedAndRootItems { get; set; }
+        IEnumerable<VM> OverflowedAndRootItems { get; }
         #endregion properties
 
         #region methods
@@ -58,9 +58,9 @@
         /// <param name="progress"></param>
         /// <returns>Returns a task that selects the requested tree node.</returns>
         Task<FinalBrowseResult<T>> SelectAsync(
-            T value,
-            CancellationToken cancelToken = default(CancellationToken),
-            IProgressViewModel progress = null);
+        T value,
+        CancellationToken cancelToken = default(CancellationToken),
+        IProgressViewModel progress = null);
         #endregion methods
     }
 }

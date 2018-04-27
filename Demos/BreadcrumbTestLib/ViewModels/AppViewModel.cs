@@ -26,9 +26,19 @@
 
         #region constructors
         /// <summary>
+        /// Class constructor from descriptive demo title name.
+        /// </summary>
+        /// <param name="demoTitle"></param>
+        public AppViewModel(string demoTitle)
+            : this()
+        {
+            DemoTitle = demoTitle;
+        }
+
+        /// <summary>
         /// Class constructor.
         /// </summary>
-        public AppViewModel()
+        protected AppViewModel()
         {
             _SlowStuffSemaphore = new SemaphoreSlim(1, 1);
             _OneTaskScheduler = new OneTaskLimitedScheduler();
@@ -45,6 +55,11 @@
         #endregion constructors
 
         #region properties
+        /// <summary>
+        /// Gets the title of this demo
+        /// </summary>
+        public string DemoTitle { get; }
+
         /// <summary>
         /// Gets a Breadcrumb Tree ViewModel that drives the Breadcrumb control demo
         /// in this application.

@@ -19,7 +19,7 @@
         {
             Loaded -= MainWindow_Loaded;
 
-            var appVM = new AppViewModel();
+            var appVM = new AppViewModel("Generic");
             DataContext = appVM;
 
             appVM.InitPath(@"C:\");

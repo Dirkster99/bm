@@ -10,6 +10,7 @@
         /// Class constructor
         /// </summary>
         public DemoViewModel()
+            : base ("Themed Demo")
         {
         }
         #endregion constructors

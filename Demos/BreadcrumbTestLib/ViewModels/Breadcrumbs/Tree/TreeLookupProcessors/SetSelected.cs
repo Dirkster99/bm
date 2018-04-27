@@ -1,7 +1,7 @@
 ﻿namespace BreadcrumbTestLib.ViewModels.TreeLookupProcessors
 {
     using BreadcrumbTestLib.ViewModels.Interfaces;
-    using BreadcrumbLib.Defines;
+    using BreadcrumbLib.Enums;
 
     /// <summary>
     /// Set ViewModel's Selector.IsSelected to true 

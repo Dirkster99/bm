@@ -60,8 +60,15 @@
 		public static readonly DependencyProperty UseTransitionProperty =
 				DependencyProperty.Register("UseTransition", typeof(bool), typeof(HotTrack), new PropertyMetadata(true));
 
-		public static readonly DependencyProperty ThreeDStyleProperty =
-				DependencyProperty.Register("ThreeDStyle", typeof(bool), typeof(HotTrack), new PropertyMetadata(true));
+        /// <summary>
+        /// Gets/sets whether Hotrack should be styled with 3D emulated
+        /// surface impression or not.
+        /// </summary>
+        public static readonly DependencyProperty ThreeDStyleProperty =
+				DependencyProperty.Register("ThreeDStyle",
+                    typeof(bool),
+                    typeof(HotTrack),
+                    new PropertyMetadata(false));
 		#endregion fields
 
 		#region Constructor
@@ -140,7 +147,8 @@
 		}
 
 		/// <summary>
-		/// Gets/sets whether Hotrack should be styled with 3D emulated surface impression or not.
+		/// Gets/sets whether Hotrack should be styled with 3D emulated
+        /// surface impression or not.
 		/// </summary>
 		public bool ThreeDStyle
 		{

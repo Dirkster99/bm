@@ -1,4 +1,4 @@
-﻿namespace BreadcrumbLib.Defines
+﻿namespace BreadcrumbLib.Enums
 {
     /// <summary>
     /// Enumerates values that are returned by a class that implements ICompareHierarchy<T>.
@@ -47,21 +47,5 @@
         /// but its there in case its needed.
         /// </summary>
         All = Related | Unrelated
-    }
-
-    /// <summary>
-    /// Specifies whether list entries are to be replaced or updated on (re)load.
-    /// </summary>
-    public enum UpdateMode
-    {
-        /// <summary>
-        /// Existing list entries are replaced on (re)load.
-        /// </summary>
-        Replace,
-
-        /// <summary>
-        /// Existing list entries are updated on (re)load.
-        /// </summary>
-        Update
     }
 }

@@ -10,9 +10,7 @@
  >
 
     <ResourceDictionary.MergedDictionaries>
-        <ResourceDictionary Source="/BreadcrumbLib;component/Themes/Default/Geometry.xaml" />
         <ResourceDictionary Source="/BreadcrumbLib;component/Themes/Default/Buttons.xaml" />
-        <!-- ResourceDictionary Source="/BreadcrumbLib;component/Themes/Default/Brushes.xaml" / -->
     </ResourceDictionary.MergedDictionaries>
 
     <DataTemplate x:Key="DropDownListItemDataTemplate">
@@ -43,7 +41,9 @@
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type uc:BreadcrumbTreeItem}">
-                    <bc:OverflowableStackPanel HorizontalAlignment="Stretch" Orientation="Horizontal" 
+                    <!-- The orientation in this panel layouts sub-items horizontally -->
+                    <bc:OverflowableStackPanel HorizontalAlignment="Stretch"
+                                               Orientation="Horizontal" 
                                                OverflowItemCount="{Binding OverflowItemCount, RelativeSource={RelativeSource TemplatedParent}
                                                                  , Mode=OneWayToSource}" >
 
@@ -51,15 +51,23 @@
                                         bc:OverflowableStackPanel.CanOverflow="True"
                                         SelectedBorderBrush="{TemplateBinding BorderBrush}"
                                         MaxWidth="1000"
-                                        BorderThickness="1,0" >
-
-                            <StackPanel Orientation="Horizontal">
-                                <StackPanel.Resources>
+                                        BorderThickness="0"
+                                        >
+                            <Grid >
+                                <Grid.Resources>
                                     <conv:BoolToVisibilityCollapsedConverter x:Key="btvc" />
-                                </StackPanel.Resources>
-                                <Button Template="{StaticResource BaseButton}"
+                                </Grid.Resources>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="Auto"/>
+                                </Grid.ColumnDefinitions>
+                                
+                                <Button Grid.Column="0"
+                                        Template="{StaticResource BaseButton}"
                                         x:Name="PART_CaptionButton"  
                                         MaxWidth="1000"
+                                        Margin="0"
+                                        Padding="3,0"
                                 >
                                     <ContentPresenter x:Name="PART_Header"
                                                       HorizontalAlignment="Stretch"
@@ -67,22 +75,20 @@
                                                       SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"
                                                       ContentSource="Header" />
                                 </Button>
-                                <ctrls:HotTrack x:Name="headerToggleHL"  bc:OverflowableStackPanel.CanOverflow="True"
-                                                BorderThickness="1,0,0,0"
-                                                SelectedBorderBrush="Transparent" 
-                                                IsSelected="{Binding IsExpanded, Mode=TwoWay, RelativeSource={RelativeSource TemplatedParent}}"
-                                                SelectedBrush="{DynamicResource {x:Static reskeys:ResourceKeys.OpenDropDownButton_Background}}"
-                                                Visibility="{Binding HasItems, RelativeSource={RelativeSource TemplatedParent}, Converter={StaticResource btvc}}"
-                                              >
-                                    <ctrls:DropDownList x:Name="PART_Toggle" ItemsSource="{TemplateBinding ItemsSource}"
-                                                        Visibility="{Binding HasItems, RelativeSource={RelativeSource TemplatedParent}, Converter={StaticResource btvc}}" 
-                                                        SelectedValuePath="{Binding ValuePath, RelativeSource={RelativeSource TemplatedParent}}"                                  
-                                                        IsDropDownOpen="{Binding IsExpanded, Mode=TwoWay, RelativeSource={RelativeSource TemplatedParent}}"
-                                                        SelectedValue="{Binding SelectedChild, Mode=TwoWay, RelativeSource={RelativeSource TemplatedParent}}"
-                                                        ItemTemplate="{TemplateBinding MenuItemTemplate}" >
-                                    </ctrls:DropDownList>
-                                </ctrls:HotTrack>
-                            </StackPanel>
+                                
+                                <ctrls:DropDownList x:Name="PART_Toggle"
+                                                    Grid.Column="1"
+                                                    Margin="0"
+                                                    Padding="3,0"
+                                                    ItemsSource="{TemplateBinding ItemsSource}"
+                                                    Visibility="{Binding HasItems, RelativeSource={RelativeSource TemplatedParent}, Converter={StaticResource btvc}}" 
+                                                    SelectedValuePath="{Binding ValuePath, RelativeSource={RelativeSource TemplatedParent}}"                                  
+                                                    IsDropDownOpen="{Binding IsExpanded, Mode=TwoWay, RelativeSource={RelativeSource TemplatedParent}}"
+                                                    SelectedValue="{Binding SelectedChild, Mode=TwoWay, RelativeSource={RelativeSource TemplatedParent}}"
+                                                    ItemTemplate="{TemplateBinding MenuItemTemplate}"
+                                                    />
+
+                            </Grid>
                         </ctrls:HotTrack>
 
                         <ItemsPresenter x:Name="ItemsHost" />
@@ -97,9 +103,6 @@
                                 <Setter Property="Visibility" Value="Collapsed"/>
                             </MultiTrigger.Setters>
                         </MultiTrigger>
-                        <Trigger  SourceName="headerHL" Property="IsMouseDirectlyOver" Value="True">
-                            <Setter TargetName="headerToggleHL" Property="IsEnabled" Value="False" />
-                        </Trigger>
                         <!--<Trigger Property="IsExpanded" Value="true">
                             <Setter Property="Visibility" Value="Visible"/>
                         </Trigger>-->

@@ -4,7 +4,6 @@
     using BreadcrumbTestLib.ViewModels.Interfaces;
     using BreadcrumbTestLib.ViewModels.TreeLookupProcessors;
     using BreadcrumbTestLib.ViewModels.TreeSelectors;
-    using BreadcrumbLib.Defines;
     using BreadcrumbLib.Utils;
     using System;
     using System.Collections.Generic;
@@ -12,6 +11,7 @@
     using System.Linq;
     using System.Threading;
     using System.Threading.Tasks;
+    using BreadcrumbLib.Enums;
 
     internal class TreeRootSelectorViewModel<VM, T> : TreeSelectorViewModel<VM, T>, ITreeRootSelector<VM, T>
     {
@@ -39,6 +39,7 @@
             ////_compareFuncs = compareFuncs;
             ////Comparers = new [] { PathComparer.LocalDefault };
 
+            _OverflowedAndRootItems = new ObservableCollection<VM>();
         }
 
         #endregion constructors
@@ -48,20 +49,11 @@
         #endregion events
 
         #region properties
-        public ObservableCollection<VM> OverflowedAndRootItems
+        public IEnumerable<VM> OverflowedAndRootItems
         {
             get
             {
-                if (_OverflowedAndRootItems == null)
-                    this.updateRootItems();
-
                 return _OverflowedAndRootItems;
-            }
-
-            set
-            {
-                _OverflowedAndRootItems = value;
-                this.NotifyPropertyChanged(() => this.OverflowedAndRootItems);
             }
         }
 
@@ -207,12 +199,9 @@
         /// in the root items drop down collection.
         /// </summary>
         /// <param name="path"></param>
-        private void updateRootItems(Stack<ITreeSelector<VM, T>> path = null)
+        private void updateRootItems(Stack<ITreeSelector<VM, T>> path)
         {
-            if (_OverflowedAndRootItems == null)
-                _OverflowedAndRootItems = new ObservableCollection<VM>();
-            else
-                _OverflowedAndRootItems.Clear();
+            _OverflowedAndRootItems.Clear();
 
             if (path != null && path.Count() > 0)
             {
@@ -226,6 +215,7 @@
                     if (!(this.EntryHelper.AllNonBindable.Contains(p.ViewModel)))
                     {
                         _OverflowedAndRootItems.Add(p.ViewModel);
+
                     }
                 }
 

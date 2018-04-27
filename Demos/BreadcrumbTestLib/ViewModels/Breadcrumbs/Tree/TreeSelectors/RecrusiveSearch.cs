@@ -4,7 +4,7 @@
     using System.Threading;
     using System.Threading.Tasks;
     using BreadcrumbTestLib.ViewModels.Interfaces;
-    using BreadcrumbLib.Defines;
+    using BreadcrumbLib.Enums;
 
     /// <summary>
     /// Lookup until lookupvalue is found, and process only parent or matchednode.

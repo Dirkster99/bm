@@ -2,7 +2,6 @@
 {
     using BreadcrumbTestLib.Utils;
     using BreadcrumbTestLib.ViewModels.Interfaces;
-    using BreadcrumbLib.Defines;
     using System;
     using System.Collections.Generic;
     using System.Collections.ObjectModel;
@@ -10,6 +9,7 @@
     using System.Threading;
     using System.Threading.Tasks;
     using System.Windows.Input;
+    using BreadcrumbLib.Enums;
 
     internal class EntriesHelperViewModel<VM> : Base.ViewModelBase, IEntriesHelper<VM>
     {

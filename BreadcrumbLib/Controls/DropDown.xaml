@@ -20,11 +20,12 @@
         <ControlTemplate TargetType="{x:Type ctlrs:DropDown}">
           <Grid>
             <ToggleButton x:Name="PART_ToggleButton"
-                          MinWidth="16"
                           Template="{Binding HeaderButtonTemplate, RelativeSource={RelativeSource TemplatedParent}, Mode=OneWay}" 
                           BorderBrush="{TemplateBinding BorderBrush}" 
                           BorderThickness="{TemplateBinding BorderThickness}"  
-                          HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch"
+                          HorizontalAlignment="Center"
+                          HorizontalContentAlignment="Center"
+                          VerticalContentAlignment="Center"
                           IsChecked="{Binding IsDropDownOpen, Mode=TwoWay, RelativeSource={RelativeSource TemplatedParent}}">
               <Grid>
                 <ContentPresenter Content="{TemplateBinding Header}" />

@@ -7,10 +7,10 @@
     using BreadcrumbTestLib.ViewModels.Interfaces;
     using BreadcrumbTestLib.ViewModels.TreeLookupProcessors;
     using BreadcrumbLib.Utils;
-    using BreadcrumbLib.Defines;
     using System.Threading;
     using System.Windows;
     using System.Diagnostics;
+    using BreadcrumbLib.Enums;
 
     /// <summary>
     /// Base class of ITreeSelector, which implements Tree
