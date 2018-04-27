@@ -30,7 +30,8 @@
             <conv:FlipBoolToVisibilityConverter x:Key="fbtv" />
         </ControlTemplate.Resources>
 
-        <Border BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}">
+        <Border BorderBrush="{TemplateBinding BorderBrush}"
+                BorderThickness="{TemplateBinding BorderThickness}">
             <ToggleButton x:Name="PART_Toggle" 
                           Grid.Column="0"
                           Padding="2,0"

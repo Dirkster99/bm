@@ -4,7 +4,7 @@
 >
 
   <Style x:Key="ComboboxNullAsSeparatorStyle"
-         TargetType="{x:Type ComboBoxItem}" >    <!-- BasedOn="{StaticResource {x:Type ComboBoxItem}}" -->
+         TargetType="{x:Type ComboBoxItem}" BasedOn="{StaticResource {x:Type ComboBoxItem}}">
     <Style.Triggers>
       <DataTrigger Binding="{Binding}" Value="{x:Null}">
         <Setter Property="Template">
