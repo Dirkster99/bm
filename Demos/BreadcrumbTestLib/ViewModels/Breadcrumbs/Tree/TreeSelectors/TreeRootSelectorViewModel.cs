@@ -156,14 +156,15 @@
                     try
                     {
                         SetChildSelected<VM, T> toSelectedChild = new SetChildSelected<VM, T>();
+                        LoadSubEntries<VM, T> whenSelected = new LoadSubEntries<VM, T>(HierarchicalResult.Current, UpdateMode.Replace, false);
+                        SetSelected<VM, T> whenSelected1 = new SetSelected<VM, T>();
 
                         await this.LookupAsync(value,
                                                RecrusiveSearch<VM, T>.LoadSubentriesIfNotLoaded,
                                                cancelToken,
-                                               SetSelected<VM, T>.WhenSelected,
+                                               whenSelected1,
                                                toSelectedChild,
-                                               LoadSubEntries<VM, T>.WhenSelected(UpdateMode.Replace,
-                                               false, null));
+                                               whenSelected);
 
                         return new FinalBrowseResult<T>(value, default(System.Guid), BrowseResult.Complete);
                     }

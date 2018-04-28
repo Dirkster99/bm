@@ -261,7 +261,7 @@
                 <CheckBox Content="EnableBreadcrumb"
                       IsChecked="{Binding BreadcrumbTest.EnableBreadcrumb}" />
                 
-                <CheckBox Content="IsOverflown"
+                <CheckBox Content="IsOverflown" IsEnabled="False"
                       IsChecked="{Binding ElementName=BreadcrumbDemoControl,Path=IsOverflown}" />
 
                 <Grid Background="#20000000"

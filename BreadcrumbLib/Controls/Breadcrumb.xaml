@@ -25,6 +25,7 @@
         <Setter Property="MinWidth" Value="100" />
         <Setter Property="BorderBrush" Value="Gray"/>
         <Setter Property="BorderThickness" Value="1"/>
+        <Setter Property="Margin" Value="0" />
         <Setter Property="MinHeight" Value="24" />
         <Setter Property="Template">
             <Setter.Value>
@@ -43,7 +44,10 @@
                             HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
                             MinHeight="{TemplateBinding MinHeight}"
                             >
-                        <Grid HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+                        <Grid HorizontalAlignment="Stretch"
+                              VerticalAlignment="Stretch"
+                              Margin="0"
+                              >
                             <Grid.Resources>
                                 <conv:BoolToVisibilityCollapsedConverter x:Key="btv" />
                                 <conv:FlipBoolConverter x:Key="fb" />
@@ -77,10 +81,10 @@
                                        Template="{StaticResource BreadcrumbSwitchTemplate}"                   
                                        IsSwitchOn="{Binding EnableBreadcrumb, Mode=TwoWay}"
                                        VerticalAlignment="Center" VerticalContentAlignment="Center"
-                                       Margin="0,1"
+                                       Margin="1,0"
                                      >
                                 <bc:Switch.Header>
-                                    <Image Source="{Binding BreadcrumbSubTree.Selection.SelectedViewModel.Icon}" VerticalAlignment="Center" HorizontalAlignment="Center" />
+                                    <Image Source="{Binding BreadcrumbSubTree.Selection.SelectedViewModel.Icon}" />
                                 </bc:Switch.Header>
                                 <bc:Switch.ContentOn>
                                     <Grid>
@@ -128,10 +132,6 @@
                                                         </DataTrigger>
                                                     </Style.Triggers>
                                                 </Style>
-
-                                                <!-- Style TargetType="{x:Type ComboBoxItem}" BasedOn="{StaticResource ComboboxNullAsSeparatorStyle}">
-                                                    <Setter Property="Visibility" Value="{Binding Selection.IsOverflowedOrRoot, Mode=OneWay, Converter={StaticResource btvc}}"  />
-                                                </Style -->
                                             </ctrls:DropDownList.ItemContainerStyle>
                                         </ctrls:DropDownList>
 
@@ -140,6 +140,7 @@
                                                            ItemsSource="{Binding BreadcrumbSubTree.Entries.All}"
                                                            MenuItemTemplate="{StaticResource DropDownListItemDataTemplate}"
                                                            x:Name="PART_BreadcrumbTree"
+                                                           Margin="0"
                                                            >
                                             <uc:BreadcrumbTree.ItemContainerStyle>
                                                 <Style TargetType="{x:Type uc:BreadcrumbTreeItem}" BasedOn="{StaticResource {x:Type uc:BreadcrumbTreeItem}}">

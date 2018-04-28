@@ -13,9 +13,9 @@
         /// <summary>
         /// Set ViewModel's EntryHelper.IsExpanded to true when it's unrelated node of current lookup.
         /// </summary>
-        public static LoadSubEntries<VM, T> WhenSelected(UpdateMode updateMode = UpdateMode.Replace, bool force = false,
-            object parameter = null)
-        { return new LoadSubEntries<VM, T>(HierarchicalResult.Current, updateMode, force, parameter); }
+////        public static LoadSubEntries<VM, T> WhenSelected(UpdateMode updateMode = UpdateMode.Replace, bool force = false,
+////            object parameter = null)
+////        { return new LoadSubEntries<VM, T>(HierarchicalResult.Current, updateMode, force, parameter); }
 
         private UpdateMode _updateMode;
         private bool _force;
@@ -26,7 +26,8 @@
         /// </summary>
         /// <param name="matchResult"></param>
         public LoadSubEntries(HierarchicalResult matchResult, UpdateMode updateMode = UpdateMode.Replace,
-            bool force = false, object parameter = null)
+                             bool force = false,
+                             object parameter = null)
         {
             this.MatchResult = matchResult;
             _updateMode = updateMode;
