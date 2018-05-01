@@ -8,7 +8,10 @@
 	{
 		#region fields
 		public static readonly DependencyProperty MenuItemTemplateProperty =
-						 DependencyProperty.Register("MenuItemTemplate", typeof(DataTemplate), typeof(BreadcrumbTree));
+						 DependencyProperty.Register("MenuItemTemplate",
+                             typeof(DataTemplate),
+                             typeof(BreadcrumbTree),
+                             new PropertyMetadata(null));
 		#endregion fields
 
 		#region Constructor

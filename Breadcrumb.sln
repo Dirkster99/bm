@@ -4,7 +4,7 @@ VisualStudioVersion = 15.0.27428.2015
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ThemedDemo", "Demos\ThemedDemo\ThemedDemo.csproj", "{58BD0E02-6BFF-43F0-9B93-D3371E97794B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Breadcrumb", "Demos\Breadcrumb\Breadcrumb.csproj", "{3CC96481-522E-4769-B93D-C81915A06893}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GenericDemo", "Demos\GenericDemo\GenericDemo.csproj", "{3CC96481-522E-4769-B93D-C81915A06893}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BreadcrumbLib", "BreadcrumbLib\BreadcrumbLib.csproj", "{15BBE1FB-D9E1-4B86-BE6C-B7D04A1A79F0}"
 EndProject

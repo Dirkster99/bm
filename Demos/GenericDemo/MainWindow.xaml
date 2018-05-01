@@ -1,11 +1,10 @@
-﻿<Window x:Class="Breadcrumb.MainWindow"
+﻿<Window x:Class="GenericDemo.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
 
         Title="MainWindow" Height="550" Width="825"
         >
-    <Grid xmlns:demoviews="clr-namespace:BreadcrumbTestLib.Views;assembly=BreadcrumbTestLib"
-        >
+        <Grid xmlns:demoviews="clr-namespace:BreadcrumbTestLib.Views;assembly=BreadcrumbTestLib">
         <demoviews:DemoView DataContext="{Binding}" />
     </Grid>
 </Window>

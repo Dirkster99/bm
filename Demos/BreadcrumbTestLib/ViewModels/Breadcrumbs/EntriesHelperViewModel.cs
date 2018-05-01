@@ -39,8 +39,10 @@
         {
             _loadSubEntryFunc = loadSubEntryFunc;
 
-            All = new FastObservableCollection<VM>();
-            All.Add(default(VM));
+            All = new FastObservableCollection<VM>
+            {
+                default(VM)
+            };
 
             this.CancelCommand = new RelayCommand(obj =>
             {

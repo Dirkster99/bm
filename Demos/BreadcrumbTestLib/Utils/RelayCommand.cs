@@ -16,8 +16,8 @@
         /// <param name="canHandle"></param>
         public RelayCommand(Action<object> handler, Func<object, bool> canHandle = null)
         {
-            this._handler = handler;
-            this._canHandle = canHandle ?? (pm => true);
+            _handler = handler;
+            _canHandle = canHandle ?? (pm => true);
         }
 
         public event EventHandler CanExecuteChanged;
@@ -26,18 +26,18 @@
         {
             get
             {
-                return this._isEnabled;
+                return _isEnabled;
             }
 
             set
             {
-                if (value != this._isEnabled)
+                if (value != _isEnabled)
                 {
-                    this._isEnabled = value;
+                    _isEnabled = value;
 
-                    if (this.CanExecuteChanged != null)
+                    if (CanExecuteChanged != null)
                     {
-                        this.CanExecuteChanged(this, EventArgs.Empty);
+                        CanExecuteChanged(this, EventArgs.Empty);
                     }
                 }
             }
@@ -45,12 +45,12 @@
 
         public bool CanExecute(object parameter)
         {
-            return this.IsEnabled && this._canHandle(parameter);
+            return IsEnabled && _canHandle(parameter);
         }
 
         public void Execute(object parameter)
         {
-            this._handler(parameter);
+            _handler(parameter);
         }
     }
 }

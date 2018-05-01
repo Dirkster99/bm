@@ -15,7 +15,7 @@ ECHO Components\ServiceLocator
 ECHO Components\Settings\Settings
 ECHO Components\Settings\SettingsModel
 ECHO.
-ECHO Demos\Breadcrumb
+ECHO Demos\GenericDemo
 ECHO Demos\BreadcrumbTestLib
 ECHO Demos\ThemedDemo
 ECHO.
@@ -67,10 +67,10 @@ RMDIR /S /Q Components\Settings\SettingsModel\obj
 ECHO.
 
 
-ECHO Deleting BIN and OBJ Folders in Breadcrumb folder
+ECHO Deleting BIN and OBJ Folders in GenericDemo folder
 ECHO.
-RMDIR /S /Q Demos\Breadcrumb\bin
-RMDIR /S /Q Demos\Breadcrumb\obj
+RMDIR /S /Q Demos\GenericDemo\bin
+RMDIR /S /Q Demos\GenericDemo\obj
 
 ECHO Deleting BIN and OBJ Folders in BreadcrumbTestLib folder
 ECHO.

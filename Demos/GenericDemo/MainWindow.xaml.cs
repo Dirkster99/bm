@@ -1,4 +1,4 @@
-﻿namespace Breadcrumb
+﻿namespace GenericDemo
 {
     using System.Windows;
     using BreadcrumbTestLib.ViewModels;
