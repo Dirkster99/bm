@@ -120,10 +120,6 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Themes\Default\ComboboxNullAsSeparatorStyle.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
     <Page Include="Themes\Default\Geometry.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>

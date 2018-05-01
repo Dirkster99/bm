@@ -13,7 +13,6 @@
     -->
     <ResourceDictionary.MergedDictionaries>
         <ResourceDictionary Source="/BmLib;component/Themes/Default/Geometry.xaml" />
-        <!-- ResourceDictionary Source="/BmLib;component/Themes/Default/ComboboxNullAsSeparatorStyle.xaml" / -->
         <ResourceDictionary Source="/BmLib;component/Controls/Breadcrumbs/BreadcrumbTreeItem.xaml" />
         <!-- ResourceDictionary Source="/BmLib;component/Themes/Default/Brushes.xaml" / -->
         <ResourceDictionary Source="/BmLib;component/Controls/Switch.xaml" />

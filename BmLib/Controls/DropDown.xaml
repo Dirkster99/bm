@@ -5,7 +5,6 @@
     xmlns:reskeys="clr-namespace:BmLib.Themes"
     >
   <ResourceDictionary.MergedDictionaries>
-    <!-- ResourceDictionary Source="/BmLib;component/Themes/Default/ComboboxNullAsSeparatorStyle.xaml" / -->
     <ResourceDictionary Source="/BmLib;component/Themes/Default/Buttons.xaml" />
     <!-- ResourceDictionary Source="/BmLib;component/Themes/Default/Brushes.xaml" / -->
   </ResourceDictionary.MergedDictionaries>
