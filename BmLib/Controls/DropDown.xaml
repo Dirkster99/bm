@@ -52,10 +52,11 @@
                           Padding="{TemplateBinding Padding}"
                           BorderBrush="{TemplateBinding BorderBrush}" 
                           BorderThickness="{TemplateBinding BorderThickness}">
-                    <ScrollViewer>
-                        <ContentPresenter x:Name="PART_Content"
-                                          Content="{TemplateBinding Content}" />
-                    </ScrollViewer>
+                    <Grid>
+                        <ScrollViewer>
+                            <ContentPresenter x:Name="PART_Content" Content="{TemplateBinding Content}" />
+                        </ScrollViewer>
+                    </Grid>
                   </Border>
                 </Grid>
             </Popup>

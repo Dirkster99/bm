@@ -6,7 +6,6 @@
     >
   <ResourceDictionary.MergedDictionaries>
     <ResourceDictionary Source="/BmLib;component/Themes/Default/Buttons.xaml" />
-    <!-- ResourceDictionary Source="/BmLib;component/Themes/Default/Brushes.xaml" / -->
   </ResourceDictionary.MergedDictionaries>
 
   <Style x:Key="{x:Type ctrls:DropDownList}" TargetType="{x:Type ctrls:DropDownList}">
@@ -31,14 +30,10 @@
                           Header="{Binding Header,RelativeSource={RelativeSource TemplatedParent}}"
                           HeaderButtonTemplate="{Binding HeaderButtonTemplate,RelativeSource={RelativeSource TemplatedParent}}"            
           >
-            <ScrollViewer VerticalScrollBarVisibility="Auto">
-              <StackPanel Orientation="Vertical">
-                <ItemsPresenter x:Name="ItemsPresenter" 
-                                KeyboardNavigation.DirectionalNavigation="Contained" 
-                                SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"/>
-              </StackPanel>
-            </ScrollViewer>
-          </ctrls:DropDown>
+          <ItemsPresenter x:Name="ItemsPresenter" 
+                          KeyboardNavigation.DirectionalNavigation="Contained" 
+                          SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"/>
+        </ctrls:DropDown>
 
         </ControlTemplate>
       </Setter.Value>
