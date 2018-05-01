@@ -1,7 +1,7 @@
 ﻿namespace BreadcrumbTestLib.ViewModels.Interfaces
 {
     using BreadcrumbTestLib.Utils;
-    using BreadcrumbLib.Enums;
+    using BmLib.Enums;
     using System;
     using System.Collections.Generic;
     using System.Collections.ObjectModel;

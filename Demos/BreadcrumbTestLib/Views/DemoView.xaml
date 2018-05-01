@@ -4,10 +4,10 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
 
-        xmlns:ctrls="clr-namespace:BreadcrumbLib.Controls;assembly=BreadcrumbLib"
+        xmlns:ctrls="clr-namespace:BmLib.Controls;assembly=BmLib"
 
         xmlns:conv="clr-namespace:BreadcrumbTestLib.Demo.Converter"
-        xmlns:convLib="clr-namespace:BreadcrumbLib.Converters;assembly=BreadcrumbLib"
+        xmlns:convLib="clr-namespace:BmLib.Converters;assembly=BmLib"
         xmlns:local="clr-namespace:BreadcrumbTestLib.Views"
 
         mc:Ignorable="d" 
@@ -15,10 +15,6 @@
     <Grid Margin="12">
         <Grid.Resources>
             <ResourceDictionary>
-                <ResourceDictionary.MergedDictionaries>
-                    <ResourceDictionary Source="/BreadcrumbLib;component/Themes/Default/ComboboxNullAsSeparatorStyle.xaml" />
-                </ResourceDictionary.MergedDictionaries>
-
                 <convLib:BoolToVisibilityPropConverter TrueValue="Visible" FalseValue="Collapsed" x:Key="BoolToVisibilityConverter" />
                 <convLib:BoolToVisibilityCollapsedConverter x:Key="btv" />
                 <convLib:BoolToVisibilityCollapsedConverter x:Key="btvc" />

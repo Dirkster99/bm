@@ -3,7 +3,7 @@
     using System.Threading;
     using System.Threading.Tasks;
     using BreadcrumbTestLib.ViewModels.Interfaces;
-    using BreadcrumbLib.Enums;
+    using BmLib.Enums;
 
     /// <summary>
     /// Lookup only next level of tree nodes, even if the lookupvalue is in deeper level, and process only the matched node.

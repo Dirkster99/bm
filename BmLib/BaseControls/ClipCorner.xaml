@@ -1,0 +1,41 @@
+﻿<ResourceDictionary
+  xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+
+  xmlns:bc="clr-namespace:BmLib.BaseControls"
+  xmlns:conv="clr-namespace:BmLib.Converters"
+>
+    <ResourceDictionary.MergedDictionaries>
+      <ResourceDictionary Source="/BmLib;component/Themes/Default/Buttons.xaml" />
+    </ResourceDictionary.MergedDictionaries>
+
+    <!--<ControlTemplate x:Key="ClippedBorderTemplate" TargetType="{x:Type bc:ClipCorner}">
+        <Border BorderBrush="Transparent" BorderThickness="1" CornerRadius="{TemplateBinding CornerRadius}">
+            <Border.Clip>
+                <MultiBinding Converter="{StaticResource bc}">
+                    <Binding Path="ActualWidth" RelativeSource="{RelativeSource Self}"/>
+                    <Binding Path="ActualHeight" RelativeSource="{RelativeSource Self}"/>
+                    <Binding Path="CornerRadius" RelativeSource="{RelativeSource Self}"/>
+                </MultiBinding>
+            </Border.Clip>
+            <ContentPresenter />                
+            
+        </Border>
+    </ControlTemplate>-->
+
+    <Style TargetType="{x:Type bc:ClipCorner}">
+    <Style.Resources>
+        <conv:BorderClipConverter x:Key="bc" />
+    </Style.Resources>
+        <Setter Property="Clip" >
+            <Setter.Value>
+                <MultiBinding Converter="{StaticResource bc}">
+                    <Binding Path="ActualWidth" RelativeSource="{RelativeSource  TemplatedParent}"/>
+                    <Binding Path="ActualHeight" RelativeSource="{RelativeSource TemplatedParent}"/>
+                    <Binding Path="CornerRadius" RelativeSource="{RelativeSource TemplatedParent}"/>
+                </MultiBinding>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+</ResourceDictionary>

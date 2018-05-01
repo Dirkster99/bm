@@ -131,7 +131,8 @@
                     // Todo: Add Additional references to theming resources here
                     new Uri("/MWindowLib;component/Themes/DarkTheme.xaml", UriKind.RelativeOrAbsolute)
                    ,new Uri("/ThemedDemo;component/BindToMLib/MWindowLib/DarkLightBrushs.xaml", UriKind.RelativeOrAbsolute)
-                   ,new Uri("/BreadcrumbLib;component/Themes/DarkBrushs.xaml", UriKind.RelativeOrAbsolute)
+                   ,new Uri("/BmLib;component/Themes/DarkTheme.xaml", UriKind.RelativeOrAbsolute)
+                   ,new Uri("/ThemedDemo;component/BindToMLib/BmLib/DarkLightBrushs.xaml", UriKind.RelativeOrAbsolute)
 
                 }, settings.Themes);
             }
@@ -147,7 +148,8 @@
                     // Todo: Add Additional references to theming resources here
                     new Uri("/MWindowLib;component/Themes/LightTheme.xaml", UriKind.RelativeOrAbsolute)
                    ,new Uri("/ThemedDemo;component/BindToMLib/MWindowLib/DarkLightBrushs.xaml", UriKind.RelativeOrAbsolute)
-                   ,new Uri("/BreadcrumbLib;component/Themes/LightBrushs.xaml", UriKind.RelativeOrAbsolute)
+                   ,new Uri("/BmLib;component/Themes/LightTheme.xaml", UriKind.RelativeOrAbsolute)
+                   ,new Uri("/ThemedDemo;component/BindToMLib/BmLib/DarkLightBrushs.xaml", UriKind.RelativeOrAbsolute)
 
                 }, settings.Themes);
             }

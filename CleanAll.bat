@@ -6,7 +6,7 @@ ECHO.
 ECHO This script deletes all temporary build files in their
 ECHO corresponding BIN and OBJ Folder contained in the following projects
 ECHO.
-ECHO BreadcrumbLib
+ECHO BmLib
 ECHO.
 ECHO DirectoryInfoExLib
 ECHO Icons
@@ -31,10 +31,10 @@ ECHO XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
 RMDIR /S /Q .vs
 
 ECHO.
-ECHO Deleting BIN and OBJ Folders in BreadcrumbLib folder
+ECHO Deleting BIN and OBJ Folders in BmLib folder
 ECHO.
-RMDIR /S /Q BreadcrumbLib\bin
-RMDIR /S /Q BreadcrumbLib\obj
+RMDIR /S /Q BmLib\bin
+RMDIR /S /Q BmLib\obj
 
 ECHO.
 ECHO Deleting BIN and OBJ Folders in DirectoryInfoExLib folder

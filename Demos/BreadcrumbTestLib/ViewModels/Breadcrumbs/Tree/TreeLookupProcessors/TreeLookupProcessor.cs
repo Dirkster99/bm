@@ -2,7 +2,7 @@
 {
     using BreadcrumbTestLib.ViewModels.Interfaces;
     using System;
-    using BreadcrumbLib.Enums;
+    using BmLib.Enums;
 
     /// <summary>
     /// Implementation of ITreeLookupProcessor, which used with ITreeSelector and ITreeLookup, 

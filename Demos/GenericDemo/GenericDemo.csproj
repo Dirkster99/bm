@@ -123,9 +123,9 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\BreadcrumbLib\BreadcrumbLib.csproj">
-      <Project>{15bbe1fb-d9e1-4b86-be6c-b7d04a1a79f0}</Project>
-      <Name>BreadcrumbLib</Name>
+    <ProjectReference Include="..\..\BmLib\BmLib.csproj">
+      <Project>{0f864f5c-ce7a-438b-b943-620d3b13fa11}</Project>
+      <Name>BmLib</Name>
     </ProjectReference>
     <ProjectReference Include="..\BreadcrumbTestLib\BreadcrumbTestLib.csproj">
       <Project>{5dd7405c-a81d-49be-93bf-46fedd0a3a2c}</Project>

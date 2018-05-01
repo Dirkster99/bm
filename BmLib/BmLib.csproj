@@ -1,0 +1,195 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{0F864F5C-CE7A-438B-B943-620D3B13FA11}</ProjectGuid>
+    <OutputType>library</OutputType>
+    <RootNamespace>BmLib</RootNamespace>
+    <AssemblyName>BmLib</AssemblyName>
+    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <ProjectTypeGuids>{60dc8134-eba5-43b8-bcc9-bb4bc16c2548};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Xml" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Xaml">
+      <RequiredTargetFramework>4.0</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="WindowsBase" />
+    <Reference Include="PresentationCore" />
+    <Reference Include="PresentationFramework" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="BaseControls\ClipCorner.xaml.cs">
+      <DependentUpon>ClipCorner.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="BaseControls\Invert.cs" />
+    <Compile Include="BaseControls\MultiContentControl.cs" />
+    <Compile Include="BaseControls\OverflowableStackPanel.cs" />
+    <Compile Include="Controls\Breadcrumb.xaml.cs">
+      <DependentUpon>Breadcrumb.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\Breadcrumbs\BreadcrumbTree.xaml.cs">
+      <DependentUpon>BreadcrumbTree.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\Breadcrumbs\BreadcrumbTreeItem.xaml.cs">
+      <DependentUpon>BreadcrumbTreeItem.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\DropDown.xaml.cs">
+      <DependentUpon>DropDown.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\DropDownList.xaml.cs">
+      <DependentUpon>DropDownList.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\HotTrack.xaml.cs">
+      <DependentUpon>HotTrack.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\Switch.xaml.cs">
+      <DependentUpon>Switch.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Themes\ResourceKeys.cs" />
+    <Compile Include="Utils\AsyncUtils.cs" />
+    <Compile Include="Utils\UITools.cs" />
+    <Page Include="BaseControls\ClipCorner.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Controls\Breadcrumb.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Controls\Breadcrumbs\BreadcrumbTree.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Controls\Breadcrumbs\BreadcrumbTreeItem.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Controls\DropDown.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Controls\DropDownList.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Controls\HotTrack.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Controls\Switch.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Themes\DarkBrushs.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Themes\Default\Brushes.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Themes\Default\Buttons.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Themes\Default\ComboboxNullAsSeparatorStyle.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Themes\Default\Geometry.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Themes\DarkTheme.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Themes\LightTheme.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Themes\Generic.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Compile Include="Converters\BoolToOneOfTwoBindingsConverter.cs" />
+    <Compile Include="Converters\BoolToVisibilityCollapsedConverter.cs" />
+    <Compile Include="Converters\BoolToVisibilityConverter.cs" />
+    <Compile Include="Converters\BoolToVisibilityPropConverter.cs" />
+    <Compile Include="Converters\BorderClipConverter.cs" />
+    <Compile Include="Converters\FlipBoolConverter.cs" />
+    <Compile Include="Converters\FlipBoolToVisibilityCollapsedConverter.cs" />
+    <Compile Include="Converters\FlipBoolToVisibilityConverter.cs" />
+    <Page Include="Themes\LightBrushs.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Enums\AttachedProperties.cs" />
+    <Compile Include="Enums\HierarchicalResult.cs" />
+    <Compile Include="Enums\UpdateMode.cs" />
+    <Compile Include="IconExtractors\Enums\IconSize.cs" />
+    <Compile Include="IconExtractors\Enums\ImageListDrawItemConstants.cs" />
+    <Compile Include="IconExtractors\Enums\ShellIconStateConstants.cs" />
+    <Compile Include="IconExtractors\SystemImageList.cs" />
+    <Compile Include="Interfaces\IEntryViewModel.cs" />
+    <Compile Include="Interfaces\IOverflown.cs" />
+    <Compile Include="Models\ExtensionMethods.cs" />
+    <Compile Include="Models\IDiskPathMapper.cs" />
+    <Compile Include="Models\IEntryHierarchyComparer.cs" />
+    <Compile Include="Models\IEntryModel.cs" />
+    <Compile Include="Models\IPathHelper.cs" />
+    <Compile Include="Models\PathHelper.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Properties\Settings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Settings.settings</DependentUpon>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+    </Compile>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <None Include="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+</Project>

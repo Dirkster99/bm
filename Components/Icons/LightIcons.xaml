@@ -1,7 +1,7 @@
 ﻿<ResourceDictionary
   xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
   xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-  xmlns:themes="clr-namespace:BreadcrumbLib.Themes;assembly=BreadcrumbLib"
+  xmlns:themes="clr-namespace:BmLib.Themes;assembly=BmLib"
   >
 
 	<BitmapImage x:Key="SpecialFolder_ApplicationData" UriSource="/Icons;component/Light/SpecialFolder_ApplicationData.ico" />

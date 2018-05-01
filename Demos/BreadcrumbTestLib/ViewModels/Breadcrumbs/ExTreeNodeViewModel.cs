@@ -10,10 +10,10 @@
     using BreadcrumbTestLib.ViewModels.Base;
     using DirectoryInfoExLib.Interfaces;
     using System;
-    using BreadcrumbLib.IconExtractors.Enums;
-    using BreadcrumbLib.IconExtractors.IconExtracts;
-    using BreadcrumbLib.Interfaces;
-    using BreadcrumbLib.Enums;
+    using BmLib.IconExtractors.Enums;
+    using BmLib.IconExtractors.IconExtracts;
+    using BmLib.Interfaces;
+    using BmLib.Enums;
 
     /// <summary>
     /// Class implements a ViewModel to manage a sub-tree of a Breadcrumb control.

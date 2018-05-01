@@ -6,10 +6,10 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
     xmlns:local="clr-namespace:BreadcrumbTestLib.Views"
 
-    xmlns:uc="clr-namespace:BreadcrumbLib.Controls.Breadcrumbs;assembly=BreadcrumbLib"
-    xmlns:ctrls="clr-namespace:BreadcrumbLib.Controls;assembly=BreadcrumbLib"
-    xmlns:themes="clr-namespace:BreadcrumbLib.Themes;assembly=BreadcrumbLib"
-    xmlns:convLib="clr-namespace:BreadcrumbLib.Converters;assembly=BreadcrumbLib"
+    xmlns:uc="clr-namespace:BmLib.Controls.Breadcrumbs;assembly=BmLib"
+    xmlns:ctrls="clr-namespace:BmLib.Controls;assembly=BmLib"
+    xmlns:themes="clr-namespace:BmLib.Themes;assembly=BmLib"
+    xmlns:convLib="clr-namespace:BmLib.Converters;assembly=BmLib"
     
     mc:Ignorable="d" 
     d:DesignHeight="450" d:DesignWidth="800">

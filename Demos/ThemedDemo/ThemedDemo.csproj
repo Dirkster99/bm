@@ -122,6 +122,10 @@
     <Compile Include="ViewModels\Base\ViewModelBase.cs" />
     <Compile Include="ViewModels\ThemeDefinitionViewModel.cs" />
     <Compile Include="ViewModels\ThemeViewModel.cs" />
+    <Page Include="BindToMLib\BmLib\DarkLightBrushs.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="BindToMLib\MWindowLib\DarkLightBrushs.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -167,9 +171,9 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\BreadcrumbLib\BreadcrumbLib.csproj">
-      <Project>{15bbe1fb-d9e1-4b86-be6c-b7d04a1a79f0}</Project>
-      <Name>BreadcrumbLib</Name>
+    <ProjectReference Include="..\..\BmLib\BmLib.csproj">
+      <Project>{0f864f5c-ce7a-438b-b943-620d3b13fa11}</Project>
+      <Name>BmLib</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\Components\DirectoryInfoExLib\DirectoryInfoExLib.csproj">
       <Project>{09df5a9a-989e-410c-ba72-5a94cf481e57}</Project>

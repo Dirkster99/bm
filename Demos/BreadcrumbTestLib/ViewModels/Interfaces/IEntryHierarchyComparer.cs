@@ -1,6 +1,6 @@
 ﻿namespace BreadcrumbTestLib.ViewModels.Interfaces
 {
-    using BreadcrumbLib.Enums;
+    using BmLib.Enums;
 
     public interface ICompareHierarchy<T>
     {

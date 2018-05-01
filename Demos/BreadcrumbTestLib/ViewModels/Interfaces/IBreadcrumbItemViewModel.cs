@@ -1,6 +1,6 @@
 ﻿namespace BreadcrumbTestLib.ViewModels.Interfaces
 {
-    using BreadcrumbLib.Interfaces;
+    using BmLib.Interfaces;
 
     public interface IBreadcrumbItemViewModel : IEntryViewModel ////, ISupportTreeSelector<IBreadcrumbItemViewModel, IEntryModel>
     {

@@ -1,0 +1,21 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation">
+
+    <ResourceDictionary.MergedDictionaries>
+        <ResourceDictionary Source="/BmLib;component/Themes/DarkBrushs.xaml" />
+        <ResourceDictionary Source="/BmLib;component/Themes/Default/Buttons.xaml" />
+
+        <ResourceDictionary Source="/BmLib;component/Controls/HotTrack.xaml" />
+        <ResourceDictionary Source="/BmLib;component/Controls/Switch.xaml" />
+
+        <ResourceDictionary Source="/BmLib;component/baseControls/ClipCorner.xaml" />
+
+        <ResourceDictionary Source="/BmLib;component/Controls/Breadcrumbs/BreadcrumbTreeItem.xaml" />
+        <ResourceDictionary Source="/BmLib;component/Controls/Breadcrumbs/BreadcrumbTree.xaml" />
+
+        <ResourceDictionary Source="/BmLib;component/Controls/DropDownList.xaml" />
+        <ResourceDictionary Source="/BmLib;component/Controls/DropDown.xaml" />
+
+        <ResourceDictionary Source="/BmLib;component/controls/Breadcrumb.xaml" />
+    </ResourceDictionary.MergedDictionaries>
+
+</ResourceDictionary>

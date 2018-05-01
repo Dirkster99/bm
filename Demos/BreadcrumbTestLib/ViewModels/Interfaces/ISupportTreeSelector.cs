@@ -1,6 +1,6 @@
 ﻿namespace BreadcrumbTestLib.ViewModels.Interfaces
 {
-    using BreadcrumbLib.Interfaces;
+    using BmLib.Interfaces;
 
     /// <summary>
     /// Implement by ViewModel that has Tree based structure and support LookupProcessing.

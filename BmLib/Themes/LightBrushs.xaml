@@ -1,0 +1,87 @@
+﻿<ResourceDictionary
+  xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+  xmlns:sys="clr-namespace:System;assembly=mscorlib"
+  xmlns:reskeys="clr-namespace:BmLib.Themes">
+
+    <!-- Accent Color Brush Definition
+             - Look for references on ControlAccentBrushKey to find where this is being set in code -->
+    <Color x:Key="{x:Static reskeys:ResourceKeys.ControlAccentColorKey}">#1ba1e2</Color>
+
+    <SolidColorBrush x:Key="{x:Static reskeys:ResourceKeys.ControlAccentBrushKey}"
+                     Color="{DynamicResource {x:Static reskeys:ResourceKeys.ControlAccentColorKey}}" />
+
+    <!-- SolidColorBrush x:Key="SystemButtonMouseOverBackgroundColor" Color="#20FFFFFF" / -->
+
+    <!-- MetroLight Theme -->
+    <SolidColorBrush x:Key="{x:Static reskeys:ResourceKeys.ControlNormalBackgroundKey}"
+                     Color="White" />
+
+    <SolidColorBrush x:Key="{x:Static reskeys:ResourceKeys.ControlTextBrushKey}"
+                     Color="Black" />
+
+    <SolidColorBrush x:Key="{x:Static reskeys:ResourceKeys.ControlNormalForegroundBrushKey}"
+                     Color="Black" />
+
+    <SolidColorBrush x:Key="{x:Static reskeys:ResourceKeys.ControlBorderBrushKey}"
+                     Color="#FFe9def5" />
+
+    <SolidColorBrush x:Key="{x:Static reskeys:ResourceKeys.ArrowBorderForeground}"
+                     Color="#80999999" />
+
+    <SolidColorBrush x:Key="{x:Static reskeys:ResourceKeys.ArrowFillForeground}"
+                     Color="#FF000000" />
+
+    <SolidColorBrush x:Key="{x:Static reskeys:ResourceKeys.ArrowFillMouseOverForeground}"
+                     Color="{DynamicResource {x:Static reskeys:ResourceKeys.ControlAccentColorKey}}" />
+
+    <SolidColorBrush x:Key="{x:Static reskeys:ResourceKeys.ArrowBorderMouseOverForeground}"
+                     Color="{DynamicResource {x:Static reskeys:ResourceKeys.ControlAccentColorKey}}" />
+
+    <!-- Defines the inner color of the chevron symbol in the arrow drop down button -->
+    <SolidColorBrush x:Key="{ComponentResourceKey TypeInTargetAssembly={x:Type reskeys:ResourceKeys},
+                     ResourceId=ArrowFillCheckedForeground}"
+                     Color="{DynamicResource {x:Static reskeys:ResourceKeys.ControlAccentColorKey}}" />
+
+    <!-- Defines the outer (border) color of the chevron symbol in the arrow drop down button -->
+    <SolidColorBrush x:Key="{ComponentResourceKey TypeInTargetAssembly={x:Type reskeys:ResourceKeys},
+                     ResourceId=ArrowBorderCheckedForeground}"
+                     Color="{DynamicResource {x:Static reskeys:ResourceKeys.ControlAccentColorKey}}" />
+
+    <SolidColorBrush x:Key="{x:Static reskeys:ResourceKeys.ButtonSelectedColor}"
+                     Color="White"  />
+
+    <SolidColorBrush x:Key="{x:Static reskeys:ResourceKeys.ButtonBackgoundColor}"
+                     Color="White" />
+
+    <!-- Decide whether styling is using a 3D depth effect or not -->
+    <sys:Boolean x:Key="{ComponentResourceKey TypeInTargetAssembly={x:Type reskeys:ResourceKeys},
+                 ResourceId=ThreeDStyleBrushes}">False</sys:Boolean>
+
+    <!-- Is applied on root drop button when list is open -->
+    <SolidColorBrush x:Key="{ComponentResourceKey TypeInTargetAssembly={x:Type reskeys:ResourceKeys},
+                     ResourceId=HotTrack_SelectedBrush}"
+                     Color="{DynamicResource {x:Static reskeys:ResourceKeys.ControlAccentColorKey}}"
+                     Opacity=".5"
+                     />
+
+    <SolidColorBrush x:Key="{x:Static reskeys:ResourceKeys.HotTrack_BackgroundBrush}"
+                     Color="#FFd9eee5"/>
+
+    <SolidColorBrush x:Key="{x:Static reskeys:ResourceKeys.HotTrack_HighlightBrush}"
+                     Color="#25d9eee5" />
+
+    <!-- This color is applied to the drop down button (Hottrack) when it is selected and the drop down is open -->
+    <SolidColorBrush x:Key="{x:Static reskeys:ResourceKeys.OpenDropDownButton_Background}"
+                     Color="{DynamicResource {x:Static reskeys:ResourceKeys.ControlAccentColorKey}}" />
+
+    <SolidColorBrush x:Key="{x:Static reskeys:ResourceKeys.ControlInputBackgroundKey}"
+                     Color="#ffffff" />
+
+    <SolidColorBrush x:Key="{x:Static reskeys:ResourceKeys.ControlInputBorderKey}"
+                     Color="#cccccc" />
+
+    <SolidColorBrush x:Key="{x:Static reskeys:ResourceKeys.ControlDisabledBackgroundKey}"
+                     Color="#20000000" />
+
+</ResourceDictionary>

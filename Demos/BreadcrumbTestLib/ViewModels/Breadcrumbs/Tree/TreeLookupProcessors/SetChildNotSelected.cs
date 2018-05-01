@@ -1,8 +1,7 @@
 ﻿namespace BreadcrumbTestLib.ViewModels.TreeLookupProcessors
 {
     using BreadcrumbTestLib.ViewModels.Interfaces;
-    using BreadcrumbLib.Defines;
-    using BreadcrumbLib.Enums;
+    using BmLib.Enums;
 
     /// <summary>
     /// Set ViewModel's ITreeSelector.SelectedChild to null.

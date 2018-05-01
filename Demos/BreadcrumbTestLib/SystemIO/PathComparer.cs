@@ -2,7 +2,7 @@ namespace BreadcrumbTestLib.SystemIO
 {
     using System;
     using BreadcrumbTestLib.ViewModels.Interfaces;
-    using BreadcrumbLib.Enums;
+    using BmLib.Enums;
 
     /// <summary>
     /// Implements a string based <seealso ref="ICompareHierarchy"> object

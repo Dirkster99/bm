@@ -9,7 +9,7 @@
     using System.Threading;
     using System.Threading.Tasks;
     using System.Windows.Input;
-    using BreadcrumbLib.Enums;
+    using BmLib.Enums;
 
     internal class EntriesHelperViewModel<VM> : Base.ViewModelBase, IEntriesHelper<VM>
     {
