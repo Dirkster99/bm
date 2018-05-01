@@ -1,4 +1,4 @@
-﻿namespace BmThemedDemo.ViewModels.Base
+﻿namespace ThemedDemo.ViewModels.Base
 {
     public class ModelBase
     {

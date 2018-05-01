@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace BmThemedDemo.Properties
+namespace ThemedDemo.Properties
 {
 
 

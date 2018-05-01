@@ -1,4 +1,4 @@
-﻿namespace BmThemedDemo
+﻿namespace ThemedDemo
 {
     using log4net;
     using log4net.Config;
@@ -23,7 +23,7 @@
         protected static log4net.ILog Logger;
 
         private ViewModels.AppViewModel _appVM = null;
-        private MainWindow _mainWindow = null;
+        private Views.MainWindow _mainWindow = null;
         #endregion fields
 
         #region constructors
@@ -34,6 +34,11 @@
 
             // Create service model to ensure available services
             ServiceInjector.InjectServices();
+        }
+
+        public App()
+        {
+            _mainWindow = new Views.MainWindow();
         }
         #endregion constructors
 
@@ -98,7 +103,7 @@
             _appVM.InitForMainWindow(GetService<IAppearanceManager>()
                                 , settings.Options.GetOptionValue<string>("Appearance", "ThemeDisplayName"));
 
-            Application.Current.MainWindow = _mainWindow = new MainWindow();
+            Application.Current.MainWindow = _mainWindow;
             MainWindow.DataContext = _appVM;
 
             AppCore.CreateAppDataFolder();
@@ -172,7 +177,7 @@
 
                 string lastActiveFile = settings.SessionData.LastActiveSolution;
 
-                MainWindow mainWin = win as MainWindow;
+                var mainWin = win as Views.MainWindow;
             }
             catch (Exception exp)
             {

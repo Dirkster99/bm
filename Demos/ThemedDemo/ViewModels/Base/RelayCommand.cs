@@ -1,4 +1,4 @@
-﻿namespace BmThemedDemo.ViewModels.Base
+﻿namespace ThemedDemo.ViewModels.Base
 {
     using System;
     using System.Diagnostics;

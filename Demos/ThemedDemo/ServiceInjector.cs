@@ -1,4 +1,4 @@
-﻿namespace BmThemedDemo
+﻿namespace ThemedDemo
 {
     using MLib;
     using MLib.Interfaces;

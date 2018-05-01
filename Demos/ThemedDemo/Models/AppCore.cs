@@ -1,4 +1,4 @@
-﻿namespace BmThemedDemo.Models
+﻿namespace ThemedDemo.Models
 {
     using System;
     using System.Globalization;
@@ -54,14 +54,14 @@
         {
             get
             {
-                return "BmThemedDemo";
+                return "ThemedDemo";
             }
         }
         public static string Application_Title
         {
             get
             {
-                return "BmThemedDemo";
+                return "ThemedDemo";
             }
         }
 

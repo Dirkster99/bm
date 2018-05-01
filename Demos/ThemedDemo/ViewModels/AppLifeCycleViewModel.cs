@@ -1,4 +1,4 @@
-﻿namespace BmThemedDemo.ViewModels
+﻿namespace ThemedDemo.ViewModels
 {
     using MLib.Interfaces;
     using Models;

@@ -1,4 +1,4 @@
-﻿namespace BmThemedDemo.Models
+﻿namespace ThemedDemo.Models
 {
     using Settings.Interfaces;
     using SettingsModel.Interfaces;

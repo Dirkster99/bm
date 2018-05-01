@@ -1,4 +1,4 @@
-﻿namespace BmThemedDemo.Demos.ViewModels
+﻿namespace ThemedDemo.Demos.ViewModels
 {
     public class DemoViewModel : BreadcrumbTestLib.ViewModels.AppViewModel
     {

@@ -1,7 +1,7 @@
-﻿namespace BmThemedDemo.ViewModels
+﻿namespace ThemedDemo.ViewModels
 {
     using Base;
-    using BmThemedDemo.Demos.ViewModels;
+    using ThemedDemo.Demos.ViewModels;
     using MLib.Interfaces;
     using Settings.Interfaces;
     using System;

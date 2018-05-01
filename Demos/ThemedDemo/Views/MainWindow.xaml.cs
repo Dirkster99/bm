@@ -1,4 +1,4 @@
-﻿namespace BmThemedDemo
+﻿namespace ThemedDemo.Views
 {
     using Settings.UserProfile;
 
