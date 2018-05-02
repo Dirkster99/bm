@@ -56,6 +56,7 @@
                     Fill="{DynamicResource {x:Static reskeys:ResourceKeys.ArrowFillForeground}}"
                     Stroke="{DynamicResource {x:Static reskeys:ResourceKeys.ArrowBorderForeground}}"
                     Data="{DynamicResource {x:Static reskeys:ResourceKeys.NormalArrow}}"
+                    StrokeThickness="1.2"
                     Margin="0"
                     IsHitTestVisible="True"
                     Visibility="Visible"  />

@@ -29,10 +29,10 @@
                      Color="#FFe9def5" options:Freeze="true"/>
 
     <SolidColorBrush x:Key="{x:Static reskeys:ResourceKeys.ArrowBorderForeground}"
-                     Color="#80999999" options:Freeze="true"/>
+                     Color="#FF000000" options:Freeze="true"/>
 
     <SolidColorBrush x:Key="{x:Static reskeys:ResourceKeys.ArrowFillForeground}"
-                     Color="#FF000000" options:Freeze="true"/>
+                     Color="Transparent" options:Freeze="true"/>
 
     <SolidColorBrush x:Key="{x:Static reskeys:ResourceKeys.ArrowFillMouseOverForeground}"
                      Color="{DynamicResource {x:Static reskeys:ResourceKeys.ControlAccentColorKey}}" options:Freeze="true"/>
@@ -72,7 +72,7 @@
 
     <SolidColorBrush x:Key="{x:Static reskeys:ResourceKeys.HotTrack_HighlightBrush}"
                      Color="{DynamicResource {x:Static reskeys:ResourceKeys.ControlAccentColorKey}}"
-                     Opacity=".25" options:Freeze="true"
+                     Opacity=".1" options:Freeze="true"
                      />
 
     <!-- This color is applied to the drop down button (Hottrack) when it is selected and the drop down is open -->
