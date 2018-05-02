@@ -40,7 +40,7 @@
     /// Microsoft.SDK.Samples.VistaBridge.Library.Shell
     /// https://blogs.msdn.microsoft.com/yvesdolc/2007/02/14/known-folders-the-return/
     /// </summary>
-    public class KnownFolder : IDisposable
+    internal class KnownFolder : IDisposable
     {
         #region fields
         /// <summary>

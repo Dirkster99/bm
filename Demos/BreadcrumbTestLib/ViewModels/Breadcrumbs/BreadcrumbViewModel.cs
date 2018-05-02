@@ -118,10 +118,10 @@ namespace BreadcrumbTestLib.ViewModels.Breadcrumbs
         /// to view a default content.
         /// </summary>
         /// <param name="initialRequest"></param>
-        public async Task<FinalBrowseResult<IDirectoryInfoEx>> InitPathAsync(
+        public async Task<FinalBrowseResult<IDirectoryBrowser>> InitPathAsync(
             BrowseRequest<string> initialRequest)
         {
-            var selector = BreadcrumbSubTree.Selection as ITreeRootSelector<ExTreeNodeViewModel, IDirectoryInfoEx>;
+            var selector = BreadcrumbSubTree.Selection as ITreeRootSelector<ExTreeNodeViewModel, IDirectoryBrowser>;
 
             return await Task.Run(() => selector.SelectAsync(DirectoryInfoExLib.Factory.FromString(initialRequest.NewLocation),
                                               initialRequest.CancelTok,

@@ -73,6 +73,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Factory.cs" />
+    <Compile Include="Interfaces\IDirectoryBrowser.cs" />
     <Compile Include="Interfaces\IDirectoryInfoEx.cs" />
     <Compile Include="IO\FileSystemInfoExt\ExtensionMethods.cs" />
     <Compile Include="IO\Header\FileBrowser\Interfaces\IEnumIDList.cs" />

@@ -32,7 +32,7 @@ namespace DirectoryInfoExLib.IO.FileSystemInfoExt
     internal class DirectoryInfoEx : FileSystemInfoEx, IDirectoryInfoEx
     {
         #region fields
-        private IDirectoryInfoEx _parent;
+        private IDirectoryBrowser _parent;
         private bool _parentInited = false;
 
         private DirectoryTypeEnum _dirType;
@@ -176,7 +176,7 @@ namespace DirectoryInfoExLib.IO.FileSystemInfoExt
         /// <summary>
         /// Gets the parent folder item of this item.
         /// </summary>
-        public IDirectoryInfoEx Parent
+        public IDirectoryBrowser Parent
         {
             get
             {
@@ -195,7 +195,7 @@ namespace DirectoryInfoExLib.IO.FileSystemInfoExt
         /// <summary>
         /// Gets the root of this item.
         /// </summary>
-        public IDirectoryInfoEx Root { get { return getDirectoryRoot(this); } }
+        public IDirectoryInfoEx Root { get { return getDirectoryRoot(this) as IDirectoryInfoEx; } }
 
         /// <summary>
         /// Gets the folders type classification.
@@ -238,9 +238,9 @@ namespace DirectoryInfoExLib.IO.FileSystemInfoExt
         /// <summary>
         /// Takes a directoryInfoEx and return the first parent with directory type = desktop or drive.
         /// </summary>
-        internal static IDirectoryInfoEx getDirectoryRoot(IDirectoryInfoEx lookup)
+        internal static IDirectoryBrowser getDirectoryRoot(IDirectoryInfoEx lookup)
         {
-            IDirectoryInfoEx dir = lookup.Parent;
+            IDirectoryBrowser dir = lookup.Parent;
 
             while (dir.DirectoryType != DirectoryTypeEnum.dtDesktop &&
                 dir.DirectoryType != DirectoryTypeEnum.dtDrive &&
@@ -416,7 +416,7 @@ namespace DirectoryInfoExLib.IO.FileSystemInfoExt
                 if (Exists)
                 {
                     if (FullName.Equals(DirectoryInfoEx.IID_Desktop))
-                        return _parent;
+                        return _parent as IDirectoryInfoEx;
 
                     this.RequestPIDL((pidl) =>
                     {
@@ -433,7 +433,7 @@ namespace DirectoryInfoExLib.IO.FileSystemInfoExt
                 }
             }
 
-            return _parent;
+            return _parent as IDirectoryInfoEx;
         }
 
         protected string GetDirectoryName(string path)
@@ -646,7 +646,7 @@ namespace DirectoryInfoExLib.IO.FileSystemInfoExt
         /// Enumerates all items in this directory with the given search parameters.
         /// </summary>
         /// <returns></returns>
-        public IEnumerable<IDirectoryInfoEx> EnumerateDirectories()
+        public IEnumerable<IDirectoryBrowser> EnumerateDirectories()
         {
             return EnumerateDirectories("*", SearchOption.TopDirectoryOnly);
         }
@@ -655,10 +655,10 @@ namespace DirectoryInfoExLib.IO.FileSystemInfoExt
         /// <summary>
         /// Return a list of sub directories
         /// </summary>
-        public IDirectoryInfoEx[] GetDirectories(String searchPattern, SearchOption searchOption)
+        public IDirectoryBrowser[] GetDirectories(String searchPattern, SearchOption searchOption)
         {
             checkExists();
-            return new List<IDirectoryInfoEx>(EnumerateDirectories(searchPattern, searchOption)).ToArray();
+            return new List<IDirectoryBrowser>(EnumerateDirectories(searchPattern, searchOption)).ToArray();
         }
 
         /// <summary>
@@ -673,10 +673,10 @@ namespace DirectoryInfoExLib.IO.FileSystemInfoExt
         /// <summary>
         /// Return a list of sub directories
         /// </summary>
-        public IDirectoryInfoEx[] GetDirectories()
+        public IDirectoryBrowser[] GetDirectories()
         {
             checkExists();
-            return new List<IDirectoryInfoEx>(EnumerateDirectories()).ToArray();
+            return new List<IDirectoryBrowser>(EnumerateDirectories()).ToArray();
         }
 
         public Task<IDirectoryInfoEx[]> GetDirectoriesAsync(String searchPattern,

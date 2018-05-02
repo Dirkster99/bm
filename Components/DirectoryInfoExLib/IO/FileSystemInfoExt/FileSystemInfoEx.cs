@@ -539,7 +539,6 @@ namespace DirectoryInfoExLib.IO.FileSystemInfoExt
                 //    FullName = IOTools.IID_Public;
                 //else
 
-
                 if (OriginalPath == null)
                     OriginalPath = FullName;
                 if (parseName.StartsWith("::")) //Guid
@@ -547,8 +546,6 @@ namespace DirectoryInfoExLib.IO.FileSystemInfoExt
 
                 _name = FullName.EndsWith("\\") ? FullName : GetFileName(FullName);
                 Label = loadName(parentShellFolder, relPIDL, Header.ShellDll.ShellAPI.SHGNO.NORMAL);
-
-
             }
             else
             {

@@ -24,12 +24,12 @@
     /// - a list of items below this item.
     /// </summary>
     public class ExTreeNodeViewModel : ViewModelBase,
-                                       ISupportTreeSelector<ExTreeNodeViewModel, IDirectoryInfoEx>
+                                       ISupportTreeSelector<ExTreeNodeViewModel, IDirectoryBrowser>
     {
         #region fields
-        public static ICompareHierarchy<IDirectoryInfoEx> Comparer = new ExHierarchyComparer();
+        public static ICompareHierarchy<IDirectoryBrowser> Comparer = new ExHierarchyComparer();
 
-        private IDirectoryInfoEx _dir;
+        private IDirectoryBrowser _dir;
         private string _header;
         private ExTreeNodeViewModel _rootNode, _parentNode;
 
@@ -45,7 +45,7 @@
         {
             Entries = new EntriesHelperViewModel<ExTreeNodeViewModel>();
             Selection =
-              new TreeRootSelectorViewModel<ExTreeNodeViewModel, IDirectoryInfoEx>(this.Entries)
+              new TreeRootSelectorViewModel<ExTreeNodeViewModel, IDirectoryBrowser>(this.Entries)
               {
                   Comparers = new[] { ExTreeNodeViewModel.Comparer }
               };
@@ -67,7 +67,7 @@
         /// </summary>
         /// <param name="dir"></param>
         /// <param name="parentNode"></param>
-        internal ExTreeNodeViewModel(IDirectoryInfoEx dir, ExTreeNodeViewModel parentNode)
+        internal ExTreeNodeViewModel(IDirectoryBrowser dir, ExTreeNodeViewModel parentNode)
         {
             _dir = dir;
 
@@ -89,13 +89,13 @@
                 }
             }));
 
-            this.Selection = new TreeSelectorViewModel<ExTreeNodeViewModel, IDirectoryInfoEx>
+            this.Selection = new TreeSelectorViewModel<ExTreeNodeViewModel, IDirectoryBrowser>
             (_dir, this, this._parentNode.Selection, this.Entries);
         }
         #endregion constructors
 
         #region properties
-        public ITreeSelector<ExTreeNodeViewModel, IDirectoryInfoEx> Selection { get; protected set; }
+        public ITreeSelector<ExTreeNodeViewModel, IDirectoryBrowser> Selection { get; protected set; }
 
         /// <summary>
         /// Gets all sub-tree entries that belong

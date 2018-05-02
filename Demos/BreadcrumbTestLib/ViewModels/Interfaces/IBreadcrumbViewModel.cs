@@ -41,7 +41,7 @@
         /// to view a default content.
         /// </summary>
         /// <param name="initialRequest"></param>
-        Task<FinalBrowseResult<IDirectoryInfoEx>> InitPathAsync(BrowseRequest<string> initialRequest);
+        Task<FinalBrowseResult<IDirectoryBrowser>> InitPathAsync(BrowseRequest<string> initialRequest);
         #endregion methods
     }
 }

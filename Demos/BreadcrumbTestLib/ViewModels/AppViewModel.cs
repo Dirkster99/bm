@@ -102,7 +102,7 @@
             var selection = DiskTest.Selection as ITreeRootSelector<DiskTreeNodeViewModel, string>;
             selection.SelectAsync(initialPath);
 
-            var sel2 = ExTest.Selection as ITreeRootSelector<ExTreeNodeViewModel, IDirectoryInfoEx>;
+            var sel2 = ExTest.Selection as ITreeRootSelector<ExTreeNodeViewModel, IDirectoryBrowser>;
             sel2.SelectAsync(DirectoryInfoExLib.Factory.FromString(initialPath));
 
             NavigateToFolder(initialPath);
@@ -194,9 +194,9 @@
         /// </summary>
         /// <param name="request"></param>
         /// <param name="requestor"</param>
-        private async Task<FinalBrowseResult<IDirectoryInfoEx>> NavigateToFolderAsync(
-                                                                BrowseRequest<string> request,
-                                                                       object sender)
+        private async Task<FinalBrowseResult<IDirectoryBrowser>> NavigateToFolderAsync(
+             BrowseRequest<string> request
+            ,object sender)
         {
             // Make sure the task always processes the last input but is not started twice
             await _SlowStuffSemaphore.WaitAsync();
@@ -214,7 +214,7 @@
             }
             catch (Exception exp)
             {
-                var result = FinalBrowseResult<IDirectoryInfoEx>.FromRequest(null, BrowseResult.InComplete);
+                var result = FinalBrowseResult<IDirectoryBrowser>.FromRequest(null, BrowseResult.InComplete);
                 result.UnexpectedError = exp;
                 return result;
             }

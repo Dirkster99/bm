@@ -1,12 +1,12 @@
 ﻿namespace DirectoryInfoExLib.Interfaces
 {
     using System;
+    using DirectoryInfoExLib.IO.Header.ShellDll;
+    using DirectoryInfoExLib.IO.Header.KnownFolder;
     using System.Collections.Generic;
     using System.IO;
-    using System.Threading.Tasks;
     using System.Threading;
-    using DirectoryInfoExLib.IO.Header.KnownFolder;
-    using DirectoryInfoExLib.IO.Header.ShellDll;
+    using System.Threading.Tasks;
 
     /// <summary>
     /// Implements a classification for folders.
@@ -44,41 +44,17 @@
     public delegate bool CancelDelegate();
 
     /// <summary>
-    /// Represents a directory in PIDL system.
+    /// Extends IDirectoryInfoEx by those API items that are currently
+    /// not needed in an external browser application.
     /// </summary>
-    public interface IDirectoryInfoEx : IDisposable, ICloneable
+    internal interface IDirectoryInfoEx : IDirectoryBrowser
     {
         #region properties
         /// <summary>
-        /// Gets the name of a directory.
-        /// </summary>
-        string Name { get; }
-
-        /// <summary>
-        /// Gets the name including path and extensions.
-        /// </summary>
-        string FullName { get; }
-
-        /// <summary>
-        /// Gets the label of a directory, ehich can be different to a name in case of a drive.
-        /// </summary>
-        string Label { get; }
-
-        /// <summary>
-        /// Gets the parent directory of a directory (if any) or null (if none).
-        /// </summary>
-        IDirectoryInfoEx Parent { get; }
-
-        /// <summary>
-        /// Gets the root directory of a directory with
+        /// Gets the root directory of a directory
         /// which is either desktop or drive.
         /// </summary>
         IDirectoryInfoEx Root { get; }
-
-        /// <summary>
-        /// Gets the folders type classification.
-        /// </summary>
-        DirectoryTypeEnum DirectoryType { get; }
 
         /// <summary>
         /// Gets the Windows known folder (similar to <see cref="Environment.SpecialFolder"/>
@@ -126,22 +102,17 @@
         /// Enumerates all items in this directory with the given search parameters.
         /// </summary>
         /// <returns></returns>
-        IEnumerable<IDirectoryInfoEx> EnumerateDirectories();
+        IEnumerable<IDirectoryBrowser> EnumerateDirectories();
 
         /// <summary>
         /// Return a list of sub directories
         /// </summary>
-        IDirectoryInfoEx[] GetDirectories(String searchPattern, SearchOption searchOption);
+        IDirectoryBrowser[] GetDirectories(String searchPattern, SearchOption searchOption);
 
         /// <summary>
         /// Return a list of sub directories
         /// </summary>
         IDirectoryInfoEx[] GetDirectories(String searchPattern);
-
-        /// <summary>
-        /// Return a list of sub directories
-        /// </summary>
-        IDirectoryInfoEx[] GetDirectories();
 
         /// <summary>
         /// Return a task that returns a list of sub directories.
@@ -164,17 +135,6 @@
         /// <param name="pidlAndRelPidlFunc"></param>
         /// <returns></returns>
         T RequestPIDL<T>(Func<PIDL, PIDL, T> pidlAndRelPidlFunc);
-
-        /// <summary>
-        /// Executes a delegate function that returns T and
-        /// accepts 1 <see cref="PIDL"/> parameter.
-        /// 
-        /// Function takes care of freeing <see cref="PIDL"/> object after execution.
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="pidlFuncOnly"></param>
-        /// <returns></returns>
-        T RequestPIDL<T>(Func<PIDL, T> pidlFuncOnly);
 
         /// <summary>
         /// Executes an Action that returns void and

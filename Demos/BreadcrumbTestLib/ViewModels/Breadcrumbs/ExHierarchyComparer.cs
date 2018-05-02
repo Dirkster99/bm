@@ -5,7 +5,7 @@
     using DirectoryInfoExLib.Interfaces;
     using BmLib.Enums;
 
-    public class ExHierarchyComparer : ICompareHierarchy<IDirectoryInfoEx>
+    public class ExHierarchyComparer : ICompareHierarchy<IDirectoryBrowser>
     {
         #region fields
         private PathComparer _pathComparer = new PathComparer();
@@ -22,7 +22,7 @@
 
         #region mothods
 
-        public HierarchicalResult CompareHierarchyInner(IDirectoryInfoEx a, IDirectoryInfoEx b)
+        public HierarchicalResult CompareHierarchyInner(IDirectoryBrowser a, IDirectoryBrowser b)
         {
             if (a == null || b == null)
                 return HierarchicalResult.Unrelated;
@@ -44,7 +44,7 @@
             else return HierarchicalResult.Unrelated;
         }
 
-        public HierarchicalResult CompareHierarchy(IDirectoryInfoEx a, IDirectoryInfoEx b)
+        public HierarchicalResult CompareHierarchy(IDirectoryBrowser a, IDirectoryBrowser b)
         {
             HierarchicalResult retVal = this.CompareHierarchyInner(a, b);
             ////Debug.WriteLine(String.Format("{2} {0},{1}", a.FullPath, b.FullPath, retVal));

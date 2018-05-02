@@ -19,7 +19,7 @@
         /// </summary>
         /// <param name="fullPath"></param>
         /// <returns></returns>
-        public static IDirectoryInfoEx CreateDirectoryInfoEx(string fullPath)
+        public static IDirectoryBrowser CreateDirectoryInfoEx(string fullPath)
         {
             return new DirectoryInfoEx(fullPath);
         }
@@ -28,7 +28,7 @@
         /// </summary>
         /// <param name="knownFolder"></param>
         /// <returns></returns>
-        public static IDirectoryInfoEx CreateDirectoryInfoEx(KnownFolder knownFolder)
+        internal static IDirectoryBrowser CreateDirectoryInfoEx(KnownFolder knownFolder)
         {
             return new DirectoryInfoEx(knownFolder);
         }
@@ -37,7 +37,7 @@
         /// Gets the <see cref="IDirectoryInfoEx"/> interface
         /// for a user's desktop folder.
         /// </summary>
-        public static IDirectoryInfoEx DesktopDirectory
+        public static IDirectoryBrowser DesktopDirectory
         {
             get
             {
@@ -49,7 +49,7 @@
         /// Gets the <see cref="IDirectoryInfoEx"/> interface
         /// for a user's MyComputer (virtual folder).
         /// </summary>
-        public static IDirectoryInfoEx MyComputer
+        public static IDirectoryBrowser MyComputer
         {
             get
             {
@@ -61,7 +61,7 @@
         /// Gets the <see cref="IDirectoryInfoEx"/> interface
         /// for a user's full name (virtual folder).
         /// </summary>
-        public static IDirectoryInfoEx CurrentUserDirectory
+        public static IDirectoryBrowser CurrentUserDirectory
         {
             get
             {
@@ -73,7 +73,7 @@
         /// Gets the <see cref="IDirectoryInfoEx"/> interface
         /// for the Public Documents folder (%PUBLIC%\Documents).
         /// </summary>
-        public static IDirectoryInfoEx SharedDirectory
+        public static IDirectoryBrowser SharedDirectory
         {
             get
             {
@@ -85,7 +85,7 @@
         /// Gets the <see cref="IDirectoryInfoEx"/> interface
         /// for the Network (virtual folder, Legacy: My Network Places).
         /// </summary>
-        public static IDirectoryInfoEx Network
+        public static IDirectoryBrowser Network
         {
             get
             {
@@ -97,7 +97,7 @@
         /// Gets the <see cref="IDirectoryInfoEx"/> interface
         /// for the Rycycle Bin (virtual folder).
         /// </summary>
-        public static IDirectoryInfoEx RecycleBin
+        public static IDirectoryBrowser RecycleBin
         {
             get
             {
@@ -112,7 +112,7 @@
         /// </summary>
         /// <param name="path"></param>
         /// <returns></returns>
-        public static IDirectoryInfoEx FromString(string path)
+        public static IDirectoryBrowser FromString(string path)
         {
             return DirectoryInfoEx.FromString(path);
         }
@@ -124,7 +124,7 @@
         /// <param name="child"></param>
         /// <param name="parentFullName"></param>
         /// <returns></returns>
-        public static bool HasParent(IDirectoryInfoEx child, string parentFullName)
+        public static bool HasParent(IDirectoryBrowser child, string parentFullName)
         {
             if (child.FullName.StartsWith(parentFullName, StringComparison.InvariantCultureIgnoreCase))
                 return true;
@@ -150,7 +150,7 @@
         /// <param name="child"></param>
         /// <param name="parent"></param>
         /// <returns></returns>
-        public static bool HasParent(IDirectoryInfoEx child, IDirectoryInfoEx parent)
+        public static bool HasParent(IDirectoryBrowser child, IDirectoryBrowser parent)
         {
             //0.13: Added HasParent
             if (parent == null)
