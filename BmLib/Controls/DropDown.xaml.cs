@@ -113,10 +113,10 @@
 			var popup = this.Template.FindName("PART_Popup", this);
 			if (popup is Popup)
 			{
-				this._popup = (Popup)this.Template.FindName("PART_Popup", this);
-				this._content = (ContentPresenter)this.Template.FindName("PART_Content", this);
+				_popup = (Popup)this.Template.FindName("PART_Popup", this);
+				_content = (ContentPresenter)this.Template.FindName("PART_Content", this);
 
-				this._popup.AddHandler(Popup.LostFocusEvent,
+				_popup.AddHandler(Popup.LostFocusEvent,
 					 new RoutedEventHandler((o, e) =>
 					 {
 						 ////(o as DropDownControl).                   

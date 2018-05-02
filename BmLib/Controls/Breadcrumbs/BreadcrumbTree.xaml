@@ -5,7 +5,6 @@
     xmlns:uc="clr-namespace:BmLib.Controls.Breadcrumbs"
     >
     <ResourceDictionary.MergedDictionaries>
-        <ResourceDictionary Source="/BmLib;component/Themes/Default/Buttons.xaml" />
         <ResourceDictionary Source="/BmLib;component/Controls/Breadcrumbs/BreadcrumbTreeItem.xaml" />
     </ResourceDictionary.MergedDictionaries>
 

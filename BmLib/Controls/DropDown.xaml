@@ -4,16 +4,12 @@
     xmlns:ctlrs="clr-namespace:BmLib.Controls"
     xmlns:reskeys="clr-namespace:BmLib.Themes"
     >
-  <ResourceDictionary.MergedDictionaries>
-    <ResourceDictionary Source="/BmLib;component/Themes/Default/Buttons.xaml" />
-    <!-- ResourceDictionary Source="/BmLib;component/Themes/Default/Brushes.xaml" / -->
-  </ResourceDictionary.MergedDictionaries>
 
   <Style TargetType="{x:Type ctlrs:DropDown}">
     <Setter Property="Background" Value="{DynamicResource {x:Static reskeys:ResourceKeys.ControlNormalBackgroundKey}}" />
     <Setter Property="BorderBrush" Value="{DynamicResource {x:Static reskeys:ResourceKeys.ControlBorderBrushKey}}" />
     <Setter Property="BorderThickness" Value="1" />
-    <Setter Property="HeaderButtonTemplate" Value="{DynamicResource BaseToggleButton}" />
+    <Setter Property="HeaderButtonTemplate" Value="{DynamicResource {x:Static reskeys:ResourceKeys.BaseToggleButton}}" />
     <Setter Property="Template">
       <Setter.Value>
         <ControlTemplate TargetType="{x:Type ctlrs:DropDown}">
@@ -53,7 +49,10 @@
                           BorderBrush="{TemplateBinding BorderBrush}" 
                           BorderThickness="{TemplateBinding BorderThickness}">
                     <Grid>
-                        <ScrollViewer>
+                        <ScrollViewer Focusable="False"
+                                      CanContentScroll="True"
+                                      ScrollViewer.HorizontalScrollBarVisibility="Auto"
+                                      ScrollViewer.VerticalScrollBarVisibility="Auto">
                             <ContentPresenter x:Name="PART_Content" Content="{TemplateBinding Content}" />
                         </ScrollViewer>
                     </Grid>
@@ -64,7 +63,7 @@
           <ControlTemplate.Triggers>
             <!-- Show the normal arrow right button when there is nothing else defined in this Header -->
             <Trigger Property="Header" Value="{x:Null}">
-              <Setter TargetName="PART_ToggleButton" Property="Template" Value="{StaticResource BasicArrowButton}" />
+              <Setter TargetName="PART_ToggleButton" Property="Template" Value="{DynamicResource {x:Static reskeys:ResourceKeys.BasicArrowButton}}" />
             </Trigger>
             <Trigger Property="Content" Value="{x:Null}">
               <Setter Property="Visibility" Value="Collapsed" />

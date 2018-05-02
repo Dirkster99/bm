@@ -5,10 +5,6 @@
   xmlns:bc="clr-namespace:BmLib.BaseControls"
   xmlns:conv="clr-namespace:BmLib.Converters"
 >
-    <ResourceDictionary.MergedDictionaries>
-      <ResourceDictionary Source="/BmLib;component/Themes/Default/Buttons.xaml" />
-    </ResourceDictionary.MergedDictionaries>
-
     <!--<ControlTemplate x:Key="ClippedBorderTemplate" TargetType="{x:Type bc:ClipCorner}">
         <Border BorderBrush="Transparent" BorderThickness="1" CornerRadius="{TemplateBinding CornerRadius}">
             <Border.Clip>

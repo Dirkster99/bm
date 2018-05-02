@@ -4,15 +4,12 @@
     xmlns:ctrls="clr-namespace:BmLib.Controls"
     xmlns:reskeys="clr-namespace:BmLib.Themes"
     >
-  <ResourceDictionary.MergedDictionaries>
-    <ResourceDictionary Source="/BmLib;component/Themes/Default/Buttons.xaml" />
-  </ResourceDictionary.MergedDictionaries>
 
   <Style x:Key="{x:Type ctrls:DropDownList}" TargetType="{x:Type ctrls:DropDownList}">
     <Setter Property="Background" Value="{DynamicResource {x:Static reskeys:ResourceKeys.ControlInputBackgroundKey}}" />
     <Setter Property="Foreground" Value="{DynamicResource {x:Static reskeys:ResourceKeys.ControlTextBrushKey}}" />
     <Setter Property="BorderBrush" Value="{DynamicResource {x:Static reskeys:ResourceKeys.ControlInputBorderKey}}" />
-    <Setter Property="HeaderButtonTemplate" Value="{StaticResource BaseToggleButton}" />
+    <Setter Property="HeaderButtonTemplate" Value="{DynamicResource {x:Static reskeys:ResourceKeys.BaseToggleButton}}" />
     <Setter Property="BorderThickness" Value="1" />
     <Setter Property="Template">
       <Setter.Value>

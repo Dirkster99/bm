@@ -3,11 +3,8 @@
 
     xmlns:bc="clr-namespace:BmLib.Controls"
     xmlns:conv="clr-namespace:BmLib.Converters"
+    xmlns:reskeys="clr-namespace:BmLib.Themes"
     >
-    <ResourceDictionary.MergedDictionaries>
-        <ResourceDictionary Source="/BmLib;component/Themes/Default/Buttons.xaml" />
-        <!-- ResourceDictionary Source="/BmLib;component/Themes/Default/Brushes.xaml" / -->
-    </ResourceDictionary.MergedDictionaries>
 
     <ControlTemplate x:Key="SwitchTemplate" TargetType="{x:Type bc:Switch}">
         <ControlTemplate.Resources>
@@ -16,7 +13,8 @@
         </ControlTemplate.Resources>
         <Grid>
             <ContentPresenter Content="{TemplateBinding ContentOn}" 
-                              Visibility="{Binding IsSwitchOn, RelativeSource={RelativeSource TemplatedParent}, Converter={StaticResource btvc}}" />
+                              Visibility="{Binding IsSwitchOn,
+                                                   RelativeSource={RelativeSource TemplatedParent}, Converter={StaticResource btvc}}" />
             <ContentPresenter Content="{TemplateBinding ContentOff}"
                               Visibility="{Binding IsSwitchOn,
                                                    RelativeSource={RelativeSource TemplatedParent},Converter={StaticResource fbtvc}}" />
@@ -41,7 +39,7 @@
                           HorizontalContentAlignment="Stretch"
                           IsChecked="{Binding IsSwitchOn, RelativeSource={RelativeSource TemplatedParent}, Mode=TwoWay}" 
                           Focusable="False"
-                          Template="{StaticResource BlankButton}"
+                          Template="{DynamicResource {x:Static reskeys:ResourceKeys.BlankButton}}"
                           Background="Transparent" >
                 <Grid>
                     <Grid.ColumnDefinitions>

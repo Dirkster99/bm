@@ -12,9 +12,7 @@
     xmlns:sbox="clr-namespace:BmLib.Controls.SuggestBox"
     -->
     <ResourceDictionary.MergedDictionaries>
-        <!-- ResourceDictionary Source="/BmLib;component/Themes/Default/Geometry.xaml" / -->
         <ResourceDictionary Source="/BmLib;component/Controls/Breadcrumbs/BreadcrumbTreeItem.xaml" />
-        <!-- ResourceDictionary Source="/BmLib;component/Themes/Default/Brushes.xaml" / -->
         <ResourceDictionary Source="/BmLib;component/Controls/Switch.xaml" />
     </ResourceDictionary.MergedDictionaries>
 
@@ -57,14 +55,14 @@
                                      Switch inside BreadCrumbTree cannot function when this is set to Auto
                 
                                      -> Defect: The items in the BreadcrumbTree will no longer overflow
-                                                (dissappear when space is limited).
+                                                (disappear when space is limited).
                                 -->
                                 <ColumnDefinition Width="*" />
                                 <ColumnDefinition Width="Auto" MinWidth="{TemplateBinding OverflowGap}" />
 
                             </Grid.ColumnDefinitions>
 
-                            <!-- Show a progressbar to indicate long running processings -->
+                            <!-- Show a progress-bar to indicate long running processing -->
                             <ProgressBar IsIndeterminate="{Binding  Progressing.IsIndeterminate, Mode=OneWay,UpdateSourceTrigger=PropertyChanged}"
                                          Value="{Binding Progressing.ProgressValue, Mode=OneWay,UpdateSourceTrigger=PropertyChanged}"
                                          Minimum="{Binding Progressing.MinimumProgressValue, Mode=OneWay,UpdateSourceTrigger=PropertyChanged}"
@@ -111,7 +109,7 @@
                                                       Data="{Binding IsOverflown,RelativeSource={RelativeSource AncestorType={x:Type bc:Breadcrumb}}, Converter={StaticResource BoolToOneOfTwoBindingsConverter},Mode=OneWay,UpdateSourceTrigger=PropertyChanged}"
                                                 />
                                             </ctrls:DropDownList.Header>
-                                            <!--ItemContainerStyle already assigned in DropDownList.xaml -->
+                                            <!-- Overwrite ItemContainerStyle assigned in DropDownList.xaml -->
                                             <ctrls:DropDownList.ItemContainerStyle>
                                                 <Style TargetType="{x:Type ComboBoxItem}" BasedOn="{StaticResource {x:Type ComboBoxItem}}">
                                                     <Setter Property="Visibility" Value="{Binding Selection.IsOverflowedOrRoot, Mode=OneWay, Converter={StaticResource btvc}}"  />

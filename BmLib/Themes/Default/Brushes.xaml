@@ -6,29 +6,29 @@
     xmlns:reskeys="clr-namespace:BmLib.Themes"
     >
     <!-- Generic Color Definitions including 3-D depth effect as in Windows 7 -->
-    <SolidColorBrush x:Key="{x:Static reskeys:ResourceKeys.ControlNormalBackgroundKey}" Color="White" />
+    <SolidColorBrush x:Key="{x:Static reskeys:ResourceKeys.ControlNormalBackgroundKey}" Color="White" options:Freeze="true"/>
 
-    <SolidColorBrush x:Key="{x:Static reskeys:ResourceKeys.ControlTextBrushKey}" Color="Black" />
-    <SolidColorBrush x:Key="{x:Static reskeys:ResourceKeys.ControlNormalForegroundBrushKey}" Color="Black" />
-    <SolidColorBrush x:Key="{x:Static reskeys:ResourceKeys.ControlBorderBrushKey}" Color="Gray" />
+    <SolidColorBrush x:Key="{x:Static reskeys:ResourceKeys.ControlTextBrushKey}" Color="Black" options:Freeze="true"/>
+    <SolidColorBrush x:Key="{x:Static reskeys:ResourceKeys.ControlNormalForegroundBrushKey}" Color="Black" options:Freeze="true"/>
+    <SolidColorBrush x:Key="{x:Static reskeys:ResourceKeys.ControlBorderBrushKey}" Color="Gray" options:Freeze="true"/>
 
-    <SolidColorBrush x:Key="{x:Static reskeys:ResourceKeys.ArrowBorderForeground}" Color="Black" />
-    <SolidColorBrush x:Key="{x:Static reskeys:ResourceKeys.ArrowFillForeground}"   Color="Black" />
+    <SolidColorBrush x:Key="{x:Static reskeys:ResourceKeys.ArrowBorderForeground}" Color="Black" options:Freeze="true"/>
+    <SolidColorBrush x:Key="{x:Static reskeys:ResourceKeys.ArrowFillForeground}"   Color="Black" options:Freeze="true"/>
 
-    <SolidColorBrush x:Key="{x:Static reskeys:ResourceKeys.ArrowFillMouseOverForeground}"   Color="Black" />
-    <SolidColorBrush x:Key="{x:Static reskeys:ResourceKeys.ArrowBorderMouseOverForeground}" Color="Black" />
+    <SolidColorBrush x:Key="{x:Static reskeys:ResourceKeys.ArrowFillMouseOverForeground}"   Color="Black" options:Freeze="true"/>
+    <SolidColorBrush x:Key="{x:Static reskeys:ResourceKeys.ArrowBorderMouseOverForeground}" Color="Black" options:Freeze="true"/>
 
-    <SolidColorBrush x:Key="{x:Static reskeys:ResourceKeys.ArrowFillCheckedForeground}"   Color="Black" />
-    <SolidColorBrush x:Key="{x:Static reskeys:ResourceKeys.ArrowBorderCheckedForeground}" Color="Black" />
+    <SolidColorBrush x:Key="{x:Static reskeys:ResourceKeys.ArrowFillCheckedForeground}"   Color="Black" options:Freeze="true"/>
+    <SolidColorBrush x:Key="{x:Static reskeys:ResourceKeys.ArrowBorderCheckedForeground}" Color="Black" options:Freeze="true"/>
 
-    <LinearGradientBrush x:Key="{x:Static reskeys:ResourceKeys.ButtonSelectedColor}" StartPoint="0,0" EndPoint="0,1" >
+    <LinearGradientBrush x:Key="{x:Static reskeys:ResourceKeys.ButtonSelectedColor}" StartPoint="0,0" EndPoint="0,1" options:Freeze="true">
         <GradientStop Color="#FFeaf6fd" Offset="0" />
         <GradientStop Color="#FFd7effc" Offset="0.125" />
         <GradientStop Color="#FFbde6fd" Offset="0.5" />
         <GradientStop Color="#FFa6d9f4" Offset="0.75" />
     </LinearGradientBrush>
 
-    <LinearGradientBrush x:Key="{x:Static reskeys:ResourceKeys.ButtonBackgoundColor}" StartPoint="0,0" EndPoint="0,1" >
+    <LinearGradientBrush x:Key="{x:Static reskeys:ResourceKeys.ButtonBackgoundColor}" StartPoint="0,0" EndPoint="0,1" options:Freeze="true">
         <GradientStop Color="#FFeaf6fd" Offset="0.2" />
         <GradientStop Color="#FFd7effc" Offset="0.25" />
         <GradientStop Color="#FFbde6fd" Offset="0.5" />
@@ -39,7 +39,7 @@
     <sys:Boolean x:Key="{ComponentResourceKey TypeInTargetAssembly={x:Type reskeys:ResourceKeys},
                  ResourceId=ThreeDStyleBrushes}">False</sys:Boolean>
 
-    <LinearGradientBrush x:Key="{x:Static reskeys:ResourceKeys.HotTrack_SelectedBrush}" StartPoint="0,0" EndPoint="0,1" >
+    <LinearGradientBrush x:Key="{x:Static reskeys:ResourceKeys.HotTrack_SelectedBrush}" StartPoint="0,0" EndPoint="0,1" options:Freeze="true">
         <GradientStop Color="#FFeaf6fd" Offset="0" />
         <GradientStop Color="#FFd7effc" Offset="0.5" />
     </LinearGradientBrush>
@@ -53,15 +53,15 @@
 
     <!-- This color is applied to the drop down button (Hottrack) when it is selected and the drop down is open -->
     <SolidColorBrush x:Key="{x:Static reskeys:ResourceKeys.OpenDropDownButton_Background}"
-                     Color="{DynamicResource {x:Static reskeys:ResourceKeys.ControlAccentColorKey}}" />
+                     Color="{DynamicResource {x:Static reskeys:ResourceKeys.ControlAccentColorKey}}" options:Freeze="true"/>
 
-    <SolidColorBrush x:Key="{x:Static reskeys:ResourceKeys.ControlInputBackgroundKey}"
+    <SolidColorBrush x:Key="{x:Static reskeys:ResourceKeys.ControlInputBackgroundKey}" options:Freeze="true"
                      Color="#ffffff" />
 
-    <SolidColorBrush x:Key="{x:Static reskeys:ResourceKeys.ControlInputBorderKey}"
+    <SolidColorBrush x:Key="{x:Static reskeys:ResourceKeys.ControlInputBorderKey}" options:Freeze="true"
                      Color="#cccccc" />
 
-    <SolidColorBrush x:Key="{x:Static reskeys:ResourceKeys.ControlDisabledBackgroundKey}"
+    <SolidColorBrush x:Key="{x:Static reskeys:ResourceKeys.ControlDisabledBackgroundKey}" options:Freeze="true"
                      Color="#20000000" />
 
 </ResourceDictionary>

@@ -6,7 +6,8 @@
   xmlns:reskeys="clr-namespace:BmLib.Themes"
 >
     <!-- Implements the left most arrow drop down toggle button next to the root toggle button -->
-    <ControlTemplate x:Key="BaseToggleButton" TargetType="{x:Type ToggleButton}">
+    <ControlTemplate x:Key="{ComponentResourceKey TypeInTargetAssembly={x:Type reskeys:ResourceKeys},
+                     ResourceId=BaseToggleButton}" TargetType="{x:Type ToggleButton}">
         <ctrls:HotTrack IsSelected="{TemplateBinding IsChecked}"
                     SelectedBrush="{DynamicResource {x:Static reskeys:ResourceKeys.HotTrack_SelectedBrush}}"
                     BackgroundBrush="{DynamicResource HotTrack_BackgroundBrush}"
@@ -24,7 +25,8 @@
     </ControlTemplate>
 
     <!-- Implements the button that displays the path string -->
-    <ControlTemplate x:Key="BaseButton" TargetType="{x:Type ButtonBase}">
+    <ControlTemplate x:Key="{ComponentResourceKey TypeInTargetAssembly={x:Type reskeys:ResourceKeys},
+                     ResourceId=BaseButton}" TargetType="{x:Type ButtonBase}">
         <Border Background="Transparent"
                 Padding="3,0,6,0"
                 Margin="0,0,0,0">
@@ -34,7 +36,8 @@
     </ControlTemplate>
 
     <!-- This button is displayed when the user makes a mouse over on a Breadcrumb ToggleButton -->
-    <ControlTemplate x:Key="BasicArrowButton" TargetType="{x:Type ToggleButton}" >
+    <ControlTemplate x:Key="{ComponentResourceKey TypeInTargetAssembly={x:Type reskeys:ResourceKeys},
+                     ResourceId=BasicArrowButton}" TargetType="{x:Type ToggleButton}" >
         <Border x:Name="border"
                 Background="Transparent"
                 BorderBrush="Transparent"
@@ -84,7 +87,8 @@
 
     <!-- Implements the background of the Switch control
          to switch content with click on background -->
-    <ControlTemplate x:Key="BlankButton" TargetType="{x:Type ButtonBase}">
+    <ControlTemplate x:Key="{ComponentResourceKey TypeInTargetAssembly={x:Type reskeys:ResourceKeys},
+                     ResourceId=BlankButton}" TargetType="{x:Type ButtonBase}">
         <Border BorderThickness="0"
                 Background="Transparent">
             <ContentPresenter HorizontalAlignment="{TemplateBinding HorizontalAlignment}" 

@@ -10,6 +10,9 @@
 		public static readonly DependencyProperty HeaderProperty =
 				HeaderedContentControl.HeaderProperty.AddOwner(typeof(DropDownList));
 
+		public static readonly DependencyProperty HeaderButtonTemplateProperty =
+				DropDown.HeaderButtonTemplateProperty.AddOwner(typeof(DropDownList));
+
 		public static readonly DependencyProperty PlacementTargetProperty =
 				Popup.PlacementTargetProperty.AddOwner(typeof(DropDownList));
 
@@ -21,9 +24,6 @@
 
 		public static readonly DependencyProperty VerticalOffsetProperty =
 			 Popup.VerticalOffsetProperty.AddOwner(typeof(DropDownList));
-
-		public static readonly DependencyProperty HeaderButtonTemplateProperty =
-				DropDown.HeaderButtonTemplateProperty.AddOwner(typeof(DropDownList));
 		#endregion fields
 
 		#region Constructor
@@ -42,6 +42,12 @@
 		{
 			get { return this.GetValue(HeaderProperty); }
 			set { this.SetValue(HeaderProperty, value); }
+		}
+
+		public ControlTemplate HeaderButtonTemplate
+		{
+			get { return (ControlTemplate)GetValue(HeaderButtonTemplateProperty); }
+			set { this.SetValue(HeaderButtonTemplateProperty, value); }
 		}
 
 		public UIElement PlacementTarget
@@ -66,12 +72,6 @@
 		{
 			get { return (double)GetValue(VerticalOffsetProperty); }
 			set { this.SetValue(VerticalOffsetProperty, value); }
-		}
-
-		public ControlTemplate HeaderButtonTemplate
-		{
-			get { return (ControlTemplate)GetValue(HeaderButtonTemplateProperty); }
-			set { this.SetValue(HeaderButtonTemplateProperty, value); }
 		}
 		#endregion properties
 

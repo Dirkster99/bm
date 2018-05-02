@@ -145,5 +145,25 @@
         /// This arrow indicates that the left most drop down list contains additional items (the overflown items).
         /// </summary>
         public static readonly ComponentResourceKey ExpanderArrow = new ComponentResourceKey(typeof(ResourceKeys), "ExpanderArrow");
+        
+        /// <summary>
+        /// Implements the left most arrow drop down toggle button next to the root toggle button
+        /// </summary>
+        public static readonly ComponentResourceKey BaseToggleButton = new ComponentResourceKey(typeof(ResourceKeys), "BaseToggleButton");
+        
+        /// <summary>
+        /// Implements the button that displays the path string
+        /// </summary>
+        public static readonly ComponentResourceKey BaseButton = new ComponentResourceKey(typeof(ResourceKeys), "BaseButton");
+        
+        /// <summary>
+        /// This button is displayed when the user makes a mouse over on a Breadcrumb ToggleButton
+        /// </summary>
+        public static readonly ComponentResourceKey BasicArrowButton = new ComponentResourceKey(typeof(ResourceKeys), "BasicArrowButton");
+        
+        /// <summary>
+        /// Implements the background of the Switch control to switch content with click on background
+        /// </summary>
+        public static readonly ComponentResourceKey BlankButton = new ComponentResourceKey(typeof(ResourceKeys), "BlankButton");
     }
 }

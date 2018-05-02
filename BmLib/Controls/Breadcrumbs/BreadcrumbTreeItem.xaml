@@ -8,11 +8,6 @@
     xmlns:conv="clr-namespace:BmLib.Converters"
     xmlns:reskeys="clr-namespace:BmLib.Themes"
  >
-
-    <ResourceDictionary.MergedDictionaries>
-        <ResourceDictionary Source="/BmLib;component/Themes/Default/Buttons.xaml" />
-    </ResourceDictionary.MergedDictionaries>
-
     <DataTemplate x:Key="DropDownListItemDataTemplate">
         <Grid>
             <Grid.ColumnDefinitions>
@@ -64,7 +59,7 @@
                                 </Grid.ColumnDefinitions>
                                 
                                 <Button Grid.Column="0"
-                                        Template="{StaticResource BaseButton}"
+                                        Template="{DynamicResource {x:Static reskeys:ResourceKeys.BaseButton}}"
                                         x:Name="PART_CaptionButton"  
                                         MaxWidth="1000"
                                         Margin="0"
