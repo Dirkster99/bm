@@ -289,9 +289,10 @@ namespace DirectoryInfoExLib.IO.FileSystemInfoExt
             IntPtr pParent = PIDL.ILClone(pidl.Ptr);
 
             relPIDL = getRelativePIDL(pidl);
-            if (pParent == IntPtr.Zero || !PIDL.ILRemoveLastID2(ref pParent))
+            if (pParent == IntPtr.Zero || PIDL.ILRemoveLastID2(ref pParent) == false)
             {
-                new PIDL(pParent, false).Free();
+                Marshal.FreeCoTaskMem(pParent); //new PIDL(pParent, false).Free();
+                pParent = IntPtr.Zero;
 
                 return DirectoryInfoEx.KnownFolderToPIDL(KnownFolder.FromKnownFolderId(KnownFolder_GUIDS.Desktop));
             }

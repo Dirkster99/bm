@@ -13,9 +13,10 @@ namespace DirectoryInfoExLib.IO.Header.ShellDll
     /// https://msdn.microsoft.com/en-us/library/windows/desktop/cc144090(v=vs.85).aspx
     /// https://www.codeproject.com/Articles/88/Namespace-extensions-the-undocumented-Windows-Shel
     /// </summary>
-    internal class PIDL : IEnumerable //, IDisposable //11-01-09 : Added automatic disposer (LYCJ)
-    //0.13 : Removed IDisposable in PIDL as it causing AccessViolationException, user have to free calling the Free() method.
+    internal class PIDL : IEnumerable
     {
+        //, IDisposable //11-01-09 : Added automatic disposer (LYCJ)
+        //0.13 : Removed IDisposable in PIDL as it causing AccessViolationException, user have to free calling the Free() method.
         #region fields
         private static int Counter = 0;
         private IntPtr pidl = IntPtr.Zero;
@@ -226,7 +227,7 @@ namespace DirectoryInfoExLib.IO.Header.ShellDll
         /// Removes the last SHITEMID structure from an ITEMIDLIST structure
         /// </summary>
         /// <param name="pidl"></param>
-        /// <returns></returns>
+        /// <returns>true if there was a last pidl to remove, false otheerwise.</returns>
         public static bool ILRemoveLastID2(ref IntPtr pidl)
         {
             IntPtr lastPidl = ILFindLastID(pidl);
@@ -271,12 +272,18 @@ namespace DirectoryInfoExLib.IO.Header.ShellDll
         }
 
         /// <summary>
-        /// Copies the ITEMIDLIST structure from the given IntPtr
+        /// Copies the ITEMIDLIST structure into the given
+        /// <see cref="IntPtr"/> <paramref name="pidl"/> parameter
+        /// if it appears to be <see cref="IntPtr.Zero"/>
         /// and returns the size of the copy as int.
+        /// 
+        /// Otherwise, if <paramref name="pidl"/> is already set
+        /// (<paramref name="pidl"/> != <see cref="IntPtr.Zero"/>),
+        /// there is no copy and 0 is returned.
         /// </summary>
         private static int ItemIDSize(IntPtr pidl)
         {
-            if (!pidl.Equals(IntPtr.Zero))
+            if (pidl.Equals(IntPtr.Zero) == false)
             {
                 byte[] buffer = new byte[2];
                 Marshal.Copy(pidl, buffer, 0, 2);
@@ -287,6 +294,11 @@ namespace DirectoryInfoExLib.IO.Header.ShellDll
                 return 0;
         }
 
+        /// <summary>
+        /// Returns the size of an ItemIDList in bytes.
+        /// </summary>
+        /// <param name="pidl"></param>
+        /// <returns></returns>
         private static int ItemIDListSize(IntPtr pidl)
         {
             if (pidl.Equals(IntPtr.Zero))
@@ -331,6 +343,7 @@ namespace DirectoryInfoExLib.IO.Header.ShellDll
             {
                 if (obj is IntPtr)
                     return ShellAPI.ILIsEqual(this.Ptr, (IntPtr)obj);
+
                 if (obj is PIDL)
                     return ShellAPI.ILIsEqual(this.Ptr, ((PIDL)obj).Ptr);
                 else
