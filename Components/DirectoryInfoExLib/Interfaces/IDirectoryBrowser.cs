@@ -1,6 +1,5 @@
 ﻿namespace DirectoryInfoExLib.Interfaces
 {
-    using DirectoryInfoExLib.IO.Header.ShellDll;
     using System;
 
     /// <summary>

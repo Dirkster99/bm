@@ -29,7 +29,7 @@ namespace DirectoryInfoExLib.IO.FileSystemInfoExt
     /// https://www.codeproject.com/Articles/1649/The-Complete-Idiot-s-Guide-to-Writing-Namespace-Ex
     /// https://msdn.microsoft.com/en-us/library/windows/desktop/cc144090(v=vs.85).aspx
     /// </summary>
-    internal class DirectoryInfoEx : FileSystemInfoEx, IDirectoryInfoEx
+    internal class DirectoryInfoEx : FileSystemInfoEx, IDirectoryInfoEx, IEquatable<IDirectoryInfoEx>
     {
         #region fields
         private IDirectoryBrowser _parent;
@@ -78,7 +78,7 @@ namespace DirectoryInfoExLib.IO.FileSystemInfoExt
         {
 #if DEBUG
             if (LicenseManager.UsageMode == LicenseUsageMode.Designtime)
-                throw new Exception("This should not be executed when design time.");
+                throw new Exception("This should not be executed at design time.");
 #endif
 
             var desktopId = KnownFolder.FromKnownFolderId(KnownFolder_GUIDS.Desktop);
@@ -103,7 +103,6 @@ namespace DirectoryInfoExLib.IO.FileSystemInfoExt
         internal DirectoryInfoEx(PIDL fullPIDL)
         {
             init(fullPIDL);
-            checkProperties();
         }
 
         /// <summary>
@@ -114,7 +113,6 @@ namespace DirectoryInfoExLib.IO.FileSystemInfoExt
         {
             fullPath = ExpandPath(fullPath);
             init(fullPath);
-            checkProperties();
         }
 
         /// <summary>
@@ -127,7 +125,6 @@ namespace DirectoryInfoExLib.IO.FileSystemInfoExt
             try
             {
                 init(pidlLookup);
-                checkProperties();
             }
             finally
             {
@@ -190,6 +187,17 @@ namespace DirectoryInfoExLib.IO.FileSystemInfoExt
             }
         }
 
+        public string Name { get { return _name; } }
+
+        public string Extension { get { return Path.GetExtension(Name); } }
+
+        public bool IsFolder
+        {
+            get { return (Attributes & FileAttributes.Directory) == FileAttributes.Directory; }
+        }
+
+        public bool Exists { get { return getExists(); } }
+
         /// <summary>
         /// Gets the root of this item.
         /// </summary>
@@ -226,6 +234,22 @@ namespace DirectoryInfoExLib.IO.FileSystemInfoExt
         #endregion
 
         #region Static Methods
+        /// <summary>
+        /// Gets whether a directory exists at a given path or not.
+        /// </summary>
+        /// <param name="path"></param>
+        /// <returns></returns>
+        public static bool DirectoryExists(string path)
+        {
+            try
+            {
+                DirectoryInfoEx dirInfo = new DirectoryInfoEx(path);
+
+                return dirInfo != null && dirInfo.IsFolder && dirInfo.Exists;
+            }
+            catch { return false; }
+        }
+
         internal static PIDL KnownFolderToPIDL(KnownFolder knownFolder)
         {
             IntPtr ptrAddr;
@@ -296,7 +320,7 @@ namespace DirectoryInfoExLib.IO.FileSystemInfoExt
             return Equals(other as FileSystemInfoEx);
         }
 
-        public override bool Equals(FileSystemInfoEx other)
+        public bool Equals(FileSystemInfoEx other)
         {
             if (other is DirectoryInfoEx)
             {
@@ -316,12 +340,28 @@ namespace DirectoryInfoExLib.IO.FileSystemInfoExt
             return base.Equals(other);
         }
 
-        /// <summary>
-        /// Move this folder to specified directory (fullpath)
-        /// </summary>
-        public void MoveTo(string destDirName)
+        public override int GetHashCode()
         {
-            throw new NotImplementedException();
+            return FullName.ToLower().GetHashCode();
+        }
+
+        public IntPtr GetPIDLIntPtr()
+        {
+            if (_pidl != null)
+                return PIDL.ILClone(_pidl.Ptr);
+
+            if (FullName == DirectoryInfoEx.IID_Desktop) // Desktop
+                return DirectoryInfoEx.KnownFolderToPIDLIntPtr(KnownFolder.FromKnownFolderId(KnownFolder_GUIDS.Desktop));
+            else
+                return PathToPIDLIntPtr(FullName);
+        }
+
+        protected string PtrToPath(IntPtr ptr)
+        {
+            using (ShellFolder2 _desktopShellFolder = getDesktopShellFolder())
+            {
+                return loadName(_desktopShellFolder, ptr, ShellAPI.SHGNO.FORPARSING);
+            }
         }
 
         protected void checkExists()
@@ -639,8 +679,7 @@ namespace DirectoryInfoExLib.IO.FileSystemInfoExt
         /// <returns></returns>
         public static IDirectoryInfoEx FromString(string path)
         {
-            return (DirectoryInfoEx.DirectoryExists(path) ?
-                new DirectoryInfoEx(path) : null);
+            return (DirectoryInfoEx.DirectoryExists(path) ? new DirectoryInfoEx(path) : null);
         }
         #endregion
 
@@ -654,20 +693,14 @@ namespace DirectoryInfoExLib.IO.FileSystemInfoExt
         }
         #endregion
 
-        #region Match File Mask Filter
-        /// <summary>
-        /// Return whether PIDL match fileMask ( * and ? supported)
-        /// </summary>
-        /// <param name="pidl"></param>
-        /// <param name="fileMask"></param>
-        /// <returns></returns>
-        public bool MatchFileMask(PIDL pidl, string fileMask)
+        #region ICloneable Members
+        public object Clone()
         {
-            string path = DirectoryInfoEx.PIDLToPath(pidl);
-            string name = GetFileName(path);
-            return MatchFileMask(name, fileMask);
+            return new DirectoryInfoEx(this.FullName);
         }
+        #endregion ICloneable Members
 
+        #region Match File Mask Filter
         /// <summary>
         /// Return whether filename match fileMask ( * and ? supported)
         /// </summary>
@@ -751,13 +784,6 @@ namespace DirectoryInfoExLib.IO.FileSystemInfoExt
             }
         }
         #endregion Match File Mask Filter
-
-        protected override void checkProperties()
-        {
-            base.checkProperties();
-            //if (Exists && (Attributes & FileAttributes.Directory) != FileAttributes.Directory && !HasSubFolder)
-            //    throw new IOException(FullName + " is not a folder.");
-        }
 
         /// <summary>
         /// Determines via delegate whether processing was meanwhile cancelled or not.

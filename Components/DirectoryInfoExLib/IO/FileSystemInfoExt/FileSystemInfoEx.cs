@@ -16,11 +16,13 @@ namespace DirectoryInfoExLib.IO.FileSystemInfoExt
     using DirectoryInfoExLib.Enums;
     using DirectoryInfoExLib.IO.Header.KnownFolder;
 
-    internal class FileSystemInfoEx : IDisposable, ICloneable,
-        IEquatable<FileSystemInfoEx>
+    internal class FileSystemInfoEx : IDisposable
     {
         #region Enums
-
+        /// <summary>
+        /// Determines whether all properties or only parts of the property set
+        /// are loaded at initialization time (refreshing properties is disabled)
+        /// </summary>
         [Flags]
         public enum RefreshModeEnum : int
         {
@@ -33,15 +35,14 @@ namespace DirectoryInfoExLib.IO.FileSystemInfoExt
 
         #region fields
         public static int counter = 0;
-        private string _name;
+        protected string _name;
         private PIDL _pidlRel = null;
-        private PIDL _pidl = null;
+        protected PIDL _pidl = null;
         private FileAttributes _attributes;
-        private DateTime _lastWriteTime, _lastAccessTime, _creationTime;
         #endregion fields
 
         #region Constructors
-        internal FileSystemInfoEx(string fullPath)
+        protected FileSystemInfoEx(string fullPath)
             : this()
         {
             init(fullPath);
@@ -58,26 +59,16 @@ namespace DirectoryInfoExLib.IO.FileSystemInfoExt
             ((IDisposable)this).Dispose();
         }
 
-        protected virtual void checkProperties()
-        {
-        }
-
         protected void init(PIDL fullPIDL)
         {
             PIDL relPIDL = null;
             //0.16: Fixed ShellFolder not freed
             using (ShellFolder2 parentShellFolder = getParentIShellFolder(fullPIDL, out relPIDL))
+            {
                 refresh(parentShellFolder, relPIDL, fullPIDL, RefreshModeEnum.BaseProps);
-            _pidl = new PIDL(fullPIDL, false); //0.14 : FileSystemInfoEx record the pidl when construct, as some path do not parasable (e.g. EntireNetwork)
-            _pidlRel = relPIDL;
-        }
+            }
 
-        protected void init(IShellFolder2 parentShellFolder, PIDL fullPIDL)
-        {
-            PIDL relPIDL = null;
-            getParentPIDL(fullPIDL, out relPIDL);
-            refresh(parentShellFolder, relPIDL, fullPIDL, RefreshModeEnum.BaseProps);
-            _pidl = new PIDL(fullPIDL, false);
+            _pidl = new PIDL(fullPIDL, false); //0.14 : FileSystemInfoEx record the pidl when construct, as some path do not parasable (e.g. EntireNetwork)
             _pidlRel = relPIDL;
         }
 
@@ -89,7 +80,6 @@ namespace DirectoryInfoExLib.IO.FileSystemInfoExt
             _pidl = fullPIDL;
             _pidlRel = relPIDL; // new PIDL(relPIDL, false);
         }
-
 
         protected void init(string path)
         {
@@ -104,12 +94,6 @@ namespace DirectoryInfoExLib.IO.FileSystemInfoExt
         #region properties
         public RefreshModeEnum RefreshMode { get; private set; }
 
-        public string Name { get { return _name; } }
-
-        public string Extension { get { return Path.GetExtension(Name); } }
-
-        public bool Exists { get { return getExists(); } }
-
         public string Label { get; protected set; }
 
         public string FullName { get; protected set; }
@@ -118,98 +102,14 @@ namespace DirectoryInfoExLib.IO.FileSystemInfoExt
         {
             get
             {
-                checkRefresh();
                 return _attributes;
             }
 
             set { _attributes = value; }
         }
-
-        public DateTime LastWriteTime
-        {
-            get
-            {
-                checkRefresh();
-                return _lastWriteTime;
-            }
-
-            set { _lastWriteTime = value; }
-        }
-
-        public DateTime LastWriteTimeUtc
-        {
-            get { return LastWriteTime.ToUniversalTime(); }
-        }
-
-        public DateTime LastAccessTime
-        {
-            get
-            {
-                checkRefresh();
-                return _lastAccessTime;
-            }
-
-            set
-            {
-                _lastAccessTime = value;
-            }
-        }
-
-        public DateTime LastAccessTimeUtc
-        {
-            get { return LastAccessTime.ToUniversalTime(); }
-        }
-
-        public DateTime CreationTime
-        {
-            get { checkRefresh(); return _creationTime; }
-            set { _creationTime = value; }
-        }
-
-        public DateTime CreationTimeUtc
-        {
-            get { return CreationTime.ToUniversalTime(); }
-        }
-
-        public bool IsFolder
-        {
-            get { return (Attributes & FileAttributes.Directory) == FileAttributes.Directory; }
-        }
         #endregion properties
 
         #region methods
-        /// <summary>
-        /// Gets whether a directory exists at a given path or not.
-        /// </summary>
-        /// <param name="path"></param>
-        /// <returns></returns>
-        public static bool DirectoryExists(string path)
-        {
-            try
-            {
-                FileSystemInfoEx fsInfo = new FileSystemInfoEx(path);
-
-                return fsInfo != null && fsInfo.IsFolder && fsInfo.Exists;
-            }
-            catch { return false; }
-        }
-
-        /// <summary>
-        /// Gets whether a file exists at a given path or not.
-        /// </summary>
-        /// <param name="path"></param>
-        /// <returns></returns>
-        public static bool FileExists(string path)
-        {
-            try
-            {
-                FileSystemInfoEx fsInfo = new FileSystemInfoEx(path);
-
-                return fsInfo != null && !fsInfo.IsFolder && fsInfo.Exists;
-            }
-            catch { return false; }
-        }
-
         /// <summary>
         /// Refresh the file / directory info. Does not refresh directory contents 
         /// because it refresh every time GetFiles/Directories/FileSystemInfos is called.
@@ -220,7 +120,7 @@ namespace DirectoryInfoExLib.IO.FileSystemInfoExt
             RefreshMode |= mode; //0.23 : Delay loading some properties.
 
             PIDL relPIDL = null;
-            if (!Exists)
+            if (getExists() == false)
                 refresh(null, null, null, mode);
             else
                 try
@@ -249,37 +149,6 @@ namespace DirectoryInfoExLib.IO.FileSystemInfoExt
                         relPIDL.Free();
                     relPIDL = null;
                 }
-
-        }
-
-        /// <summary>
-        /// Return if two FileSystemInfoEx is equal (using PIDL if possible, otherwise Path)
-        /// </summary>
-        public virtual bool Equals(FileSystemInfoEx other)
-        {
-            PIDL thisPidl = this.getPIDL();
-            PIDL otherPidl = other.getPIDL();
-            try
-            {
-                return thisPidl.Equals(otherPidl);
-            }
-            finally
-            {
-                thisPidl.Free();
-                otherPidl.Free();
-            }
-        }
-
-        public override bool Equals(object obj)
-        {
-            if (obj is FileSystemInfoEx)
-                return Equals((FileSystemInfoEx)obj);
-            return false;
-        }
-
-        public override int GetHashCode()
-        {
-            return FullName.ToLower().GetHashCode();
         }
 
         public override string ToString()
@@ -287,7 +156,7 @@ namespace DirectoryInfoExLib.IO.FileSystemInfoExt
             return Label;
         }
 
-        internal static ShellFolder2 getDesktopShellFolder()
+        protected static ShellFolder2 getDesktopShellFolder()
         {
             IntPtr ptrShellFolder;
             int hr = ShellAPI.SHGetDesktopFolder(out ptrShellFolder);
@@ -303,7 +172,7 @@ namespace DirectoryInfoExLib.IO.FileSystemInfoExt
             return null; //mute error.
         }
 
-        internal static PIDL PathToPIDL(string path)
+        protected static PIDL PathToPIDL(string path)
         {
             path = RemoveSlash(path);
             IntPtr pidlPtr;
@@ -322,7 +191,7 @@ namespace DirectoryInfoExLib.IO.FileSystemInfoExt
             return new PIDL(pidlPtr, false);
         }
 
-        internal static IntPtr PathToPIDLIntPtr(string path)
+        protected static IntPtr PathToPIDLIntPtr(string path)
         {
             path = RemoveSlash(path);
             IntPtr pidlPtr;
@@ -346,7 +215,7 @@ namespace DirectoryInfoExLib.IO.FileSystemInfoExt
         }
 
         //0.12: Fixed PIDL, PIDLRel, ShellFolder, Storage properties generated on demand to avoid x-thread issues.
-        internal PIDL getRelPIDL()
+        protected PIDL getRelPIDL()
         {
             if (_pidlRel != null) //0.14 : FileSystemInfoEx now stored a copy of PIDL/Rel, will return copy of it when properties is called (to avoid AccessViolation). 
                 return new PIDL(_pidlRel, true);
@@ -366,7 +235,7 @@ namespace DirectoryInfoExLib.IO.FileSystemInfoExt
             }
         }
 
-        internal PIDL getPIDL()
+        protected PIDL getPIDL()
         {
             if (_pidl != null)
                 return new PIDL(_pidl, true);
@@ -377,24 +246,7 @@ namespace DirectoryInfoExLib.IO.FileSystemInfoExt
                 return PathToPIDL(FullName);
         }
 
-        public IntPtr GetPIDLIntPtr()
-        {
-            if (_pidl != null)
-                return PIDL.ILClone(_pidl.Ptr);
-
-            if (FullName == DirectoryInfoEx.IID_Desktop) // Desktop
-                return DirectoryInfoEx.KnownFolderToPIDLIntPtr(KnownFolder.FromKnownFolderId(KnownFolder_GUIDS.Desktop));
-            else
-                return PathToPIDLIntPtr(FullName);
-        }
-
-        internal string PtrToPath(IntPtr ptr)
-        {
-            using (ShellFolder2 _desktopShellFolder = getDesktopShellFolder())
-                return loadName(_desktopShellFolder, ptr, ShellAPI.SHGNO.FORPARSING);
-        }
-
-        internal static string PIDLToPath(PIDL pidlFull)
+        protected static string PIDLToPath(PIDL pidlFull)
         {
             PIDL desktopPIDL = DirectoryInfoEx.DesktopDirectory.getPIDL();
             try
@@ -413,12 +265,12 @@ namespace DirectoryInfoExLib.IO.FileSystemInfoExt
             }
         }
 
-        internal static string PIDLToPath(IShellFolder2 iShellFolder, PIDL pidlRel)
+        protected static string PIDLToPath(IShellFolder2 iShellFolder, PIDL pidlRel)
         {
             return loadName(iShellFolder, pidlRel, ShellAPI.SHGNO.FORPARSING);
         }
 
-        internal static PIDL getRelativePIDL(PIDL pidl)
+        protected static PIDL getRelativePIDL(PIDL pidl)
         {
             if (pidl == null)
                 return null;
@@ -428,7 +280,7 @@ namespace DirectoryInfoExLib.IO.FileSystemInfoExt
             return new PIDL(pRelPIDL, true); //0.21
         }
 
-        internal static PIDL getParentPIDL(PIDL pidl, out PIDL relPIDL)
+        protected static PIDL getParentPIDL(PIDL pidl, out PIDL relPIDL)
         {
             relPIDL = new PIDL(pidl, true); //0.21
             if (pidl.Size == 0)
@@ -447,7 +299,7 @@ namespace DirectoryInfoExLib.IO.FileSystemInfoExt
             return new PIDL(pParent, false); //pParent will be freed by the PIDL.
         }
 
-        internal static PIDL getParentPIDL(PIDL pidl)
+        protected static PIDL getParentPIDL(PIDL pidl)
         {
             PIDL relPIDL = null;
             try
@@ -457,17 +309,7 @@ namespace DirectoryInfoExLib.IO.FileSystemInfoExt
             finally { if (relPIDL != null) relPIDL.Free(); }
         }
 
-        //internal static string getParentParseName(PIDL pidl)
-        //{
-        //    PIDL relPIDL;
-        //    PIDL parentPIDL = getParentPIDL(pidl, out relPIDL);
-        //    IShellFolder sf = getParentIShellFolder(parentPIDL, out relPIDL);
-        //    if (relPIDL.Size == 0)
-        //        return IOTools.IID_Desktop;
-        //    return loadName(sf, relPIDL, ShellAPI.SHGNO.FORPARSING);
-        //}
-
-        internal ShellFolder2 getParentIShellFolder(PIDL pidl, out PIDL relPIDL)
+        protected ShellFolder2 getParentIShellFolder(PIDL pidl, out PIDL relPIDL)
         {
             int hr;
             IntPtr ptrShellFolder = IntPtr.Zero;
@@ -499,7 +341,7 @@ namespace DirectoryInfoExLib.IO.FileSystemInfoExt
             return null; //mute error.
         }
 
-        protected virtual void refresh(IShellFolder2 parentShellFolder, PIDL relPIDL, PIDL fullPIDL, RefreshModeEnum mode)
+        private void refresh(IShellFolder2 parentShellFolder, PIDL relPIDL, PIDL fullPIDL, RefreshModeEnum mode)
         {
             if (parentShellFolder != null && fullPIDL != null && relPIDL != null)
             {
@@ -584,12 +426,6 @@ namespace DirectoryInfoExLib.IO.FileSystemInfoExt
 ////                    FullName = origPath;
 ////                }
             }
-        }
-
-        protected void checkRefresh(RefreshModeEnum mode = RefreshModeEnum.AllProps)
-        {
-            if ((RefreshMode & mode) != mode)
-                Refresh(mode);
         }
 
         protected static string GetFileName(string path)
@@ -688,7 +524,7 @@ namespace DirectoryInfoExLib.IO.FileSystemInfoExt
                 return input;
         }
 
-        private bool getExists()
+        protected bool getExists()
         {
             if (FullName == DirectoryInfoEx.IID_Desktop) // Desktop
                 return true;
@@ -703,7 +539,10 @@ namespace DirectoryInfoExLib.IO.FileSystemInfoExt
                         if (_pidl != null)
                         {
                             using (ShellFolder2 _desktopShellFolder = getDesktopShellFolder())
+                            {
                                 loadName(_desktopShellFolder, _pidl, Header.ShellDll.ShellAPI.SHGNO.FORPARSING);
+                            }
+
                             return true;
                         }
                         else
@@ -713,7 +552,12 @@ namespace DirectoryInfoExLib.IO.FileSystemInfoExt
                             {
                                 return pidlLookup != null;
                             }
-                            finally { if (pidlLookup != null) pidlLookup.Free(); }
+                            finally
+                            {
+                                if (pidlLookup != null)
+                                    pidlLookup.Free();
+                           
+                            }
                         }
                     }
                     catch (FileNotFoundException)
@@ -725,27 +569,6 @@ namespace DirectoryInfoExLib.IO.FileSystemInfoExt
         }
         #endregion
 
-        ////        #region ISerializable Members
-        ////        protected virtual void getObjectData(SerializationInfo info, StreamingContext context)
-        ////        {
-        ////            info.AddValue("OriginalPath", OriginalPath);
-        ////            info.AddValue("Label", Label);
-        ////            info.AddValue("Name", Name);
-        ////            info.AddValue("FullName", FullName);
-        ////            info.AddValue("Attributes", Attributes);
-        ////            info.AddValue("LastWriteTime", LastWriteTime);
-        ////            info.AddValue("LastAccessTime", LastAccessTime);
-        ////            info.AddValue("CreationTime", CreationTime);
-        ////
-        ////        }
-        ////
-        ////        void ISerializable.GetObjectData(SerializationInfo info, StreamingContext context)
-        ////        {
-        ////            getObjectData(info, context);
-        ////        }
-        ////
-        ////        #endregion
-
         #region IDisposable Members
 
         public void Dispose()
@@ -753,20 +576,14 @@ namespace DirectoryInfoExLib.IO.FileSystemInfoExt
             if (_pidlRel != null || _pidl != null)
                 System.Threading.Interlocked.Decrement(ref counter);
 
-            if (_pidlRel != null)
-                _pidlRel.Free();
+            if (_pidlRel != null) _pidlRel.Free();
+
             if (_pidl != null) _pidl.Free();
+
             _pidlRel = null;
             _pidl = null;
 
         }
         #endregion
-
-        #region ICloneable Members
-        public object Clone()
-        {
-            return new FileSystemInfoEx(this.FullName);
-        }
-        #endregion ICloneable Members
     }
 }
