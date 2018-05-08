@@ -42,10 +42,11 @@
         IDirectoryBrowser[] GetDirectories();
 
         /// <summary>
-        /// Gets the <see cref="PIDL"/> object that represents this item.
+        /// Gets an <see cref="IntPtr"/> representing a PIDL item list
+        /// that represents this item.
         /// </summary>
         /// <returns></returns>
-        PIDL getPIDL();
+        IntPtr GetPIDLIntPtr();
         #endregion methods
     }
 }

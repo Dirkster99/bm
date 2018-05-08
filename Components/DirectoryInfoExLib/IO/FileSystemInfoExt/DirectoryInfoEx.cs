@@ -246,6 +246,19 @@ namespace DirectoryInfoExLib.IO.FileSystemInfoExt
             else throw new ArgumentException("Invalid knownFolder " + RetVal);
         }
 
+        internal static IntPtr KnownFolderToPIDLIntPtr(KnownFolder knownFolder)
+        {
+            IntPtr ptrAddr;
+
+            int RetVal = (knownFolder.KnownFolderInterface).GetIDList(KnownFolderRetrievalOptions.Create, out ptrAddr);
+            if (ptrAddr != IntPtr.Zero)
+            {
+                return ptrAddr;
+            }
+            else
+                throw new ArgumentException("Invalid knownFolder " + RetVal);
+        }
+
         /// <summary>
         /// Takes a directoryInfoEx and return the first parent with directory type = desktop or drive.
         /// </summary>

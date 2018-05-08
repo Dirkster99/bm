@@ -355,6 +355,29 @@ namespace DirectoryInfoExLib.IO.FileSystemInfoExt
             return new PIDL(pidlPtr, false);
         }
 
+        internal static IntPtr PathToPIDLIntPtr(string path)
+        {
+            path = RemoveSlash(path);
+            IntPtr pidlPtr;
+            uint pchEaten = 0;
+            ShellAPI.SFGAO pdwAttributes = 0;
+
+            using (ShellFolder2 _desktopShellFolder = getDesktopShellFolder())
+            {
+                int hr = _desktopShellFolder.ParseDisplayName(
+                    IntPtr.Zero, IntPtr.Zero, path, ref pchEaten, out pidlPtr, ref pdwAttributes);
+
+                if (pidlPtr == IntPtr.Zero || hr != ShellAPI.S_OK)
+                {
+                    //Commented because this is part of init and it's too time consuming.
+                    /*Marshal.ThrowExceptionForHR(hr);*/
+                    return default(IntPtr);
+                }
+            }
+
+            return pidlPtr;
+        }
+
         //0.12: Fixed PIDL, PIDLRel, ShellFolder, Storage properties generated on demand to avoid x-thread issues.
         internal PIDL getRelPIDL()
         {
@@ -385,6 +408,17 @@ namespace DirectoryInfoExLib.IO.FileSystemInfoExt
                 return DirectoryInfoEx.KnownFolderToPIDL(KnownFolder.FromKnownFolderId(KnownFolder_GUIDS.Desktop));
             else
                 return PathToPIDL(FullName);
+        }
+
+        public IntPtr GetPIDLIntPtr()
+        {
+            if (_pidl != null)
+                return PIDL.ILClone(_pidl.Ptr);
+
+            if (FullName == DirectoryInfoEx.IID_Desktop) // Desktop
+                return DirectoryInfoEx.KnownFolderToPIDLIntPtr(KnownFolder.FromKnownFolderId(KnownFolder_GUIDS.Desktop));
+            else
+                return PathToPIDLIntPtr(FullName);
         }
 
         internal string PtrToPath(IntPtr ptr)
