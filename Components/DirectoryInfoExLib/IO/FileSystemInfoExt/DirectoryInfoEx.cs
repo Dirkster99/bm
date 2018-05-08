@@ -35,8 +35,6 @@ namespace DirectoryInfoExLib.IO.FileSystemInfoExt
         private IDirectoryBrowser _parent;
         private bool _parentInited = false;
 
-        private DirectoryTypeEnum _dirType;
-
         #region Static fields
         /// <summary>
         /// Defines the (CLSID Guid) path of the Desktop shell item.
@@ -200,11 +198,7 @@ namespace DirectoryInfoExLib.IO.FileSystemInfoExt
         /// <summary>
         /// Gets the folders type classification.
         /// </summary>
-        public DirectoryTypeEnum DirectoryType
-        {
-            get { return _dirType; }
-            protected set { _dirType = value; }
-        }
+        public DirectoryTypeEnum DirectoryType { get; protected set; }
 
         /// <summary>
         /// Gets the Windows known folder (similar to <see cref="Environment.SpecialFolder"/>
