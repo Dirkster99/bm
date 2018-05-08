@@ -55,14 +55,6 @@
         /// which is either desktop or drive.
         /// </summary>
         IDirectoryInfoEx Root { get; }
-
-        /// <summary>
-        /// Gets the Windows known folder (similar to <see cref="Environment.SpecialFolder"/>
-        /// but extensible and customizable at run-time) or null if this folder
-        /// is not a special folder in Windows.
-        /// </summary>
-        /// <returns></returns>
-        KnownFolder KnownFolderType { get; }
         #endregion properties
 
         #region methods

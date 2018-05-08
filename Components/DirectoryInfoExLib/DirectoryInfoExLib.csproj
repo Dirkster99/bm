@@ -80,8 +80,7 @@
     <Compile Include="Enums\KnownFolder_GUIDS.cs" />
     <Compile Include="IO\Header\FileBrowser\PIDL.cs" />
     <Compile Include="IO\Header\FileBrowser\ShellAPI.cs" />
-    <Compile Include="IO\FileSystemInfoExt\DirectoryInfoEx.cs" />
-    <Compile Include="IO\FileSystemInfoExt\FileSystemInfoEx.cs" />
+    <Compile Include="IO\DirectoryInfoEx.cs" />
     <Compile Include="IO\Header\IShellFolder2.cs" />
     <None Include="ClassDiagram1.cd" />
     <Compile Include="IO\Header\KnownFolder\Enums\KnownFolderCategory.cs" />

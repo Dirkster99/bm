@@ -1,7 +1,7 @@
 ﻿namespace DirectoryInfoExLib
 {
     using DirectoryInfoExLib.Interfaces;
-    using DirectoryInfoExLib.IO.FileSystemInfoExt;
+    using DirectoryInfoExLib.IO;
     using DirectoryInfoExLib.IO.Header.KnownFolder;
     using System;
 
