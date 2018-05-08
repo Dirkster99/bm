@@ -399,7 +399,7 @@ namespace DirectoryInfoExLib.IO.FileSystemInfoExt
             }
         }
 
-        public PIDL getPIDL()
+        internal PIDL getPIDL()
         {
             if (_pidl != null)
                 return new PIDL(_pidl, true);
