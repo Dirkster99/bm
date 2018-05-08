@@ -124,37 +124,6 @@
         Task<IDirectoryInfoEx[]> GetDirectoriesAsync(String searchPattern,
                                                      SearchOption searchOption,
                                                      CancellationToken ct);
-
-        /// <summary>
-        /// Executes a delegate function that returns T and
-        /// accepts 2 <see cref="PIDL"/> parameters.
-        /// 
-        /// Function takes care of freeing <see cref="PIDL"/> objects after execution.
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="pidlAndRelPidlFunc"></param>
-        /// <returns></returns>
-        T RequestPIDL<T>(Func<PIDL, PIDL, T> pidlAndRelPidlFunc);
-
-        /// <summary>
-        /// Executes an Action that returns void and
-        /// accepts 1 <see cref="PIDL"/> parameter.
-        /// 
-        /// Function takes care of freeing <see cref="PIDL"/> object after execution.
-        /// </summary>
-        /// <param name="pidlFuncOnly"></param>
-        /// <returns></returns>
-        void RequestPIDL(Action<PIDL> pidlFuncOnly);
-
-        /// <summary>
-        /// Executes an delegate function that returns T and
-        /// accepts 1 relative <see cref="PIDL"/> parameter.
-        /// 
-        /// Function takes care of freeing <see cref="PIDL"/> object after execution.
-        /// </summary>
-        /// <param name="relPidlFuncOnly"></param>
-        /// <returns></returns>
-        T RequestRelativePIDL<T>(Func<PIDL, T> relPidlFuncOnly);
         #endregion methods
     }
 }

@@ -247,11 +247,18 @@ namespace DirectoryInfoExLib.IO.FileSystemInfoExt
                 try
                 {
                     //0.16: Fixed ShellFolder not freed
-                    this.RequestPIDL(pidlLookup =>
+                    PIDL pidlLookup = this.getPIDL();
+                    try
+                    {
+                        using (ShellFolder2 sf = getParentIShellFolder(pidlLookup, out relPIDL))
                         {
-                            using (ShellFolder2 sf = getParentIShellFolder(pidlLookup, out relPIDL))
-                                refresh(sf, relPIDL, pidlLookup, mode);
-                        });
+                            refresh(sf, relPIDL, pidlLookup, mode);
+                        }
+                    }
+                    finally
+                    {
+                        pidlLookup.Free();
+                    }
                 }
                 catch (NullReferenceException)
                 {
@@ -283,8 +290,17 @@ namespace DirectoryInfoExLib.IO.FileSystemInfoExt
         /// </summary>
         public virtual bool Equals(FileSystemInfoEx other)
         {
-            return this.RequestPIDL(thisPidl =>
-                other.RequestPIDL(otherPidl => thisPidl.Equals(otherPidl)));
+            PIDL thisPidl = this.getPIDL();
+            PIDL otherPidl = other.getPIDL();
+            try
+            {
+                return thisPidl.Equals(otherPidl);
+            }
+            finally
+            {
+                thisPidl.Free();
+                otherPidl.Free();
+            }
         }
 
         public override bool Equals(object obj)
@@ -360,7 +376,7 @@ namespace DirectoryInfoExLib.IO.FileSystemInfoExt
             }
         }
 
-        internal PIDL getPIDL()
+        public PIDL getPIDL()
         {
             if (_pidl != null)
                 return new PIDL(_pidl, true);
@@ -379,12 +395,21 @@ namespace DirectoryInfoExLib.IO.FileSystemInfoExt
 
         internal static string PIDLToPath(PIDL pidlFull)
         {
-            if (DirectoryInfoEx.DesktopDirectory.RequestPIDL(desktopPIDL => pidlFull.Equals(desktopPIDL)))
-                return DirectoryInfoEx.IID_Desktop;
+            PIDL desktopPIDL = DirectoryInfoEx.DesktopDirectory.getPIDL();
+            try
+            {
+                if (pidlFull.Equals(desktopPIDL))
+                    return DirectoryInfoEx.IID_Desktop;
+            }
+            finally
+            {
+                desktopPIDL.Free();
+            }
 
             using (ShellFolder2 _desktopShellFolder = getDesktopShellFolder())
+            {
                 return loadName(_desktopShellFolder, pidlFull, ShellAPI.SHGNO.FORPARSING);
-
+            }
         }
 
         internal static string PIDLToPath(IShellFolder2 iShellFolder, PIDL pidlRel)

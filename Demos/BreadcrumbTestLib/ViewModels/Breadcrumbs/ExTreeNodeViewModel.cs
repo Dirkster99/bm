@@ -14,6 +14,7 @@
     using BmLib.IconExtractors.IconExtracts;
     using BmLib.Interfaces;
     using BmLib.Enums;
+    using DirectoryInfoExLib.IO.Header.ShellDll;
 
     /// <summary>
     /// Class implements a ViewModel to manage a sub-tree of a Breadcrumb control.
@@ -168,8 +169,17 @@
         /// </summary>
         private void loadIcon()
         {
-            Bitmap bitmap = _dir.RequestPIDL(pidl =>
-                                GetBitmap(IconSize.large, pidl.Ptr, false));
+            PIDL pidl = _dir.getPIDL();
+            Bitmap bitmap = null;
+
+            try
+            {
+                bitmap = GetBitmap(IconSize.large, pidl.Ptr, false);
+            }
+            finally
+            {
+                pidl.Free();
+            }
 
             if (bitmap != null)
                 this.Icon = BreadcrumbTestLib.Utils.BitmapSourceUtils.CreateBitmapSourceFromBitmap(bitmap);

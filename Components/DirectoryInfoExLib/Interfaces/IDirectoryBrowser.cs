@@ -42,15 +42,10 @@
         IDirectoryBrowser[] GetDirectories();
 
         /// <summary>
-        /// Executes a delegate function that returns T and
-        /// accepts 1 <see cref="PIDL"/> parameter.
-        /// 
-        /// Function takes care of freeing <see cref="PIDL"/> object after execution.
+        /// Gets the <see cref="PIDL"/> object that represents this item.
         /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="pidlFuncOnly"></param>
         /// <returns></returns>
-        T RequestPIDL<T>(Func<PIDL, T> pidlFuncOnly);
+        PIDL getPIDL();
         #endregion methods
     }
 }

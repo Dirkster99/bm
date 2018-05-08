@@ -75,7 +75,6 @@
     <Compile Include="Factory.cs" />
     <Compile Include="Interfaces\IDirectoryBrowser.cs" />
     <Compile Include="Interfaces\IDirectoryInfoEx.cs" />
-    <Compile Include="IO\FileSystemInfoExt\ExtensionMethods.cs" />
     <Compile Include="IO\Header\FileBrowser\Interfaces\IEnumIDList.cs" />
     <Compile Include="IO\Header\FileBrowser\Interfaces\IShellFolder.cs" />
     <Compile Include="Enums\KnownFolder_GUIDS.cs" />

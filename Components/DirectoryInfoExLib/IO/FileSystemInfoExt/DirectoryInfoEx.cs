@@ -214,7 +214,18 @@ namespace DirectoryInfoExLib.IO.FileSystemInfoExt
         /// <returns></returns>
         public KnownFolder KnownFolderType
         {
-            get { return this.RequestPIDL(pidl => KnownFolder.FromPidl(pidl)); }
+            get
+            {
+                PIDL pidl = this.getPIDL();
+                try
+                {
+                    return KnownFolder.FromPidl(pidl);
+                }
+                finally
+                {
+                    pidl.Free();
+                }
+            }
         }
 
         private ShellFolder2 ShellFolder { get { return getIShellFolder(); } }
@@ -267,94 +278,6 @@ namespace DirectoryInfoExLib.IO.FileSystemInfoExt
         #endregion
 
         #region Methods
-        /// <summary>
-        /// Executes a delegate function that returns T and
-        /// accepts 2 <see cref="PIDL"/> parameters.
-        /// 
-        /// Function takes care of freeing <see cref="PIDL"/> objects after execution.
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="pidlAndRelPidlFunc"></param>
-        /// <returns></returns>
-        public T RequestPIDL<T>(Func<PIDL, PIDL, T> pidlAndRelPidlFunc)
-        {
-            PIDL pidl = this.getPIDL();
-            PIDL relPidl = this.getRelPIDL();
-            try
-            {
-                return pidlAndRelPidlFunc(pidl, relPidl);
-            }
-            finally
-            {
-                pidl.Free();
-                relPidl.Free();
-            }
-        }
-
-        /// <summary>
-        /// Executes a delegate function that returns T and
-        /// accepts 1 <see cref="PIDL"/> parameter.
-        /// 
-        /// Function takes care of freeing <see cref="PIDL"/> object after execution.
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="pidlFuncOnly"></param>
-        /// <returns></returns>
-        public T RequestPIDL<T>(Func<PIDL, T> pidlFuncOnly)
-        {
-            PIDL pidl = this.getPIDL();
-            try
-            {
-                return pidlFuncOnly(pidl);
-            }
-            finally
-            {
-                pidl.Free();
-            }
-        }
-
-        /// <summary>
-        /// Executes an Action that returns void and
-        /// accepts 1 <see cref="PIDL"/> parameter.
-        /// 
-        /// Function takes care of freeing <see cref="PIDL"/> object after execution.
-        /// </summary>
-        /// <param name="pidlFuncOnly"></param>
-        /// <returns></returns>
-        public void RequestPIDL(Action<PIDL> pidlFuncOnly)
-        {
-            PIDL pidl = this.getPIDL();
-            try
-            {
-                pidlFuncOnly(pidl);
-            }
-            finally
-            {
-                pidl.Free();
-            }
-        }
-
-        /// <summary>
-        /// Executes an delegate function that returns T and
-        /// accepts 1 relative <see cref="PIDL"/> parameter.
-        /// 
-        /// Function takes care of freeing <see cref="PIDL"/> object after execution.
-        /// </summary>
-        /// <param name="relPidlFuncOnly"></param>
-        /// <returns></returns>
-        public T RequestRelativePIDL<T>(Func<PIDL, T> relPidlFuncOnly)
-        {
-            PIDL relPidl = this.getRelPIDL();
-            try
-            {
-                return relPidlFuncOnly(relPidl);
-            }
-            finally
-            {
-                relPidl.Free();
-            }
-        }
-
         /// <summary>
         /// Returns whether this directory item is
         /// the same as the <paramref name="other"/> or not.
@@ -418,13 +341,16 @@ namespace DirectoryInfoExLib.IO.FileSystemInfoExt
                     if (FullName.Equals(DirectoryInfoEx.IID_Desktop))
                         return _parent as IDirectoryInfoEx;
 
-                    this.RequestPIDL((pidl) =>
+                    PIDL pidl = this.getPIDL();
+                    try
                     {
-                        ////                            PIDL relPIDL;
                         _parent = new DirectoryInfoEx(getParentPIDL(pidl));
                         _parentInited = true;
-
-                    });
+                    }
+                    finally
+                    {
+                        pidl.Free();
+                    }
                 }
                 else
                 {
@@ -473,9 +399,17 @@ namespace DirectoryInfoExLib.IO.FileSystemInfoExt
                 {
                     IntPtr ptrShellFolder = IntPtr.Zero;
 
-                    int hr = this.RequestRelativePIDL(relPIDL =>
-                        parentShellFolder.BindToObject(relPIDL.Ptr, IntPtr.Zero, ref ShellAPI.IID_IShellFolder2,
-                        out ptrShellFolder));
+                    int hr = ShellAPI.S_FALSE;
+                    PIDL relPidl = this.getRelPIDL();
+                    try
+                    {
+                        hr = parentShellFolder.BindToObject(relPidl.Ptr, IntPtr.Zero, ref ShellAPI.IID_IShellFolder2,
+                                                            out ptrShellFolder);
+                    }
+                    finally
+                    {
+                        relPidl.Free();
+                    }
 
                     if (ptrShellFolder != IntPtr.Zero && hr == ShellAPI.S_OK)
                         return new ShellFolder2(ptrShellFolder);
@@ -494,17 +428,25 @@ namespace DirectoryInfoExLib.IO.FileSystemInfoExt
                 if (retVal != null)
                     return retVal;
 
-                return this.RequestPIDL((pidl, relPIDL) =>
+                PIDL pidl = this.getPIDL();
+                PIDL relPidl = this.getRelPIDL();
+                try
                 {
-                    using (ShellFolder2 parentShellFolder = getParentIShellFolder(pidl, out relPIDL))
+                    using (ShellFolder2 parentShellFolder = getParentIShellFolder(pidl, out relPidl))
                     {
                         IntPtr ptrShellFolder;
-                        int hr = parentShellFolder.BindToObject(relPIDL.Ptr, IntPtr.Zero, ref ShellAPI.IID_IShellFolder2,
+                        int hr = parentShellFolder.BindToObject(relPidl.Ptr, IntPtr.Zero, ref ShellAPI.IID_IShellFolder2,
                             out ptrShellFolder);
                         if (ptrShellFolder == IntPtr.Zero || hr != ShellAPI.S_OK) Marshal.ThrowExceptionForHR(hr);
+
                         return new ShellFolder2(ptrShellFolder);
                     }
-                });
+                }
+                finally
+                {
+                    pidl.Free();
+                    relPidl.Free();
+                }
             }
         }
         #endregion

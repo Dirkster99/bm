@@ -13,7 +13,9 @@
     /// </summary>
     public sealed class Factory
     {
-        private Factory() { }
+        private Factory()
+        {
+        }
 
         /// <summary>
         /// </summary>
