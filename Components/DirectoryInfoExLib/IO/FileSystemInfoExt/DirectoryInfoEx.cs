@@ -317,14 +317,6 @@ namespace DirectoryInfoExLib.IO.FileSystemInfoExt
         }
 
         /// <summary>
-        /// Delete this folder. (not move it to recycle bin)
-        /// </summary>
-        public override void Delete()
-        {
-            throw new NotImplementedException();
-        }
-
-        /// <summary>
         /// Move this folder to specified directory (fullpath)
         /// </summary>
         public void MoveTo(string destDirName)

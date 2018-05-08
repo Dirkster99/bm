@@ -10,14 +10,13 @@ namespace DirectoryInfoExLib.IO.FileSystemInfoExt
     using System.IO;
     using System.Runtime.InteropServices;
     using System.Text;
-    using System.Runtime.Serialization;
     using DirectoryInfoExLib.IO.Header.ShellDll;
     using DirectoryInfoExLib.IO.Tools.Interface;
     using DirectoryInfoExLib.IO.Header;
     using DirectoryInfoExLib.Enums;
     using DirectoryInfoExLib.IO.Header.KnownFolder;
 
-    internal class FileSystemInfoEx : FileSystemInfo, IDisposable, ISerializable, ICloneable,
+    internal class FileSystemInfoEx : IDisposable, ICloneable,
         IEquatable<FileSystemInfoEx>
     {
         #region Enums
@@ -47,13 +46,6 @@ namespace DirectoryInfoExLib.IO.FileSystemInfoExt
         {
             init(fullPath);
         }
-
-        ////        protected FileSystemInfoEx(SerializationInfo info, StreamingContext context)
-        ////            : this()
-        ////        {
-        ////            init(info, context);
-        ////        }
-
 
         protected FileSystemInfoEx()
             : base()
@@ -104,38 +96,25 @@ namespace DirectoryInfoExLib.IO.FileSystemInfoExt
             //0.22: Fix illegal PIDL for Directory under Library.ms directory
             _pidl = null;
             _pidlRel = null;
-            OriginalPath = path;
             FullName = path;
             Refresh(RefreshModeEnum.BaseProps);
         }
-
-        ////        protected void init(SerializationInfo info, StreamingContext context)
-        ////        {
-        ////            OriginalPath = info.GetString("OriginalPath");
-        ////            Label = info.GetString("Label");
-        ////            _name = info.GetString("Name");
-        ////            FullName = info.GetString("FullName");
-        ////            Attributes = (FileAttributes)info.GetValue("Attributes", typeof(FileAttributes));
-        ////            LastWriteTime = info.GetDateTime("LastWriteTime");
-        ////            LastAccessTime = info.GetDateTime("LastAccessTime");
-        ////            CreationTime = info.GetDateTime("CreationTime");
-        ////        }
         #endregion
 
         #region properties
         public RefreshModeEnum RefreshMode { get; private set; }
 
-        public override string Name { get { return _name; } }
+        public string Name { get { return _name; } }
 
-        public new string Extension { get { return Path.GetExtension(Name); } }
+        public string Extension { get { return Path.GetExtension(Name); } }
 
-        public override bool Exists { get { return getExists(); } }
+        public bool Exists { get { return getExists(); } }
 
         public string Label { get; protected set; }
 
-        public new string FullName { get; protected set; }
+        public string FullName { get; protected set; }
 
-        public new FileAttributes Attributes
+        public FileAttributes Attributes
         {
             get
             {
@@ -146,7 +125,7 @@ namespace DirectoryInfoExLib.IO.FileSystemInfoExt
             set { _attributes = value; }
         }
 
-        public new DateTime LastWriteTime
+        public DateTime LastWriteTime
         {
             get
             {
@@ -157,12 +136,12 @@ namespace DirectoryInfoExLib.IO.FileSystemInfoExt
             set { _lastWriteTime = value; }
         }
 
-        public new DateTime LastWriteTimeUtc
+        public DateTime LastWriteTimeUtc
         {
             get { return LastWriteTime.ToUniversalTime(); }
         }
 
-        public new DateTime LastAccessTime
+        public DateTime LastAccessTime
         {
             get
             {
@@ -176,18 +155,18 @@ namespace DirectoryInfoExLib.IO.FileSystemInfoExt
             }
         }
 
-        public new DateTime LastAccessTimeUtc
+        public DateTime LastAccessTimeUtc
         {
             get { return LastAccessTime.ToUniversalTime(); }
         }
 
-        public new DateTime CreationTime
+        public DateTime CreationTime
         {
             get { checkRefresh(); return _creationTime; }
             set { _creationTime = value; }
         }
 
-        public new DateTime CreationTimeUtc
+        public DateTime CreationTimeUtc
         {
             get { return CreationTime.ToUniversalTime(); }
         }
@@ -274,18 +253,6 @@ namespace DirectoryInfoExLib.IO.FileSystemInfoExt
         }
 
         /// <summary>
-        /// Delete the current item.
-        /// </summary>
-        public override void Delete()
-        {
-            throw new NotImplementedException();
-            ////            if (this is FileInfoEx)
-            ////                (this as FileInfoEx).Delete();
-            ////            else
-            ////                (this as DirectoryInfoEx).Delete();
-        }
-
-        /// <summary>
         /// Return if two FileSystemInfoEx is equal (using PIDL if possible, otherwise Path)
         /// </summary>
         public virtual bool Equals(FileSystemInfoEx other)
@@ -312,7 +279,7 @@ namespace DirectoryInfoExLib.IO.FileSystemInfoExt
 
         public override int GetHashCode()
         {
-            return FullPath.ToLower().GetHashCode();
+            return FullName.ToLower().GetHashCode();
         }
 
         public override string ToString()
@@ -598,8 +565,9 @@ namespace DirectoryInfoExLib.IO.FileSystemInfoExt
                 //    FullName = IOTools.IID_Public;
                 //else
 
-                if (OriginalPath == null)
-                    OriginalPath = FullName;
+////                if (OriginalPath == null)
+////                    OriginalPath = FullName;
+
                 if (parseName.StartsWith("::")) //Guid
                     parseName = loadName(parentShellFolder, relPIDL, Header.ShellDll.ShellAPI.SHGNO.NORMAL);
 
@@ -608,13 +576,13 @@ namespace DirectoryInfoExLib.IO.FileSystemInfoExt
             }
             else
             {
-                if (OriginalPath != null)
-                {
-                    string origPath = RemoveSlash(OriginalPath);
-                    _name = Path.GetFileName(origPath);
-                    Label = _name;
-                    FullName = origPath;
-                }
+////                if (OriginalPath != null)
+////                {
+////                    string origPath = RemoveSlash(OriginalPath);
+////                    _name = Path.GetFileName(origPath);
+////                    Label = _name;
+////                    FullName = origPath;
+////                }
             }
         }
 
