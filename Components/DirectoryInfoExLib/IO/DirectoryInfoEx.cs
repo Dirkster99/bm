@@ -25,34 +25,6 @@ namespace DirectoryInfoExLib.IO
     using System.Text;
 
     /// <summary>
-    /// Determines whether all properties or only parts of the property set
-    /// are loaded at initialization time (refreshing properties is disabled)
-    /// </summary>
-    [Flags]
-    internal enum RefreshModeEnum : int
-    {
-        /// <summary>
-        /// Refresh no properties at all
-        /// </summary>
-        None = 1 << 0,
-
-        /// <summary>
-        /// Refresh only base properties
-        /// </summary>
-        BaseProps = 1 << 1,
-
-        /// <summary>
-        /// Refresh only Full Properties
-        /// </summary>
-        FullProps = 1 << 2,
-
-        /// <summary>
-        /// Refresh Base and Full Properties
-        /// </summary>
-        AllProps = BaseProps | FullProps
-    }
-
-    /// <summary>
     /// Represents a directory in PIDL (Pointer to an ID List) system.
     ///
     /// https://www.codeproject.com/Articles/1649/The-Complete-Idiot-s-Guide-to-Writing-Namespace-Ex
@@ -219,7 +191,7 @@ namespace DirectoryInfoExLib.IO
             //0.16: Fixed ShellFolder not freed
             using (ShellFolder2 parentShellFolder = getParentIShellFolder(fullPIDL, out relPIDL))
             {
-                refresh(parentShellFolder, relPIDL, fullPIDL, RefreshModeEnum.BaseProps);
+                refresh(parentShellFolder, relPIDL, fullPIDL);
             }
 
             _pidl = new PIDL(fullPIDL, false); //0.14 : FileSystemInfoEx record the pidl when construct, as some path do not parasable (e.g. EntireNetwork)
@@ -230,7 +202,7 @@ namespace DirectoryInfoExLib.IO
         {
             PIDL fullPIDL = new PIDL(PIDL.ILCombine(parentPIDl.Ptr, relPIDL.Ptr), false);
 
-            refresh(parentShellFolder, relPIDL, fullPIDL, RefreshModeEnum.BaseProps);
+            refresh(parentShellFolder, relPIDL, fullPIDL);
             _pidl = fullPIDL;
             _pidlRel = relPIDL; // new PIDL(relPIDL, false);
         }
@@ -241,17 +213,11 @@ namespace DirectoryInfoExLib.IO
             _pidl = null;
             _pidlRel = null;
             FullName = path;
-            Refresh(RefreshModeEnum.BaseProps);
+            Refresh();
         }
         #endregion constructors
 
         #region properties
-        /// <summary>
-        /// Gets the current refresh mode that is applied when the Refresh() method
-        /// is called to refresh Windows shell file system attributes of this object.
-        /// </summary>
-        public RefreshModeEnum RefreshMode { get; private set; }
-
         /// <summary>
         /// Gets the Label of this object. A label is a descriptive but short text
         /// that specifies an item in more detail. Typically, local drives or mapped
@@ -431,16 +397,13 @@ namespace DirectoryInfoExLib.IO
 
         /// <summary>
         /// Refresh the file / directory info. Does not refresh directory contents 
-        /// because it refresh every time GetFiles/Directories/FileSystemInfos is called.
+        /// because it refresh every time GetFiles/Directories is called.
         /// </summary>
-        /// <param name="mode"></param>
-        public void Refresh(RefreshModeEnum mode = RefreshModeEnum.AllProps)
+        public void Refresh()
         {
-            RefreshMode |= mode; //0.23 : Delay loading some properties.
-
             PIDL relPIDL = null;
             if (getExists() == false)
-                refresh(null, null, null, mode);
+                refresh(null, null, null);
             else
                 try
                 {
@@ -450,7 +413,7 @@ namespace DirectoryInfoExLib.IO
                     {
                         using (ShellFolder2 sf = getParentIShellFolder(pidlLookup, out relPIDL))
                         {
-                            refresh(sf, relPIDL, pidlLookup, mode);
+                            refresh(sf, relPIDL, pidlLookup);
                         }
                     }
                     finally
@@ -460,7 +423,7 @@ namespace DirectoryInfoExLib.IO
                 }
                 catch (NullReferenceException)
                 {
-                    refresh(null, null, null, mode);
+                    refresh(null, null, null);
                 }
                 finally
                 {
@@ -1515,7 +1478,7 @@ namespace DirectoryInfoExLib.IO
         /// Method implements an extension of the init() method which is called upon construction.
         /// This method can be called to initialize/refresh file system properties of this object.
         /// </summary>
-        private void refresh(IShellFolder2 parentShellFolder, PIDL relPIDL, PIDL fullPIDL, RefreshModeEnum mode)
+        private void refresh(IShellFolder2 parentShellFolder, PIDL relPIDL, PIDL fullPIDL)
         {
             if (parentShellFolder != null && fullPIDL != null && relPIDL != null)
             {
