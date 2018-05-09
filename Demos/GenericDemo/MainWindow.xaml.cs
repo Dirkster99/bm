@@ -1,5 +1,6 @@
 ﻿namespace GenericDemo
 {
+    using System;
     using System.Windows;
     using BreadcrumbTestLib.ViewModels;
 
@@ -23,6 +24,18 @@
             DataContext = appVM;
 
             appVM.InitPath(@"C:\");
+        }
+
+        protected override void OnClosed(EventArgs e)
+        {
+            base.OnClosed(e);
+
+            var appVm = (DataContext as IDisposable);
+
+            if (appVm != null)
+                appVm.Dispose();
+
+            DataContext = null;
         }
     }
 }

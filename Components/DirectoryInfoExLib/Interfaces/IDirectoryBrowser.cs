@@ -14,7 +14,7 @@
         string Name { get; }
 
         /// <summary>
-        /// Gets the name including path and extensions.
+        /// Gets the name including path and extensions of this object.
         /// </summary>
         string FullName { get; }
 

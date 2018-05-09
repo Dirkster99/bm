@@ -2,7 +2,7 @@
 // LYCJ (c) 2009 - http://www.quickzip.org/components                                                            //
 // Release under LGPL license.                                                                                   //
 //                                                                                                               //
-// This code used part of Steven Roebert's work (http://www.codeproject.com/KB/miscctrl/FileBrowser.aspx)    //
+// This code used part of Steven Roebert's work (http://www.codeproject.com/KB/miscctrl/FileBrowser.aspx)        //
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 namespace DirectoryInfoExLib.IO
 {
@@ -100,10 +100,11 @@ namespace DirectoryInfoExLib.IO
         private string _name;
         private PIDL _pidlRel = null;
         private PIDL _pidl = null;
-        private FileAttributes _attributes;
 
-        private IDirectoryBrowser _parent;
-        private bool _parentInited = false;
+        private IDirectoryBrowser _parent;     // Get the parent obejct of this object
+        private bool _parentInited = false;    // Is parent property initialized?
+
+        private bool _disposed = false;        // Implement IDisposable interface
         #endregion fields
 
         #region constructors
@@ -202,9 +203,14 @@ namespace DirectoryInfoExLib.IO
             System.Threading.Interlocked.Increment(ref counter);
         }
 
+        /// <summary>
+        /// Class finalizer/destructor
+        /// When the object is eligible for finalization,
+        /// the garbage collector runs the Finalize method of the object. 
+        /// </summary>
         ~DirectoryInfoEx()
         {
-            ((IDisposable)this).Dispose();
+            Dispose();
         }
 
         protected void init(PIDL fullPIDL)
@@ -240,24 +246,35 @@ namespace DirectoryInfoExLib.IO
         #endregion constructors
 
         #region properties
+        /// <summary>
+        /// Gets the current refresh mode that is applied when the Refresh() method
+        /// is called to refresh Windows shell file system attributes of this object.
+        /// </summary>
         public RefreshModeEnum RefreshMode { get; private set; }
 
+        /// <summary>
+        /// Gets the Label of this object. A label is a descriptive but short text
+        /// that specifies an item in more detail. Typically, local drives or mapped
+        /// drives have a label to specify the contents of that drive (e.g.: 'Data').
+        /// </summary>
         public string Label { get; protected set; }
 
+        /// <summary>
+        /// Gets the name including path and extensions of this object.
+        /// </summary>
         public string FullName { get; protected set; }
 
+
+        /// <summary>
+        /// Gets the file system attributes for this object.
+        /// </summary>
         public FileAttributes Attributes
         {
-            get
-            {
-                return _attributes;
-            }
-
-            set { _attributes = value; }
+            get; protected set;
         }
 
         /// <summary>
-        /// Gets the parent folder item of this item.
+        /// Gets/sets the parent folder item of this item.
         /// </summary>
         public IDirectoryBrowser Parent
         {
@@ -274,11 +291,19 @@ namespace DirectoryInfoExLib.IO
                 _parent = value;
             }
         }
-
+        /// <summary>
+        /// Gets the name of this item's path.
+        /// </summary>
         public string Name { get { return _name; } }
 
+        /// <summary>
+        /// Gets the extension of this item's name.
+        /// </summary>
         public string Extension { get { return Path.GetExtension(Name); } }
 
+        /// <summary>
+        /// Gets whether this item represents a folder or not.
+        /// </summary>
         public bool IsFolder
         {
             get { return (Attributes & FileAttributes.Directory) == FileAttributes.Directory; }
@@ -317,10 +342,9 @@ namespace DirectoryInfoExLib.IO
                 }
             }
         }
-
-        protected ShellFolder2 ShellFolder { get { return getIShellFolder(); } }
         #endregion
 
+        #region Methods
         #region Static Methods
         /// <summary>
         /// Gets whether a directory exists at a given path or not.
@@ -364,23 +388,47 @@ namespace DirectoryInfoExLib.IO
 
         #region IDisposable Members
         /// <summary>
-        /// Implements standard disposable method.
+        /// Standard dispose method of the <seealso cref="IDisposable" /> interface.
         /// </summary>
         public void Dispose()
         {
-            if (_pidlRel != null || _pidl != null)
-                System.Threading.Interlocked.Decrement(ref counter);
+            Dispose(true);
+        }
 
-            if (_pidlRel != null) _pidlRel.Free();
+        /// <summary>
+        /// Implements standard disposable method.
+        /// Source: http://www.codeproject.com/Articles/15360/Implementing-IDisposable-and-the-Dispose-Pattern-P
+        /// </summary>
+        /// <param name="disposing"></param>
+        protected virtual void Dispose(bool disposing)
+        {
+            if (_disposed == false)
+            {
+                if (disposing == true)
+                {
+                    if (_pidlRel != null || _pidl != null)
+                        System.Threading.Interlocked.Decrement(ref counter);
 
-            if (_pidl != null) _pidl.Free();
+                    if (_pidlRel != null) _pidlRel.Free();
 
-            _pidlRel = null;
-            _pidl = null;
+                    if (_pidl != null) _pidl.Free();
+
+                    _pidlRel = null;
+                    _pidl = null;
+                }
+
+                // There are no unmanaged resources to release, but
+                // if we add them, they need to be released here.
+            }
+
+            _disposed = true;
+
+            //// If it is available, make the call to the
+            //// base class's Dispose(Boolean) method
+            ////base.Dispose(disposing);
         }
         #endregion
 
-        #region Methods
         /// <summary>
         /// Refresh the file / directory info. Does not refresh directory contents 
         /// because it refresh every time GetFiles/Directories/FileSystemInfos is called.
@@ -495,7 +543,7 @@ namespace DirectoryInfoExLib.IO
             PIDL parentPIDL = this.getPIDL();
 
             List<IntPtr> trashPtrList = new List<IntPtr>();
-            using (ShellFolder2 sf = this.ShellFolder)
+            using (ShellFolder2 sf = this.getIShellFolder())
             {
                 try
                 {
@@ -624,8 +672,16 @@ namespace DirectoryInfoExLib.IO
         /// </summary>
         public IDirectoryBrowser[] GetDirectories(String searchPattern, SearchOption searchOption)
         {
-            checkExists();
-            return new List<IDirectoryBrowser>(EnumerateDirectories(searchPattern, searchOption)).ToArray();
+            try
+            {
+                checkExists();
+                return new List<IDirectoryBrowser>(EnumerateDirectories(searchPattern, searchOption)).ToArray();
+            }
+            catch
+            {
+                // Return empty list if something did not work as expected
+                return new List<IDirectoryBrowser>().ToArray();
+            }
         }
 
         /// <summary>
@@ -633,8 +689,16 @@ namespace DirectoryInfoExLib.IO
         /// </summary>
         public IDirectoryInfoEx[] GetDirectories(String searchPattern)
         {
-            checkExists();
-            return new List<IDirectoryInfoEx>(EnumerateDirectories(searchPattern)).ToArray();
+            try
+            {
+                checkExists();
+                return new List<IDirectoryInfoEx>(EnumerateDirectories(searchPattern)).ToArray();
+            }
+            catch
+            {
+                // Return empty list if something did not work as expected
+                return new List<IDirectoryInfoEx>().ToArray();
+            }
         }
 
         /// <summary>
@@ -642,26 +706,51 @@ namespace DirectoryInfoExLib.IO
         /// </summary>
         public IDirectoryBrowser[] GetDirectories()
         {
-            checkExists();
-            return new List<IDirectoryBrowser>(EnumerateDirectories()).ToArray();
+            try
+            {
+                checkExists();
+                return new List<IDirectoryBrowser>(EnumerateDirectories()).ToArray();
+            }
+            catch
+            {
+                // Return empty list if something did not work as expected
+                return new List<IDirectoryBrowser>().ToArray();
+            }
         }
 
+        /// <summary>
+        /// Returns a task that gets a list of sub directories.
+        /// </summary>
         public Task<IDirectoryInfoEx[]> GetDirectoriesAsync(String searchPattern,
           SearchOption searchOption, CancellationToken ct)
         {
-            checkExists();
-            return Task.Run(() =>
-                new List<IDirectoryInfoEx>(EnumerateDirectories(searchPattern, searchOption,
-                    () => ct.IsCancellationRequested)).ToArray(), ct);
+            try
+            {
+                checkExists();
+                return Task.Run(() =>
+                    new List<IDirectoryInfoEx>(EnumerateDirectories(searchPattern, searchOption,
+                        () => ct.IsCancellationRequested)).ToArray(), ct);
+            }
+            catch
+            {
+                // Return empty list if something did not work as expected
+                return Task.Run(() => new List<IDirectoryInfoEx>().ToArray());
+            }
         }
         #endregion
         #endregion
 
+        /// <summary>
+        /// Gets the label of this item to show meaningful information in the debugger.
+        /// </summary>
         public override string ToString()
         {
             return Label;
         }
 
+        /// <summary>
+        /// Gets a PIDL for the Knownfolder parameter object.
+        /// </summary>
         protected static PIDL KnownFolderToPIDL(KnownFolder knownFolder)
         {
             IntPtr ptrAddr;
@@ -673,7 +762,8 @@ namespace DirectoryInfoExLib.IO
                 pidl = new PIDL(ptrAddr, false);
                 return pidl;
             }
-            else throw new ArgumentException("Invalid knownFolder " + RetVal);
+            else
+                throw new ArgumentException("Invalid knownFolder " + RetVal);
         }
 
         protected static IntPtr KnownFolderToPIDLIntPtr(KnownFolder knownFolder)
@@ -708,6 +798,376 @@ namespace DirectoryInfoExLib.IO
             return dir;
         }
 
+        /// <summary>
+        /// Gets an object that implements the IShellFolder2 interface of the Windows Desktop object.
+        /// The desktop object is an important anchor point in the Windows Shell since it is considered
+        /// to be the root of all items below it.
+        ///
+        /// This type of object can be used to determine internals of a Windows shell folder.
+        ///
+        /// MSDN: https://msdn.microsoft.com/en-us/library/windows/desktop/bb775055(v=vs.85).aspx
+        /// </summary>
+        /// <returns>The object that implement the IShellFolder2 interface or null.</returns>
+        protected static ShellFolder2 getDesktopShellFolder()
+        {
+            IntPtr ptrShellFolder;
+            int hr = ShellAPI.SHGetDesktopFolder(out ptrShellFolder);
+            if (hr == ShellAPI.S_OK && ptrShellFolder != IntPtr.Zero)
+            {
+                ShellFolder2 sf = new ShellFolder2(ptrShellFolder);
+                //0.13: Fixed? Desktop ShellFolder not released. (may be a cause of AccessViolationException.)
+                //GC.SuppressFinalize(sf);
+                return sf;
+            }
+            else Marshal.ThrowExceptionForHR(hr);
+
+            return null; //mute error.
+        }
+
+        /// <summary>
+        /// Gets an object that represents an ABSOLUTE PIDL of the given path parameter.
+        ///
+        /// MSDN: https://msdn.microsoft.com/en-us/library/windows/desktop/bb775055(v=vs.85).aspx
+        /// </summary>
+        /// <returns>The PIDL object that wraps the pidl <seealso cref="IntPtr"/> or null
+        /// if the PIDL cannot be determined at this time.</returns>
+        protected static PIDL PathToPIDL(string path)
+        {
+            path = RemoveSlash(path);
+            IntPtr pidlPtr;
+            uint pchEaten = 0;
+            ShellAPI.SFGAO pdwAttributes = 0;
+
+            using (ShellFolder2 _desktopShellFolder = getDesktopShellFolder())
+            {
+                int hr = _desktopShellFolder.ParseDisplayName(
+                    IntPtr.Zero, IntPtr.Zero, path, ref pchEaten, out pidlPtr, ref pdwAttributes);
+
+                if (pidlPtr == IntPtr.Zero || hr != ShellAPI.S_OK)
+                {
+                    // Commented because this is part of init and it's too time consuming.
+                    ////Marshal.ThrowExceptionForHR(hr);
+                    return null;
+                }
+            }
+
+            return new PIDL(pidlPtr, false);
+        }
+
+        /// <summary>
+        /// Gets an <seealso cref="IntPtr"/> that represents an ABSOLUTE PIDL of the given path parameter.
+        ///
+        /// MSDN: https://msdn.microsoft.com/en-us/library/windows/desktop/cc144090(v=vs.85).aspx#ID_Lists_PIDL
+        /// </summary>
+        /// <returns>The <seealso cref="IntPtr"/> or default(<seealso cref="IntPtr"/>)
+        /// if the PIDL cannot be determined at this time.</returns>
+        protected static IntPtr PathToPIDLIntPtr(string path)
+        {
+            path = RemoveSlash(path);
+            IntPtr pidlPtr;
+            uint pchEaten = 0;
+            ShellAPI.SFGAO pdwAttributes = 0;
+
+            using (ShellFolder2 _desktopShellFolder = getDesktopShellFolder())
+            {
+                int hr = _desktopShellFolder.ParseDisplayName(
+                    IntPtr.Zero, IntPtr.Zero, path, ref pchEaten, out pidlPtr, ref pdwAttributes);
+
+                if (pidlPtr == IntPtr.Zero || hr != ShellAPI.S_OK)
+                {
+                    // Commented because this is part of init and it's too time consuming.
+                    ////Marshal.ThrowExceptionForHR(hr);
+                    return default(IntPtr);
+                }
+            }
+
+            return pidlPtr;
+        }
+
+        /// <summary>
+        /// Gets a path for a given ABSOLUTE/Full <seealso cref="PIDL"/> object parameter.
+        ///
+        /// MSDN: https://msdn.microsoft.com/en-us/library/windows/desktop/cc144090(v=vs.85).aspx#ID_Lists_PIDL
+        /// </summary>
+        /// <returns>The path (e.g.: 'C:\Windows' or '::{...}').</returns>
+        protected static string PIDLToPath(PIDL pidlFull)
+        {
+            PIDL desktopPIDL = DirectoryInfoEx.DesktopDirectory.getPIDL();
+            try
+            {
+                if (pidlFull.Equals(desktopPIDL))
+                    return DirectoryInfoEx.IID_Desktop;
+            }
+            finally
+            {
+                desktopPIDL.Free();
+            }
+
+            using (ShellFolder2 _desktopShellFolder = getDesktopShellFolder())
+            {
+                return loadName(_desktopShellFolder, pidlFull, ShellAPI.SHGNO.FORPARSING);
+            }
+        }
+
+        /// <summary>
+        /// Gets a path for a given Relative <seealso cref="PIDL"/> object parameter.
+        /// The relative PIDL must be relative to the given IShellFolder2 interface parameter.
+        ///
+        /// MSDN: https://msdn.microsoft.com/en-us/library/windows/desktop/cc144090(v=vs.85).aspx#ID_Lists_PIDL
+        /// </summary>
+        /// <returns>The path (e.g.: 'C:\Windows' or '::{...}').</returns>
+        protected static string PIDLToPath(IShellFolder2 iShellFolder, PIDL pidlRel)
+        {
+            return loadName(iShellFolder, pidlRel, ShellAPI.SHGNO.FORPARSING);
+        }
+
+        /// <summary>
+        /// Gets a Relative <seealso cref="PIDL"/> that represents this item's parent (if any).
+        /// The relative PIDL is the last item in the ITEMIDLIST structure
+        /// if this item is a container (directory or virtual directory).
+        ///
+        /// MSDN: https://msdn.microsoft.com/en-us/library/windows/desktop/cc144090(v=vs.85).aspx#ID_Lists_PIDL
+        /// </summary>
+        /// <returns>The path (e.g.: 'C:\Windows' or '::{...}').</returns>
+        protected static PIDL getRelativePIDL(PIDL pidl)
+        {
+            if (pidl == null)
+                return null;
+
+            IntPtr pRelPIDL = PIDL.ILFindLastID(pidl.Ptr);
+
+            if (pRelPIDL == IntPtr.Zero)
+                throw new IOException("getRelativePIDL");
+
+            return new PIDL(pRelPIDL, true); //0.21
+        }
+
+        /// <summary>
+        /// Gets a Relative <seealso cref="PIDL"/> object that represents
+        /// the parent of the item descried by the <param ref="pidl"/> parameter.
+        ///
+        /// The relative PIDL is the last item in the ITEMIDLIST structure
+        /// if this item is a container (directory or virtual directory).
+        ///
+        /// MSDN: https://msdn.microsoft.com/en-us/library/windows/desktop/cc144090(v=vs.85).aspx#ID_Lists_PIDL
+        /// <param name="pidl">Represents the item whos relative parent pidl is to be returned.</param>
+        /// <param name="relPIDL">Returns the relative parent pidl via out.</param>
+        /// <returns>The relative PIDL object of the parent item.</returns>
+        /// </summary>
+        protected static PIDL getParentPIDL(PIDL pidl, out PIDL relPIDL)
+        {
+            relPIDL = new PIDL(pidl, true); //0.21
+            if (pidl.Size == 0)
+                return pidl;
+
+            IntPtr pParent = PIDL.ILClone(pidl.Ptr);
+
+            relPIDL = getRelativePIDL(pidl);
+            if (pParent == IntPtr.Zero || PIDL.ILRemoveLastID2(ref pParent) == false)
+            {
+                Marshal.FreeCoTaskMem(pParent); //new PIDL(pParent, false).Free();
+                pParent = IntPtr.Zero;
+
+                return DirectoryInfoEx.KnownFolderToPIDL(KnownFolder.FromKnownFolderId(KnownFolder_GUIDS.Desktop));
+            }
+
+            return new PIDL(pParent, false); //pParent will be freed by the PIDL.
+        }
+
+        /// <summary>
+        /// Gets a Relative <seealso cref="PIDL"/> object that represents
+        /// the parent of the item descried by the <param ref="pidl"/> parameter.
+        ///
+        /// The relative PIDL is the last item in the ITEMIDLIST structure
+        /// if this item is a container (directory or virtual directory).
+        ///
+        /// MSDN: https://msdn.microsoft.com/en-us/library/windows/desktop/cc144090(v=vs.85).aspx#ID_Lists_PIDL
+        /// </summary>
+        /// <param name="pidl">Represents the item whos relative parent pidl is to be returned.</param>
+        /// <returns>The relative PIDL object of the parent item.</returns>
+        protected static PIDL getParentPIDL(PIDL pidl)
+        {
+            PIDL relPIDL = null;
+            try
+            {
+                return getParentPIDL(pidl, out relPIDL);
+            }
+            finally
+            {
+                if (relPIDL != null)
+                    relPIDL.Free();
+            }
+        }
+
+        /// <summary>
+        /// Gets the name of the item represented by the given path parameter.
+        /// (e.g. returns 'Windows' for 'C:\Windows\' or 'C:\Windows')
+        /// </summary>
+        /// <param name="path">Path to the item whos name is to be determined.</param>
+        /// <returns>The name of the item addressed by the parameter</returns>
+        protected static string GetFileName(string path)
+        {
+            int idx = path.LastIndexOf('\\');
+
+            if (idx == -1)
+                return path;
+
+            return path.Substring(idx + 1);
+        }
+
+        /// <summary>
+        /// Gets the name of a shell folder item based on its <seealso cref="IntPtr"/>.
+        /// </summary>
+        /// <param name="iShellFolder"></param>
+        /// <param name="ptr"></param>
+        /// <param name="uFlags"></param>
+        /// <returns></returns>
+        protected static string loadName(IShellFolder2 iShellFolder,
+                                         IntPtr ptr,
+                                         Header.ShellDll.ShellAPI.SHGNO uFlags)
+        {
+            if (iShellFolder == null)
+                return null;
+
+            IntPtr ptrStr = Marshal.AllocCoTaskMem(Header.ShellDll.ShellAPI.MAX_PATH * 2 + 4);
+            Marshal.WriteInt32(ptrStr, 0, 0);
+            StringBuilder buf = new StringBuilder(Header.ShellDll.ShellAPI.MAX_PATH);
+
+            try
+            {
+                if (iShellFolder.GetDisplayNameOf(ptr, uFlags, ptrStr) == Header.ShellDll.ShellAPI.S_OK)
+                    Header.ShellDll.ShellAPI.StrRetToBuf(ptrStr, ptr, buf, Header.ShellDll.ShellAPI.MAX_PATH);
+            }
+            finally
+            {
+                if (ptrStr != IntPtr.Zero)
+                    Marshal.FreeCoTaskMem(ptrStr);
+                ptrStr = IntPtr.Zero;
+            }
+
+            return buf.ToString();
+        }
+
+        protected static string loadName(IShellFolder2 iShellFolder,
+                                  PIDL relPidl,
+                                  Header.ShellDll.ShellAPI.SHGNO uFlags)
+        {
+            return loadName(iShellFolder, relPidl.Ptr, uFlags);
+        }
+
+        /// <summary>
+        /// Remove slash end of input.
+        /// </summary>
+        protected static string RemoveSlash(string input)
+        {
+            if (!input.EndsWith(@":\") && input.EndsWith(@"\"))
+            {
+                return input.Substring(0, input.Length - 1);
+            }
+            else
+                return input;
+        }
+
+        /// <summary>
+        /// Gets a PIDL object that represents a Relative PIDL of the parent item
+        /// in relation to this item. The parent item can be used to navigate the
+        /// Windows shell tree towards the root.
+        ///
+        /// 0.12: Fixed PIDL, PIDLRel, ShellFolder
+        /// Storage properties generated on demand to avoid x-thread issues.
+        /// </summary>
+        /// <returns>The <seealso cref="IntPtr"/> or default(<seealso cref="IntPtr"/>)
+        /// if the PIDL cannot be determined at this time.</returns>
+        protected PIDL getRelPIDL()
+        {
+            //0.14 : FileSystemInfoEx now stored a copy of PIDL/Rel, will return copy of it when properties is called (to avoid AccessViolation).
+            if (_pidlRel != null)
+                return new PIDL(_pidlRel, true);
+
+            //0.16: Fixed getRelPIDL() cannot return correct value if File/DirInfoEx construct with string. (attemp to return a freed up pointer).                       
+            PIDL pidlLookup = getPIDL();
+            try
+            {
+                return getRelativePIDL(pidlLookup);
+            }
+            finally
+            {
+                if (pidlLookup != null)
+                    pidlLookup.Free();
+
+                pidlLookup = null;
+            }
+        }
+
+        /// <summary>
+        /// Gets an ABSOLUTE PIDL object for this item.
+        /// </summary>
+        /// <returns>The <seealso cref="IntPtr"/> or default(<seealso cref="IntPtr"/>)
+        /// if the PIDL cannot be determined at this time.</returns>
+        protected PIDL getPIDL()
+        {
+            if (_pidl != null)
+                return new PIDL(_pidl, true);
+
+            // Path equal Desktop ID -> return desktop's PIDL
+            if (FullName == DirectoryInfoEx.IID_Desktop)
+                return DirectoryInfoEx.KnownFolderToPIDL(KnownFolder.FromKnownFolderId(KnownFolder_GUIDS.Desktop));
+            else
+                return PathToPIDL(FullName);
+        }
+
+        /// <summary>
+        /// Gets an IShellFolder2 object and a RELATIVE PIDL for the parent of the
+        /// given <param ref="pidl"/> parameter.
+        ///
+        /// MSDN:
+        /// https://msdn.microsoft.com/en-us/library/windows/desktop/cc144090(v=vs.85).aspx#ID_Lists_PIDL
+        /// https://msdn.microsoft.com/en-us/library/windows/desktop/bb775055(v=vs.85).aspx
+        /// </summary>
+        /// <param name="pidl">Represents the item whos
+        /// relative parent pidl and IshellFolder interface is to be returned.</param>
+        /// <param name="relPIDL">Returns the relative parent pidl via out.</param>
+        /// <returns>The <seealso cref="IntPtr"/> or default(<seealso cref="IntPtr"/>)
+        /// if the PIDL cannot be determined at this time.</returns>
+        protected ShellFolder2 getParentIShellFolder(PIDL pidl, out PIDL relPIDL)
+        {
+            int hr;
+            IntPtr ptrShellFolder = IntPtr.Zero;
+
+            if (pidl.Size == 0 || PIDL.ILFindLastID(pidl.Ptr) == pidl.Ptr || //is root or parent is root
+                PIDLToPath(pidl) == Environment.GetFolderPath(Environment.SpecialFolder.Desktop))
+            {
+
+                hr = ShellAPI.SHGetDesktopFolder(out ptrShellFolder);
+                relPIDL = new PIDL(pidl, true);
+            }
+            else
+            {
+                PIDL parentPIDL = getParentPIDL(pidl, out relPIDL);
+
+                //Console.WriteLine("ParentPIDL.Size = {0}", parentPIDL.Size);
+                System.Guid guid = ShellAPI.IID_IShellFolder2;
+                using (ShellFolder2 _desktopShellFolder = getDesktopShellFolder())
+                    hr = _desktopShellFolder.BindToObject(parentPIDL.Ptr, IntPtr.Zero,
+                        ref guid, out ptrShellFolder);
+
+                if (parentPIDL != null) parentPIDL.Free();
+            }
+
+            if (hr == ShellAPI.S_OK && ptrShellFolder != IntPtr.Zero)
+                return new ShellFolder2(ptrShellFolder);
+            else Marshal.ThrowExceptionForHR(hr);
+
+            return null; //mute error.
+        }
+
+        /// <summary>
+        /// Gets a path for a given <seealso cref="IntPtr"/> representing an
+        /// ABSOLUTE/Full <seealso cref="PIDL"/>.
+        ///
+        /// MSDN: https://msdn.microsoft.com/en-us/library/windows/desktop/cc144090(v=vs.85).aspx#ID_Lists_PIDL
+        /// <returns>The path (e.g.: 'C:\Windows' or '::{...}').</returns>
+        /// </summary>
         protected string PtrToPath(IntPtr ptr)
         {
             using (ShellFolder2 _desktopShellFolder = getDesktopShellFolder())
@@ -723,6 +1183,9 @@ namespace DirectoryInfoExLib.IO
                 throw new DirectoryNotFoundException(FullName + " does not exist.");
         }
 
+        /// <summary>
+        /// Initializes the parent item of this item.
+        /// </summary>
         protected IDirectoryInfoEx initParent()
         {
             if (!_parentInited)
@@ -753,6 +1216,12 @@ namespace DirectoryInfoExLib.IO
             return _parent as IDirectoryInfoEx;
         }
 
+        /// <summary>
+        /// Gets the name of the item represented by the given path parameter.
+        /// (e.g. returns 'Windows' for 'C:\Windows\' or 'C:\Windows')
+        /// </summary>
+        /// <param name="path">Path to the item whos name is to be determined.</param>
+        /// <returns>The name of the item addressed by the parameter</returns>
         protected string GetDirectoryName(string path)
         {
             if (path.EndsWith("\\"))
@@ -764,6 +1233,75 @@ namespace DirectoryInfoExLib.IO
                 return "";
 
             return path.Substring(0, idx);
+        }
+
+        /// <summary>
+        /// Gets the name of the IShellFolder2 object given in the parameters list.
+        /// </summary>
+        /// <param name="iShellFolder">The object that implements IShellFolder2</param>
+        /// <param name="uFlags">A list of flags that determines the type of name to get</param>
+        /// <returns>The name of the shell item addressed by the parameter</returns>
+        protected string loadName(IShellFolder2 iShellFolder, Header.ShellDll.ShellAPI.SHGNO uFlags)
+        {
+            PIDL pidl = new PIDL(IntPtr.Zero, false); // Memory Leak Fix
+            try
+            {
+                return loadName(iShellFolder, new PIDL(IntPtr.Zero, false), uFlags);
+            }
+            finally
+            {
+                pidl.Free();
+            }
+        }
+
+        /// <summary>
+        /// Gets whether this item exists in the Windows Shell namespace or not.
+        /// This includes virtual folders like Control Panel and other items whos
+        /// existence is all but trivial.
+        /// </summary>
+        /// <returns>true if the item exists, otherwise false.</returns>
+        protected bool getExists()
+        {
+            if (FullName == DirectoryInfoEx.IID_Desktop) // Desktop
+                return true;
+            else
+            {
+                if (FullName == null)
+                    return false;
+                else
+                {
+                    try
+                    {
+                        if (_pidl != null)
+                        {
+                            using (ShellFolder2 _desktopShellFolder = getDesktopShellFolder())
+                            {
+                                loadName(_desktopShellFolder, _pidl, Header.ShellDll.ShellAPI.SHGNO.FORPARSING);
+                            }
+
+                            return true;
+                        }
+                        else
+                        {
+                            PIDL pidlLookup = PathToPIDL(FullName);
+                            try
+                            {
+                                return pidlLookup != null;
+                            }
+                            finally
+                            {
+                                if (pidlLookup != null)
+                                    pidlLookup.Free();
+
+                            }
+                        }
+                    }
+                    catch (FileNotFoundException)
+                    {
+                        return false;
+                    }
+                }
+            }
         }
 
         /// <summary>
@@ -783,32 +1321,42 @@ namespace DirectoryInfoExLib.IO
             return pidl;
         }
 
-        private ShellFolder2 getIShellFolderFromParent()
+        /// <summary>
+        /// Gets the Windows Shell file system properties for this object.
+        /// </summary>
+        private static FileAttributes loadAttributes(IShellFolder2 iShellFolder, PIDL pidlFull, PIDL pidlRel)
         {
-            if (_parent != null)
-                using (ShellFolder2 parentShellFolder = (_parent as DirectoryInfoEx).ShellFolder)
-                {
-                    IntPtr ptrShellFolder = IntPtr.Zero;
+            FileAttributes retVal = new FileAttributes();
 
-                    int hr = ShellAPI.S_FALSE;
-                    PIDL relPidl = this.getRelPIDL();
-                    try
-                    {
-                        hr = parentShellFolder.BindToObject(relPidl.Ptr, IntPtr.Zero, ref ShellAPI.IID_IShellFolder2,
-                                                            out ptrShellFolder);
-                    }
-                    finally
-                    {
-                        relPidl.Free();
-                    }
+            //ShellAPI.SFGAO attribute = shGetFileAttribute(pidlFull, ShellAPI.SFGAO.READONLY |
+            //    ShellAPI.SFGAO.FOLDER | ShellAPI.SFGAO.FILESYSTEM | ShellAPI.SFGAO.STREAM | ShellAPI.SFGAO.FILESYSANCESTOR |
+            //    ShellAPI.SFGAO.HIDDEN);
+            Header.ShellDll.ShellAPI.SFGAO attribute = Header.ShellDll.ShellAPI.SFGAO.READONLY |
+                                                       Header.ShellDll.ShellAPI.SFGAO.FOLDER |
+                                                       Header.ShellDll.ShellAPI.SFGAO.FILESYSTEM |
+                                                       Header.ShellDll.ShellAPI.SFGAO.STREAM |
+                                                       Header.ShellDll.ShellAPI.SFGAO.FILESYSANCESTOR;
 
-                    if (ptrShellFolder != IntPtr.Zero && hr == ShellAPI.S_OK)
-                        return new ShellFolder2(ptrShellFolder);
-                }
+            iShellFolder.GetAttributesOf(1, new IntPtr[] { pidlRel.Ptr }, ref attribute);
 
-            return null;
+            if ((attribute & Header.ShellDll.ShellAPI.SFGAO.FOLDER) != 0)
+                retVal |= FileAttributes.Directory;
+
+            if ((attribute & Header.ShellDll.ShellAPI.SFGAO.HIDDEN) != 0)
+                retVal |= FileAttributes.Hidden;
+
+            if ((attribute & Header.ShellDll.ShellAPI.SFGAO.READONLY) != 0)
+                retVal |= FileAttributes.ReadOnly;
+
+            return retVal;
         }
 
+        /// <summary>
+        /// Gets an object that implements the IShellFolder2 interface.
+        /// This type of object can be used to determine internals of a Windows shell folder.
+        ///
+        /// MSDN: https://msdn.microsoft.com/en-us/library/windows/desktop/bb775055(v=vs.85).aspx
+        /// </summary>
         private ShellFolder2 getIShellFolder()
         {
             if (this.FullName.Equals(DirectoryInfoEx.IID_Desktop))
@@ -840,7 +1388,43 @@ namespace DirectoryInfoExLib.IO
                 }
             }
         }
-        #endregion
+
+        /// <summary>
+        /// Gets an object that implements the IShellFolder2 interface of the Parent object
+        /// or null if there is no known parent for this item. The parent object can be used
+        /// to determine further details for items contained below the parent item.
+        ///
+        /// This type of object can be used to determine internals of a Windows shell folder.
+        ///
+        /// MSDN: https://msdn.microsoft.com/en-us/library/windows/desktop/bb775055(v=vs.85).aspx
+        /// </summary>
+        private ShellFolder2 getIShellFolderFromParent()
+        {
+            if (_parent == null)
+                return null;
+
+            using (ShellFolder2 parentShellFolder = (_parent as DirectoryInfoEx).getIShellFolder())
+            {
+                IntPtr ptrShellFolder = IntPtr.Zero;
+
+                int hr = ShellAPI.S_FALSE;
+                PIDL relPidl = this.getRelPIDL();
+                try
+                {
+                    hr = parentShellFolder.BindToObject(relPidl.Ptr, IntPtr.Zero, ref ShellAPI.IID_IShellFolder2,
+                                                        out ptrShellFolder);
+                }
+                finally
+                {
+                    relPidl.Free();
+                }
+
+                if (ptrShellFolder != IntPtr.Zero && hr == ShellAPI.S_OK)
+                    return new ShellFolder2(ptrShellFolder);
+            }
+
+            return null;
+        }
 
         #region Match File Mask Filter
         /// <summary>
@@ -927,332 +1511,10 @@ namespace DirectoryInfoExLib.IO
         }
         #endregion Match File Mask Filter
 
-        protected static ShellFolder2 getDesktopShellFolder()
-        {
-            IntPtr ptrShellFolder;
-            int hr = ShellAPI.SHGetDesktopFolder(out ptrShellFolder);
-            if (hr == ShellAPI.S_OK && ptrShellFolder != IntPtr.Zero)
-            {
-                ShellFolder2 sf = new ShellFolder2(ptrShellFolder);
-                //0.13: Fixed? Desktop ShellFolder not released. (may be a cause of AccessViolationException.)
-                //GC.SuppressFinalize(sf);
-                return sf;
-            }
-            else Marshal.ThrowExceptionForHR(hr);
-
-            return null; //mute error.
-        }
-
-        protected static PIDL PathToPIDL(string path)
-        {
-            path = RemoveSlash(path);
-            IntPtr pidlPtr;
-            uint pchEaten = 0;
-            ShellAPI.SFGAO pdwAttributes = 0;
-
-            using (ShellFolder2 _desktopShellFolder = getDesktopShellFolder())
-            {
-                int hr = _desktopShellFolder.ParseDisplayName(
-                    IntPtr.Zero, IntPtr.Zero, path, ref pchEaten, out pidlPtr, ref pdwAttributes);
-
-                if (pidlPtr == IntPtr.Zero || hr != ShellAPI.S_OK)
-                { /*Marshal.ThrowExceptionForHR(hr);*/ return null; }
-                //Commented because this is part of init and it's too time consuming.
-            }
-            return new PIDL(pidlPtr, false);
-        }
-
-        protected static IntPtr PathToPIDLIntPtr(string path)
-        {
-            path = RemoveSlash(path);
-            IntPtr pidlPtr;
-            uint pchEaten = 0;
-            ShellAPI.SFGAO pdwAttributes = 0;
-
-            using (ShellFolder2 _desktopShellFolder = getDesktopShellFolder())
-            {
-                int hr = _desktopShellFolder.ParseDisplayName(
-                    IntPtr.Zero, IntPtr.Zero, path, ref pchEaten, out pidlPtr, ref pdwAttributes);
-
-                if (pidlPtr == IntPtr.Zero || hr != ShellAPI.S_OK)
-                {
-                    //Commented because this is part of init and it's too time consuming.
-                    /*Marshal.ThrowExceptionForHR(hr);*/
-                    return default(IntPtr);
-                }
-            }
-
-            return pidlPtr;
-        }
-
-        //0.12: Fixed PIDL, PIDLRel, ShellFolder, Storage properties generated on demand to avoid x-thread issues.
-        protected PIDL getRelPIDL()
-        {
-            if (_pidlRel != null) //0.14 : FileSystemInfoEx now stored a copy of PIDL/Rel, will return copy of it when properties is called (to avoid AccessViolation). 
-                return new PIDL(_pidlRel, true);
-
-
-            //0.16: Fixed getRelPIDL() cannot return correct value if File/DirInfoEx construct with string. (attemp to return a freed up pointer).                       
-            PIDL pidlLookup = getPIDL();
-            try
-            {
-                return getRelativePIDL(pidlLookup);
-            }
-            finally
-            {
-                if (pidlLookup != null)
-                    pidlLookup.Free();
-                pidlLookup = null;
-            }
-        }
-
-        protected PIDL getPIDL()
-        {
-            if (_pidl != null)
-                return new PIDL(_pidl, true);
-
-            if (FullName == DirectoryInfoEx.IID_Desktop) // Desktop
-                return DirectoryInfoEx.KnownFolderToPIDL(KnownFolder.FromKnownFolderId(KnownFolder_GUIDS.Desktop));
-            else
-                return PathToPIDL(FullName);
-        }
-
-        protected static string PIDLToPath(PIDL pidlFull)
-        {
-            PIDL desktopPIDL = DirectoryInfoEx.DesktopDirectory.getPIDL();
-            try
-            {
-                if (pidlFull.Equals(desktopPIDL))
-                    return DirectoryInfoEx.IID_Desktop;
-            }
-            finally
-            {
-                desktopPIDL.Free();
-            }
-
-            using (ShellFolder2 _desktopShellFolder = getDesktopShellFolder())
-            {
-                return loadName(_desktopShellFolder, pidlFull, ShellAPI.SHGNO.FORPARSING);
-            }
-        }
-
-        protected static string PIDLToPath(IShellFolder2 iShellFolder, PIDL pidlRel)
-        {
-            return loadName(iShellFolder, pidlRel, ShellAPI.SHGNO.FORPARSING);
-        }
-
-        protected static PIDL getRelativePIDL(PIDL pidl)
-        {
-            if (pidl == null)
-                return null;
-            IntPtr pRelPIDL = PIDL.ILFindLastID(pidl.Ptr);
-            if (pRelPIDL == IntPtr.Zero)
-                throw new IOException("getRelativePIDL");
-            return new PIDL(pRelPIDL, true); //0.21
-        }
-
-        protected static PIDL getParentPIDL(PIDL pidl, out PIDL relPIDL)
-        {
-            relPIDL = new PIDL(pidl, true); //0.21
-            if (pidl.Size == 0)
-                return pidl;
-
-            IntPtr pParent = PIDL.ILClone(pidl.Ptr);
-
-            relPIDL = getRelativePIDL(pidl);
-            if (pParent == IntPtr.Zero || PIDL.ILRemoveLastID2(ref pParent) == false)
-            {
-                Marshal.FreeCoTaskMem(pParent); //new PIDL(pParent, false).Free();
-                pParent = IntPtr.Zero;
-
-                return DirectoryInfoEx.KnownFolderToPIDL(KnownFolder.FromKnownFolderId(KnownFolder_GUIDS.Desktop));
-            }
-
-            return new PIDL(pParent, false); //pParent will be freed by the PIDL.
-        }
-
-        protected static PIDL getParentPIDL(PIDL pidl)
-        {
-            PIDL relPIDL = null;
-            try
-            {
-                return getParentPIDL(pidl, out relPIDL);
-            }
-            finally { if (relPIDL != null) relPIDL.Free(); }
-        }
-
-        protected ShellFolder2 getParentIShellFolder(PIDL pidl, out PIDL relPIDL)
-        {
-            int hr;
-            IntPtr ptrShellFolder = IntPtr.Zero;
-
-            if (pidl.Size == 0 || PIDL.ILFindLastID(pidl.Ptr) == pidl.Ptr || //is root or parent is root
-                PIDLToPath(pidl) == Environment.GetFolderPath(Environment.SpecialFolder.Desktop))
-            {
-
-                hr = ShellAPI.SHGetDesktopFolder(out ptrShellFolder);
-                relPIDL = new PIDL(pidl, true);
-            }
-            else
-            {
-                PIDL parentPIDL = getParentPIDL(pidl, out relPIDL);
-
-                //Console.WriteLine("ParentPIDL.Size = {0}", parentPIDL.Size);
-                System.Guid guid = ShellAPI.IID_IShellFolder2;
-                using (ShellFolder2 _desktopShellFolder = getDesktopShellFolder())
-                    hr = _desktopShellFolder.BindToObject(parentPIDL.Ptr, IntPtr.Zero,
-                        ref guid, out ptrShellFolder);
-
-                if (parentPIDL != null) parentPIDL.Free();
-            }
-
-            if (hr == ShellAPI.S_OK && ptrShellFolder != IntPtr.Zero)
-                return new ShellFolder2(ptrShellFolder);
-            else Marshal.ThrowExceptionForHR(hr);
-
-            return null; //mute error.
-        }
-
-        protected static string GetFileName(string path)
-        {
-            int idx = path.LastIndexOf('\\');
-
-            if (idx == -1)
-                return path;
-
-            return path.Substring(idx + 1);
-        }
-
-        private static FileAttributes loadAttributes(IShellFolder2 iShellFolder, PIDL pidlFull, PIDL pidlRel)
-        {
-            FileAttributes retVal = new FileAttributes();
-
-
-            //ShellAPI.SFGAO attribute = shGetFileAttribute(pidlFull, ShellAPI.SFGAO.READONLY |
-            //    ShellAPI.SFGAO.FOLDER | ShellAPI.SFGAO.FILESYSTEM | ShellAPI.SFGAO.STREAM | ShellAPI.SFGAO.FILESYSANCESTOR |
-            //    ShellAPI.SFGAO.HIDDEN);
-            Header.ShellDll.ShellAPI.SFGAO attribute = Header.ShellDll.ShellAPI.SFGAO.READONLY |
-                                                       Header.ShellDll.ShellAPI.SFGAO.FOLDER |
-                                                       Header.ShellDll.ShellAPI.SFGAO.FILESYSTEM |
-                                                       Header.ShellDll.ShellAPI.SFGAO.STREAM |
-                                                       Header.ShellDll.ShellAPI.SFGAO.FILESYSANCESTOR;
-
-            iShellFolder.GetAttributesOf(1, new IntPtr[] { pidlRel.Ptr }, ref attribute);
-
-            if ((attribute & Header.ShellDll.ShellAPI.SFGAO.FOLDER) != 0)
-                retVal |= FileAttributes.Directory;
-
-            if ((attribute & Header.ShellDll.ShellAPI.SFGAO.HIDDEN) != 0)
-                retVal |= FileAttributes.Hidden;
-
-            if ((attribute & Header.ShellDll.ShellAPI.SFGAO.READONLY) != 0)
-                retVal |= FileAttributes.ReadOnly;
-
-            return retVal;
-        }
-
-        protected string loadName(IShellFolder2 iShellFolder, Header.ShellDll.ShellAPI.SHGNO uFlags)
-        {
-            return loadName(iShellFolder, new PIDL(IntPtr.Zero, false), uFlags);
-        }
-
         /// <summary>
-        /// Gets the name of a shell folder item based on its <seealso cref="IntPtr"/>.
+        /// Method implements an extension of the init() method which is called upon construction.
+        /// This method can be called to initialize/refresh file system properties of this object.
         /// </summary>
-        /// <param name="iShellFolder"></param>
-        /// <param name="ptr"></param>
-        /// <param name="uFlags"></param>
-        /// <returns></returns>
-        protected static string loadName(IShellFolder2 iShellFolder,
-                                         IntPtr ptr,
-                                         Header.ShellDll.ShellAPI.SHGNO uFlags)
-        {
-            if (iShellFolder == null)
-                return null;
-
-            IntPtr ptrStr = Marshal.AllocCoTaskMem(Header.ShellDll.ShellAPI.MAX_PATH * 2 + 4);
-            Marshal.WriteInt32(ptrStr, 0, 0);
-            StringBuilder buf = new StringBuilder(Header.ShellDll.ShellAPI.MAX_PATH);
-
-            try
-            {
-                if (iShellFolder.GetDisplayNameOf(ptr, uFlags, ptrStr) == Header.ShellDll.ShellAPI.S_OK)
-                    Header.ShellDll.ShellAPI.StrRetToBuf(ptrStr, ptr, buf, Header.ShellDll.ShellAPI.MAX_PATH);
-            }
-            finally
-            {
-                if (ptrStr != IntPtr.Zero)
-                    Marshal.FreeCoTaskMem(ptrStr);
-                ptrStr = IntPtr.Zero;
-            }
-
-            return buf.ToString();
-        }
-
-        protected static string loadName(IShellFolder2 iShellFolder,
-                                  PIDL relPidl,
-                                  Header.ShellDll.ShellAPI.SHGNO uFlags)
-        {
-            return loadName(iShellFolder, relPidl.Ptr, uFlags);
-        }
-
-        /// <summary>
-        /// Remove slash end of input.
-        /// </summary>
-        protected static string RemoveSlash(string input)
-        {
-            if (!input.EndsWith(@":\") && input.EndsWith(@"\"))
-            {
-                return input.Substring(0, input.Length - 1);
-            }
-            else
-                return input;
-        }
-
-        protected bool getExists()
-        {
-            if (FullName == DirectoryInfoEx.IID_Desktop) // Desktop
-                return true;
-            else
-            {
-                if (FullName == null)
-                    return false;
-                else
-                {
-                    try
-                    {
-                        if (_pidl != null)
-                        {
-                            using (ShellFolder2 _desktopShellFolder = getDesktopShellFolder())
-                            {
-                                loadName(_desktopShellFolder, _pidl, Header.ShellDll.ShellAPI.SHGNO.FORPARSING);
-                            }
-
-                            return true;
-                        }
-                        else
-                        {
-                            PIDL pidlLookup = PathToPIDL(FullName);
-                            try
-                            {
-                                return pidlLookup != null;
-                            }
-                            finally
-                            {
-                                if (pidlLookup != null)
-                                    pidlLookup.Free();
-
-                            }
-                        }
-                    }
-                    catch (FileNotFoundException)
-                    {
-                        return false;
-                    }
-                }
-            }
-        }
-
         private void refresh(IShellFolder2 parentShellFolder, PIDL relPIDL, PIDL fullPIDL, RefreshModeEnum mode)
         {
             if (parentShellFolder != null && fullPIDL != null && relPIDL != null)
@@ -1273,7 +1535,7 @@ namespace DirectoryInfoExLib.IO
                     if (DirectoryInfoEx.CurrentUser != null)
                     {
                         if (parseName == DirectoryInfoEx.CurrentUser.FullName &&
-                        loadName(parentShellFolder, Header.ShellDll.ShellAPI.SHGNO.FORPARSING) == Environment.GetFolderPath(Environment.SpecialFolder.Desktop))
+                            loadName(parentShellFolder, Header.ShellDll.ShellAPI.SHGNO.FORPARSING) == Environment.GetFolderPath(Environment.SpecialFolder.Desktop))
                         {
                             FullName = DirectoryInfoEx.IID_UserFiles;
                         }
@@ -1364,5 +1626,6 @@ namespace DirectoryInfoExLib.IO
 
             return fullPath;
         }
+        #endregion
     }
 }

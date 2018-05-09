@@ -26,7 +26,8 @@
     /// - a list of items below this item.
     /// </summary>
     public class ExTreeNodeViewModel : ViewModelBase,
-                                       ISupportTreeSelector<ExTreeNodeViewModel, IDirectoryBrowser>
+                                       ISupportTreeSelector<ExTreeNodeViewModel, IDirectoryBrowser>,
+                                       IDisposable
     {
         #region fields
         public static ICompareHierarchy<IDirectoryBrowser> Comparer = new ExHierarchyComparer();
@@ -37,6 +38,7 @@
 
         private bool _isIconLoaded = false;
         private ImageSource _icon = null;
+        private bool _disposed = false;
         #endregion fields
 
         #region constructors
@@ -93,6 +95,17 @@
 
             this.Selection = new TreeSelectorViewModel<ExTreeNodeViewModel, IDirectoryBrowser>
             (_dir, this, this._parentNode.Selection, this.Entries);
+        }
+        
+        
+        /// <summary>
+        /// Class finalizer/destructor
+        /// When the object is eligible for finalization,
+        /// the garbage collector runs the Finalize method of the object. 
+        /// </summary>
+        ~ExTreeNodeViewModel()
+        {
+            Dispose();
         }
         #endregion constructors
 
@@ -165,6 +178,43 @@
         #endregion properties
 
         #region methods
+        #region Disposable Interfaces
+        /// <summary>
+        /// Standard dispose method of the <seealso cref="IDisposable" /> interface.
+        /// </summary>
+        public void Dispose()
+        {
+            Dispose(true);
+        }
+
+        /// <summary>
+        /// Implements standard disposable method.
+        /// Source: http://www.codeproject.com/Articles/15360/Implementing-IDisposable-and-the-Dispose-Pattern-P
+        /// </summary>
+        /// <param name="disposing"></param>
+        protected virtual void Dispose(bool disposing)
+        {
+            if (_disposed == false)
+            {
+                if (disposing == true)
+                {
+                    // Dispose of the model that defines this viemodel
+                    _dir.Dispose();
+                    _dir = null;
+                }
+
+                // There are no unmanaged resources to release, but
+                // if we add them, they need to be released here.
+            }
+
+            _disposed = true;
+
+            //// If it is available, make the call to the
+            //// base class's Dispose(Boolean) method
+            ////base.Dispose(disposing);
+        }
+        #endregion Disposable Interfaces
+        
         /// <summary>
         /// Gets icon for this item when requested ...
         /// </summary>

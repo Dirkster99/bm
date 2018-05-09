@@ -18,9 +18,9 @@
         #region fields
         private DiskTreeNodeViewModel _DiskTest;
 
-        private readonly SemaphoreSlim _SlowStuffSemaphore;
-        private readonly OneTaskLimitedScheduler _OneTaskScheduler;
-        private readonly CancellationTokenSource _CancelTokenSource;
+        private SemaphoreSlim _SlowStuffSemaphore;
+        private OneTaskLimitedScheduler _OneTaskScheduler;
+        private CancellationTokenSource _CancelTokenSource;
         private bool _disposed = false;
         #endregion fields
 
@@ -71,6 +71,10 @@
         /// </summary>
         public SpecialFoldersViewModel SpecialFoldersTest { get; }
 
+        /// <summary>
+        /// Gets a viewmodel that drives the BreadcrumbTree control
+        /// (which is just one part of the Breadcrumb control).
+        /// </summary>
         public DiskTreeNodeViewModel DiskTest
         {
             get
@@ -85,7 +89,10 @@
             }
         }
 
-        public ExTreeNodeViewModel ExTest { get; }
+        /// <summary>
+        /// Gets a viewmodel that drives the Breadcrumb control.
+        /// </summary>
+        public ExTreeNodeViewModel ExTest { get; private set; }
         #endregion properties
 
         #region methods
@@ -127,10 +134,17 @@
             {
                 if (disposing == true)
                 {
-                    // Dispose of the curently displayed content
+                    // Dispose of the currently used inner disposables
+                    ExTest.Dispose();
+                    
                     _OneTaskScheduler.Dispose();
                     _SlowStuffSemaphore.Dispose();
                     _CancelTokenSource.Dispose();
+                    
+                    ExTest = null;
+                    _OneTaskScheduler = null;
+                    _SlowStuffSemaphore = null;
+                    _CancelTokenSource = null;
                 }
 
                 // There are no unmanaged resources to release, but

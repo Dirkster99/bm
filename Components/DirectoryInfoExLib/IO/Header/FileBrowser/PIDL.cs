@@ -10,6 +10,8 @@ namespace DirectoryInfoExLib.IO.Header.ShellDll
     /// by the Shell into a single tree-structured hierarchy. Conceptually, it is
     /// a larger and more inclusive version of the file system.
     /// 
+    /// https://www.codeproject.com/script/Articles/ViewDownloads.aspx?aid=15059
+    ///
     /// https://msdn.microsoft.com/en-us/library/windows/desktop/cc144090(v=vs.85).aspx
     /// https://www.codeproject.com/Articles/88/Namespace-extensions-the-undocumented-Windows-Shel
     /// </summary>
