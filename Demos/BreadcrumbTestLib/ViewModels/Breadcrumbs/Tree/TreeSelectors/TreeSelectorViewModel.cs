@@ -114,14 +114,14 @@
             }
         }
 
-        public virtual bool IsChildSelected
-        {
-            get { return _selectedValue != null; }
-        }
-
         public virtual bool IsRootAndIsChildSelected
         {
             get { return IsRoot && IsChildSelected; }
+        }
+
+        public virtual bool IsChildSelected
+        {
+            get { return _selectedValue != null; }
         }
 
         public T SelectedChild

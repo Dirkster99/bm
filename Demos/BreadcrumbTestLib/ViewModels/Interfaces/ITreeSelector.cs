@@ -24,14 +24,14 @@
         bool IsRoot { get; set; }
 
         /// <summary>
-        /// Whether a child of current view model is selected.
-        /// </summary>
-        bool IsChildSelected { get; }
-
-        /// <summary>
         /// Based on IsRoot and IsChildSelected
         /// </summary>
         bool IsRootAndIsChildSelected { get; }
+
+        /// <summary>
+        /// Whether a child of current view model is selected.
+        /// </summary>
+        bool IsChildSelected { get; }
 
         /// <summary>
         /// Gets/sets whether the BreadCrumb Tree item is currently overflowed

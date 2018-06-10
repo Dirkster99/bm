@@ -84,9 +84,9 @@
 
                         <Image Source="{Binding Icon}" Margin="3,0" DockPanel.Dock="Left" />
                         <TextBlock Text="{Binding Header}"
-                                 Foreground="{DynamicResource {x:Static themes:ResourceKeys.ControlTextBrushKey}}"
-                                 VerticalAlignment="Center"
-                                 Grid.Column="1" />
+                                   Foreground="{DynamicResource {x:Static themes:ResourceKeys.ControlTextBrushKey}}"
+                                   VerticalAlignment="Center"
+                                   Grid.Column="1" />
                     </Grid>
                 </DataTemplate>
             </uc:BreadcrumbTree.MenuItemTemplate>

@@ -30,7 +30,7 @@
         /// </summary>
         /// <param name="knownFolder"></param>
         /// <returns></returns>
-        internal static IDirectoryBrowser CreateDirectoryInfoEx(KnownFolder knownFolder)
+        public static IDirectoryBrowser CreateDirectoryInfoEx(KnownFolder knownFolder)
         {
             return new DirectoryInfoEx(knownFolder);
         }

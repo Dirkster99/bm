@@ -3,6 +3,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+       xmlns:themes="clr-namespace:BmLib.Themes;assembly=BmLib"
 
         xmlns:ctrls="clr-namespace:BmLib.Controls;assembly=BmLib"
 
@@ -24,8 +25,8 @@
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" MinHeight="200"/>
             <RowDefinition Height="Auto" />
-            <RowDefinition Height="*" />
         </Grid.RowDefinitions>
 
         <Grid.ColumnDefinitions>
@@ -79,13 +80,71 @@
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="Auto"/>
             </Grid.ColumnDefinitions>
-            <ctrls:Breadcrumb DataContext="{Binding BreadcrumbTest}" Name="BreadcrumbDemoControl"
-                              Visibility="{Binding Path=IsChecked,ElementName=ShowBreadCrumbControl,Mode=OneWay, UpdateSourceTrigger=PropertyChanged,Converter={StaticResource BoolToVisibilityConverter}}"
-                              VerticalAlignment="Top" HorizontalAlignment="Stretch"
-                              RootItems="{Binding BreadcrumbSubTree.Selection.OverflowedAndRootItems,Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"
-                              Margin="3"
+
+            <Grid Grid.Column="0" Grid.Row="0"
+                  xmlns:behav="clr-namespace:BreadcrumbTestLib.Behaviors"
+                  >
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+                
+                <ctrls:Breadcrumb DataContext="{Binding BreadcrumbTest}" Name="BreadcrumbDemoControl"
+                                  Visibility="{Binding Path=IsChecked,ElementName=ShowBreadCrumbControl,Mode=OneWay, UpdateSourceTrigger=PropertyChanged,Converter={StaticResource BoolToVisibilityConverter}}"
+                                  VerticalAlignment="Top" HorizontalAlignment="Stretch"
+                                  RootItems="{Binding BreadcrumbSubTree.Selection.OverflowedAndRootItems,Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"
+                                  Margin="3"
                               />
+
+                <TreeView Grid.Row="1" DataContext="{Binding BreadcrumbTest}" 
+                          ItemsSource="{Binding BreadcrumbSubTree.Entries.All}"
+                          >
+                    <TreeView.ItemTemplate>
+                        <HierarchicalDataTemplate ItemsSource="{Binding Entries.All}">
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto" />
+                                    <ColumnDefinition Width="*" />
+                                </Grid.ColumnDefinitions>
+
+                                <Image Source="{Binding Icon}" Margin="3,0" DockPanel.Dock="Left" />
+                                <TextBlock Text="{Binding Header}"
+                                           Foreground="{DynamicResource {x:Static themes:ResourceKeys.ControlTextBrushKey}}"
+                                           VerticalAlignment="Center"
+                                           Grid.Column="1" >
+                                    <TextBlock.ToolTip>
+                                        <TextBlock FontFamily="Courier New">
+                                            <!-- Is true on the item that is at the far right of the breadcrumb path -->
+                                            <TextBlock Text="              Selection.IsSelected: "><TextBlock Text="{Binding Selection.IsSelected}"/></TextBlock><LineBreak/>
+                                            
+                                            <!-- It true for items loaded initially in Selection.OverflowedAndRootItems list -->
+                                            <TextBlock Text="                  Selection.IsRoot: "><TextBlock Text="{Binding Selection.IsRoot}"/></TextBlock><LineBreak/>
+
+                                            <TextBlock Text="Selection.IsRootAndIsChildSelected: "><TextBlock Text="{Binding Selection.IsRootAndIsChildSelected}"/></TextBlock><LineBreak/>
+                                            
+                                            <!-- Is true only for root elements with a selected child item in their path -->
+                                            <TextBlock Text="         Selection.IsChildSelected: "><TextBlock Text="{Binding Selection.IsChildSelected}"/></TextBlock><LineBreak/>
+                                            <TextBlock Text="            Selection.IsOverflowed: "><TextBlock Text="{Binding Selection.IsOverflowed}"/></TextBlock><LineBreak/>
+                                            
+                                            <!-- Is this used at all? -->
+                                            <TextBlock Text="                Entries.IsExpanded: "><TextBlock Text="{Binding Entries.IsExpanded}"/></TextBlock>
+                                        </TextBlock>
+                                    </TextBlock.ToolTip>
+                                </TextBlock>
+                            </Grid>
+                        </HierarchicalDataTemplate>
+                    </TreeView.ItemTemplate>
+                    <TreeView.ItemContainerStyle>
+                        <Style TargetType="{x:Type TreeViewItem}" BasedOn="{StaticResource {x:Type TreeViewItem}}">
+                            <Setter Property="behav:TreeViewItemBehaviour.IsBroughtIntoViewWhenSelected" Value="True" />
+                            <Setter Property="IsExpanded" Value="{Binding Selection.IsChildSelected, Mode=OneWay,UpdateSourceTrigger=PropertyChanged}"  />
+                            <Setter Property="IsSelected" Value="{Binding Selection.IsSelected, Mode=OneWay,UpdateSourceTrigger=PropertyChanged}"  />
+                        </Style>
+                    </TreeView.ItemContainerStyle>
+                </TreeView>
+            </Grid>
         </Grid>
+        <!-- PropertiesView of Breadcrumb control -->
         <ScrollViewer Grid.Column="2" Grid.Row="3">
             <StackPanel VerticalAlignment="Top" Margin="3" Width="200">
                 <!-- For Debugging only -->
@@ -166,7 +225,7 @@
             </StackPanel>
         </ScrollViewer>
 
-        <TextBlock Text="Converter Test" Grid.Column="0" Grid.Row="4" Margin="3" HorizontalAlignment="Right" VerticalAlignment="Top" />
+        <!--TextBlock Text="Converter Test" Grid.Column="0" Grid.Row="4" Margin="3" HorizontalAlignment="Right" VerticalAlignment="Top" />
         <ListBox ItemsSource="{Binding SpecialFoldersTest.Folders}"
                  Visibility="{Binding Path=IsChecked,ElementName=ShowConverterTest,Mode=OneWay, UpdateSourceTrigger=PropertyChanged,Converter={StaticResource BoolToVisibilityConverter}}"
                  Grid.Column="1" Grid.Row="4"
@@ -188,9 +247,9 @@
             </ListBox.ItemTemplate>
         </ListBox>
         <StackPanel Grid.Column="2" Grid.Row="4" VerticalAlignment="Top" Margin="3">
-            <!-- For Debugging only -->
+            - For Debugging only -
             <CheckBox Content="Show Converter Test" Name="ShowConverterTest"
                       IsChecked="False" />
-        </StackPanel>
+        </StackPanel-->
     </Grid>
 </UserControl>

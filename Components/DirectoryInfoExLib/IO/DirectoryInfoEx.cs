@@ -91,9 +91,10 @@ namespace DirectoryInfoExLib.IO
 #endif
 
             var desktopId = KnownFolder.FromKnownFolderId(KnownFolder_GUIDS.Desktop);
+            CurrentUser = new DirectoryInfoEx(KnownFolder.FromKnownFolderId(KnownFolder_GUIDS.UsersFiles));
+            RecycleBinDirectory = new DirectoryInfoEx(KnownFolder.FromKnownFolderId(KnownFolder_GUIDS.RecycleBin));
             DesktopDirectory = new DirectoryInfoEx(desktopId);
             MyComputerDirectory = new DirectoryInfoEx(KnownFolder.FromKnownFolderId(KnownFolder_GUIDS.Computer));
-            CurrentUser = new DirectoryInfoEx(KnownFolder.FromKnownFolderId(KnownFolder_GUIDS.UsersFiles));
 
             //0.17: Fixed some system cannot create shared directories. (by cwharmon)
             try
@@ -103,7 +104,6 @@ namespace DirectoryInfoExLib.IO
             catch { }
 
             NetworkDirectory = new DirectoryInfoEx(KnownFolder.FromKnownFolderId(KnownFolder_GUIDS.Network));
-            RecycleBinDirectory = new DirectoryInfoEx(KnownFolder.FromKnownFolderId(KnownFolder_GUIDS.RecycleBin));
         }
 
         /// <summary>

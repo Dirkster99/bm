@@ -26,6 +26,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Demos", "Demos", "{51467FF2
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BmLib", "BmLib\BmLib.csproj", "{0F864F5C-CE7A-438B-B943-620D3B13FA11}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Test", "Test\Test.csproj", "{820EBD99-32AC-47A2-A719-0231A2E6FE7E}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -142,6 +144,18 @@ Global
 		{0F864F5C-CE7A-438B-B943-620D3B13FA11}.Release|x64.Build.0 = Release|Any CPU
 		{0F864F5C-CE7A-438B-B943-620D3B13FA11}.Release|x86.ActiveCfg = Release|Any CPU
 		{0F864F5C-CE7A-438B-B943-620D3B13FA11}.Release|x86.Build.0 = Release|Any CPU
+		{820EBD99-32AC-47A2-A719-0231A2E6FE7E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{820EBD99-32AC-47A2-A719-0231A2E6FE7E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{820EBD99-32AC-47A2-A719-0231A2E6FE7E}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{820EBD99-32AC-47A2-A719-0231A2E6FE7E}.Debug|x64.Build.0 = Debug|Any CPU
+		{820EBD99-32AC-47A2-A719-0231A2E6FE7E}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{820EBD99-32AC-47A2-A719-0231A2E6FE7E}.Debug|x86.Build.0 = Debug|Any CPU
+		{820EBD99-32AC-47A2-A719-0231A2E6FE7E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{820EBD99-32AC-47A2-A719-0231A2E6FE7E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{820EBD99-32AC-47A2-A719-0231A2E6FE7E}.Release|x64.ActiveCfg = Release|Any CPU
+		{820EBD99-32AC-47A2-A719-0231A2E6FE7E}.Release|x64.Build.0 = Release|Any CPU
+		{820EBD99-32AC-47A2-A719-0231A2E6FE7E}.Release|x86.ActiveCfg = Release|Any CPU
+		{820EBD99-32AC-47A2-A719-0231A2E6FE7E}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
