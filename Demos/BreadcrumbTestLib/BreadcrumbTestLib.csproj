@@ -44,9 +44,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Behaviors\TreeViewItemBehaviour.cs" />
-    <Compile Include="Demo\Converter\BrowseItemTypeToImageConverter.cs" />
-    <Compile Include="Demo\SpecialFoldersViewModel.cs" />
-    <Compile Include="Demo\SpecialFolderViewModel.cs" />
     <Compile Include="Models\BrowseRequest.cs" />
     <Compile Include="Models\BrowseResult.cs" />
     <Compile Include="Models\FinalBrowseResult.cs" />
@@ -82,7 +79,6 @@
     <Compile Include="ViewModels\Breadcrumbs\Tree\TreeSelectors\SearchNextUsingReverseLookup.cs" />
     <Compile Include="ViewModels\Breadcrumbs\Tree\TreeSelectors\TreeRootSelectorViewModel.cs" />
     <Compile Include="ViewModels\Breadcrumbs\Tree\TreeSelectors\TreeSelectorViewModel.cs" />
-    <Compile Include="ViewModels\Interfaces\IBreadcrumbItemViewModel.cs" />
     <Compile Include="ViewModels\Interfaces\IBreadcrumbViewModel.cs" />
     <Compile Include="ViewModels\Interfaces\IEntriesHelper.cs" />
     <Compile Include="ViewModels\Interfaces\IEntryHierarchyComparer.cs" />
@@ -129,6 +125,9 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="BreadcrumbTestLib.cd" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

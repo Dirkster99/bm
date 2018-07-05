@@ -96,6 +96,7 @@
     <Compile Include="IO\Header\KnownFolder\KnownFolderManager.cs" />
     <Compile Include="IO\Tools\Interface\ShellFolder2.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <None Include="ClassDiagram2.cd" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="License.txt" />

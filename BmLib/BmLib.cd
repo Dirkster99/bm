@@ -1,0 +1,292 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="BmLib.BaseControls.ClipCorner" Collapsed="true">
+    <Position X="13" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>BaseControls\ClipCorner.xaml.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="BmLib.BaseControls.Invert" Collapsed="true">
+    <Position X="7.75" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>BAAAAAAJAABAAAQAAABAAAIABAAAAABgEABQBAAAAEA=</HashCode>
+      <FileName>BaseControls\Invert.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="BmLib.BaseControls.MultiContentControl" Collapsed="true">
+    <Position X="9.5" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAQAAAAAAAAAAAYQAAAAAAAAAAQAAAAAAAAAAg=</HashCode>
+      <FileName>BaseControls\MultiContentControl.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="BmLib.BaseControls.OverflowableStackPanel" Collapsed="true">
+    <Position X="11.25" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>CAAEAAAAAAAgIAIIAAAABkAQBAABAAEAAAAAIAAAAAA=</HashCode>
+      <FileName>BaseControls\OverflowableStackPanel.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="BmLib.Controls.Breadcrumb" Collapsed="true">
+    <Position X="7.75" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQEIAAAAABAAgABAABAAQAAAIABEAUQAAAAAAAEAAA=</HashCode>
+      <FileName>Controls\Breadcrumb.xaml.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="BmLib.Controls.DropDown" Collapsed="true">
+    <Position X="6" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAgBAABBEBAABCAECAAgAAAAQEAAAKAAGAAAAACA=</HashCode>
+      <FileName>Controls\DropDown.xaml.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="BmLib.Controls.DropDownList" Collapsed="true">
+    <Position X="7.75" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>BAAAAgAAAABEAAAAAAEQAAgAAAAQEAAAKAAEAAAAACA=</HashCode>
+      <FileName>Controls\DropDownList.xaml.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="BmLib.Controls.HotTrack" Collapsed="true">
+    <Position X="6" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAggAIIAABEEAIAgABAAAAoIAAAABAHIAEJBAEEAAA=</HashCode>
+      <FileName>Controls\HotTrack.xaml.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="BmLib.Controls.Switch" Collapsed="true">
+    <Position X="9.5" Y="4.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAEAAAAAABAAYAAQCAAAAAAAAACAAAAAQAAAAAAAAQ=</HashCode>
+      <FileName>Controls\Switch.xaml.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="BmLib.Controls.Breadcrumbs.BreadcrumbTree" Collapsed="true">
+    <Position X="9.5" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAEAAAAAAAACAAAAAAAEAAAAAAAAAAAAAAAAAQAAAA=</HashCode>
+      <FileName>Controls\Breadcrumbs\BreadcrumbTree.xaml.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="BmLib.Controls.Breadcrumbs.BreadcrumbTreeItem" Collapsed="true">
+    <Position X="11.25" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>CEAIAAABAABACAAIAAAAFAEAUQAAAIAAgADABESAAAA=</HashCode>
+      <FileName>Controls\Breadcrumbs\BreadcrumbTreeItem.xaml.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="BmLib.Converters.BoolToOneOfTwoBindingsConverter" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="9.5" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAMAEAAAAAAgAAAAgAAACAAAAAAA=</HashCode>
+      <FileName>Converters\BoolToOneOfTwoBindingsConverter.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="BmLib.Converters.BoolToVisibilityCollapsedConverter" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="11.25" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAIAAAAAAAAgAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Converters\BoolToVisibilityCollapsedConverter.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="BmLib.Converters.BoolToVisibilityConverter" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="13" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAIAAAAAAAAgAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Converters\BoolToVisibilityConverter.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="BmLib.Converters.BoolToVisibilityPropConverter" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="14.75" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAIAAAAAAAAgQAAAAAAAgAAAAAAA=</HashCode>
+      <FileName>Converters\BoolToVisibilityPropConverter.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="BmLib.Converters.BorderClipConverter" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="6" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAIAAAAAAAAgAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Converters\BorderClipConverter.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="BmLib.Converters.FlipBoolConverter" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="11.25" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAIAAAAAAAAgAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Converters\FlipBoolConverter.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="BmLib.Converters.FlipBoolToVisibilityCollapsedConverter" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="13" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAIAAAAAAAAgAAAAAQAAAAAAAAAA=</HashCode>
+      <FileName>Converters\FlipBoolToVisibilityCollapsedConverter.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="BmLib.Converters.FlipBoolToVisibilityConverter" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="14.75" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAIAAAAAAAAgAAAAAQAAAAAAAAAA=</HashCode>
+      <FileName>Converters\FlipBoolToVisibilityConverter.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="BmLib.Enums.AttachedProperties" Collapsed="true">
+    <Position X="7.75" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAIAAIAAABAAAEEAAAAAAAAAAAAgGAABgABAAAAIAA=</HashCode>
+      <FileName>Enums\AttachedProperties.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="BmLib.IconExtractors.IconExtracts.SystemImageList" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="11.25" Y="4.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AQAQoACAACCWMBAACAAAMAgIACEKABAAAAAnGAIUAFA=</HashCode>
+      <FileName>IconExtractors\SystemImageList.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="BmLib.Models.ExtensionMethods" Collapsed="true">
+    <Position X="9.5" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AQAAAAAAAAAAAAAAAAAAABAAAAAAAAAAkAABAAAAAAA=</HashCode>
+      <FileName>Models\ExtensionMethods.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="BmLib.Models.PathHelper" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="13" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAQAAAEAAAAAABQAAAABABAAABAHAAAAA=</HashCode>
+      <FileName>Models\PathHelper.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="BmLib.Properties.Resources" Collapsed="true">
+    <Position X="6" Y="4.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAABEAAAAQAAAAAAAAAAAAAAAIA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="BmLib.Properties.Settings" Collapsed="true">
+    <Position X="7.75" Y="4.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAIAAAAAABAAAAAAAAAAAAAAA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="BmLib.Themes.ResourceKeys" Collapsed="true">
+    <Position X="14.75" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AoAABIEAoKhFQAQAAggEAQEIAAQEAQAAAgAAAAAAAAQ=</HashCode>
+      <FileName>Themes\ResourceKeys.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="BmLib.Utils.AsyncUtils" Collapsed="true">
+    <Position X="6" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQAAA=</HashCode>
+      <FileName>Utils\AsyncUtils.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="BmLib.Utils.UITools" Collapsed="true">
+    <Position X="13" Y="4.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAIAAABCAAAQAAAAAAAAAAAgAA=</HashCode>
+      <FileName>Utils\UITools.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Interface Name="BmLib.Interfaces.IEntryViewModel">
+    <Position X="0.5" Y="4.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAABAAAAAAAAAAAQAAAAAAAAAAAAAgAAAAEAABA=</HashCode>
+      <FileName>Interfaces\IEntryViewModel.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="BmLib.Interfaces.IOverflown">
+    <Position X="2.25" Y="4.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAABAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Interfaces\IOverflown.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="BmLib.Models.ICompareHierarchy&lt;T&gt;">
+    <Position X="3" Y="0.5" Width="2.25" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAgAAAAAAAAAAAAA=</HashCode>
+      <FileName>Models\IEntryHierarchyComparer.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="BmLib.Models.IEntryHierarchyComparer">
+    <Position X="3" Y="2" Width="2.25" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Models\IEntryHierarchyComparer.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="BmLib.Models.IEntryModel">
+    <Position X="0.5" Y="0.5" Width="2" />
+    <TypeIdentifier>
+      <HashCode>CAACAAABEAAgAAAAAAAQQAQAAIAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Models\IEntryModel.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="BmLib.Models.IConvertedEntryModel" Collapsed="true">
+    <Position X="0.5" Y="3.75" Width="2" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAgAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Models\IEntryModel.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="BmLib.Models.IPathHelper">
+    <Position X="4" Y="4.75" Width="1.75" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAEAAAAAAAQAAAABABAAABAAAAAAA=</HashCode>
+      <FileName>Models\IPathHelper.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Enum Name="BmLib.Enums.HierarchicalResult" Collapsed="true">
+    <Position X="6" Y="6.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAACIAAAACAQAAAAAAAAAAAAIAAAAAEAAA=</HashCode>
+      <FileName>Enums\HierarchicalResult.cs</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="BmLib.Enums.UpdateMode" Collapsed="true">
+    <Position X="13" Y="6.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACA=</HashCode>
+      <FileName>Enums\UpdateMode.cs</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="BmLib.IconExtractors.Enums.IconSize" Collapsed="true">
+    <Position X="7.75" Y="6.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAABAAAAAAAIACAAEAAAAAAAQAAAAAAAAAAAAAA=</HashCode>
+      <FileName>IconExtractors\Enums\IconSize.cs</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="BmLib.IconExtractors.Enums.ImageListDrawItemConstants" Collapsed="true">
+    <Position X="9.5" Y="6.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAgAAABAAAAABAAACAAgAAgIAAABAAABQAgAAAQAAA=</HashCode>
+      <FileName>IconExtractors\Enums\ImageListDrawItemConstants.cs</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="BmLib.IconExtractors.Enums.ShellIconStateConstants" Collapsed="true">
+    <Position X="11.25" Y="6.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAACAEAAAAgAAAEAAAAAACAAAAAAAAAAAA=</HashCode>
+      <FileName>IconExtractors\Enums\ShellIconStateConstants.cs</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>

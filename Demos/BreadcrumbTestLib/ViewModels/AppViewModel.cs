@@ -1,6 +1,5 @@
 ﻿namespace BreadcrumbTestLib.ViewModels
 {
-    using BreadcrumbTestLib.Demo;
     using BreadcrumbTestLib.Models;
     using BreadcrumbTestLib.SystemIO;
     using BreadcrumbTestLib.Tasks;
@@ -46,7 +45,6 @@
 
             // Initialize Breadcrumb Tree ViewModel and SpecialFolders Test ViewModel
             BreadcrumbTest = new BreadcrumbViewModel();
-            SpecialFoldersTest = new SpecialFoldersViewModel();
 
             this.DiskTest = new DiskTreeNodeViewModel(new DirectoryInfo(@"C:\\"), new DirectoryInfo(@"E:\\"));
 
@@ -65,11 +63,6 @@
         /// in this application.
         /// </summary>
         public BreadcrumbViewModel BreadcrumbTest { get; }
-
-        /// <summary>
-        /// Gets a viewmodel to demonstrate Icon display for special folders in Windows.
-        /// </summary>
-        public SpecialFoldersViewModel SpecialFoldersTest { get; }
 
         /// <summary>
         /// Gets a viewmodel that drives the BreadcrumbTree control

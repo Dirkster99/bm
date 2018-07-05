@@ -7,7 +7,6 @@
 
         xmlns:ctrls="clr-namespace:BmLib.Controls;assembly=BmLib"
 
-        xmlns:conv="clr-namespace:BreadcrumbTestLib.Demo.Converter"
         xmlns:convLib="clr-namespace:BmLib.Converters;assembly=BmLib"
         xmlns:local="clr-namespace:BreadcrumbTestLib.Views"
 

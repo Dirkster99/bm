@@ -160,7 +160,6 @@
     <Compile Include="Interfaces\IEntryViewModel.cs" />
     <Compile Include="Interfaces\IOverflown.cs" />
     <Compile Include="Models\ExtensionMethods.cs" />
-    <Compile Include="Models\IDiskPathMapper.cs" />
     <Compile Include="Models\IEntryHierarchyComparer.cs" />
     <Compile Include="Models\IEntryModel.cs" />
     <Compile Include="Models\IPathHelper.cs" />
@@ -182,6 +181,7 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
+    <None Include="BmLib.cd" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>

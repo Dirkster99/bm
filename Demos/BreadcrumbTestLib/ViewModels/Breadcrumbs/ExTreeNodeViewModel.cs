@@ -14,7 +14,6 @@
     using BmLib.IconExtractors.IconExtracts;
     using BmLib.Interfaces;
     using BmLib.Enums;
-    using DirectoryInfoExLib.IO.Header.ShellDll;
     using System.Runtime.InteropServices;
 
     /// <summary>
