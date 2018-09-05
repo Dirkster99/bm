@@ -11,6 +11,11 @@ namespace BreadcrumbTestLib.SystemIO
     public class PathComparer : ICompareHierarchy<string>
     {
         #region fields
+        /// <summary>
+        /// Log4net logger facility for this class.
+        /// </summary>
+        protected static readonly log4net.ILog Logger = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
+
         private StringComparison _stringComparsion = StringComparison.InvariantCultureIgnoreCase;
         #endregion fields
 
@@ -35,6 +40,8 @@ namespace BreadcrumbTestLib.SystemIO
         {
             if (path1 == null || path2 == null)
                 return HierarchicalResult.Unrelated;
+
+            Logger.InfoFormat("path1 '{0}' path2 '{1}'", path1, path2);
 
             if (path1.Equals(path2, this._stringComparsion))
                 return HierarchicalResult.Current;

@@ -1,5 +1,6 @@
 ﻿namespace ThemedDemo.Behaviors
 {
+    using System.ComponentModel;
     using System.Windows;
     using System.Windows.Controls;
     using System.Windows.Controls.Primitives;
@@ -48,6 +49,9 @@
         /// <param name="e"></param>
         private static void OnSelectionChangedCommandChange(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
+            if (DesignerProperties.GetIsInDesignMode(new System.Windows.DependencyObject()))
+                return;
+
             Selector uiElement = d as Selector;  // Remove the handler if it exist to avoid memory leaks
 
             if (uiElement != null)

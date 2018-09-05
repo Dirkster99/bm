@@ -15,6 +15,11 @@
     {
         #region fields
         /// <summary>
+        /// Log4net logger facility for this class.
+        /// </summary>
+        protected static readonly log4net.ILog Logger = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
+
+        /// <summary>
         /// Lookup until lookupvalue is found, and process only parent or matchednode.
         /// Load subentries if not loaded.
         /// </summary>
@@ -35,6 +40,7 @@
         /// <param name="loadSubEntries"></param>
         public RecrusiveSearch(bool loadSubEntries)
         {
+            Logger.InfoFormat("_");
             this._loadSubEntries = loadSubEntries;
         }
         #endregion constructors
@@ -45,6 +51,8 @@
                                       CancellationToken cancelToken,
                                       params ITreeLookupProcessor<VM, T>[] processors)
         {
+            Logger.InfoFormat("_");
+
             IEnumerable<VM> subentries = this._loadSubEntries ?
                     await parentSelector.EntryHelper.LoadAsync() :
                      parentSelector.EntryHelper.AllNonBindable;

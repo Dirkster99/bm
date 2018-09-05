@@ -13,6 +13,11 @@
     /// </summary>
     public sealed class Factory
     {
+        /// <summary>
+        /// Log4net logger facility for this class.
+        /// </summary>
+        private static readonly log4net.ILog Logger = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
+
         private Factory()
         {
         }
@@ -23,6 +28,8 @@
         /// <returns></returns>
         public static IDirectoryBrowser CreateDirectoryInfoEx(string fullPath)
         {
+            Logger.InfoFormat("fullPath {0}", fullPath);
+
             return new DirectoryInfoEx(fullPath);
         }
 
@@ -32,6 +39,8 @@
         /// <returns></returns>
         public static IDirectoryBrowser CreateDirectoryInfoEx(KnownFolder knownFolder)
         {
+            Logger.InfoFormat("knownFolder.Path {0}", knownFolder.Path);
+
             return new DirectoryInfoEx(knownFolder);
         }
 
@@ -128,6 +137,8 @@
         /// <returns></returns>
         public static bool HasParent(IDirectoryBrowser child, string parentFullName)
         {
+            Logger.InfoFormat("parentFullName {0}", parentFullName);
+
             if (child.FullName.StartsWith(parentFullName, StringComparison.InvariantCultureIgnoreCase))
                 return true;
 
@@ -162,6 +173,8 @@
                 return false;
             }
 
+            Logger.InfoFormat("child.FullName '{0}' parent.FullName '{1}'", child.FullName, parent.FullName);
+
             //::{031E4825-7B94-4DC3-B131-E946B44C8DD5}\Music.library-ms
             if (parent.FullName.StartsWith(DirectoryInfoEx.IID_Library) && parent.FullName.EndsWith(".library-ms"))
             {
@@ -195,6 +208,8 @@
         /// <returns></returns>
         public static bool IsLibraryItem(string fullName)
         {
+            Logger.InfoFormat("fullName '{0}'", fullName);
+
             return (fullName.StartsWith(DirectoryInfoEx.IID_Library) &&
                     fullName.EndsWith(".library-ms"));
         }

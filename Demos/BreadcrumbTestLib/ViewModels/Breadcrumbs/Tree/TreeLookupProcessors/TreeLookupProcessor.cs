@@ -13,6 +13,11 @@
     public class TreeLookupProcessor<VM, T> : ITreeLookupProcessor<VM, T>
     {
         #region fields
+        /// <summary>
+        /// Log4net logger facility for this class.
+        /// </summary>
+        protected static readonly log4net.ILog Logger = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
+
         private Func<HierarchicalResult, ITreeSelector<VM, T>, ITreeSelector<VM, T>, bool> _processFunc;
         private HierarchicalResult _appliedResult;
         #endregion fields

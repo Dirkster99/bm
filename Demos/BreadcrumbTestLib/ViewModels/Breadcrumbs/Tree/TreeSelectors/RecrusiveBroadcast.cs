@@ -14,6 +14,11 @@
     {
         #region fields
         /// <summary>
+        /// Log4net logger facility for this class.
+        /// </summary>
+        protected static readonly log4net.ILog Logger = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
+
+        /// <summary>
         ///  Lookup until lookupvalue is found, and process all node.  Load entries if not loaded.
         /// </summary>
         public static RecrusiveBroadcast<VM, T> LoadSubentriesIfNotLoaded = new RecrusiveBroadcast<VM, T>(false);
@@ -39,11 +44,13 @@
 
         #region methods
         public async Task LookupAsync(T value,
-                                          ITreeSelector<VM, T> parentSelector,
-                                    ICompareHierarchy<T> comparer,
-                                          CancellationToken cancelToken,
-                                          params ITreeLookupProcessor<VM, T>[] processors)
+                                      ITreeSelector<VM, T> parentSelector,
+                                      ICompareHierarchy<T> comparer,
+                                      CancellationToken cancelToken,
+                                      params ITreeLookupProcessor<VM, T>[] processors)
         {
+            Logger.InfoFormat("_");
+
             IEnumerable<VM> subentries = this._loadSubEntries ?
                             await parentSelector.EntryHelper.LoadAsync() :
                               parentSelector.EntryHelper.AllNonBindable;

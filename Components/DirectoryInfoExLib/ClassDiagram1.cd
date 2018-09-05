@@ -1,200 +1,278 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <ClassDiagram MajorVersion="1" MinorVersion="1">
-  <Class Name="DirectoryInfoExLib.Factory" Collapsed="true">
-    <Position X="7.75" Y="4.25" Width="1.5" />
+  <Class Name="DirectoryInfoExLib.Factory">
+    <Position X="19" Y="0.75" Width="2.75" />
     <TypeIdentifier>
       <HashCode>AAAAAgAAAAAAAEAAEAACAAAAAEAAAAACAAAAgAQAAAQ=</HashCode>
       <FileName>Factory.cs</FileName>
     </TypeIdentifier>
   </Class>
-  <Class Name="DirectoryInfoExLib.IO.Header.ShellDll.PIDL" Collapsed="true" BaseTypeListCollapsed="true">
-    <Position X="9.5" Y="6.25" Width="1.5" />
+  <Class Name="DirectoryInfoExLib.IO.Header.ShellDll.PIDL" BaseTypeListCollapsed="true">
+    <Position X="16.75" Y="0.75" Width="1.75" />
+    <Members>
+      <Method Name="ItemIDListSize" Hidden="true" />
+      <Method Name="ItemIDSize" Hidden="true" />
+    </Members>
+    <Compartments>
+      <Compartment Name="Fields" Collapsed="true" />
+      <Compartment Name="Nested Types" Collapsed="false" />
+    </Compartments>
+    <NestedTypes>
+      <Class Name="DirectoryInfoExLib.IO.Header.ShellDll.PIDL.PIDLEnumerator" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>IO\Header\FileBrowser\PIDL.cs</NewMemberFileName>
+        </TypeIdentifier>
+        <Lollipop Position="0.2" />
+      </Class>
+    </NestedTypes>
     <TypeIdentifier>
       <HashCode>AABAAGAAAAAAgBAAgAAAEAABYQAIAZAIAAAAAAEAQAI=</HashCode>
       <FileName>IO\Header\FileBrowser\PIDL.cs</FileName>
     </TypeIdentifier>
-    <Lollipop Position="0.2" Collapsed="true" />
+    <Lollipop Position="0.2" />
   </Class>
-  <Class Name="DirectoryInfoExLib.IO.Header.ShellDll.ShellAPI" Collapsed="true">
-    <Position X="11.25" Y="6.25" Width="1.5" />
+  <Class Name="DirectoryInfoExLib.IO.Header.ShellDll.ShellAPI">
+    <Position X="19" Y="4.25" Width="2.75" />
+    <NestedTypes>
+      <Enum Name="DirectoryInfoExLib.IO.Header.ShellDll.ShellAPI.SHGNO" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>IO\Header\FileBrowser\ShellAPI.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Enum>
+      <Enum Name="DirectoryInfoExLib.IO.Header.ShellDll.ShellAPI.SFGAO" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>IO\Header\FileBrowser\ShellAPI.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Enum>
+      <Enum Name="DirectoryInfoExLib.IO.Header.ShellDll.ShellAPI.SHCONTF" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>IO\Header\FileBrowser\ShellAPI.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Enum>
+    </NestedTypes>
     <TypeIdentifier>
       <HashCode>AAAAAAGAAAAAAAAAggAAAAAIAAAAAAAAAAhAABAAAAA=</HashCode>
       <FileName>IO\Header\FileBrowser\ShellAPI.cs</FileName>
     </TypeIdentifier>
   </Class>
-  <Class Name="DirectoryInfoExLib.IO.Header.KnownFolder.KnownFolder" Collapsed="true" BaseTypeListCollapsed="true">
-    <Position X="9.5" Y="5.25" Width="1.5" />
+  <Class Name="DirectoryInfoExLib.IO.Header.KnownFolder.KnownFolder" BaseTypeListCollapsed="true">
+    <Position X="10" Y="0.75" Width="2.25" />
+    <Compartments>
+      <Compartment Name="Fields" Collapsed="true" />
+    </Compartments>
     <TypeIdentifier>
       <HashCode>AgACABAAACAACCIAAAFAAAAAAAACIAAAAAQQIAAECIA=</HashCode>
       <FileName>IO\Header\KnownFolder\KnownFolder.cs</FileName>
     </TypeIdentifier>
-    <Lollipop Position="0.2" Collapsed="true" />
+    <Lollipop Position="0.2" />
   </Class>
-  <Class Name="DirectoryInfoExLib.IO.Header.KnownFolder.KnownFolderManager" Collapsed="true">
-    <Position X="4.25" Y="6.25" Width="1.5" />
+  <Class Name="DirectoryInfoExLib.IO.Header.KnownFolder.KnownFolderManager">
+    <Position X="14.5" Y="6.25" Width="2" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
       <FileName>IO\Header\KnownFolder\KnownFolderManager.cs</FileName>
     </TypeIdentifier>
   </Class>
-  <Class Name="DirectoryInfoExLib.IO.Tools.Interface.ShellFolder2" Collapsed="true" BaseTypeListCollapsed="true">
-    <Position X="6" Y="7.25" Width="1.5" />
-    <TypeIdentifier>
-      <HashCode>CCAgAAAgACAGgQABAAAAQAAEQCAIAAAEAAACAAgIgCg=</HashCode>
-      <FileName>IO\Tools\Interface\ShellFolder2.cs</FileName>
-    </TypeIdentifier>
-    <Lollipop Position="0.2" Collapsed="true" />
-  </Class>
-  <Class Name="DirectoryInfoExLib.IO.DirectoryInfoEx">
-    <Position X="1.25" Y="0.75" Width="2.5" />
+  <Class Name="DirectoryInfoExLib.IO.Tools.Interface.ShellFolder2" BaseTypeListCollapsed="true">
+    <Position X="14.5" Y="0.75" Width="2" />
     <Compartments>
       <Compartment Name="Fields" Collapsed="true" />
     </Compartments>
     <TypeIdentifier>
-      <HashCode>JEEEIkEsFepAQOAOkGAIyMQSRBgACYNghEAgREGJEBQ=</HashCode>
-      <FileName>IO\DirectoryInfoEx.cs</FileName>
+      <HashCode>CCAgAAAgACAGgQABAAAAQAAEQCAIAAAEAAACAAgIgCg=</HashCode>
+      <FileName>IO\Tools\Interface\ShellFolder2.cs</FileName>
     </TypeIdentifier>
     <Lollipop Position="0.2" />
   </Class>
-  <Struct Name="DirectoryInfoExLib.IO.Header.ExtraSearch" Collapsed="true">
-    <Position X="4.25" Y="8.5" Width="1.5" />
+  <Class Name="DirectoryInfoExLib.IO.DirectoryInfoEx">
+    <Position X="6" Y="0.75" Width="2.5" />
+    <Members>
+      <Method Name="~DirectoryInfoEx" Hidden="true" />
+      <Method Name="DirectoryInfoEx" Hidden="true" />
+      <Method Name="ExpandPath" Hidden="true" />
+      <Method Name="getIShellFolder" Hidden="true" />
+      <Method Name="getIShellFolderFromParent" Hidden="true" />
+      <Method Name="ICloneable.Clone" Hidden="true" />
+      <Method Name="IsCancelTriggered" Hidden="true" />
+      <Method Name="loadAttributes" Hidden="true" />
+      <Method Name="PathtoPIDL" Hidden="true" />
+      <Method Name="refresh" Hidden="true" />
+    </Members>
+    <Compartments>
+      <Compartment Name="Fields" Collapsed="true" />
+    </Compartments>
+    <AssociationLine Name="Parent" Type="DirectoryInfoExLib.Interfaces.IDirectoryBrowser">
+      <MemberNameLabel ManuallyPlaced="true">
+        <Position X="0.126" Y="0.132" />
+      </MemberNameLabel>
+    </AssociationLine>
+    <AssociationLine Name="Root" Type="DirectoryInfoExLib.Interfaces.IDirectoryInfoEx">
+      <MemberNameLabel ManuallyPlaced="true" ManuallySized="true">
+        <Position X="0.181" Y="0.143" Height="0.182" Width="0.767" />
+      </MemberNameLabel>
+    </AssociationLine>
+    <TypeIdentifier>
+      <HashCode>JEEEIkEkFepEQKAMkGAIyMQSRBgACYNghEAgREGJEBQ=</HashCode>
+      <FileName>IO\DirectoryInfoEx.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Property Name="KnownFolderType" />
+      <Property Name="Parent" />
+      <Property Name="Attributes" />
+      <Property Name="Root" />
+    </ShowAsAssociation>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Struct Name="DirectoryInfoExLib.IO.Header.ExtraSearch">
+    <Position X="24.75" Y="0.75" Width="2.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAgAAAAAAAAEABAAAAAAAAAAAAAAAAAAAAA=</HashCode>
       <FileName>IO\Header\IShellFolder2.cs</FileName>
     </TypeIdentifier>
   </Struct>
-  <Struct Name="DirectoryInfoExLib.IO.Header.PropertyKey" Collapsed="true">
-    <Position X="9.5" Y="8.5" Width="1.5" />
+  <Struct Name="DirectoryInfoExLib.IO.Header.PropertyKey">
+    <Position X="27.5" Y="0.75" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAEAAAAAAAAIAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
       <FileName>IO\Header\IShellFolder2.cs</FileName>
     </TypeIdentifier>
   </Struct>
-  <Struct Name="DirectoryInfoExLib.IO.Header.ShellDetails" Collapsed="true">
-    <Position X="11.25" Y="8.5" Width="1.5" />
+  <Struct Name="DirectoryInfoExLib.IO.Header.ShellDetails">
+    <Position X="22.25" Y="0.75" Width="2.25" />
     <TypeIdentifier>
       <HashCode>QAAAAAAAAAAAACAAAAAAAAAAAAAAACAAAAAAAAAAAAA=</HashCode>
       <FileName>IO\Header\IShellFolder2.cs</FileName>
     </TypeIdentifier>
   </Struct>
-  <Struct Name="DirectoryInfoExLib.IO.Header.KnownFolder.Enums.KnownFolderDefinition" Collapsed="true">
-    <Position X="7.75" Y="8.5" Width="1.5" />
+  <Struct Name="DirectoryInfoExLib.IO.Header.KnownFolder.Enums.KnownFolderDefinition">
+    <Position X="22.25" Y="2.75" Width="2.25" />
     <TypeIdentifier>
       <HashCode>AAAAAACAAAAgAAAAAAAAIAQQQABAAAAAAIAEoAEACAA=</HashCode>
       <FileName>IO\Header\KnownFolder\Enums\KnownFolderDefinition.cs</FileName>
     </TypeIdentifier>
   </Struct>
-  <Struct Name="DirectoryInfoExLib.IO.Header.KnownFolder.InternalKnownFolderDefinition" Collapsed="true">
-    <Position X="6" Y="8.5" Width="1.5" />
+  <Struct Name="DirectoryInfoExLib.IO.Header.KnownFolder.InternalKnownFolderDefinition">
+    <Position X="24.75" Y="2.75" Width="2.5" />
     <TypeIdentifier>
       <HashCode>ABAACASAAAAEAAAAAgACACAAAIAAAAAAAIAIgAAACAA=</HashCode>
       <FileName>IO\Header\KnownFolder\InternalKnownFolderDefinition.cs</FileName>
     </TypeIdentifier>
   </Struct>
   <Interface Name="DirectoryInfoExLib.Interfaces.IDirectoryInfoEx">
-    <Position X="6.75" Y="0.75" Width="3" />
+    <Position X="2.5" Y="4.75" Width="2.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAEgAAAAACAAgAAAAAAAAAAAAAAAAAAAAAAAABA=</HashCode>
       <FileName>Interfaces\IDirectoryInfoEx.cs</FileName>
     </TypeIdentifier>
   </Interface>
-  <Interface Name="DirectoryInfoExLib.IO.Header.ShellDll.Interfaces.IEnumIDList" Collapsed="true">
-    <Position X="7.75" Y="9.75" Width="1.5" />
+  <Interface Name="DirectoryInfoExLib.IO.Header.ShellDll.Interfaces.IEnumIDList">
+    <Position X="10.25" Y="15.5" Width="1.75" />
     <TypeIdentifier>
       <HashCode>AgAAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAEBA=</HashCode>
       <FileName>IO\Header\FileBrowser\Interfaces\IEnumIDList.cs</FileName>
     </TypeIdentifier>
   </Interface>
-  <Interface Name="DirectoryInfoExLib.IO.Header.ShellDll.Interfaces.IShellFolder" Collapsed="true">
-    <Position X="9.5" Y="10.5" Width="1.5" />
+  <Interface Name="DirectoryInfoExLib.IO.Header.ShellDll.Interfaces.IShellFolder">
+    <Position X="8.25" Y="11.25" Width="1.75" />
     <TypeIdentifier>
       <HashCode>AAAgAAAgAAAAAQABAAAAQAAEQCAIAAAEAAAAAAAAAAA=</HashCode>
       <FileName>IO\Header\FileBrowser\Interfaces\IShellFolder.cs</FileName>
     </TypeIdentifier>
   </Interface>
-  <Interface Name="DirectoryInfoExLib.IO.Header.IEnumExtraSearch" Collapsed="true">
-    <Position X="4.25" Y="9.75" Width="1.5" />
+  <Interface Name="DirectoryInfoExLib.IO.Header.IEnumExtraSearch">
+    <Position X="8.25" Y="14.25" Width="1.75" />
     <TypeIdentifier>
       <HashCode>AgAAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAEBA=</HashCode>
       <FileName>IO\Header\IShellFolder2.cs</FileName>
     </TypeIdentifier>
   </Interface>
-  <Interface Name="DirectoryInfoExLib.IO.Header.IShellFolder2" Collapsed="true">
-    <Position X="11.25" Y="10.5" Width="1.5" />
+  <Interface Name="DirectoryInfoExLib.IO.Header.IShellFolder2">
+    <Position X="10.25" Y="11.25" Width="1.75" />
     <TypeIdentifier>
       <HashCode>ACAgAAAgAAACgQABAAAAQAAEQCAIAAAEAAACAAgIgAA=</HashCode>
       <FileName>IO\Header\IShellFolder2.cs</FileName>
     </TypeIdentifier>
   </Interface>
-  <Interface Name="DirectoryInfoExLib.IO.Header.KnownFolder.Interfaces.IKnownFolder" Collapsed="true">
-    <Position X="4.25" Y="10.5" Width="1.5" />
+  <Interface Name="DirectoryInfoExLib.IO.Header.KnownFolder.Interfaces.IKnownFolder">
+    <Position X="6" Y="11.25" Width="2" />
     <TypeIdentifier>
       <HashCode>AAAAAgIAAAAAAAAAAAgAAAAAAAACoAAAAAAAAAJAAQA=</HashCode>
       <FileName>IO\Header\KnownFolder\Interfaces\IKnownFolder.cs</FileName>
     </TypeIdentifier>
   </Interface>
-  <Interface Name="DirectoryInfoExLib.IO.Header.KnownFolder.Interfaces.IKnownFolderManager" Collapsed="true">
-    <Position X="6" Y="10.5" Width="1.5" />
+  <Interface Name="DirectoryInfoExLib.IO.Header.KnownFolder.Interfaces.IKnownFolderManager">
+    <Position X="6" Y="14.25" Width="2" />
     <TypeIdentifier>
       <HashCode>IAAEAAAAEAAAAAAAAAACAAAQAAAAAAAAEAAEQAAQAAI=</HashCode>
       <FileName>IO\Header\KnownFolder\Interfaces\IKnownFolderManager.cs</FileName>
     </TypeIdentifier>
   </Interface>
-  <Enum Name="DirectoryInfoExLib.Interfaces.DirectoryTypeEnum" Collapsed="true">
-    <Position X="4.25" Y="12.25" Width="1.5" />
+  <Interface Name="DirectoryInfoExLib.Interfaces.IDirectoryBrowser">
+    <Position X="2.5" Y="7.5" Width="2.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAEAEAAAAIAAAEAAQAQAAAAAAAAAAAAAAAABAAA=</HashCode>
+      <FileName>Interfaces\IDirectoryBrowser.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Enum Name="DirectoryInfoExLib.Interfaces.DirectoryTypeEnum">
+    <Position X="16" Y="11.25" Width="2.75" />
     <TypeIdentifier>
       <HashCode>AgAAAAAAAAAAgAAAAAAAAABAAAAABAAAAAAAAAAAAAA=</HashCode>
       <FileName>Interfaces\IDirectoryInfoEx.cs</FileName>
     </TypeIdentifier>
   </Enum>
-  <Enum Name="DirectoryInfoExLib.IO.Header.SHCOLSTATEF" Collapsed="true">
-    <Position X="11.25" Y="13" Width="1.5" />
+  <Enum Name="DirectoryInfoExLib.IO.Header.SHCOLSTATEF">
+    <Position X="13" Y="14.25" Width="2.5" />
     <TypeIdentifier>
       <HashCode>gAEAQAAAAAIgAAkBAQAAgAAAABAAIBBoCAAAAACAACA=</HashCode>
       <FileName>IO\Header\IShellFolder2.cs</FileName>
     </TypeIdentifier>
   </Enum>
-  <Enum Name="DirectoryInfoExLib.IO.Header.KnownFolder.Enums.KnownFolderCategory" Collapsed="true">
-    <Position X="7.75" Y="12.25" Width="1.5" />
+  <Enum Name="DirectoryInfoExLib.IO.Header.KnownFolder.Enums.KnownFolderCategory">
+    <Position X="13" Y="11.25" Width="2.75" />
     <TypeIdentifier>
       <HashCode>AAAAAQAAAAAAAAIQAAAAAAAAAAAAAAAAAAAAAABAAAA=</HashCode>
       <FileName>IO\Header\KnownFolder\Enums\KnownFolderCategory.cs</FileName>
     </TypeIdentifier>
   </Enum>
-  <Enum Name="DirectoryInfoExLib.IO.Header.KnownFolder.Enums.KnownFolderDefinitionFlags" Collapsed="true">
-    <Position X="9.5" Y="12.25" Width="1.5" />
+  <Enum Name="DirectoryInfoExLib.IO.Header.KnownFolder.Enums.KnownFolderDefinitionFlags">
+    <Position X="19" Y="11.25" Width="2.25" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAABAAAAAAAAAAAAAQAAAQAAAAAAAAAAAAAAA=</HashCode>
       <FileName>IO\Header\KnownFolder\Enums\KnownFolderDefinitionFlags.cs</FileName>
     </TypeIdentifier>
   </Enum>
-  <Enum Name="DirectoryInfoExLib.IO.Header.KnownFolder.Enums.KnownFolderFindMode" Collapsed="true">
-    <Position X="11.25" Y="12.25" Width="1.5" />
+  <Enum Name="DirectoryInfoExLib.IO.Header.KnownFolder.Enums.KnownFolderFindMode">
+    <Position X="13" Y="13" Width="2.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAAACAAAAAAAAAAAAAgAAAAAAAAAAAAAAA=</HashCode>
       <FileName>IO\Header\KnownFolder\Enums\KnownFolderFindMode.cs</FileName>
     </TypeIdentifier>
   </Enum>
-  <Enum Name="DirectoryInfoExLib.IO.Header.KnownFolder.Enums.KnownFolderRedirectionCapabilities" Collapsed="true">
-    <Position X="6" Y="13" Width="1.5" />
+  <Enum Name="DirectoryInfoExLib.IO.Header.KnownFolder.Enums.KnownFolderRedirectionCapabilities">
+    <Position X="16" Y="13" Width="2.75" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAIAAAAAAAAACAAAAAAAAAAAAAABAAAQAQAI=</HashCode>
       <FileName>IO\Header\KnownFolder\Enums\KnownFolderRedirectionCapabilities.cs</FileName>
     </TypeIdentifier>
   </Enum>
-  <Enum Name="DirectoryInfoExLib.IO.Header.KnownFolder.Enums.KnownFolderRetrievalOptions" Collapsed="true">
-    <Position X="7.75" Y="13" Width="1.5" />
+  <Enum Name="DirectoryInfoExLib.IO.Header.KnownFolder.Enums.KnownFolderRetrievalOptions">
+    <Position X="19" Y="13" Width="2.25" />
     <TypeIdentifier>
       <HashCode>AAAAAAQAAAAAAAEAAAAAIAAAAACAAEAAAgACAAAAAAA=</HashCode>
       <FileName>IO\Header\KnownFolder\Enums\KnownFolderRetrievalOptions.cs</FileName>
     </TypeIdentifier>
   </Enum>
-  <Enum Name="DirectoryInfoExLib.IO.RefreshModeEnum">
-    <Position X="4.25" Y="0.75" Width="2" />
-    <TypeIdentifier>
-      <HashCode>AAABAAAAAAAAAAAAAAAAgAAAEAAAAAAAAAAAAAEAAAA=</HashCode>
-      <FileName>IO\DirectoryInfoEx.cs</FileName>
-    </TypeIdentifier>
+  <Enum Name="System.IO.FileAttributes">
+    <Position X="3.5" Y="0.75" Width="1.5" />
+    <TypeIdentifier />
   </Enum>
+  <Delegate Name="DirectoryInfoExLib.Interfaces.CancelDelegate">
+    <Position X="8.75" Y="5.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAIAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Interfaces\IDirectoryInfoEx.cs</FileName>
+    </TypeIdentifier>
+  </Delegate>
   <Font Name="Segoe UI" Size="9" />
 </ClassDiagram>

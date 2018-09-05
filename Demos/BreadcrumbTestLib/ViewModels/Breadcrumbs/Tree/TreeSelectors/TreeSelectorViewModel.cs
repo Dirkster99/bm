@@ -21,6 +21,11 @@
     internal class TreeSelectorViewModel<VM, T> : Base.ViewModelBase, ITreeSelector<VM, T>
     {
         #region fields
+        /// <summary>
+        /// Log4net logger facility for this class.
+        /// </summary>
+        protected static readonly log4net.ILog Logger = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
+
         private readonly AsyncLock _lookupLock = new AsyncLock();
         private T _currentValue = default(T);
         private bool _isSelected = false;
@@ -84,6 +89,8 @@
 
             set
             {
+                Logger.InfoFormat("_");
+
                 if (_isSelected != value)
                 {
                     _isSelected = value;
@@ -107,6 +114,8 @@
 
             set
             {
+                Logger.InfoFormat("_");
+
                 _isRoot = value;
                 NotifyPropertyChanged(() => this.IsRoot);
                 NotifyPropertyChanged(() => this.IsOverflowedOrRoot);
@@ -133,6 +142,7 @@
 
             set
             {
+                Logger.InfoFormat("_");
                 _selectedValue = value;
 
                 NotifyPropertyChanged(() => this.SelectedChild);
@@ -151,6 +161,7 @@
 
             set
             {
+                Logger.InfoFormat("_");
                 IsSelected = false;
                 NotifyPropertyChanged(() => this.IsSelected);
 
@@ -202,6 +213,7 @@
             {
                 if (_isOverflowed != value)
                 {
+                    Logger.InfoFormat("_");
                     if (value == true)
                         Debug.WriteLine("--> Item is Overflowed: " + this);
 
@@ -225,6 +237,8 @@
         /// <param name="path"></param>
         public virtual void ReportChildSelected(Stack<ITreeSelector<VM, T>> path)
         {
+            Logger.InfoFormat("_");
+
             if (path.Count() > 0)
             {
                 _selectedValue = path.Peek().Value;
@@ -241,6 +255,8 @@
 
         public virtual void ReportChildDeselected(Stack<ITreeSelector<VM, T>> path)
         {
+            Logger.InfoFormat("_");
+
             if (EntryHelper.IsLoaded)
             {
                 // Clear child node selection.
@@ -285,6 +301,8 @@
                                       CancellationToken cancelToken,
                                       params ITreeLookupProcessor<VM, T>[] processors)
         {
+            Logger.InfoFormat("_");
+
             using (await _lookupLock.LockAsync())
             {
                 await Application.Current.Dispatcher.Invoke(async () =>

@@ -14,7 +14,10 @@
     internal class EntriesHelperViewModel<VM> : Base.ViewModelBase, IEntriesHelper<VM>
     {
         #region fields
-        ////private static ILogger logger = LogManagerFactory.DefaultLogManager.GetLogger<EntriesHelper<VM>>();
+        /// <summary>
+        /// Log4net logger facility for this class.
+        /// </summary>
+        protected static readonly log4net.ILog Logger = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
 
         protected Func<bool, object, Task<IEnumerable<VM>>> _loadSubEntryFunc;
 
@@ -220,23 +223,17 @@
         #endregion properties
 
         #region methods
-        public async Task UnloadAsync()
-        {
-            // Cancel previous load.
-            _lastCancellationToken.Cancel();
-
-            using (var releaser = await _loadingLock.LockAsync())
-            {
-                _subItemList = new List<VM>();
-                this.All.Clear();
-                _isLoaded = false;
-            }
-        }
-
+        /// <summary>
+        /// Call to load sub-entries.
+        /// </summary>
+        /// <param name="force">Load sub-entries even if it's already loaded.</param>
+        /// <returns></returns>
         public async Task<IEnumerable<VM>> LoadAsync(UpdateMode updateMode = UpdateMode.Replace,
                                                      bool force = false,
                                                      object parameter = null)
         {
+            Logger.InfoFormat("_");
+
             // Ignore if constructed using entries but not entries func
             if (_loadSubEntryFunc != null)
             {
@@ -270,15 +267,35 @@
 
                             _lastCancellationToken, scheduler);
                         }
-                        catch ////(InvalidOperationException ex)
+                        catch (InvalidOperationException ex)
                         {
-                            ////logger.Error("Cannot obtain SynchronizationContext", ex);
+                            Logger.Error("Cannot obtain SynchronizationContext", ex);
                         }
                     }
                 }
             }
 
             return _subItemList;
+        }
+
+        /// <summary>
+        /// Call to unload sub-entries.
+        /// Method can also be used to cancel current load processings.
+        /// </summary>
+        /// <returns></returns>
+        public async Task UnloadAsync()
+        {
+            Logger.InfoFormat("_");
+
+            // Cancel previous load.
+            _lastCancellationToken.Cancel();
+
+            using (var releaser = await _loadingLock.LockAsync())
+            {
+                _subItemList = new List<VM>();
+                this.All.Clear();
+                _isLoaded = false;
+            }
         }
 
         /// <summary>
@@ -290,6 +307,8 @@
         public void SetEntries(UpdateMode updateMode = UpdateMode.Replace,
                                params VM[] viewModels)
         {
+            Logger.InfoFormat("_");
+
             switch (updateMode)
             {
                 case UpdateMode.Update:
@@ -312,6 +331,8 @@
         /// <param name="viewModels"></param>
         private void UpdateAllEntries(params VM[] viewModels)
         {
+            Logger.InfoFormat("_");
+
             FastObservableCollection<VM> all = this.All as FastObservableCollection<VM>;
             all.SuspendCollectionChangeNotification();
             try
@@ -343,6 +364,8 @@
         /// <param name="viewModels"></param>
         private void ResetAllEntries(params VM[] viewModels)
         {
+            Logger.InfoFormat("_");
+
             _subItemList = viewModels.ToList();
             FastObservableCollection<VM> all = this.All as FastObservableCollection<VM>;
 

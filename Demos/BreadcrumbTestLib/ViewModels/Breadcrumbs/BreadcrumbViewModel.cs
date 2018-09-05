@@ -11,6 +11,11 @@ namespace BreadcrumbTestLib.ViewModels.Breadcrumbs
     public class BreadcrumbViewModel : Base.ViewModelBase, IBreadcrumbViewModel
     {
         #region fields
+        /// <summary>
+        /// Log4net logger facility for this class.
+        /// </summary>
+        protected static readonly log4net.ILog Logger = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
+
         private bool _EnableBreadcrumb;
         private string _suggestedPath;
         private bool _IsRootOverflowed;
@@ -60,6 +65,8 @@ namespace BreadcrumbTestLib.ViewModels.Breadcrumbs
             {
                 if (_EnableBreadcrumb != value)
                 {
+                    Logger.InfoFormat("_");
+
                     _EnableBreadcrumb = value;
                     NotifyPropertyChanged(() => EnableBreadcrumb);
                 }
@@ -77,6 +84,8 @@ namespace BreadcrumbTestLib.ViewModels.Breadcrumbs
             {
                 if (_IsRootOverflowed != value)
                 {
+                    Logger.InfoFormat("_");
+
                     _IsRootOverflowed = value;
                     NotifyPropertyChanged(() => IsRootOverflowed);
                 }
@@ -88,6 +97,8 @@ namespace BreadcrumbTestLib.ViewModels.Breadcrumbs
             get { return _suggestedPath; }
             set
             {
+                Logger.InfoFormat("_");
+
                 _suggestedPath = value;
 
                 NotifyPropertyChanged(() => SuggestedPath);
@@ -95,21 +106,21 @@ namespace BreadcrumbTestLib.ViewModels.Breadcrumbs
             }
         }
 
-        /// <summary>
-        /// Contains a list of items that maps into the SuggestBox control.
-        /// </summary>
-        ////        public IEnumerable<ISuggestSource> SuggestSources
-        ////        {
-        ////            get
-        ////            {
-        ////                return _suggestSources;
-        ////            }
-        ////            set
-        ////            {
-        ////                _suggestSources = value;
-        ////                NotifyOfPropertyChange(() => SuggestSources);
-        ////            }
-        ////        }
+////        /// <summary>
+////        /// Contains a list of items that maps into the SuggestBox control.
+////        /// </summary>
+////        public IEnumerable<ISuggestSource> SuggestSources
+////        {
+////            get
+////            {
+////                return _suggestSources;
+////            }
+////            set
+////            {
+////                _suggestSources = value;
+////                NotifyOfPropertyChange(() => SuggestSources);
+////            }
+////        }
         #endregion properties
 
         #region methods
@@ -121,6 +132,8 @@ namespace BreadcrumbTestLib.ViewModels.Breadcrumbs
         public async Task<FinalBrowseResult<IDirectoryBrowser>> InitPathAsync(
             BrowseRequest<string> initialRequest)
         {
+            Logger.InfoFormat("_");
+
             var selector = BreadcrumbSubTree.Selection as ITreeRootSelector<ExTreeNodeViewModel, IDirectoryBrowser>;
 
             return await Task.Run(() => selector.SelectAsync(DirectoryInfoExLib.Factory.FromString(initialRequest.NewLocation),
@@ -134,6 +147,8 @@ namespace BreadcrumbTestLib.ViewModels.Breadcrumbs
         /// </summary>
         private void OnSuggestPathChanged()
         {
+            Logger.InfoFormat("_");
+
             /***
             if (!ShowBreadcrumb)
             {

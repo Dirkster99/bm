@@ -63,6 +63,11 @@
         /// <returns></returns>
         Task<IEnumerable<VM>> LoadAsync(UpdateMode updateMode = UpdateMode.Replace, bool force = false, object parameter = null);
 
+        /// <summary>
+        /// Call to unload sub-entries.
+        /// Method can also be used to cancel current load processings.
+        /// </summary>
+        /// <returns></returns>
         Task UnloadAsync();
 
         /// <summary>

@@ -31,6 +31,11 @@
         #region fields
         public static ICompareHierarchy<IDirectoryBrowser> Comparer = new ExHierarchyComparer();
 
+        /// <summary>
+        /// Log4net logger facility for this class.
+        /// </summary>
+        protected static readonly log4net.ILog Logger = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
+
         private IDirectoryBrowser _dir;
         private string _header;
         private ExTreeNodeViewModel _rootNode, _parentNode;
@@ -72,6 +77,8 @@
         /// <param name="parentNode"></param>
         internal ExTreeNodeViewModel(IDirectoryBrowser dir, ExTreeNodeViewModel parentNode)
         {
+            Logger.InfoFormat("_");
+
             _dir = dir;
 
             // If parentNode == null => Root.
@@ -86,8 +93,9 @@
                 {
                     return _dir.GetDirectories().Select(d => new ExTreeNodeViewModel(d, this));
                 }
-                catch
+                catch (Exception exp)
                 {
+                    Logger.Error(exp);
                     return new List<ExTreeNodeViewModel>();
                 }
             }));
@@ -95,8 +103,7 @@
             this.Selection = new TreeSelectorViewModel<ExTreeNodeViewModel, IDirectoryBrowser>
             (_dir, this, this._parentNode.Selection, this.Entries);
         }
-        
-        
+
         /// <summary>
         /// Class finalizer/destructor
         /// When the object is eligible for finalization,
@@ -131,6 +138,7 @@
             {
                 if (_header != value)
                 {
+                    Logger.InfoFormat("_");
                     _header = value;
                     NotifyPropertyChanged(() => Header);
                 }
@@ -158,6 +166,7 @@
             {
                 if (_icon != value)
                 {
+                    Logger.InfoFormat("_");
                     _icon = value;
                     NotifyPropertyChanged(() => Icon);
                 }
@@ -213,7 +222,7 @@
             ////base.Dispose(disposing);
         }
         #endregion Disposable Interfaces
-        
+
         /// <summary>
         /// Gets icon for this item when requested ...
         /// </summary>

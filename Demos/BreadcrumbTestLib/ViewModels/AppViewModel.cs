@@ -15,6 +15,11 @@
     public class AppViewModel : Base.ViewModelBase, IDisposable
     {
         #region fields
+        /// <summary>
+        /// Log4net logger facility for this class.
+        /// </summary>
+        protected static readonly log4net.ILog Logger = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
+
         private DiskTreeNodeViewModel _DiskTest;
 
         private SemaphoreSlim _SlowStuffSemaphore;
@@ -95,6 +100,8 @@
         /// </summary>
         public void InitPath(string initialPath)
         {
+            Logger.InfoFormat("_");
+
             // Revert request to default if requested path is non-existing
             if (System.IO.Directory.Exists(initialPath) == false)
                 initialPath = new DirectoryInfo(Environment.SystemDirectory).Root.Name;
@@ -161,6 +168,8 @@
         /// <param name="requestor"</param>
         private void NavigateToFolder(string itemPath)
         {
+            Logger.InfoFormat("_");
+
             // XXX Todo Keep task reference, support cancel, and remove on end?
             try
             {
@@ -205,6 +214,8 @@
              BrowseRequest<string> request
             ,object sender)
         {
+            Logger.InfoFormat("_");
+
             // Make sure the task always processes the last input but is not started twice
             await _SlowStuffSemaphore.WaitAsync();
             try

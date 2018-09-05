@@ -12,6 +12,11 @@
     {
         #region fields
         /// <summary>
+        /// Log4net logger facility for this class.
+        /// </summary>
+        protected static readonly log4net.ILog Logger = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
+
+        /// <summary>
         /// Set ViewModel's Selector.IsSelected to false  if it's lookupvalue of current lookup.
         /// </summary>
         public static SetNotSelected<VM, T> WhenCurrent = new SetNotSelected<VM, T>(HierarchicalResult.Current);
@@ -33,6 +38,7 @@
         /// <param name="hr"></param>
         public SetNotSelected(HierarchicalResult hr)
         {
+            Logger.InfoFormat("_");
             this._hr = hr;
         }
         #endregion constructors
@@ -41,6 +47,8 @@
                             ITreeSelector<VM, T> parentSelector,
                             ITreeSelector<VM, T> selector)
         {
+            Logger.InfoFormat("_");
+
             if (this._hr.HasFlag(hr))
                 selector.IsSelected = false;
 

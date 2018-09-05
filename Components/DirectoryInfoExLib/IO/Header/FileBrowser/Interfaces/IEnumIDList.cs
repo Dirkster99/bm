@@ -5,10 +5,11 @@ namespace DirectoryInfoExLib.IO.Header.ShellDll.Interfaces
 
     /// <summary>
     /// Exposes a standard set of methods used to enumerate the pointers to item
-    /// identifier lists (<see cref="PIDL"/>s) of the items in a Shell folder. When a folder's
-    /// IShellFolder::EnumObjects method is called, it creates an enumeration object
-    /// and passes a pointer to the object's IEnumIDList interface back to the
-    /// calling application.
+    /// identifier lists (<see cref="PIDL"/>s) of the items in a Shell folder.
+    /// 
+    /// When a folder's IShellFolder::EnumObjects method is called, it creates an
+    /// enumeration object and passes a pointer to the object's IEnumIDList interface
+    /// back to the calling application.
     /// </summary>
     [ComImportAttribute()]
     [InterfaceTypeAttribute(ComInterfaceType.InterfaceIsIUnknown)]

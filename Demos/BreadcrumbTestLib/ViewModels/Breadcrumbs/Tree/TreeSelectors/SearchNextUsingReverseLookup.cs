@@ -14,6 +14,11 @@
     public class SearchNextUsingReverseLookup<VM, T> : ITreeLookup<VM, T>
     {
         #region fields
+        /// <summary>
+        /// Log4net logger facility for this class.
+        /// </summary>
+        protected static readonly log4net.ILog Logger = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
+
         private Stack<ITreeSelector<VM, T>> _hierarchy;
         private ITreeSelector<VM, T> _targetSelector;
         #endregion fields
@@ -21,14 +26,14 @@
         #region constructors
         public SearchNextUsingReverseLookup(ITreeSelector<VM, T> targetSelector)
         {
-            this._targetSelector = targetSelector;
-            this._hierarchy = new Stack<ITreeSelector<VM, T>>();
+            _targetSelector = targetSelector;
+            _hierarchy = new Stack<ITreeSelector<VM, T>>();
 
             var current = targetSelector;
 
             while (current != null)
             {
-                this._hierarchy.Push(current);
+                _hierarchy.Push(current);
                 current = current.ParentSelector;
             }
         }
@@ -50,6 +55,8 @@
                                       CancellationToken cancelToken,
                                       params ITreeLookupProcessor<VM, T>[] processors)
         {
+            Logger.InfoFormat("_");
+
             await Task.FromResult(0);
 
             if (cancelToken != CancellationToken.None)

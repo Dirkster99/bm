@@ -11,8 +11,13 @@
     public class LoadSubEntries<VM, T> : ITreeLookupProcessor<VM, T>
     {
         /// <summary>
-        /// Set ViewModel's EntryHelper.IsExpanded to true when it's unrelated node of current lookup.
+        /// Log4net logger facility for this class.
         /// </summary>
+        protected static readonly log4net.ILog Logger = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
+
+////        /// <summary>
+////        /// Set ViewModel's EntryHelper.IsExpanded to true when it's unrelated node of current lookup.
+////        /// </summary>
 ////        public static LoadSubEntries<VM, T> WhenSelected(UpdateMode updateMode = UpdateMode.Replace, bool force = false,
 ////            object parameter = null)
 ////        { return new LoadSubEntries<VM, T>(HierarchicalResult.Current, updateMode, force, parameter); }

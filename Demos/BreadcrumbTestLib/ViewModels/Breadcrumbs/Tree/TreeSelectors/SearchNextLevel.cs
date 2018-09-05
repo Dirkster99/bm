@@ -13,6 +13,11 @@
     public class SearchNextLevel<VM, T> : ITreeLookup<VM, T>
     {
         /// <summary>
+        /// Log4net logger facility for this class.
+        /// </summary>
+        protected static readonly log4net.ILog Logger = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
+
+        /// <summary>
         /// Lookup only next level of tree nodes, even if the lookupvalue is in deeper level, and process only the matched node.
         /// Load subentries if not loaded.
         /// </summary>
@@ -24,6 +29,8 @@
                                       CancellationToken cancelToken,
                                       params ITreeLookupProcessor<VM, T>[] processors)
         {
+            Logger.InfoFormat("_");
+
             foreach (VM current in await parentSelector.EntryHelper.LoadAsync())
             {
                 if (cancelToken != CancellationToken.None)

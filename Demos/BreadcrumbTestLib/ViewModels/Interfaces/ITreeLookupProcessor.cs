@@ -23,11 +23,16 @@
     public static class ITreeSelectionProcessorExtension
     {
         public static bool Process<VM, T>(this ITreeLookupProcessor<VM, T>[] processors,
-            HierarchicalResult hr, ITreeSelector<VM, T> parentSelector, ITreeSelector<VM, T> selector)
+                                          HierarchicalResult hr,
+                                          ITreeSelector<VM, T> parentSelector,
+                                          ITreeSelector<VM, T> selector)
         {
             foreach (var p in processors)
+            {
                 if (!p.Process(hr, parentSelector, selector))
                     return false;
+            }
+
             return true;
         }
     }

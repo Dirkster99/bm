@@ -9,6 +9,11 @@
     internal class ProgressViewModel : Base.ViewModelBase, IProgressViewModel
     {
         #region fields
+        /// <summary>
+        /// Log4net logger facility for this class.
+        /// </summary>
+        protected static readonly log4net.ILog Logger = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
+
         private bool _IsIndeterminate = true;
         private bool _IsProgressbarVisible = false;
         private double _Progress;
@@ -28,6 +33,7 @@
             {
                 if (_IsProgressbarVisible != value)
                 {
+                    Logger.InfoFormat("Old value {0} -> New value {1}", _IsProgressbarVisible, value);
                     _IsProgressbarVisible = value;
 
                     NotifyPropertyChanged(() => IsProgressbarVisible);
@@ -47,6 +53,7 @@
             {
                 if (_IsIndeterminate != value)
                 {
+                    Logger.InfoFormat("Old value {0} -> New value {1}", _IsIndeterminate, value);
                     _IsIndeterminate = value;
 
                     NotifyPropertyChanged(() => IsIndeterminate);
@@ -67,6 +74,7 @@
             {
                 if (_Progress != value)
                 {
+                    Logger.InfoFormat("Old value {0} -> New value {1}", _Progress, value);
                     _Progress = value;
 
                     NotifyPropertyChanged(() => ProgressValue);
@@ -87,6 +95,7 @@
             {
                 if (_MinimumValue != value)
                 {
+                    Logger.InfoFormat("Old value {0} -> New value {1}", _MinimumValue, value);
                     _MinimumValue = value;
 
                     NotifyPropertyChanged(() => MinimumProgressValue);
@@ -107,6 +116,7 @@
             {
                 if (_MaximumValue != value)
                 {
+                    Logger.InfoFormat("Old value {0} -> New value {1}", _MaximumValue, value);
                     _MaximumValue = value;
 
                     NotifyPropertyChanged(() => MaximumProgressValue);
@@ -122,6 +132,8 @@
         /// </summary>
         public void ShowIndeterminatedProgress()
         {
+            Logger.InfoFormat("_");
+
             IsIndeterminate = true;
             IsProgressbarVisible = true;
         }
@@ -137,6 +149,8 @@
                                              double minimum = 0,
                                              double maximum = 100)
         {
+            Logger.InfoFormat("_");
+
             ProgressValue = value;
             MinimumProgressValue = minimum;
             MaximumProgressValue = maximum;
@@ -154,6 +168,8 @@
         /// <param name="value"></param>
         public void UpdateDeterminatedProgress(double value)
         {
+            Logger.InfoFormat("_");
+
             ProgressValue = value;
 
             IsIndeterminate = false;
@@ -165,6 +181,8 @@
         /// </summary>
         public void ProgressDisplayOff()
         {
+            Logger.InfoFormat("_");
+
             IsProgressbarVisible = false;
         }
         #endregion methods

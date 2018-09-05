@@ -16,6 +16,11 @@
     internal class TreeRootSelectorViewModel<VM, T> : TreeSelectorViewModel<VM, T>, ITreeRootSelector<VM, T>
     {
         #region fields
+        /// <summary>
+        /// Log4net logger facility for this class.
+        /// </summary>
+        protected new static readonly log4net.ILog Logger = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
+
         private T _selectedValue = default(T);
         private ITreeSelector<VM, T> _selectedSelector;
         private Stack<ITreeSelector<VM, T>> _prevPath = null;
@@ -35,6 +40,7 @@
                                                                          ////params Func<T, T, HierarchicalResult>[] compareFuncs)
           : base(entryHelper)
         {
+            Logger.InfoFormat("_");
             ////_rootLevel = rootLevel;
             ////_compareFuncs = compareFuncs;
             ////Comparers = new [] { PathComparer.LocalDefault };
@@ -83,6 +89,7 @@
 
             set
             {
+                Logger.InfoFormat("_");
                 AsyncUtils.RunAsync(() => this.SelectAsync(value, CancellationToken.None));
             }
         }
@@ -106,6 +113,8 @@
         #region methods
         public override void ReportChildSelected(Stack<ITreeSelector<VM, T>> path)
         {
+            Logger.InfoFormat("_");
+
             ITreeSelector<VM, T> prevSelector = _selectedSelector;
 
             T prevSelectedValue = _selectedValue;
@@ -132,6 +141,7 @@
 
         public override void ReportChildDeselected(Stack<ITreeSelector<VM, T>> path)
         {
+            Logger.InfoFormat("_");
         }
 
         /// <summary>
@@ -145,6 +155,8 @@
             CancellationToken cancelToken = default(CancellationToken),
             IProgressViewModel progress = null)
         {
+            Logger.InfoFormat("_");
+
             if (_selectedValue == null ||
                 CompareHierarchy(_selectedValue, value) != HierarchicalResult.Current)
             {
@@ -185,6 +197,8 @@
 
         public HierarchicalResult CompareHierarchy(T value1, T value2)
         {
+            Logger.InfoFormat("_");
+
             foreach (var c in this.Comparers)
             {
                 var retVal = c.CompareHierarchy(value1, value2);
@@ -202,6 +216,8 @@
         /// <param name="path"></param>
         private void updateRootItems(Stack<ITreeSelector<VM, T>> path)
         {
+            Logger.InfoFormat("_");
+
             _OverflowedAndRootItems.Clear();
 
             if (path != null && path.Count() > 0)
@@ -229,6 +245,8 @@
 
         private async Task updateRootItemsAsync(ITreeSelector<VM, T> selector, ObservableCollection<VM> rootItems, int level)
         {
+            Logger.InfoFormat("_");
+
             if (level == 0)
                 return;
 
