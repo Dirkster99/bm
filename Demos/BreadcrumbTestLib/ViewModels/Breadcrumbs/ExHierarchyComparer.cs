@@ -30,10 +30,25 @@
         #endregion constructors
 
         #region methods
-        public HierarchicalResult CompareHierarchyInner(IDirectoryBrowser a, IDirectoryBrowser b)
+        /// <summary>
+        /// Method is invoked to compute the relationship of 2 items in a tree.
+        /// (Parent, Current, Child <see cref="HierarchicalResult"/> enumeration)
+        /// </summary>
+        /// <param name="a"></param>
+        /// <param name="b"></param>
+        /// <returns></returns>
+        public HierarchicalResult CompareHierarchy(IDirectoryBrowser a, IDirectoryBrowser b)
         {
-            Logger.InfoFormat("IDirectoryBrowser a '{0}' IDirectoryBrowser b '{1}'", a.FullName, b.FullName);
+            HierarchicalResult retVal = this.CompareHierarchyInner(a, b);
 
+            Logger.InfoFormat("IDirectoryBrowser a '{0}' IDirectoryBrowser b '{1}' retVal {2}",
+                (a != null ? a.FullName : "(null)"), (b != null ? b.FullName : "(null)"), retVal);
+
+            return retVal;
+        }
+
+        private HierarchicalResult CompareHierarchyInner(IDirectoryBrowser a, IDirectoryBrowser b)
+        {
             if (a == null || b == null)
                 return HierarchicalResult.Unrelated;
 
@@ -54,27 +69,17 @@
             else return HierarchicalResult.Unrelated;
         }
 
-        public HierarchicalResult CompareHierarchy(IDirectoryBrowser a, IDirectoryBrowser b)
-        {
-            Logger.InfoFormat("IDirectoryBrowser a '{0}' IDirectoryBrowser b '{1}'", a.FullName, b.FullName);
-
-            HierarchicalResult retVal = this.CompareHierarchyInner(a, b);
-            ////Debug.WriteLine(String.Format("{2} {0},{1}", a.FullPath, b.FullPath, retVal));
-
-            return retVal;
-        }
-
-////    private bool HasParent(FileSystemInfoEx child, DirectoryInfoEx parent)
-////    {
-////      DirectoryInfoEx current = child.Parent;
-////      while (current != null)
-////      {
-////        if (current.Equals(parent))
-////          return true;
-////        current = current.Parent;
-////      }
-////      return false;
-////    }
+        ////    private bool HasParent(FileSystemInfoEx child, DirectoryInfoEx parent)
+        ////    {
+        ////      DirectoryInfoEx current = child.Parent;
+        ////      while (current != null)
+        ////      {
+        ////        if (current.Equals(parent))
+        ////          return true;
+        ////        current = current.Parent;
+        ////      }
+        ////      return false;
+        ////    }
         #endregion methods
     }
 }

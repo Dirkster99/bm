@@ -12,12 +12,14 @@
             <conv:BoolToVisibilityCollapsedConverter x:Key="btvc" />
         </ControlTemplate.Resources>
         <Grid>
-            <ContentPresenter Content="{TemplateBinding ContentOn}" 
-                              Visibility="{Binding IsSwitchOn,
-                                                   RelativeSource={RelativeSource TemplatedParent}, Converter={StaticResource btvc}}" />
-            <ContentPresenter Content="{TemplateBinding ContentOff}"
-                              Visibility="{Binding IsSwitchOn,
-                                                   RelativeSource={RelativeSource TemplatedParent},Converter={StaticResource fbtvc}}" />
+            <ContentPresenter
+                Content="{TemplateBinding ContentOn}" 
+                Visibility="{Binding IsSwitchOn,
+                                     RelativeSource={RelativeSource TemplatedParent}, Converter={StaticResource btvc}}" />
+            <ContentPresenter
+                Content="{TemplateBinding ContentOff}"
+                Visibility="{Binding IsSwitchOn,
+                                     RelativeSource={RelativeSource TemplatedParent},Converter={StaticResource fbtvc}}" />
         </Grid>
     </ControlTemplate>
 

@@ -97,6 +97,7 @@
 
                 <TreeView Grid.Row="1" DataContext="{Binding BreadcrumbTest}" 
                           ItemsSource="{Binding BreadcrumbSubTree.Entries.All}"
+                          Visibility="{Binding Path=IsChecked,ElementName=ShowTreeviewControl,Mode=OneWay, UpdateSourceTrigger=PropertyChanged,Converter={StaticResource BoolToVisibilityConverter}}"
                           >
                     <TreeView.ItemTemplate>
                         <HierarchicalDataTemplate ItemsSource="{Binding Entries.All}">
@@ -221,6 +222,9 @@
                         HorizontalAlignment="Stretch"
                         />
                 </Grid>
+
+                <CheckBox Content="Show BreadCrumb Control" Name="ShowTreeviewControl"
+                          IsChecked="True" />
             </StackPanel>
         </ScrollViewer>
 
