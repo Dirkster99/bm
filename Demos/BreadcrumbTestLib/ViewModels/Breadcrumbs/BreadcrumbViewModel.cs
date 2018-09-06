@@ -28,7 +28,7 @@ namespace BreadcrumbTestLib.ViewModels.Breadcrumbs
         public BreadcrumbViewModel()
         {
             Progressing = new ProgressViewModel();
-            BreadcrumbSubTree = new ExTreeNodeViewModel();
+            BreadcrumbSubTree = new BreadcrumbTreeRootViewModel();
             _EnableBreadcrumb = true;
             _IsRootOverflowed = false;
         }
@@ -45,7 +45,7 @@ namespace BreadcrumbTestLib.ViewModels.Breadcrumbs
         /// Gets a viewmodel that manages the sub-tree brwosing and
         /// selection within the sub-tree component
         /// </summary>
-        public ExTreeNodeViewModel BreadcrumbSubTree { get; }
+        public BreadcrumbTreeRootViewModel BreadcrumbSubTree { get; }
 
         /// <summary>
         /// Gets/sets a property that determines whether a breadcrumb
@@ -134,7 +134,7 @@ namespace BreadcrumbTestLib.ViewModels.Breadcrumbs
         {
             Logger.InfoFormat("_");
 
-            var selector = BreadcrumbSubTree.Selection as ITreeRootSelector<ExTreeNodeViewModel, IDirectoryBrowser>;
+            var selector = BreadcrumbSubTree.Selection as ITreeRootSelector<BreadcrumbTreeRootViewModel, IDirectoryBrowser>;
 
             return await Task.Run(() => selector.SelectAsync(DirectoryInfoExLib.Factory.FromString(initialRequest.NewLocation),
                                               initialRequest.CancelTok,

@@ -16,7 +16,7 @@
         /// <summary>
         /// Gets the root tree of the breadcrumb control tree
         /// </summary>
-        ExTreeNodeViewModel BreadcrumbSubTree { get; }
+        BreadcrumbTreeRootViewModel BreadcrumbSubTree { get; }
 
         /// <summary>
         /// Gets/sets a property that determines whether a breadcrumb

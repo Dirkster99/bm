@@ -24,8 +24,8 @@
     /// - a SelectedItem (see Selection property), and
     /// - a list of items below this item.
     /// </summary>
-    public class ExTreeNodeViewModel : ViewModelBase,
-                                       ISupportTreeSelector<ExTreeNodeViewModel, IDirectoryBrowser>,
+    public class BreadcrumbTreeRootViewModel : ViewModelBase,
+                                       ISupportTreeSelector<BreadcrumbTreeRootViewModel, IDirectoryBrowser>,
                                        IDisposable
     {
         #region fields
@@ -38,7 +38,7 @@
 
         private IDirectoryBrowser _dir;
         private string _header;
-        private ExTreeNodeViewModel _rootNode, _parentNode;
+        private BreadcrumbTreeRootViewModel _rootNode, _parentNode;
 
         private bool _isIconLoaded = false;
         private ImageSource _icon = null;
@@ -49,13 +49,13 @@
         /// <summary>
         /// Class constructor
         /// </summary>
-        public ExTreeNodeViewModel()
+        public BreadcrumbTreeRootViewModel()
         {
-            Entries = new EntriesHelperViewModel<ExTreeNodeViewModel>();
+            Entries = new EntriesHelperViewModel<BreadcrumbTreeRootViewModel>();
             Selection =
-              new TreeRootSelectorViewModel<ExTreeNodeViewModel, IDirectoryBrowser>(this.Entries)
+              new TreeRootSelectorViewModel<BreadcrumbTreeRootViewModel, IDirectoryBrowser>(this.Entries)
               {
-                  Comparers = new[] { ExTreeNodeViewModel.Comparer }
+                  Comparers = new[] { BreadcrumbTreeRootViewModel.Comparer }
               };
 
             // Find all entries below desktop
@@ -64,7 +64,7 @@
                                _dir.GetDirectories()
                                  //(filter out recycle bin entry if its not that useful...)
                                  //.Where(d => !d.Equals(DirectoryInfoExLib.Factory.RecycleBinDirectory))
-                                 .Select(d => new ExTreeNodeViewModel(d, this)).ToArray());
+                                 .Select(d => new BreadcrumbTreeRootViewModel(d, this)).ToArray());
 
             Header = _dir.Label;
         }
@@ -75,7 +75,7 @@
         /// </summary>
         /// <param name="dir"></param>
         /// <param name="parentNode"></param>
-        internal ExTreeNodeViewModel(IDirectoryBrowser dir, ExTreeNodeViewModel parentNode)
+        internal BreadcrumbTreeRootViewModel(IDirectoryBrowser dir, BreadcrumbTreeRootViewModel parentNode)
         {
             Logger.InfoFormat("_");
 
@@ -87,20 +87,20 @@
             _parentNode = parentNode;
             Header = _dir.Label;
 
-            this.Entries = new EntriesHelperViewModel<ExTreeNodeViewModel>((isLoaded, parameter) => Task.Run(() =>
+            this.Entries = new EntriesHelperViewModel<BreadcrumbTreeRootViewModel>((isLoaded, parameter) => Task.Run(() =>
             {
                 try
                 {
-                    return _dir.GetDirectories().Select(d => new ExTreeNodeViewModel(d, this));
+                    return _dir.GetDirectories().Select(d => new BreadcrumbTreeRootViewModel(d, this));
                 }
                 catch (Exception exp)
                 {
                     Logger.Error(exp);
-                    return new List<ExTreeNodeViewModel>();
+                    return new List<BreadcrumbTreeRootViewModel>();
                 }
             }));
 
-            this.Selection = new TreeSelectorViewModel<ExTreeNodeViewModel, IDirectoryBrowser>
+            this.Selection = new TreeSelectorViewModel<BreadcrumbTreeRootViewModel, IDirectoryBrowser>
             (_dir, this, this._parentNode.Selection, this.Entries);
         }
 
@@ -109,20 +109,20 @@
         /// When the object is eligible for finalization,
         /// the garbage collector runs the Finalize method of the object. 
         /// </summary>
-        ~ExTreeNodeViewModel()
+        ~BreadcrumbTreeRootViewModel()
         {
             Dispose();
         }
         #endregion constructors
 
         #region properties
-        public ITreeSelector<ExTreeNodeViewModel, IDirectoryBrowser> Selection { get; protected set; }
+        public ITreeSelector<BreadcrumbTreeRootViewModel, IDirectoryBrowser> Selection { get; protected set; }
 
         /// <summary>
         /// Gets all sub-tree entries that belong
         /// to the sub-tree represented by this item.
         /// </summary>
-        public IEntriesHelper<ExTreeNodeViewModel> Entries { get; protected set; }
+        public IEntriesHelper<BreadcrumbTreeRootViewModel> Entries { get; protected set; }
 
         /// <summary>
         /// Gets the name of the Breadcrumb node (item).
