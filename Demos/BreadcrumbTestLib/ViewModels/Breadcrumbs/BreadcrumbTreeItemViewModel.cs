@@ -11,7 +11,12 @@
     using System.Windows.Input;
     using BmLib.Enums;
 
-    internal class EntriesHelperViewModel<VM> : Base.ViewModelBase, IEntriesHelper<VM>
+    /// <summary>
+    /// Implements the viewmodel template that drives every BreadcrumbTreeItem control
+    /// of the root item of a BreadcrumbTree control.
+    /// </summary>
+    /// <typeparam name="VM"></typeparam>
+    internal class BreadcrumbTreeItemViewModel<VM> : Base.ViewModelBase, IEntriesHelper<VM>
     {
         #region fields
         /// <summary>
@@ -38,7 +43,7 @@
         /// Class constructor
         /// </summary>
         /// <param name="loadSubEntryFunc"></param>
-        public EntriesHelperViewModel(Func<bool, object, Task<IEnumerable<VM>>> loadSubEntryFunc)
+        public BreadcrumbTreeItemViewModel(Func<bool, object, Task<IEnumerable<VM>>> loadSubEntryFunc)
         {
             _loadSubEntryFunc = loadSubEntryFunc;
 
@@ -60,7 +65,7 @@
         /// Class constructor
         /// </summary>
         /// <param name="loadSubEntryFunc"></param>
-        public EntriesHelperViewModel(Func<bool, Task<IEnumerable<VM>>> loadSubEntryFunc)
+        public BreadcrumbTreeItemViewModel(Func<bool, Task<IEnumerable<VM>>> loadSubEntryFunc)
           : this((b, __) => loadSubEntryFunc(b))
         {
         }
@@ -69,7 +74,7 @@
         /// Class constructor
         /// </summary>
         /// <param name="loadSubEntryFunc"></param>
-        public EntriesHelperViewModel(Func<Task<IEnumerable<VM>>> loadSubEntryFunc)
+        public BreadcrumbTreeItemViewModel(Func<Task<IEnumerable<VM>>> loadSubEntryFunc)
           : this(_ => loadSubEntryFunc())
         {
         }
@@ -78,7 +83,7 @@
         /// Class constructor from entries parameters.
         /// </summary>
         /// <param name="entries"></param>
-        public EntriesHelperViewModel(params VM[] entries)
+        public BreadcrumbTreeItemViewModel(params VM[] entries)
         {
             _isLoaded = true;
             All = new FastObservableCollection<VM>();

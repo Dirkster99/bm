@@ -62,7 +62,7 @@
     <Compile Include="ViewModels\AppViewModel.cs" />
     <Compile Include="ViewModels\Base\ViewModelBase.cs" />
     <Compile Include="ViewModels\Breadcrumbs\BreadcrumbViewModel.cs" />
-    <Compile Include="ViewModels\Breadcrumbs\EntriesHelperViewModel.cs" />
+    <Compile Include="ViewModels\Breadcrumbs\BreadcrumbTreeItemViewModel.cs" />
     <Compile Include="ViewModels\Breadcrumbs\ExHierarchyComparer.cs" />
     <Compile Include="ViewModels\Breadcrumbs\BreadcrumbTreeRootViewModel.cs" />
     <Compile Include="ViewModels\Breadcrumbs\ProgressViewModel.cs" />

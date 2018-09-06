@@ -22,7 +22,7 @@
     /// This sub-tree includes
     /// - a specific item (see Header property),
     /// - a SelectedItem (see Selection property), and
-    /// - a list of items below this item.
+    /// - a list of items below this item (<see cref="BreadcrumbTreeItemViewModel{VM}"/>).
     /// </summary>
     public class BreadcrumbTreeRootViewModel : ViewModelBase,
                                        ISupportTreeSelector<BreadcrumbTreeRootViewModel, IDirectoryBrowser>,
@@ -51,7 +51,7 @@
         /// </summary>
         public BreadcrumbTreeRootViewModel()
         {
-            Entries = new EntriesHelperViewModel<BreadcrumbTreeRootViewModel>();
+            Entries = new BreadcrumbTreeItemViewModel<BreadcrumbTreeRootViewModel>();
             Selection =
               new TreeRootSelectorViewModel<BreadcrumbTreeRootViewModel, IDirectoryBrowser>(this.Entries)
               {
@@ -87,7 +87,7 @@
             _parentNode = parentNode;
             Header = _dir.Label;
 
-            this.Entries = new EntriesHelperViewModel<BreadcrumbTreeRootViewModel>((isLoaded, parameter) => Task.Run(() =>
+            this.Entries = new BreadcrumbTreeItemViewModel<BreadcrumbTreeRootViewModel>((isLoaded, parameter) => Task.Run(() =>
             {
                 try
                 {
