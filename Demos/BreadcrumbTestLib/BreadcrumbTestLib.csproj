@@ -83,7 +83,7 @@
     <Compile Include="ViewModels\Breadcrumbs\Tree\TreeSelectors\TreeRootSelectorViewModel.cs" />
     <Compile Include="ViewModels\Breadcrumbs\Tree\TreeSelectors\TreeSelectorViewModel.cs" />
     <Compile Include="ViewModels\Interfaces\IBreadcrumbViewModel.cs" />
-    <Compile Include="ViewModels\Interfaces\IEntriesHelper.cs" />
+    <Compile Include="ViewModels\Interfaces\IBreadcrumbTreeItemViewModel.cs" />
     <Compile Include="ViewModels\Interfaces\IEntryHierarchyComparer.cs" />
     <Compile Include="ViewModels\Interfaces\IProgressViewModel.cs" />
     <Compile Include="ViewModels\Interfaces\ISupportTreeSelector.cs" />

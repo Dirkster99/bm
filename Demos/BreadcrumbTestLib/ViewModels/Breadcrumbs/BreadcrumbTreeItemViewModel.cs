@@ -16,7 +16,7 @@
     /// of the root item of a BreadcrumbTree control.
     /// </summary>
     /// <typeparam name="VM"></typeparam>
-    internal class BreadcrumbTreeItemViewModel<VM> : Base.ViewModelBase, IEntriesHelper<VM>
+    internal class BreadcrumbTreeItemViewModel<VM> : Base.ViewModelBase, IBreadcrumbTreeItemViewModel<VM>
     {
         #region fields
         /// <summary>

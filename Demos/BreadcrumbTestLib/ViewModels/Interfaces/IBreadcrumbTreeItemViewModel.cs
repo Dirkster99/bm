@@ -10,14 +10,14 @@
 
     public interface ISupportEntriesHelper<VM>
     {
-        IEntriesHelper<VM> Entries { get; }
+        IBreadcrumbTreeItemViewModel<VM> Entries { get; }
     }
 
     /// <summary>
     /// Helper view model class that provide support of loading sub-entries.
     /// </summary>
     /// <typeparam name="VM"></typeparam>
-    public interface IEntriesHelper<VM> : INotifyPropertyChanged
+    public interface IBreadcrumbTreeItemViewModel<VM> : INotifyPropertyChanged
     {
         #region events
         event EventHandler EntriesChanged;

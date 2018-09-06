@@ -74,7 +74,7 @@
         /// <summary>
         /// For loading sub-entries of current tree.
         /// </summary>
-        IEntriesHelper<VM> EntryHelper { get; }
+        IBreadcrumbTreeItemViewModel<VM> EntryHelper { get; }
         #endregion properties
 
         #region methods

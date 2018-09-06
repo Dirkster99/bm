@@ -72,7 +72,7 @@
         /// Gets all sub-tree entries that belong
         /// to the sub-tree represented by this item.
         /// </summary>
-        public IEntriesHelper<DiskTreeNodeViewModel> Entries { get; set; }
+        public IBreadcrumbTreeItemViewModel<DiskTreeNodeViewModel> Entries { get; set; }
 
         //// Lycj: Moved to Selection.IsOverflowed/IsOverflowedOrRoot
         ////public bool IsOverflowedOrRoot { get { return _isOverflowed || _parentNode == null; } set { } }

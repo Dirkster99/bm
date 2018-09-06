@@ -43,7 +43,7 @@
         /// </summary>
         public TreeSelectorViewModel(T currentValue, VM currentViewModel,
                                      ITreeSelector<VM, T> parentSelector,
-                                     IEntriesHelper<VM> entryHelper)
+                                     IBreadcrumbTreeItemViewModel<VM> entryHelper)
         {
             RootSelector = parentSelector.RootSelector;
             ParentSelector = parentSelector;
@@ -56,7 +56,7 @@
         /// <summary>
         /// Internal base classe constructor for inheriting classes.
         /// </summary>
-        protected TreeSelectorViewModel(IEntriesHelper<VM> entryHelper)
+        protected TreeSelectorViewModel(IBreadcrumbTreeItemViewModel<VM> entryHelper)
         {
             EntryHelper = entryHelper;
             RootSelector = this as ITreeRootSelector<VM, T>;
@@ -78,7 +78,7 @@
 
         public ITreeRootSelector<VM, T> RootSelector { get; private set; }
 
-        public IEntriesHelper<VM> EntryHelper { get; private set; }
+        public IBreadcrumbTreeItemViewModel<VM> EntryHelper { get; private set; }
 
         public bool IsSelected
         {

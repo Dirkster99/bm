@@ -36,7 +36,7 @@
         /// <param name="compareFunc"></param>
         /// <param name="rootLevel">Level of TreeItem to consider as root, root items should shown in expander 
         /// (e.g. in OverflowedAndRootItems) and have caption and expander hidden when the path is longer than it.</param>
-        public TreeRootSelectorViewModel(IEntriesHelper<VM> entryHelper) ////int rootLevel = 0,
+        public TreeRootSelectorViewModel(IBreadcrumbTreeItemViewModel<VM> entryHelper) ////int rootLevel = 0,
                                                                          ////params Func<T, T, HierarchicalResult>[] compareFuncs)
           : base(entryHelper)
         {

@@ -114,7 +114,7 @@
         /// Gets all sub-tree entries that belong
         /// to the sub-tree represented by this item.
         /// </summary>
-        public IEntriesHelper<BreadcrumbTreeRootViewModel> Entries { get; protected set; }
+        public IBreadcrumbTreeItemViewModel<BreadcrumbTreeRootViewModel> Entries { get; protected set; }
 
         /// <summary>
         /// Gets the name of the Breadcrumb node (item).
