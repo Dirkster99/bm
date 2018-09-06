@@ -47,7 +47,9 @@
 
         #region constructors
         /// <summary>
-        /// Class constructor
+        /// Standard class constructor.
+        /// Call the <see cref="InitRoot"/> method after construction to initialize
+        /// root items collection outside of the scope of object construction.
         /// </summary>
         public BreadcrumbTreeRootViewModel()
         {
@@ -57,16 +59,6 @@
               {
                   Comparers = new[] { BreadcrumbTreeRootViewModel.Comparer }
               };
-
-            // Find all entries below desktop
-            _dir = DirectoryInfoExLib.Factory.DesktopDirectory;
-            Entries.SetEntries(UpdateMode.Update,
-                               _dir.GetDirectories()
-                                 //(filter out recycle bin entry if its not that useful...)
-                                 //.Where(d => !d.Equals(DirectoryInfoExLib.Factory.RecycleBinDirectory))
-                                 .Select(d => new BreadcrumbTreeRootViewModel(d, this)).ToArray());
-
-            Header = _dir.Label;
         }
 
         /// <summary>
@@ -75,9 +67,9 @@
         /// </summary>
         /// <param name="dir"></param>
         /// <param name="parentNode"></param>
-        internal BreadcrumbTreeRootViewModel(IDirectoryBrowser dir, BreadcrumbTreeRootViewModel parentNode)
+        protected BreadcrumbTreeRootViewModel(IDirectoryBrowser dir, BreadcrumbTreeRootViewModel parentNode)
         {
-            Logger.InfoFormat("_");
+            Logger.Info("_");
 
             _dir = dir;
 
@@ -138,7 +130,7 @@
             {
                 if (_header != value)
                 {
-                    Logger.InfoFormat("_");
+                    Logger.Info("_");
                     _header = value;
                     NotifyPropertyChanged(() => Header);
                 }
@@ -166,7 +158,7 @@
             {
                 if (_icon != value)
                 {
-                    Logger.InfoFormat("_");
+                    Logger.Info("_");
                     _icon = value;
                     NotifyPropertyChanged(() => Icon);
                 }
@@ -186,6 +178,35 @@
         #endregion properties
 
         #region methods
+        /// <summary>
+        /// Gets all root items below the desktop item and makes them available
+        /// in the <see cref="Entries"/> collection.
+        /// </summary>
+        /// <returns></returns>
+        public bool InitRoot()
+        {
+            try
+            {
+                Logger.Info("_");
+                // Find all entries below desktop
+                _dir = DirectoryInfoExLib.Factory.DesktopDirectory;
+
+                Entries.SetEntries(UpdateMode.Update,
+                                   _dir.GetDirectories()
+                                     //(filter out recycle bin entry if its not that useful...)
+                                     //.Where(d => !d.Equals(DirectoryInfoExLib.Factory.RecycleBinDirectory))
+                                     .Select(d => new BreadcrumbTreeRootViewModel(d, this)).ToArray());
+
+                Header = _dir.Label;
+            }
+            catch
+            {
+                return false;
+            }
+
+            return true;
+        }
+
         #region Disposable Interfaces
         /// <summary>
         /// Standard dispose method of the <seealso cref="IDisposable" /> interface.

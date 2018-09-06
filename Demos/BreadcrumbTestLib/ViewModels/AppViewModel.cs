@@ -109,6 +109,7 @@
             var selection = DiskTest.Selection as ITreeRootSelector<DiskTreeNodeViewModel, string>;
             selection.SelectAsync(initialPath);
 
+            ExTest.InitRoot();
             var sel2 = ExTest.Selection as ITreeRootSelector<BreadcrumbTreeRootViewModel, IDirectoryBrowser>;
             sel2.SelectAsync(DirectoryInfoExLib.Factory.FromString(initialPath));
 

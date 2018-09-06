@@ -134,11 +134,15 @@ namespace BreadcrumbTestLib.ViewModels.Breadcrumbs
         {
             Logger.InfoFormat("_");
 
-            var selector = BreadcrumbSubTree.Selection as ITreeRootSelector<BreadcrumbTreeRootViewModel, IDirectoryBrowser>;
+            return await Task.Run(() =>
+            {
+                BreadcrumbSubTree.InitRoot();
+                var selector = BreadcrumbSubTree.Selection as ITreeRootSelector<BreadcrumbTreeRootViewModel, IDirectoryBrowser>;
 
-            return await Task.Run(() => selector.SelectAsync(DirectoryInfoExLib.Factory.FromString(initialRequest.NewLocation),
+                return selector.SelectAsync(DirectoryInfoExLib.Factory.FromString(initialRequest.NewLocation),
                                               initialRequest.CancelTok,
-                                              Progressing));
+                                              Progressing);
+            });
         }
 
         /// <summary>
