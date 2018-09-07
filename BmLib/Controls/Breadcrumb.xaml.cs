@@ -66,15 +66,15 @@
 		/// Static constructor
 		/// </summary>
 		static Breadcrumb()
-		{
-			DefaultStyleKeyProperty.OverrideMetadata(typeof(Breadcrumb),
-					new System.Windows.FrameworkPropertyMetadata(typeof(Breadcrumb)));
-		}
+        {
+            DefaultStyleKeyProperty.OverrideMetadata(typeof(Breadcrumb),
+                    new System.Windows.FrameworkPropertyMetadata(typeof(Breadcrumb)));
+        }
 
-		/// <summary>
-		/// Class constructor
-		/// </summary>
-		public Breadcrumb()
+        /// <summary>
+        /// Class constructor
+        /// </summary>
+        public Breadcrumb()
 		{
             this.DataContextChanged += Breadcrumb_DataContextChanged;
             this.Loaded += Breadcrumb_Loaded;

@@ -223,7 +223,7 @@
                         />
                 </Grid>
 
-                <CheckBox Content="Show BreadCrumb Control" Name="ShowTreeviewControl"
+                <CheckBox Content="Show TreeView Debug Control" Name="ShowTreeviewControl"
                           IsChecked="True" />
             </StackPanel>
         </ScrollViewer>

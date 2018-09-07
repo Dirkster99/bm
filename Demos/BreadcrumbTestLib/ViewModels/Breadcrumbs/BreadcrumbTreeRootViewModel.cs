@@ -69,17 +69,17 @@
         /// <param name="parentNode"></param>
         protected BreadcrumbTreeRootViewModel(IDirectoryBrowser dir, BreadcrumbTreeRootViewModel parentNode)
         {
-            Logger.Info("_");
+            Logger.InfoFormat("'{0}'", dir.FullName);
 
             _dir = dir;
 
-            // If parentNode == null => Root.
+            // If parentNode == null => Parent of Root is this item itself.
             _rootNode = parentNode == null ? this : parentNode._rootNode;
 
             _parentNode = parentNode;
             Header = _dir.Label;
 
-            this.Entries = new BreadcrumbTreeItemViewModel<BreadcrumbTreeRootViewModel>((isLoaded, parameter) => Task.Run(() =>
+            Func<bool, object, Task<IEnumerable<BreadcrumbTreeRootViewModel>>> loadAsyncFunc = (isLoaded, parameter) => Task.Run(() =>
             {
                 try
                 {
@@ -90,10 +90,11 @@
                     Logger.Error(exp);
                     return new List<BreadcrumbTreeRootViewModel>();
                 }
-            }));
+            });
 
+            this.Entries = new BreadcrumbTreeItemViewModel<BreadcrumbTreeRootViewModel>(loadAsyncFunc);
             this.Selection = new TreeSelectorViewModel<BreadcrumbTreeRootViewModel, IDirectoryBrowser>
-            (_dir, this, this._parentNode.Selection, this.Entries);
+                                                    (_dir, this, this._parentNode.Selection, this.Entries);
         }
 
         /// <summary>
@@ -111,8 +112,8 @@
         public ITreeSelector<BreadcrumbTreeRootViewModel, IDirectoryBrowser> Selection { get; protected set; }
 
         /// <summary>
-        /// Gets all sub-tree entries that belong
-        /// to the sub-tree represented by this item.
+        /// Gets a structure that contains all root items that are located on level 0.
+        /// See <see cref="Entries.All"/> collection for more details.
         /// </summary>
         public IBreadcrumbTreeItemViewModel<BreadcrumbTreeRootViewModel> Entries { get; protected set; }
 
@@ -191,11 +192,12 @@
                 // Find all entries below desktop
                 _dir = DirectoryInfoExLib.Factory.DesktopDirectory;
 
+                // and insert desktop sub-entries into Entries property
                 Entries.SetEntries(UpdateMode.Update,
-                                   _dir.GetDirectories()
+                                   _dir.GetDirectories().Select(d => new BreadcrumbTreeRootViewModel(d, this)).ToArray());
                                      //(filter out recycle bin entry if its not that useful...)
                                      //.Where(d => !d.Equals(DirectoryInfoExLib.Factory.RecycleBinDirectory))
-                                     .Select(d => new BreadcrumbTreeRootViewModel(d, this)).ToArray());
+                                     
 
                 Header = _dir.Label;
             }

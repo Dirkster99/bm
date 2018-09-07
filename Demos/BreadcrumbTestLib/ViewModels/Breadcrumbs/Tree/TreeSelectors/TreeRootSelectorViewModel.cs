@@ -157,8 +157,7 @@
         {
             Logger.InfoFormat("_");
 
-            if (_selectedValue == null ||
-                CompareHierarchy(_selectedValue, value) != HierarchicalResult.Current)
+            if (_selectedValue == null || CompareHierarchy(_selectedValue, value) != HierarchicalResult.Current)
             {
                 try
                 {

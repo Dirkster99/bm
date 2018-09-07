@@ -57,10 +57,9 @@
         /// <param name="cancelToken"></param>
         /// <param name="progress"></param>
         /// <returns>Returns a task that selects the requested tree node.</returns>
-        Task<FinalBrowseResult<T>> SelectAsync(
-        T value,
-        CancellationToken cancelToken = default(CancellationToken),
-        IProgressViewModel progress = null);
+        Task<FinalBrowseResult<T>> SelectAsync(T value,
+                                               CancellationToken cancelToken = default(CancellationToken),
+                                               IProgressViewModel progress = null);
         #endregion methods
     }
 }
