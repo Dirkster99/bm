@@ -51,7 +51,7 @@
         /// <returns></returns>
         public async Task LookupAsync(T value,
                                       ITreeSelector<VM, T> parentSelector,
-                              ICompareHierarchy<T> comparer,
+                                      ICompareHierarchy<T> comparer,
                                       CancellationToken cancelToken,
                                       params ITreeLookupProcessor<VM, T>[] processors)
         {
@@ -80,7 +80,7 @@
                             case HierarchicalResult.Current:
                                 if (this._hierarchy.Contains(currentSelectionHelper))
                                 {
-                                    processors.Process(compareResult, parentSelector, currentSelectionHelper);
+                                    Process(processors, compareResult, parentSelector, currentSelectionHelper);
                                     return;
                                 }
                                 break;
@@ -88,6 +88,27 @@
                     }
                 }
             }
+        }
+
+        /// <summary>
+        /// Called by ITreeSelector.LookupAsync() to process returned HierarchicalResult from ITreeLookup.
+        /// </summary>
+        /// <param name="hr">Returned hierarchicalresult</param>
+        /// <param name="parentSelector">Parent viewmodel's ITreeSelector.</param>
+        /// <param name="selector">Current viewmodel's ITreeSelector.</param>
+        /// <returns>Stop process and return false if any processor return false.</returns>
+        public bool Process(ITreeLookupProcessor<VM, T>[] processors,
+                            HierarchicalResult hr,
+                            ITreeSelector<VM, T> parentSelector,
+                            ITreeSelector<VM, T> selector)
+        {
+            foreach (var p in processors)
+            {
+                if (!p.Process(hr, parentSelector, selector))
+                    return false;
+            }
+
+            return true;
         }
         #endregion methods
     }

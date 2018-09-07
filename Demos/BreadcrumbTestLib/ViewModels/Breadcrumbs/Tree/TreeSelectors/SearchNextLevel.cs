@@ -45,11 +45,32 @@
                     {
                         case HierarchicalResult.Current:
                         case HierarchicalResult.Child:
-                            processors.Process(compareResult, parentSelector, currentSelectionHelper);
+                            Process(processors, compareResult, parentSelector, currentSelectionHelper);
                             return;
                     }
                 }
             }
+        }
+
+        /// <summary>
+        /// Called by ITreeSelector.LookupAsync() to process returned HierarchicalResult from ITreeLookup.
+        /// </summary>
+        /// <param name="hr">Returned hierarchicalresult</param>
+        /// <param name="parentSelector">Parent viewmodel's ITreeSelector.</param>
+        /// <param name="selector">Current viewmodel's ITreeSelector.</param>
+        /// <returns>Stop process and return false if any processor return false.</returns>
+        public bool Process(ITreeLookupProcessor<VM, T>[] processors,
+                            HierarchicalResult hr,
+                            ITreeSelector<VM, T> parentSelector,
+                            ITreeSelector<VM, T> selector)
+        {
+            foreach (var p in processors)
+            {
+                if (!p.Process(hr, parentSelector, selector))
+                    return false;
+            }
+
+            return true;
         }
     }
 }
