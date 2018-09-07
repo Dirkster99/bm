@@ -51,13 +51,13 @@
 
         #region methods
         /// <summary>
-        /// Method can be invoked on the tree root to select a tree node by value.
+        /// Method can be invoked on the tree root to select a tree node by <paramref name="targetLocation"/>.
         /// </summary>
-        /// <param name="value"></param>
+        /// <param name="targetLocation"></param>
         /// <param name="cancelToken"></param>
         /// <param name="progress"></param>
         /// <returns>Returns a task that selects the requested tree node.</returns>
-        Task<FinalBrowseResult<T>> SelectAsync(T value,
+        Task<FinalBrowseResult<T>> SelectAsync(T targetLocation,
                                                CancellationToken cancelToken = default(CancellationToken),
                                                IProgressViewModel progress = null);
         #endregion methods

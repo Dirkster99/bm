@@ -11,7 +11,7 @@
     /// </summary>
     /// <typeparam name="VM"></typeparam>
     /// <typeparam name="T"></typeparam>
-    public class SearchNextUsingReverseLookup<VM, T> : ITreeLookup<VM, T>
+    internal class SearchNextUsingReverseLookup<VM, T> : ITreeLookup<VM, T>
     {
         #region fields
         /// <summary>

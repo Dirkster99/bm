@@ -11,24 +11,13 @@
     /// </summary>
     /// <typeparam name="VM"></typeparam>
     /// <typeparam name="T"></typeparam>
-    public class RecrusiveSearch<VM, T> : ITreeLookup<VM, T>
+    internal class RecrusiveSearch<VM, T> : ITreeLookup<VM, T>
     {
         #region fields
         /// <summary>
         /// Log4net logger facility for this class.
         /// </summary>
         protected static readonly log4net.ILog Logger = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
-
-        /// <summary>
-        /// Lookup until lookupvalue is found, and process only parent or matchednode.
-        /// Load subentries if not loaded.
-        /// </summary>
-        public static RecrusiveSearch<VM, T> LoadSubentriesIfNotLoaded = new RecrusiveSearch<VM, T>(true);
-
-        /// <summary>
-        /// Lookup until lookupvalue is found, and process only parent or matchednode.  Skip if not loaded.
-        /// </summary>
-        public static RecrusiveSearch<VM, T> SkipIfNotLoaded = new RecrusiveSearch<VM, T>(false);
 
         private bool _loadSubEntries;
         #endregion fields

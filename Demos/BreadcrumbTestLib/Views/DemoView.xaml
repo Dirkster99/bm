@@ -224,7 +224,7 @@
                 </Grid>
 
                 <CheckBox Content="Show TreeView Debug Control" Name="ShowTreeviewControl"
-                          IsChecked="True" />
+                          IsChecked="False" />
             </StackPanel>
         </ScrollViewer>
 

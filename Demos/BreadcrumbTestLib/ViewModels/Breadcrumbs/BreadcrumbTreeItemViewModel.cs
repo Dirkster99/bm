@@ -237,7 +237,9 @@
                 if (disposing == true)
                 {
                     // Dispose of the model that defines this viemodel
-                    _dir.Dispose();
+                    if (_dir != null)
+                        _dir.Dispose();
+
                     _dir = null;
                 }
 

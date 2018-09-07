@@ -8,7 +8,7 @@
     /// </summary>
     /// <typeparam name="VM"></typeparam>
     /// <typeparam name="T"></typeparam>
-    public class SetNotSelected<VM, T> : ITreeLookupProcessor<VM, T>
+    internal class SetNotSelected<VM, T> : ITreeLookupProcessor<VM, T>
     {
         #region fields
         /// <summary>

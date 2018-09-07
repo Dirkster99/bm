@@ -10,7 +10,7 @@
     /// </summary>
     /// <typeparam name="VM"></typeparam>
     /// <typeparam name="T"></typeparam>
-    public class SearchNextLevel<VM, T> : ITreeLookup<VM, T>
+    internal class SearchNextLevel<VM, T> : ITreeLookup<VM, T>
     {
         /// <summary>
         /// Log4net logger facility for this class.

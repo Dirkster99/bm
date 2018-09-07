@@ -9,7 +9,7 @@
     /// </summary>
     /// <typeparam name="VM"></typeparam>
     /// <typeparam name="T"></typeparam>
-    public class BroadcastNextLevel<VM, T> : ITreeLookup<VM, T>
+    internal class BroadcastNextLevel<VM, T> : ITreeLookup<VM, T>
     {
         /// <summary>
         /// Log4net logger facility for this class.

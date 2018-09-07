@@ -10,7 +10,7 @@
     /// </summary>
     /// <typeparam name="VM"></typeparam>
     /// <typeparam name="T"></typeparam>
-    public class RecrusiveBroadcast<VM, T> : ITreeLookup<VM, T>
+    internal class RecrusiveBroadcast<VM, T> : ITreeLookup<VM, T>
     {
         #region fields
         /// <summary>

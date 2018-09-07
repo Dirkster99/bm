@@ -8,7 +8,7 @@
     /// </summary>
     /// <typeparam name="VM"></typeparam>
     /// <typeparam name="T"></typeparam>
-    public class RefreshDirectory<VM, T> : ITreeLookupProcessor<VM, T>
+    internal class RefreshDirectory<VM, T> : ITreeLookupProcessor<VM, T>
     {
         /// <summary>
         /// Log4net logger facility for this class.

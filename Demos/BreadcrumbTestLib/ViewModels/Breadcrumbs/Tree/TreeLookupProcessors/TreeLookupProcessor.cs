@@ -10,7 +10,7 @@
     /// </summary>
     /// <typeparam name="VM"></typeparam>
     /// <typeparam name="T"></typeparam>
-    public class TreeLookupProcessor<VM, T> : ITreeLookupProcessor<VM, T>
+    internal class TreeLookupProcessor<VM, T> : ITreeLookupProcessor<VM, T>
     {
         #region fields
         /// <summary>

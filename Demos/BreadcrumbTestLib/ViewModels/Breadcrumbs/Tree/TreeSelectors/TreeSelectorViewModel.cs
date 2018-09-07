@@ -297,19 +297,16 @@
         /// <param name="model"></param>
         /// <param name="currentAction"></param>
         /// <returns></returns>
-        public async Task LookupAsync(T value,
+        public async Task LookupAsync(T targetLocation,
                                       ITreeLookup<VM, T> lookupProc,
                                       CancellationToken cancelToken,
                                       params ITreeLookupProcessor<VM, T>[] processors)
         {
-            Logger.InfoFormat("_");
+            Logger.InfoFormat("'{0}'", (targetLocation != null ? targetLocation.ToString() : "(null)"));
 
             using (await _lookupLock.LockAsync())
             {
-                await Application.Current.Dispatcher.Invoke(async () =>
-                {
-                    await lookupProc.LookupAsync(value, this, this.RootSelector, cancelToken, processors);
-                });
+                await lookupProc.LookupAsync(targetLocation, this, this.RootSelector, cancelToken, processors);
             }
         }
         #endregion

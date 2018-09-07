@@ -12,6 +12,7 @@
     using System.Threading;
     using System.Threading.Tasks;
     using BmLib.Enums;
+    using System.Windows;
 
     internal class TreeRootSelectorViewModel<VM, T> : TreeSelectorViewModel<VM, T>, ITreeRootSelector<VM, T>
     {
@@ -47,7 +48,6 @@
 
             _OverflowedAndRootItems = new ObservableCollection<VM>();
         }
-
         #endregion constructors
 
         #region events
@@ -145,19 +145,19 @@
         }
 
         /// <summary>
-        /// Method can be invoked on the tree root to select a tree node by value.
+        /// Method can be invoked on the tree root to select a tree node by <paramref name="targetLocation"/>.
         /// </summary>
-        /// <param name="value"></param>
+        /// <param name="targetLocation"></param>
         /// <param name="progress"></param>
         /// <returns>Returns a task that selects the requested tree node.</returns>
         public async Task<FinalBrowseResult<T>> SelectAsync(
-            T value,
+            T targetLocation,
             CancellationToken cancelToken = default(CancellationToken),
             IProgressViewModel progress = null)
         {
             Logger.InfoFormat("_");
 
-            if (_selectedValue == null || CompareHierarchy(_selectedValue, value) != HierarchicalResult.Current)
+            if (_selectedValue == null || CompareHierarchy(_selectedValue, targetLocation) != HierarchicalResult.Current)
             {
                 try
                 {
@@ -170,18 +170,18 @@
                         LoadSubEntries<VM, T> whenSelected = new LoadSubEntries<VM, T>(HierarchicalResult.Current, UpdateMode.Replace, false);
                         SetSelected<VM, T> whenSelected1 = new SetSelected<VM, T>();
 
-                        await this.LookupAsync(value,
-                                               RecrusiveSearch<VM, T>.LoadSubentriesIfNotLoaded,
+                        await this.LookupAsync(targetLocation,
+                                               new RecrusiveSearch<VM, T>(true), // Load SubEntries if not already loaded
                                                cancelToken,
                                                whenSelected1,
                                                toSelectedChild,
                                                whenSelected);
 
-                        return new FinalBrowseResult<T>(value, default(System.Guid), BrowseResult.Complete);
+                        return new FinalBrowseResult<T>(targetLocation, default(System.Guid), BrowseResult.Complete);
                     }
                     catch (Exception)
                     {
-                        return new FinalBrowseResult<T>(value, default(System.Guid), BrowseResult.InComplete);
+                        return new FinalBrowseResult<T>(targetLocation, default(System.Guid), BrowseResult.InComplete);
                     }
                 }
                 finally
@@ -191,7 +191,7 @@
                 }
             }
 
-            return new FinalBrowseResult<T>(value, default(System.Guid), BrowseResult.InComplete);
+            return new FinalBrowseResult<T>(targetLocation, default(System.Guid), BrowseResult.InComplete);
         }
 
         public HierarchicalResult CompareHierarchy(T value1, T value2)
@@ -217,7 +217,10 @@
         {
             Logger.InfoFormat("_");
 
-            _OverflowedAndRootItems.Clear();
+            Application.Current.Dispatcher.Invoke(() =>
+            {
+                _OverflowedAndRootItems.Clear();
+            });
 
             if (path != null && path.Count() > 0)
             {
@@ -230,12 +233,17 @@
                 {
                     if (!(this.EntryHelper.AllNonBindable.Contains(p.ViewModel)))
                     {
-                        _OverflowedAndRootItems.Add(p.ViewModel);
-
+                        Application.Current.Dispatcher.Invoke(() =>
+                        {
+                            _OverflowedAndRootItems.Add(p.ViewModel);
+                        });
                     }
                 }
 
-                _OverflowedAndRootItems.Add(default(VM)); // Separator
+                Application.Current.Dispatcher.Invoke(() =>
+                {
+                    _OverflowedAndRootItems.Add(default(VM)); // Separator
+                });
             }
 
             // Get all items for display in the root drop down list
@@ -265,7 +273,11 @@
             // Then foreach rootTreeSelectors, add to rootItems and preferm updateRootItemAsync.
             foreach (var c in rootTreeSelectors)
             {
-                rootItems.Add(c.ViewModel);
+                Application.Current.Dispatcher.Invoke(() =>
+                {
+                    rootItems.Add(c.ViewModel);
+                });
+
                 c.IsRoot = true;
 
                 await this.updateRootItemsAsync(c, rootItems, level - 1);
