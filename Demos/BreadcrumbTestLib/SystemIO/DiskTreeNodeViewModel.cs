@@ -12,7 +12,7 @@
     using BmLib.Interfaces;
     using BmLib.Enums;
 
-    public class DiskTreeNodeViewModel : ViewModelBase, ISupportTreeSelector<DiskTreeNodeViewModel, string>
+    public class DiskTreeNodeViewModel : ViewModelBase, ISupportBreadcrumbTreeItemViewModel<DiskTreeNodeViewModel, string>
     {
         #region fields
         public static ICompareHierarchy<string> Comparer = new PathComparer(StringComparison.CurrentCultureIgnoreCase);
@@ -72,7 +72,7 @@
         /// Gets all sub-tree entries that belong
         /// to the sub-tree represented by this item.
         /// </summary>
-        public IBreadcrumbTreeItemViewModel<DiskTreeNodeViewModel> Entries { get; set; }
+        public IBreadcrumbTreeItemHelperViewModel<DiskTreeNodeViewModel> Entries { get; set; }
 
         //// Lycj: Moved to Selection.IsOverflowed/IsOverflowedOrRoot
         ////public bool IsOverflowedOrRoot { get { return _isOverflowed || _parentNode == null; } set { } }

@@ -127,6 +127,7 @@
                                             <TextBlock Text="            Selection.IsOverflowed: "><TextBlock Text="{Binding Selection.IsOverflowed}"/></TextBlock><LineBreak/>
                                             
                                             <!-- Is this used at all? -->
+                                            <!-- Might be used to bind drop down list control IsOpen when it pops-open -->
                                             <TextBlock Text="                Entries.IsExpanded: "><TextBlock Text="{Binding Entries.IsExpanded}"/></TextBlock>
                                         </TextBlock>
                                     </TextBlock.ToolTip>
@@ -137,6 +138,7 @@
                     <TreeView.ItemContainerStyle>
                         <Style TargetType="{x:Type TreeViewItem}" BasedOn="{StaticResource {x:Type TreeViewItem}}">
                             <Setter Property="behav:TreeViewItemBehaviour.IsBroughtIntoViewWhenSelected" Value="True" />
+
                             <Setter Property="IsExpanded" Value="{Binding Selection.IsChildSelected, Mode=OneWay,UpdateSourceTrigger=PropertyChanged}"  />
                             <Setter Property="IsSelected" Value="{Binding Selection.IsSelected, Mode=OneWay,UpdateSourceTrigger=PropertyChanged}"  />
                         </Style>
@@ -149,7 +151,7 @@
             <StackPanel VerticalAlignment="Top" Margin="3" Width="200">
                 <!-- For Debugging only -->
                 <CheckBox Content="Show BreadCrumb Control" Name="ShowBreadCrumbControl"
-                      IsChecked="True" />
+                          IsChecked="True" />
 
                 <CheckBox Content="EnableBreadcrumb"
                       IsChecked="{Binding BreadcrumbTest.EnableBreadcrumb}" />
@@ -224,7 +226,7 @@
                 </Grid>
 
                 <CheckBox Content="Show TreeView Debug Control" Name="ShowTreeviewControl"
-                          IsChecked="False" />
+                          IsChecked="True" />
             </StackPanel>
         </ScrollViewer>
 

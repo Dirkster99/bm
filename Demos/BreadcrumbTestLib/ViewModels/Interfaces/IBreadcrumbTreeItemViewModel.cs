@@ -4,20 +4,14 @@
     using BmLib.Enums;
     using System;
     using System.Collections.Generic;
-    using System.Collections.ObjectModel;
     using System.ComponentModel;
     using System.Threading.Tasks;
-
-    public interface ISupportEntriesHelper<VM>
-    {
-        IBreadcrumbTreeItemViewModel<VM> Entries { get; }
-    }
 
     /// <summary>
     /// Helper view model class that provide support of loading sub-entries.
     /// </summary>
     /// <typeparam name="VM"></typeparam>
-    public interface IBreadcrumbTreeItemViewModel<VM> : INotifyPropertyChanged
+    public interface IBreadcrumbTreeItemHelperViewModel<VM> : INotifyPropertyChanged
     {
         #region events
         event EventHandler EntriesChanged;
@@ -47,7 +41,7 @@
         /// <summary>
         /// A list of sub-entries, after loaded, used by UI thread only (e.g. Binding).
         /// </summary>
-        ObservableCollection<VM> All { get; }
+        IEnumerable<VM> All { get; }
 
         /// <summary>
         /// Internal lock object when loading.

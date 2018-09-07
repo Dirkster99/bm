@@ -11,13 +11,14 @@
     using System.Windows.Input;
     using BmLib.Enums;
     using System.Windows;
+    using BmLib.Utils;
 
     /// <summary>
     /// Implements the viewmodel template that drives every BreadcrumbTreeItem control
     /// of the root item of a BreadcrumbTree control.
     /// </summary>
     /// <typeparam name="VM"></typeparam>
-    internal class BreadcrumbTreeItemHelperViewModel<VM> : Base.ViewModelBase, IBreadcrumbTreeItemViewModel<VM>
+    internal class BreadcrumbTreeItemHelperViewModel<VM> : Base.ViewModelBase, IBreadcrumbTreeItemHelperViewModel<VM>
     {
         #region fields
         /// <summary>
@@ -30,12 +31,12 @@
         private readonly AsyncLock _loadingLock = new AsyncLock();
         private CancellationTokenSource _lastCancellationToken = new CancellationTokenSource();
         private bool _clearBeforeLoad = false;
-        ////private bool _isLoading = false;
+
         private bool _isLoaded = false;
         private bool _isExpanded = false;
         private bool _isLoading = false;
         private IEnumerable<VM> _subItemList = new List<VM>();
-        private ObservableCollection<VM> _All;                      // _subItems
+        private readonly ObservableCollection<VM> _All;                      // _subItems
         private DateTime _lastRefreshTimeUtc = DateTime.MinValue;
         #endregion fields
 
@@ -45,10 +46,11 @@
         /// </summary>
         /// <param name="loadSubEntryFunc"></param>
         public BreadcrumbTreeItemHelperViewModel(Func<bool, object, Task<IEnumerable<VM>>> loadSubEntryFunc)
+            : this()
         {
             _loadSubEntryFunc = loadSubEntryFunc;
 
-            All = new FastObservableCollection<VM>
+            _All = new FastObservableCollection<VM>
             {
                 default(VM)
             };
@@ -85,14 +87,22 @@
         /// </summary>
         /// <param name="entries"></param>
         public BreadcrumbTreeItemHelperViewModel(params VM[] entries)
+            : this()
         {
             _isLoaded = true;
-            All = new FastObservableCollection<VM>();
             _subItemList = entries;
 
             (this.All as FastObservableCollection<VM>).AddItems(entries);
             ////foreach (var entry in entries)
             ////    All.Add(entry);
+        }
+
+        /// <summary>
+        /// Hidden standard class constructor
+        /// </summary>
+        protected BreadcrumbTreeItemHelperViewModel()
+        {
+            _All = new FastObservableCollection<VM>();
         }
         #endregion constructors
 
@@ -115,7 +125,9 @@
         }
 
         /// <summary>
-        /// Gets/sets whether a breadcrumb entry is expanded or not.
+        /// Gets/sets whether a breadcrumb drop down entry is
+        /// 1) Expanded - Drop Down List is open or
+        /// 2) not.
         /// </summary>
         public bool IsExpanded
         {
@@ -128,8 +140,18 @@
             {
                 if (_isExpanded != value)
                 {
-                    ////if (value && !_isExpanded)
-                    ////  AsyncUtils.RunAsync(() => this.LoadAsync());
+                    try
+                    {
+                        Logger.InfoFormat("{0} -> {1}", value, _isExpanded);
+////                        Console.WriteLine("{0}: {1} -> {2}", this.ToString(), value, _isExpanded);
+
+                        if (value && _isExpanded == false)
+                            AsyncUtils.RunAsync(() => this.LoadAsync());
+                    }
+                    catch (Exception exc)
+                    {
+                        Logger.Error(exc);
+                    }
 
                     _isExpanded = value;
                     NotifyPropertyChanged(() => IsExpanded);
@@ -206,16 +228,11 @@
             }
         }
 
-        public ObservableCollection<VM> All
+        public IEnumerable<VM> All
         {
             get
             {
                 return _All;
-            }
-
-            private set
-            {
-                _All = value;
             }
         }
 
@@ -256,7 +273,7 @@
                         {
                             Application.Current.Dispatcher.Invoke(() =>
                             {
-                                this.All.Clear();
+                                _All.Clear();
                             });
                         }
 
@@ -310,7 +327,7 @@
                 _subItemList = new List<VM>();
                 Application.Current.Dispatcher.Invoke(() =>
                 {
-                    this.All.Clear();
+                    _All.Clear();
                 });
                 _isLoaded = false;
             }

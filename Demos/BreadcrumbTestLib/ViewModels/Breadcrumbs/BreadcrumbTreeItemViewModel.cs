@@ -26,7 +26,7 @@
     /// - a list of items below this item (<see cref="BreadcrumbTreeItemHelperViewModel{VM}"/>).
     /// </summary>
     public class BreadcrumbTreeItemViewModel : ViewModelBase,
-                                       ISupportTreeSelector<BreadcrumbTreeItemViewModel, IDirectoryBrowser>,
+                                       ISupportBreadcrumbTreeItemViewModel<BreadcrumbTreeItemViewModel, IDirectoryBrowser>,
                                        IDisposable
     {
         #region fields
@@ -116,7 +116,7 @@
         /// Gets a structure that contains all root items that are located on level 0.
         /// See <see cref="Entries.All"/> collection for more details.
         /// </summary>
-        public IBreadcrumbTreeItemViewModel<BreadcrumbTreeItemViewModel> Entries { get; protected set; }
+        public IBreadcrumbTreeItemHelperViewModel<BreadcrumbTreeItemViewModel> Entries { get; protected set; }
 
         /// <summary>
         /// Gets the name of the Breadcrumb node (item).
@@ -132,7 +132,6 @@
             {
                 if (_header != value)
                 {
-                    Logger.Info("_");
                     _header = value;
                     NotifyPropertyChanged(() => Header);
                 }
@@ -160,7 +159,6 @@
             {
                 if (_icon != value)
                 {
-                    Logger.Info("_");
                     _icon = value;
                     NotifyPropertyChanged(() => Icon);
                 }
@@ -180,6 +178,15 @@
         #endregion properties
 
         #region methods
+        /// <summary>
+        /// Output Header string to hint about the object instance of this object.
+        /// </summary>
+        /// <returns></returns>
+        public override string ToString()
+        {
+            return (this.Header != null ? this.Header : "(Header==null)");
+        }
+
         /// <summary>
         /// Gets all root items below the desktop item and makes them available
         /// in the <see cref="Entries"/> collection.

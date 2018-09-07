@@ -53,9 +53,9 @@
                     if (cancelToken != CancellationToken.None)
                         cancelToken.ThrowIfCancellationRequested();
 
-                    if (current is ISupportTreeSelector<VM, T> && current is ISupportEntriesHelper<VM>)
+                    if (current is ISupportBreadcrumbTreeItemViewModel<VM, T> && current is ISupportBreadcrumbTreeItemHelperViewModel<VM>)
                     {
-                        var currentSelectionHelper = (current as ISupportTreeSelector<VM, T>).Selection;
+                        var currentSelectionHelper = (current as ISupportBreadcrumbTreeItemViewModel<VM, T>).Selection;
                         var compareResult = comparer.CompareHierarchy(currentSelectionHelper.Value, value);
 
                         switch (compareResult)

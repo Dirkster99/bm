@@ -43,7 +43,7 @@
         /// </summary>
         public TreeSelectorViewModel(T currentValue, VM currentViewModel,
                                      ITreeSelector<VM, T> parentSelector,
-                                     IBreadcrumbTreeItemViewModel<VM> entryHelper)
+                                     IBreadcrumbTreeItemHelperViewModel<VM> entryHelper)
         {
             RootSelector = parentSelector.RootSelector;
             ParentSelector = parentSelector;
@@ -56,7 +56,7 @@
         /// <summary>
         /// Internal base classe constructor for inheriting classes.
         /// </summary>
-        protected TreeSelectorViewModel(IBreadcrumbTreeItemViewModel<VM> entryHelper)
+        protected TreeSelectorViewModel(IBreadcrumbTreeItemHelperViewModel<VM> entryHelper)
         {
             EntryHelper = entryHelper;
             RootSelector = this as ITreeRootSelector<VM, T>;
@@ -78,7 +78,7 @@
 
         public ITreeRootSelector<VM, T> RootSelector { get; private set; }
 
-        public IBreadcrumbTreeItemViewModel<VM> EntryHelper { get; private set; }
+        public IBreadcrumbTreeItemHelperViewModel<VM> EntryHelper { get; private set; }
 
         public bool IsSelected
         {
@@ -214,9 +214,7 @@
                 if (_isOverflowed != value)
                 {
                     Logger.InfoFormat("--> Item '{0}' is Overflowed: {1} -> {2}", this, _isOverflowed, value);
-
-                    if (value == true)
-                        Debug.WriteLine("--> Item '{0}' is Overflowed: {1} -> {2}", this, _isOverflowed, value);
+                    Debug.WriteLine("--> Item '{0}' is Overflowed: {1} -> {2}", this, _isOverflowed, value);
 
                     _isOverflowed = value;
                     NotifyPropertyChanged(() => this.IsOverflowed);
