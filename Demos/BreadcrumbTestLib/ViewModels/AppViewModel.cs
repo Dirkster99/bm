@@ -53,7 +53,7 @@
 
             this.DiskTest = new DiskTreeNodeViewModel(new DirectoryInfo(@"C:\\"), new DirectoryInfo(@"E:\\"));
 
-            this.ExTest = new BreadcrumbTreeRootViewModel();
+            this.ExTest = new BreadcrumbTreeItemViewModel();
         }
         #endregion constructors
 
@@ -90,7 +90,7 @@
         /// <summary>
         /// Gets a viewmodel that drives the Breadcrumb control.
         /// </summary>
-        public BreadcrumbTreeRootViewModel ExTest { get; private set; }
+        public BreadcrumbTreeItemViewModel ExTest { get; private set; }
         #endregion properties
 
         #region methods
@@ -110,7 +110,7 @@
             selection.SelectAsync(initialPath);
 
             ExTest.InitRoot();
-            var sel2 = ExTest.Selection as ITreeRootSelector<BreadcrumbTreeRootViewModel, IDirectoryBrowser>;
+            var sel2 = ExTest.Selection as ITreeRootSelector<BreadcrumbTreeItemViewModel, IDirectoryBrowser>;
             sel2.SelectAsync(DirectoryInfoExLib.Factory.FromString(initialPath));
 
             NavigateToFolder(initialPath);

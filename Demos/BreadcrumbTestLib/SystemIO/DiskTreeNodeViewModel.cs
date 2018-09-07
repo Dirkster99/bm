@@ -26,7 +26,7 @@
         #region constructors
         public DiskTreeNodeViewModel(params DirectoryInfo[] dir)
         {
-            Entries = new BreadcrumbTreeItemViewModel<DiskTreeNodeViewModel>();
+            Entries = new BreadcrumbTreeItemHelperViewModel<DiskTreeNodeViewModel>();
             Selection = new TreeRootSelectorViewModel<DiskTreeNodeViewModel, string>(this.Entries)
             {
                 Comparers = new[] { DiskTreeNodeViewModel.Comparer }
@@ -46,7 +46,7 @@
             _parentNode = parentNode;
             Header = _dir.Name;
 
-            this.Entries = new BreadcrumbTreeItemViewModel<DiskTreeNodeViewModel>((ct) => Task.Run(() =>
+            this.Entries = new BreadcrumbTreeItemHelperViewModel<DiskTreeNodeViewModel>((ct) => Task.Run(() =>
             {
                 try
                 {

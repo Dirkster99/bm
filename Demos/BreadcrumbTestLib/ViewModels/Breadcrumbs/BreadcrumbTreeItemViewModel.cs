@@ -1,394 +1,283 @@
 ﻿namespace BreadcrumbTestLib.ViewModels.Breadcrumbs
 {
-    using BreadcrumbTestLib.Utils;
-    using BreadcrumbTestLib.ViewModels.Interfaces;
-    using System;
     using System.Collections.Generic;
-    using System.Collections.ObjectModel;
+    using System.Drawing;
     using System.Linq;
-    using System.Threading;
     using System.Threading.Tasks;
-    using System.Windows.Input;
+    using System.Windows.Media;
+    using BreadcrumbTestLib.ViewModels.Interfaces;
+    using BreadcrumbTestLib.ViewModels.TreeSelectors;
+    using BreadcrumbTestLib.ViewModels.Base;
+    using DirectoryInfoExLib.Interfaces;
+    using System;
+    using BmLib.IconExtractors.Enums;
+    using BmLib.IconExtractors.IconExtracts;
+    using BmLib.Interfaces;
     using BmLib.Enums;
+    using System.Runtime.InteropServices;
 
     /// <summary>
-    /// Implements the viewmodel template that drives every BreadcrumbTreeItem control
-    /// of the root item of a BreadcrumbTree control.
+    /// Class implements a ViewModel to manage a sub-tree of a Breadcrumb control.
+    /// 
+    /// This sub-tree includes
+    /// - a specific item (see Header property),
+    /// - a SelectedItem (see Selection property), and
+    /// - a list of items below this item (<see cref="BreadcrumbTreeItemHelperViewModel{VM}"/>).
     /// </summary>
-    /// <typeparam name="VM"></typeparam>
-    internal class BreadcrumbTreeItemViewModel<VM> : Base.ViewModelBase, IBreadcrumbTreeItemViewModel<VM>
+    public class BreadcrumbTreeItemViewModel : ViewModelBase,
+                                       ISupportTreeSelector<BreadcrumbTreeItemViewModel, IDirectoryBrowser>,
+                                       IDisposable
     {
         #region fields
+        public static ICompareHierarchy<IDirectoryBrowser> Comparer = new ExHierarchyComparer();
+
         /// <summary>
         /// Log4net logger facility for this class.
         /// </summary>
         protected static readonly log4net.ILog Logger = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
 
-        protected Func<bool, object, Task<IEnumerable<VM>>> _loadSubEntryFunc;
+        private IDirectoryBrowser _dir;
+        private string _header;
+        private BreadcrumbTreeItemViewModel _rootNode, _parentNode;
 
-        private readonly AsyncLock _loadingLock = new AsyncLock();
-        private CancellationTokenSource _lastCancellationToken = new CancellationTokenSource();
-        private bool _clearBeforeLoad = false;
-        ////private bool _isLoading = false;
-        private bool _isLoaded = false;
-        private bool _isExpanded = false;
-        private bool _isLoading = false;
-        private IEnumerable<VM> _subItemList = new List<VM>();
-        private ObservableCollection<VM> _All;                      // _subItems
-        private DateTime _lastRefreshTimeUtc = DateTime.MinValue;
+        private bool _isIconLoaded = false;
+        private ImageSource _icon = null;
+        private bool _disposed = false;
         #endregion fields
 
         #region constructors
         /// <summary>
-        /// Class constructor
+        /// Standard class constructor.
+        /// Call the <see cref="InitRoot"/> method after construction to initialize
+        /// root items collection outside of the scope of object construction.
         /// </summary>
-        /// <param name="loadSubEntryFunc"></param>
-        public BreadcrumbTreeItemViewModel(Func<bool, object, Task<IEnumerable<VM>>> loadSubEntryFunc)
+        public BreadcrumbTreeItemViewModel()
         {
-            _loadSubEntryFunc = loadSubEntryFunc;
+            Entries = new BreadcrumbTreeItemHelperViewModel<BreadcrumbTreeItemViewModel>();
+            Selection =
+              new TreeRootSelectorViewModel<BreadcrumbTreeItemViewModel, IDirectoryBrowser>(this.Entries)
+              {
+                  Comparers = new[] { BreadcrumbTreeItemViewModel.Comparer }
+              };
+        }
 
-            All = new FastObservableCollection<VM>
+        /// <summary>
+        /// Class constructor from an available parentNode and directory model
+        /// to recurse down on a given structure.
+        /// </summary>
+        /// <param name="dir"></param>
+        /// <param name="parentNode"></param>
+        protected BreadcrumbTreeItemViewModel(IDirectoryBrowser dir, BreadcrumbTreeItemViewModel parentNode)
+        {
+            Logger.InfoFormat("'{0}'", dir.FullName);
+
+            _dir = dir;
+
+            // If parentNode == null => Parent of Root is this item itself.
+            _rootNode = parentNode == null ? this : parentNode._rootNode;
+
+            _parentNode = parentNode;
+            Header = _dir.Label;
+
+            Func<bool, object, Task<IEnumerable<BreadcrumbTreeItemViewModel>>> loadAsyncFunc = (isLoaded, parameter) => Task.Run(() =>
             {
-                default(VM)
-            };
-
-            this.CancelCommand = new RelayCommand(obj =>
-            {
-                var token = _lastCancellationToken;
-
-                if (token != null)
-                    token.Cancel();
+                try
+                {
+                    return _dir.GetDirectories().Select(d => new BreadcrumbTreeItemViewModel(d, this));
+                }
+                catch (Exception exp)
+                {
+                    Logger.Error(exp);
+                    return new List<BreadcrumbTreeItemViewModel>();
+                }
             });
+
+            this.Entries = new BreadcrumbTreeItemHelperViewModel<BreadcrumbTreeItemViewModel>(loadAsyncFunc);
+            this.Selection = new TreeSelectorViewModel<BreadcrumbTreeItemViewModel, IDirectoryBrowser>
+                                                    (_dir, this, this._parentNode.Selection, this.Entries);
         }
 
         /// <summary>
-        /// Class constructor
+        /// Class finalizer/destructor
+        /// When the object is eligible for finalization,
+        /// the garbage collector runs the Finalize method of the object. 
         /// </summary>
-        /// <param name="loadSubEntryFunc"></param>
-        public BreadcrumbTreeItemViewModel(Func<bool, Task<IEnumerable<VM>>> loadSubEntryFunc)
-          : this((b, __) => loadSubEntryFunc(b))
+        ~BreadcrumbTreeItemViewModel()
         {
-        }
-
-        /// <summary>
-        /// Class constructor
-        /// </summary>
-        /// <param name="loadSubEntryFunc"></param>
-        public BreadcrumbTreeItemViewModel(Func<Task<IEnumerable<VM>>> loadSubEntryFunc)
-          : this(_ => loadSubEntryFunc())
-        {
-        }
-
-        /// <summary>
-        /// Class constructor from entries parameters.
-        /// </summary>
-        /// <param name="entries"></param>
-        public BreadcrumbTreeItemViewModel(params VM[] entries)
-        {
-            _isLoaded = true;
-            All = new FastObservableCollection<VM>();
-            _subItemList = entries;
-
-            (this.All as FastObservableCollection<VM>).AddItems(entries);
-            ////foreach (var entry in entries)
-            ////    All.Add(entry);
+            Dispose();
         }
         #endregion constructors
 
-        #region events
-        /// <summary>
-        /// Implements an event that is fired when the ALL items collection has been changed.
-        /// </summary>
-        public event EventHandler EntriesChanged;
-        #endregion events
-
         #region properties
-        /// <summary>
-        /// Gets/sets whether the entries in the All property should be
-        /// reset before loading new entries or not.
-        /// </summary>
-        public bool ClearBeforeLoad
-        {
-            get { return _clearBeforeLoad; }
-            set { _clearBeforeLoad = value; }
-        }
+        public ITreeSelector<BreadcrumbTreeItemViewModel, IDirectoryBrowser> Selection { get; protected set; }
 
         /// <summary>
-        /// Gets/sets whether a breadcrumb entry is expanded or not.
+        /// Gets a structure that contains all root items that are located on level 0.
+        /// See <see cref="Entries.All"/> collection for more details.
         /// </summary>
-        public bool IsExpanded
+        public IBreadcrumbTreeItemViewModel<BreadcrumbTreeItemViewModel> Entries { get; protected set; }
+
+        /// <summary>
+        /// Gets the name of the Breadcrumb node (item).
+        /// </summary>
+        public string Header
         {
             get
             {
-                return _isExpanded;
+                return _header;
             }
 
-            set
+            protected set
             {
-                if (_isExpanded != value)
+                if (_header != value)
                 {
-                    ////if (value && !_isExpanded)
-                    ////  AsyncUtils.RunAsync(() => this.LoadAsync());
-
-                    _isExpanded = value;
-                    NotifyPropertyChanged(() => IsExpanded);
+                    Logger.Info("_");
+                    _header = value;
+                    NotifyPropertyChanged(() => Header);
                 }
             }
         }
 
         /// <summary>
-        /// Gets whether current items are already loaded or not.
+        /// Gets a lazy loaded image source for an icon that
+        /// can be used to reresent this item in the bound view.
         /// </summary>
-        public bool IsLoaded
+        public ImageSource Icon
         {
             get
             {
-                return _isLoaded;
+                if (_isIconLoaded == false)
+                {
+                    _isIconLoaded = true;
+                    loadIcon();
+                }
+
+                return _icon;
             }
 
-            private set
+            protected set
             {
-                if (_isLoaded != value)
+                if (_icon != value)
                 {
-                    _isLoaded = value;
-                    NotifyPropertyChanged(() => IsLoaded);
+                    Logger.Info("_");
+                    _icon = value;
+                    NotifyPropertyChanged(() => Icon);
                 }
             }
         }
 
-        /// <summary>
-        /// Gets whether the control is currently loading items or not.
-        /// </summary>
-        public bool IsLoading
+        bool IOverflown.IsOverflown
         {
             get
             {
-                return _isLoading;
-            }
+                if (Selection != null)
+                    return Selection.IsOverflowed;
 
-            private set
-            {
-                if (_isLoading != value)
-                {
-                    _isLoading = value;
-                    NotifyPropertyChanged(() => IsLoading);
-                }
-            }
-        }
-
-        /// <summary>
-        /// Gets the command that can cancel the current LoadASync() operation.
-        /// </summary>
-        public ICommand CancelCommand
-        {
-            get;
-            private set;
-        }
-
-        /// <summary>
-        /// Gets the Coordinated Universal Time (UTC) of the last load processing
-        /// at the ALL/AllNonBindable items collection.
-        /// </summary>
-        public DateTime LastRefreshTimeUtc
-        {
-            get
-            {
-                return _lastRefreshTimeUtc;
-            }
-        }
-
-        public IEnumerable<VM> AllNonBindable
-        {
-            get
-            {
-                return _subItemList;
-            }
-        }
-
-        public ObservableCollection<VM> All
-        {
-            get
-            {
-                return _All;
-            }
-
-            private set
-            {
-                _All = value;
-            }
-        }
-
-        public AsyncLock LoadingLock
-        {
-            get
-            {
-                return _loadingLock;
+                return false;
             }
         }
         #endregion properties
 
         #region methods
         /// <summary>
-        /// Call to load sub-entries.
+        /// Gets all root items below the desktop item and makes them available
+        /// in the <see cref="Entries"/> collection.
         /// </summary>
-        /// <param name="force">Load sub-entries even if it's already loaded.</param>
         /// <returns></returns>
-        public async Task<IEnumerable<VM>> LoadAsync(UpdateMode updateMode = UpdateMode.Replace,
-                                                     bool force = false,
-                                                     object parameter = null)
+        public bool InitRoot()
         {
-            Logger.InfoFormat("_");
-
-            // Ignore if constructed using entries but not entries func
-            if (_loadSubEntryFunc != null)
+            try
             {
-                _lastCancellationToken.Cancel(); // Cancel previous load.
+                Logger.Info("_");
+                // Find all entries below desktop
+                _dir = DirectoryInfoExLib.Factory.DesktopDirectory;
 
-                using (var releaser = await _loadingLock.LockAsync())
+                // and insert desktop sub-entries into Entries property
+                Entries.SetEntries(UpdateMode.Update,
+                                   _dir.GetDirectories().Select(d => new BreadcrumbTreeItemViewModel(d, this)).ToArray());
+                                     //(filter out recycle bin entry if its not that useful...)
+                                     //.Where(d => !d.Equals(DirectoryInfoExLib.Factory.RecycleBinDirectory))
+                                     
+
+                Header = _dir.Label;
+            }
+            catch
+            {
+                return false;
+            }
+
+            return true;
+        }
+
+        #region Disposable Interfaces
+        /// <summary>
+        /// Standard dispose method of the <seealso cref="IDisposable" /> interface.
+        /// </summary>
+        public void Dispose()
+        {
+            Dispose(true);
+        }
+
+        /// <summary>
+        /// Implements standard disposable method.
+        /// Source: http://www.codeproject.com/Articles/15360/Implementing-IDisposable-and-the-Dispose-Pattern-P
+        /// </summary>
+        /// <param name="disposing"></param>
+        protected virtual void Dispose(bool disposing)
+        {
+            if (_disposed == false)
+            {
+                if (disposing == true)
                 {
-                    _lastCancellationToken = new CancellationTokenSource();
-
-                    if (!_isLoaded || force)
-                    {
-                        if (_clearBeforeLoad)
-                            this.All.Clear();
-
-                        try
-                        {
-                            var scheduler = TaskScheduler.FromCurrentSynchronizationContext();
-                            IsLoading = true;
-
-                            await _loadSubEntryFunc(_isLoaded, parameter).ContinueWith((prevTask, _) =>
-                            {
-                                IsLoaded = true;
-                                IsLoading = false;
-
-                                if (!prevTask.IsCanceled && !prevTask.IsFaulted)
-                                {
-                                    this.SetEntries(updateMode, prevTask.Result.ToArray());
-                                    _lastRefreshTimeUtc = DateTime.UtcNow;
-                                }
-                            },
-
-                            _lastCancellationToken, scheduler);
-                        }
-                        catch (InvalidOperationException ex)
-                        {
-                            Logger.Error("Cannot obtain SynchronizationContext", ex);
-                        }
-                    }
+                    // Dispose of the model that defines this viemodel
+                    _dir.Dispose();
+                    _dir = null;
                 }
+
+                // There are no unmanaged resources to release, but
+                // if we add them, they need to be released here.
             }
 
-            return _subItemList;
+            _disposed = true;
+
+            //// If it is available, make the call to the
+            //// base class's Dispose(Boolean) method
+            ////base.Dispose(disposing);
         }
+        #endregion Disposable Interfaces
 
         /// <summary>
-        /// Call to unload sub-entries.
-        /// Method can also be used to cancel current load processings.
+        /// Gets icon for this item when requested ...
         /// </summary>
-        /// <returns></returns>
-        public async Task UnloadAsync()
+        private void loadIcon()
         {
-            Logger.InfoFormat("_");
+            IntPtr pidl = _dir.GetPIDLIntPtr();
+            Bitmap bitmap = null;
 
-            // Cancel previous load.
-            _lastCancellationToken.Cancel();
-
-            using (var releaser = await _loadingLock.LockAsync())
-            {
-                _subItemList = new List<VM>();
-                this.All.Clear();
-                _isLoaded = false;
-            }
-        }
-
-        /// <summary>
-        /// Updates or resets the entries in the ALL items collection
-        /// with the entries in the <param name="viewModels"/> parameter.
-        /// </summary>
-        /// <param name="updateMode">Specifies whether the ALL items collection is updated or reset.</param>
-        /// <param name="viewModels"></param>
-        public void SetEntries(UpdateMode updateMode = UpdateMode.Replace,
-                               params VM[] viewModels)
-        {
-            Logger.InfoFormat("_");
-
-            switch (updateMode)
-            {
-                case UpdateMode.Update:
-                    UpdateAllEntries(viewModels);
-                    break;
-
-                case UpdateMode.Replace:
-                    ResetAllEntries(viewModels);
-                    break;
-
-                default:
-                    throw new NotSupportedException("UpdateMode");
-            }
-        }
-
-        /// <summary>
-        /// Updates the entries (via Remove and Add) in the ALL items collection
-        /// with the entries in the <param name="viewModels"/> parameter.
-        /// </summary>
-        /// <param name="viewModels"></param>
-        private void UpdateAllEntries(params VM[] viewModels)
-        {
-            Logger.InfoFormat("_");
-
-            FastObservableCollection<VM> all = this.All as FastObservableCollection<VM>;
-            all.SuspendCollectionChangeNotification();
             try
             {
-                var removeItems = all.Where(vm => !viewModels.Contains(vm)).ToList();
-                var addItems = viewModels.Where(vm => !all.Contains(vm)).ToList();
-
-                foreach (var vm in removeItems)
-                    all.Remove(vm);
-
-                foreach (var vm in addItems)
-                    all.Add(vm);
-
-                _subItemList = all.ToArray().ToList();
+                bitmap = GetBitmap(IconSize.large, pidl, false);
             }
             finally
             {
-                all.NotifyChanges();
-
-                if (this.EntriesChanged != null)
-                    this.EntriesChanged(this, EventArgs.Empty);
+                Marshal.FreeCoTaskMem(pidl);
             }
+
+            if (bitmap != null)
+                this.Icon = BreadcrumbTestLib.Utils.BitmapSourceUtils.CreateBitmapSourceFromBitmap(bitmap);
         }
 
-        /// <summary>
-        /// Resets the entries (via Clear and Add) in the ALL items collection
-        /// with the entries in the <param name="viewModels"/> parameter.
-        /// </summary>
-        /// <param name="viewModels"></param>
-        private void ResetAllEntries(params VM[] viewModels)
+        private Bitmap GetBitmap(IconSize size,
+                                 IntPtr ptr,
+                                 bool forceLoad)
         {
-            Logger.InfoFormat("_");
+            Bitmap retVal = null;
 
-            _subItemList = viewModels.ToList();
-            FastObservableCollection<VM> all = this.All as FastObservableCollection<VM>;
+            using (var imgList = new SystemImageList(size))
+                retVal = imgList[ptr, true, forceLoad];
 
-            all.SuspendCollectionChangeNotification();
-            try
-            {
-                all.Clear();
-                all.NotifyChanges();
-                all.AddItems(viewModels);
-            }
-            finally
-            {
-                all.NotifyChanges();
-
-                if (this.EntriesChanged != null)
-                    this.EntriesChanged(this, EventArgs.Empty);
-            }
+            return retVal;
         }
-        #endregion methods
+        #endregion
     }
 }
