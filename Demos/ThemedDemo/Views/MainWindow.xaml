@@ -10,7 +10,7 @@
         xmlns:MWindow="clr-namespace:MWindowLib;assembly=MWindowLib"
                      
         mc:Ignorable="d"
-        Title="MainWindow" Height="350" Width="525"
+        Title="MainWindow" Height="350" Width="425"
         ShowIcon="False"
         >
     <Grid>

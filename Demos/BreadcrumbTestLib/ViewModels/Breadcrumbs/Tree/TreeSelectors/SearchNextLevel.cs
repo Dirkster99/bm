@@ -21,7 +21,7 @@
         /// Lookup only next level of tree nodes, even if the lookupvalue is in deeper level, and process only the matched node.
         /// Load subentries if not loaded.
         /// </summary>
-        public static SearchNextLevel<VM, T> LoadSubentriesIfNotLoaded = new SearchNextLevel<VM, T>();
+////        public static SearchNextLevel<VM, T> LoadSubentriesIfNotLoaded = new SearchNextLevel<VM, T>();
 
         public async Task LookupAsync(T value,
                                       ITreeSelector<VM, T> parentSelector,

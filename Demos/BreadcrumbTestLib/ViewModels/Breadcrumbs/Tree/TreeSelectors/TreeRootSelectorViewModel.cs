@@ -170,7 +170,7 @@
                         LoadSubEntries<VM, T> whenSelected = new LoadSubEntries<VM, T>(HierarchicalResult.Current, UpdateMode.Replace, false);
                         SetSelected<VM, T> whenSelected1 = new SetSelected<VM, T>();
 
-                        await this.LookupAsync(targetLocation,
+                        await this.LookupAsync(targetLocation,                    // usually a string path
                                                new RecrusiveSearch<VM, T>(true), // Load SubEntries if not already loaded
                                                cancelToken,
                                                whenSelected1,
@@ -250,7 +250,9 @@
             AsyncUtils.RunAsync(() => this.updateRootItemsAsync(this, _OverflowedAndRootItems, 1));
         }
 
-        private async Task updateRootItemsAsync(ITreeSelector<VM, T> selector, ObservableCollection<VM> rootItems, int level)
+        private async Task updateRootItemsAsync(ITreeSelector<VM, T> selector,
+                                                ObservableCollection<VM> rootItems,
+                                                int level)
         {
             Logger.InfoFormat("_");
 
@@ -262,7 +264,7 @@
             // Perform a lookup and for all directories in next level of current directory (load asynchronously if not loaded), 
             // add directories's Selector to rootTreeSelectors.
             await selector.LookupAsync(default(T),
-                                       BroadcastNextLevel<VM, T>.LoadSubentriesIfNotLoaded,
+                                       new BroadcastNextLevel<VM, T>(),    // LoadSubentriesIfNotLoaded
                                        CancellationToken.None,
                                        new TreeLookupProcessor<VM, T>(HierarchicalResult.All, (hr, p, c) =>
                                        {

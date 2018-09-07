@@ -179,7 +179,7 @@
                         AsyncUtils.RunAsync(async () => await LookupAsync
                         (
                             value,
-                            SearchNextLevel<VM, T>.LoadSubentriesIfNotLoaded,
+                            new SearchNextLevel<VM, T>(),    // LoadSubentriesIfNotLoaded
                             CancellationToken.None,
                             new TreeLookupProcessor<VM, T>(HierarchicalResult.Related, (hr, p, c) =>
                             {
@@ -297,16 +297,16 @@
         /// <param name="model"></param>
         /// <param name="currentAction"></param>
         /// <returns></returns>
-        public async Task LookupAsync(T targetLocation,
+        public async Task LookupAsync(T value,
                                       ITreeLookup<VM, T> lookupProc,
                                       CancellationToken cancelToken,
                                       params ITreeLookupProcessor<VM, T>[] processors)
         {
-            Logger.InfoFormat("'{0}'", (targetLocation != null ? targetLocation.ToString() : "(null)"));
+            Logger.InfoFormat("'{0}'", (value != null ? value.ToString() : "(null)"));
 
             using (await _lookupLock.LockAsync())
             {
-                await lookupProc.LookupAsync(targetLocation, this, this.RootSelector, cancelToken, processors);
+                await lookupProc.LookupAsync(value, this, this.RootSelector, cancelToken, processors);
             }
         }
         #endregion

@@ -19,7 +19,7 @@
         /// <summary>
         /// Lookup only next level of tree nodes, load subentries if not already loaded.
         /// </summary>
-        public static BroadcastNextLevel<VM, T> LoadSubentriesIfNotLoaded = new BroadcastNextLevel<VM, T>();
+////        public static BroadcastNextLevel<VM, T> LoadSubentriesIfNotLoaded = new BroadcastNextLevel<VM, T>();
 
         public async Task LookupAsync(T value,
                                       ITreeSelector<VM, T> parentSelector,

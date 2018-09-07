@@ -76,7 +76,6 @@
     <Compile Include="ViewModels\Breadcrumbs\Tree\TreeLookupProcessors\SetSelected.cs" />
     <Compile Include="ViewModels\Breadcrumbs\Tree\TreeLookupProcessors\TreeLookupProcessor.cs" />
     <Compile Include="ViewModels\Breadcrumbs\Tree\TreeSelectors\BroadcastNextLevel.cs" />
-    <Compile Include="ViewModels\Breadcrumbs\Tree\TreeSelectors\RecrusiveBroadcast.cs" />
     <Compile Include="ViewModels\Breadcrumbs\Tree\TreeSelectors\RecrusiveSearch.cs" />
     <Compile Include="ViewModels\Breadcrumbs\Tree\TreeSelectors\SearchNextLevel.cs" />
     <Compile Include="ViewModels\Breadcrumbs\Tree\TreeSelectors\SearchNextUsingReverseLookup.cs" />
