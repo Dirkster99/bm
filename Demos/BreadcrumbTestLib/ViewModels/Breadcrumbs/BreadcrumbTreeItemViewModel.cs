@@ -15,6 +15,7 @@
     using BmLib.Interfaces;
     using BmLib.Enums;
     using System.Runtime.InteropServices;
+    using BreadcrumbTestLib.Models;
 
     /// <summary>
     /// Class implements a ViewModel to manage a sub-tree of a Breadcrumb control.
@@ -48,7 +49,7 @@
         #region constructors
         /// <summary>
         /// Standard class constructor.
-        /// Call the <see cref="InitRoot"/> method after construction to initialize
+        /// Call the <see cref="InitRootAsync"/> method after construction to initialize
         /// root items collection outside of the scope of object construction.
         /// </summary>
         public BreadcrumbTreeItemViewModel()
@@ -184,7 +185,9 @@
         /// in the <see cref="Entries"/> collection.
         /// </summary>
         /// <returns></returns>
-        public bool InitRoot()
+        public Task<FinalBrowseResult<IDirectoryBrowser>> InitRootAsync(
+            BrowseRequest<string> initialRequest,
+            IProgressViewModel progress = null)
         {
             try
             {
@@ -200,13 +203,17 @@
                                      
 
                 Header = _dir.Label;
+
+                var selector = this.Selection as ITreeRootSelector<BreadcrumbTreeItemViewModel, IDirectoryBrowser>;
+
+                return selector.SelectAsync(DirectoryInfoExLib.Factory.FromString(initialRequest.NewLocation),
+                                            initialRequest.CancelTok,
+                                            progress);
             }
             catch
             {
-                return false;
+                return null;
             }
-
-            return true;
         }
 
         #region Disposable Interfaces

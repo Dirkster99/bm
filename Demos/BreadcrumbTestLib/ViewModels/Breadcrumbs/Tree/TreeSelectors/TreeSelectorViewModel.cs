@@ -213,9 +213,10 @@
             {
                 if (_isOverflowed != value)
                 {
-                    Logger.InfoFormat("_");
+                    Logger.InfoFormat("--> Item '{0}' is Overflowed: {1} -> {2}", this, _isOverflowed, value);
+
                     if (value == true)
-                        Debug.WriteLine("--> Item is Overflowed: " + this);
+                        Debug.WriteLine("--> Item '{0}' is Overflowed: {1} -> {2}", this, _isOverflowed, value);
 
                     _isOverflowed = value;
                     NotifyPropertyChanged(() => this.IsOverflowed);
