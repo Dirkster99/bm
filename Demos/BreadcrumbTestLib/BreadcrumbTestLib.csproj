@@ -67,12 +67,7 @@
     <Compile Include="ViewModels\Breadcrumbs\BreadcrumbTreeItemViewModel.cs" />
     <Compile Include="ViewModels\Breadcrumbs\ProgressViewModel.cs" />
     <Compile Include="ViewModels\Breadcrumbs\Tree\TreeLookupProcessors\LoadSubEntries.cs" />
-    <Compile Include="ViewModels\Breadcrumbs\Tree\TreeLookupProcessors\RefreshDirectory.cs" />
-    <Compile Include="ViewModels\Breadcrumbs\Tree\TreeLookupProcessors\SetChildNotSelected.cs" />
     <Compile Include="ViewModels\Breadcrumbs\Tree\TreeLookupProcessors\SetChildSelected.cs" />
-    <Compile Include="ViewModels\Breadcrumbs\Tree\TreeLookupProcessors\SetCollapsed.cs" />
-    <Compile Include="ViewModels\Breadcrumbs\Tree\TreeLookupProcessors\SetExpanded.cs" />
-    <Compile Include="ViewModels\Breadcrumbs\Tree\TreeLookupProcessors\SetNotSelected.cs" />
     <Compile Include="ViewModels\Breadcrumbs\Tree\TreeLookupProcessors\SetSelected.cs" />
     <Compile Include="ViewModels\Breadcrumbs\Tree\TreeLookupProcessors\TreeLookupProcessor.cs" />
     <Compile Include="ViewModels\Breadcrumbs\Tree\TreeSelectors\BroadcastNextLevel.cs" />
