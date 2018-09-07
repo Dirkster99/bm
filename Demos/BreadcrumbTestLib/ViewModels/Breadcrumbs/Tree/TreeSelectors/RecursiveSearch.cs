@@ -11,7 +11,7 @@
     /// </summary>
     /// <typeparam name="VM"></typeparam>
     /// <typeparam name="T"></typeparam>
-    internal class RecrusiveSearch<VM, T> : ITreeLookup<VM, T>
+    internal class RecursiveSearch<VM, T> : ITreeLookup<VM, T>
     {
         #region fields
         /// <summary>
@@ -27,7 +27,7 @@
         /// Class constructor
         /// </summary>
         /// <param name="loadSubEntries"></param>
-        public RecrusiveSearch(bool loadSubEntries)
+        public RecursiveSearch(bool loadSubEntries)
         {
             Logger.InfoFormat("_");
             this._loadSubEntries = loadSubEntries;

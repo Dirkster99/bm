@@ -166,12 +166,12 @@
 
                     try
                     {
-                        SetChildSelected<VM, T> toSelectedChild = new SetChildSelected<VM, T>();
-                        LoadSubEntries<VM, T> whenSelected = new LoadSubEntries<VM, T>(HierarchicalResult.Current, UpdateMode.Replace, false);
-                        SetSelected<VM, T> whenSelected1 = new SetSelected<VM, T>();
+                        var toSelectedChild = new SetChildSelected<VM, T>();
+                        var whenSelected = new LoadSubEntries<VM, T>(HierarchicalResult.Current, UpdateMode.Replace, false);
+                        var whenSelected1 = new SetSelected<VM, T>();
 
                         await this.LookupAsync(targetLocation,                    // usually a string path
-                                               new RecrusiveSearch<VM, T>(true), // Load SubEntries if not already loaded
+                                               new RecursiveSearch<VM, T>(true), // Load SubEntries if not already loaded
                                                cancelToken,
                                                whenSelected1,
                                                toSelectedChild,
