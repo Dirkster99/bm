@@ -67,7 +67,7 @@
         /// Gets a Breadcrumb Tree ViewModel that drives the Breadcrumb control demo
         /// in this application.
         /// </summary>
-        public BreadcrumbViewModel BreadcrumbTest { get; }
+        public IBreadcrumbViewModel BreadcrumbTest { get; }
 
         /// <summary>
         /// Gets a viewmodel that drives the BreadcrumbTree control

@@ -8,7 +8,7 @@ namespace BreadcrumbTestLib.ViewModels.Breadcrumbs
     /// <summary>
     /// Class implements the viewmodel that manages the complete breadcrump control.
     /// </summary>
-    public class BreadcrumbViewModel : Base.ViewModelBase, IBreadcrumbViewModel
+    internal class BreadcrumbViewModel : Base.ViewModelBase, IBreadcrumbViewModel
     {
         #region fields
         /// <summary>
