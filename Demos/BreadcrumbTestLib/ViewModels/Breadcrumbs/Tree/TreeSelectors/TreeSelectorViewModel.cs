@@ -15,8 +15,8 @@
     /// Base class of ITreeSelector, which implements Tree
     /// based structure and supports LookupProcessing.
     /// </summary>
-    /// <typeparam name="VM"></typeparam>
-    /// <typeparam name="T"></typeparam>
+    /// <typeparam name="VM">Reference to a type of viewmodel</typeparam>
+    /// <typeparam name="T">reference to a type of model that is required by the viewmodel</typeparam>
     internal class TreeSelectorViewModel<VM, T> : Base.ViewModelBase, ITreeSelector<VM, T>
     {
         #region fields
@@ -63,22 +63,9 @@
         #endregion
 
         #region Public Properties
-        public T Value
-        {
-            get { return _currentValue; }
-        }
-
-        public VM ViewModel
-        {
-            get { return _currentViewModel; }
-        }
-
-        public ITreeSelector<VM, T> ParentSelector { get; private set; }
-
-        public ITreeRootSelector<VM, T> RootSelector { get; private set; }
-
-        public IBreadcrumbTreeItemHelperViewModel<VM> EntryHelper { get; private set; }
-
+        /// <summary>
+        /// Whether current view model is selected.
+        /// </summary>
         public bool IsSelected
         {
             get
@@ -104,6 +91,9 @@
             }
         }
 
+        /// <summary>
+        /// This is marked by TreeRootSelector, for overflow menu support.
+        /// </summary>
         public bool IsRoot
         {
             get
@@ -122,16 +112,25 @@
             }
         }
 
+        /// <summary>
+        /// Based on IsRoot and IsChildSelected
+        /// </summary>
         public virtual bool IsRootAndIsChildSelected
         {
             get { return IsRoot && IsChildSelected; }
         }
 
+        /// <summary>
+        /// Gets whether a child of current view model is selected.
+        /// </summary>
         public virtual bool IsChildSelected
         {
             get { return _selectedValue != null; }
         }
 
+        /// <summary>
+        /// Gets the selected child of current view model.          
+        /// </summary>
         public T SelectedChild
         {
             get
@@ -151,6 +150,11 @@
             }
         }
 
+        /// <summary>
+        /// Lycj: Removed SetSelectedChild and SetIsSelected.
+        /// 
+        /// The selected child of current view model, for use in UI only.          
+        /// </summary>
         public T SelectedChildUI
         {
             get
@@ -192,6 +196,49 @@
             }
         }
 
+        /// <summary>
+        /// Gets the instance of the model object that represents this selection helper.
+        /// The model backs the <see cref="ViewModel"/> property and should be in sync
+        /// with it.
+        /// </summary>
+        public T Value
+        {
+            get { return _currentValue; }
+        }
+
+        /// <summary>
+        /// Gets the owning ViewModel of this selection helper.
+        /// </summary>
+        public VM ViewModel
+        {
+            get { return _currentViewModel; }
+        }
+
+        /// <summary>
+        /// Gets the parent's ViewModel <see cref="ITreeSelector"/>.
+        /// </summary>
+        public ITreeSelector<VM, T> ParentSelector { get; }
+
+        /// <summary>
+        /// Gets the root's ViewModel <see cref="ITreeSelector"/>.
+        /// </summary>
+        public ITreeRootSelector<VM, T> RootSelector { get; }
+
+        /// <summary>
+        /// Gets All sub-entries of the current tree item
+        /// to support loading tree items.
+        /// </summary>
+        public IBreadcrumbTreeItemHelperViewModel<VM> EntryHelper { get; }
+
+        /// <summary>
+        /// Gets whether this entry is currently overflowed (should be hidden
+        /// because its to large for display) or a root element, or both.
+        /// 
+        /// This can be used by binding system to determine whether an element should
+        /// be visble in the root drop down list, because overflowed or root
+        /// items should be visible in the root drop down list for
+        /// overflowed and root items.
+        /// </summary>
         public bool IsOverflowedOrRoot
         {
             get { return IsOverflowed || IsRoot; }
@@ -224,9 +271,15 @@
         #endregion
 
         #region methods
+        /// <summary>
+        /// Returns a string that represents the current object.
+        /// </summary>
+        /// <returns></returns>
         public override string ToString()
         {
-            return _currentValue == null ? string.Empty : _currentValue.ToString();
+            return string.Format("Model '{0}', ViewModel '{1}'",
+                _currentValue == null ? string.Empty : _currentValue.ToString(),
+                _currentViewModel == null ? string.Empty : _currentViewModel.ToString());
         }
 
         /// <summary>

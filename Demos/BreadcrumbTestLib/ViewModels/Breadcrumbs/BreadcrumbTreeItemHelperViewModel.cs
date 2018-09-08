@@ -35,7 +35,7 @@
 
         private CancellationTokenSource _lastCancellationToken = new CancellationTokenSource();
 
-        private readonly FastObservableCollection<VM> _All;                      // _subItems
+        private readonly FastObservableCollection<VM> _All;
         private readonly AsyncLock _loadingLock = new AsyncLock();
         #endregion fields
 
@@ -205,6 +205,10 @@
             }
         }
 
+        /// <summary>
+        /// Gets a list of sub-entries that should be displayed below this entry
+        /// in a tree view like display of path items.
+        /// </summary>
         public IEnumerable<VM> All
         {
             get

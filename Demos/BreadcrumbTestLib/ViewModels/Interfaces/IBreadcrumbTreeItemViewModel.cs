@@ -33,12 +33,8 @@
         bool IsLoading { get; }
 
         /// <summary>
-        /// A list of sub-entries, after loaded, used by VM thread only.
-        /// </summary>
-////        IEnumerable<VM> AllNonBindable { get; }
-
-        /// <summary>
-        /// A list of sub-entries, after loaded, used by UI thread only (e.g. Binding).
+        /// Gets a list of sub-entries that should be displayed below this entry
+        /// in a tree view like display of path items.
         /// </summary>
         IEnumerable<VM> All { get; }
         #endregion properties

@@ -29,18 +29,12 @@
         bool IsRootAndIsChildSelected { get; }
 
         /// <summary>
-        /// Whether a child of current view model is selected.
+        /// Gets whether a child of current view model is selected.
         /// </summary>
         bool IsChildSelected { get; }
 
         /// <summary>
-        /// Gets/sets whether the BreadCrumb Tree item is currently overflowed
-        /// (does not fit into the view display area) or not.
-        /// </summary>
-        bool IsOverflowed { get; }
-
-        /// <summary>
-        /// The selected child of current view model.          
+        /// Gets the selected child of current view model.          
         /// </summary>
         T SelectedChild { get; set; }
 
@@ -52,29 +46,49 @@
         T SelectedChildUI { get; set; }
 
         /// <summary>
-        /// The owner view model of this selection helper.
-        /// </summary>
-        VM ViewModel { get; }
-
-        /// <summary>
-        /// The represented value of this selection helper.
+        /// Gets the instance of the model object that represents this selection helper.
+        /// The model backs the <see cref="ViewModel"/> property and should be in sync
+        /// with it.
         /// </summary>
         T Value { get; }
 
         /// <summary>
-        /// Parent ViewModel's ITreeSelector.
+        /// Gets the owning ViewModel of this selection helper.
+        /// </summary>
+        VM ViewModel { get; }
+
+        /// <summary>
+        /// Gets the parent's ViewModel <see cref="ITreeSelector"/>.
         /// </summary>
         ITreeSelector<VM, T> ParentSelector { get; }
 
         /// <summary>
-        /// Root ViewModel's ITreeSelector.
+        /// Gets the root's ViewModel <see cref="ITreeSelector"/>.
         /// </summary>
         ITreeRootSelector<VM, T> RootSelector { get; }
 
         /// <summary>
-        /// For loading sub-entries of current tree.
+        /// Gets All sub-entries of the current tree item
+        /// to support loading tree items.
         /// </summary>
         IBreadcrumbTreeItemHelperViewModel<VM> EntryHelper { get; }
+
+        /// <summary>
+        /// Gets whether this entry is currently overflowed (should be hidden
+        /// because its to large for display) or a root element, or both.
+        /// 
+        /// This can be used by binding system to determine whether an element should
+        /// be visble in the root drop down list, because overflowed or root
+        /// items should be visible in the root drop down list for
+        /// overflowed and root items.
+        /// </summary>
+        bool IsOverflowedOrRoot { get; }
+
+        /// <summary>
+        /// Gets/sets whether the BreadCrumb Tree item is currently overflowed
+        /// (does not fit into the view display area) or not.
+        /// </summary>
+        bool IsOverflowed { get; }
         #endregion properties
 
         #region methods
