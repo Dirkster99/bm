@@ -133,7 +133,7 @@
                     try
                     {
                         Logger.InfoFormat("{0} -> {1}", value, _isExpanded);
-////                        Console.WriteLine("{0}: {1} -> {2}", this.ToString(), value, _isExpanded);
+                        ////                        Console.WriteLine("{0}: {1} -> {2}", this.ToString(), value, _isExpanded);
 
                         ////if (value && _isExpanded == false)
                         ////    AsyncUtils.RunAsync(() => this.LoadAsync());
@@ -261,30 +261,30 @@
 
                         await Application.Current.Dispatcher.Invoke(async () =>
                         {
-                             try
-                             {
-                                 var scheduler = TaskScheduler.FromCurrentSynchronizationContext();
-                                 IsLoading = true;
+                            try
+                            {
+                                var scheduler = TaskScheduler.FromCurrentSynchronizationContext();
+                                IsLoading = true;
 
-                                 await _loadSubEntryFunc(_isLoaded, parameter).ContinueWith((prevTask, _) =>
-                                 {
-                                     IsLoaded = true;
-                                     IsLoading = false;
+                                await _loadSubEntryFunc(_isLoaded, parameter).ContinueWith((prevTask, _) =>
+                                {
+                                    IsLoaded = true;
+                                    IsLoading = false;
 
-                                     if (!prevTask.IsCanceled && !prevTask.IsFaulted)
-                                     {
-                                         this.SetEntries(updateMode, prevTask.Result.ToArray());
-                                         _lastRefreshTimeUtc = DateTime.UtcNow;
-                                     }
-                                 },
+                                    if (!prevTask.IsCanceled && !prevTask.IsFaulted)
+                                    {
+                                        this.SetEntries(updateMode, prevTask.Result.ToArray());
+                                        _lastRefreshTimeUtc = DateTime.UtcNow;
+                                    }
+                                },
 
-                                 _lastCancellationToken, scheduler);
-                             }
-                             catch (InvalidOperationException ex)
-                             {
-                                 Logger.Error("Cannot obtain SynchronizationContext", ex);
-                             }
-                         });
+                                _lastCancellationToken, scheduler);
+                            }
+                            catch (InvalidOperationException ex)
+                            {
+                                Logger.Error("Cannot obtain SynchronizationContext", ex);
+                            }
+                        });
                     }
                 }
             }
@@ -343,38 +343,34 @@
 
         /// <summary>
         /// Updates the entries (via Remove and Add) in the ALL items collection
-        /// with the entries in the <param name="viewModels"/> parameter.
+        /// with the entries in the <param name="viewModels"/> array parameter.
         /// </summary>
         /// <param name="viewModels"></param>
         private void UpdateAllEntries(params VM[] viewModels)
         {
             Logger.InfoFormat("_");
 
-            Application.Current.Dispatcher.Invoke(() =>
+            _All.SuspendCollectionChangeNotification();
+            try
             {
-                FastObservableCollection<VM> all = this.All as FastObservableCollection<VM>;
-                all.SuspendCollectionChangeNotification();
-                try
-                {
-                        var removeItems = all.Where(vm => !viewModels.Contains(vm)).ToList();
-                        var addItems = viewModels.Where(vm => !all.Contains(vm)).ToList();
+                var removeItems = _All.Where(vm => !viewModels.Contains(vm)).ToList();
+                var addItems = viewModels.Where(vm => !_All.Contains(vm)).ToList();
 
-                        foreach (var vm in removeItems)
-                            all.Remove(vm);
+                foreach (var vm in removeItems)
+                    _All.Remove(vm);
 
-                        foreach (var vm in addItems)
-                            all.Add(vm);
+                foreach (var vm in addItems)
+                    _All.Add(vm);
 
-                        _subItemList = all.ToArray().ToList();
-                }
-                finally
-                {
-                    all.NotifyChanges();
+                _subItemList = _All.ToArray().ToList();
+            }
+            finally
+            {
+                _All.NotifyChanges();
 
-                    if (this.EntriesChanged != null)
-                        this.EntriesChanged(this, EventArgs.Empty);
-                }
-            });
+                if (this.EntriesChanged != null)
+                    this.EntriesChanged(this, EventArgs.Empty);
+            }
         }
 
         /// <summary>
