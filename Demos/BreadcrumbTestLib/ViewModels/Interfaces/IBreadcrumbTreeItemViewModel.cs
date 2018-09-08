@@ -35,7 +35,7 @@
         /// <summary>
         /// A list of sub-entries, after loaded, used by VM thread only.
         /// </summary>
-        IEnumerable<VM> AllNonBindable { get; }
+////        IEnumerable<VM> AllNonBindable { get; }
 
         /// <summary>
         /// A list of sub-entries, after loaded, used by UI thread only (e.g. Binding).

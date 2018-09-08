@@ -4,14 +4,12 @@
     using BreadcrumbTestLib.ViewModels.Interfaces;
     using System;
     using System.Collections.Generic;
-    using System.Collections.ObjectModel;
     using System.Linq;
     using System.Threading;
     using System.Threading.Tasks;
     using System.Windows.Input;
     using BmLib.Enums;
     using System.Windows;
-    using BmLib.Utils;
 
     /// <summary>
     /// Implements the viewmodel template that drives every BreadcrumbTreeItem control
@@ -28,16 +26,17 @@
 
         protected Func<bool, object, Task<IEnumerable<VM>>> _loadSubEntryFunc;
 
-        private readonly AsyncLock _loadingLock = new AsyncLock();
-        private CancellationTokenSource _lastCancellationToken = new CancellationTokenSource();
         private bool _clearBeforeLoad = false;
 
         private bool _isLoaded = false;
         private bool _isExpanded = false;
         private bool _isLoading = false;
-        private IEnumerable<VM> _subItemList = new List<VM>();
-        private readonly FastObservableCollection<VM> _All;                      // _subItems
         private DateTime _lastRefreshTimeUtc = DateTime.MinValue;
+
+        private CancellationTokenSource _lastCancellationToken = new CancellationTokenSource();
+
+        private readonly FastObservableCollection<VM> _All;                      // _subItems
+        private readonly AsyncLock _loadingLock = new AsyncLock();
         #endregion fields
 
         #region constructors
@@ -90,11 +89,7 @@
             : this()
         {
             _isLoaded = true;
-            _subItemList = entries;
-
             _All.AddItems(entries);
-            ////foreach (var entry in entries)
-            ////    All.Add(entry);
         }
 
         /// <summary>
@@ -210,14 +205,6 @@
             }
         }
 
-        public IEnumerable<VM> AllNonBindable
-        {
-            get
-            {
-                return _subItemList;
-            }
-        }
-
         public IEnumerable<VM> All
         {
             get
@@ -289,7 +276,7 @@
                 }
             }
 
-            return _subItemList;
+            return _All;
         }
 
         /// <summary>
@@ -306,7 +293,6 @@
 
             using (var releaser = await _loadingLock.LockAsync())
             {
-                _subItemList = new List<VM>();
                 Application.Current.Dispatcher.Invoke(() =>
                 {
                     _All.Clear();
@@ -361,8 +347,6 @@
 
                 foreach (var vm in addItems)
                     _All.Add(vm);
-
-                _subItemList = _All.ToArray().ToList();
             }
             finally
             {
@@ -382,7 +366,6 @@
         {
             Logger.InfoFormat("_");
 
-            _subItemList = viewModels.ToList();
             FastObservableCollection<VM> all = this.All as FastObservableCollection<VM>;
 
             all.SuspendCollectionChangeNotification();

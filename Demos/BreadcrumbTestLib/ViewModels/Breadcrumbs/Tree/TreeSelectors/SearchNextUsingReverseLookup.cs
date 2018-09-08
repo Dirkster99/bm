@@ -64,7 +64,7 @@
 
             if (parentSelector.EntryHelper.IsLoaded)
             {
-                foreach (VM current in parentSelector.EntryHelper.AllNonBindable)
+                foreach (VM current in parentSelector.EntryHelper.All)
                 {
                     if (cancelToken != CancellationToken.None)
                         cancelToken.ThrowIfCancellationRequested();

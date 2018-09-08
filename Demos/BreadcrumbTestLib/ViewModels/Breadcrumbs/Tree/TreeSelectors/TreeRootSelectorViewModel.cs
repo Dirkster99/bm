@@ -231,7 +231,7 @@
                 // in the root drop down list with item.IsOverflowed == true
                 foreach (var p in path.Reverse())
                 {
-                    if (!(this.EntryHelper.AllNonBindable.Contains(p.ViewModel)))
+                    if (!(this.EntryHelper.All.Contains(p.ViewModel)))
                     {
                         Application.Current.Dispatcher.Invoke(() =>
                         {

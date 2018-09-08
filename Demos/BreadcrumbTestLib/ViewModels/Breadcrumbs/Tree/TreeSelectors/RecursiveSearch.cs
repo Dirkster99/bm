@@ -43,8 +43,8 @@
             Logger.InfoFormat("_");
 
             IEnumerable<VM> subentries = this._loadSubEntries ?
-                    await parentSelector.EntryHelper.LoadAsync() :
-                     parentSelector.EntryHelper.AllNonBindable;
+                    await parentSelector.EntryHelper.LoadAsync() : null;
+                     //parentSelector.EntryHelper.AllNonBindable;
 
             if (subentries != null)
             {
