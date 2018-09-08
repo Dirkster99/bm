@@ -8,7 +8,6 @@
     using BreadcrumbTestLib.ViewModels.TreeLookupProcessors;
     using BmLib.Utils;
     using System.Threading;
-    using System.Windows;
     using System.Diagnostics;
     using BmLib.Enums;
 

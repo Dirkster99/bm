@@ -36,7 +36,7 @@
         private bool _isExpanded = false;
         private bool _isLoading = false;
         private IEnumerable<VM> _subItemList = new List<VM>();
-        private readonly ObservableCollection<VM> _All;                      // _subItems
+        private readonly FastObservableCollection<VM> _All;                      // _subItems
         private DateTime _lastRefreshTimeUtc = DateTime.MinValue;
         #endregion fields
 
@@ -92,7 +92,7 @@
             _isLoaded = true;
             _subItemList = entries;
 
-            (this.All as FastObservableCollection<VM>).AddItems(entries);
+            _All.AddItems(entries);
             ////foreach (var entry in entries)
             ////    All.Add(entry);
         }
@@ -115,16 +115,6 @@
 
         #region properties
         /// <summary>
-        /// Gets/sets whether the entries in the All property should be
-        /// reset before loading new entries or not.
-        /// </summary>
-        public bool ClearBeforeLoad
-        {
-            get { return _clearBeforeLoad; }
-            set { _clearBeforeLoad = value; }
-        }
-
-        /// <summary>
         /// Gets/sets whether a breadcrumb drop down entry is
         /// 1) Expanded - Drop Down List is open or
         /// 2) not.
@@ -145,8 +135,8 @@
                         Logger.InfoFormat("{0} -> {1}", value, _isExpanded);
 ////                        Console.WriteLine("{0}: {1} -> {2}", this.ToString(), value, _isExpanded);
 
-                        if (value && _isExpanded == false)
-                            AsyncUtils.RunAsync(() => this.LoadAsync());
+                        ////if (value && _isExpanded == false)
+                        ////    AsyncUtils.RunAsync(() => this.LoadAsync());
                     }
                     catch (Exception exc)
                     {
@@ -233,14 +223,6 @@
             get
             {
                 return _All;
-            }
-        }
-
-        public AsyncLock LoadingLock
-        {
-            get
-            {
-                return _loadingLock;
             }
         }
         #endregion properties

@@ -1,6 +1,5 @@
 ﻿namespace BreadcrumbTestLib.ViewModels.Interfaces
 {
-    using BreadcrumbTestLib.Utils;
     using BmLib.Enums;
     using System;
     using System.Collections.Generic;
@@ -42,11 +41,6 @@
         /// A list of sub-entries, after loaded, used by UI thread only (e.g. Binding).
         /// </summary>
         IEnumerable<VM> All { get; }
-
-        /// <summary>
-        /// Internal lock object when loading.
-        /// </summary>
-        AsyncLock LoadingLock { get; }
         #endregion properties
 
         #region methods
