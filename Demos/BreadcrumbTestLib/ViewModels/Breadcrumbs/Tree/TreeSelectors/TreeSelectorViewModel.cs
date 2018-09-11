@@ -309,17 +309,16 @@
                 // And just in case if the new selected value is child of this node.
                 if (RootSelector.SelectedValue != null)
                 {
-                    AsyncUtils.RunAsync(() => LookupAsync
-                    (
-                      RootSelector.SelectedValue,
-                      new SearchNextUsingReverseLookup<VM, T>(RootSelector.SelectedSelector),
-                      CancellationToken.None,
-                      new TreeLookupProcessor<VM, T>(HierarchicalResult.All, (hr, p, c) =>
-                      {
-                          SelectedChild = c == null ? default(T) : c.Value;
+                    AsyncUtils.RunAsync(() => LookupAsync(
+                                                RootSelector.SelectedValue,
+                                                new SearchNextUsingReverseLookup<VM, T>(RootSelector.SelectedSelector),
+                                                CancellationToken.None,
+                                                new TreeLookupProcessor<VM, T>(HierarchicalResult.All, (hr, p, c) =>
+                                                {
+                                                    SelectedChild = c == null ? default(T) : c.Value;
 
-                          return true;
-                      })));
+                                                    return true;
+                                                })));
                 }
 
                 // SetSelectedChild(lookupResult == null ? default(T) : lookupResult.Value);

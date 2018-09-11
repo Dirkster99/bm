@@ -108,7 +108,7 @@
             string[] pathSegments = DirectoryInfoExLib.Factory.GetFolderSegments(initialPath);
 
             var selection = DiskTest.Selection as ITreeRootSelector<DiskTreeNodeViewModel, string>;
-            selection.SelectAsync(initialPath); // new BrowseRequest<string>(initialPath, pathSegments)
+            selection.SelectAsync(initialPath, new BrowseRequest<string>(initialPath, pathSegments));
 
             ExTest.InitRootAsync(new BrowseRequest<string>(initialPath, pathSegments));
 

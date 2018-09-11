@@ -58,6 +58,7 @@
         /// <param name="progress"></param>
         /// <returns>Returns a task that selects the requested tree node.</returns>
         Task<FinalBrowseResult<T>> SelectAsync(T targetLocation,
+                                               BrowseRequest<string> request,
                                                CancellationToken cancelToken = default(CancellationToken),
                                                IProgressViewModel progress = null);
         #endregion methods

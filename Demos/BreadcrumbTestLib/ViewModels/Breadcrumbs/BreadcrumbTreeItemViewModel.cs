@@ -211,12 +211,11 @@
 
                 Header = _dir.Label;
 
-                
-
                 var selector = this.Selection as ITreeRootSelector<BreadcrumbTreeItemViewModel, IDirectoryBrowser>;
 
                 return selector.SelectAsync(
                     DirectoryInfoExLib.Factory.FromString(initialRequest.NewLocation),
+                    initialRequest,
                     initialRequest.CancelTok,
                     progress);
             }

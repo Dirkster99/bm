@@ -75,6 +75,9 @@
         /// <summary>
         /// Gets/sets the select item when the user opens the drop down and selects 1 item
         /// in the dropdownlist of the RootDropDown button.
+        /// 
+        /// Source:
+        /// DropDownList Binding with SelectedValue="{Binding Selection.SelectedValue}"
         /// </summary>
         public T SelectedValue
         {
@@ -85,8 +88,17 @@
 
             set
             {
+                if (value == null && _selectedSelector == null)
+                    return;
+
+                if (value != null && _selectedSelector != null)
+                {
+                    if (value.Equals(_selectedSelector) == true)
+                        return;
+                }
+
                 Logger.InfoFormat("_");
-                AsyncUtils.RunAsync(() => this.SelectAsync(value, CancellationToken.None));
+                AsyncUtils.RunAsync(() => this.SelectAsync(value, null, CancellationToken.None));
             }
         }
 
@@ -148,6 +160,7 @@
         /// <returns>Returns a task that selects the requested tree node.</returns>
         public async Task<FinalBrowseResult<T>> SelectAsync(
             T targetLocation,
+            BrowseRequest<string> request,
             CancellationToken cancelToken = default(CancellationToken),
             IProgressViewModel progress = null)
         {
