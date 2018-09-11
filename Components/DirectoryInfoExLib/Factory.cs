@@ -213,5 +213,90 @@
             return (fullName.StartsWith(DirectoryInfoEx.IID_Library) &&
                     fullName.EndsWith(".library-ms"));
         }
+
+        /// <summary>
+        /// Make sure that a path reference does actually work with
+        /// <see cref="System.IO.DirectoryInfo"/> by replacing 'C:' by 'C:\'.
+        /// </summary>
+        /// <param name="dirOrfilePath"></param>
+        /// <returns></returns>
+        public static string NormalizePath(string dirOrfilePath)
+        {
+            if (string.IsNullOrEmpty(dirOrfilePath) == true)
+                return null;
+
+            // The dirinfo constructor will not work with 'C:' but does work with 'C:\'
+            if (dirOrfilePath.Length < 2)
+                return null;
+
+            if (dirOrfilePath.Length == 2)
+            {
+                if (dirOrfilePath[dirOrfilePath.Length - 1] == ':')
+                    return dirOrfilePath + System.IO.Path.DirectorySeparatorChar;
+            }
+
+            if (dirOrfilePath.Length == 3)
+            {
+                if (dirOrfilePath[dirOrfilePath.Length - 2] == ':' &&
+                    dirOrfilePath[dirOrfilePath.Length - 1] == System.IO.Path.DirectorySeparatorChar)
+                    return dirOrfilePath;
+
+                return "" + dirOrfilePath[0] + dirOrfilePath[1] +
+                            System.IO.Path.DirectorySeparatorChar + dirOrfilePath[2];
+            }
+
+            // Insert a backslash in 3rd character position if not already present
+            // C:Temp\myfile -> C:\Temp\myfile
+            if (dirOrfilePath.Length >= 3)
+            {
+                if (char.ToUpper(dirOrfilePath[0]) >= 'A' && char.ToUpper(dirOrfilePath[0]) <= 'Z' &&
+                    dirOrfilePath[1] == ':' &&
+                    dirOrfilePath[2] != '\\')
+                {
+                    dirOrfilePath = dirOrfilePath.Substring(0, 2) + "\\" + dirOrfilePath.Substring(2);
+                }
+            }
+
+            // This will normalize directory and drive references into 'C:' or 'C:\Temp'
+            if (dirOrfilePath[dirOrfilePath.Length - 1] == System.IO.Path.DirectorySeparatorChar)
+                dirOrfilePath = dirOrfilePath.Trim(System.IO.Path.DirectorySeparatorChar);
+
+            return dirOrfilePath;
+        }
+
+        /// <summary>
+        /// Split the current folder in an array of sub-folder names and return it.
+        /// </summary>
+        /// <returns>Returns a string array of sub-folder names (including drive)
+        /// or null if folder reference is invalid.</returns>
+        public static string[] GetFolderSegments(string folder)
+        {
+            if (string.IsNullOrEmpty(folder) == true)
+                return null;
+
+            folder = NormalizePath(folder);
+
+            string[] dirs = null;
+
+            try
+            {
+                dirs = folder.Split(new char[] { System.IO.Path.DirectorySeparatorChar }, StringSplitOptions.RemoveEmptyEntries);
+
+                if (dirs != null)
+                {
+                    if (dirs[0].Length == 2)                                        // Normalizing Drive representation
+                    {                                                              // from 'C:' to 'C:\'
+                        if (char.ToUpper(dirs[0][0]) >= 'A' && char.ToUpper(dirs[0][0]) <= 'Z' &&
+                            dirs[0][1] == ':')                                    // to ensure correct processing
+                            dirs[0] += System.IO.Path.DirectorySeparatorChar;    // since 'C:' is technically invalid(!)
+                    }
+                }
+            }
+            catch
+            {
+            }
+
+            return dirs;
+        }
     }
 }

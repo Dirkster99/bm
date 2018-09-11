@@ -100,16 +100,17 @@
         /// </summary>
         public void InitPath(string initialPath)
         {
-            Logger.InfoFormat("_");
-
             // Revert request to default if requested path is non-existing
             if (System.IO.Directory.Exists(initialPath) == false)
                 initialPath = new DirectoryInfo(Environment.SystemDirectory).Root.Name;
 
-            var selection = DiskTest.Selection as ITreeRootSelector<DiskTreeNodeViewModel, string>;
-            selection.SelectAsync(initialPath);
+            Logger.InfoFormat("'{0}'", initialPath);
+            string[] pathSegments = DirectoryInfoExLib.Factory.GetFolderSegments(initialPath);
 
-            ExTest.InitRootAsync(new BrowseRequest<string>(initialPath));
+            var selection = DiskTest.Selection as ITreeRootSelector<DiskTreeNodeViewModel, string>;
+            selection.SelectAsync(initialPath); // new BrowseRequest<string>(initialPath, pathSegments)
+
+            ExTest.InitRootAsync(new BrowseRequest<string>(initialPath, pathSegments));
 
             NavigateToFolder(initialPath);
         }
@@ -167,16 +168,18 @@
         /// <param name="requestor"</param>
         private void NavigateToFolder(string itemPath)
         {
-            Logger.InfoFormat("_");
+            Logger.InfoFormat("'{0}'", itemPath);
 
             // XXX Todo Keep task reference, support cancel, and remove on end?
             try
             {
+                string[] pathSegments = DirectoryInfoExLib.Factory.GetFolderSegments(itemPath);
+
                 // XXX Todo Keep task reference, support cancel, and remove on end?
                 var timeout = TimeSpan.FromSeconds(5);
                 var actualTask = new Task(() =>
                 {
-                    var request = new BrowseRequest<string>(itemPath, _CancelTokenSource.Token);
+                    var request = new BrowseRequest<string>(itemPath, pathSegments, _CancelTokenSource.Token);
                     var t = Task.Factory.StartNew(() => NavigateToFolderAsync(request, null),
                                                         request.CancelTok,
                                                         TaskCreationOptions.LongRunning,
@@ -213,7 +216,7 @@
              BrowseRequest<string> request
             ,object sender)
         {
-            Logger.InfoFormat("_");
+            Logger.InfoFormat("'{0}'", request.NewLocation);
 
             // Make sure the task always processes the last input but is not started twice
             await _SlowStuffSemaphore.WaitAsync();

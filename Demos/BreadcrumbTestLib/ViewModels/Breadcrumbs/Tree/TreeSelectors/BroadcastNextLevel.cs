@@ -17,18 +17,13 @@
         /// </summary>
         protected static readonly log4net.ILog Logger = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
 
-        /// <summary>
-        /// Lookup only next level of tree nodes, load subentries if not already loaded.
-        /// </summary>
-////        public static BroadcastNextLevel<VM, T> LoadSubentriesIfNotLoaded = new BroadcastNextLevel<VM, T>();
-
-        public async Task LookupAsync(T value,
+        public async Task LookupAsync(T targetLocation,
                                       ITreeSelector<VM, T> parentSelector,
                                       ICompareHierarchy<T> comparer,
                                       CancellationToken cancelToken,
                                       params ITreeLookupProcessor<VM, T>[] processors)
         {
-            Logger.InfoFormat("_");
+            Logger.InfoFormat("target '{0}'", (targetLocation != null ? targetLocation.ToString() : "(null)"));
 
             foreach (VM current in await parentSelector.EntryHelper.LoadAsync())
             {
@@ -38,7 +33,7 @@
                 if (current is ISupportBreadcrumbTreeItemViewModel<VM, T>)
                 {
                     var currentSelectionHelper = (current as ISupportBreadcrumbTreeItemViewModel<VM, T>).Selection;
-                    var compareResult = comparer.CompareHierarchy(currentSelectionHelper.Value, value);
+                    var compareResult = comparer.CompareHierarchy(currentSelectionHelper.Value, targetLocation);
 
                     Process(processors, compareResult, parentSelector, currentSelectionHelper);
                 }
@@ -52,14 +47,14 @@
         /// <param name="parentSelector">Parent viewmodel's ITreeSelector.</param>
         /// <param name="selector">Current viewmodel's ITreeSelector.</param>
         /// <returns>Stop process and return false if any processor return false.</returns>
-        public bool Process(ITreeLookupProcessor<VM, T>[] processors,
-                            HierarchicalResult hr,
-                            ITreeSelector<VM, T> parentSelector,
-                            ITreeSelector<VM, T> selector)
+        private bool Process(ITreeLookupProcessor<VM, T>[] processors,
+                             HierarchicalResult hr,
+                             ITreeSelector<VM, T> parentSelector,
+                             ITreeSelector<VM, T> selector)
         {
             foreach (var p in processors)
             {
-                if (!p.Process(hr, parentSelector, selector))
+                if (p.Process(hr, parentSelector, selector) == false)
                     return false;
             }
 

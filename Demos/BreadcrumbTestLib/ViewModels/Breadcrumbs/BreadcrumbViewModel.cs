@@ -132,7 +132,7 @@ namespace BreadcrumbTestLib.ViewModels.Breadcrumbs
         public async Task<FinalBrowseResult<IDirectoryBrowser>> InitPathAsync(
             BrowseRequest<string> initialRequest)
         {
-            Logger.InfoFormat("_");
+            Logger.InfoFormat("'{0}'", initialRequest.NewLocation);
 
             return await Task.Run(() =>
             {

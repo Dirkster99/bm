@@ -75,8 +75,6 @@
 
             set
             {
-                Logger.InfoFormat("_");
-
                 if (_isSelected != value)
                 {
                     _isSelected = value;
@@ -103,8 +101,6 @@
 
             set
             {
-                Logger.InfoFormat("_");
-
                 _isRoot = value;
                 NotifyPropertyChanged(() => this.IsRoot);
                 NotifyPropertyChanged(() => this.IsOverflowedOrRoot);
@@ -140,7 +136,6 @@
 
             set
             {
-                Logger.InfoFormat("_");
                 _selectedValue = value;
 
                 NotifyPropertyChanged(() => this.SelectedChild);
@@ -164,7 +159,6 @@
 
             set
             {
-                Logger.InfoFormat("_");
                 IsSelected = false;
                 NotifyPropertyChanged(() => this.IsSelected);
 
@@ -259,8 +253,7 @@
             {
                 if (_isOverflowed != value)
                 {
-                    Logger.InfoFormat("--> Item '{0}' is Overflowed: {1} -> {2}", this, _isOverflowed, value);
-                    Debug.WriteLine("--> Item '{0}' is Overflowed: {1} -> {2}", this, _isOverflowed, value);
+                    ////Debug.WriteLine("--> Item '{0}' is Overflowed: {1} -> {2}", this, _isOverflowed, value);
 
                     _isOverflowed = value;
                     NotifyPropertyChanged(() => this.IsOverflowed);

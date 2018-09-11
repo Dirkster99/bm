@@ -31,17 +31,13 @@
 
         #region constructors
         /// <summary>
-        /// Constructor
+        /// Class Constructor
         /// </summary>
         /// <param name="entryHelper"></param>
-        /// <param name="compareFunc"></param>
-        /// <param name="rootLevel">Level of TreeItem to consider as root, root items should shown in expander 
-        /// (e.g. in OverflowedAndRootItems) and have caption and expander hidden when the path is longer than it.</param>
         public TreeRootSelectorViewModel(IBreadcrumbTreeItemHelperViewModel<VM> entryHelper) ////int rootLevel = 0,
                                                                          ////params Func<T, T, HierarchicalResult>[] compareFuncs)
           : base(entryHelper)
         {
-            Logger.InfoFormat("_");
             ////_rootLevel = rootLevel;
             ////_compareFuncs = compareFuncs;
             ////Comparers = new [] { PathComparer.LocalDefault };
@@ -155,8 +151,12 @@
             CancellationToken cancelToken = default(CancellationToken),
             IProgressViewModel progress = null)
         {
-            Logger.InfoFormat("_");
+            Logger.InfoFormat("targetLocation: '{0}', _selectedValue: '{1}'",
+                (targetLocation != null ? targetLocation.ToString() : "(null)"),
+                (_selectedValue != null ? _selectedValue.ToString() : "(null)"));
 
+            // There is no selected value or selected value is not targetLocation ?
+            // -> LookUp targetLocation and set _selectedValue
             if (_selectedValue == null || CompareHierarchy(_selectedValue, targetLocation) != HierarchicalResult.Current)
             {
                 try
@@ -166,16 +166,17 @@
 
                     try
                     {
-                        var toSelectedChild = new SetChildSelected<VM, T>();
-                        var whenSelected = new LoadSubEntries<VM, T>(HierarchicalResult.Current, UpdateMode.Replace, false);
-                        var whenSelected1 = new SetSelected<VM, T>();
+                        var toSelectedChild_Processor = new SetChildSelected<VM, T>();
+                        var whenSelected_Processor = new LoadSubEntries<VM, T>(HierarchicalResult.Current, UpdateMode.Replace, false);
+                        var whenSelected1_Processor = new SetSelected<VM, T>();
 
+                        // The selected value is either not set or is not the same as targetLocation
                         await this.LookupAsync(targetLocation,                    // usually a string path
                                                new RecursiveSearch<VM, T>(true), // Load SubEntries if not already loaded
                                                cancelToken,
-                                               whenSelected1,
-                                               toSelectedChild,
-                                               whenSelected);
+                                               whenSelected1_Processor,
+                                               toSelectedChild_Processor,
+                                               whenSelected_Processor);
 
                         return new FinalBrowseResult<T>(targetLocation, default(System.Guid), BrowseResult.Complete);
                     }

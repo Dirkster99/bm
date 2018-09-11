@@ -49,13 +49,13 @@
         /// <param name="cancelToken"></param>
         /// <param name="processors">Processors's Process() method is run whether it's parent, child, current or unrelated node of lookup node.</param>
         /// <returns></returns>
-        public async Task LookupAsync(T value,
+        public async Task LookupAsync(T targetLocation,
                                       ITreeSelector<VM, T> parentSelector,
                                       ICompareHierarchy<T> comparer,
                                       CancellationToken cancelToken,
                                       params ITreeLookupProcessor<VM, T>[] processors)
         {
-            Logger.InfoFormat("_");
+            Logger.InfoFormat("target '{0}'", targetLocation.ToString());
 
             await Task.FromResult(0);
 
@@ -72,7 +72,7 @@
                     if (current is ISupportBreadcrumbTreeItemViewModel<VM, T> && current is ISupportBreadcrumbTreeItemHelperViewModel<VM>)
                     {
                         var currentSelectionHelper = (current as ISupportBreadcrumbTreeItemViewModel<VM, T>).Selection;
-                        var compareResult = comparer.CompareHierarchy(currentSelectionHelper.Value, value);
+                        var compareResult = comparer.CompareHierarchy(currentSelectionHelper.Value, targetLocation);
 
                         switch (compareResult)
                         {
@@ -97,14 +97,14 @@
         /// <param name="parentSelector">Parent viewmodel's ITreeSelector.</param>
         /// <param name="selector">Current viewmodel's ITreeSelector.</param>
         /// <returns>Stop process and return false if any processor return false.</returns>
-        public bool Process(ITreeLookupProcessor<VM, T>[] processors,
+        private bool Process(ITreeLookupProcessor<VM, T>[] processors,
                             HierarchicalResult hr,
                             ITreeSelector<VM, T> parentSelector,
                             ITreeSelector<VM, T> selector)
         {
             foreach (var p in processors)
             {
-                if (!p.Process(hr, parentSelector, selector))
+                if (p.Process(hr, parentSelector, selector) == false)
                     return false;
             }
 

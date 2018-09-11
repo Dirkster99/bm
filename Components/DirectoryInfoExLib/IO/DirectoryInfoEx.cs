@@ -9,7 +9,6 @@ namespace DirectoryInfoExLib.IO
     using System;
     using System.Collections.Generic;
     using System.Runtime.InteropServices;
-    using System.ComponentModel;
     using System.Threading.Tasks;
     using System.Threading;
     using DirectoryInfoExLib.IO.Header.ShellDll;
@@ -23,6 +22,7 @@ namespace DirectoryInfoExLib.IO
     using DirectoryInfoExLib.Enums;
     using System.Text.RegularExpressions;
     using System.Text;
+    using System.ComponentModel;
 
     /// <summary>
     /// Represents a directory in PIDL (Pointer to an ID List) system.
@@ -356,7 +356,7 @@ namespace DirectoryInfoExLib.IO
         /// <returns></returns>
         object ICloneable.Clone()
         {
-            Logger.InfoFormat("_");
+            Logger.InfoFormat("'{0}'", this.FullName);
 
             return new DirectoryInfoEx(this.FullName);
         }
@@ -410,7 +410,7 @@ namespace DirectoryInfoExLib.IO
         /// </summary>
         public void Refresh()
         {
-            Logger.InfoFormat("_");
+            Logger.InfoFormat("'{0}'", this.FullName);
 
             PIDL relPIDL = null;
             if (getExists() == false)
@@ -452,8 +452,6 @@ namespace DirectoryInfoExLib.IO
         /// <returns></returns>
         public bool Equals(IDirectoryInfoEx other)
         {
-            Logger.InfoFormat("_");
-
             PIDL thisPidl = this.getPIDL();
             PIDL otherPidl = (other as DirectoryInfoEx).getPIDL();
             try
@@ -469,12 +467,13 @@ namespace DirectoryInfoExLib.IO
 
         public bool Equals(DirectoryInfoEx other)
         {
-            Logger.InfoFormat("_");
-
             if (this.FullName.Equals(other.FullName, StringComparison.InvariantCultureIgnoreCase))
                 return true;
 
             DirectoryInfoEx dirObj = other as DirectoryInfoEx;
+
+            Logger.InfoFormat("'{0}' <-> '{1}'", this.FullName, dirObj.FullName);
+
             if (dirObj.FullName.Equals(DirectoryInfoEx.IID_UserFiles))
                 if (this.FullName.Equals(DirectoryInfoEx.CurrentUser.FullName, StringComparison.InvariantCultureIgnoreCase))
                     return true;
@@ -488,14 +487,12 @@ namespace DirectoryInfoExLib.IO
 
         public override int GetHashCode()
         {
-            Logger.InfoFormat("_");
-
             return FullName.ToLower().GetHashCode();
         }
 
         public IntPtr GetPIDLIntPtr()
         {
-            Logger.InfoFormat("_");
+            Logger.InfoFormat("'{0}'", this.FullName);
 
             if (_pidl != null)
                 return PIDL.ILClone(_pidl.Ptr);
@@ -519,7 +516,7 @@ namespace DirectoryInfoExLib.IO
             SearchOption searchOption,
             CancelDelegate cancel)
         {
-            Logger.InfoFormat("_");
+            Logger.InfoFormat("FullName: '{0}'", this.FullName);
 
             const ShellAPI.SHCONTF flag = ShellAPI.SHCONTF.NONFOLDERS | ShellAPI.SHCONTF.FOLDERS | ShellAPI.SHCONTF.INCLUDEHIDDEN;
             IntPtr ptrEnum = IntPtr.Zero;
@@ -628,7 +625,7 @@ namespace DirectoryInfoExLib.IO
         /// <returns></returns>
         public IEnumerable<IDirectoryInfoEx> EnumerateDirectories(String searchPattern, SearchOption searchOption)
         {
-            Logger.InfoFormat("_");
+            Logger.InfoFormat("FullName: '{0}'", this.FullName);
 
             return EnumerateDirectories(searchPattern, searchOption, null);
         }
@@ -640,7 +637,7 @@ namespace DirectoryInfoExLib.IO
         /// <returns></returns>
         public IEnumerable<IDirectoryInfoEx> EnumerateDirectories(String searchPattern)
         {
-            Logger.InfoFormat("_");
+            Logger.InfoFormat("FullName: '{0}'", this.FullName);
 
             return EnumerateDirectories(searchPattern, SearchOption.TopDirectoryOnly);
         }
@@ -651,7 +648,7 @@ namespace DirectoryInfoExLib.IO
         /// <returns></returns>
         public IEnumerable<IDirectoryBrowser> EnumerateDirectories()
         {
-            Logger.InfoFormat("_");
+            Logger.InfoFormat("FullName: '{0}'", this.FullName);
 
             return EnumerateDirectories("*", SearchOption.TopDirectoryOnly);
         }
@@ -662,7 +659,7 @@ namespace DirectoryInfoExLib.IO
         /// </summary>
         public IDirectoryBrowser[] GetDirectories(String searchPattern, SearchOption searchOption)
         {
-            Logger.InfoFormat("_");
+            Logger.InfoFormat("FullName: '{0}'", this.FullName);
 
             try
             {
@@ -681,7 +678,7 @@ namespace DirectoryInfoExLib.IO
         /// </summary>
         public IDirectoryInfoEx[] GetDirectories(String searchPattern)
         {
-            Logger.InfoFormat("_");
+            Logger.InfoFormat("FullName: '{0}'", this.FullName);
 
             try
             {
@@ -700,7 +697,7 @@ namespace DirectoryInfoExLib.IO
         /// </summary>
         public IDirectoryBrowser[] GetDirectories()
         {
-            Logger.InfoFormat("_");
+            Logger.InfoFormat("FullName: '{0}'", this.FullName);
 
             try
             {
@@ -720,7 +717,7 @@ namespace DirectoryInfoExLib.IO
         public Task<IDirectoryInfoEx[]> GetDirectoriesAsync(String searchPattern,
           SearchOption searchOption, CancellationToken ct)
         {
-            Logger.InfoFormat("_");
+            Logger.InfoFormat("FullName: '{0}'", this.FullName);
 
             try
             {
@@ -743,7 +740,7 @@ namespace DirectoryInfoExLib.IO
         /// </summary>
         public override string ToString()
         {
-            return Label;
+            return string.Format("'{0}' ({1})", this.Label, this.FullName);
         }
 
         /// <summary>
@@ -751,8 +748,6 @@ namespace DirectoryInfoExLib.IO
         /// </summary>
         protected static PIDL KnownFolderToPIDL(KnownFolder knownFolder)
         {
-            Logger.InfoFormat("_");
-
             IntPtr ptrAddr;
             PIDL pidl;
 
@@ -768,8 +763,6 @@ namespace DirectoryInfoExLib.IO
 
         protected static IntPtr KnownFolderToPIDLIntPtr(KnownFolder knownFolder)
         {
-            Logger.InfoFormat("_");
-
             IntPtr ptrAddr;
 
             int RetVal = (knownFolder.KnownFolderInterface).GetIDList(KnownFolderRetrievalOptions.Create, out ptrAddr);
@@ -786,8 +779,6 @@ namespace DirectoryInfoExLib.IO
         /// </summary>
         protected static IDirectoryBrowser getDirectoryRoot(IDirectoryInfoEx lookup)
         {
-            Logger.InfoFormat("_");
-
             IDirectoryBrowser dir = lookup.Parent;
 
             while (dir.DirectoryType != DirectoryTypeEnum.dtDesktop &&
@@ -814,8 +805,6 @@ namespace DirectoryInfoExLib.IO
         /// <returns>The object that implement the IShellFolder2 interface or null.</returns>
         protected static ShellFolder2 getDesktopShellFolder()
         {
-            Logger.InfoFormat("_");
-
             IntPtr ptrShellFolder;
             int hr = ShellAPI.SHGetDesktopFolder(out ptrShellFolder);
             if (hr == ShellAPI.S_OK && ptrShellFolder != IntPtr.Zero)
@@ -839,8 +828,6 @@ namespace DirectoryInfoExLib.IO
         /// if the PIDL cannot be determined at this time.</returns>
         protected static PIDL PathToPIDL(string path)
         {
-            Logger.InfoFormat("_");
-
             path = RemoveSlash(path);
             IntPtr pidlPtr;
             uint pchEaten = 0;
@@ -871,8 +858,6 @@ namespace DirectoryInfoExLib.IO
         /// if the PIDL cannot be determined at this time.</returns>
         protected static IntPtr PathToPIDLIntPtr(string path)
         {
-            Logger.InfoFormat("_");
-
             path = RemoveSlash(path);
             IntPtr pidlPtr;
             uint pchEaten = 0;
@@ -902,8 +887,6 @@ namespace DirectoryInfoExLib.IO
         /// <returns>The path (e.g.: 'C:\Windows' or '::{...}').</returns>
         protected static string PIDLToPath(PIDL pidlFull)
         {
-            Logger.InfoFormat("_");
-
             PIDL desktopPIDL = DirectoryInfoEx.DesktopDirectory.getPIDL();
             try
             {
@@ -930,8 +913,6 @@ namespace DirectoryInfoExLib.IO
         /// <returns>The path (e.g.: 'C:\Windows' or '::{...}').</returns>
         protected static string PIDLToPath(IShellFolder2 iShellFolder, PIDL pidlRel)
         {
-            Logger.InfoFormat("_");
-
             return loadName(iShellFolder, pidlRel, ShellAPI.SHGNO.FORPARSING);
         }
 
@@ -945,8 +926,6 @@ namespace DirectoryInfoExLib.IO
         /// <returns>The path (e.g.: 'C:\Windows' or '::{...}').</returns>
         protected static PIDL getRelativePIDL(PIDL pidl)
         {
-            Logger.InfoFormat("_");
-
             if (pidl == null)
                 return null;
 
@@ -972,8 +951,6 @@ namespace DirectoryInfoExLib.IO
         /// </summary>
         protected static PIDL getParentPIDL(PIDL pidl, out PIDL relPIDL)
         {
-            Logger.InfoFormat("_");
-
             relPIDL = new PIDL(pidl, true); //0.21
             if (pidl.Size == 0)
                 return pidl;
@@ -1005,8 +982,6 @@ namespace DirectoryInfoExLib.IO
         /// <returns>The relative PIDL object of the parent item.</returns>
         protected static PIDL getParentPIDL(PIDL pidl)
         {
-            Logger.InfoFormat("_");
-
             PIDL relPIDL = null;
             try
             {
@@ -1027,8 +1002,6 @@ namespace DirectoryInfoExLib.IO
         /// <returns>The name of the item addressed by the parameter</returns>
         protected static string GetFileName(string path)
         {
-            Logger.InfoFormat("_");
-
             int idx = path.LastIndexOf('\\');
 
             if (idx == -1)
@@ -1076,8 +1049,6 @@ namespace DirectoryInfoExLib.IO
                                   PIDL relPidl,
                                   Header.ShellDll.ShellAPI.SHGNO uFlags)
         {
-            Logger.InfoFormat("_");
-
             return loadName(iShellFolder, relPidl.Ptr, uFlags);
         }
 
@@ -1086,8 +1057,6 @@ namespace DirectoryInfoExLib.IO
         /// </summary>
         protected static string RemoveSlash(string input)
         {
-            Logger.InfoFormat("_");
-
             if (!input.EndsWith(@":\") && input.EndsWith(@"\"))
             {
                 return input.Substring(0, input.Length - 1);
@@ -1108,8 +1077,6 @@ namespace DirectoryInfoExLib.IO
         /// if the PIDL cannot be determined at this time.</returns>
         protected PIDL getRelPIDL()
         {
-            Logger.InfoFormat("_");
-
             //0.14 : FileSystemInfoEx now stored a copy of PIDL/Rel, will return copy of it when properties is called (to avoid AccessViolation).
             if (_pidlRel != null)
                 return new PIDL(_pidlRel, true);
@@ -1136,8 +1103,6 @@ namespace DirectoryInfoExLib.IO
         /// if the PIDL cannot be determined at this time.</returns>
         protected PIDL getPIDL()
         {
-            Logger.InfoFormat("_");
-
             if (_pidl != null)
                 return new PIDL(_pidl, true);
 
@@ -1163,8 +1128,6 @@ namespace DirectoryInfoExLib.IO
         /// if the PIDL cannot be determined at this time.</returns>
         protected ShellFolder2 getParentIShellFolder(PIDL pidl, out PIDL relPIDL)
         {
-            Logger.InfoFormat("_");
-
             int hr;
             IntPtr ptrShellFolder = IntPtr.Zero;
 
@@ -1204,8 +1167,6 @@ namespace DirectoryInfoExLib.IO
         /// </summary>
         protected string PtrToPath(IntPtr ptr)
         {
-            Logger.InfoFormat("_");
-
             using (ShellFolder2 _desktopShellFolder = getDesktopShellFolder())
             {
                 return loadName(_desktopShellFolder, ptr, ShellAPI.SHGNO.FORPARSING);
@@ -1214,8 +1175,6 @@ namespace DirectoryInfoExLib.IO
 
         protected void checkExists()
         {
-            Logger.InfoFormat("_");
-
             //0.18: checkExists() ignore network directory.
             if (!FullName.StartsWith("\\") && !Exists)
                 throw new DirectoryNotFoundException(FullName + " does not exist.");
@@ -1226,8 +1185,6 @@ namespace DirectoryInfoExLib.IO
         /// </summary>
         protected IDirectoryInfoEx initParent()
         {
-            Logger.InfoFormat("_");
-
             if (!_parentInited)
             {
                 if (Exists)
@@ -1264,8 +1221,6 @@ namespace DirectoryInfoExLib.IO
         /// <returns>The name of the item addressed by the parameter</returns>
         protected string GetDirectoryName(string path)
         {
-            Logger.InfoFormat("_");
-
             if (path.EndsWith("\\"))
                 path = path.Substring(0, path.Length - 1); // Remove ending slash.
 
@@ -1306,8 +1261,6 @@ namespace DirectoryInfoExLib.IO
         /// <returns>true if the item exists, otherwise false.</returns>
         protected bool getExists()
         {
-            Logger.InfoFormat("_");
-
             if (FullName == DirectoryInfoEx.IID_Desktop) // Desktop
                 return true;
             else

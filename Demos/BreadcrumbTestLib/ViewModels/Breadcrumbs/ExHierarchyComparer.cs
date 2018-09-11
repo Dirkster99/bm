@@ -52,13 +52,13 @@
             if (a == null || b == null)
                 return HierarchicalResult.Unrelated;
 
-            if (!a.FullName.Contains("::") && !b.FullName.Contains("::"))
+            if (a.FullName.Contains("::") == false && b.FullName.Contains("::") == false)
                 return this._pathComparer.CompareHierarchy(a.FullName, b.FullName);
 
             if (a.FullName.Equals(b.FullName))
-                return HierarchicalResult.Current;
+                return HierarchicalResult.Current;  // a and b refer to the same location
 
-            string key = string.Format("{0}-compare-{1}", a.FullName, b.FullName);
+//            string key = string.Format("{0}-compare-{1}", a.FullName, b.FullName);
 
             if (a.FullName == b.FullName)
                 return HierarchicalResult.Current;

@@ -18,8 +18,6 @@
         /// Log4net logger facility for this class.
         /// </summary>
         protected static readonly log4net.ILog Logger = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
-
-        private bool _loadSubEntries;
         #endregion fields
 
         #region constructors
@@ -27,27 +25,29 @@
         /// Class constructor
         /// </summary>
         /// <param name="loadSubEntries"></param>
-        public RecursiveSearch(bool loadSubEntries)
+        public RecursiveSearch(bool reloadSubEntries = true)
         {
-            Logger.InfoFormat("_");
-            this._loadSubEntries = loadSubEntries;
+            // XXX TODO FixMe to use existing sub-entries without reload, if requested
         }
         #endregion constructors
 
-        public async Task LookupAsync(T value,
+        public async Task LookupAsync(T targetLocation,
                                       ITreeSelector<VM, T> parentSelector,
                                       ICompareHierarchy<T> comparer,
                                       CancellationToken cancelToken,
                                       params ITreeLookupProcessor<VM, T>[] processors)
         {
-            Logger.InfoFormat("_");
+            Logger.InfoFormat("target '{0}'", (targetLocation != null ? targetLocation.ToString() : "(null)"));
 
-            IEnumerable<VM> subentries = this._loadSubEntries ?
-                    await parentSelector.EntryHelper.LoadAsync() : null;
-                     //parentSelector.EntryHelper.AllNonBindable;
+            // Always re-Load sub-entries below this node via parentSelector if requested
+            // (XXX TODO FixMe to use existing entries without reload, if requested)
+            IEnumerable<VM> subentries = await parentSelector.EntryHelper.LoadAsync();
 
             if (subentries != null)
             {
+                // Go through each sub-entry and determine if any entry is:
+                // 1) Same as targetLocation or
+                // 2) targetLocation is child of this sub-entry (reload its children in turn)
                 foreach (VM current in subentries)
                 {
                     if (cancelToken != CancellationToken.None)
@@ -56,7 +56,7 @@
                     if (current is ISupportBreadcrumbTreeItemViewModel<VM, T> && current is ISupportBreadcrumbTreeItemHelperViewModel<VM>)
                     {
                         var currentSelectionHelper = (current as ISupportBreadcrumbTreeItemViewModel<VM, T>).Selection;
-                        var compareResult = comparer.CompareHierarchy(currentSelectionHelper.Value, value);
+                        var compareResult = comparer.CompareHierarchy(currentSelectionHelper.Value, targetLocation);
 
                         switch (compareResult)
                         {
@@ -67,7 +67,7 @@
                             case HierarchicalResult.Child:
                                 if (Process(processors, compareResult, parentSelector, currentSelectionHelper))
                                 {
-                                    await this.LookupAsync(value, currentSelectionHelper,
+                                    await this.LookupAsync(targetLocation, currentSelectionHelper,
                                                            comparer, cancelToken, processors);
 
                                     return;
@@ -87,14 +87,14 @@
         /// <param name="parentSelector">Parent viewmodel's ITreeSelector.</param>
         /// <param name="selector">Current viewmodel's ITreeSelector.</param>
         /// <returns>Stop process and return false if any processor return false.</returns>
-        public bool Process(ITreeLookupProcessor<VM, T>[] processors,
+        private bool Process(ITreeLookupProcessor<VM, T>[] processors,
                             HierarchicalResult hr,
                             ITreeSelector<VM, T> parentSelector,
                             ITreeSelector<VM, T> selector)
         {
             foreach (var p in processors)
             {
-                if (!p.Process(hr, parentSelector, selector))
+                if (p.Process(hr, parentSelector, selector) == false)
                     return false;
             }
 

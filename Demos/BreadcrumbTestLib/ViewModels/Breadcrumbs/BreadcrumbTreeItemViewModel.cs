@@ -198,24 +198,27 @@
         {
             try
             {
-                Logger.Info("_");
                 // Find all entries below desktop
                 _dir = DirectoryInfoExLib.Factory.DesktopDirectory;
+
+                Logger.InfoFormat("'{0}' -> '{1}'", initialRequest.NewLocation, _dir.Label);
 
                 // and insert desktop sub-entries into Entries property
                 Entries.SetEntries(UpdateMode.Update,
                                    _dir.GetDirectories().Select(d => new BreadcrumbTreeItemViewModel(d, this)).ToArray());
                                      //(filter out recycle bin entry if its not that useful...)
                                      //.Where(d => !d.Equals(DirectoryInfoExLib.Factory.RecycleBinDirectory))
-                                     
 
                 Header = _dir.Label;
 
+                
+
                 var selector = this.Selection as ITreeRootSelector<BreadcrumbTreeItemViewModel, IDirectoryBrowser>;
 
-                return selector.SelectAsync(DirectoryInfoExLib.Factory.FromString(initialRequest.NewLocation),
-                                            initialRequest.CancelTok,
-                                            progress);
+                return selector.SelectAsync(
+                    DirectoryInfoExLib.Factory.FromString(initialRequest.NewLocation),
+                    initialRequest.CancelTok,
+                    progress);
             }
             catch
             {

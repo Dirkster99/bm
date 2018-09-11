@@ -23,13 +23,13 @@
         /// </summary>
 ////        public static SearchNextLevel<VM, T> LoadSubentriesIfNotLoaded = new SearchNextLevel<VM, T>();
 
-        public async Task LookupAsync(T value,
+        public async Task LookupAsync(T targetLocation,
                                       ITreeSelector<VM, T> parentSelector,
                                       ICompareHierarchy<T> comparer,
                                       CancellationToken cancelToken,
                                       params ITreeLookupProcessor<VM, T>[] processors)
         {
-            Logger.InfoFormat("_");
+            Logger.InfoFormat("target '{0}'", targetLocation.ToString());
 
             foreach (VM current in await parentSelector.EntryHelper.LoadAsync())
             {
@@ -39,7 +39,7 @@
                 if (current is ISupportBreadcrumbTreeItemViewModel<VM, T>)
                 {
                     var currentSelectionHelper = (current as ISupportBreadcrumbTreeItemViewModel<VM, T>).Selection;
-                    var compareResult = comparer.CompareHierarchy(currentSelectionHelper.Value, value);
+                    var compareResult = comparer.CompareHierarchy(currentSelectionHelper.Value, targetLocation);
 
                     switch (compareResult)
                     {
@@ -59,14 +59,14 @@
         /// <param name="parentSelector">Parent viewmodel's ITreeSelector.</param>
         /// <param name="selector">Current viewmodel's ITreeSelector.</param>
         /// <returns>Stop process and return false if any processor return false.</returns>
-        public bool Process(ITreeLookupProcessor<VM, T>[] processors,
+        private bool Process(ITreeLookupProcessor<VM, T>[] processors,
                             HierarchicalResult hr,
                             ITreeSelector<VM, T> parentSelector,
                             ITreeSelector<VM, T> selector)
         {
             foreach (var p in processors)
             {
-                if (!p.Process(hr, parentSelector, selector))
+                if (p.Process(hr, parentSelector, selector) == false)
                     return false;
             }
 
