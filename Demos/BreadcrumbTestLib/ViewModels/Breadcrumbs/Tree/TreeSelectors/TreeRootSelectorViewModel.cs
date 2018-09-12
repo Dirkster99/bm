@@ -97,8 +97,8 @@
                         return;
                 }
 
-                Logger.InfoFormat("_");
-                AsyncUtils.RunAsync(() => this.SelectAsync(value, null, CancellationToken.None));
+                //// Refactored this into BreadcrumbViewModel.RootDropDownSelectionChangedCommand
+                //// AsyncUtils.RunAsync(() => this.SelectAsync(value, null, CancellationToken.None));
             }
         }
 
@@ -168,9 +168,11 @@
                 (targetLocation != null ? targetLocation.ToString() : "(null)"),
                 (_selectedValue != null ? _selectedValue.ToString() : "(null)"));
 
+            var hierarchyRelation = CompareHierarchy(_selectedValue, targetLocation);
+
             // There is no selected value or selected value is not targetLocation ?
             // -> LookUp targetLocation and set _selectedValue
-            if (_selectedValue == null || CompareHierarchy(_selectedValue, targetLocation) != HierarchicalResult.Current)
+            if (_selectedValue == null || hierarchyRelation != HierarchicalResult.Current)
             {
                 try
                 {

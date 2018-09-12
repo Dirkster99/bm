@@ -1,4 +1,4 @@
-﻿namespace BreadcrumbTestLib.Views
+﻿namespace BmLib.BaseControls
 {
     using System.Windows;
 

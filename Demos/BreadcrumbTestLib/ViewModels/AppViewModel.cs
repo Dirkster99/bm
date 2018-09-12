@@ -11,6 +11,7 @@
     using System.IO;
     using System.Threading;
     using System.Threading.Tasks;
+    using System.Windows;
 
     public class AppViewModel : Base.ViewModelBase, IDisposable
     {
@@ -49,11 +50,80 @@
             _CancelTokenSource = new CancellationTokenSource();
 
             // Initialize Breadcrumb Tree ViewModel and SpecialFolders Test ViewModel
-            BreadcrumbTest = new BreadcrumbViewModel();
+            BreadcrumbBrowser = new BreadcrumbViewModel();
+
+            WeakEventManager<ICanNavigate, BrowsingEventArgs>
+                .AddHandler(BreadcrumbBrowser, "BrowseEvent", Control_BrowseEvent);
 
             this.DiskTest = new DiskTreeNodeViewModel(new DirectoryInfo(@"C:\\"), new DirectoryInfo(@"E:\\"));
 
             this.ExTest = new BreadcrumbTreeItemViewModel();
+        }
+
+        /// <summary>
+        /// One of the controls has changed its location in its space.
+        /// This method is invoked to synchronize this change with all other controls.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void Control_BrowseEvent(object sender, BrowsingEventArgs e)
+        {
+            var location = e.Location;
+
+////            SelectedFolder = location.Path;
+////
+////            if (e.IsBrowsing == false && e.Result == BrowseResult.Complete)
+////            {
+////                // XXX Todo Keep task reference, support cancel, and remove on end?
+////                try
+////                {
+////                    var timeout = TimeSpan.FromSeconds(5);
+////                    var actualTask = new Task(() =>
+////                    {
+////                        var request = new BrowseRequest(location, _CancelTokenSourc.Token);
+////
+////                        var t = Task.Factory.StartNew(() => NavigateToFolderAsync(request, sender),
+////                                                            request.CancelTok,
+////                                                            TaskCreationOptions.LongRunning,
+////                                                            _OneTaskScheduler);
+////
+////                        if (t.Wait(timeout) == true)
+////                            return;
+////
+////                        _CancelTokenSourc.Cancel();           // Task timed out so lets abort it
+////                        return;                         // Signal timeout here...
+////                    });
+////
+////                    actualTask.Start();
+////                    actualTask.Wait();
+////                }
+////                catch (System.AggregateException ex)
+////                {
+////                    Logger.Error(ex);
+////                }
+////                catch (Exception ex)
+////                {
+////                    Logger.Error(ex);
+////                }
+////            }
+////            else
+////            {
+////                if (e.IsBrowsing == true)
+////                {
+////                    // The sender has messaged: "I am changing location..."
+////                    // So, we set this property to tell the others:
+////                    // 1) Don't change your location now (eg.: Disable UI)
+////                    // 2) We'll be back to tell you the location when we know it
+////                    if (TreeBrowser != sender)
+////                        TreeBrowser.SetExternalBrowsingState(true);
+////
+////                    if (FolderTextPath != sender)
+////                        FolderTextPath.SetExternalBrowsingState(true);
+////
+////                    if (FolderItemsView != sender)
+////                        FolderItemsView.SetExternalBrowsingState(true);
+////                }
+////            }
         }
         #endregion constructors
 
@@ -67,7 +137,7 @@
         /// Gets a Breadcrumb Tree ViewModel that drives the Breadcrumb control demo
         /// in this application.
         /// </summary>
-        public IBreadcrumbViewModel BreadcrumbTest { get; }
+        public IBreadcrumbViewModel BreadcrumbBrowser { get; }
 
         /// <summary>
         /// Gets a viewmodel that drives the BreadcrumbTree control
@@ -173,12 +243,11 @@
             // XXX Todo Keep task reference, support cancel, and remove on end?
             try
             {
-                string[] pathSegments = DirectoryInfoExLib.Factory.GetFolderSegments(itemPath);
-
                 // XXX Todo Keep task reference, support cancel, and remove on end?
                 var timeout = TimeSpan.FromSeconds(5);
                 var actualTask = new Task(() =>
                 {
+                    string[] pathSegments = DirectoryInfoExLib.Factory.GetFolderSegments(itemPath);
                     var request = new BrowseRequest<string>(itemPath, pathSegments, _CancelTokenSource.Token);
                     var t = Task.Factory.StartNew(() => NavigateToFolderAsync(request, null),
                                                         request.CancelTok,
@@ -228,7 +297,7 @@
                 if (cancel != null)
                     cancel.ThrowIfCancellationRequested();
 
-                var browseResult = await BreadcrumbTest.InitPathAsync(request);
+                var browseResult = await BreadcrumbBrowser.InitPathAsync(request);
 
                 return browseResult;
             }

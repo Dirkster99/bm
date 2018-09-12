@@ -50,7 +50,6 @@
                         <ColumnDefinition Width="Auto" />
                     </Grid.ColumnDefinitions>
 
-
                     <bc:HotTrack Grid.Column="0" 
                                  x:Name="PART_ToggleHotTrack"
                                  Width="{Binding ActualHeight, ElementName=PART_ToggleHotTrack}">
@@ -58,7 +57,7 @@
                     </bc:HotTrack>
 
 
-                    <Grid Grid.Column="1" Margin="2,0">
+                    <Grid Grid.Column="1" Margin="0">
                         <ContentPresenter 
                             x:Name="PART_ContentOn"
                             Content="{TemplateBinding ContentOn}" 

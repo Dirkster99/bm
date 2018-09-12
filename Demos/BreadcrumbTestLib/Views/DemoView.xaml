@@ -87,15 +87,15 @@
                     <RowDefinition Height="Auto"/>
                     <RowDefinition Height="*"/>
                 </Grid.RowDefinitions>
-                
-                <ctrls:Breadcrumb DataContext="{Binding BreadcrumbTest}" Name="BreadcrumbDemoControl"
+
+                <ctrls:Breadcrumb DataContext="{Binding BreadcrumbBrowser}" Name="BreadcrumbDemoControl"
                                   Visibility="{Binding Path=IsChecked,ElementName=ShowBreadCrumbControl,Mode=OneWay, UpdateSourceTrigger=PropertyChanged,Converter={StaticResource BoolToVisibilityConverter}}"
                                   VerticalAlignment="Top" HorizontalAlignment="Stretch"
                                   RootItems="{Binding BreadcrumbSubTree.Selection.OverflowedAndRootItems,Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"
                                   Margin="3"
                               />
 
-                <TreeView Grid.Row="1" DataContext="{Binding BreadcrumbTest}" 
+                <TreeView Grid.Row="1" DataContext="{Binding BreadcrumbBrowser}" 
                           ItemsSource="{Binding BreadcrumbSubTree.Entries.All}"
                           Visibility="{Binding Path=IsChecked,ElementName=ShowTreeviewControl,Mode=OneWay, UpdateSourceTrigger=PropertyChanged,Converter={StaticResource BoolToVisibilityConverter}}"
                           >
@@ -154,7 +154,7 @@
                           IsChecked="True" />
 
                 <CheckBox Content="EnableBreadcrumb"
-                      IsChecked="{Binding BreadcrumbTest.EnableBreadcrumb}" />
+                      IsChecked="{Binding BreadcrumbBrowser.EnableBreadcrumb}" />
                 
                 <CheckBox Content="IsOverflown" IsEnabled="False"
                       IsChecked="{Binding ElementName=BreadcrumbDemoControl,Path=IsOverflown}" />
@@ -171,9 +171,9 @@
                     <StackPanel Grid.Column="1"
                                 HorizontalAlignment="Stretch" VerticalAlignment="Top"
                                 Orientation="Vertical">
-                        <Image Source="{Binding Path=BreadcrumbTest.BreadcrumbSubTree.Selection.SelectedViewModel.Icon}"
+                        <Image Source="{Binding Path=BreadcrumbBrowser.BreadcrumbSubTree.Selection.SelectedViewModel.Icon}"
                                VerticalAlignment="Center" HorizontalAlignment="Center" Width="64" />
-                        <Label Content="{Binding Path=BreadcrumbTest.BreadcrumbSubTree.Selection.SelectedViewModel.Header}" />
+                        <Label Content="{Binding Path=BreadcrumbBrowser.BreadcrumbSubTree.Selection.SelectedViewModel.Header}" />
                     </StackPanel>
                 </Grid>
                 <Grid Margin="3,9">

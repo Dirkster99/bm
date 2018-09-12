@@ -9,14 +9,15 @@
     <ControlTemplate x:Key="{ComponentResourceKey TypeInTargetAssembly={x:Type reskeys:ResourceKeys},
                      ResourceId=BaseToggleButton}" TargetType="{x:Type ToggleButton}">
         <ctrls:HotTrack IsSelected="{TemplateBinding IsChecked}"
-                    SelectedBrush="{DynamicResource {x:Static reskeys:ResourceKeys.HotTrack_SelectedBrush}}"
-                    BackgroundBrush="{DynamicResource HotTrack_BackgroundBrush}"
-                    HighlightBrush="{DynamicResource HotTrack_HighlightBrush}"
-                    ThreeDStyle="{DynamicResource {x:Static reskeys:ResourceKeys.ThreeDStyleBrushes}}"
-                    SelectedBorderBrush="{DynamicResource {x:Static SystemColors.ActiveBorderBrushKey}}"
-                    BorderThickness="{TemplateBinding BorderThickness}"
-                    Margin="0"
-                    Padding="3,0"
+                        SelectedBrush="{DynamicResource {x:Static reskeys:ResourceKeys.HotTrack_SelectedBrush}}"
+                        BackgroundBrush="{DynamicResource HotTrack_BackgroundBrush}"
+                        HighlightBrush="{DynamicResource HotTrack_HighlightBrush}"
+                        ThreeDStyle="{DynamicResource {x:Static reskeys:ResourceKeys.ThreeDStyleBrushes}}"
+                        SelectedBorderBrush="{DynamicResource {x:Static SystemColors.ActiveBorderBrushKey}}"
+                        BorderThickness="{TemplateBinding BorderThickness}"
+                        Margin="0"
+                        Padding="0"
+                        Background="Transparent"
                     >
             <ContentPresenter HorizontalAlignment="{TemplateBinding HorizontalAlignment}" 
                         VerticalAlignment="Center"

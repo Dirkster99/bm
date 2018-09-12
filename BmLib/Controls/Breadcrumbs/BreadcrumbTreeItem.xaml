@@ -42,7 +42,6 @@
                                                Orientation="Horizontal" 
                                                OverflowItemCount="{Binding OverflowItemCount, RelativeSource={RelativeSource TemplatedParent}
                                                                  , Mode=OneWayToSource}" >
-
                         <ctrls:HotTrack x:Name="headerHL"
                                         bc:OverflowableStackPanel.CanOverflow="True"
                                         SelectedBorderBrush="{TemplateBinding BorderBrush}"

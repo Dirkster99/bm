@@ -46,12 +46,14 @@
     <Reference Include="PresentationFramework" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BaseControls\BindingProxy.cs" />
     <Compile Include="BaseControls\ClipCorner.xaml.cs">
       <DependentUpon>ClipCorner.xaml</DependentUpon>
     </Compile>
     <Compile Include="BaseControls\Invert.cs" />
     <Compile Include="BaseControls\MultiContentControl.cs" />
     <Compile Include="BaseControls\OverflowableStackPanel.cs" />
+    <Compile Include="Behaviors\SelectionChangedCommand.cs" />
     <Compile Include="Controls\Breadcrumb.xaml.cs">
       <DependentUpon>Breadcrumb.xaml</DependentUpon>
     </Compile>

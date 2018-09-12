@@ -22,7 +22,7 @@
                           HorizontalContentAlignment="Center"
                           VerticalContentAlignment="Center"
                           Margin="0"
-                          Padding="3,0"
+                          Padding="0"
                           IsChecked="{Binding IsDropDownOpen, Mode=TwoWay, RelativeSource={RelativeSource TemplatedParent}}">
               <Grid>
                 <ContentPresenter Content="{TemplateBinding Header}" />

@@ -10,7 +10,7 @@
     /// Defines an inteface to manage the complete Breadcrumb control with
     /// a viewmodel that should implement these properties and methods.
     /// </summary>
-    public interface IBreadcrumbViewModel : INotifyPropertyChanged
+    public interface IBreadcrumbViewModel : ICanNavigate, INotifyPropertyChanged
     {
         #region properties
         /// <summary>

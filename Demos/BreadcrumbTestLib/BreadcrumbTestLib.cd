@@ -13,7 +13,7 @@
   <Class Name="BreadcrumbTestLib.Models.BrowseRequest&lt;T&gt;">
     <Position X="29.75" Y="0.75" Width="2" />
     <TypeIdentifier>
-      <HashCode>AAAEAAAAAAAAAAQAAAAAAAAAAAAAAgAAAAAAAAAAAAA=</HashCode>
+      <HashCode>AAAEAAAAAAAAAAQAAAAAAAAAAAAAAgAAAAAAAAAAAAQ=</HashCode>
       <FileName>Models\BrowseRequest.cs</FileName>
     </TypeIdentifier>
   </Class>
@@ -95,37 +95,24 @@
     <Compartments>
       <Compartment Name="Fields" Collapsed="true" />
     </Compartments>
-    <AssociationLine Name="BreadcrumbTest" Type="BreadcrumbTestLib.ViewModels.Interfaces.IBreadcrumbViewModel">
-      <MemberNameLabel ManuallyPlaced="true">
-        <Position X="0.214" Y="0.092" />
-      </MemberNameLabel>
-    </AssociationLine>
     <TypeIdentifier>
-      <HashCode>AAABAAAAQCIEQCAAAAAAAAgIAAAAAgAAIBAAAAAAIAA=</HashCode>
+      <HashCode>AAABgAAAQCIEQCAAAAAAAAAIAAAAAgAAIBAAAAAAIAA=</HashCode>
       <FileName>ViewModels\AppViewModel.cs</FileName>
     </TypeIdentifier>
-    <ShowAsAssociation>
-      <Property Name="BreadcrumbTest" />
-    </ShowAsAssociation>
     <Lollipop Position="0.2" />
   </Class>
   <Class Name="BreadcrumbTestLib.ViewModels.Breadcrumbs.BreadcrumbViewModel">
-    <Position X="8.25" Y="8.75" Width="2" />
+    <Position X="8.25" Y="9" Width="2" />
     <Compartments>
       <Compartment Name="Fields" Collapsed="true" />
     </Compartments>
-    <AssociationLine Name="BreadcrumbSubTree" Type="BreadcrumbTestLib.ViewModels.Breadcrumbs.BreadcrumbTreeItemViewModel" FixedFromPoint="true" FixedToPoint="true">
-      <Path>
-        <Point X="8.25" Y="9.438" />
-        <Point X="7.562" Y="9.438" />
-        <Point X="7.562" Y="8.098" />
-      </Path>
+    <AssociationLine Name="BreadcrumbSubTree" Type="BreadcrumbTestLib.ViewModels.Breadcrumbs.BreadcrumbTreeItemViewModel">
       <MemberNameLabel ManuallyPlaced="true">
         <Position X="-0.592" Y="1.487" />
       </MemberNameLabel>
     </AssociationLine>
     <TypeIdentifier>
-      <HashCode>AAAEAAAAAAIAAAAAgAAAAABAAAAAAAAAAABAADAIAgo=</HashCode>
+      <HashCode>AAAMAAAAAAICAAACAACAAABAAABAAAAAAIBAADAAAgo=</HashCode>
       <FileName>ViewModels\Breadcrumbs\BreadcrumbViewModel.cs</FileName>
     </TypeIdentifier>
     <ShowAsAssociation>
@@ -165,6 +152,11 @@
     <Compartments>
       <Compartment Name="Fields" Collapsed="true" />
     </Compartments>
+    <AssociationLine Name="Selection" Type="BreadcrumbTestLib.ViewModels.Interfaces.ITreeSelector&lt;VM, T&gt;">
+      <MemberNameLabel ManuallyPlaced="true">
+        <Position X="1.922" Y="0.06" />
+      </MemberNameLabel>
+    </AssociationLine>
     <AssociationLine Name="Entries" Type="BreadcrumbTestLib.ViewModels.Interfaces.IBreadcrumbTreeItemHelperViewModel&lt;VM&gt;" FixedFromPoint="true">
       <Path>
         <Point X="10.25" Y="7.875" />
@@ -174,18 +166,13 @@
         <Position X="0.275" Y="0.136" />
       </MemberNameLabel>
     </AssociationLine>
-    <AssociationLine Name="Selection" Type="BreadcrumbTestLib.ViewModels.Interfaces.ITreeSelector&lt;VM, T&gt;">
-      <MemberNameLabel ManuallyPlaced="true">
-        <Position X="1.922" Y="0.06" />
-      </MemberNameLabel>
-    </AssociationLine>
     <TypeIdentifier>
-      <HashCode>BAgAAAAAACIEAGAEACAAAAAAACAiCACAAAAAIAEEQQA=</HashCode>
+      <HashCode>BAgAAAAAACKEAGAEACAAAAAAACAiCACAAAAAIAEEQQA=</HashCode>
       <FileName>ViewModels\Breadcrumbs\BreadcrumbTreeItemViewModel.cs</FileName>
     </TypeIdentifier>
     <ShowAsAssociation>
-      <Property Name="Entries" />
       <Property Name="Selection" />
+      <Property Name="Entries" />
     </ShowAsAssociation>
     <Lollipop Position="0.2" />
   </Class>
@@ -347,7 +334,7 @@
     </TypeIdentifier>
   </Interface>
   <Interface Name="BreadcrumbTestLib.ViewModels.Interfaces.IProgressViewModel">
-    <Position X="8" Y="12" Width="2.25" />
+    <Position X="8.25" Y="13" Width="2.25" />
     <TypeIdentifier>
       <HashCode>AAAAAECAAQAAAAAAAVAAAAAAQAAAAAAAgAgAAAAAAAA=</HashCode>
       <FileName>ViewModels\Interfaces\IProgressViewModel.cs</FileName>

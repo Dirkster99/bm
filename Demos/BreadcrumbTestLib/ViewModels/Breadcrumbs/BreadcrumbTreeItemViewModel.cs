@@ -16,6 +16,7 @@
     using BmLib.Enums;
     using System.Runtime.InteropServices;
     using BreadcrumbTestLib.Models;
+    using System.Windows.Input;
 
     /// <summary>
     /// Class implements a ViewModel to manage a sub-tree of a Breadcrumb control.
@@ -223,6 +224,16 @@
             {
                 return null;
             }
+        }
+
+        /// <summary>
+        /// Gets the model that represents this item for internal navigational
+        /// and debug puroses only(!).
+        /// </summary>
+        /// <returns></returns>
+        internal IDirectoryBrowser GetModel()
+        {
+            return _dir;
         }
 
         #region Disposable Interfaces

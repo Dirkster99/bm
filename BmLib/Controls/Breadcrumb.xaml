@@ -7,6 +7,7 @@
     xmlns:bc="clr-namespace:BmLib.Controls"
     xmlns:conv="clr-namespace:BmLib.Converters"
     xmlns:reskeys="clr-namespace:BmLib.Themes"
+    xmlns:behav="clr-namespace:BmLib.Behaviors"
    >
     <!--
     xmlns:sbox="clr-namespace:BmLib.Controls.SuggestBox"
@@ -78,7 +79,8 @@
                                        Template="{StaticResource BreadcrumbSwitchTemplate}"                   
                                        IsSwitchOn="{Binding EnableBreadcrumb, Mode=TwoWay}"
                                        VerticalAlignment="Center" VerticalContentAlignment="Center"
-                                       Margin="1,0"
+                                       HorizontalAlignment="Left" HorizontalContentAlignment="Left"
+                                       Margin="0"
                                      >
                                 <bc:Switch.Header>
                                     <Image Source="{Binding BreadcrumbSubTree.Selection.SelectedViewModel.Icon}" />
@@ -98,12 +100,15 @@
                                                             ItemsSource="{Binding BreadcrumbSubTree.Selection.OverflowedAndRootItems}"
                                                             SelectedValuePath="Selection.Value"
                                                             SelectedValue="{Binding BreadcrumbSubTree.Selection.SelectedValue}"                               
-                                                            ItemTemplate="{StaticResource DropDownListItemDataTemplate}">
+                                                            ItemTemplate="{StaticResource DropDownListItemDataTemplate}"
+                                                            behav:SelectionChangedCommand.ChangedCommand="{Binding Path=RootDropDownSelectionChangedCommand}"
+                                                            Margin="0"
+                                                            >
                                             <ctrls:DropDownList.Header>
                                                 <Path Stroke="{DynamicResource {x:Static reskeys:ResourceKeys.ControlNormalForegroundBrushKey}}"
                                                       StrokeThickness="1.2"
-                                                      HorizontalAlignment="Center"
-                                                      VerticalAlignment="Center"
+                                                      HorizontalAlignment="Stretch"
+                                                      VerticalAlignment="Stretch"
                                                       IsHitTestVisible="True"
                                                       DataContext="{Binding BreadcrumbSubTree}"
                                                       Data="{Binding IsOverflown,RelativeSource={RelativeSource AncestorType={x:Type bc:Breadcrumb}}, Converter={StaticResource BoolToOneOfTwoBindingsConverter},Mode=OneWay,UpdateSourceTrigger=PropertyChanged}"
