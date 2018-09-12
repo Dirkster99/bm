@@ -7,6 +7,7 @@
     xmlns:uc="clr-namespace:BmLib.Controls.Breadcrumbs"
     xmlns:conv="clr-namespace:BmLib.Converters"
     xmlns:reskeys="clr-namespace:BmLib.Themes"
+    xmlns:behav="clr-namespace:BmLib.Behaviors"
  >
     <DataTemplate x:Key="DropDownListItemDataTemplate">
         <Grid>
@@ -81,7 +82,8 @@
                                                     IsDropDownOpen="{Binding IsExpanded, Mode=TwoWay, RelativeSource={RelativeSource TemplatedParent}}"
                                                     SelectedValue="{Binding SelectedChild, Mode=TwoWay, RelativeSource={RelativeSource TemplatedParent}}"
                                                     ItemTemplate="{TemplateBinding MenuItemTemplate}"
-                                                    />
+                                                    behav:SelectionChangedCommand.ChangedCommand="{Binding Path=ItemSelectionChangedCommand}"
+                                    />
 
                             </Grid>
                         </ctrls:HotTrack>

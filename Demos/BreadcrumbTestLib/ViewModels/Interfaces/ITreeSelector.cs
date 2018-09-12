@@ -39,13 +39,6 @@
         T SelectedChild { get; set; }
 
         /// <summary>
-        /// Lycj: Removed SetSelectedChild and SetIsSelected.
-        /// 
-        /// The selected child of current view model, for use in UI only.          
-        /// </summary>
-        T SelectedChildUI { get; set; }
-
-        /// <summary>
         /// Gets the instance of the model object that represents this selection helper.
         /// The model backs the <see cref="ViewModel"/> property and should be in sync
         /// with it.
@@ -118,9 +111,9 @@
         /// <param name="processors"></param>
         /// <returns></returns>
         Task LookupAsync(T value,
-                             ITreeLookup<VM, T> lookupProc,
-                     CancellationToken cancelToken,
-                             params ITreeLookupProcessor<VM, T>[] processors);
+                         ITreeLookup<VM, T> lookupProc,
+                         CancellationToken cancelToken,
+                         params ITreeLookupProcessor<VM, T>[] processors);
         #endregion methods
     }
 }

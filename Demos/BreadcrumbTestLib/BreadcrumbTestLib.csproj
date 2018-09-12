@@ -52,6 +52,7 @@
     <Compile Include="Models\BrowsingEventArgs.cs" />
     <Compile Include="Models\FinalBrowseResult.cs" />
     <Compile Include="Models\ICanNavigate.cs" />
+    <Compile Include="Models\IRoot.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SystemIO\DiskTreeNodeViewModel.cs" />
     <Compile Include="SystemIO\PathComparer.cs" />

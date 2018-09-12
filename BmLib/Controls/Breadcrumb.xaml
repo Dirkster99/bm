@@ -79,7 +79,7 @@
                                        Template="{StaticResource BreadcrumbSwitchTemplate}"                   
                                        IsSwitchOn="{Binding EnableBreadcrumb, Mode=TwoWay}"
                                        VerticalAlignment="Center" VerticalContentAlignment="Center"
-                                       HorizontalAlignment="Left" HorizontalContentAlignment="Left"
+                                       HorizontalAlignment="Stretch" HorizontalContentAlignment="Stretch"
                                        Margin="0"
                                      >
                                 <bc:Switch.Header>
@@ -149,7 +149,7 @@
                                                     <Setter Property="ValuePath" Value="Selection.Value" />
                                                     <Setter Property="IsExpanded" Value="{Binding Entries.IsExpanded, Mode=TwoWay}"  />
                                                     <Setter Property="IsCurrentSelected" Value="{Binding Selection.IsSelected, Mode=TwoWay}"  />
-                                                    <Setter Property="SelectedChild" Value="{Binding Selection.SelectedChildUI, Mode=TwoWay}"  />
+                                                    <!--Setter Property="SelectedChild" Value="{Binding Selection.SelectedChildUI, Mode=TwoWay}"  /-->
                                                     <Setter Property="IsChildSelected" Value="{Binding Selection.IsChildSelected, Mode=OneWay}"  />
 
                                                     <!--Updated by BreadcrumbTreeItem and it's OverflowableStackPanel-->

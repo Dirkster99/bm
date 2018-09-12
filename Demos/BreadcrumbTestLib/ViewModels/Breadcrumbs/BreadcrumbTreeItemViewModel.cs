@@ -17,6 +17,9 @@
     using System.Runtime.InteropServices;
     using BreadcrumbTestLib.Models;
     using System.Windows.Input;
+    using System.Threading;
+    using BreadcrumbTestLib.ViewModels.TreeLookupProcessors;
+    using BmLib.Utils;
 
     /// <summary>
     /// Class implements a ViewModel to manage a sub-tree of a Breadcrumb control.
@@ -45,6 +48,8 @@
         private bool _isIconLoaded = false;
         private ImageSource _icon = null;
         private bool _disposed = false;
+
+        private ICommand _ItemSelectionChangedCommand;
         #endregion fields
 
         #region constructors
@@ -53,8 +58,9 @@
         /// Call the <see cref="InitRootAsync"/> method after construction to initialize
         /// root items collection outside of the scope of object construction.
         /// </summary>
-        public BreadcrumbTreeItemViewModel()
+        internal BreadcrumbTreeItemViewModel(IRoot<IDirectoryBrowser> root)
         {
+            _Root = root;
             Entries = new BreadcrumbTreeItemHelperViewModel<BreadcrumbTreeItemViewModel>();
             Selection =
               new TreeRootSelectorViewModel<BreadcrumbTreeItemViewModel, IDirectoryBrowser>(this.Entries)
@@ -69,10 +75,14 @@
         /// </summary>
         /// <param name="dir"></param>
         /// <param name="parentNode"></param>
-        protected BreadcrumbTreeItemViewModel(IDirectoryBrowser dir, BreadcrumbTreeItemViewModel parentNode)
+        internal BreadcrumbTreeItemViewModel(IDirectoryBrowser dir,
+                                              BreadcrumbTreeItemViewModel parentNode,
+                                              IRoot<IDirectoryBrowser> root
+                                              )
         {
             Logger.InfoFormat("'{0}'", dir.FullName);
 
+            _Root = root;
             _dir = dir;
 
             // If parentNode == null => Parent of Root is this item itself.
@@ -85,7 +95,7 @@
             {
                 try
                 {
-                    return _dir.GetDirectories().Select(d => new BreadcrumbTreeItemViewModel(d, this));
+                    return _dir.GetDirectories().Select(d => new BreadcrumbTreeItemViewModel(d, this, _Root));
                 }
                 catch (Exception exp)
                 {
@@ -112,6 +122,8 @@
 
         #region properties
         public ITreeSelector<BreadcrumbTreeItemViewModel, IDirectoryBrowser> Selection { get; protected set; }
+
+        private IRoot<IDirectoryBrowser> _Root;
 
         /// <summary>
         /// Gets a structure that contains all root items that are located on level 0.
@@ -176,6 +188,36 @@
                 return false;
             }
         }
+
+        public ICommand ItemSelectionChangedCommand
+        {
+            get
+            {
+                if (_ItemSelectionChangedCommand == null)
+                {
+                    _ItemSelectionChangedCommand = new RelayCommand<object>(async (param) =>
+                    {
+                        var parArray = param as object[];
+                        if (parArray == null)
+                            return;
+
+                        if (parArray.Length <= 0)
+                            return;
+
+                        // Limitation of command is currently only 1 LOCATION PARAMETER being processed
+                        var selectedFolder = parArray[0] as BreadcrumbTreeItemViewModel;
+
+                        if (selectedFolder == null)
+                            return;
+
+                        var selector = Selection as TreeSelectorViewModel<BreadcrumbTreeItemViewModel, IDirectoryBrowser>;
+                        selector.NavigateToChild(selectedFolder.GetModel());
+                    });
+                }
+
+                return _ItemSelectionChangedCommand;
+            }
+        }
         #endregion properties
 
         #region methods
@@ -206,7 +248,7 @@
 
                 // and insert desktop sub-entries into Entries property
                 Entries.SetEntries(UpdateMode.Update,
-                                   _dir.GetDirectories().Select(d => new BreadcrumbTreeItemViewModel(d, this)).ToArray());
+                                   _dir.GetDirectories().Select(d => new BreadcrumbTreeItemViewModel(d, this, _Root)).ToArray());
                                      //(filter out recycle bin entry if its not that useful...)
                                      //.Where(d => !d.Equals(DirectoryInfoExLib.Factory.RecycleBinDirectory))
 

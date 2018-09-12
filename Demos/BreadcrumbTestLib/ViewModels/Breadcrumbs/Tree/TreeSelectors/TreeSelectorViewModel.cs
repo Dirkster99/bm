@@ -139,56 +139,43 @@
                 _selectedValue = value;
 
                 NotifyPropertyChanged(() => this.SelectedChild);
-                NotifyPropertyChanged(() => this.SelectedChildUI);
                 NotifyPropertyChanged(() => this.IsChildSelected);
                 NotifyPropertyChanged(() => this.IsRootAndIsChildSelected);
             }
         }
 
-        /// <summary>
-        /// Lycj: Removed SetSelectedChild and SetIsSelected.
-        /// 
-        /// The selected child of current view model, for use in UI only.          
-        /// </summary>
-        public T SelectedChildUI
+        public void NavigateToChild(T value)
         {
-            get
-            {
-                return _selectedValue;
-            }
+            IsSelected = false;
+            NotifyPropertyChanged(() => this.IsSelected);
 
-            set
+            if (_selectedValue == null || !_selectedValue.Equals(value))
             {
-                IsSelected = false;
-                NotifyPropertyChanged(() => this.IsSelected);
-
-                if (_selectedValue == null || !_selectedValue.Equals(value))
+                if (_prevSelected != null)
                 {
-                    if (_prevSelected != null)
-                    {
-                        _prevSelected.IsSelected = false;
-                    }
+                    _prevSelected.IsSelected = false;
+                }
 
-                    SelectedChild = value;
+                SelectedChild = value;
 
-                    if (value != null)
-                    {
-                        AsyncUtils.RunAsync(async () => await LookupAsync
-                        (
-                            value,
-                            new SearchNextLevel<VM, T>(),    // LoadSubentriesIfNotLoaded
-                            CancellationToken.None,
-                            new TreeLookupProcessor<VM, T>(HierarchicalResult.Related, (hr, p, c) =>
-                            {
-                                c.IsSelected = true;
-                                _prevSelected = c;
+                if (value != null)
+                {
+                    AsyncUtils.RunAsync(async () => await LookupAsync
+                    (
+                        value,
+                        new SearchNextLevel<VM, T>(),    // LoadSubentriesIfNotLoaded
+                        CancellationToken.None,
+                        new TreeLookupProcessor<VM, T>(HierarchicalResult.Related, (hr, p, c) =>
+                        {
+                            c.IsSelected = true;
+                            _prevSelected = c;
 
-                                return true;
-                            })));
-                    }
+                            return true;
+                        })));
                 }
             }
         }
+
 
         /// <summary>
         /// Gets the instance of the model object that represents this selection helper.
@@ -288,7 +275,6 @@
                 _selectedValue = path.Peek().Value;
 
                 NotifyPropertyChanged(() => this.SelectedChild);
-                NotifyPropertyChanged(() => this.SelectedChildUI);
             }
 
             path.Push(this);
@@ -324,7 +310,6 @@
                 // SetSelectedChild(lookupResult == null ? default(T) : lookupResult.Value);
                 NotifyPropertyChanged(() => this.IsChildSelected);
                 NotifyPropertyChanged(() => this.SelectedChild);
-                NotifyPropertyChanged(() => this.SelectedChildUI);
             }
 
             path.Push(this);

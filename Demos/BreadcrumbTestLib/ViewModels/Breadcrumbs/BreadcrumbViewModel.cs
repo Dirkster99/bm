@@ -1,8 +1,12 @@
 namespace BreadcrumbTestLib.ViewModels.Breadcrumbs
 {
+    using BmLib.Enums;
+    using BmLib.Utils;
     using BreadcrumbTestLib.Models;
     using BreadcrumbTestLib.ViewModels.Base;
     using BreadcrumbTestLib.ViewModels.Interfaces;
+    using BreadcrumbTestLib.ViewModels.TreeLookupProcessors;
+    using BreadcrumbTestLib.ViewModels.TreeSelectors;
     using DirectoryInfoExLib.Interfaces;
     using System;
     using System.Threading;
@@ -12,7 +16,8 @@ namespace BreadcrumbTestLib.ViewModels.Breadcrumbs
     /// <summary>
     /// Class implements the viewmodel that manages the complete breadcrump control.
     /// </summary>
-    internal class BreadcrumbViewModel : Base.ViewModelBase, IBreadcrumbViewModel
+    internal class BreadcrumbViewModel : Base.ViewModelBase, IBreadcrumbViewModel,
+                                                             IRoot<IDirectoryBrowser>
     {
         #region fields
         /// <summary>
@@ -34,7 +39,7 @@ namespace BreadcrumbTestLib.ViewModels.Breadcrumbs
         public BreadcrumbViewModel()
         {
             Progressing = new ProgressViewModel();
-            BreadcrumbSubTree = new BreadcrumbTreeItemViewModel();
+            BreadcrumbSubTree = new BreadcrumbTreeItemViewModel(this);
             _EnableBreadcrumb = true;
             _IsBrowsing = false;
         }
@@ -122,31 +127,29 @@ namespace BreadcrumbTestLib.ViewModels.Breadcrumbs
         /// object[1] = {new <see cref="BreadcrumbTreeItemViewModel"/>() }
         /// </summary>
         public ICommand RootDropDownSelectionChangedCommand
+        {
+            get
             {
-                get
+                if (_RootDropDownSelectionChangedCommand == null)
                 {
-                    if (_RootDropDownSelectionChangedCommand == null)
+                    _RootDropDownSelectionChangedCommand = new RelayCommand<object>(async (p) =>
                     {
-                        _RootDropDownSelectionChangedCommand = new RelayCommand<object>(async (p) =>
-                        {
-                            var parArray = p as object[];
-                            if (parArray == null)
-                                return;
+                        var parArray = p as object[];
+                        if (parArray == null)
+                            return;
 
-                            if (parArray.Length <= 0)
-                                return;
+                        if (parArray.Length <= 0)
+                            return;
 
-                            // Limitation of command is currently only 1 LOCATION PARAMETER being processed
-                            var selectedFolder = parArray[0] as BreadcrumbTreeItemViewModel;
+                        // Limitation of command is currently only 1 LOCATION PARAMETER being processed
+                        var selectedFolder = parArray[0] as BreadcrumbTreeItemViewModel;
 
-                            if (selectedFolder == null)
-                                return;
+                        if (selectedFolder == null)
+                            return;
 
-                            var model = selectedFolder.GetModel();
-
-                            await this.NavigateTo(model);
-                        });
-                    }
+                        await this.NavigateTo(selectedFolder.GetModel());
+                    });
+                }
 
                 return _RootDropDownSelectionChangedCommand;
             }
@@ -186,7 +189,7 @@ namespace BreadcrumbTestLib.ViewModels.Breadcrumbs
         /// </summary>
         /// <param name="location"></param>
         /// <returns></returns>
-        private async Task NavigateTo(IDirectoryBrowser location)
+        public async Task NavigateTo(IDirectoryBrowser location)
         {
             IsBrowsing = true;
             try

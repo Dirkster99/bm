@@ -55,9 +55,9 @@
             WeakEventManager<ICanNavigate, BrowsingEventArgs>
                 .AddHandler(BreadcrumbBrowser, "BrowseEvent", Control_BrowseEvent);
 
-            this.DiskTest = new DiskTreeNodeViewModel(new DirectoryInfo(@"C:\\"), new DirectoryInfo(@"E:\\"));
+            this.DiskTest = null; //// new DiskTreeNodeViewModel(new DirectoryInfo(@"C:\\"), new DirectoryInfo(@"E:\\"));
 
-            this.ExTest = new BreadcrumbTreeItemViewModel();
+            this.ExTest = null; //// new BreadcrumbTreeItemViewModel();
         }
 
         /// <summary>
@@ -177,10 +177,10 @@
             Logger.InfoFormat("'{0}'", initialPath);
             string[] pathSegments = DirectoryInfoExLib.Factory.GetFolderSegments(initialPath);
 
-            var selection = DiskTest.Selection as ITreeRootSelector<DiskTreeNodeViewModel, string>;
-            selection.SelectAsync(initialPath, new BrowseRequest<string>(initialPath, pathSegments));
+////            var selection = DiskTest.Selection as ITreeRootSelector<DiskTreeNodeViewModel, string>;
+////            selection.SelectAsync(initialPath, new BrowseRequest<string>(initialPath, pathSegments));
 
-            ExTest.InitRootAsync(new BrowseRequest<string>(initialPath, pathSegments));
+////            ExTest.InitRootAsync(new BrowseRequest<string>(initialPath, pathSegments));
 
             NavigateToFolder(initialPath);
         }
@@ -205,13 +205,13 @@
                 if (disposing == true)
                 {
                     // Dispose of the currently used inner disposables
-                    ExTest.Dispose();
+////                    ExTest.Dispose();
                     
                     _OneTaskScheduler.Dispose();
                     _SlowStuffSemaphore.Dispose();
                     _CancelTokenSource.Dispose();
                     
-                    ExTest = null;
+////                    ExTest = null;
                     _OneTaskScheduler = null;
                     _SlowStuffSemaphore = null;
                     _CancelTokenSource = null;
