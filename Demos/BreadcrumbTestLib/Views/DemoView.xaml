@@ -107,7 +107,10 @@
                                     <ColumnDefinition Width="*" />
                                 </Grid.ColumnDefinitions>
 
-                                <Image Source="{Binding Icon}" Margin="3,0" DockPanel.Dock="Left" />
+                                <Image Source="{Binding Icon}" Margin="3,0" DockPanel.Dock="Left"
+                                       SnapsToDevicePixels="true"
+                                       RenderOptions.BitmapScalingMode="NearestNeighbor"
+                                       />
                                 <TextBlock Text="{Binding Header}"
                                            Foreground="{DynamicResource {x:Static themes:ResourceKeys.ControlTextBrushKey}}"
                                            VerticalAlignment="Center"
@@ -172,7 +175,10 @@
                                 HorizontalAlignment="Stretch" VerticalAlignment="Top"
                                 Orientation="Vertical">
                         <Image Source="{Binding Path=BreadcrumbBrowser.BreadcrumbSubTree.Selection.SelectedViewModel.Icon}"
-                               VerticalAlignment="Center" HorizontalAlignment="Center" Width="64" />
+                               VerticalAlignment="Center" HorizontalAlignment="Center" Width="64"
+                               SnapsToDevicePixels="True"
+                               RenderOptions.BitmapScalingMode="NearestNeighbor"
+                               />
                         <Label Content="{Binding Path=BreadcrumbBrowser.BreadcrumbSubTree.Selection.SelectedViewModel.Header}" />
                     </StackPanel>
                 </Grid>
@@ -239,7 +245,7 @@
             <ListBox.ItemTemplate>
                 <DataTemplate>
                     <StackPanel Orientation="Horizontal">
-                        <Image Margin="3" Width="64">
+                        <Image Margin="3" Width="64" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="NearestNeighbor">
                             <Image.Source>
                                 <MultiBinding Converter="{conv:BrowseItemTypeToImageConverter}">
                                     <Binding Path="EnumSpecialFolder" />

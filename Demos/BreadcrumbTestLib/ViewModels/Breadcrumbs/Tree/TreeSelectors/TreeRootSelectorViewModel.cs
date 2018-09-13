@@ -119,6 +119,16 @@
         #endregion properties
 
         #region methods
+        /// <summary>
+        /// Method is invoked via IsSelected property in TreeSelectorViewModel when
+        /// user clicks on one Breadcrumb and control navigates back to the given location.
+        /// 
+        ///  Sample Use Case: Breadcrumb shows 'C:'> 'Windows'> 'System32'> and user clicks on 'Windows'
+        /// Expectedt Result: Breadcrumb shows 'C:'> 'Windows'>
+        /// 
+        /// This behavior is mostly implemented in this method.
+        /// </summary>
+        /// <param name="path"></param>
         public override void ReportChildSelected(Stack<ITreeSelector<VM, T>> path)
         {
             Logger.InfoFormat("_");
@@ -131,7 +141,7 @@
             _selectedSelector = path.Last();
             _selectedValue = path.Last().Value;
 
-            if (prevSelectedValue != null && !prevSelectedValue.Equals(path.Last().Value))
+            if (prevSelectedValue != null && prevSelectedValue.Equals(path.Last().Value) == false)
             {
                 prevSelector.IsSelected = false;
             }

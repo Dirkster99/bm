@@ -50,6 +50,9 @@
         private bool _disposed = false;
 
         private ICommand _ItemSelectionChangedCommand;
+
+        // Instance of the root viewmodel - reference is used to invoke central tree related (navigational) methods
+        private IRoot<IDirectoryBrowser> _Root;
         #endregion fields
 
         #region constructors
@@ -123,8 +126,6 @@
         #region properties
         public ITreeSelector<BreadcrumbTreeItemViewModel, IDirectoryBrowser> Selection { get; protected set; }
 
-        private IRoot<IDirectoryBrowser> _Root;
-
         /// <summary>
         /// Gets a structure that contains all root items that are located on level 0.
         /// See <see cref="Entries.All"/> collection for more details.
@@ -189,13 +190,26 @@
             }
         }
 
+        /// <summary>
+        /// Gets a command that can change the navigation target of the currently
+        /// selected location towards a new location. This command is typically
+        /// executed when:
+        /// 1) Any other than the root drop down triangle is opened,
+        /// 2) An entry in the list drop down is selected and
+        /// 3) The control is now deactivating its previous selection and
+        /// 4) needs to navigate towards the new selected item.
+        /// 
+        /// Expected command parameter:
+        /// Array of length 1 with an object of type <see cref="BreadcrumbTreeItemViewModel"/>
+        /// object[1] = {new <see cref="BreadcrumbTreeItemViewModel"/>() }
+        /// </summary>
         public ICommand ItemSelectionChangedCommand
         {
             get
             {
                 if (_ItemSelectionChangedCommand == null)
                 {
-                    _ItemSelectionChangedCommand = new RelayCommand<object>(async (param) =>
+                    _ItemSelectionChangedCommand = new RelayCommand<object>((param) =>
                     {
                         var parArray = param as object[];
                         if (parArray == null)
@@ -210,8 +224,7 @@
                         if (selectedFolder == null)
                             return;
 
-                        var selector = Selection as TreeSelectorViewModel<BreadcrumbTreeItemViewModel, IDirectoryBrowser>;
-                        selector.NavigateToChild(selectedFolder.GetModel());
+                        _Root.NavigateToChild(this, selectedFolder.GetModel());
                     });
                 }
 

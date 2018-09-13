@@ -58,9 +58,8 @@
                                     <ColumnDefinition Width="Auto"/>
                                 </Grid.ColumnDefinitions>
                                 
-                                <Button Grid.Column="0"
+                                <Button Grid.Column="0" x:Name="PART_CaptionButton"
                                         Template="{DynamicResource {x:Static reskeys:ResourceKeys.BaseButton}}"
-                                        x:Name="PART_CaptionButton"  
                                         MaxWidth="1000"
                                         Margin="0"
                                         Padding="3,0"
