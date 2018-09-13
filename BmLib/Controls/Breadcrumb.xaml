@@ -59,8 +59,6 @@
                                                 (disappear when space is limited).
                                 -->
                                 <ColumnDefinition Width="*" />
-                                <ColumnDefinition Width="Auto" MinWidth="{TemplateBinding OverflowGap}" />
-
                             </Grid.ColumnDefinitions>
 
                             <!-- Show a progress-bar to indicate long running processing -->
@@ -90,6 +88,7 @@
                                         <Grid.ColumnDefinitions>
                                             <ColumnDefinition Width="Auto"/>
                                             <ColumnDefinition Width="*"/>
+                                            <ColumnDefinition Width="Auto" MinWidth="{TemplateBinding OverflowGap}" />
                                         </Grid.ColumnDefinitions>
 
                                         <!-- Displays a root toggle button with a (root/overflow) dropdown list
@@ -173,6 +172,8 @@
                                               <ScaleTransform ScaleX="2" ScaleY="2" />
                                             </uc:BreadcrumbTree.LayoutTransform>-->
                                         </uc:BreadcrumbTree>
+
+                                        <!-- Grid.Column="2" Is OverflowGap which is necessary to reach Switch through click on background -->
                                     </Grid>
                                 </bc:Switch.ContentOn>
                                 <!-- bc:Switch.ContentOff>
