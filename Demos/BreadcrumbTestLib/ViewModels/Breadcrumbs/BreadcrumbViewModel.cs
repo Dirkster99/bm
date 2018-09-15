@@ -281,9 +281,14 @@ namespace BreadcrumbTestLib.ViewModels.Breadcrumbs
                                 {
                                     lastList[i].Selection.SelectedChild = null;
                                     lastList[i].Selection.IsSelected = false;
-
-
                                 }
+                                else
+                                {
+                                    // Special case if we look at last item in chain
+                                    // there cannot be a remaining child in the list
+                                    if (i == pathList.Length - 1)
+                                        lastList[i].Selection.SelectedChild = null;
+                                 }
 
                                 if (selectedItem.GetModel().Equals(lastSelectedItem.GetModel()) == false)
                                     lastList[i].Selection.IsSelected = false;
@@ -370,6 +375,11 @@ namespace BreadcrumbTestLib.ViewModels.Breadcrumbs
 
                 var result = Comparer.CompareHierarchy(current.GetModel(), destination);
 
+                if (result != HierarchicalResult.Unrelated)
+                {
+                    Console.WriteLine("'{0}' + '{1}' => '{2}'", destination, current, result);
+                }
+
                 // Found an item along the way?
                 // Search on sub-tree items from an item that indicates selected children
                 if (result == HierarchicalResult.Child)
@@ -379,6 +389,7 @@ namespace BreadcrumbTestLib.ViewModels.Breadcrumbs
                     if (current.Entries.IsLoaded == false)
                         await current.Entries.LoadAsync();
 
+                    queue.Clear();
                     foreach (var item in current.Entries.All)
                         queue.Enqueue(new Tuple<int, BreadcrumbTreeItemViewModel>(iLevel + 1, item));
                 }
@@ -387,11 +398,13 @@ namespace BreadcrumbTestLib.ViewModels.Breadcrumbs
                     if (result == HierarchicalResult.Current)
                     {
                         path.Push(current);
+                        Console.WriteLine("");
                         return path;
                     }
                 }
             }
 
+            Console.WriteLine("");
             return path;
         }
 

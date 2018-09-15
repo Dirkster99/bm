@@ -76,16 +76,17 @@
                                 <ctrls:DropDownList x:Name="PART_Toggle"
                                                     Grid.Column="1"
                                                     Margin="0"
-                                                    Padding="3,0"
+                                                    Padding="0"
                                                     ItemsSource="{TemplateBinding ItemsSource}"
                                                     Visibility="{Binding HasItems, RelativeSource={RelativeSource TemplatedParent}, Converter={StaticResource btvc}}" 
-                                                    SelectedValuePath="{Binding ValuePath, RelativeSource={RelativeSource TemplatedParent}}"                                  
                                                     IsDropDownOpen="{Binding IsExpanded, Mode=TwoWay, RelativeSource={RelativeSource TemplatedParent}}"
-                                                    SelectedValue="{Binding SelectedChild, Mode=TwoWay, RelativeSource={RelativeSource TemplatedParent}}"
                                                     ItemTemplate="{TemplateBinding MenuItemTemplate}"
                                                     behav:SelectionChangedCommand.ChangedCommand="{Binding Path=ItemSelectionChangedCommand}"
                                     />
-
+                                    <!--    
+                                        SelectedValuePath="{Binding ValuePath, RelativeSource={RelativeSource TemplatedParent}}"                                  
+                                        SelectedValue="{Binding SelectedChild, Mode=OneWay,UpdateSourceTrigger=PropertyChanged, RelativeSource={RelativeSource TemplatedParent}}"
+                                    -->
                             </Grid>
                         </ctrls:HotTrack>
 
