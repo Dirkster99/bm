@@ -31,8 +31,6 @@
         // Holds the location model of the selected child of this entry (if any)
         private T _SelectedChild = default(T);
 
-        private ITreeSelector<VM, T> _prevSelected = null;
-
         private T _Value = default(T);
         private VM _ViewModel;
 
@@ -89,20 +87,8 @@
                 {
                     _isSelected = value;
                     NotifyPropertyChanged(() => IsSelected);
-
-//                    TestReportChildSelection(value);
                 }
             }
-        }
-
-        public void TestReportChildSelection(bool value)
-        {
-            SelectedChild = default(T);
-
-            if (value == true)
-                ReportChildSelected(new Stack<ITreeSelector<VM, T>>());
-            else
-                ReportChildDeselected(new Stack<ITreeSelector<VM, T>>());
         }
 
         /// <summary>
@@ -264,83 +250,6 @@
 
             if (ParentSelector != null)
                 ParentSelector.ReportChildSelected(path);
-        }
-
-        public virtual void ReportChildDeselected(Stack<ITreeSelector<VM, T>> path)
-        {
-            Logger.InfoFormat("_");
-
-            if (EntryHelper.IsLoaded)
-            {
-                // Clear child node selection.
-                SelectedChild = default(T);
-
-                // And just in case if the new selected value is child of this node.
-                if (RootSelector.SelectedValue != null)
-                {
-                    AsyncUtils.RunAsync(() => LookupAsync(
-                                                RootSelector.SelectedValue,
-                                                new SearchNextUsingReverseLookup<VM, T>(RootSelector.SelectedSelector),
-                                                CancellationToken.None,
-                                                new TreeLookupProcessor<VM, T>(HierarchicalResult.All, (hr, p, c) =>
-                                                {
-                                                    SelectedChild = c == null ? default(T) : c.Value;
-
-                                                    return true;
-                                                })));
-                }
-
-                // SetSelectedChild(lookupResult == null ? default(T) : lookupResult.Value);
-                NotifyPropertyChanged(() => this.IsChildSelected);
-                NotifyPropertyChanged(() => this.SelectedChild);
-            }
-
-            path.Push(this);
-
-            if (ParentSelector != null)
-                ParentSelector.ReportChildDeselected(path);
-        }
-
-        /// <summary>
-        /// Method is executed to  change the navigation target of the currently
-        /// selected location towards a new location. This method is typically
-        /// executed when:
-        /// 1) Any other than the root drop down triangle is opened,
-        /// 2) An entry in the list drop down is selected and
-        /// 3) The control is now deactivating its previous selection and
-        /// 4) needs to navigate towards the new selected item.
-        /// </summary>
-        /// <param name="value">Is the location model object that represents the target location in the tree structure.</param>
-        public void NavigateToChild(T value)
-        {
-            IsSelected = false;
-            NotifyPropertyChanged(() => this.IsSelected);
-
-            if (_SelectedChild == null || _SelectedChild.Equals(value) == false)
-            {
-                if (_prevSelected != null)
-                {
-                    _prevSelected.IsSelected = false;
-                }
-
-                SelectedChild = value;
-
-                if (value != null)
-                {
-                    AsyncUtils.RunAsync(async () => await LookupAsync
-                    (
-                        value,
-                        new SearchNextLevel<VM, T>(),    // LoadSubentriesIfNotLoaded
-                        CancellationToken.None,
-                        new TreeLookupProcessor<VM, T>(HierarchicalResult.Related, (hr, p, c) =>
-                        {
-                            c.IsSelected = true;
-                            _prevSelected = c;
-
-                            return true;
-                        })));
-                }
-            }
         }
 
         /// <summary>

@@ -1,6 +1,7 @@
 ﻿namespace BreadcrumbTestLib.ViewModels.Interfaces
 {
     using BreadcrumbTestLib.Models;
+    using BreadcrumbTestLib.ViewModels.Breadcrumbs;
     using System;
     using System.Collections.Generic;
     using System.Collections.ObjectModel;
@@ -49,18 +50,12 @@
         IEnumerable<VM> OverflowedAndRootItems { get; }
         #endregion properties
 
-        #region methods
         /// <summary>
-        /// Method can be invoked on the tree root to select a tree node by <paramref name="targetLocation"/>.
+        /// Update the root drop down list with the list of root items
+        /// and overflowable (non-root) items.
         /// </summary>
-        /// <param name="targetLocation"></param>
-        /// <param name="cancelToken"></param>
-        /// <param name="progress"></param>
-        /// <returns>Returns a task that selects the requested tree node.</returns>
-        Task<FinalBrowseResult<T>> SelectAsync(T targetLocation,
-                                               BrowseRequest<string> request,
-                                               CancellationToken cancelToken = default(CancellationToken),
-                                               IProgressViewModel progress = null);
-        #endregion methods
+        /// <param name="rootItems"></param>
+        /// <param name="pathItems"></param>
+        void UpdateOverflowedItems(IEnumerable<VM> rootItems, IEnumerable<VM> pathItems);
     }
 }

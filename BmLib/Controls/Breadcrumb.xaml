@@ -116,7 +116,7 @@
                                             <!-- Overwrite ItemContainerStyle assigned in DropDownList.xaml -->
                                             <ctrls:DropDownList.ItemContainerStyle>
                                                 <Style TargetType="{x:Type ComboBoxItem}" BasedOn="{StaticResource {x:Type ComboBoxItem}}">
-                                                    <Setter Property="Visibility" Value="{Binding Selection.IsOverflowedOrRoot, Mode=OneWay, Converter={StaticResource btvc}}"  />
+                                                    <Setter Property="Visibility" Value="{Binding Selection.IsOverflowedOrRoot, Mode=OneWay, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource btvc}}"  />
                                                     <Style.Triggers>
                                                         <DataTrigger Binding="{Binding}" Value="{x:Null}">
                                                             <Setter Property="Template">
@@ -125,7 +125,7 @@
                                                                         <!-- BugFix: Show Seperator only if items are overflown -->
                                                                         <Separator HorizontalAlignment="Stretch"
                                                                                    IsEnabled="False"
-                                                                                   Visibility="{Binding IsOverflown,Converter={StaticResource btv}, RelativeSource={RelativeSource AncestorType={x:Type bc:Breadcrumb}}}"
+                                                                                   Visibility="{Binding IsOverflown,Converter={StaticResource btv}, UpdateSourceTrigger=PropertyChanged, RelativeSource={RelativeSource AncestorType={x:Type bc:Breadcrumb}}}"
                                                                                    />
                                                                     </ControlTemplate>
                                                                 </Setter.Value>

@@ -35,7 +35,7 @@
         /// </summary>
         /// <param name="entryHelper"></param>
         public TreeRootSelectorViewModel(IBreadcrumbTreeItemHelperViewModel<VM> entryHelper) ////int rootLevel = 0,
-                                                                         ////params Func<T, T, HierarchicalResult>[] compareFuncs)
+                                                                                             ////params Func<T, T, HierarchicalResult>[] compareFuncs)
           : base(entryHelper)
         {
             ////_rootLevel = rootLevel;
@@ -157,69 +157,6 @@
             path.Last().EntryHelper.LoadAsync();
         }
 
-        public override void ReportChildDeselected(Stack<ITreeSelector<VM, T>> path)
-        {
-            Logger.InfoFormat("_");
-        }
-
-        /// <summary>
-        /// Method can be invoked on the tree root to select a tree node by <paramref name="targetLocation"/>.
-        /// </summary>
-        /// <param name="targetLocation"></param>
-        /// <param name="progress"></param>
-        /// <returns>Returns a task that selects the requested tree node.</returns>
-        public async Task<FinalBrowseResult<T>> SelectAsync(
-            T targetLocation,
-            BrowseRequest<string> request,
-            CancellationToken cancelToken = default(CancellationToken),
-            IProgressViewModel progress = null)
-        {
-            Logger.InfoFormat("targetLocation: '{0}', _selectedValue: '{1}'",
-                (targetLocation != null ? targetLocation.ToString() : "(null)"),
-                (_selectedValue != null ? _selectedValue.ToString() : "(null)"));
-
-            var hierarchyRelation = CompareHierarchy(_selectedValue, targetLocation);
-
-            // There is no selected value or selected value is not targetLocation ?
-            // -> LookUp targetLocation and set _selectedValue
-            if (_selectedValue == null || hierarchyRelation != HierarchicalResult.Current)
-            {
-                try
-                {
-                    if (progress != null)                     // Show indeterminate progress
-                        progress.ShowIndeterminatedProgress();
-
-                    try
-                    {
-                        var toSelectedChild_Processor = new SetChildSelected<VM, T>();
-                        var whenSelected_Processor = new LoadSubEntries<VM, T>(HierarchicalResult.Current, UpdateMode.Replace, false);
-                        var whenSelected1_Processor = new SetSelected<VM, T>();
-
-                        // The selected value is either not set or is not the same as targetLocation
-                        await this.LookupAsync(targetLocation,                    // usually a string path
-                                               new RecursiveSearch<VM, T>(true), // Load SubEntries if not already loaded
-                                               cancelToken,
-                                               whenSelected1_Processor,
-                                               toSelectedChild_Processor,
-                                               whenSelected_Processor);
-
-                        return new FinalBrowseResult<T>(targetLocation, default(System.Guid), BrowseResult.Complete);
-                    }
-                    catch (Exception)
-                    {
-                        return new FinalBrowseResult<T>(targetLocation, default(System.Guid), BrowseResult.InComplete);
-                    }
-                }
-                finally
-                {
-                    if (progress != null)              // Remove progress display
-                        progress.ProgressDisplayOff();
-                }
-            }
-
-            return new FinalBrowseResult<T>(targetLocation, default(System.Guid), BrowseResult.InComplete);
-        }
-
         public HierarchicalResult CompareHierarchy(T value1, T value2)
         {
             Logger.InfoFormat("_");
@@ -231,6 +168,52 @@
                     return retVal;
             }
             return HierarchicalResult.Unrelated;
+        }
+
+        /// <summary>
+        /// Update the root drop down list with the list of root items
+        /// and overflowable (non-root) items.
+        /// </summary>
+        /// <param name="rootItems"></param>
+        /// <param name="pathItems"></param>
+        public void UpdateOverflowedItems(IEnumerable<VM> rootItems,
+                                          IEnumerable<VM> pathItems)
+        {
+            Logger.InfoFormat("_");
+
+            Application.Current.Dispatcher.Invoke(() =>
+            {
+                _OverflowedAndRootItems.Clear();
+            });
+
+            if (pathItems != null && pathItems.Count() > 0)
+            {
+                // Get all items that belong to the current path and add them into the
+                // OverflowedAndRootItems collection
+                // The item.IsOverflowed property is (re)-set by OverflowableStackPanel
+                // when the UI changes - a converter in the binding shows only those entries
+                // in the root drop down list with item.IsOverflowed == true
+                foreach (var p in pathItems)
+                {
+                    Application.Current.Dispatcher.Invoke(() =>
+                    {
+                        _OverflowedAndRootItems.Add(p);
+                    });
+                }
+
+                Application.Current.Dispatcher.Invoke(() =>
+                {
+                    _OverflowedAndRootItems.Add(default(VM)); // Separator
+                });
+
+                foreach (var p in rootItems)
+                {
+                    Application.Current.Dispatcher.Invoke(() =>
+                    {
+                        _OverflowedAndRootItems.Add(p);
+                    });
+                }
+            }
         }
 
         /// <summary>

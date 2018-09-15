@@ -14,6 +14,7 @@ namespace BreadcrumbTestLib.ViewModels.Breadcrumbs
     using System.Linq;
     using System.Threading;
     using System.Threading.Tasks;
+    using System.Windows;
     using System.Windows.Input;
 
     /// <summary>
@@ -255,15 +256,14 @@ namespace BreadcrumbTestLib.ViewModels.Breadcrumbs
                 string[] pathSegments = Factory.GetFolderSegments(location.FullName);
                 var request = new BrowseRequest<string>(location.FullName, pathSegments, CancellationToken.None);
 
-                var selector = BreadcrumbSubTree.Selection as ITreeRootSelector<BreadcrumbTreeItemViewModel, IDirectoryBrowser>;
+                var rootSelector = BreadcrumbSubTree.Selection as ITreeRootSelector<BreadcrumbTreeItemViewModel, IDirectoryBrowser>;
                 var items = await BrowseItemsAsync(BreadcrumbSubTree, location);
 
                 if (items.Count > 0)
                 {
                     var selectedItem = items.Peek();
 
-                    // Get rid of old selected path
-                    if (_CurrentPath != null)
+                    if (_CurrentPath != null) // Get rid of old selected path
                     {
                         var lastSelectedItem = _CurrentPath.Peek();
 
@@ -288,7 +288,7 @@ namespace BreadcrumbTestLib.ViewModels.Breadcrumbs
                                     // there cannot be a remaining child in the list
                                     if (i == pathList.Length - 1)
                                         lastList[i].Selection.SelectedChild = null;
-                                 }
+                                }
 
                                 if (selectedItem.GetModel().Equals(lastSelectedItem.GetModel()) == false)
                                     lastList[i].Selection.IsSelected = false;
@@ -323,6 +323,8 @@ namespace BreadcrumbTestLib.ViewModels.Breadcrumbs
                     BreadcrumbSubTree.Selection.ReportChildSelected(path);
                 }
 
+                UpdateListOfOverlowableRootItems(rootSelector, items);
+
                 UpdateBreadcrumbSelectedPath();
 
                 if (BrowseEvent != null)
@@ -341,6 +343,41 @@ namespace BreadcrumbTestLib.ViewModels.Breadcrumbs
             {
                 IsBrowsing = false;
             }
+        }
+
+        /// <summary>
+        /// Updates the source of the root drop down list by merging the current
+        /// root items with the new list of overflowable path items.
+        /// </summary>
+        /// <param name="rootSelector">Is the <see cref="ITreeRootSelector{ViewModels,M}"/> that contains
+        /// the OverflowedAndRootItems list to be updated.</param>
+        /// <param name="items">Is the list of new pathitems to be include in OverflowedAndRootItems</param>
+        private static void UpdateListOfOverlowableRootItems(
+            ITreeRootSelector<BreadcrumbTreeItemViewModel, IDirectoryBrowser> rootSelector,
+            Stack<BreadcrumbTreeItemViewModel> items)
+        {
+            // Update list of overflowable items for bindings from converter on rootdropdownlist
+            // 1) Get all rootitems minus seperator minus overflowable pathitems
+            List<BreadcrumbTreeItemViewModel> rootItems = new List<BreadcrumbTreeItemViewModel>();
+            foreach (var item in rootSelector.OverflowedAndRootItems)
+            {
+                if (item != null) // Null item is the seperator
+                {
+                    if (item.Selection != null)
+                    {
+                        if (item.Selection.IsRoot == true)
+                        {
+                            rootItems.Add(item);
+                        }
+                    }
+                }
+            }
+
+            // 2) Get new list of overflowable path items
+            var overflowedItems = items.Where(i => i.Selection.IsRoot == false);
+
+            // 3) merge both lists from 1) and 2) into updated overflowable list
+            rootSelector.UpdateOverflowedItems(rootItems, overflowedItems);
         }
 
         /// <summary>
@@ -375,11 +412,6 @@ namespace BreadcrumbTestLib.ViewModels.Breadcrumbs
 
                 var result = Comparer.CompareHierarchy(current.GetModel(), destination);
 
-                if (result != HierarchicalResult.Unrelated)
-                {
-                    Console.WriteLine("'{0}' + '{1}' => '{2}'", destination, current, result);
-                }
-
                 // Found an item along the way?
                 // Search on sub-tree items from an item that indicates selected children
                 if (result == HierarchicalResult.Child)
@@ -398,13 +430,11 @@ namespace BreadcrumbTestLib.ViewModels.Breadcrumbs
                     if (result == HierarchicalResult.Current)
                     {
                         path.Push(current);
-                        Console.WriteLine("");
                         return path;
                     }
                 }
             }
 
-            Console.WriteLine("");
             return path;
         }
 

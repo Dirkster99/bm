@@ -91,12 +91,6 @@
         /// <param name="path"></param>
         void ReportChildSelected(Stack<ITreeSelector<VM, M>> path);
 
-        /// <summary>
-        /// Used by a tree node to report to it's parent it's deselected.
-        /// </summary>
-        /// <param name="path"></param>
-        void ReportChildDeselected(Stack<ITreeSelector<VM, M>> path);
-
         /// <summary>        
         /// Find requested node using lookupProc using type T, after any HierarchicalResult,
         /// use processors to perform further action.

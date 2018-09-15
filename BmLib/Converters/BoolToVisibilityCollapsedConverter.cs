@@ -14,16 +14,17 @@
 		{
 			if (value is bool && (bool)value)
 				return Visibility.Visible;
-			else return Visibility.Collapsed;
+
+            return Visibility.Collapsed;
 		}
 
 		public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
 		{
 			if ((Visibility)value != Visibility.Collapsed)
 				return true;
+
 			return false;
 		}
-
 		#endregion
 	}
 }
