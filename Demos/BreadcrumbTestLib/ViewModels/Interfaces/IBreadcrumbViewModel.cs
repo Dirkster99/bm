@@ -52,9 +52,9 @@
         /// </summary>
         /// <param name="location"></param>
         /// <returns></returns>
-        Task<BrowseResult> NavigateTo(IDirectoryBrowser location);
+        Task<BrowseResult> NavigateToAsync(IDirectoryBrowser location);
 
-        Task<FinalBrowseResult<IDirectoryBrowser>> NavigateTo1Async(BrowseRequest<string> requestedLocation);
+        Task<FinalBrowseResult<IDirectoryBrowser>> NavigateToAsync(BrowseRequest<string> requestedLocation);
         #endregion methods
     }
 }

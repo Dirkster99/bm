@@ -59,14 +59,6 @@
 
         #region methods
         /// <summary>
-        /// Fetermines whether this instance equals the <paramref name="other"/>
-        /// instance or not.
-        /// </summary>
-        /// <param name="other"></param>
-        /// <returns></returns>
-        bool Equals(IDirectoryInfoEx other);
-
-        /// <summary>
         /// Enumerates all items in this directory with the given search parameters.
         /// </summary>
         /// <param name="searchPattern"></param>

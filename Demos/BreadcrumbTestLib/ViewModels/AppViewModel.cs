@@ -298,7 +298,7 @@
                 if (cancel != null)
                     cancel.ThrowIfCancellationRequested();
 
-                var browseResult = await BreadcrumbBrowser.NavigateTo1Async(request);
+                var browseResult = await BreadcrumbBrowser.NavigateToAsync(request);
 
                 return browseResult;
             }

@@ -30,7 +30,7 @@ namespace DirectoryInfoExLib.IO
     /// https://www.codeproject.com/Articles/1649/The-Complete-Idiot-s-Guide-to-Writing-Namespace-Ex
     /// https://msdn.microsoft.com/en-us/library/windows/desktop/cc144090(v=vs.85).aspx
     /// </summary>
-    internal class DirectoryInfoEx : IDirectoryInfoEx, IEquatable<IDirectoryInfoEx>
+    internal class DirectoryInfoEx : IDirectoryInfoEx
     {
         #region fields
         /// <summary>
@@ -450,10 +450,10 @@ namespace DirectoryInfoExLib.IO
         /// </summary>
         /// <param name="other"></param>
         /// <returns></returns>
-        public bool Equals(IDirectoryInfoEx other)
+        public bool Equals(IDirectoryBrowser other)
         {
-            PIDL thisPidl = this.getPIDL();
-            PIDL otherPidl = (other as DirectoryInfoEx).getPIDL();
+            PIDL thisPidl = new PIDL(this.getPIDL(), false);
+            PIDL otherPidl = new PIDL((other as IDirectoryBrowser).GetPIDLIntPtr(), false);
             try
             {
                 return thisPidl.Equals(otherPidl);
@@ -490,6 +490,14 @@ namespace DirectoryInfoExLib.IO
             return FullName.ToLower().GetHashCode();
         }
 
+        /// <summary>
+        /// Gets an <see cref="IntPtr"/> representing a PIDL item list
+        /// that represents this item.
+        /// 
+        /// The returned PIDL is a clone and must be freed by the caller using:
+        /// Marshal.FreeCoTaskMem(pidl);
+        /// </summary>
+        /// <returns></returns>
         public IntPtr GetPIDLIntPtr()
         {
             Logger.InfoFormat("'{0}'", this.FullName);

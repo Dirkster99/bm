@@ -5,7 +5,7 @@
     /// <summary>
     /// Represents a directory in PIDL system.
     /// </summary>
-    public interface IDirectoryBrowser : IDisposable, ICloneable
+    public interface IDirectoryBrowser : IDisposable, ICloneable, IEquatable<IDirectoryBrowser>
     {
         #region properties
         /// <summary>
@@ -43,6 +43,9 @@
         /// <summary>
         /// Gets an <see cref="IntPtr"/> representing a PIDL item list
         /// that represents this item.
+        /// 
+        /// The returned PIDL is a clone and must be freed by the caller using:
+        /// Marshal.FreeCoTaskMem(pidl);
         /// </summary>
         /// <returns></returns>
         IntPtr GetPIDLIntPtr();

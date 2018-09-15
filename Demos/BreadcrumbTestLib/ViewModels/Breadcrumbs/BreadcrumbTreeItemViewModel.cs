@@ -207,7 +207,7 @@
             {
                 if (_ItemSelectionChangedCommand == null)
                 {
-                    _ItemSelectionChangedCommand = new RelayCommand<object>((param) =>
+                    _ItemSelectionChangedCommand = new RelayCommand<object>(async (param) =>
                     {
                         var parArray = param as object[];
                         if (parArray == null)
@@ -222,7 +222,7 @@
                         if (selectedFolder == null)
                             return;
 
-                        _Root.NavigateToChild(this, selectedFolder);
+                        await _Root.NavigateToAsync(selectedFolder.GetModel());
                     });
                 }
 
@@ -230,26 +230,21 @@
             }
         }
 
+        /// <summary>
+        /// Gets a command that can be execute to make this item the currently
+        /// selected item in the breadcrumb control.
+        /// 
+        /// Use Case: User clicks a visible item in the list of breadcrumbs.
+        /// </summary>
         public ICommand BreadcrumbTreeTreeItemClickCommand
         {
             get
             {
                 if (_BreadcrumbTreeTreeItemClickCommand == null)
                 {
-                    _BreadcrumbTreeTreeItemClickCommand = new RelayCommand<object>((param) =>
+                    _BreadcrumbTreeTreeItemClickCommand = new RelayCommand<object>(async (param) =>
                     {
-////                        if (Entries != null)
-////                        {
-////                            foreach (var item in Entries.All)
-////                            {
-////                                if (item.Selection.IsSelected == true)
-////                                    item.Selection.ReportChildDeselected(new Stack<ITreeSelector<BreadcrumbTreeItemViewModel, IDirectoryBrowser>>());
-////                            }
-////
-////                        }
-////
-////                        this.Selection.IsSelected = true;
-////                        this.Selection.ReportChildSelected(new Stack<ITreeSelector<BreadcrumbTreeItemViewModel, IDirectoryBrowser>>());
+                        await _Root.NavigateToAsync(this.GetModel());
                     });
                 }
 
