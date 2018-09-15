@@ -168,7 +168,7 @@
         /// Method should be called after construction to initialize the viewmodel
         /// to view a default content.
         /// </summary>
-        public void InitPath(string initialPath)
+        public async Task InitPathAsync(string initialPath)
         {
             // Revert request to default if requested path is non-existing
             if (System.IO.Directory.Exists(initialPath) == false)
@@ -182,6 +182,7 @@
 
 ////            ExTest.InitRootAsync(new BrowseRequest<string>(initialPath, pathSegments));
 
+            await BreadcrumbBrowser.InitPathAsync();
             NavigateToFolder(initialPath);
         }
 
@@ -297,7 +298,7 @@
                 if (cancel != null)
                     cancel.ThrowIfCancellationRequested();
 
-                var browseResult = await BreadcrumbBrowser.InitPathAsync(request);
+                var browseResult = await BreadcrumbBrowser.NavigateTo1Async(request);
 
                 return browseResult;
             }

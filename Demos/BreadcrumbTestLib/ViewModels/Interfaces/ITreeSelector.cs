@@ -9,8 +9,8 @@
     /// Implement Tree based structure and support LookupProcessing.
     /// </summary>
     /// <typeparam name="VM">Sub-node viewmodel type.</typeparam>
-    /// <typeparam name="T">Type to identify a node, commonly string.</typeparam>
-    public interface ITreeSelector<VM, T> : INotifyPropertyChanged
+    /// <typeparam name="M">Type to identify a node, commonly string.</typeparam>
+    public interface ITreeSelector<VM, M> : INotifyPropertyChanged
     {
         #region properties
         /// <summary>
@@ -36,14 +36,14 @@
         /// <summary>
         /// Gets the selected child of current view model.          
         /// </summary>
-        T SelectedChild { get; set; }
+        M SelectedChild { get; set; }
 
         /// <summary>
         /// Gets the instance of the model object that represents this selection helper.
         /// The model backs the <see cref="ViewModel"/> property and should be in sync
         /// with it.
         /// </summary>
-        T Value { get; }
+        M Value { get; }
 
         /// <summary>
         /// Gets the owning ViewModel of this selection helper.
@@ -53,12 +53,12 @@
         /// <summary>
         /// Gets the parent's ViewModel <see cref="ITreeSelector"/>.
         /// </summary>
-        ITreeSelector<VM, T> ParentSelector { get; }
+        ITreeSelector<VM, M> ParentSelector { get; }
 
         /// <summary>
         /// Gets the root's ViewModel <see cref="ITreeSelector"/>.
         /// </summary>
-        ITreeRootSelector<VM, T> RootSelector { get; }
+        ITreeRootSelector<VM, M> RootSelector { get; }
 
         /// <summary>
         /// Gets All sub-entries of the current tree item
@@ -89,13 +89,13 @@
         /// Used by a tree node to report to it's root it's selected.
         /// </summary>
         /// <param name="path"></param>
-        void ReportChildSelected(Stack<ITreeSelector<VM, T>> path);
+        void ReportChildSelected(Stack<ITreeSelector<VM, M>> path);
 
         /// <summary>
         /// Used by a tree node to report to it's parent it's deselected.
         /// </summary>
         /// <param name="path"></param>
-        void ReportChildDeselected(Stack<ITreeSelector<VM, T>> path);
+        void ReportChildDeselected(Stack<ITreeSelector<VM, M>> path);
 
         /// <summary>        
         /// Find requested node using lookupProc using type T, after any HierarchicalResult,
@@ -110,10 +110,10 @@
         /// <param name="cancelToken"></param>
         /// <param name="processors"></param>
         /// <returns></returns>
-        Task LookupAsync(T value,
-                         ITreeLookup<VM, T> lookupProc,
+        Task LookupAsync(M value,
+                         ITreeLookup<VM, M> lookupProc,
                          CancellationToken cancelToken,
-                         params ITreeLookupProcessor<VM, T>[] processors);
+                         params ITreeLookupProcessor<VM, M>[] processors);
         #endregion methods
     }
 }

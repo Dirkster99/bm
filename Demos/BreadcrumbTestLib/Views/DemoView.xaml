@@ -80,6 +80,11 @@
                 <ColumnDefinition Width="Auto"/>
             </Grid.ColumnDefinitions>
 
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+
             <Grid Grid.Column="0" Grid.Row="0"
                   xmlns:behav="clr-namespace:BreadcrumbTestLib.Behaviors"
                   >
@@ -148,7 +153,15 @@
                     </TreeView.ItemContainerStyle>
                 </TreeView>
             </Grid>
+
+            <TextBox Grid.Column="0" Grid.Row="1" Grid.ColumnSpan="2"
+                     Text="{Binding Path=BreadcrumbBrowser.BreadcrumbSelectedPath}"
+                     TextWrapping="WrapWithOverflow"
+                     HorizontalScrollBarVisibility="Auto"
+                     VerticalScrollBarVisibility="Auto"
+                    />
         </Grid>
+
         <!-- PropertiesView of Breadcrumb control -->
         <ScrollViewer Grid.Column="2" Grid.Row="3">
             <StackPanel VerticalAlignment="Top" Margin="3" Width="200">

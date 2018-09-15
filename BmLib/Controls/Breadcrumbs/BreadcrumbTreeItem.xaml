@@ -8,6 +8,7 @@
     xmlns:conv="clr-namespace:BmLib.Converters"
     xmlns:reskeys="clr-namespace:BmLib.Themes"
     xmlns:behav="clr-namespace:BmLib.Behaviors"
+    xmlns:local="clr-namespace:BmLib.Controls.Breadcrumbs"
  >
     <DataTemplate x:Key="DropDownListItemDataTemplate">
         <Grid>
@@ -63,7 +64,8 @@
                                         MaxWidth="1000"
                                         Margin="0"
                                         Padding="3,0"
-                                >
+                                        Command="{TemplateBinding ClickItemCommand}"
+                                    >
                                     <ContentPresenter x:Name="PART_Header"
                                                       HorizontalAlignment="Stretch"
                                                       VerticalAlignment="Stretch"                                   

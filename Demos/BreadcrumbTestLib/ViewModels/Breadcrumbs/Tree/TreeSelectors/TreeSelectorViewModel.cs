@@ -26,12 +26,16 @@
         protected static readonly log4net.ILog Logger = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
 
         private readonly AsyncLock _lookupLock = new AsyncLock();
-        private T _currentValue = default(T);
         private bool _isSelected = false;
-        private T _selectedValue = default(T);
+
+        // Holds the location model of the selected child of this entry (if any)
+        private T _SelectedChild = default(T);
+
         private ITreeSelector<VM, T> _prevSelected = null;
 
-        private VM _currentViewModel;
+        private T _Value = default(T);
+        private VM _ViewModel;
+
         private bool _isRoot = false;
         private bool _isOverflowed;
         #endregion fields
@@ -40,16 +44,22 @@
         /// <summary>
         /// Class constructor
         /// </summary>
-        public TreeSelectorViewModel(T currentValue, VM currentViewModel,
+        /// <param name="value">Is the location model object that is represented by the viewmodel object.</param>
+        /// <param name="viewModel">Is the viewmodel object that represents an item in the viewmodel tree structure.</param>
+        /// <param name="parentSelector"></param>
+        /// <param name="entryHelper"></param>
+        public TreeSelectorViewModel(T value,
+                                     VM viewModel,
                                      ITreeSelector<VM, T> parentSelector,
                                      IBreadcrumbTreeItemHelperViewModel<VM> entryHelper)
         {
+            _Value = value;
+            _ViewModel = viewModel;
+
             RootSelector = parentSelector.RootSelector;
             ParentSelector = parentSelector;
-            EntryHelper = entryHelper;
 
-            _currentValue = currentValue;
-            _currentViewModel = currentViewModel;
+            EntryHelper = entryHelper;
         }
 
         /// <summary>
@@ -64,7 +74,7 @@
 
         #region Public Properties
         /// <summary>
-        /// Whether current view model is selected.
+        /// Gets/sets whether current view model is selected or not.
         /// </summary>
         public bool IsSelected
         {
@@ -79,14 +89,20 @@
                 {
                     _isSelected = value;
                     NotifyPropertyChanged(() => IsSelected);
-                    SelectedChild = default(T);
 
-                    if (value)
-                        ReportChildSelected(new Stack<ITreeSelector<VM, T>>());
-                    else
-                        ReportChildDeselected(new Stack<ITreeSelector<VM, T>>());
+//                    TestReportChildSelection(value);
                 }
             }
+        }
+
+        public void TestReportChildSelection(bool value)
+        {
+            SelectedChild = default(T);
+
+            if (value == true)
+                ReportChildSelected(new Stack<ITreeSelector<VM, T>>());
+            else
+                ReportChildDeselected(new Stack<ITreeSelector<VM, T>>());
         }
 
         /// <summary>
@@ -121,7 +137,7 @@
         /// </summary>
         public virtual bool IsChildSelected
         {
-            get { return _selectedValue != null; }
+            get { return _SelectedChild != null; }
         }
 
         /// <summary>
@@ -131,12 +147,12 @@
         {
             get
             {
-                return _selectedValue;
+                return _SelectedChild;
             }
 
             set
             {
-                _selectedValue = value;
+                _SelectedChild = value;
 
                 NotifyPropertyChanged(() => this.SelectedChild);
                 NotifyPropertyChanged(() => this.IsChildSelected);
@@ -144,47 +160,14 @@
             }
         }
 
-        public void NavigateToChild(T value)
-        {
-            IsSelected = false;
-            NotifyPropertyChanged(() => this.IsSelected);
-
-            if (_selectedValue == null || !_selectedValue.Equals(value))
-            {
-                if (_prevSelected != null)
-                {
-                    _prevSelected.IsSelected = false;
-                }
-
-                SelectedChild = value;
-
-                if (value != null)
-                {
-                    AsyncUtils.RunAsync(async () => await LookupAsync
-                    (
-                        value,
-                        new SearchNextLevel<VM, T>(),    // LoadSubentriesIfNotLoaded
-                        CancellationToken.None,
-                        new TreeLookupProcessor<VM, T>(HierarchicalResult.Related, (hr, p, c) =>
-                        {
-                            c.IsSelected = true;
-                            _prevSelected = c;
-
-                            return true;
-                        })));
-                }
-            }
-        }
-
-
         /// <summary>
-        /// Gets the instance of the model object that represents this selection helper.
+        /// Gets the instance of the location model object that represents this selection helper.
         /// The model backs the <see cref="ViewModel"/> property and should be in sync
         /// with it.
         /// </summary>
         public T Value
         {
-            get { return _currentValue; }
+            get { return _Value; }
         }
 
         /// <summary>
@@ -192,7 +175,7 @@
         /// </summary>
         public VM ViewModel
         {
-            get { return _currentViewModel; }
+            get { return _ViewModel; }
         }
 
         /// <summary>
@@ -258,8 +241,8 @@
         public override string ToString()
         {
             return string.Format("Model '{0}', ViewModel '{1}'",
-                _currentValue == null ? string.Empty : _currentValue.ToString(),
-                _currentViewModel == null ? string.Empty : _currentViewModel.ToString());
+                _Value == null ? string.Empty : _Value.ToString(),
+                _ViewModel == null ? string.Empty : _ViewModel.ToString());
         }
 
         /// <summary>
@@ -272,7 +255,7 @@
 
             if (path.Count() > 0)
             {
-                _selectedValue = path.Peek().Value;
+                _SelectedChild = path.Peek().Value;
 
                 NotifyPropertyChanged(() => this.SelectedChild);
             }
@@ -316,6 +299,48 @@
 
             if (ParentSelector != null)
                 ParentSelector.ReportChildDeselected(path);
+        }
+
+        /// <summary>
+        /// Method is executed to  change the navigation target of the currently
+        /// selected location towards a new location. This method is typically
+        /// executed when:
+        /// 1) Any other than the root drop down triangle is opened,
+        /// 2) An entry in the list drop down is selected and
+        /// 3) The control is now deactivating its previous selection and
+        /// 4) needs to navigate towards the new selected item.
+        /// </summary>
+        /// <param name="value">Is the location model object that represents the target location in the tree structure.</param>
+        public void NavigateToChild(T value)
+        {
+            IsSelected = false;
+            NotifyPropertyChanged(() => this.IsSelected);
+
+            if (_SelectedChild == null || _SelectedChild.Equals(value) == false)
+            {
+                if (_prevSelected != null)
+                {
+                    _prevSelected.IsSelected = false;
+                }
+
+                SelectedChild = value;
+
+                if (value != null)
+                {
+                    AsyncUtils.RunAsync(async () => await LookupAsync
+                    (
+                        value,
+                        new SearchNextLevel<VM, T>(),    // LoadSubentriesIfNotLoaded
+                        CancellationToken.None,
+                        new TreeLookupProcessor<VM, T>(HierarchicalResult.Related, (hr, p, c) =>
+                        {
+                            c.IsSelected = true;
+                            _prevSelected = c;
+
+                            return true;
+                        })));
+                }
+            }
         }
 
         /// <summary>

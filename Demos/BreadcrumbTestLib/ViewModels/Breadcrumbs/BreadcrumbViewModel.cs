@@ -7,8 +7,11 @@ namespace BreadcrumbTestLib.ViewModels.Breadcrumbs
     using BreadcrumbTestLib.ViewModels.Interfaces;
     using BreadcrumbTestLib.ViewModels.TreeLookupProcessors;
     using BreadcrumbTestLib.ViewModels.TreeSelectors;
+    using DirectoryInfoExLib;
     using DirectoryInfoExLib.Interfaces;
     using System;
+    using System.Collections.Generic;
+    using System.Linq;
     using System.Threading;
     using System.Threading.Tasks;
     using System.Windows.Input;
@@ -30,6 +33,7 @@ namespace BreadcrumbTestLib.ViewModels.Breadcrumbs
 
         private ICommand _RootDropDownSelectionChangedCommand;
         private bool _IsBrowsing;
+        private string _BreadcrumbSelectedPath;
         #endregion fields
 
         #region constructors
@@ -58,7 +62,7 @@ namespace BreadcrumbTestLib.ViewModels.Breadcrumbs
         /// Gets a viewmodel that manages the progress display that is shown to inform
         /// users of long running processings.
         /// </summary>
-        public IProgressViewModel Progressing { get; private set; }
+        public IProgressViewModel Progressing { get; }
 
         /// <summary>
         /// Gets a viewmodel that manages the sub-tree brwosing and
@@ -86,6 +90,23 @@ namespace BreadcrumbTestLib.ViewModels.Breadcrumbs
                 {
                     _EnableBreadcrumb = value;
                     NotifyPropertyChanged(() => EnableBreadcrumb);
+                }
+            }
+        }
+
+        public string BreadcrumbSelectedPath
+        {
+            get
+            {
+                return _BreadcrumbSelectedPath;
+            }
+
+            set
+            {
+                if (_BreadcrumbSelectedPath != value)
+                {
+                    _BreadcrumbSelectedPath = value;
+                    NotifyPropertyChanged(() => BreadcrumbSelectedPath);
                 }
             }
         }
@@ -183,6 +204,31 @@ namespace BreadcrumbTestLib.ViewModels.Breadcrumbs
         #endregion properties
 
         #region methods
+        /// <summary>
+        /// Method should be called after construction to initialize the viewmodel
+        /// to view a default content.
+        /// </summary>
+        /// <param name="initialRequest"></param>
+        public Task InitPathAsync()
+        {
+            return Task.Run(() => BreadcrumbSubTree.InitRootAsync());
+        }
+
+        public async Task<FinalBrowseResult<IDirectoryBrowser>> NavigateTo1Async(
+            BrowseRequest<string> requestedLocation)
+        {
+            Logger.InfoFormat("'{0}'", requestedLocation.NewLocation);
+
+            return await Task.Run(async () =>
+            {
+                var newLocation = requestedLocation.NewLocation;
+                var result = await NavigateTo(Factory.CreateDirectoryInfoEx(newLocation));
+
+                var locate = Factory.CreateDirectoryInfoEx(newLocation);
+
+                return new FinalBrowseResult<IDirectoryBrowser>(locate);
+            });
+        }
 
         /// <summary>
         /// Navigates the viewmodel (and hopefully the bound control) to a new location
@@ -192,34 +238,168 @@ namespace BreadcrumbTestLib.ViewModels.Breadcrumbs
         /// </summary>
         /// <param name="location"></param>
         /// <returns></returns>
-        public async Task NavigateTo(IDirectoryBrowser location)
+        public async Task<BrowseResult> NavigateTo(IDirectoryBrowser location)
         {
             IsBrowsing = true;
             try
             {
                 var root = BreadcrumbSubTree.Selection as ITreeRootSelector<BreadcrumbTreeItemViewModel, IDirectoryBrowser>;
                 if (root == null)
-                    return;
+                    return BrowseResult.InComplete;
 
                 string[] pathSegments = DirectoryInfoExLib.Factory.GetFolderSegments(location.FullName);
                 var request = new BrowseRequest<string>(location.FullName, pathSegments, CancellationToken.None);
 
+//                BreadcrumbTreeItemViewModel selectedParentItem = null, selectedItem = null;
                 var selector = BreadcrumbSubTree.Selection as ITreeRootSelector<BreadcrumbTreeItemViewModel, IDirectoryBrowser>;
-                await selector.SelectAsync(location, request, CancellationToken.None, Progressing);
+                var items = await LookUpAndSelectAsync(BreadcrumbSubTree, location);
 
-                try
+                if (items.Count > 0)
                 {
-                    if (BrowseEvent != null)
-                        BrowseEvent(this, new BrowsingEventArgs(location, false, BrowseResult.Complete));
+                    var selectedItem = items.Peek();
+                    if (selectedItem.Selection.IsSelected == true)
+                    {
+                        var path = new Stack<ITreeSelector<BreadcrumbTreeItemViewModel, IDirectoryBrowser>>();
+                        path.Push(selectedItem.Selection);
+
+                        BreadcrumbSubTree.Selection.ReportChildSelected(path);
+                    }
                 }
-                catch
-                {
-                }
+
+//                foreach (var item in items)
+//                {
+//                    Console.WriteLine("Path Item '{0}' IsChildSelected {1} IsSelected {2}", 
+//                        item.Header,
+//                        item.Selection.IsChildSelected, item.Selection.IsSelected);
+//                }
+//                Console.WriteLine();
+
+//               await selector.SelectAsync(location, request, CancellationToken.None, Progressing);
+
+                // XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+//                selectedParentItem = null;
+//                selectedItem = null;
+//                selectedParentItem = FindItemIsSelected(BreadcrumbSubTree, out selectedItem);
+//
+//                if (selectedParentItem != null && selectedItem != null)
+//                {
+//                    selectedItem.Selection.IsSelected = true;
+//
+//                    var path = new Stack<ITreeSelector<BreadcrumbTreeItemViewModel, IDirectoryBrowser>>();
+//                    path.Push(selectedItem.Selection);
+//                    BreadcrumbSubTree.Selection.ReportChildSelected(path);
+//                }
+
+                UpdateBreadcrumbSelectedPath();
+
+                if (BrowseEvent != null)
+                    BrowseEvent(this, new BrowsingEventArgs(location, false, BrowseResult.Complete));
+
+                return BrowseResult.Complete;
+            }
+            catch
+            {
+                if (BrowseEvent != null)
+                    BrowseEvent(this, new BrowsingEventArgs(location, false, BrowseResult.InComplete));
+
+                return BrowseResult.InComplete;
             }
             finally
             {
                 IsBrowsing = false;
             }
+        }
+
+        private async Task<Stack<BreadcrumbTreeItemViewModel>> LookUpAndSelectAsync(
+            BreadcrumbTreeItemViewModel root,
+            IDirectoryBrowser newLocation)
+        {
+            Queue<Tuple<int, BreadcrumbTreeItemViewModel>> queue = new Queue<Tuple<int, BreadcrumbTreeItemViewModel>>();
+            Stack<BreadcrumbTreeItemViewModel> path = new Stack<BreadcrumbTreeItemViewModel>();
+            ICompareHierarchy<IDirectoryBrowser> Comparer = new ExHierarchyComparer();
+
+            var ret = root;
+
+            if (root != null)
+                queue.Enqueue(new Tuple<int, BreadcrumbTreeItemViewModel>(0, root));
+
+            while (queue.Count() > 0)
+            {
+                var queueItem = queue.Dequeue();
+                int iLevel = queueItem.Item1;
+                BreadcrumbTreeItemViewModel current = queueItem.Item2;
+
+                var result = Comparer.CompareHierarchy(current.GetModel(), newLocation);
+
+                // Found an item along the way?
+                // Search on sub-tree items from an item that indicates selected children
+                if (result == HierarchicalResult.Child)
+                {
+                    if (path.Count() > 0)
+                        path.Peek().Selection.SelectedChild = current.Selection.Value;
+
+                    path.Push(current);
+
+                    if (current.Entries.IsLoaded == false)
+                        await current.Entries.LoadAsync();
+
+                    foreach (var item in current.Entries.All)
+                        queue.Enqueue(new Tuple<int, BreadcrumbTreeItemViewModel>(iLevel + 1, item));
+                }
+                else  // Found what we where looking for?
+                {
+                    if (result == HierarchicalResult.Current)
+                    {
+                        if (path.Count() > 0)
+                            path.Peek().Selection.SelectedChild = current.Selection.Value;
+
+                        path.Push(current);
+                        current.Selection.IsSelected = true;
+                    }
+                }
+            }
+
+            return path;
+        }
+
+        /// <summary>
+        /// Searches the list of Entries.All items below root and returns the item with
+        /// the Selection.IsSelected property - requires that each item towards the result
+        /// item has the Selection.IsChildSelected property set.
+        /// </summary>
+        /// <param name="root"></param>
+        /// <param name="selectedChild">Returns item with Selection.IsSelected property set or null.</param>
+        /// <returns>Last item with Selection.IsChildSelected property set or root</returns>
+        public BreadcrumbTreeItemViewModel FindItemIsSelected(BreadcrumbTreeItemViewModel root,
+                                                          out BreadcrumbTreeItemViewModel selectedChild)
+        {
+            selectedChild = null;
+            var ret = root;
+            Queue<Tuple<int, BreadcrumbTreeItemViewModel>> queue = new Queue<Tuple<int, BreadcrumbTreeItemViewModel>>();
+
+            if (root != null)
+                queue.Enqueue(new Tuple<int, BreadcrumbTreeItemViewModel>(0, root));
+
+            while (queue.Count() > 0)
+            {
+                var queueItem = queue.Dequeue();
+                int iLevel = queueItem.Item1;
+                BreadcrumbTreeItemViewModel current = queueItem.Item2;
+
+                // Search on sub-tree items from an item that indicates selected children
+                if (current.Selection.IsChildSelected == true)
+                {
+                    ret = current;
+
+                    foreach (var item in current.Entries.All)
+                        queue.Enqueue(new Tuple<int, BreadcrumbTreeItemViewModel>(iLevel + 1, item));
+                }
+
+                if (current.Selection.IsSelected == true)
+                    selectedChild = current;
+            }
+
+            return ret;
         }
 
         /// <summary>
@@ -237,22 +417,29 @@ namespace BreadcrumbTestLib.ViewModels.Breadcrumbs
         /// </summary>
         /// <param name="item">Is the tree item that represents the target location in the tree structure.</param>
         public void NavigateToChild(BreadcrumbTreeItemViewModel item,
-                                    IDirectoryBrowser selectedLocationModel)
+                                    BreadcrumbTreeItemViewModel selectedLocationModel)
         {
+            var prevSelector = BreadcrumbSubTree.Selection as TreeRootSelectorViewModel<BreadcrumbTreeItemViewModel, IDirectoryBrowser>;
+
             IsBrowsing = true;
             try
             {
                 var selector = item.Selection as TreeSelectorViewModel<BreadcrumbTreeItemViewModel, IDirectoryBrowser>;
-                selector.NavigateToChild(selectedLocationModel);
+                selector.NavigateToChild(selectedLocationModel.GetModel());
 
-                try
-                {
-                    if (BrowseEvent != null)
-                        BrowseEvent(this, new BrowsingEventArgs(selectedLocationModel, false, BrowseResult.Complete));
-                }
-                catch
-                {
-                }
+                var path = new Stack<ITreeSelector<BreadcrumbTreeItemViewModel, IDirectoryBrowser>>();
+                path.Push(selectedLocationModel.Selection);
+                BreadcrumbSubTree.Selection.ReportChildSelected(path);
+
+                UpdateBreadcrumbSelectedPath();
+
+                if (BrowseEvent != null)
+                    BrowseEvent(this, new BrowsingEventArgs(item.GetModel(), false, BrowseResult.Complete));
+            }
+            catch
+            {
+                if (BrowseEvent != null)
+                    BrowseEvent(this, new BrowsingEventArgs(item.GetModel(), false, BrowseResult.InComplete));
             }
             finally
             {
@@ -261,19 +448,34 @@ namespace BreadcrumbTestLib.ViewModels.Breadcrumbs
         }
 
         /// <summary>
-        /// Method should be called after construction to initialize the viewmodel
-        /// to view a default content.
+        /// Method updates the BreadcrumbSelectedPath property for debugging purposes.
         /// </summary>
-        /// <param name="initialRequest"></param>
-        public async Task<FinalBrowseResult<IDirectoryBrowser>> InitPathAsync(
-            BrowseRequest<string> initialRequest)
+        private void UpdateBreadcrumbSelectedPath()
         {
-            Logger.InfoFormat("'{0}'", initialRequest.NewLocation);
+            var selector = BreadcrumbSubTree.Selection as ITreeRootSelector<BreadcrumbTreeItemViewModel, IDirectoryBrowser>;
 
-            return await Task.Run(() =>
+            if (selector != null)
             {
-                return BreadcrumbSubTree.InitRootAsync(initialRequest, Progressing);
-            });
+                if (selector.SelectedViewModel != null)
+                {
+                    var pathItems = selector.SelectedViewModel.GetPathItems();
+
+                    string output = "";
+                    foreach (var item in pathItems)
+                    {
+                        var itemString = string.Format("{0} {1}", item.Header,
+                            (item.Selection.IsSelected == false ? "" : "(Selected)"));
+
+                        output = (string.IsNullOrEmpty(output) ?
+                            itemString :
+                            output + "/" + itemString);
+                    }
+
+                    // Gets the complete path string below root item selector.RootSelector.SelectedValue.FullName;
+
+                    BreadcrumbSelectedPath = output;
+                }
+            }
         }
 
         /// <summary>

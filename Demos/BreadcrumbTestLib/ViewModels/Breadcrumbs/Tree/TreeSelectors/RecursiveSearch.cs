@@ -5,6 +5,9 @@
     using System.Threading.Tasks;
     using BreadcrumbTestLib.ViewModels.Interfaces;
     using BmLib.Enums;
+    using BreadcrumbTestLib.ViewModels.TreeLookupProcessors;
+    using DirectoryInfoExLib.Interfaces;
+    using BreadcrumbTestLib.ViewModels.Breadcrumbs;
 
     /// <summary>
     /// Lookup until lookupvalue is found, and process only parent or matchednode.
@@ -94,7 +97,9 @@
         {
             foreach (var p in processors)
             {
-                if (p.Process(hr, parentSelector, selector) == false)
+                bool retVal = p.Process(hr, parentSelector, selector);
+
+                if (retVal == false)
                     return false;
             }
 

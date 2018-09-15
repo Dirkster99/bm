@@ -22,7 +22,7 @@
         /// </summary>
         /// <param name="location"></param>
         /// <returns></returns>
-        Task NavigateTo(M location);
+        Task<BrowseResult> NavigateTo(M location);
 
         /// <summary>
         /// Method is executed to  change the navigation target of the currently
@@ -39,6 +39,6 @@
         /// </summary>
         /// <param name="item">Is the tree item that represents the target location in the tree structure.</param>
         void NavigateToChild(BreadcrumbTreeItemViewModel item,
-                             IDirectoryBrowser selectedLocationModel);
+                             BreadcrumbTreeItemViewModel selectedLocationModel);
     }
 }

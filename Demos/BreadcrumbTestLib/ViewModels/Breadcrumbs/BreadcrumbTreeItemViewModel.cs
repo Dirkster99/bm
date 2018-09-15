@@ -17,9 +17,6 @@
     using System.Runtime.InteropServices;
     using BreadcrumbTestLib.Models;
     using System.Windows.Input;
-    using System.Threading;
-    using BreadcrumbTestLib.ViewModels.TreeLookupProcessors;
-    using BmLib.Utils;
 
     /// <summary>
     /// Class implements a ViewModel to manage a sub-tree of a Breadcrumb control.
@@ -49,10 +46,11 @@
         private ImageSource _icon = null;
         private bool _disposed = false;
 
-        private ICommand _ItemSelectionChangedCommand;
-
         // Instance of the root viewmodel - reference is used to invoke central tree related (navigational) methods
         private IRoot<IDirectoryBrowser> _Root;
+
+        private ICommand _ItemSelectionChangedCommand;
+        private ICommand _BreadcrumbTreeTreeItemClickCommand;
         #endregion fields
 
         #region constructors
@@ -224,11 +222,38 @@
                         if (selectedFolder == null)
                             return;
 
-                        _Root.NavigateToChild(this, selectedFolder.GetModel());
+                        _Root.NavigateToChild(this, selectedFolder);
                     });
                 }
 
                 return _ItemSelectionChangedCommand;
+            }
+        }
+
+        public ICommand BreadcrumbTreeTreeItemClickCommand
+        {
+            get
+            {
+                if (_BreadcrumbTreeTreeItemClickCommand == null)
+                {
+                    _BreadcrumbTreeTreeItemClickCommand = new RelayCommand<object>((param) =>
+                    {
+////                        if (Entries != null)
+////                        {
+////                            foreach (var item in Entries.All)
+////                            {
+////                                if (item.Selection.IsSelected == true)
+////                                    item.Selection.ReportChildDeselected(new Stack<ITreeSelector<BreadcrumbTreeItemViewModel, IDirectoryBrowser>>());
+////                            }
+////
+////                        }
+////
+////                        this.Selection.IsSelected = true;
+////                        this.Selection.ReportChildSelected(new Stack<ITreeSelector<BreadcrumbTreeItemViewModel, IDirectoryBrowser>>());
+                    });
+                }
+
+                return _BreadcrumbTreeTreeItemClickCommand;
             }
         }
         #endregion properties
@@ -248,16 +273,13 @@
         /// in the <see cref="Entries"/> collection.
         /// </summary>
         /// <returns></returns>
-        public Task<FinalBrowseResult<IDirectoryBrowser>> InitRootAsync(
-            BrowseRequest<string> initialRequest,
-            IProgressViewModel progress = null)
+        public void InitRootAsync()
         {
             try
             {
                 // Find all entries below desktop
                 _dir = DirectoryInfoExLib.Factory.DesktopDirectory;
-
-                Logger.InfoFormat("'{0}' -> '{1}'", initialRequest.NewLocation, _dir.Label);
+                Header = _dir.Label;
 
                 // and insert desktop sub-entries into Entries property
                 Entries.SetEntries(UpdateMode.Update,
@@ -265,19 +287,20 @@
                                      //(filter out recycle bin entry if its not that useful...)
                                      //.Where(d => !d.Equals(DirectoryInfoExLib.Factory.RecycleBinDirectory))
 
-                Header = _dir.Label;
-
                 var selector = this.Selection as ITreeRootSelector<BreadcrumbTreeItemViewModel, IDirectoryBrowser>;
 
-                return selector.SelectAsync(
-                    DirectoryInfoExLib.Factory.FromString(initialRequest.NewLocation),
-                    initialRequest,
-                    initialRequest.CancelTok,
-                    progress);
+                if (Entries.All.Count() > 0)
+                {
+                    var firstRootItem = Entries.All.First();
+                    firstRootItem.Selection.IsSelected = true;
+
+                    var path = new Stack<ITreeSelector<BreadcrumbTreeItemViewModel, IDirectoryBrowser>>();
+                    path.Push(firstRootItem.Selection);
+                    this.Selection.ReportChildSelected(path);
+                }
             }
             catch
             {
-                return null;
             }
         }
 
@@ -289,6 +312,30 @@
         internal IDirectoryBrowser GetModel()
         {
             return _dir;
+        }
+
+        /// <summary>
+        /// Gets a collection of viewmodel items that represent
+        /// the path towards the currently selected item in the the tree.
+        /// </summary>
+        /// <returns></returns>
+        public IList<BreadcrumbTreeItemViewModel> GetPathItems(bool bReverseItems = true)
+        {
+            var parentNode = _parentNode;
+            var list = new List<BreadcrumbTreeItemViewModel>();
+
+            list.Add(this);
+
+            while (parentNode != null)
+            {
+                list.Add(parentNode);
+                parentNode = parentNode._parentNode;
+            }
+
+            if (bReverseItems == true)
+                list.Reverse();
+
+            return list;
         }
 
         #region Disposable Interfaces

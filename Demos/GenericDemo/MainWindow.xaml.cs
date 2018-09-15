@@ -23,7 +23,7 @@
             var appVM = new AppViewModel("Generic");
             DataContext = appVM;
 
-            appVM.InitPath(@"C:\");
+            appVM.InitPathAsync(@"C:\");
         }
 
         protected override void OnClosed(EventArgs e)

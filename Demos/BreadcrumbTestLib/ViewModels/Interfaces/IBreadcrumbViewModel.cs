@@ -42,7 +42,19 @@
         /// to view a default content.
         /// </summary>
         /// <param name="initialRequest"></param>
-        Task<FinalBrowseResult<IDirectoryBrowser>> InitPathAsync(BrowseRequest<string> initialRequest);
+        Task InitPathAsync();
+
+        /// <summary>
+        /// Navigates the viewmodel (and hopefully the bound control) to a new location
+        /// and ensures correct <see cref="IsBrowsing"/> state and event handling towards
+        /// listing objects for
+        /// <see cref="ICanNavigate"/> events.
+        /// </summary>
+        /// <param name="location"></param>
+        /// <returns></returns>
+        Task<BrowseResult> NavigateTo(IDirectoryBrowser location);
+
+        Task<FinalBrowseResult<IDirectoryBrowser>> NavigateTo1Async(BrowseRequest<string> requestedLocation);
         #endregion methods
     }
 }
