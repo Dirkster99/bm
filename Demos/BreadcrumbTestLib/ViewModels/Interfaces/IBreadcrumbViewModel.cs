@@ -10,7 +10,7 @@
     /// Defines an inteface to manage the complete Breadcrumb control with
     /// a viewmodel that should implement these properties and methods.
     /// </summary>
-    public interface IBreadcrumbViewModel : ICanNavigate,
+    public interface IBreadcrumbViewModel : IRoot<IDirectoryBrowser>,
                                             INotifyPropertyChanged
     {
         #region properties
@@ -41,20 +41,7 @@
         /// Method should be called after construction to initialize the viewmodel
         /// to view a default content.
         /// </summary>
-        /// <param name="initialRequest"></param>
         Task InitPathAsync();
-
-        /// <summary>
-        /// Navigates the viewmodel (and hopefully the bound control) to a new location
-        /// and ensures correct <see cref="IsBrowsing"/> state and event handling towards
-        /// listing objects for
-        /// <see cref="ICanNavigate"/> events.
-        /// </summary>
-        /// <param name="location"></param>
-        /// <returns></returns>
-        Task<BrowseResult> NavigateToAsync(IDirectoryBrowser location);
-
-        Task<FinalBrowseResult<IDirectoryBrowser>> NavigateToAsync(BrowseRequest<string> requestedLocation);
         #endregion methods
     }
 }

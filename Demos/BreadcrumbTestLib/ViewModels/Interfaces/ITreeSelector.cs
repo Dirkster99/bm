@@ -89,7 +89,7 @@
         /// Used by a tree node to report to it's root it's selected.
         /// </summary>
         /// <param name="path"></param>
-        void ReportChildSelected(Stack<ITreeSelector<VM, M>> path);
+        Task ReportChildSelectedAsync(Stack<ITreeSelector<VM, M>> path);
 
         /// <summary>        
         /// Find requested node using lookupProc using type T, after any HierarchicalResult,

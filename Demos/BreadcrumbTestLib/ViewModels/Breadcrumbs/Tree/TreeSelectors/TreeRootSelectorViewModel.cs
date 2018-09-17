@@ -129,7 +129,7 @@
         /// This behavior is mostly implemented in this method.
         /// </summary>
         /// <param name="path"></param>
-        public override void ReportChildSelected(Stack<ITreeSelector<VM, T>> path)
+        public override async Task ReportChildSelectedAsync(Stack<ITreeSelector<VM, T>> path)
         {
             Logger.InfoFormat("_");
 
@@ -154,7 +154,7 @@
 
             this.updateRootItems(path);
 
-            path.Last().EntryHelper.LoadAsync();
+            await path.Last().EntryHelper.LoadAsync();
         }
 
         public HierarchicalResult CompareHierarchy(T value1, T value2)
@@ -255,6 +255,9 @@
                 });
             }
 
+            Console.WriteLine();
+            Console.WriteLine("Adding Root Items:");
+
             // Get all items for display in the root drop down list
             AsyncUtils.RunAsync(() => this.updateRootItemsAsync(this, _OverflowedAndRootItems, 1));
         }
@@ -289,6 +292,7 @@
                     rootItems.Add(c.ViewModel);
                 });
 
+                Console.WriteLine("Level {0} Root item: {1}", level, c.Value.ToString());
                 c.IsRoot = true;
 
                 await this.updateRootItemsAsync(c, rootItems, level - 1);

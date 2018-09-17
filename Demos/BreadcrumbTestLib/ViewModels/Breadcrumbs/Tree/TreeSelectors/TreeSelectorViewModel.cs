@@ -235,21 +235,22 @@
         /// Bubble up to TreeSelectionHelper for selection.
         /// </summary>
         /// <param name="path"></param>
-        public virtual void ReportChildSelected(Stack<ITreeSelector<VM, T>> path)
+        public virtual Task ReportChildSelectedAsync(Stack<ITreeSelector<VM, T>> path)
         {
             Logger.InfoFormat("_");
 
-            if (path.Count() > 0)
-            {
-                _SelectedChild = path.Peek().Value;
-
-                NotifyPropertyChanged(() => this.SelectedChild);
-            }
-
-            path.Push(this);
-
-            if (ParentSelector != null)
-                ParentSelector.ReportChildSelected(path);
+////            if (path.Count() > 0)
+////            {
+////                _SelectedChild = path.Peek().Value;
+////
+////                NotifyPropertyChanged(() => this.SelectedChild);
+////            }
+////
+////            path.Push(this);
+////
+////            if (ParentSelector != null)
+////                ParentSelector.ReportChildSelectedAsync(path);
+            return Task.Run(() => { });
         }
 
         /// <summary>

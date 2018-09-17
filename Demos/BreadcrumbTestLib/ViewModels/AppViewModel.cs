@@ -5,6 +5,7 @@
     using BreadcrumbTestLib.Tasks;
     using BreadcrumbTestLib.ViewModels.Breadcrumbs;
     using BreadcrumbTestLib.ViewModels.Interfaces;
+    using DirectoryInfoExLib;
     using DirectoryInfoExLib.Interfaces;
     using System;
     using System.Diagnostics;
@@ -175,7 +176,8 @@
                 initialPath = new DirectoryInfo(Environment.SystemDirectory).Root.Name;
 
             Logger.InfoFormat("'{0}'", initialPath);
-            string[] pathSegments = DirectoryInfoExLib.Factory.GetFolderSegments(initialPath);
+            var location = Factory.CreateDirectoryInfoEx(initialPath);
+            string[] pathSegments = Factory.GetFolderSegments(initialPath);
 
 ////            var selection = DiskTest.Selection as ITreeRootSelector<DiskTreeNodeViewModel, string>;
 ////            selection.SelectAsync(initialPath, new BrowseRequest<string>(initialPath, pathSegments));
@@ -183,7 +185,7 @@
 ////            ExTest.InitRootAsync(new BrowseRequest<string>(initialPath, pathSegments));
 
             await BreadcrumbBrowser.InitPathAsync();
-            NavigateToFolder(initialPath);
+            NavigateToFolder(location);
         }
 
         #region Disposable Interfaces
@@ -237,9 +239,9 @@
         /// </summary>
         /// <param name="itemPath"></param>
         /// <param name="requestor"</param>
-        private void NavigateToFolder(string itemPath)
+        private void NavigateToFolder(IDirectoryBrowser location)
         {
-            Logger.InfoFormat("'{0}'", itemPath);
+            Logger.InfoFormat("'{0}'", location.FullName);
 
             // XXX Todo Keep task reference, support cancel, and remove on end?
             try
@@ -248,8 +250,8 @@
                 var timeout = TimeSpan.FromSeconds(5);
                 var actualTask = new Task(() =>
                 {
-                    string[] pathSegments = DirectoryInfoExLib.Factory.GetFolderSegments(itemPath);
-                    var request = new BrowseRequest<string>(itemPath, pathSegments, _CancelTokenSource.Token);
+                    ////string[] pathSegments = DirectoryInfoExLib.Factory.GetFolderSegments(location.FullName);
+                    var request = new BrowseRequest<IDirectoryBrowser>(location, _CancelTokenSource.Token);
                     var t = Task.Factory.StartNew(() => NavigateToFolderAsync(request, null),
                                                         request.CancelTok,
                                                         TaskCreationOptions.LongRunning,
@@ -283,7 +285,7 @@
         /// <param name="request"></param>
         /// <param name="requestor"</param>
         private async Task<FinalBrowseResult<IDirectoryBrowser>> NavigateToFolderAsync(
-             BrowseRequest<string> request
+             BrowseRequest<IDirectoryBrowser> request
             ,object sender)
         {
             Logger.InfoFormat("'{0}'", request.NewLocation);

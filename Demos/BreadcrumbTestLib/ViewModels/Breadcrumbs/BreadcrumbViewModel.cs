@@ -1,12 +1,9 @@
 namespace BreadcrumbTestLib.ViewModels.Breadcrumbs
 {
     using BmLib.Enums;
-    using BmLib.Utils;
     using BreadcrumbTestLib.Models;
     using BreadcrumbTestLib.ViewModels.Base;
     using BreadcrumbTestLib.ViewModels.Interfaces;
-    using BreadcrumbTestLib.ViewModels.TreeLookupProcessors;
-    using BreadcrumbTestLib.ViewModels.TreeSelectors;
     using DirectoryInfoExLib;
     using DirectoryInfoExLib.Interfaces;
     using System;
@@ -14,20 +11,20 @@ namespace BreadcrumbTestLib.ViewModels.Breadcrumbs
     using System.Linq;
     using System.Threading;
     using System.Threading.Tasks;
-    using System.Windows;
     using System.Windows.Input;
 
     /// <summary>
     /// Class implements the viewmodel that manages the complete breadcrump control.
     /// </summary>
-    internal class BreadcrumbViewModel : Base.ViewModelBase, IBreadcrumbViewModel,
-                                                             IRoot<IDirectoryBrowser>
+    internal class BreadcrumbViewModel : Base.ViewModelBase, IBreadcrumbViewModel                                                             
     {
         #region fields
         /// <summary>
         /// Log4net logger facility for this class.
         /// </summary>
         protected static readonly log4net.ILog Logger = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
+
+        private SemaphoreSlim _SlowStuffSemaphore;
 
         private bool _EnableBreadcrumb;
         private string _suggestedPath;
@@ -36,6 +33,7 @@ namespace BreadcrumbTestLib.ViewModels.Breadcrumbs
         private bool _IsBrowsing;
         private string _BreadcrumbSelectedPath;
 
+        private IDirectoryBrowser _RootLocation = DirectoryInfoExLib.Factory.DesktopDirectory;
         private Stack<BreadcrumbTreeItemViewModel> _CurrentPath;
         #endregion fields
 
@@ -45,11 +43,12 @@ namespace BreadcrumbTestLib.ViewModels.Breadcrumbs
         /// </summary>
         public BreadcrumbViewModel()
         {
-            Progressing = new ProgressViewModel();
-            BreadcrumbSubTree = new BreadcrumbTreeItemViewModel(this);
             _EnableBreadcrumb = true;
             _IsBrowsing = false;
             _CurrentPath = null;
+            _SlowStuffSemaphore = new SemaphoreSlim(1, 1);
+            Progressing = new ProgressViewModel();
+            BreadcrumbSubTree = new BreadcrumbTreeItemViewModel(this);
         }
         #endregion constructors
 
@@ -215,22 +214,42 @@ namespace BreadcrumbTestLib.ViewModels.Breadcrumbs
         /// <param name="initialRequest"></param>
         public Task InitPathAsync()
         {
-            return Task.Run(() => BreadcrumbSubTree.InitRootAsync());
+            return Task.Run(async () =>
+            {
+                await BreadcrumbSubTree.InitRootAsync(_RootLocation);
+
+                var rootSelector = BreadcrumbSubTree.Selection as ITreeRootSelector<BreadcrumbTreeItemViewModel, IDirectoryBrowser>;
+                var request = new BrowseRequest<IDirectoryBrowser>(_RootLocation);
+
+                _CurrentPath = new Stack<BreadcrumbTreeItemViewModel>() { };
+                _CurrentPath.Push(BreadcrumbSubTree.Entries.All.First());
+
+                await NavigateToAsync(_RootLocation);
+
+                //var items = await BrowseItemsAsync(BreadcrumbSubTree, initLocation);
+                //UpdateListOfOverlowableRootItems(rootSelector, items);
+            });
         }
 
         public async Task<FinalBrowseResult<IDirectoryBrowser>> NavigateToAsync(
-            BrowseRequest<string> requestedLocation)
+            BrowseRequest<IDirectoryBrowser> requestedLocation)
         {
             Logger.InfoFormat("'{0}'", requestedLocation.NewLocation);
 
             return await Task.Run(async () =>
             {
-                var newLocation = requestedLocation.NewLocation;
-                var result = await NavigateToAsync(Factory.CreateDirectoryInfoEx(newLocation));
+                await _SlowStuffSemaphore.WaitAsync();
+                try
+                {
+                    var result = await NavigateToAsync(requestedLocation.NewLocation);
 
-                var locate = Factory.CreateDirectoryInfoEx(newLocation);
-
-                return new FinalBrowseResult<IDirectoryBrowser>(locate);
+                    return FinalBrowseResult<IDirectoryBrowser>.FromRequest(requestedLocation,
+                                                                            BrowseResult.Complete);
+                }
+                finally
+                {
+                    _SlowStuffSemaphore.Release();
+                }
             });
         }
 
@@ -242,7 +261,7 @@ namespace BreadcrumbTestLib.ViewModels.Breadcrumbs
         /// </summary>
         /// <param name="location"></param>
         /// <returns></returns>
-        public async Task<BrowseResult> NavigateToAsync(IDirectoryBrowser location)
+        private async Task<BrowseResult> NavigateToAsync(IDirectoryBrowser location)
         {
             Logger.InfoFormat("'{0}'", location.FullName);
 
@@ -252,9 +271,6 @@ namespace BreadcrumbTestLib.ViewModels.Breadcrumbs
                 var root = BreadcrumbSubTree.Selection as ITreeRootSelector<BreadcrumbTreeItemViewModel, IDirectoryBrowser>;
                 if (root == null)
                     return BrowseResult.InComplete;
-
-                string[] pathSegments = Factory.GetFolderSegments(location.FullName);
-                var request = new BrowseRequest<string>(location.FullName, pathSegments, CancellationToken.None);
 
                 var rootSelector = BreadcrumbSubTree.Selection as ITreeRootSelector<BreadcrumbTreeItemViewModel, IDirectoryBrowser>;
                 var items = await BrowseItemsAsync(BreadcrumbSubTree, location);
@@ -320,7 +336,7 @@ namespace BreadcrumbTestLib.ViewModels.Breadcrumbs
 
                     var path = new Stack<ITreeSelector<BreadcrumbTreeItemViewModel, IDirectoryBrowser>>();
                     path.Push(selectedItem.Selection);
-                    BreadcrumbSubTree.Selection.ReportChildSelected(path);
+                    await BreadcrumbSubTree.Selection.ReportChildSelectedAsync(path);
                 }
 
                 UpdateListOfOverlowableRootItems(rootSelector, items);
@@ -352,7 +368,7 @@ namespace BreadcrumbTestLib.ViewModels.Breadcrumbs
         /// <param name="rootSelector">Is the <see cref="ITreeRootSelector{ViewModels,M}"/> that contains
         /// the OverflowedAndRootItems list to be updated.</param>
         /// <param name="items">Is the list of new pathitems to be include in OverflowedAndRootItems</param>
-        private static void UpdateListOfOverlowableRootItems(
+        private void UpdateListOfOverlowableRootItems(
             ITreeRootSelector<BreadcrumbTreeItemViewModel, IDirectoryBrowser> rootSelector,
             Stack<BreadcrumbTreeItemViewModel> items)
         {

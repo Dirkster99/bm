@@ -165,7 +165,27 @@
                                                                 VerticalAlignment="Center"
                                                                 Background="Transparent"
                                                                 Foreground="{DynamicResource {x:Static reskeys:ResourceKeys.ControlTextBrushKey}}"
-                                                                />
+                                                                >
+                                                        <TextBlock.ToolTip>
+                                                            <TextBlock FontFamily="Courier New">
+                                                            <!-- Is true on the item that is at the far right of the breadcrumb path -->
+                                                            <TextBlock Text="              Selection.IsSelected: "><TextBlock Text="{Binding Selection.IsSelected}"/></TextBlock><LineBreak/>
+                                            
+                                                            <!-- It true for items loaded initially in Selection.OverflowedAndRootItems list -->
+                                                            <TextBlock Text="                  Selection.IsRoot: "><TextBlock Text="{Binding Selection.IsRoot}"/></TextBlock><LineBreak/>
+
+                                                            <TextBlock Text="Selection.IsRootAndIsChildSelected: "><TextBlock Text="{Binding Selection.IsRootAndIsChildSelected}"/></TextBlock><LineBreak/>
+                                            
+                                                            <!-- Is true only for root elements with a selected child item in their path -->
+                                                            <TextBlock Text="         Selection.IsChildSelected: "><TextBlock Text="{Binding Selection.IsChildSelected}"/></TextBlock><LineBreak/>
+                                                            <TextBlock Text="            Selection.IsOverflowed: "><TextBlock Text="{Binding Selection.IsOverflowed}"/></TextBlock><LineBreak/>
+                                            
+                                                            <!-- Is this used at all? -->
+                                                            <!-- Might be used to bind drop down list control IsOpen when it pops-open -->
+                                                            <TextBlock Text="                Entries.IsExpanded: "><TextBlock Text="{Binding Entries.IsExpanded}"/></TextBlock>
+                                                        </TextBlock>
+                                                        </TextBlock.ToolTip>
+                                                    </TextBlock>
                                                 </HierarchicalDataTemplate>
                                             </uc:BreadcrumbTree.ItemTemplate>
 

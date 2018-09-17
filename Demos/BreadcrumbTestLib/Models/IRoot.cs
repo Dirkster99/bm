@@ -12,7 +12,7 @@
     /// to initialize the execution of (navigational) methods that influence
     /// the tree structure as a whole and ensure correct state for the whole tree.
     /// </summary>
-    internal interface IRoot<M>
+    public interface IRoot<M> : ICanNavigate
     {
         /// <summary>
         /// Navigates the viewmodel (and hopefully the bound control) to a new location
@@ -22,6 +22,7 @@
         /// </summary>
         /// <param name="location"></param>
         /// <returns></returns>
-        Task<BrowseResult> NavigateToAsync(M location);
+        Task<FinalBrowseResult<M>> NavigateToAsync(
+            BrowseRequest<M> requestedLocation);
     }
 }

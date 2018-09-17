@@ -17,6 +17,7 @@
     using System.Runtime.InteropServices;
     using BreadcrumbTestLib.Models;
     using System.Windows.Input;
+    using DirectoryInfoExLib;
 
     /// <summary>
     /// Class implements a ViewModel to manage a sub-tree of a Breadcrumb control.
@@ -222,7 +223,11 @@
                         if (selectedFolder == null)
                             return;
 
-                        await _Root.NavigateToAsync(selectedFolder.GetModel());
+                        if (_Root.IsBrowsing == true)   // Selection change originates from viewmodel
+                            return;                    // So, let ignore this one since its browsing anyways...
+
+                        var request = new BrowseRequest<IDirectoryBrowser>(selectedFolder.GetModel());
+                        await _Root.NavigateToAsync(request);
                     });
                 }
 
@@ -244,7 +249,11 @@
                 {
                     _BreadcrumbTreeTreeItemClickCommand = new RelayCommand<object>(async (param) =>
                     {
-                        await _Root.NavigateToAsync(this.GetModel());
+                        if (_Root.IsBrowsing == true)   // Selection change originates from viewmodel
+                            return;                    // So, let ignore this one since its browsing anyways...
+
+                        var request = new BrowseRequest<IDirectoryBrowser>(this.GetModel());
+                        await _Root.NavigateToAsync(request);
                     });
                 }
 
@@ -265,15 +274,17 @@
 
         /// <summary>
         /// Gets all root items below the desktop item and makes them available
-        /// in the <see cref="Entries"/> collection.
+        /// in the <see cref="Entries"/> collection. The first available item
+        /// in the retrieved collection (eg: 'PC') is selected.
         /// </summary>
+        /// <param name="location"></param>
         /// <returns></returns>
-        public void InitRootAsync()
+        public async Task InitRootAsync(IDirectoryBrowser location)
         {
             try
             {
                 // Find all entries below desktop
-                _dir = DirectoryInfoExLib.Factory.DesktopDirectory;
+                _dir = location;
                 Header = _dir.Label;
 
                 // and insert desktop sub-entries into Entries property
@@ -291,7 +302,7 @@
 
                     var path = new Stack<ITreeSelector<BreadcrumbTreeItemViewModel, IDirectoryBrowser>>();
                     path.Push(firstRootItem.Selection);
-                    this.Selection.ReportChildSelected(path);
+                    await this.Selection.ReportChildSelectedAsync(path);
                 }
             }
             catch
