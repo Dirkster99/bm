@@ -14,6 +14,11 @@
         string Name { get; }
 
         /// <summary>
+        /// Gets the extension of this item's name.
+        /// </summary>
+        string Extension { get; }
+
+        /// <summary>
         /// Gets the name including path and extensions of this object.
         /// </summary>
         string FullName { get; }

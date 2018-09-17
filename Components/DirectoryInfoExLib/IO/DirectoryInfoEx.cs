@@ -235,7 +235,6 @@ namespace DirectoryInfoExLib.IO
         /// </summary>
         public string FullName { get; protected set; }
 
-
         /// <summary>
         /// Gets the file system attributes for this object.
         /// </summary>
@@ -280,6 +279,9 @@ namespace DirectoryInfoExLib.IO
             get { return (Attributes & FileAttributes.Directory) == FileAttributes.Directory; }
         }
 
+        /// <summary>
+        /// Gets whether this folder exists or not.
+        /// </summary>
         public bool Exists { get { return getExists(); } }
 
         /// <summary>
@@ -291,28 +293,6 @@ namespace DirectoryInfoExLib.IO
         /// Gets the folders type classification.
         /// </summary>
         public DirectoryTypeEnum DirectoryType { get; protected set; }
-
-        /// <summary>
-        /// Gets the Windows known folder (similar to <see cref="Environment.SpecialFolder"/>
-        /// but extensible and customizable at run-time) or null if this folder
-        /// is not a special folder in Windows.
-        /// </summary>
-        /// <returns></returns>
-        protected KnownFolder KnownFolderType
-        {
-            get
-            {
-                PIDL pidl = this.getPIDL();
-                try
-                {
-                    return KnownFolder.FromPidl(pidl);
-                }
-                finally
-                {
-                    pidl.Free();
-                }
-            }
-        }
         #endregion
 
         #region Methods
