@@ -255,8 +255,8 @@
                 });
             }
 
-            Console.WriteLine();
-            Console.WriteLine("Adding Root Items:");
+////            Console.WriteLine();
+////            Console.WriteLine("Adding Root Items:");
 
             // Get all items for display in the root drop down list
             AsyncUtils.RunAsync(() => this.updateRootItemsAsync(this, _OverflowedAndRootItems, 1));
@@ -292,7 +292,7 @@
                     rootItems.Add(c.ViewModel);
                 });
 
-                Console.WriteLine("Level {0} Root item: {1}", level, c.Value.ToString());
+////                Console.WriteLine("Level {0} Root item: {1}", level, c.Value.ToString());
                 c.IsRoot = true;
 
                 await this.updateRootItemsAsync(c, rootItems, level - 1);

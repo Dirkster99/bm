@@ -4,7 +4,6 @@ namespace BreadcrumbTestLib.ViewModels.Breadcrumbs
     using BreadcrumbTestLib.Models;
     using BreadcrumbTestLib.ViewModels.Base;
     using BreadcrumbTestLib.ViewModels.Interfaces;
-    using DirectoryInfoExLib;
     using DirectoryInfoExLib.Interfaces;
     using System;
     using System.Collections.Generic;
@@ -416,9 +415,15 @@ namespace BreadcrumbTestLib.ViewModels.Breadcrumbs
             ICompareHierarchy<IDirectoryBrowser> Comparer = new ExHierarchyComparer();
 
             var ret = root;
+            path.Push(root);
+            var matchItem = GetBestMatch(destination, Comparer, root);
 
-            if (root != null)
-                queue.Enqueue(new Tuple<int, BreadcrumbTreeItemViewModel>(0, root));
+            if (matchItem != null)
+                queue.Enqueue(new Tuple<int, BreadcrumbTreeItemViewModel>(1, matchItem));
+            else
+            {
+                throw new NotImplementedException("Attempt Refresh - Reload before giving up here...");
+            }
 
             while (queue.Count() > 0)
             {
@@ -438,8 +443,14 @@ namespace BreadcrumbTestLib.ViewModels.Breadcrumbs
                         await current.Entries.LoadAsync();
 
                     queue.Clear();
-                    foreach (var item in current.Entries.All)
-                        queue.Enqueue(new Tuple<int, BreadcrumbTreeItemViewModel>(iLevel + 1, item));
+                    matchItem = GetBestMatch(destination, Comparer, current);
+
+                    if (matchItem != null)
+                        queue.Enqueue(new Tuple<int, BreadcrumbTreeItemViewModel>(iLevel + 1, matchItem));
+                    else
+                    {
+                        throw new NotImplementedException("Attempt Refresh - Reload before giving up here...");
+                    }
                 }
                 else  // Found what we where looking for?
                 {
@@ -452,6 +463,28 @@ namespace BreadcrumbTestLib.ViewModels.Breadcrumbs
             }
 
             return path;
+        }
+
+        private BreadcrumbTreeItemViewModel GetBestMatch(
+            IDirectoryBrowser destination,
+            ICompareHierarchy<IDirectoryBrowser> Comparer,
+            BreadcrumbTreeItemViewModel current)
+        {
+            BreadcrumbTreeItemViewModel ret = null;
+
+            foreach (var item in current.Entries.All)
+            {
+                var itemResult = Comparer.CompareHierarchy(item.GetModel(), destination);
+                if (itemResult == HierarchicalResult.Child)
+                    ret = item;
+                else
+                {
+                    if (itemResult == HierarchicalResult.Current)
+                        return item;
+                }
+            }
+
+            return ret;
         }
 
         /// <summary>

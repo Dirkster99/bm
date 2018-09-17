@@ -4,6 +4,7 @@
     using BreadcrumbTestLib.ViewModels.Interfaces;
     using DirectoryInfoExLib.Interfaces;
     using BmLib.Enums;
+    using System;
 
     /// <summary>
     /// Implements a <see cref="IDirectoryBrowser"/> based <seealso ref="ICompareHierarchy"> object
@@ -66,7 +67,15 @@
                 return HierarchicalResult.Child;
             else if (DirectoryInfoExLib.Factory.HasParent(a, b.FullName))
                 return HierarchicalResult.Parent;
-            else return HierarchicalResult.Unrelated;
+            else
+            {
+                if (a.FullName.Contains("::") == false || b.FullName.Contains("::") == false)
+                {
+                    Console.WriteLine("Comparing to Unrelated: {0} - {1}", a, b);
+                }
+
+                return HierarchicalResult.Unrelated;
+            }
         }
 
         ////    private bool HasParent(FileSystemInfoEx child, DirectoryInfoEx parent)
