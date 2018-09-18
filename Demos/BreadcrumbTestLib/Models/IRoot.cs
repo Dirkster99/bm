@@ -20,9 +20,10 @@
         /// listing objects for
         /// <see cref="ICanNavigate"/> events.
         /// </summary>
-        /// <param name="location"></param>
+        /// <param name="requestedLocation"></param>
+        /// <param name="direction"></param>
         /// <returns></returns>
-        Task<FinalBrowseResult<M>> NavigateToAsync(
-            BrowseRequest<M> requestedLocation);
+        Task<FinalBrowseResult<M>> NavigateToAsync(BrowseRequest<M> requestedLocation,
+                                                   HintDirection direction = HintDirection.Unrelated);
     }
 }

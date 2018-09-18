@@ -51,6 +51,7 @@
     <Compile Include="Models\BrowseResult.cs" />
     <Compile Include="Models\BrowsingEventArgs.cs" />
     <Compile Include="Models\FinalBrowseResult.cs" />
+    <Compile Include="Models\HintDirection.cs" />
     <Compile Include="Models\ICanNavigate.cs" />
     <Compile Include="Models\IRoot.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

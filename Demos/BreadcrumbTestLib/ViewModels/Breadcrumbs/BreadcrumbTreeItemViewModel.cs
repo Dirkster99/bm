@@ -227,7 +227,7 @@
                             return;                    // So, let ignore this one since its browsing anyways...
 
                         var request = new BrowseRequest<IDirectoryBrowser>(selectedFolder.GetModel());
-                        await _Root.NavigateToAsync(request);
+                        await _Root.NavigateToAsync(request, HintDirection.Down);
                     });
                 }
 
@@ -253,7 +253,7 @@
                             return;                    // So, let ignore this one since its browsing anyways...
 
                         var request = new BrowseRequest<IDirectoryBrowser>(this.GetModel());
-                        await _Root.NavigateToAsync(request);
+                        await _Root.NavigateToAsync(request, HintDirection.Up);
                     });
                 }
 

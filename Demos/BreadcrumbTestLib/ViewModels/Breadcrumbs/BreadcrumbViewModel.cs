@@ -230,8 +230,17 @@ namespace BreadcrumbTestLib.ViewModels.Breadcrumbs
             });
         }
 
+        /// <summary>
+        /// Navigates the viewmodel (and hopefully the bound control) to a new location
+        /// and ensures correct <see cref="IsBrowsing"/> state and event handling towards
+        /// listing objects for <see cref="ICanNavigate"/> events.
+        /// </summary>
+        /// <param name="requestedLocation"></param>
+        /// <param name="direction"></param>
+        /// <returns></returns>
         public async Task<FinalBrowseResult<IDirectoryBrowser>> NavigateToAsync(
-            BrowseRequest<IDirectoryBrowser> requestedLocation)
+            BrowseRequest<IDirectoryBrowser> requestedLocation,
+            HintDirection direction = HintDirection.Unrelated)
         {
             Logger.InfoFormat("'{0}'", requestedLocation.NewLocation);
 
@@ -240,10 +249,15 @@ namespace BreadcrumbTestLib.ViewModels.Breadcrumbs
                 await _SlowStuffSemaphore.WaitAsync();
                 try
                 {
-                    var result = await NavigateToAsync(requestedLocation.NewLocation);
+                    var result = await NavigateToAsync(requestedLocation.NewLocation, direction);
 
                     return FinalBrowseResult<IDirectoryBrowser>.FromRequest(requestedLocation,
-                                                                            BrowseResult.Complete);
+                                                                            result);
+                }
+                catch
+                {
+                    return FinalBrowseResult<IDirectoryBrowser>.FromRequest(requestedLocation,
+                                                                            BrowseResult.InComplete);
                 }
                 finally
                 {
@@ -253,14 +267,21 @@ namespace BreadcrumbTestLib.ViewModels.Breadcrumbs
         }
 
         /// <summary>
-        /// Navigates the viewmodel (and hopefully the bound control) to a new location
-        /// and ensures correct <see cref="IsBrowsing"/> state and event handling towards
-        /// listing objects for
-        /// <see cref="ICanNavigate"/> events.
+        /// Implements the internal version of the navigational request method.
+        /// This method should always be called through a method that ensures
+        /// correct synchronization using the correct semaphore.
+        /// 
+        /// Method should result in resetting _CurrentPath to new path targeted in request.
+        ///
+        /// Items in _CurrentPath should always adhere to these requirements:
+        /// The last item in the stack should have   LastItem.Selection.IsSelected      == true and
+        /// all other items in the stack should have OtherItem.Selection.IsChildSelected == true
+        ///                                          OtherItem.Selection.SelectedChild   != null
         /// </summary>
         /// <param name="location"></param>
         /// <returns></returns>
-        private async Task<BrowseResult> NavigateToAsync(IDirectoryBrowser location)
+        private async Task<BrowseResult> NavigateToAsync(IDirectoryBrowser location,
+                                                         HintDirection direction = HintDirection.Unrelated)
         {
             Logger.InfoFormat("'{0}'", location.FullName);
 
@@ -272,7 +293,8 @@ namespace BreadcrumbTestLib.ViewModels.Breadcrumbs
                     return BrowseResult.InComplete;
 
                 var rootSelector = BreadcrumbSubTree.Selection as ITreeRootSelector<BreadcrumbTreeItemViewModel, IDirectoryBrowser>;
-                var items = await BrowseItemsAsync(BreadcrumbSubTree, location);
+                var items = await BrowseItemsAsync(BreadcrumbSubTree, location,
+                                                   direction, _CurrentPath);
 
                 if (items.Count > 0)
                 {
@@ -361,10 +383,140 @@ namespace BreadcrumbTestLib.ViewModels.Breadcrumbs
         }
 
         /// <summary>
+        /// Attempts to find the <paramref name="destination"/> underneath the given
+        /// root and returns a stack containing the path to the selected item including
+        /// items that were populated so far.
+        /// </summary>
+        /// <param name="root"></param>
+        /// <param name="destination"></param>
+        /// <returns></returns>
+        private async Task<Stack<BreadcrumbTreeItemViewModel>> BrowseItemsAsync(
+            BreadcrumbTreeItemViewModel root,
+            IDirectoryBrowser destination,
+            HintDirection direction,
+            Stack<BreadcrumbTreeItemViewModel> currentPath)
+        {
+            Queue<Tuple<int, BreadcrumbTreeItemViewModel>> queue = new Queue<Tuple<int, BreadcrumbTreeItemViewModel>>();
+            Stack<BreadcrumbTreeItemViewModel> path = new Stack<BreadcrumbTreeItemViewModel>();
+            ICompareHierarchy<IDirectoryBrowser> Comparer = new ExHierarchyComparer();
+
+            var ret = root;
+            int initLevel = 0;
+            BreadcrumbTreeItemViewModel matchedItem = null;
+            
+            if (direction == HintDirection.Down || direction == HintDirection.Up)
+            {
+                // Put current path into output stack and continue searching below current path
+                foreach(var item in currentPath.ToArray().Reverse())
+                {
+                  path.Push(item);
+                    initLevel++;
+
+                  if (direction == HintDirection.Up) // Found target item? -> return completed path
+                  {
+                    var cmpResult = Comparer.CompareHierarchy(item.GetModel(), destination);
+                    if (cmpResult == HierarchicalResult.Current)
+                        return path;
+                  }
+                }
+
+                // This should always result in finding the next Child item
+                // and the next match should be matched with Current (end of retrieval)
+                matchedItem = GetBestMatch(destination, Comparer, path.Peek());
+            }
+
+            // But lets consider rolling back to generic algorithm if something went wrong before
+            if (direction != HintDirection.Unrelated)
+            {
+                if (matchedItem == null)
+                {
+                    path.Clear();
+                    initLevel = 0;
+                    direction = HintDirection.Unrelated;
+                }
+            }
+
+            // Initialize generic search from root ...
+            if (direction == HintDirection.Unrelated)
+            {
+                path.Push(root); // Level 0 Root should always be pushed since everything's under DesktopRoot item
+                matchedItem = GetBestMatch(destination, Comparer, root);
+            }
+
+            if (matchedItem != null)
+                queue.Enqueue(new Tuple<int, BreadcrumbTreeItemViewModel>(initLevel, matchedItem));
+            else
+            {
+                throw new NotImplementedException("Attempt Refresh - Reload before giving up here...");
+            }
+
+            while (queue.Count() > 0)
+            {
+                var queueItem = queue.Dequeue();
+                int iLevel = queueItem.Item1;
+                BreadcrumbTreeItemViewModel current = queueItem.Item2;
+
+                var result = Comparer.CompareHierarchy(current.GetModel(), destination);
+
+                // Found an item along the way?
+                // Search on sub-tree items from an item that indicates selected children
+                if (result == HierarchicalResult.Child)
+                {
+                    path.Push(current);
+
+                    if (current.Entries.IsLoaded == false)
+                        await current.Entries.LoadAsync();
+
+                    queue.Clear();
+                    matchedItem = GetBestMatch(destination, Comparer, current);
+
+                    if (matchedItem != null)
+                        queue.Enqueue(new Tuple<int, BreadcrumbTreeItemViewModel>(iLevel + 1, matchedItem));
+                    else
+                    {
+                        throw new NotImplementedException("Attempt Refresh - Reload before giving up here...");
+                    }
+                }
+                else  // Found what we where looking for?
+                {
+                    if (result == HierarchicalResult.Current)
+                    {
+                        path.Push(current);
+                        return path;
+                    }
+                }
+            }
+
+            return path;
+        }
+
+        private BreadcrumbTreeItemViewModel GetBestMatch(
+            IDirectoryBrowser destination,
+            ICompareHierarchy<IDirectoryBrowser> Comparer,
+            BreadcrumbTreeItemViewModel currentItem)
+        {
+            BreadcrumbTreeItemViewModel ret = null;
+
+            foreach (var item in currentItem.Entries.All)
+            {
+                var itemResult = Comparer.CompareHierarchy(item.GetModel(), destination);
+                if (itemResult == HierarchicalResult.Child)
+                    ret = item;
+                else
+                {
+                    if (itemResult == HierarchicalResult.Current)
+                        return item;
+                }
+            }
+
+            return ret;
+        }
+
+        /// <summary>
         /// Updates the source of the root drop down list by merging the current
         /// root items with the new list of overflowable path items.
         /// </summary>
-        /// <param name="rootSelector">Is the <see cref="ITreeRootSelector{ViewModels,M}"/> that contains
+        /// <param name="rootSelector">Is the <see cref="ITreeRootSelector{VM,M}"/> that contains
         /// the OverflowedAndRootItems list to be updated.</param>
         /// <param name="items">Is the list of new pathitems to be include in OverflowedAndRootItems</param>
         private void UpdateListOfOverlowableRootItems(
@@ -393,98 +545,6 @@ namespace BreadcrumbTestLib.ViewModels.Breadcrumbs
 
             // 3) merge both lists from 1) and 2) into updated overflowable list
             rootSelector.UpdateOverflowedItems(rootItems, overflowedItems);
-        }
-
-        /// <summary>
-        /// Attempts to find the <paramref name="destination"/> underneath the given
-        /// root and returns a stack containing the path to the selected item.
-        /// 
-        /// The last item in the stack should have    LastItem.Selection.IsSelected      == true and
-        /// all other items in the stack should have OtherItem.Selection.IsChildSelected == true
-        ///                                          OtherItem.Selection.SelectedChild   != null
-        /// </summary>
-        /// <param name="root"></param>
-        /// <param name="destination"></param>
-        /// <returns></returns>
-        private async Task<Stack<BreadcrumbTreeItemViewModel>> BrowseItemsAsync(
-            BreadcrumbTreeItemViewModel root,
-            IDirectoryBrowser destination)
-        {
-            Queue<Tuple<int, BreadcrumbTreeItemViewModel>> queue = new Queue<Tuple<int, BreadcrumbTreeItemViewModel>>();
-            Stack<BreadcrumbTreeItemViewModel> path = new Stack<BreadcrumbTreeItemViewModel>();
-            ICompareHierarchy<IDirectoryBrowser> Comparer = new ExHierarchyComparer();
-
-            var ret = root;
-            path.Push(root);
-            var matchItem = GetBestMatch(destination, Comparer, root);
-
-            if (matchItem != null)
-                queue.Enqueue(new Tuple<int, BreadcrumbTreeItemViewModel>(1, matchItem));
-            else
-            {
-                throw new NotImplementedException("Attempt Refresh - Reload before giving up here...");
-            }
-
-            while (queue.Count() > 0)
-            {
-                var queueItem = queue.Dequeue();
-                int iLevel = queueItem.Item1;
-                BreadcrumbTreeItemViewModel current = queueItem.Item2;
-
-                var result = Comparer.CompareHierarchy(current.GetModel(), destination);
-
-                // Found an item along the way?
-                // Search on sub-tree items from an item that indicates selected children
-                if (result == HierarchicalResult.Child)
-                {
-                    path.Push(current);
-
-                    if (current.Entries.IsLoaded == false)
-                        await current.Entries.LoadAsync();
-
-                    queue.Clear();
-                    matchItem = GetBestMatch(destination, Comparer, current);
-
-                    if (matchItem != null)
-                        queue.Enqueue(new Tuple<int, BreadcrumbTreeItemViewModel>(iLevel + 1, matchItem));
-                    else
-                    {
-                        throw new NotImplementedException("Attempt Refresh - Reload before giving up here...");
-                    }
-                }
-                else  // Found what we where looking for?
-                {
-                    if (result == HierarchicalResult.Current)
-                    {
-                        path.Push(current);
-                        return path;
-                    }
-                }
-            }
-
-            return path;
-        }
-
-        private BreadcrumbTreeItemViewModel GetBestMatch(
-            IDirectoryBrowser destination,
-            ICompareHierarchy<IDirectoryBrowser> Comparer,
-            BreadcrumbTreeItemViewModel current)
-        {
-            BreadcrumbTreeItemViewModel ret = null;
-
-            foreach (var item in current.Entries.All)
-            {
-                var itemResult = Comparer.CompareHierarchy(item.GetModel(), destination);
-                if (itemResult == HierarchicalResult.Child)
-                    ret = item;
-                else
-                {
-                    if (itemResult == HierarchicalResult.Current)
-                        return item;
-                }
-            }
-
-            return ret;
         }
 
         /// <summary>
