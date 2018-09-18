@@ -80,6 +80,7 @@
                                                     ItemsSource="{TemplateBinding ItemsSource}"
                                                     Visibility="{Binding HasItems, RelativeSource={RelativeSource TemplatedParent}, Converter={StaticResource btvc}}" 
                                                     IsDropDownOpen="{Binding IsExpanded, Mode=TwoWay, RelativeSource={RelativeSource TemplatedParent}}"
+                                                    SelectedItem="{Binding Selection.SelectedChild,Mode=OneWay,UpdateSourceTrigger=PropertyChanged}"
                                                     ItemTemplate="{TemplateBinding MenuItemTemplate}"
                                                     behav:SelectionChangedCommand.ChangedCommand="{Binding Path=ItemSelectionChangedCommand}"
                                     />
