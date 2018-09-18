@@ -1,15 +1,9 @@
 ﻿namespace BreadcrumbTestLib.ViewModels.TreeSelectors
 {
     using System.Collections.Generic;
-    using System.Linq;
     using System.Threading.Tasks;
     using BreadcrumbTestLib.Utils;
     using BreadcrumbTestLib.ViewModels.Interfaces;
-    using BreadcrumbTestLib.ViewModels.TreeLookupProcessors;
-    using BmLib.Utils;
-    using System.Threading;
-    using System.Diagnostics;
-    using BmLib.Enums;
 
     /// <summary>
     /// Base class of ITreeSelector, which implements Tree
@@ -239,37 +233,7 @@
         {
             Logger.InfoFormat("_");
 
-////            if (path.Count() > 0)
-////            {
-////                _SelectedChild = path.Peek().Value;
-////
-////                NotifyPropertyChanged(() => this.SelectedChild);
-////            }
-////
-////            path.Push(this);
-////
-////            if (ParentSelector != null)
-////                ParentSelector.ReportChildSelectedAsync(path);
             return Task.Run(() => { });
-        }
-
-        /// <summary>
-        /// Tunnel down to select the specified item.
-        /// </summary>
-        /// <param name="model"></param>
-        /// <param name="currentAction"></param>
-        /// <returns></returns>
-        public async Task LookupAsync(T value,
-                                      ITreeLookup<VM, T> lookupProc,
-                                      CancellationToken cancelToken,
-                                      params ITreeLookupProcessor<VM, T>[] processors)
-        {
-            Logger.InfoFormat("'{0}'", (value != null ? value.ToString() : "(null)"));
-
-            using (await _lookupLock.LockAsync())
-            {
-                await lookupProc.LookupAsync(value, this, this.RootSelector, cancelToken, processors);
-            }
         }
         #endregion
     }

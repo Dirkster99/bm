@@ -4,6 +4,7 @@ namespace BreadcrumbTestLib.ViewModels.Breadcrumbs
     using BreadcrumbTestLib.Models;
     using BreadcrumbTestLib.ViewModels.Base;
     using BreadcrumbTestLib.ViewModels.Interfaces;
+    using DirectoryInfoExLib;
     using DirectoryInfoExLib.Interfaces;
     using System;
     using System.Collections.Generic;
@@ -170,7 +171,11 @@ namespace BreadcrumbTestLib.ViewModels.Breadcrumbs
                         if (selectedFolder == null)
                             return;
 
-                        await this.NavigateToAsync(selectedFolder.GetModel());
+                        if (IsBrowsing == true)
+                            return;
+
+                        var request = new BrowseRequest<IDirectoryBrowser>(selectedFolder.GetModel());
+                        await this.NavigateToAsync(request);
                     });
                 }
 
@@ -217,13 +222,12 @@ namespace BreadcrumbTestLib.ViewModels.Breadcrumbs
             {
                 await BreadcrumbSubTree.InitRootAsync(_RootLocation);
 
-                var rootSelector = BreadcrumbSubTree.Selection as ITreeRootSelector<BreadcrumbTreeItemViewModel, IDirectoryBrowser>;
-                var request = new BrowseRequest<IDirectoryBrowser>(_RootLocation);
-
                 _CurrentPath = new Stack<BreadcrumbTreeItemViewModel>() { };
                 _CurrentPath.Push(BreadcrumbSubTree.Entries.All.First());
 
-                await NavigateToAsync(_RootLocation);
+                var rootSelector = BreadcrumbSubTree.Selection as ITreeRootSelector<BreadcrumbTreeItemViewModel, IDirectoryBrowser>;
+                var request = new BrowseRequest<IDirectoryBrowser>(_RootLocation);
+                await NavigateToAsync(request);
 
                 //var items = await BrowseItemsAsync(BreadcrumbSubTree, initLocation);
                 //UpdateListOfOverlowableRootItems(rootSelector, items);
@@ -360,7 +364,7 @@ namespace BreadcrumbTestLib.ViewModels.Breadcrumbs
                     await BreadcrumbSubTree.Selection.ReportChildSelectedAsync(path);
                 }
 
-                UpdateListOfOverlowableRootItems(rootSelector, items);
+                UpdateListOfOverflowableRootItems(rootSelector, items);
 
                 UpdateBreadcrumbSelectedPath();
 
@@ -439,7 +443,13 @@ namespace BreadcrumbTestLib.ViewModels.Breadcrumbs
             // Initialize generic search from root ...
             if (direction == HintDirection.Unrelated)
             {
-                path.Push(root); // Level 0 Root should always be pushed since everything's under DesktopRoot item
+                // Level 0 Root should always be pushed since everything's under DesktopRoot item
+                path.Push(root);
+
+                // Check if destination is root because this means we are done here
+                if (Factory.DesktopDirectory.Equals(destination) == true)
+                    return path;
+
                 matchedItem = GetBestMatch(destination, Comparer, root);
             }
 
@@ -519,28 +529,40 @@ namespace BreadcrumbTestLib.ViewModels.Breadcrumbs
         /// <param name="rootSelector">Is the <see cref="ITreeRootSelector{VM,M}"/> that contains
         /// the OverflowedAndRootItems list to be updated.</param>
         /// <param name="items">Is the list of new pathitems to be include in OverflowedAndRootItems</param>
-        private void UpdateListOfOverlowableRootItems(
+        private void UpdateListOfOverflowableRootItems(
             ITreeRootSelector<BreadcrumbTreeItemViewModel, IDirectoryBrowser> rootSelector,
             Stack<BreadcrumbTreeItemViewModel> items)
         {
             // Update list of overflowable items for bindings from converter on rootdropdownlist
             // 1) Get all rootitems minus seperator minus overflowable pathitems
             List<BreadcrumbTreeItemViewModel> rootItems = new List<BreadcrumbTreeItemViewModel>();
-            foreach (var item in rootSelector.OverflowedAndRootItems)
+            if (rootSelector.OverflowedAndRootItems.Count() > 0)
             {
-                if (item != null) // Null item is the seperator
+                foreach (var item in rootSelector.OverflowedAndRootItems)
                 {
-                    if (item.Selection != null)
+                    if (item != null)
                     {
-                        if (item.Selection.IsRoot == true)
+                        if (item.Selection != null)
                         {
-                            rootItems.Add(item);
+                            if (item.Selection.IsRoot == true)
+                            {
+                                rootItems.Add(item);
+                            }
                         }
                     }
                 }
             }
+            else
+            {
+                foreach (var item in BreadcrumbSubTree.Entries.All)
+                {
+                    if (item.Selection.IsRoot == true)
+                        rootItems.Add(item);
+                }
+            }
 
-            // 2) Get new list of overflowable path items
+            // 2) Get new list of overflowable path items that are not root items
+            //    (assuming that all root items are already in first list)
             var overflowedItems = items.Where(i => i.Selection.IsRoot == false);
 
             // 3) merge both lists from 1) and 2) into updated overflowable list

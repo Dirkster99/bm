@@ -71,10 +71,6 @@
     <Compile Include="ViewModels\Breadcrumbs\ExHierarchyComparer.cs" />
     <Compile Include="ViewModels\Breadcrumbs\BreadcrumbTreeItemViewModel.cs" />
     <Compile Include="ViewModels\Breadcrumbs\ProgressViewModel.cs" />
-    <Compile Include="ViewModels\Breadcrumbs\Tree\TreeLookupProcessors\SetChildSelected.cs" />
-    <Compile Include="ViewModels\Breadcrumbs\Tree\TreeLookupProcessors\SetSelected.cs" />
-    <Compile Include="ViewModels\Breadcrumbs\Tree\TreeLookupProcessors\TreeLookupProcessor.cs" />
-    <Compile Include="ViewModels\Breadcrumbs\Tree\TreeSelectors\BroadcastNextLevel.cs" />
     <Compile Include="ViewModels\Breadcrumbs\Tree\TreeSelectors\TreeRootSelectorViewModel.cs" />
     <Compile Include="ViewModels\Breadcrumbs\Tree\TreeSelectors\TreeSelectorViewModel.cs" />
     <Compile Include="ViewModels\Interfaces\IBreadcrumbViewModel.cs" />
@@ -82,8 +78,6 @@
     <Compile Include="ViewModels\Interfaces\IEntryHierarchyComparer.cs" />
     <Compile Include="ViewModels\Interfaces\IProgressViewModel.cs" />
     <Compile Include="ViewModels\Interfaces\ISupportTreeSelector.cs" />
-    <Compile Include="ViewModels\Interfaces\ITreeLookup.cs" />
-    <Compile Include="ViewModels\Interfaces\ITreeLookupProcessor.cs" />
     <Compile Include="ViewModels\Interfaces\ITreeRootSelector.cs" />
     <Compile Include="ViewModels\Interfaces\ITreeSelector.cs" />
     <Compile Include="Views\DemoView.xaml.cs">

@@ -64,11 +64,9 @@
         {
             _Root = root;
             Entries = new BreadcrumbTreeItemHelperViewModel<BreadcrumbTreeItemViewModel>();
-            Selection =
-              new TreeRootSelectorViewModel<BreadcrumbTreeItemViewModel, IDirectoryBrowser>(this.Entries)
-              {
-                  Comparers = new[] { BreadcrumbTreeItemViewModel.Comparer }
-              };
+            Selection = new TreeRootSelectorViewModel<BreadcrumbTreeItemViewModel, IDirectoryBrowser>
+                (this.Entries,
+                  new[] { BreadcrumbTreeItemViewModel.Comparer });
         }
 
         /// <summary>
@@ -297,11 +295,17 @@
 
                 if (Entries.All.Count() > 0)
                 {
+                    // All items imidiately under root are by definition root items
+                    foreach (var item in Entries.All)
+                        item.Selection.IsRoot = true;
+
                     var firstRootItem = Entries.All.First();
                     firstRootItem.Selection.IsSelected = true;
 
                     var path = new Stack<ITreeSelector<BreadcrumbTreeItemViewModel, IDirectoryBrowser>>();
                     path.Push(firstRootItem.Selection);
+
+
                     await this.Selection.ReportChildSelectedAsync(path);
                 }
             }

@@ -27,10 +27,9 @@
         public DiskTreeNodeViewModel(params DirectoryInfo[] dir)
         {
             Entries = new BreadcrumbTreeItemHelperViewModel<DiskTreeNodeViewModel>();
-            Selection = new TreeRootSelectorViewModel<DiskTreeNodeViewModel, string>(this.Entries)
-            {
-                Comparers = new[] { DiskTreeNodeViewModel.Comparer }
-            };
+            Selection = new TreeRootSelectorViewModel<DiskTreeNodeViewModel, string>(
+                                this.Entries,
+                                new[] { DiskTreeNodeViewModel.Comparer });
 
             Entries.SetEntries(UpdateMode.Update, dir.Select(d => new DiskTreeNodeViewModel(d, this)).ToArray());
             Header = string.Empty;

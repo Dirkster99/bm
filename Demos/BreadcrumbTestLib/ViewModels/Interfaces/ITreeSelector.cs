@@ -2,7 +2,6 @@
 {
     using System.Collections.Generic;
     using System.ComponentModel;
-    using System.Threading;
     using System.Threading.Tasks;
 
     /// <summary>
@@ -90,24 +89,6 @@
         /// </summary>
         /// <param name="path"></param>
         Task ReportChildSelectedAsync(Stack<ITreeSelector<VM, M>> path);
-
-        /// <summary>        
-        /// Find requested node using lookupProc using type T, after any HierarchicalResult,
-        /// use processors to perform further action.
-        /// </summary>
-        /// <example>
-        /// //This will select the C:\Temp Node.
-        /// await LookupAsync(@"c:\temp", RecursiveSearch.LoadSubentriesIfNotLoaded, SetSelected.WhenSelected);
-        /// </example>
-        /// <param name="value"></param>
-        /// <param name="lookupProc"></param>
-        /// <param name="cancelToken"></param>
-        /// <param name="processors"></param>
-        /// <returns></returns>
-        Task LookupAsync(M value,
-                         ITreeLookup<VM, M> lookupProc,
-                         CancellationToken cancelToken,
-                         params ITreeLookupProcessor<VM, M>[] processors);
         #endregion methods
     }
 }

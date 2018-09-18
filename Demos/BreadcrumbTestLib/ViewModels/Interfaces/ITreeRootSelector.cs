@@ -41,7 +41,7 @@
         /// <summary>
         /// Indicate a list to compare Hierarchy of two value that identify a node.
         /// </summary>
-        IEnumerable<ICompareHierarchy<T>> Comparers { get; set; }
+        IEnumerable<ICompareHierarchy<T>> Comparers { get; }
 
         /// <summary>
         /// Used by Breadcrumb, items that are root items or ALL items in the selected path, 
