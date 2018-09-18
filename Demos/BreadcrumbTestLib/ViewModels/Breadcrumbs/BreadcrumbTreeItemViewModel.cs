@@ -224,6 +224,8 @@
                         if (_Root.IsBrowsing == true)   // Selection change originates from viewmodel
                             return;                    // So, let ignore this one since its browsing anyways...
 
+                        Logger.InfoFormat("selectedFolder {0}", selectedFolder);
+
                         var request = new BrowseRequest<IDirectoryBrowser>(selectedFolder.GetModel());
                         await _Root.NavigateToAsync(request, HintDirection.Down);
                     });
@@ -250,6 +252,8 @@
                         if (_Root.IsBrowsing == true)   // Selection change originates from viewmodel
                             return;                    // So, let ignore this one since its browsing anyways...
 
+                        Logger.InfoFormat("selectedFolder {0}", this);
+
                         var request = new BrowseRequest<IDirectoryBrowser>(this.GetModel());
                         await _Root.NavigateToAsync(request, HintDirection.Up);
                     });
@@ -267,7 +271,9 @@
         /// <returns></returns>
         public override string ToString()
         {
-            return (this.Header != null ? this.Header : "(Header==null)");
+            return string.Format("location '{0}' Header '{1}'",
+                                (_dir != null ? _dir.FullName : "(null)"),
+                                (this.Header != null ? this.Header : "(null)"));
         }
 
         /// <summary>

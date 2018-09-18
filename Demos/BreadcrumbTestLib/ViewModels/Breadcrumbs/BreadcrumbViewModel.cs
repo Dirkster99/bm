@@ -174,6 +174,8 @@ namespace BreadcrumbTestLib.ViewModels.Breadcrumbs
                         if (IsBrowsing == true)
                             return;
 
+                        Logger.InfoFormat("selectedFolder {0}", selectedFolder);
+
                         var request = new BrowseRequest<IDirectoryBrowser>(selectedFolder.GetModel());
                         await this.NavigateToAsync(request);
                     });
