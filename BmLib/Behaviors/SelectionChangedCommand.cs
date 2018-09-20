@@ -3,12 +3,11 @@
     using System.ComponentModel;
     using System.Windows;
     using System.Windows.Controls;
-    using System.Windows.Controls.Primitives;
     using System.Windows.Input;
 
     /// <summary>
-    /// Attached behaviour to implement a selection changed command on a Selector (combobox).
-    /// The Selector (combobox) generates a SelectionChanged event which in turn generates a
+    /// Attached behaviour to implement a selection changed command on a ComboBox.
+    /// The ComboBox generates a SelectionChanged event which in turn generates a
     /// Command (in this behavior), which in turn is, when bound, invoked on the viewmodel.
     /// </summary>
     public static class SelectionChangedCommand
@@ -52,54 +51,18 @@
             if (DesignerProperties.GetIsInDesignMode(new System.Windows.DependencyObject()))
                 return;
 
-            Selector uiElement = d as Selector;  // Remove the handler if it exist to avoid memory leaks
+            ComboBox uiElement = d as ComboBox;  // Remove the handler if it exist to avoid memory leaks
 
             if (uiElement != null)
             {
                 uiElement.SelectionChanged -= Selection_Changed;
-                uiElement.KeyUp -= uiElement_KeyUp;
 
                 var command = e.NewValue as ICommand;
                 if (command != null)
                 {
                     // the property is attached so we attach the Drop event handler
                     uiElement.SelectionChanged += Selection_Changed;
-                    uiElement.KeyUp += uiElement_KeyUp;
                 }
-            }
-        }
-
-        private static void uiElement_KeyUp(object sender, KeyEventArgs e)
-        {
-            if (e == null)
-                return;
-
-            // Forward key event only if user has hit the return, BackSlash, or Slash key
-            if (e.Key != Key.Return)
-                return;
-
-            ComboBox uiElement = sender as ComboBox;
-
-            // Sanity check just in case this was somehow send by something else
-            if (uiElement == null)
-                return;
-
-            ICommand changedCommand = SelectionChangedCommand.GetChangedCommand(uiElement);
-
-            // There may not be a command bound to this after all
-            if (changedCommand == null)
-                return;
-
-            // Check whether this attached behaviour is bound to a RoutedCommand
-            if (changedCommand is RoutedCommand)
-            {
-                // Execute the routed command
-                (changedCommand as RoutedCommand).Execute(uiElement.Text, uiElement);
-            }
-            else
-            {
-                // Execute the Command as bound delegate
-                changedCommand.Execute(uiElement.Text);
             }
         }
 
@@ -114,29 +77,39 @@
         /// <param name="e"></param>
         private static void Selection_Changed(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
         {
-            Selector uiElement = sender as Selector;
+            ComboBox uiElement = sender as ComboBox;
 
             // Sanity check just in case this was somehow send by something else
             if (uiElement == null)
                 return;
 
-            ICommand changedCommand = SelectionChangedCommand.GetChangedCommand(uiElement);
+            var isDropDownOpen = uiElement.IsDropDownOpen;
 
-            // There may not be a command bound to this after all
-            if (changedCommand == null)
+            // Selection changed event is probably caused by a background thread
+            // so we ignore this here
+            if (isDropDownOpen == false)
                 return;
+
+            ICommand changedCommand = SelectionChangedCommand.GetChangedCommand(uiElement);
 
             // Check whether this attached behaviour is bound to a RoutedCommand
             if (changedCommand is RoutedCommand)
             {
+                // Setting this to avoid weird corner cases that might be possible otherwise
+                uiElement.IsDropDownOpen = false;
+
                 // Execute the routed command
                 (changedCommand as RoutedCommand).Execute(e.AddedItems, uiElement);
             }
             else
             {
+                // Setting this to avoid weird corner cases that might be possible otherwise
+                uiElement.IsDropDownOpen = false;
+
                 // Execute the Command as bound delegate
                 changedCommand.Execute(e.AddedItems);
             }
         }
     }
+
 }

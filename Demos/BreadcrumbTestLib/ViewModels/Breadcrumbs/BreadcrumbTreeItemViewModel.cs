@@ -227,7 +227,10 @@
                         Logger.InfoFormat("selectedFolder {0}", selectedFolder);
 
                         var request = new BrowseRequest<IDirectoryBrowser>(selectedFolder.GetModel());
-                        await _Root.NavigateToAsync(request, HintDirection.Down);
+                        await _Root.NavigateToAsync(request,
+                                                    "BreadcrumbTreeItemViewModel.ItemSelectionChanged",
+                                                    HintDirection.Down);
+
                     });
                 }
 
@@ -255,7 +258,9 @@
                         Logger.InfoFormat("selectedFolder {0}", this);
 
                         var request = new BrowseRequest<IDirectoryBrowser>(this.GetModel());
-                        await _Root.NavigateToAsync(request, HintDirection.Up);
+                        await _Root.NavigateToAsync(request,
+                            "BreadcrumbTreeItemViewModel.BreadcrumbTreeTreeItemClickCommand",
+                            HintDirection.Up);
                     });
                 }
 

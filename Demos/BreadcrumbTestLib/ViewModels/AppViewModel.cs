@@ -24,8 +24,8 @@
 
         private DiskTreeNodeViewModel _DiskTest;
 
-        private SemaphoreSlim _SlowStuffSemaphore;
         private OneTaskLimitedScheduler _OneTaskScheduler;
+        private SemaphoreSlim _Semaphore;
         private CancellationTokenSource _CancelTokenSource;
         private bool _disposed = false;
         #endregion fields
@@ -46,7 +46,7 @@
         /// </summary>
         protected AppViewModel()
         {
-            _SlowStuffSemaphore = new SemaphoreSlim(1, 1);
+            _Semaphore = new SemaphoreSlim(1, 1);
             _OneTaskScheduler = new OneTaskLimitedScheduler();
             _CancelTokenSource = new CancellationTokenSource();
 
@@ -211,12 +211,12 @@
 ////                    ExTest.Dispose();
                     
                     _OneTaskScheduler.Dispose();
-                    _SlowStuffSemaphore.Dispose();
+                    _Semaphore.Dispose();
                     _CancelTokenSource.Dispose();
                     
 ////                    ExTest = null;
                     _OneTaskScheduler = null;
-                    _SlowStuffSemaphore = null;
+                    _Semaphore = null;
                     _CancelTokenSource = null;
                 }
 
@@ -291,7 +291,7 @@
             Logger.InfoFormat("'{0}'", request.NewLocation);
 
             // Make sure the task always processes the last input but is not started twice
-            await _SlowStuffSemaphore.WaitAsync();
+            await _Semaphore.WaitAsync();
             try
             {
                 var newPath = request.NewLocation;
@@ -300,7 +300,10 @@
                 if (cancel != null)
                     cancel.ThrowIfCancellationRequested();
 
-                var browseResult = await BreadcrumbBrowser.NavigateToAsync(request);
+                var browseResult = await BreadcrumbBrowser.NavigateToAsync(
+                    request,
+                    "AppViewModel.NavigateToFolderAsync"
+                    );
 
                 return browseResult;
             }
@@ -312,7 +315,7 @@
             }
             finally
             {
-                _SlowStuffSemaphore.Release();
+                _Semaphore.Release();
             }
         }
         #endregion methods

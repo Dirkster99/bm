@@ -23,7 +23,9 @@
         /// <param name="requestedLocation"></param>
         /// <param name="direction"></param>
         /// <returns></returns>
-        Task<FinalBrowseResult<M>> NavigateToAsync(BrowseRequest<M> requestedLocation,
-                                                   HintDirection direction = HintDirection.Unrelated);
+        Task<FinalBrowseResult<M>> NavigateToAsync(
+            BrowseRequest<M> requestedLocation,
+            string sourceHint,
+            HintDirection direction = HintDirection.Unrelated);
     }
 }

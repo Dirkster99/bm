@@ -2,6 +2,7 @@ namespace BreadcrumbTestLib.ViewModels.Breadcrumbs
 {
     using BmLib.Enums;
     using BreadcrumbTestLib.Models;
+    using BreadcrumbTestLib.Tasks;
     using BreadcrumbTestLib.ViewModels.Base;
     using BreadcrumbTestLib.ViewModels.Interfaces;
     using DirectoryInfoExLib;
@@ -16,7 +17,7 @@ namespace BreadcrumbTestLib.ViewModels.Breadcrumbs
     /// <summary>
     /// Class implements the viewmodel that manages the complete breadcrump control.
     /// </summary>
-    internal class BreadcrumbViewModel : Base.ViewModelBase, IBreadcrumbViewModel                                                             
+    internal class BreadcrumbViewModel : Base.ViewModelBase, IBreadcrumbViewModel
     {
         #region fields
         /// <summary>
@@ -24,8 +25,8 @@ namespace BreadcrumbTestLib.ViewModels.Breadcrumbs
         /// </summary>
         protected static readonly log4net.ILog Logger = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
 
-        private SemaphoreSlim _SlowStuffSemaphore;
-
+        private OneTaskLimitedScheduler _OneTaskScheduler;
+        private SemaphoreSlim _Semaphore;
         private bool _EnableBreadcrumb;
         private string _suggestedPath;
 
@@ -46,7 +47,10 @@ namespace BreadcrumbTestLib.ViewModels.Breadcrumbs
             _EnableBreadcrumb = true;
             _IsBrowsing = false;
             _CurrentPath = null;
-            _SlowStuffSemaphore = new SemaphoreSlim(1, 1);
+
+            _Semaphore = new SemaphoreSlim(1, 1);
+            _OneTaskScheduler = new OneTaskLimitedScheduler();
+
             Progressing = new ProgressViewModel();
             BreadcrumbSubTree = new BreadcrumbTreeItemViewModel(this);
         }
@@ -177,7 +181,7 @@ namespace BreadcrumbTestLib.ViewModels.Breadcrumbs
                         Logger.InfoFormat("selectedFolder {0}", selectedFolder);
 
                         var request = new BrowseRequest<IDirectoryBrowser>(selectedFolder.GetModel());
-                        await this.NavigateToAsync(request);
+                        await this.NavigateToAsync(request, "BreadcrumbViewModel.RootDropDownSelectionChangedCommand");
                     });
                 }
 
@@ -229,7 +233,7 @@ namespace BreadcrumbTestLib.ViewModels.Breadcrumbs
 
                 var rootSelector = BreadcrumbSubTree.Selection as ITreeRootSelector<BreadcrumbTreeItemViewModel, IDirectoryBrowser>;
                 var request = new BrowseRequest<IDirectoryBrowser>(_RootLocation);
-                await NavigateToAsync(request);
+                await NavigateToAsync(request, "BreadcrumbViewModel.InitPathAsync");
 
                 //var items = await BrowseItemsAsync(BreadcrumbSubTree, initLocation);
                 //UpdateListOfOverlowableRootItems(rootSelector, items);
@@ -246,30 +250,34 @@ namespace BreadcrumbTestLib.ViewModels.Breadcrumbs
         /// <returns></returns>
         public async Task<FinalBrowseResult<IDirectoryBrowser>> NavigateToAsync(
             BrowseRequest<IDirectoryBrowser> requestedLocation,
+            string sourceHint,
             HintDirection direction = HintDirection.Unrelated)
         {
-            Logger.InfoFormat("'{0}'", requestedLocation.NewLocation);
+            Console.WriteLine("Request '{0}' direction {1} source: {2} IsBrowsing {3}",
+                requestedLocation.NewLocation,
+                direction,
+                sourceHint, IsBrowsing);
 
-            return await Task.Run(async () =>
+            try
             {
-                await _SlowStuffSemaphore.WaitAsync();
-                try
+                IsBrowsing = true;
+                return await Task.Run(async () =>
                 {
-                    var result = await NavigateToAsync(requestedLocation.NewLocation, direction);
+                    var result = await InternalNavigateToAsync(requestedLocation.NewLocation, direction);
 
                     return FinalBrowseResult<IDirectoryBrowser>.FromRequest(requestedLocation,
                                                                             result);
-                }
-                catch
+                }).ContinueWith((result)=>
                 {
-                    return FinalBrowseResult<IDirectoryBrowser>.FromRequest(requestedLocation,
-                                                                            BrowseResult.InComplete);
-                }
-                finally
-                {
-                    _SlowStuffSemaphore.Release();
-                }
-            });
+                    IsBrowsing = false;
+                    return result.Result;
+                });
+            }
+            catch
+            {
+                return FinalBrowseResult<IDirectoryBrowser>.FromRequest(requestedLocation,
+                                                                        BrowseResult.InComplete);
+            }
         }
 
         /// <summary>
@@ -286,12 +294,12 @@ namespace BreadcrumbTestLib.ViewModels.Breadcrumbs
         /// </summary>
         /// <param name="location"></param>
         /// <returns></returns>
-        private async Task<BrowseResult> NavigateToAsync(IDirectoryBrowser location,
+        private async Task<BrowseResult> InternalNavigateToAsync(IDirectoryBrowser location,
                                                          HintDirection direction = HintDirection.Unrelated)
         {
             Logger.InfoFormat("'{0}'", location.FullName);
 
-            IsBrowsing = true;
+            await _Semaphore.WaitAsync();
             try
             {
                 var root = BreadcrumbSubTree.Selection as ITreeRootSelector<BreadcrumbTreeItemViewModel, IDirectoryBrowser>;
@@ -384,7 +392,7 @@ namespace BreadcrumbTestLib.ViewModels.Breadcrumbs
             }
             finally
             {
-                IsBrowsing = false;
+                _Semaphore.Release();
             }
         }
 
@@ -409,21 +417,21 @@ namespace BreadcrumbTestLib.ViewModels.Breadcrumbs
             var ret = root;
             int initLevel = 0;
             BreadcrumbTreeItemViewModel matchedItem = null;
-            
+
             if (direction == HintDirection.Down || direction == HintDirection.Up)
             {
                 // Put current path into output stack and continue searching below current path
-                foreach(var item in currentPath.ToArray().Reverse())
+                foreach (var item in currentPath.ToArray().Reverse())
                 {
-                  path.Push(item);
+                    path.Push(item);
                     initLevel++;
 
-                  if (direction == HintDirection.Up) // Found target item? -> return completed path
-                  {
-                    var cmpResult = Comparer.CompareHierarchy(item.GetModel(), destination);
-                    if (cmpResult == HierarchicalResult.Current)
-                        return path;
-                  }
+                    if (direction == HintDirection.Up) // Found target item? -> return completed path
+                    {
+                        var cmpResult = Comparer.CompareHierarchy(item.GetModel(), destination);
+                        if (cmpResult == HierarchicalResult.Current)
+                            return path;
+                    }
                 }
 
                 // This should always result in finding the next Child item
