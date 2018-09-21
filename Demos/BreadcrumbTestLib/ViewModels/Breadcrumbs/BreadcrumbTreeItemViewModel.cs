@@ -6,7 +6,7 @@
     using System.Threading.Tasks;
     using System.Windows.Media;
     using BreadcrumbTestLib.ViewModels.Interfaces;
-    using BreadcrumbTestLib.ViewModels.TreeSelectors;
+    using BreadcrumbTestLib.ViewModels.Breadcrumbs.TreeSelectors;
     using BreadcrumbTestLib.ViewModels.Base;
     using DirectoryInfoExLib.Interfaces;
     using System;
@@ -17,9 +17,6 @@
     using System.Runtime.InteropServices;
     using BreadcrumbTestLib.Models;
     using System.Windows.Input;
-    using System.Threading;
-    using BreadcrumbTestLib.ViewModels.TreeLookupProcessors;
-    using BmLib.Utils;
 
     /// <summary>
     /// Class implements a ViewModel to manage a sub-tree of a Breadcrumb control.
@@ -34,8 +31,6 @@
                                        IDisposable
     {
         #region fields
-        public static ICompareHierarchy<IDirectoryBrowser> Comparer = new ExHierarchyComparer();
-
         /// <summary>
         /// Log4net logger facility for this class.
         /// </summary>
@@ -49,10 +44,11 @@
         private ImageSource _icon = null;
         private bool _disposed = false;
 
-        private ICommand _ItemSelectionChangedCommand;
-
         // Instance of the root viewmodel - reference is used to invoke central tree related (navigational) methods
         private IRoot<IDirectoryBrowser> _Root;
+
+        private ICommand _ItemSelectionChangedCommand;
+        private ICommand _BreadcrumbTreeTreeItemClickCommand;
         #endregion fields
 
         #region constructors
@@ -65,11 +61,8 @@
         {
             _Root = root;
             Entries = new BreadcrumbTreeItemHelperViewModel<BreadcrumbTreeItemViewModel>();
-            Selection =
-              new TreeRootSelectorViewModel<BreadcrumbTreeItemViewModel, IDirectoryBrowser>(this.Entries)
-              {
-                  Comparers = new[] { BreadcrumbTreeItemViewModel.Comparer }
-              };
+            Selection = new TreeRootSelectorViewModel<BreadcrumbTreeItemViewModel, IDirectoryBrowser>
+                        (this.Entries);
         }
 
         /// <summary>
@@ -124,6 +117,10 @@
         #endregion constructors
 
         #region properties
+        /// <summary>
+        /// Gets a property that holds all other properties on whether
+        /// or not this entry is selected or not and so forth.
+        /// </summary>
         public ITreeSelector<BreadcrumbTreeItemViewModel, IDirectoryBrowser> Selection { get; protected set; }
 
         /// <summary>
@@ -209,7 +206,7 @@
             {
                 if (_ItemSelectionChangedCommand == null)
                 {
-                    _ItemSelectionChangedCommand = new RelayCommand<object>((param) =>
+                    _ItemSelectionChangedCommand = new RelayCommand<object>(async (param) =>
                     {
                         var parArray = param as object[];
                         if (parArray == null)
@@ -224,11 +221,52 @@
                         if (selectedFolder == null)
                             return;
 
-                        _Root.NavigateToChild(this, selectedFolder.GetModel());
+                        if (_Root.IsBrowsing == true)   // Selection change originates from viewmodel
+                            return;                    // So, let ignore this one since its browsing anyways...
+
+                        int itemLevel = GetItemLevel();
+
+                        Logger.InfoFormat("itemLevel {0} selectedFolder {1}", itemLevel, selectedFolder);
+
+                        var request = new BrowseRequest<IDirectoryBrowser>(selectedFolder.GetModel());
+                        await _Root.NavigateToAsync(request,
+                                                    "BreadcrumbTreeItemViewModel.ItemSelectionChanged",
+                                                    HintDirection.Down, itemLevel);
+
                     });
                 }
 
                 return _ItemSelectionChangedCommand;
+            }
+        }
+
+        /// <summary>
+        /// Gets a command that can be execute to make this item the currently
+        /// selected item in the breadcrumb control.
+        /// 
+        /// Use Case: User clicks a visible item in the list of breadcrumbs.
+        /// </summary>
+        public ICommand BreadcrumbTreeTreeItemClickCommand
+        {
+            get
+            {
+                if (_BreadcrumbTreeTreeItemClickCommand == null)
+                {
+                    _BreadcrumbTreeTreeItemClickCommand = new RelayCommand<object>(async (param) =>
+                    {
+                        if (_Root.IsBrowsing == true)   // Selection change originates from viewmodel
+                            return;                    // So, let ignore this one since its browsing anyways...
+
+                        Logger.InfoFormat("selectedFolder {0}", this);
+
+                        var request = new BrowseRequest<IDirectoryBrowser>(this.GetModel());
+                        await _Root.NavigateToAsync(request,
+                            "BreadcrumbTreeItemViewModel.BreadcrumbTreeTreeItemClickCommand",
+                            HintDirection.Up);
+                    });
+                }
+
+                return _BreadcrumbTreeTreeItemClickCommand;
             }
         }
         #endregion properties
@@ -240,24 +278,25 @@
         /// <returns></returns>
         public override string ToString()
         {
-            return (this.Header != null ? this.Header : "(Header==null)");
+            return string.Format("location '{0}' Header '{1}'",
+                                (_dir != null ? _dir.FullName : "(null)"),
+                                (this.Header != null ? this.Header : "(null)"));
         }
 
         /// <summary>
         /// Gets all root items below the desktop item and makes them available
-        /// in the <see cref="Entries"/> collection.
+        /// in the <see cref="Entries"/> collection. The first available item
+        /// in the retrieved collection (eg: 'PC') is selected.
         /// </summary>
+        /// <param name="location"></param>
         /// <returns></returns>
-        public Task<FinalBrowseResult<IDirectoryBrowser>> InitRootAsync(
-            BrowseRequest<string> initialRequest,
-            IProgressViewModel progress = null)
+        public async Task InitRootAsync(IDirectoryBrowser location)
         {
             try
             {
                 // Find all entries below desktop
-                _dir = DirectoryInfoExLib.Factory.DesktopDirectory;
-
-                Logger.InfoFormat("'{0}' -> '{1}'", initialRequest.NewLocation, _dir.Label);
+                _dir = location;
+                Header = _dir.Label;
 
                 // and insert desktop sub-entries into Entries property
                 Entries.SetEntries(UpdateMode.Update,
@@ -265,19 +304,26 @@
                                      //(filter out recycle bin entry if its not that useful...)
                                      //.Where(d => !d.Equals(DirectoryInfoExLib.Factory.RecycleBinDirectory))
 
-                Header = _dir.Label;
-
                 var selector = this.Selection as ITreeRootSelector<BreadcrumbTreeItemViewModel, IDirectoryBrowser>;
 
-                return selector.SelectAsync(
-                    DirectoryInfoExLib.Factory.FromString(initialRequest.NewLocation),
-                    initialRequest,
-                    initialRequest.CancelTok,
-                    progress);
+                if (Entries.All.Count() > 0)
+                {
+                    // All items imidiately under root are by definition root items
+                    foreach (var item in Entries.All)
+                        item.Selection.IsRoot = true;
+
+                    var firstRootItem = Entries.All.First();
+                    firstRootItem.Selection.IsSelected = true;
+
+                    var path = new Stack<ITreeSelector<BreadcrumbTreeItemViewModel, IDirectoryBrowser>>();
+                    path.Push(firstRootItem.Selection);
+
+
+                    await this.Selection.ReportChildSelectedAsync(path);
+                }
             }
             catch
             {
-                return null;
             }
         }
 
@@ -289,6 +335,30 @@
         internal IDirectoryBrowser GetModel()
         {
             return _dir;
+        }
+
+        /// <summary>
+        /// Gets a collection of viewmodel items that represent
+        /// the path towards the currently selected item in the the tree.
+        /// </summary>
+        /// <returns></returns>
+        public IList<BreadcrumbTreeItemViewModel> GetPathItems(bool bReverseItems = true)
+        {
+            var parentNode = _parentNode;
+            var list = new List<BreadcrumbTreeItemViewModel>();
+
+            list.Add(this);
+
+            while (parentNode != null)
+            {
+                list.Add(parentNode);
+                parentNode = parentNode._parentNode;
+            }
+
+            if (bReverseItems == true)
+                list.Reverse();
+
+            return list;
         }
 
         #region Disposable Interfaces
@@ -361,6 +431,20 @@
                 retVal = imgList[ptr, true, forceLoad];
 
             return retVal;
+        }
+
+        private int GetItemLevel()
+        {
+            int iLevel = 0;
+            var parent = _parentNode;
+            while (parent != null)
+            {
+                parent = parent._parentNode;
+                iLevel++;
+            }
+
+
+            return iLevel;
         }
         #endregion
     }

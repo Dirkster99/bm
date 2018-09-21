@@ -2,14 +2,28 @@
 {
 	using System.Windows;
 	using System.Windows.Controls;
-	using BmLib.BaseControls;
+    using System.Windows.Input;
+    using BmLib.BaseControls;
 
 	[TemplateVisualState(Name = "ShowCaption", GroupName = "CaptionStates")]
 	[TemplateVisualState(Name = "HideCaption", GroupName = "CaptionStates")]
 	public class BreadcrumbTreeItem : TreeViewItem
 	{
-		#region fields
-		public static readonly DependencyProperty OverflowItemCountProperty = OverflowableStackPanel.OverflowItemCountProperty
+        #region fields
+        public DependencyObject ClickItemCommand
+        {
+            get { return (DependencyObject)GetValue(ClickItemCommandProperty); }
+            set { SetValue(ClickItemCommandProperty, value); }
+        }
+
+        // Using a DependencyProperty as the backing store for ClickItemCommand.  This enables animation, styling, binding, etc...
+        public static readonly DependencyProperty ClickItemCommandProperty =
+            DependencyProperty.Register("ClickItemCommand",
+                typeof(ICommand),
+                typeof(BreadcrumbTreeItem),
+                new PropertyMetadata(null));
+
+        public static readonly DependencyProperty OverflowItemCountProperty = OverflowableStackPanel.OverflowItemCountProperty
 		.AddOwner(typeof(BreadcrumbTreeItem), new PropertyMetadata(OnOverflowItemCountChanged));
 
 		public static readonly DependencyProperty IsOverflowedProperty = DependencyProperty.Register("IsOverflowed", typeof(bool),
@@ -40,13 +54,13 @@
 
 		public static readonly DependencyProperty MenuItemTemplateProperty =
 						BreadcrumbTree.MenuItemTemplateProperty.AddOwner(typeof(BreadcrumbTreeItem));
-		#endregion fields
+        #endregion fields
 
-		#region Constructor
-		/// <summary>
-		/// Static constructor
-		/// </summary>
-		static BreadcrumbTreeItem()
+        #region Constructor
+        /// <summary>
+        /// Static constructor
+        /// </summary>
+        static BreadcrumbTreeItem()
 		{
 			DefaultStyleKeyProperty.OverrideMetadata(typeof(BreadcrumbTreeItem),
 					new FrameworkPropertyMetadata(typeof(BreadcrumbTreeItem)));
@@ -131,7 +145,7 @@
 		{
 			base.OnApplyTemplate();
 
-			this.AddHandler(Button.ClickEvent, (RoutedEventHandler)((o, e) =>
+            this.AddHandler(Button.ClickEvent, (RoutedEventHandler)((o, e) =>
 			{
 				if (e.Source is Button)
 				{
@@ -149,7 +163,7 @@
 			////    }));
 		}
 
-		protected override DependencyObject GetContainerForItemOverride()
+        protected override DependencyObject GetContainerForItemOverride()
 		{
 			return new BreadcrumbTreeItem();
 		}

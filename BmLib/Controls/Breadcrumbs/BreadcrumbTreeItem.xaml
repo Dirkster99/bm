@@ -8,6 +8,7 @@
     xmlns:conv="clr-namespace:BmLib.Converters"
     xmlns:reskeys="clr-namespace:BmLib.Themes"
     xmlns:behav="clr-namespace:BmLib.Behaviors"
+    xmlns:local="clr-namespace:BmLib.Controls.Breadcrumbs"
  >
     <DataTemplate x:Key="DropDownListItemDataTemplate">
         <Grid>
@@ -63,7 +64,8 @@
                                         MaxWidth="1000"
                                         Margin="0"
                                         Padding="3,0"
-                                >
+                                        Command="{TemplateBinding ClickItemCommand}"
+                                    >
                                     <ContentPresenter x:Name="PART_Header"
                                                       HorizontalAlignment="Stretch"
                                                       VerticalAlignment="Stretch"                                   
@@ -74,16 +76,18 @@
                                 <ctrls:DropDownList x:Name="PART_Toggle"
                                                     Grid.Column="1"
                                                     Margin="0"
-                                                    Padding="3,0"
+                                                    Padding="0"
                                                     ItemsSource="{TemplateBinding ItemsSource}"
                                                     Visibility="{Binding HasItems, RelativeSource={RelativeSource TemplatedParent}, Converter={StaticResource btvc}}" 
-                                                    SelectedValuePath="{Binding ValuePath, RelativeSource={RelativeSource TemplatedParent}}"                                  
                                                     IsDropDownOpen="{Binding IsExpanded, Mode=TwoWay, RelativeSource={RelativeSource TemplatedParent}}"
-                                                    SelectedValue="{Binding SelectedChild, Mode=TwoWay, RelativeSource={RelativeSource TemplatedParent}}"
+                                                    SelectedItem="{Binding Selection.SelectedChild,Mode=OneWay,UpdateSourceTrigger=PropertyChanged}"
                                                     ItemTemplate="{TemplateBinding MenuItemTemplate}"
                                                     behav:SelectionChangedCommand.ChangedCommand="{Binding Path=ItemSelectionChangedCommand}"
                                     />
-
+                                    <!--    
+                                        SelectedValuePath="{Binding ValuePath, RelativeSource={RelativeSource TemplatedParent}}"                                  
+                                        SelectedValue="{Binding SelectedChild, Mode=OneWay,UpdateSourceTrigger=PropertyChanged, RelativeSource={RelativeSource TemplatedParent}}"
+                                    -->
                             </Grid>
                         </ctrls:HotTrack>
 

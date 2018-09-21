@@ -116,7 +116,6 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="Behaviors\SelectionChangedCommand.cs" />
     <Compile Include="Demos\ViewModels\DemoViewModel.cs" />
     <Compile Include="Models\AppCore.cs" />
     <Compile Include="Models\SettingDefaults.cs" />

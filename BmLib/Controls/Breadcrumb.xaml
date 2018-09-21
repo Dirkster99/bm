@@ -101,22 +101,35 @@
                                                             SelectedValue="{Binding BreadcrumbSubTree.Selection.SelectedValue}"                               
                                                             ItemTemplate="{StaticResource DropDownListItemDataTemplate}"
                                                             behav:SelectionChangedCommand.ChangedCommand="{Binding Path=RootDropDownSelectionChangedCommand}"
+                                                            BorderThickness="0"
                                                             Margin="0"
                                                             >
                                             <ctrls:DropDownList.Header>
-                                                <Path Stroke="{DynamicResource {x:Static reskeys:ResourceKeys.ControlNormalForegroundBrushKey}}"
-                                                      StrokeThickness="1.2"
-                                                      HorizontalAlignment="Stretch"
-                                                      VerticalAlignment="Stretch"
-                                                      IsHitTestVisible="True"
-                                                      DataContext="{Binding BreadcrumbSubTree}"
-                                                      Data="{Binding IsOverflown,RelativeSource={RelativeSource AncestorType={x:Type bc:Breadcrumb}}, Converter={StaticResource BoolToOneOfTwoBindingsConverter},Mode=OneWay,UpdateSourceTrigger=PropertyChanged}"
+                                                <Border x:Name="border"
+                                                    Background="Transparent"
+                                                    BorderBrush="Transparent"
+                                                    BorderThickness="0"
+                                                    VerticalAlignment="Stretch"
+                                                    HorizontalAlignment="Center"
+                                                    Margin="0"
+                                                    Padding="3,0"
+                                                    SnapsToDevicePixels="True"
+                                                    MinWidth="15"
+                                                    >
+                                                    <Path Stroke="{DynamicResource {x:Static reskeys:ResourceKeys.ControlNormalForegroundBrushKey}}"
+                                                          StrokeThickness="1.2"
+                                                          HorizontalAlignment="Center"
+                                                          VerticalAlignment="Stretch"
+                                                          IsHitTestVisible="True"
+                                                          DataContext="{Binding BreadcrumbSubTree}"
+                                                          Data="{Binding IsOverflown,RelativeSource={RelativeSource AncestorType={x:Type bc:Breadcrumb}}, Converter={StaticResource BoolToOneOfTwoBindingsConverter},Mode=OneWay,UpdateSourceTrigger=PropertyChanged}"
                                                 />
+                                                </Border>
                                             </ctrls:DropDownList.Header>
                                             <!-- Overwrite ItemContainerStyle assigned in DropDownList.xaml -->
                                             <ctrls:DropDownList.ItemContainerStyle>
                                                 <Style TargetType="{x:Type ComboBoxItem}" BasedOn="{StaticResource {x:Type ComboBoxItem}}">
-                                                    <Setter Property="Visibility" Value="{Binding Selection.IsOverflowedOrRoot, Mode=OneWay, Converter={StaticResource btvc}}"  />
+                                                    <Setter Property="Visibility" Value="{Binding Selection.IsOverflowedOrRoot, Mode=OneWay, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource btvc}}"  />
                                                     <Style.Triggers>
                                                         <DataTrigger Binding="{Binding}" Value="{x:Null}">
                                                             <Setter Property="Template">
@@ -125,7 +138,7 @@
                                                                         <!-- BugFix: Show Seperator only if items are overflown -->
                                                                         <Separator HorizontalAlignment="Stretch"
                                                                                    IsEnabled="False"
-                                                                                   Visibility="{Binding IsOverflown,Converter={StaticResource btv}, RelativeSource={RelativeSource AncestorType={x:Type bc:Breadcrumb}}}"
+                                                                                   Visibility="{Binding IsOverflown,Converter={StaticResource btv}, UpdateSourceTrigger=PropertyChanged, RelativeSource={RelativeSource AncestorType={x:Type bc:Breadcrumb}}}"
                                                                                    />
                                                                     </ControlTemplate>
                                                                 </Setter.Value>
@@ -147,12 +160,13 @@
                                                 <Style TargetType="{x:Type uc:BreadcrumbTreeItem}" BasedOn="{StaticResource {x:Type uc:BreadcrumbTreeItem}}">
                                                     <Setter Property="ValuePath" Value="Selection.Value" />
                                                     <Setter Property="IsExpanded" Value="{Binding Entries.IsExpanded, Mode=TwoWay}"  />
-                                                    <Setter Property="IsCurrentSelected" Value="{Binding Selection.IsSelected, Mode=TwoWay}"  />
+                                                    <Setter Property="IsCurrentSelected" Value="{Binding Selection.IsSelected, Mode=TwoWay}"  /><!-- -->
                                                     <!--Setter Property="SelectedChild" Value="{Binding Selection.SelectedChildUI, Mode=TwoWay}"  /-->
-                                                    <Setter Property="IsChildSelected" Value="{Binding Selection.IsChildSelected, Mode=OneWay}"  />
+                                                    <Setter Property="IsChildSelected" Value="{Binding Selection.IsChildSelected, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"  />
 
                                                     <!--Updated by BreadcrumbTreeItem and it's OverflowableStackPanel-->
                                                     <Setter Property="IsOverflowed" Value="{Binding Selection.IsOverflowed, Mode=OneWayToSource}"  />
+                                                    <Setter Property="ClickItemCommand" Value="{Binding BreadcrumbTreeTreeItemClickCommand}" />
                                                 </Style>
                                             </uc:BreadcrumbTree.ItemContainerStyle>
 
@@ -164,7 +178,11 @@
                                                                 VerticalAlignment="Center"
                                                                 Background="Transparent"
                                                                 Foreground="{DynamicResource {x:Static reskeys:ResourceKeys.ControlTextBrushKey}}"
-                                                                />
+                                                                >
+                                                        <TextBlock.ToolTip>
+                                                            <TextBlock Text="{Binding Header}"/>
+                                                        </TextBlock.ToolTip>
+                                                    </TextBlock>
                                                 </HierarchicalDataTemplate>
                                             </uc:BreadcrumbTree.ItemTemplate>
 

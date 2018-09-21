@@ -4,8 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
 
-                     
-        xmlns:behav="clr-namespace:ThemedDemo.Behaviors"
+        xmlns:behav="clr-namespace:BmLib.Behaviors;assembly=BmLib"
         xmlns:demoviews="clr-namespace:BreadcrumbTestLib.Views;assembly=BreadcrumbTestLib"
         xmlns:MWindow="clr-namespace:MWindowLib;assembly=MWindowLib"
                      

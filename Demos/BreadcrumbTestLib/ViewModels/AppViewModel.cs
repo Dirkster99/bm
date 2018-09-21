@@ -5,6 +5,7 @@
     using BreadcrumbTestLib.Tasks;
     using BreadcrumbTestLib.ViewModels.Breadcrumbs;
     using BreadcrumbTestLib.ViewModels.Interfaces;
+    using DirectoryInfoExLib;
     using DirectoryInfoExLib.Interfaces;
     using System;
     using System.Diagnostics;
@@ -23,8 +24,8 @@
 
         private DiskTreeNodeViewModel _DiskTest;
 
-        private SemaphoreSlim _SlowStuffSemaphore;
         private OneTaskLimitedScheduler _OneTaskScheduler;
+        private SemaphoreSlim _Semaphore;
         private CancellationTokenSource _CancelTokenSource;
         private bool _disposed = false;
         #endregion fields
@@ -45,7 +46,7 @@
         /// </summary>
         protected AppViewModel()
         {
-            _SlowStuffSemaphore = new SemaphoreSlim(1, 1);
+            _Semaphore = new SemaphoreSlim(1, 1);
             _OneTaskScheduler = new OneTaskLimitedScheduler();
             _CancelTokenSource = new CancellationTokenSource();
 
@@ -168,21 +169,23 @@
         /// Method should be called after construction to initialize the viewmodel
         /// to view a default content.
         /// </summary>
-        public void InitPath(string initialPath)
+        public async Task InitPathAsync(string initialPath)
         {
             // Revert request to default if requested path is non-existing
             if (System.IO.Directory.Exists(initialPath) == false)
                 initialPath = new DirectoryInfo(Environment.SystemDirectory).Root.Name;
 
             Logger.InfoFormat("'{0}'", initialPath);
-            string[] pathSegments = DirectoryInfoExLib.Factory.GetFolderSegments(initialPath);
+            var location = Factory.CreateDirectoryInfoEx(initialPath);
+            string[] pathSegments = Factory.GetFolderSegments(initialPath);
 
 ////            var selection = DiskTest.Selection as ITreeRootSelector<DiskTreeNodeViewModel, string>;
 ////            selection.SelectAsync(initialPath, new BrowseRequest<string>(initialPath, pathSegments));
 
 ////            ExTest.InitRootAsync(new BrowseRequest<string>(initialPath, pathSegments));
 
-            NavigateToFolder(initialPath);
+            await BreadcrumbBrowser.InitPathAsync();
+            NavigateToFolder(location);
         }
 
         #region Disposable Interfaces
@@ -208,12 +211,12 @@
 ////                    ExTest.Dispose();
                     
                     _OneTaskScheduler.Dispose();
-                    _SlowStuffSemaphore.Dispose();
+                    _Semaphore.Dispose();
                     _CancelTokenSource.Dispose();
                     
 ////                    ExTest = null;
                     _OneTaskScheduler = null;
-                    _SlowStuffSemaphore = null;
+                    _Semaphore = null;
                     _CancelTokenSource = null;
                 }
 
@@ -236,9 +239,9 @@
         /// </summary>
         /// <param name="itemPath"></param>
         /// <param name="requestor"</param>
-        private void NavigateToFolder(string itemPath)
+        private void NavigateToFolder(IDirectoryBrowser location)
         {
-            Logger.InfoFormat("'{0}'", itemPath);
+            Logger.InfoFormat("'{0}'", location.FullName);
 
             // XXX Todo Keep task reference, support cancel, and remove on end?
             try
@@ -247,8 +250,8 @@
                 var timeout = TimeSpan.FromSeconds(5);
                 var actualTask = new Task(() =>
                 {
-                    string[] pathSegments = DirectoryInfoExLib.Factory.GetFolderSegments(itemPath);
-                    var request = new BrowseRequest<string>(itemPath, pathSegments, _CancelTokenSource.Token);
+                    ////string[] pathSegments = DirectoryInfoExLib.Factory.GetFolderSegments(location.FullName);
+                    var request = new BrowseRequest<IDirectoryBrowser>(location, _CancelTokenSource.Token);
                     var t = Task.Factory.StartNew(() => NavigateToFolderAsync(request, null),
                                                         request.CancelTok,
                                                         TaskCreationOptions.LongRunning,
@@ -282,13 +285,13 @@
         /// <param name="request"></param>
         /// <param name="requestor"</param>
         private async Task<FinalBrowseResult<IDirectoryBrowser>> NavigateToFolderAsync(
-             BrowseRequest<string> request
+             BrowseRequest<IDirectoryBrowser> request
             ,object sender)
         {
             Logger.InfoFormat("'{0}'", request.NewLocation);
 
             // Make sure the task always processes the last input but is not started twice
-            await _SlowStuffSemaphore.WaitAsync();
+            await _Semaphore.WaitAsync();
             try
             {
                 var newPath = request.NewLocation;
@@ -297,7 +300,10 @@
                 if (cancel != null)
                     cancel.ThrowIfCancellationRequested();
 
-                var browseResult = await BreadcrumbBrowser.InitPathAsync(request);
+                var browseResult = await BreadcrumbBrowser.NavigateToAsync(
+                    request,
+                    "AppViewModel.NavigateToFolderAsync"
+                    );
 
                 return browseResult;
             }
@@ -309,7 +315,7 @@
             }
             finally
             {
-                _SlowStuffSemaphore.Release();
+                _Semaphore.Release();
             }
         }
         #endregion methods
