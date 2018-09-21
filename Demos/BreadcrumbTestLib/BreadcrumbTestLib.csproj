@@ -68,11 +68,11 @@
     <Compile Include="ViewModels\Base\ViewModelBase.cs" />
     <Compile Include="ViewModels\Breadcrumbs\BreadcrumbViewModel.cs" />
     <Compile Include="ViewModels\Breadcrumbs\BreadcrumbTreeItemHelperViewModel.cs" />
-    <Compile Include="ViewModels\Breadcrumbs\ExHierarchyComparer.cs" />
+    <Compile Include="ViewModels\Breadcrumbs\IDirectoryHierarchyComparer.cs" />
     <Compile Include="ViewModels\Breadcrumbs\BreadcrumbTreeItemViewModel.cs" />
     <Compile Include="ViewModels\Breadcrumbs\ProgressViewModel.cs" />
-    <Compile Include="ViewModels\Breadcrumbs\Tree\TreeSelectors\TreeRootSelectorViewModel.cs" />
-    <Compile Include="ViewModels\Breadcrumbs\Tree\TreeSelectors\TreeSelectorViewModel.cs" />
+    <Compile Include="ViewModels\Breadcrumbs\TreeSelectors\TreeRootSelectorViewModel.cs" />
+    <Compile Include="ViewModels\Breadcrumbs\TreeSelectors\TreeSelectorViewModel.cs" />
     <Compile Include="ViewModels\Interfaces\IBreadcrumbViewModel.cs" />
     <Compile Include="ViewModels\Interfaces\IBreadcrumbTreeItemViewModel.cs" />
     <Compile Include="ViewModels\Interfaces\IEntryHierarchyComparer.cs" />

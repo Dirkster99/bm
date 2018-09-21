@@ -6,7 +6,7 @@
     using System.Threading.Tasks;
     using System.Windows.Media;
     using BreadcrumbTestLib.ViewModels.Interfaces;
-    using BreadcrumbTestLib.ViewModels.TreeSelectors;
+    using BreadcrumbTestLib.ViewModels.Breadcrumbs.TreeSelectors;
     using BreadcrumbTestLib.ViewModels.Base;
     using DirectoryInfoExLib.Interfaces;
     using System;
@@ -17,7 +17,6 @@
     using System.Runtime.InteropServices;
     using BreadcrumbTestLib.Models;
     using System.Windows.Input;
-    using DirectoryInfoExLib;
 
     /// <summary>
     /// Class implements a ViewModel to manage a sub-tree of a Breadcrumb control.
@@ -32,8 +31,6 @@
                                        IDisposable
     {
         #region fields
-        public static ICompareHierarchy<IDirectoryBrowser> Comparer = new ExHierarchyComparer();
-
         /// <summary>
         /// Log4net logger facility for this class.
         /// </summary>
@@ -65,8 +62,7 @@
             _Root = root;
             Entries = new BreadcrumbTreeItemHelperViewModel<BreadcrumbTreeItemViewModel>();
             Selection = new TreeRootSelectorViewModel<BreadcrumbTreeItemViewModel, IDirectoryBrowser>
-                (this.Entries,
-                  new[] { BreadcrumbTreeItemViewModel.Comparer });
+                        (this.Entries);
         }
 
         /// <summary>
@@ -121,6 +117,10 @@
         #endregion constructors
 
         #region properties
+        /// <summary>
+        /// Gets a property that holds all other properties on whether
+        /// or not this entry is selected or not and so forth.
+        /// </summary>
         public ITreeSelector<BreadcrumbTreeItemViewModel, IDirectoryBrowser> Selection { get; protected set; }
 
         /// <summary>
@@ -224,12 +224,14 @@
                         if (_Root.IsBrowsing == true)   // Selection change originates from viewmodel
                             return;                    // So, let ignore this one since its browsing anyways...
 
-                        Logger.InfoFormat("selectedFolder {0}", selectedFolder);
+                        int itemLevel = GetItemLevel();
+
+                        Logger.InfoFormat("itemLevel {0} selectedFolder {1}", itemLevel, selectedFolder);
 
                         var request = new BrowseRequest<IDirectoryBrowser>(selectedFolder.GetModel());
                         await _Root.NavigateToAsync(request,
                                                     "BreadcrumbTreeItemViewModel.ItemSelectionChanged",
-                                                    HintDirection.Down);
+                                                    HintDirection.Down, itemLevel);
 
                     });
                 }
@@ -429,6 +431,20 @@
                 retVal = imgList[ptr, true, forceLoad];
 
             return retVal;
+        }
+
+        private int GetItemLevel()
+        {
+            int iLevel = 0;
+            var parent = _parentNode;
+            while (parent != null)
+            {
+                parent = parent._parentNode;
+                iLevel++;
+            }
+
+
+            return iLevel;
         }
         #endregion
     }

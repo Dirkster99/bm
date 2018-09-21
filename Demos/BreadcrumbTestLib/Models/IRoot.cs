@@ -21,11 +21,17 @@
         /// <see cref="ICanNavigate"/> events.
         /// </summary>
         /// <param name="requestedLocation"></param>
-        /// <param name="direction"></param>
-        /// <returns></returns>
+        /// <param name="direction">Specifies whether the navigation direction
+        /// is not specified or up or down relative to the current path or
+        /// ihintLevel parameter</param>
+        /// <param name="ihintLevel">This parameter is relevant for Down direction only.
+        /// It specifies the level in the tree structure from which the next child
+        /// in the current path should be searched.</param>
+        /// <returns>Returns a result that informs whether the target was reached or not.</returns>
         Task<FinalBrowseResult<M>> NavigateToAsync(
             BrowseRequest<M> requestedLocation,
             string sourceHint,
-            HintDirection direction = HintDirection.Unrelated);
+            HintDirection direction = HintDirection.Unrelated,
+            int ihintLevel = -1);
     }
 }

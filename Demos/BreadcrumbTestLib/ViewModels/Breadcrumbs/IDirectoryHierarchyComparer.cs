@@ -10,7 +10,7 @@
     /// Implements a <see cref="IDirectoryBrowser"/> based <seealso ref="ICompareHierarchy"> object
     /// to compute the relationship of two <see cref="IDirectoryBrowser"/> based paths to each other.
     /// </summary>
-    public class ExHierarchyComparer : ICompareHierarchy<IDirectoryBrowser>
+    public class IDirectoryHierarchyComparer : ICompareHierarchy<IDirectoryBrowser>
     {
         #region fields
         /// <summary>
@@ -25,7 +25,7 @@
         /// <summary>
         /// Class cosntructor
         /// </summary>
-        public ExHierarchyComparer()
+        public IDirectoryHierarchyComparer()
         {
         }
         #endregion constructors

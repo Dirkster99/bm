@@ -3,7 +3,7 @@
     using BreadcrumbTestLib.ViewModels.Base;
     using BreadcrumbTestLib.ViewModels.Breadcrumbs;
     using BreadcrumbTestLib.ViewModels.Interfaces;
-    using BreadcrumbTestLib.ViewModels.TreeSelectors;
+    using BreadcrumbTestLib.ViewModels.Breadcrumbs.TreeSelectors;
     using System;
     using System.Collections.Generic;
     using System.IO;
@@ -27,9 +27,7 @@
         public DiskTreeNodeViewModel(params DirectoryInfo[] dir)
         {
             Entries = new BreadcrumbTreeItemHelperViewModel<DiskTreeNodeViewModel>();
-            Selection = new TreeRootSelectorViewModel<DiskTreeNodeViewModel, string>(
-                                this.Entries,
-                                new[] { DiskTreeNodeViewModel.Comparer });
+            Selection = new TreeRootSelectorViewModel<DiskTreeNodeViewModel, string>(this.Entries);
 
             Entries.SetEntries(UpdateMode.Update, dir.Select(d => new DiskTreeNodeViewModel(d, this)).ToArray());
             Header = string.Empty;

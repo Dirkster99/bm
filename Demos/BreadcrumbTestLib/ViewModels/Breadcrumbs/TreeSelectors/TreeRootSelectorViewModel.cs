@@ -1,13 +1,12 @@
 ﻿namespace BreadcrumbTestLib.ViewModels.Breadcrumbs
 {
     using BreadcrumbTestLib.ViewModels.Interfaces;
-    using BreadcrumbTestLib.ViewModels.TreeSelectors;
+    using BreadcrumbTestLib.ViewModels.Breadcrumbs.TreeSelectors;
     using System;
     using System.Collections.Generic;
     using System.Collections.ObjectModel;
     using System.Linq;
     using System.Threading.Tasks;
-    using BmLib.Enums;
     using System.Windows;
 
     internal class TreeRootSelectorViewModel<VM, T> : TreeSelectorViewModel<VM, T>, ITreeRootSelector<VM, T>
@@ -21,7 +20,6 @@
         private T _selectedValue = default(T);
         private ITreeSelector<VM, T> _selectedSelector;
         private Stack<ITreeSelector<VM, T>> _prevPath = null;
-        private IEnumerable<ICompareHierarchy<T>> _comparers;
         private ObservableCollection<VM> _OverflowedAndRootItems = null;
         #endregion fields
 
@@ -30,12 +28,10 @@
         /// Class Constructor
         /// </summary>
         /// <param name="entryHelper"></param>
-        public TreeRootSelectorViewModel(IBreadcrumbTreeItemHelperViewModel<VM> entryHelper,
-                                         IEnumerable<ICompareHierarchy<T>> inComparers)
+        public TreeRootSelectorViewModel(IBreadcrumbTreeItemHelperViewModel<VM> entryHelper)
           : base(entryHelper)
         {
-            _OverflowedAndRootItems = new ObservableCollection<VM>();
-            Comparers = inComparers;
+            this._OverflowedAndRootItems = new ObservableCollection<VM>();
         }
         #endregion constructors
 
@@ -101,23 +97,6 @@
                 }
             }
         }
-
-        /// <summary>
-        /// Gets the hierarichal comparer that can be used to determine
-        /// the relation of two items in the tree structure.
-        /// </summary>
-        public IEnumerable<ICompareHierarchy<T>> Comparers
-        {
-            get
-            {
-                return _comparers;
-            }
-
-            protected set
-            {
-                _comparers = value;
-            }
-        }
         #endregion properties
 
         #region methods
@@ -159,7 +138,7 @@
 
             await path.Last().EntryHelper.LoadAsync();
         }
-
+/***
         /// <summary>
         /// Method checks value1 and value2 with a set of comparers
         /// as stored in the <see cref="Comparers"/> property and
@@ -184,7 +163,7 @@
 
             return HierarchicalResult.Unrelated;
         }
-
+***/
         /// <summary>
         /// Update the root drop down list with the list of root items
         /// and overflowable (non-root) items.

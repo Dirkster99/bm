@@ -35,6 +35,8 @@ namespace BreadcrumbTestLib.ViewModels.Breadcrumbs
         private string _BreadcrumbSelectedPath;
 
         private IDirectoryBrowser _RootLocation = DirectoryInfoExLib.Factory.DesktopDirectory;
+        private ICompareHierarchy<IDirectoryBrowser> _Comparer = new IDirectoryHierarchyComparer();
+
         private Stack<BreadcrumbTreeItemViewModel> _CurrentPath;
         #endregion fields
 
@@ -246,24 +248,29 @@ namespace BreadcrumbTestLib.ViewModels.Breadcrumbs
         /// listing objects for <see cref="ICanNavigate"/> events.
         /// </summary>
         /// <param name="requestedLocation"></param>
-        /// <param name="direction"></param>
-        /// <returns></returns>
+        /// <param name="direction">Specifies whether the navigation direction
+        /// is not specified or up or down relative to the current path or
+        /// ihintLevel parameter</param>
+        /// <param name="ihintLevel">This parameter is relevant for Down direction only.
+        /// It specifies the level in the tree structure from which the next child
+        /// in the current path should be searched.</param>
+        /// <returns>Returns a result that informs whether the target was reached or not.</returns>
         public async Task<FinalBrowseResult<IDirectoryBrowser>> NavigateToAsync(
             BrowseRequest<IDirectoryBrowser> requestedLocation,
             string sourceHint,
-            HintDirection direction = HintDirection.Unrelated)
+            HintDirection direction = HintDirection.Unrelated,
+            int ihintLevel = -1)
         {
-            Console.WriteLine("Request '{0}' direction {1} source: {2} IsBrowsing {3}",
-                requestedLocation.NewLocation,
-                direction,
-                sourceHint, IsBrowsing);
+            Logger.InfoFormat("Request '{0}' direction {1} level {2} source: {3} IsBrowsing {4}",
+                requestedLocation.NewLocation, direction, ihintLevel, sourceHint, IsBrowsing);
 
             try
             {
                 IsBrowsing = true;
                 return await Task.Run(async () =>
                 {
-                    var result = await InternalNavigateToAsync(requestedLocation.NewLocation, direction);
+                    var result = await InternalNavigateToAsync(requestedLocation.NewLocation
+                                                             , direction, ihintLevel);
 
                     return FinalBrowseResult<IDirectoryBrowser>.FromRequest(requestedLocation,
                                                                             result);
@@ -294,8 +301,10 @@ namespace BreadcrumbTestLib.ViewModels.Breadcrumbs
         /// </summary>
         /// <param name="location"></param>
         /// <returns></returns>
-        private async Task<BrowseResult> InternalNavigateToAsync(IDirectoryBrowser location,
-                                                         HintDirection direction = HintDirection.Unrelated)
+        private async Task<BrowseResult> InternalNavigateToAsync(
+            IDirectoryBrowser location,
+            HintDirection direction = HintDirection.Unrelated,
+            int ihintLevel = -1)
         {
             Logger.InfoFormat("'{0}'", location.FullName);
 
@@ -306,9 +315,18 @@ namespace BreadcrumbTestLib.ViewModels.Breadcrumbs
                 if (root == null)
                     return BrowseResult.InComplete;
 
+                if (ihintLevel == -1)
+                {
+                    if (_CurrentPath == null)
+                        ihintLevel = 0;
+                    else
+                        ihintLevel = _CurrentPath.Count();
+                }
+
                 var rootSelector = BreadcrumbSubTree.Selection as ITreeRootSelector<BreadcrumbTreeItemViewModel, IDirectoryBrowser>;
                 var items = await BrowseItemsAsync(BreadcrumbSubTree, location,
-                                                   direction, _CurrentPath);
+                                                   direction, ihintLevel,
+                                                   _CurrentPath, _Comparer);
 
                 if (items.Count > 0)
                 {
@@ -320,7 +338,7 @@ namespace BreadcrumbTestLib.ViewModels.Breadcrumbs
 
                         var lastList = _CurrentPath.Reverse().ToArray();
                         var pathList = items.Reverse().ToArray();
-                        ICompareHierarchy<IDirectoryBrowser> Comparer = new ExHierarchyComparer();
+                        ICompareHierarchy<IDirectoryBrowser> Comparer = new IDirectoryHierarchyComparer();
 
                         for (int i = 0; i < lastList.Length; i++)
                         {
@@ -408,11 +426,12 @@ namespace BreadcrumbTestLib.ViewModels.Breadcrumbs
             BreadcrumbTreeItemViewModel root,
             IDirectoryBrowser destination,
             HintDirection direction,
-            Stack<BreadcrumbTreeItemViewModel> currentPath)
+            int ihintLevel,
+            Stack<BreadcrumbTreeItemViewModel> currentPath,
+            ICompareHierarchy<IDirectoryBrowser> Comparer)
         {
             Queue<Tuple<int, BreadcrumbTreeItemViewModel>> queue = new Queue<Tuple<int, BreadcrumbTreeItemViewModel>>();
             Stack<BreadcrumbTreeItemViewModel> path = new Stack<BreadcrumbTreeItemViewModel>();
-            ICompareHierarchy<IDirectoryBrowser> Comparer = new ExHierarchyComparer();
 
             var ret = root;
             int initLevel = 0;
@@ -432,6 +451,10 @@ namespace BreadcrumbTestLib.ViewModels.Breadcrumbs
                         if (cmpResult == HierarchicalResult.Current)
                             return path;
                     }
+
+                    // Found level down hint ??? Lets search from here
+                    if (direction == HintDirection.Down && initLevel == (ihintLevel+1))
+                        break;
                 }
 
                 // This should always result in finding the next Child item

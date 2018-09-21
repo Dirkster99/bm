@@ -1,4 +1,4 @@
-﻿namespace BreadcrumbTestLib.ViewModels.TreeSelectors
+﻿namespace BreadcrumbTestLib.ViewModels.Breadcrumbs.TreeSelectors
 {
     using System.Collections.Generic;
     using System.Threading.Tasks;

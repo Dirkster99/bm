@@ -1,19 +1,14 @@
 ﻿namespace BreadcrumbTestLib.ViewModels.Interfaces
 {
-    using BreadcrumbTestLib.Models;
-    using BreadcrumbTestLib.ViewModels.Breadcrumbs;
     using System;
     using System.Collections.Generic;
-    using System.Collections.ObjectModel;
-    using System.Threading;
-    using System.Threading.Tasks;
 
     /// <summary>
     /// Implemented in tree node view model, to provide selection support.
     /// </summary>
     /// <typeparam name="VM">Sub-node viewmodel type.</typeparam>
     /// <typeparam name="T">Type to identify a node, commonly string.</typeparam>
-    public interface ITreeRootSelector<VM, T> : ITreeSelector<VM, T>, ICompareHierarchy<T>
+    public interface ITreeRootSelector<VM, T> : ITreeSelector<VM, T> ////, ICompareHierarchy<T>
     {
         #region events
         /// <summary>
@@ -37,11 +32,6 @@
         /// Value of SelectedViewModel.
         /// </summary>
         T SelectedValue { get; set; }
-
-        /// <summary>
-        /// Indicate a list to compare Hierarchy of two value that identify a node.
-        /// </summary>
-        IEnumerable<ICompareHierarchy<T>> Comparers { get; }
 
         /// <summary>
         /// Used by Breadcrumb, items that are root items or ALL items in the selected path, 
