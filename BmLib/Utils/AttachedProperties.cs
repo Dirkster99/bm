@@ -1,4 +1,4 @@
-﻿namespace BmLib.Enums
+﻿namespace BmLib.Utils
 {
 	using System;
 	using System.Windows;

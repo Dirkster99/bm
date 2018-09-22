@@ -4,7 +4,6 @@
 	using System.ComponentModel;
 	using System.Windows;
 	using System.Windows.Media;
-	using BmLib.Enums;
     using System.Windows.Threading;
     using System.Text;
 

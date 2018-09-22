@@ -16,7 +16,9 @@
         <ResourceDictionary Source="/BmLib;component/Controls/DropDownList.xaml" />
         <ResourceDictionary Source="/BmLib;component/Controls/DropDown.xaml" />
 
-        <ResourceDictionary Source="/BmLib;component/controls/Breadcrumb.xaml" />
+        <ResourceDictionary Source="/BmLib;component/Controls/Breadcrumb.xaml" />
+
+        <ResourceDictionary Source="/BmLib;component/Controls/SuggestBox/SuggestBoxBase.xaml" />
     </ResourceDictionary.MergedDictionaries>
 
 </ResourceDictionary>

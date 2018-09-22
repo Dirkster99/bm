@@ -1,0 +1,57 @@
+﻿<UserControl x:Class="SuggestBoxTestLib.Views.DemoView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:SuggestBoxTestLib.Views"
+             xmlns:bc="clr-namespace:BmLib.Controls.SuggestBox;assembly=BmLib"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="800">
+    <Grid>
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto" MinWidth="200"/>
+            </Grid.ColumnDefinitions>
+
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+
+            <TextBlock Text="Test Input" FontWeight="Bold" />
+            <TextBlock Text="Test Result" FontWeight="Bold" Grid.Column="1"/>
+
+            <bc:SuggestBox x:Name="suggestBoxDummy" Grid.Column="0" Grid.Row="1"
+                        Hint="Custom implement (+xyz/abc)"
+                        SuggestSources="{Binding SuggestBoxDummy_SuggestSources}"
+                        MinHeight="21"
+                        MinWidth="100"
+                        />
+            <TextBlock Text="{Binding Text,ElementName=suggestBoxDummy}"
+                       Grid.Column="1" Grid.Row="1" Margin="3,0"/>
+
+            <bc:SuggestBox x:Name="suggestBoxAuto" Grid.Column="0" Grid.Row="2"
+                        DisplayMemberPath="Value"
+                        Hint="Uses ViewModel, try Sub1\Sub12"                                   
+                        Text="{Binding Text, ElementName=txtAuto, UpdateSourceTrigger=Explicit}"
+                        RootItem="{Binding SuggestBoxAuto_RootItems}"
+                        HierarchyHelper="{Binding SuggestBoxAuto_HierarchyHelper}"
+                        MinHeight="21"
+                        MinWidth="100"
+                        />
+            <TextBlock x:Name="txtAuto" Grid.Column="1" Grid.Row="2" Margin="3,0" />
+
+            <bc:SuggestBox x:Name="suggestBoxAuto2" Grid.Column="0" Grid.Row="3"
+                           DisplayMemberPath="Value"
+                           Hint="With delay 1 sec"                                   
+                           RootItem="{Binding SuggestBoxAuto2_RootItems}"
+                           HierarchyHelper="{Binding SuggestBoxAuto2_HierarchyHelper}"
+                           SuggestSources="{Binding SuggestBoxAuto2_SuggestSources}"
+                           Text="{Binding Text, ElementName=txtAuto2, UpdateSourceTrigger=Explicit}" />
+            <TextBlock x:Name="txtAuto2" Grid.Column="1" Grid.Row="3" Margin="3,0"  />
+        </Grid>            
+    </Grid>
+</UserControl>
