@@ -1,41 +1,39 @@
 ﻿namespace DirectoryInfoExLib.Interfaces
 {
     using System;
-    using DirectoryInfoExLib.IO.Header.ShellDll;
-    using DirectoryInfoExLib.IO.Header.KnownFolder;
     using System.Collections.Generic;
     using System.IO;
     using System.Threading;
     using System.Threading.Tasks;
 
-    /// <summary>
-    /// Implements a classification for folders.
-    /// </summary>
-    public enum DirectoryTypeEnum
-    {
-        /// <summary>
-        /// The folder is the users <see cref="Environment.SpecialFolder.DesktopDirectory"/>.
-        /// </summary>
-        dtDesktop,
-
-        /// <summary>
-        /// This folder is a known folder in Windows.
-        /// https://msdn.microsoft.com/en-us/library/bb776911
-        /// </summary>
-        dtSpecial,
-
-        /// <summary>
-        /// This folder is a drive.
-        /// </summary>
-        dtDrive,
-
-        /// <summary>
-        /// This folder is a normal (non-special or in Windows known) directory.
-        /// </summary>
-        dtFolder
-
-////        ,dtRoot
-    }
+////    /// <summary>
+////    /// Implements a classification for folders.
+////    /// </summary>
+////    public enum DirectoryTypeEnum
+////    {
+////        /// <summary>
+////        /// The folder is the users <see cref="Environment.SpecialFolder.DesktopDirectory"/>.
+////        /// </summary>
+////        dtDesktop,
+////
+////        /// <summary>
+////        /// This folder is a known folder in Windows.
+////        /// https://msdn.microsoft.com/en-us/library/bb776911
+////        /// </summary>
+////        dtSpecial,
+////
+////        /// <summary>
+////        /// This folder is a drive.
+////        /// </summary>
+////        dtDrive,
+////
+////        /// <summary>
+////        /// This folder is a normal (non-special or in Windows known) directory.
+////        /// </summary>
+////        dtFolder
+////
+////////        ,dtRoot
+////    }
 
     /// <summary>
     /// Defines a delegate that determines whether processing has been canceled or not.
@@ -50,11 +48,11 @@
     internal interface IDirectoryInfoEx : IDirectoryBrowser
     {
         #region properties
-        /// <summary>
-        /// Gets the root directory of a directory
-        /// which is either desktop or drive.
-        /// </summary>
-        IDirectoryInfoEx Root { get; }
+////        /// <summary>
+////        /// Gets the root directory of a directory
+////        /// which is either desktop or drive.
+////        /// </summary>
+////        IDirectoryInfoEx Root { get; }
         #endregion properties
 
         #region methods

@@ -33,10 +33,10 @@
         /// </summary>
         IDirectoryBrowser Parent { get; }
 
-        /// <summary>
-        /// Gets the folders type classification.
-        /// </summary>
-        DirectoryTypeEnum DirectoryType { get; }
+////        /// <summary>
+////        /// Gets the folders type classification.
+////        /// </summary>
+////        DirectoryTypeEnum DirectoryType { get; }
         #endregion properties
 
         #region methods

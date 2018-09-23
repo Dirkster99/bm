@@ -43,8 +43,9 @@ namespace DirectoryInfoExLib.IO
         #region Static fields
         /// <summary>
         /// Defines the (CLSID Guid) path of the Desktop shell item.
+        /// Id used previously was "::{00021400-0000-0000-C000-000000000046}"
         /// </summary>
-        internal const string IID_Desktop = "::{00021400-0000-0000-C000-000000000046}";
+        internal const string IID_Desktop = "::{B4BFCC3A-DB2C-424C-B029-7FE99A87C641}";
 
         /// <summary>
         /// Defines the (CLSID Guid) path of the User Files shell item.
@@ -284,15 +285,15 @@ namespace DirectoryInfoExLib.IO
         /// </summary>
         public bool Exists { get { return getExists(); } }
 
-        /// <summary>
-        /// Gets the root of this item.
-        /// </summary>
-        public IDirectoryInfoEx Root { get { return getDirectoryRoot(this) as IDirectoryInfoEx; } }
+////        /// <summary>
+////        /// Gets the root of this item.
+////        /// </summary>
+////        public IDirectoryInfoEx Root { get { return getDirectoryRoot(this) as IDirectoryInfoEx; } }
 
-        /// <summary>
-        /// Gets the folders type classification.
-        /// </summary>
-        public DirectoryTypeEnum DirectoryType { get; protected set; }
+////        /// <summary>
+////        /// Gets the folders type classification.
+////        /// </summary>
+////        public DirectoryTypeEnum DirectoryType { get; }
         #endregion
 
         #region Methods
@@ -762,24 +763,24 @@ namespace DirectoryInfoExLib.IO
                 throw new ArgumentException("Invalid knownFolder " + RetVal);
         }
 
-        /// <summary>
-        /// Takes a directoryInfoEx and return the first parent with directory type = desktop or drive.
-        /// </summary>
-        protected static IDirectoryBrowser getDirectoryRoot(IDirectoryInfoEx lookup)
-        {
-            IDirectoryBrowser dir = lookup.Parent;
-
-            while (dir.DirectoryType != DirectoryTypeEnum.dtDesktop &&
-                dir.DirectoryType != DirectoryTypeEnum.dtDrive &&
-                ////                dir.DirectoryType != DirectoryTypeEnum.dtRoot &&
-                dir != null)
-                dir = dir.Parent;
-
-            if (dir == null)
-                throw new IOException("Internal exception in GetDirectoryRoot.");
-
-            return dir;
-        }
+////        /// <summary>
+////        /// Takes a directoryInfoEx and return the first parent with directory type = desktop or drive.
+////        /// </summary>
+////        protected static IDirectoryBrowser getDirectoryRoot(IDirectoryInfoEx lookup)
+////        {
+////            IDirectoryBrowser dir = lookup.Parent;
+////
+////            while (dir.DirectoryType != DirectoryTypeEnum.dtDesktop &&
+////                dir.DirectoryType != DirectoryTypeEnum.dtDrive &&
+////                ////                dir.DirectoryType != DirectoryTypeEnum.dtRoot &&
+////                dir != null)
+////                dir = dir.Parent;
+////
+////            if (dir == null)
+////                throw new IOException("Internal exception in GetDirectoryRoot.");
+////
+////            return dir;
+////        }
 
         /// <summary>
         /// Gets an object that implements the IShellFolder2 interface of the Windows Desktop object.
