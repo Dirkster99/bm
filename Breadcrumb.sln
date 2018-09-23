@@ -30,7 +30,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SuggestBoxDemo", "Demos\Sug
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "SuggestBox", "SuggestBox", "{E5B93A3B-845A-447E-B730-E7074E8D2B7A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SuggestBoxTestLib", "SuggestBoxTestLib\SuggestBoxTestLib.csproj", "{F6A08289-52E8-45CD-928B-E71D7BCB6290}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SuggestBoxTestLib", "Demos\SuggestBox\SuggestBoxTestLib\SuggestBoxTestLib.csproj", "{F6A08289-52E8-45CD-928B-E71D7BCB6290}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

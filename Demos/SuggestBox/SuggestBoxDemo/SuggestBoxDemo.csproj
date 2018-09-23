@@ -100,7 +100,7 @@
       <Project>{0f864f5c-ce7a-438b-b943-620d3b13fa11}</Project>
       <Name>BmLib</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\..\SuggestBoxTestLib\SuggestBoxTestLib.csproj">
+    <ProjectReference Include="..\SuggestBoxTestLib\SuggestBoxTestLib.csproj">
       <Project>{f6a08289-52e8-45cd-928b-e71d7bcb6290}</Project>
       <Name>SuggestBoxTestLib</Name>
     </ProjectReference>
