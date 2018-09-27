@@ -338,11 +338,11 @@
         }
 
         /// <summary>
-        /// Gets a collection of viewmodel items that represent
-        /// the path towards the currently selected item in the the tree.
+        /// Goes through all Parent items of this item and gets a collection of viewmodel
+        /// items that represent the path towards this item in the the tree.
         /// </summary>
         /// <returns></returns>
-        public IList<BreadcrumbTreeItemViewModel> GetPathItems(bool bReverseItems = true)
+        internal IList<BreadcrumbTreeItemViewModel> GetPathItems(bool bReverseItems = true)
         {
             var parentNode = _parentNode;
             var list = new List<BreadcrumbTreeItemViewModel>();
