@@ -8,13 +8,33 @@
     using System.Threading.Tasks;
     using System.Windows;
     using System.Windows.Controls;
+    using System.Windows.Controls.Primitives;
 
     /// <summary>
     /// Uses ISuggestSource and HierarchyHelper to suggest automatically.
     /// </summary>
+    [TemplatePart(Name = PART_Popup, Type = typeof(Popup))]
+    [TemplatePart(Name = PART_ResizeGripThumb, Type = typeof(Thumb))]
+    [TemplatePart(Name = PART_ResizeableGrid, Type = typeof(Grid))]
     public class SuggestBox : SuggestBoxBase
     {
+        #region fields
+        public const string PART_Popup = "PART_Popup";
+        public const string PART_ResizeGripThumb = "PART_ResizeGripThumb";
+        public const string PART_ResizeableGrid = "PART_ResizeableGrid";
+
+        private Popup _PART_Popup;
+        private Thumb _PART_ResizeGripThumb;
+        private Grid _PART_ResizeableGrid;
+        #endregion fields
+
         #region Constructor
+        static SuggestBox()
+        {
+            DefaultStyleKeyProperty.OverrideMetadata(typeof(SuggestBox),
+                new FrameworkPropertyMetadata(typeof(SuggestBox)));
+        }
+
         /// <summary>
         /// Class constructor
         /// </summary>
@@ -60,6 +80,45 @@
         #endregion
 
         #region Methods
+        public override void OnApplyTemplate()
+        {
+            base.OnApplyTemplate();
+
+            // Find Popup
+            _PART_Popup = Template.FindName(PART_Popup, this) as Popup;
+
+            // Find Grid for resizing with Thumb
+            _PART_ResizeableGrid = Template.FindName(PART_ResizeableGrid, this) as Grid;
+
+            // Find Thumb in Popup
+            _PART_ResizeGripThumb = Template.FindName(PART_ResizeGripThumb, this) as Thumb;
+
+            // Set the handler
+            if (_PART_ResizeGripThumb != null && _PART_ResizeableGrid != null)
+                _PART_ResizeGripThumb.DragDelta += new DragDeltaEventHandler(MyThumb_DragDelta);
+        }
+
+        /// <summary>
+        /// https://stackoverflow.com/questions/1695101/why-are-actualwidth-and-actualheight-0-0-in-this-case
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void MyThumb_DragDelta(object sender, DragDeltaEventArgs e)
+        {
+            Thumb MyThumb = sender as Thumb;
+
+            // Set the new Width and Height fo Grid, Popup they will inherit
+            double yAdjust = _PART_ResizeableGrid.ActualHeight + e.VerticalChange;
+            double xAdjust = _PART_ResizeableGrid.ActualWidth + e.HorizontalChange;
+
+            // Set new Height and Width
+            if (xAdjust >= 0)
+                _PART_ResizeableGrid.Width = xAdjust;
+
+            if (yAdjust >= 0)
+                _PART_ResizeableGrid.Height = yAdjust;
+        }
+
         #region Utils - Update Bindings
         protected override void updateSource()
         {

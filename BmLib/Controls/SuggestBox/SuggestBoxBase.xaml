@@ -5,6 +5,27 @@
                     xmlns:conv="clr-namespace:BmLib.Converters"
                     >
 
+    <!-- ResizeGrip Style -->
+    <Style x:Key="ResizeGripStyle" TargetType="{x:Type Thumb}">
+        <Setter Property="SnapsToDevicePixels" Value="True" />
+        <Setter Property="Cursor" Value="SizeNWSE" />
+
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type Thumb}">
+                    <Grid Background="Transparent">
+                        <Path Width="{TemplateBinding Width}"
+                              Height="{TemplateBinding Height}"
+                              Stretch="Fill"
+                              SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"
+                              Fill="Gray"
+                              Data="M8,0L10,0 10,2 8,2z M4,4L6,4 6,6 4,6z M8,4L10,4 10,6 8,6z M0,8L2,8 2,10 0,10z M4,8L6,8 6,10 4,10z M8,8L10,8 10,10 8,10z "/>
+                    </Grid>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
     <ControlTemplate x:Key="suggestableTextBoxTemplate"
                      TargetType="{x:Type bc:SuggestBoxBase}">
         <ControlTemplate.Resources>
@@ -38,29 +59,49 @@
                             Converter={StaticResource btv}}"  Opacity="0.5"  />
                 <ScrollViewer Margin="0" x:Name="PART_ContentHost" />
                 <Popup x:Name="PART_Popup" AllowsTransparency="true"  
-                                   PlacementTarget="{Binding ElementName=PART_ContentHost}"                                   
-                                   Placement="Bottom"                                                        
-                                   IsOpen="{TemplateBinding IsPopupOpened}"                                     
-                                   PopupAnimation="Fade"   
-                                   >
+                       PlacementTarget="{Binding ElementName=PART_ContentHost}"                                   
+                       Placement="Bottom"                                                        
+                       IsOpen="{TemplateBinding IsPopupOpened}"                                     
+                       PopupAnimation="None"
+                       Focusable="False"
+                    >
+                    <Grid x:Name="PART_ResizeableGrid" Background="White">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="Auto"/>
+                        </Grid.RowDefinitions>
 
-                    <Border x:Name="DropDownBorder" Background="{DynamicResource {x:Static SystemColors.WindowBrushKey}}"  
-                                            Width="{Binding ActualWidth, ElementName=PART_ContentHost}"                                             
-                                            MaxHeight="100"
-                                            BorderBrush="{TemplateBinding BorderBrush}"
-                                            BorderThickness="1,0,1,1">
+                        <Border
+                            x:Name="DropDownBorder" Background="{DynamicResource {x:Static SystemColors.WindowBrushKey}}"  
+                            Width="{Binding ActualWidth, ElementName=PART_ContentHost}"                                             
+                            Height="{Binding ActualHeight, ElementName=PART_ContentHost}"                                             
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            BorderThickness="1"/>
 
-                        <ListBox x:Name="PART_ItemList"
-                                 SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"                                                             
-                                 VerticalContentAlignment="Stretch" HorizontalContentAlignment="Stretch"
-                                 DisplayMemberPath="{TemplateBinding DisplayMemberPath}"
-                                 SelectedValuePath="{TemplateBinding ValuePath}"
-                                 ItemTemplate="{TemplateBinding HeaderTemplate}"
-                                 ItemsSource="{Binding Suggestions, RelativeSource={RelativeSource TemplatedParent}}"
-                                 ScrollViewer.HorizontalScrollBarVisibility="Disabled" 
-                                 KeyboardNavigation.AcceptsReturn="True"
-                                 KeyboardNavigation.DirectionalNavigation="Cycle" />
-                    </Border>
+                        <ListBox
+                            x:Name="PART_ItemList" Grid.Row="0"
+                            SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"                                                             
+                            VerticalContentAlignment="Stretch" HorizontalContentAlignment="Stretch"
+                            DisplayMemberPath="{TemplateBinding DisplayMemberPath}"
+                            SelectedValuePath="{TemplateBinding ValuePath}"
+                            ItemTemplate="{TemplateBinding HeaderTemplate}"
+                            ItemsSource="{Binding Suggestions, RelativeSource={RelativeSource TemplatedParent}}"
+                            ScrollViewer.HorizontalScrollBarVisibility="Auto" 
+                            ScrollViewer.VerticalScrollBarVisibility="Auto" 
+                            ScrollViewer.CanContentScroll="True"
+                            KeyboardNavigation.AcceptsReturn="True"
+                            KeyboardNavigation.DirectionalNavigation="Cycle" />
+                        
+                        <!-- Our Thumb -->
+                        <Thumb x:Name="PART_ResizeGripThumb" Grid.Row="1"
+                               Style="{StaticResource ResizeGripStyle}"
+                               HorizontalAlignment="Right"
+                               Margin="3"
+                               Background="Transparent"
+                               VerticalAlignment="Bottom"
+                               Width="12" Height="12" />
+                    </Grid>
+
                 </Popup>
             </Grid>
         </Border>

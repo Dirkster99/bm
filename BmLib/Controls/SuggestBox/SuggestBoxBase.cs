@@ -24,7 +24,6 @@
         #endregion fields
 
         #region Constructor
-
         static SuggestBoxBase()
         {
             DefaultStyleKeyProperty.OverrideMetadata(typeof(SuggestBoxBase),
