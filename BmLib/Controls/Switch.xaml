@@ -53,9 +53,9 @@
                     <bc:HotTrack Grid.Column="0" 
                                  x:Name="PART_ToggleHotTrack"
                                  Width="{Binding ActualHeight, ElementName=PART_ToggleHotTrack}">
-                        <ContentControl ContentTemplate="{TemplateBinding HeaderTemplate}"    Content="{TemplateBinding Header}" Margin="2" />
+                        <ContentControl ContentTemplate="{TemplateBinding HeaderTemplate}"
+                                        Content="{TemplateBinding Header}" Margin="2" />
                     </bc:HotTrack>
-
 
                     <Grid Grid.Column="1" Margin="0">
                         <ContentPresenter 
