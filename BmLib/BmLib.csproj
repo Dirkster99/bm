@@ -83,6 +83,7 @@
     <Compile Include="Controls\Switch.xaml.cs">
       <DependentUpon>Switch.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Converters\AssociatedIconConverter.cs" />
     <Compile Include="Interfaces\SuggestBox\IHierarchyHelper.cs" />
     <Compile Include="Interfaces\SuggestBox\ISuggestSource.cs" />
     <Compile Include="Themes\ResourceKeys.cs" />
@@ -169,10 +170,6 @@
     <Compile Include="Utils\AttachedProperties.cs" />
     <Compile Include="Enums\HierarchicalResult.cs" />
     <Compile Include="Enums\UpdateMode.cs" />
-    <Compile Include="IconExtractors\Enums\IconSize.cs" />
-    <Compile Include="IconExtractors\Enums\ImageListDrawItemConstants.cs" />
-    <Compile Include="IconExtractors\Enums\ShellIconStateConstants.cs" />
-    <Compile Include="IconExtractors\SystemImageList.cs" />
     <Compile Include="Interfaces\IEntryViewModel.cs" />
     <Compile Include="Interfaces\IOverflown.cs" />
     <Compile Include="Interfaces\IEntryModel.cs" />

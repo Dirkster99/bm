@@ -2,9 +2,10 @@
 {
     using BreadcrumbTestLib.SystemIO;
     using BreadcrumbTestLib.ViewModels.Interfaces;
-    using DirectoryInfoExLib.Interfaces;
+    using ShellBrowserLib.Interfaces;
     using BmLib.Enums;
     using System;
+    using ShellBrowserLib;
 
     /// <summary>
     /// Implements a <see cref="IDirectoryBrowser"/> based <seealso ref="ICompareHierarchy"> object
@@ -63,15 +64,15 @@
 
             if (a.FullName == b.FullName)
                 return HierarchicalResult.Current;
-            else if (DirectoryInfoExLib.Factory.HasParent(b, a.FullName))
+            else if (ShellBrowser.HasParent(b, a.FullName))
                 return HierarchicalResult.Child;
-            else if (DirectoryInfoExLib.Factory.HasParent(a, b.FullName))
+            else if (ShellBrowser.HasParent(a, b.FullName))
                 return HierarchicalResult.Parent;
             else
             {
                 if (a.FullName.Contains("::") == false || b.FullName.Contains("::") == false)
                 {
-                    Console.WriteLine("Comparing to Unrelated: {0} - {1}", a, b);
+                    Console.WriteLine("Comparing to Unrelated: {0} - {1}", a.Name, b.Name);
                 }
 
                 return HierarchicalResult.Unrelated;

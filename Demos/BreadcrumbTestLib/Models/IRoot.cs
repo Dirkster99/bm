@@ -1,7 +1,7 @@
 ﻿namespace BreadcrumbTestLib.Models
 {
     using BreadcrumbTestLib.ViewModels.Breadcrumbs;
-    using DirectoryInfoExLib.Interfaces;
+    using ShellBrowserLib.Interfaces;
     using System.Threading.Tasks;
 
     /// <summary>

@@ -5,8 +5,8 @@
     using BreadcrumbTestLib.Tasks;
     using BreadcrumbTestLib.ViewModels.Breadcrumbs;
     using BreadcrumbTestLib.ViewModels.Interfaces;
-    using DirectoryInfoExLib;
-    using DirectoryInfoExLib.Interfaces;
+    using ShellBrowserLib;
+    using ShellBrowserLib.Interfaces;
     using System;
     using System.Diagnostics;
     using System.IO;
@@ -176,8 +176,8 @@
                 initialPath = new DirectoryInfo(Environment.SystemDirectory).Root.Name;
 
             Logger.InfoFormat("'{0}'", initialPath);
-            var location = Factory.CreateDirectoryInfoEx(initialPath);
-            string[] pathSegments = Factory.GetFolderSegments(initialPath);
+            var location = ShellBrowser.Create(initialPath);
+////            string[] pathSegments = ShellBrowser.GetFolderSegments(initialPath);
 
 ////            var selection = DiskTest.Selection as ITreeRootSelector<DiskTreeNodeViewModel, string>;
 ////            selection.SelectAsync(initialPath, new BrowseRequest<string>(initialPath, pathSegments));

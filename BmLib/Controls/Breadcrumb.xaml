@@ -5,6 +5,7 @@
     xmlns:uc="clr-namespace:BmLib.Controls.Breadcrumbs"
                     
     xmlns:bc="clr-namespace:BmLib.Controls"
+    xmlns:imgSize="clr-namespace:BmLib.Converters"
     xmlns:conv="clr-namespace:BmLib.Converters"
     xmlns:reskeys="clr-namespace:BmLib.Themes"
     xmlns:behav="clr-namespace:BmLib.Behaviors"
@@ -81,7 +82,18 @@
                                        Margin="0"
                                      >
                                 <bc:Switch.Header>
-                                    <Image Source="{Binding BreadcrumbSubTree.Selection.SelectedViewModel.Icon}" />
+                                    <Image DataContext="{Binding BreadcrumbSubTree.Selection.SelectedViewModel}">
+                                        <Image.Source>
+                                            <MultiBinding Converter="{x:Static conv:AssociatedIconConverter.Default}">
+                                                <MultiBinding.ConverterParameter>
+                                                    <imgSize:IconSize >Small</imgSize:IconSize>
+                                                </MultiBinding.ConverterParameter>
+                                                <Binding Path="ItemPath" />
+                                                <Binding Path="ItemName" />
+                                                <Binding Path="IconResourceId" />
+                                            </MultiBinding>
+                                        </Image.Source>
+                                    </Image>
                                 </bc:Switch.Header>
                                 <bc:Switch.ContentOn>
                                     <Grid>

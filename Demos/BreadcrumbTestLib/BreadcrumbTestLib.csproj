@@ -37,7 +37,6 @@
     <Reference Include="PresentationFramework" />
     <Reference Include="System" />
     <Reference Include="System.Core" />
-    <Reference Include="System.Drawing" />
     <Reference Include="System.Xaml" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="Microsoft.CSharp" />
@@ -60,7 +59,6 @@
     <Compile Include="Tasks\OneTaskLimitedScheduler.cs" />
     <Compile Include="Utils\AsyncLock.cs" />
     <Compile Include="Utils\AsyncSemaphore.cs" />
-    <Compile Include="Utils\BitmapSourceUtils.cs" />
     <Compile Include="Utils\FastObservableCollection.cs" />
     <Compile Include="Utils\RelayCommand.cs" />
     <Compile Include="ViewModels\AppViewModel.cs" />
@@ -98,9 +96,9 @@
       <Project>{0f864f5c-ce7a-438b-b943-620d3b13fa11}</Project>
       <Name>BmLib</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\Components\DirectoryInfoExLib\DirectoryInfoExLib.csproj">
-      <Project>{09df5a9a-989e-410c-ba72-5a94cf481e57}</Project>
-      <Name>DirectoryInfoExLib</Name>
+    <ProjectReference Include="..\..\ShellBrowser\ShellBrowserLib\ShellBrowserLib.csproj">
+      <Project>{2fb5c730-5836-4ed7-abca-2b9669e8c0a6}</Project>
+      <Name>ShellBrowserLib</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

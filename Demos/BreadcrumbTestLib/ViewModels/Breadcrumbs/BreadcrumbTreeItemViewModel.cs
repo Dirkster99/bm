@@ -1,22 +1,18 @@
 ﻿namespace BreadcrumbTestLib.ViewModels.Breadcrumbs
 {
     using System.Collections.Generic;
-    using System.Drawing;
     using System.Linq;
     using System.Threading.Tasks;
-    using System.Windows.Media;
     using BreadcrumbTestLib.ViewModels.Interfaces;
     using BreadcrumbTestLib.ViewModels.Breadcrumbs.TreeSelectors;
     using BreadcrumbTestLib.ViewModels.Base;
-    using DirectoryInfoExLib.Interfaces;
+    using ShellBrowserLib.Interfaces;
     using System;
-    using BmLib.IconExtractors.Enums;
-    using BmLib.IconExtractors.IconExtracts;
     using BmLib.Interfaces;
     using BmLib.Enums;
-    using System.Runtime.InteropServices;
     using BreadcrumbTestLib.Models;
     using System.Windows.Input;
+    using ShellBrowserLib;
 
     /// <summary>
     /// Class implements a ViewModel to manage a sub-tree of a Breadcrumb control.
@@ -39,9 +35,6 @@
         private IDirectoryBrowser _dir;
         private string _header;
         private BreadcrumbTreeItemViewModel _rootNode, _parentNode;
-
-        private bool _isIconLoaded = false;
-        private ImageSource _icon = null;
         private bool _disposed = false;
 
         // Instance of the root viewmodel - reference is used to invoke central tree related (navigational) methods
@@ -91,7 +84,7 @@
             {
                 try
                 {
-                    return _dir.GetDirectories().Select(d => new BreadcrumbTreeItemViewModel(d, this, _Root));
+                    return ShellBrowser.GetChildItems(_dir.PathShell).Select(d => new BreadcrumbTreeItemViewModel(d, this, _Root));
                 }
                 catch (Exception exp)
                 {
@@ -145,33 +138,6 @@
                 {
                     _header = value;
                     NotifyPropertyChanged(() => Header);
-                }
-            }
-        }
-
-        /// <summary>
-        /// Gets a lazy loaded image source for an icon that
-        /// can be used to reresent this item in the bound view.
-        /// </summary>
-        public ImageSource Icon
-        {
-            get
-            {
-                if (_isIconLoaded == false)
-                {
-                    _isIconLoaded = true;
-                    loadIcon();
-                }
-
-                return _icon;
-            }
-
-            protected set
-            {
-                if (_icon != value)
-                {
-                    _icon = value;
-                    NotifyPropertyChanged(() => Icon);
                 }
             }
         }
@@ -269,6 +235,62 @@
                 return _BreadcrumbTreeTreeItemClickCommand;
             }
         }
+
+        /// <summary>
+        /// Get Known FolderId or file system Path for this folder.
+        /// 
+        /// That is:
+        /// 1) A knownfolder GUID (if it exists) is shown
+        ///    here as default preference over
+        ///    
+        /// 2) A storage location (if it exists) in the filesystem
+        /// </summary>
+        public string ItemPath
+        {
+            get
+            {
+                if (_dir == null)
+                    return string.Empty;
+
+                if (string.IsNullOrEmpty(_dir.SpecialPathId) == false)
+                    return _dir.SpecialPathId;
+
+
+                return _dir.PathFileSystem;
+            }
+        }
+
+        /// <summary>
+        /// Gets the name of this folder (without its root path component).
+        /// </summary>
+        public string ItemName
+        {
+            get
+            {
+                if (_dir != null)
+                    return _dir.Name;
+
+                return string.Empty;
+            }
+        }
+
+        /// <summary>
+        /// Gets an optional pointer to the default icon resource used when the folder is created.
+        /// This is a null-terminated Unicode string in this form:
+        ///
+        /// Module name, Resource ID
+        /// or null is this information is not available.
+        /// </summary>
+        public string IconResourceId
+        {
+            get
+            {
+                if (_dir != null)
+                    return _dir.IconResourceId;
+
+                return null;
+            }
+        }
         #endregion properties
 
         #region methods
@@ -300,9 +322,9 @@
 
                 // and insert desktop sub-entries into Entries property
                 Entries.SetEntries(UpdateMode.Update,
-                                   _dir.GetDirectories().Select(d => new BreadcrumbTreeItemViewModel(d, this, _Root)).ToArray());
-                                     //(filter out recycle bin entry if its not that useful...)
-                                     //.Where(d => !d.Equals(DirectoryInfoExLib.Factory.RecycleBinDirectory))
+                    ShellBrowser.GetChildItems(_dir.PathShell).Select(d => new BreadcrumbTreeItemViewModel(d, this, _Root)).ToArray());
+                    //(filter out recycle bin entry if its not that useful...)
+                    //.Where(d => !d.Equals(DirectoryInfoExLib.Factory.RecycleBinDirectory))
 
                 var selector = this.Selection as ITreeRootSelector<BreadcrumbTreeItemViewModel, IDirectoryBrowser>;
 
@@ -382,8 +404,8 @@
                 if (disposing == true)
                 {
                     // Dispose of the model that defines this viemodel
-                    if (_dir != null)
-                        _dir.Dispose();
+////                    if (_dir != null)
+////                        _dir.Dispose();
 
                     _dir = null;
                 }
@@ -399,39 +421,6 @@
             ////base.Dispose(disposing);
         }
         #endregion Disposable Interfaces
-
-        /// <summary>
-        /// Gets icon for this item when requested ...
-        /// </summary>
-        private void loadIcon()
-        {
-            IntPtr pidl = _dir.GetPIDLIntPtr();
-            Bitmap bitmap = null;
-
-            try
-            {
-                bitmap = GetBitmap(IconSize.large, pidl, false);
-            }
-            finally
-            {
-                Marshal.FreeCoTaskMem(pidl);
-            }
-
-            if (bitmap != null)
-                this.Icon = BreadcrumbTestLib.Utils.BitmapSourceUtils.CreateBitmapSourceFromBitmap(bitmap);
-        }
-
-        private Bitmap GetBitmap(IconSize size,
-                                 IntPtr ptr,
-                                 bool forceLoad)
-        {
-            Bitmap retVal = null;
-
-            using (var imgList = new SystemImageList(size))
-                retVal = imgList[ptr, true, forceLoad];
-
-            return retVal;
-        }
 
         private int GetItemLevel()
         {
