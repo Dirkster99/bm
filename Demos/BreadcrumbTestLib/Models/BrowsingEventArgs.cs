@@ -1,6 +1,6 @@
 ﻿namespace BreadcrumbTestLib.Models
 {
-    using DirectoryInfoExLib.Interfaces;
+    using ShellBrowserLib.Interfaces;
     using System;
 
     /// <summary>

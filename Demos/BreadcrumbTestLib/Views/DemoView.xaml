@@ -3,10 +3,11 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-       xmlns:themes="clr-namespace:BmLib.Themes;assembly=BmLib"
+        xmlns:themes="clr-namespace:BmLib.Themes;assembly=BmLib"
 
         xmlns:ctrls="clr-namespace:BmLib.Controls;assembly=BmLib"
 
+        xmlns:imgSize="clr-namespace:BmLib.Converters;assembly=BmLib"
         xmlns:convLib="clr-namespace:BmLib.Converters;assembly=BmLib"
         xmlns:bc="clr-namespace:BmLib.Controls;assembly=BmLib"
         xmlns:local="clr-namespace:BreadcrumbTestLib.Views"
@@ -115,10 +116,21 @@
                                         <ColumnDefinition Width="Auto" />
                                         <ColumnDefinition Width="*" />
                                     </Grid.ColumnDefinitions>
-                                    <Image Source="{Binding Icon}" Margin="3,0" DockPanel.Dock="Left"
+
+                                    <Image Margin="3,0"
                                            SnapsToDevicePixels="true"
-                                           RenderOptions.BitmapScalingMode="NearestNeighbor"
-                                       />
+                                           RenderOptions.BitmapScalingMode="NearestNeighbor">
+                                        <Image.Source>
+                                            <MultiBinding Converter="{x:Static convLib:AssociatedIconConverter.Default}">
+                                                <MultiBinding.ConverterParameter>
+                                                    <imgSize:IconSize >Small</imgSize:IconSize>
+                                                </MultiBinding.ConverterParameter>
+                                                <Binding Path="ItemPath" />
+                                                <Binding Path="ItemName" />
+                                                <Binding Path="IconResourceId" />
+                                            </MultiBinding>
+                                        </Image.Source>
+                                    </Image>
                                     <TextBlock Text="{Binding Header}"
                                                Foreground="{DynamicResource {x:Static themes:ResourceKeys.ControlTextBrushKey}}"
                                                VerticalAlignment="Center"
@@ -171,10 +183,22 @@
                                         <ColumnDefinition Width="Auto" />
                                         <ColumnDefinition Width="*" />
                                     </Grid.ColumnDefinitions>
-                                    <Image Source="{Binding Icon}" Margin="3,0" DockPanel.Dock="Left"
-                                       SnapsToDevicePixels="true"
-                                       RenderOptions.BitmapScalingMode="NearestNeighbor"
-                                       />
+
+                                    <Image Margin="3,0"
+                                           SnapsToDevicePixels="true"
+                                           RenderOptions.BitmapScalingMode="NearestNeighbor">
+                                        <Image.Source>
+                                            <MultiBinding Converter="{x:Static convLib:AssociatedIconConverter.Default}">
+                                                <MultiBinding.ConverterParameter>
+                                                    <imgSize:IconSize >Small</imgSize:IconSize>
+                                                </MultiBinding.ConverterParameter>
+                                                <Binding Path="ItemPath" />
+                                                <Binding Path="ItemName" />
+                                                <Binding Path="IconResourceId" />
+                                            </MultiBinding>
+                                        </Image.Source>
+                                    </Image>
+
                                     <TextBlock Text="{Binding Header}"
                                            Foreground="{DynamicResource {x:Static themes:ResourceKeys.ControlTextBrushKey}}"
                                            VerticalAlignment="Center"
@@ -257,11 +281,22 @@
                     <StackPanel Grid.Column="1"
                                 HorizontalAlignment="Stretch" VerticalAlignment="Top"
                                 Orientation="Vertical">
-                        <Image Source="{Binding Path=BreadcrumbBrowser.BreadcrumbSubTree.Selection.SelectedViewModel.Icon}"
+                        <Image DataContext="{Binding Path=BreadcrumbBrowser.BreadcrumbSubTree.Selection.SelectedViewModel}"
                                VerticalAlignment="Center" HorizontalAlignment="Center" Width="64"
                                SnapsToDevicePixels="True"
-                               RenderOptions.BitmapScalingMode="NearestNeighbor"
-                               />
+                               RenderOptions.BitmapScalingMode="NearestNeighbor">
+                            <Image.Source>
+                                <MultiBinding Converter="{x:Static convLib:AssociatedIconConverter.Default}">
+                                    <MultiBinding.ConverterParameter>
+                                        <imgSize:IconSize >Large</imgSize:IconSize>
+                                    </MultiBinding.ConverterParameter>
+                                    <Binding Path="ItemPath" />
+                                    <Binding Path="ItemName" />
+                                    <Binding Path="IconResourceId" />
+                                </MultiBinding>
+                            </Image.Source>
+                        </Image>
+
                         <Label Content="{Binding Path=BreadcrumbBrowser.BreadcrumbSubTree.Selection.SelectedViewModel.Header}" />
                     </StackPanel>
                 </Grid>

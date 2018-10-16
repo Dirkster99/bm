@@ -5,10 +5,10 @@
     xmlns:ctrls="clr-namespace:BmLib.Controls"
     xmlns:bc="clr-namespace:BmLib.BaseControls"
     xmlns:uc="clr-namespace:BmLib.Controls.Breadcrumbs"
+    xmlns:imgSize="clr-namespace:BmLib.Converters"
     xmlns:conv="clr-namespace:BmLib.Converters"
     xmlns:reskeys="clr-namespace:BmLib.Themes"
     xmlns:behav="clr-namespace:BmLib.Behaviors"
-    xmlns:local="clr-namespace:BmLib.Controls.Breadcrumbs"
  >
     <DataTemplate x:Key="DropDownListItemDataTemplate">
         <Grid>
@@ -17,7 +17,19 @@
                 <ColumnDefinition Width="*" />
             </Grid.ColumnDefinitions>
 
-            <Image Source="{Binding Icon}" Margin="3,0" HorizontalAlignment="Left" VerticalAlignment="Center"/>
+            <Image Margin="3,0" HorizontalAlignment="Left" VerticalAlignment="Center">
+                <Image.Source>
+                    <MultiBinding Converter="{x:Static conv:AssociatedIconConverter.Default}">
+                        <MultiBinding.ConverterParameter>
+                            <imgSize:IconSize >Small</imgSize:IconSize>
+                        </MultiBinding.ConverterParameter>
+                        <Binding Path="ItemPath" />
+                        <Binding Path="ItemName" />
+                        <Binding Path="IconResourceId" />
+                    </MultiBinding>
+                </Image.Source>
+            </Image>
+
             <TextBlock Text="{Binding Header}"
                         Foreground="{DynamicResource {x:Static reskeys:ResourceKeys.ControlTextBrushKey}}"
                         VerticalAlignment="Center"

@@ -8,12 +8,17 @@ ECHO corresponding BIN and OBJ Folder contained in the following projects
 ECHO.
 ECHO BmLib
 ECHO.
-ECHO DirectoryInfoExLib
+ECHO ShellBrowser\Client
+ECHO ShellBrowser\ShellBrowserLib
+ECHO ShellBrowser\TestShellBrowserLib
 ECHO Icons
 ECHO.
 ECHO Components\ServiceLocator
 ECHO Components\Settings\Settings
 ECHO Components\Settings\SettingsModel
+ECHO.
+ECHO Demos\SuggestBox\SuggestBoxDemo
+ECHO Demos\SuggestBox\SuggestBoxTestLib
 ECHO.
 ECHO Demos\GenericDemo
 ECHO Demos\BreadcrumbTestLib
@@ -37,10 +42,22 @@ RMDIR /S /Q BmLib\bin
 RMDIR /S /Q BmLib\obj
 
 ECHO.
-ECHO Deleting BIN and OBJ Folders in DirectoryInfoExLib folder
+ECHO Deleting BIN and OBJ Folders in ShellBrowserLib folder
 ECHO.
-RMDIR /S /Q Components\DirectoryInfoExLib\bin
-RMDIR /S /Q Components\DirectoryInfoExLib\obj
+RMDIR /S /Q ShellBrowser\ShellBrowserLib\bin
+RMDIR /S /Q ShellBrowser\ShellBrowserLib\obj
+
+ECHO.
+ECHO Deleting BIN and OBJ Folders in Client folder
+ECHO.
+RMDIR /S /Q ShellBrowser\Client\bin
+RMDIR /S /Q ShellBrowser\Client\obj
+
+ECHO.
+ECHO Deleting BIN and OBJ Folders in UnitTests folder
+ECHO.
+RMDIR /S /Q ShellBrowser\TestShellBrowserLib\bin
+RMDIR /S /Q ShellBrowser\TestShellBrowserLib\obj
 
 ECHO Deleting BIN and OBJ Folders in Icons folder
 ECHO.
@@ -65,7 +82,18 @@ RMDIR /S /Q Components\Settings\SettingsModel\bin
 RMDIR /S /Q Components\Settings\SettingsModel\obj
 
 ECHO.
+ECHO Deleting BIN and OBJ Folders in Demos\SuggestBox\SuggestBoxDemo folder
+ECHO.
+RMDIR /S /Q Demos\SuggestBox\SuggestBoxDemo\bin
+RMDIR /S /Q Demos\SuggestBox\SuggestBoxDemo\obj
+ECHO.
 
+ECHO.
+ECHO Deleting BIN and OBJ Folders in Demos\SuggestBox\SuggestBoxTestLib folder
+ECHO.
+RMDIR /S /Q Demos\SuggestBox\SuggestBoxTestLib\bin
+RMDIR /S /Q Demos\SuggestBox\SuggestBoxTestLib\obj
+ECHO.
 
 ECHO Deleting BIN and OBJ Folders in GenericDemo folder
 ECHO.

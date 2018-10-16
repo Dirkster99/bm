@@ -2,7 +2,7 @@
 {
     using BreadcrumbTestLib.Models;
     using BreadcrumbTestLib.ViewModels.Breadcrumbs;
-    using DirectoryInfoExLib.Interfaces;
+    using ShellBrowserLib.Interfaces;
     using System.ComponentModel;
     using System.Threading.Tasks;
 

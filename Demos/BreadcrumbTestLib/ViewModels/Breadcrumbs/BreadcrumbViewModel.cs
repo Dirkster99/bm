@@ -5,8 +5,8 @@ namespace BreadcrumbTestLib.ViewModels.Breadcrumbs
     using BreadcrumbTestLib.Tasks;
     using BreadcrumbTestLib.ViewModels.Base;
     using BreadcrumbTestLib.ViewModels.Interfaces;
-    using DirectoryInfoExLib;
-    using DirectoryInfoExLib.Interfaces;
+    using ShellBrowserLib;
+    using ShellBrowserLib.Interfaces;
     using System;
     using System.Collections.Generic;
     using System.Linq;
@@ -34,7 +34,7 @@ namespace BreadcrumbTestLib.ViewModels.Breadcrumbs
         private bool _IsBrowsing;
         private string _BreadcrumbSelectedPath;
 
-        private IDirectoryBrowser _RootLocation = DirectoryInfoExLib.Factory.DesktopDirectory;
+        private IDirectoryBrowser _RootLocation = ShellBrowser.DesktopDirectory;
         private ICompareHierarchy<IDirectoryBrowser> _Comparer = new IDirectoryHierarchyComparer();
 
         private Stack<BreadcrumbTreeItemViewModel> _CurrentPath;
@@ -480,7 +480,7 @@ namespace BreadcrumbTestLib.ViewModels.Breadcrumbs
                 path.Push(root);
 
                 // Check if destination is root because this means we are done here
-                if (Factory.DesktopDirectory.Equals(destination) == true)
+                if (ShellBrowser.DesktopDirectory.Equals(destination) == true)
                     return path;
 
                 matchedItem = GetBestMatch(destination, Comparer, root);
@@ -490,7 +490,8 @@ namespace BreadcrumbTestLib.ViewModels.Breadcrumbs
                 queue.Enqueue(new Tuple<int, BreadcrumbTreeItemViewModel>(initLevel, matchedItem));
             else
             {
-                throw new NotImplementedException("Attempt Refresh - Reload before giving up here...");
+//// TODO XXX
+////                throw new NotImplementedException("Attempt Refresh - Reload before giving up here...");
             }
 
             while (queue.Count() > 0)
