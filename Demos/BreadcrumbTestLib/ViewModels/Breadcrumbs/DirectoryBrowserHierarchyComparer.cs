@@ -61,27 +61,28 @@
             if (a.Equals(b))
                 return HierarchicalResult.Current;  // a and b refer to the same location
 
-//            string key = string.Format("{0}-compare-{1}", a.FullName, b.FullName);
+            //            string key = string.Format("{0}-compare-{1}", a.FullName, b.FullName);
+
+////            if (ShellBrowser.HasParent(b, a.FullName) != ShellBrowser.HasParent(b, a))
+////            {
+////                var test = ShellBrowser.HasParent(b, a.FullName);
+////                ShellBrowser.HasParent(b, a);
+////            }
 
             if (ShellBrowser.HasParent(b, a.FullName) == true)
             {
-////                if (ShellBrowser.HasParent(b, a) == false)
-////                {
-////                    ShellBrowser.HasParent(b, a);
-////                }
-
                 return HierarchicalResult.Child;
-
             }
             else
             {
+////                if (ShellBrowser.HasParent(a, b.FullName) != ShellBrowser.HasParent(a, b))
+////                {
+////                    var test = ShellBrowser.HasParent(a, b.FullName);
+////                    ShellBrowser.HasParent(a, b);
+////                }
+
                 if (ShellBrowser.HasParent(a, b.FullName) == true)
                 {
-////                    if (ShellBrowser.HasParent(a, b) == false)
-////                    {
-////                        ShellBrowser.HasParent(a, b);
-////                    }
-
                     return HierarchicalResult.Parent;
                 }
                 else

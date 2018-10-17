@@ -200,6 +200,30 @@
             }
         }
 
+        /// <summary>Creates a new object that implements the
+        /// <see cref="IDirectoryBrowser"/> interface from a
+        /// <paramref name="fullPidl"/> that represents an item in the browsing structure.
+        /// 
+        /// Returns null if a parseName could not be determined.
+        /// </summary>
+        /// <param name="fullPidl"></param>
+        /// <returns></returns>
+        public static IDirectoryBrowser Create(IdList fullPidl)
+        {
+            if (fullPidl == null)
+                return Create(KF_IID.ID_FOLDERID_Desktop);
+
+            if (fullPidl.Size == 0)
+                return Create(KF_IID.ID_FOLDERID_Desktop);
+
+            string parseName = PidlManager.GetPathFromPIDL(fullPidl);
+
+            if (string.IsNullOrEmpty(parseName) == true)
+                return null;
+
+            return Create(parseName);
+        }
+
         /// <summary>
         /// Gets an enumeration of all childitems below the
         /// <paramref name="folderParseName"/> item.
@@ -780,6 +804,43 @@
             while (current != null && parentFullName != current.FullName);
 
             return (current != null);
+        }
+
+        /// <summary>
+        /// Gets a list of fullids that represent a path to the given <paramref name="item"/>.
+        /// </summary>
+        /// <param name="item"></param>
+        /// <returns></returns>
+        public static List<IdList> GetPathItems(IDirectoryBrowser item)
+        {
+            List<IdList> pathItems = new List<IdList>();
+
+            // Desktop has no parents and no child to point at
+            if (item.ParentIdList == null && item.ChildIdList == null)
+                return pathItems;
+
+            var fullIdList = PidlManager.CombineParentChild(item.ParentIdList,
+                                                            item.ChildIdList);
+
+            if (fullIdList.Size <= 1)
+            {
+                pathItems.Add(fullIdList); // Reference to 'This PC'(?) directly under desktop
+                return pathItems;
+            }
+
+            IdList parentItem, childItem;
+            while (PidlManager.GetParentChildIdList(fullIdList,
+                                                    out parentItem, out childItem) == true)
+            {
+                pathItems.Add(fullIdList);
+
+                if (fullIdList.Size <= 1)
+                    break;
+
+                fullIdList = parentItem;
+            }
+
+            return pathItems;
         }
 
         /// <summary>

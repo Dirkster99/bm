@@ -103,7 +103,7 @@
       <Compartment Name="Fields" Collapsed="true" />
     </Compartments>
     <TypeIdentifier>
-      <HashCode>CEAIAAABAABACAAIAAAAFAEAUQAAAIAAgADABESAAAA=</HashCode>
+      <HashCode>CEAIAAABAABACAAIAAAAFAECUQAAAIAAgADABESBAAA=</HashCode>
       <FileName>Controls\Breadcrumbs\BreadcrumbTreeItem.xaml.cs</FileName>
     </TypeIdentifier>
   </Class>
@@ -180,155 +180,79 @@
     </TypeIdentifier>
     <Lollipop Position="0.2" Collapsed="true" />
   </Class>
-  <Class Name="BmLib.Enums.AttachedProperties" Collapsed="true">
-    <Position X="18.5" Y="12.5" Width="1.5" />
-    <TypeIdentifier>
-      <HashCode>AAAIAAIAAABAAAEEAAAAAAAAAAAAgGAABgABAAAAIAA=</HashCode>
-      <FileName>Enums\AttachedProperties.cs</FileName>
-    </TypeIdentifier>
-  </Class>
-  <Class Name="BmLib.IconExtractors.IconExtracts.SystemImageList" BaseTypeListCollapsed="true">
-    <Position X="21.5" Y="10.75" Width="1.75" />
-    <Compartments>
-      <Compartment Name="Fields" Collapsed="true" />
-    </Compartments>
-    <NestedTypes>
-      <Enum Name="BmLib.IconExtractors.IconExtracts.SystemImageList.SHGetFileInfoConstants" Collapsed="true">
-        <TypeIdentifier>
-          <NewMemberFileName>IconExtractors\SystemImageList.cs</NewMemberFileName>
-        </TypeIdentifier>
-      </Enum>
-      <Interface Name="BmLib.IconExtractors.IconExtracts.SystemImageList.IImageList" Collapsed="true">
-        <TypeIdentifier>
-          <NewMemberFileName>IconExtractors\SystemImageList.cs</NewMemberFileName>
-        </TypeIdentifier>
-      </Interface>
-      <Struct Name="BmLib.IconExtractors.IconExtracts.SystemImageList.RECT" Collapsed="true">
-        <TypeIdentifier>
-          <NewMemberFileName>IconExtractors\SystemImageList.cs</NewMemberFileName>
-        </TypeIdentifier>
-      </Struct>
-      <Struct Name="BmLib.IconExtractors.IconExtracts.SystemImageList.POINT" Collapsed="true">
-        <TypeIdentifier>
-          <NewMemberFileName>IconExtractors\SystemImageList.cs</NewMemberFileName>
-        </TypeIdentifier>
-      </Struct>
-      <Struct Name="BmLib.IconExtractors.IconExtracts.SystemImageList.IMAGELISTDRAWPARAMS" Collapsed="true">
-        <TypeIdentifier>
-          <NewMemberFileName>IconExtractors\SystemImageList.cs</NewMemberFileName>
-        </TypeIdentifier>
-      </Struct>
-      <Struct Name="BmLib.IconExtractors.IconExtracts.SystemImageList.IMAGEINFO" Collapsed="true">
-        <TypeIdentifier>
-          <NewMemberFileName>IconExtractors\SystemImageList.cs</NewMemberFileName>
-        </TypeIdentifier>
-      </Struct>
-      <Struct Name="BmLib.IconExtractors.IconExtracts.SystemImageList.SHFILEINFO" Collapsed="true">
-        <TypeIdentifier>
-          <NewMemberFileName>IconExtractors\SystemImageList.cs</NewMemberFileName>
-        </TypeIdentifier>
-      </Struct>
-    </NestedTypes>
-    <TypeIdentifier>
-      <HashCode>AQAQoACAACCWMBAACAAAMAgIACEKABAAAAAnGAIUAFA=</HashCode>
-      <FileName>IconExtractors\SystemImageList.cs</FileName>
-    </TypeIdentifier>
-    <Lollipop Position="0.2" Collapsed="true" />
-  </Class>
   <Class Name="BmLib.Properties.Resources" Collapsed="true">
-    <Position X="16.75" Y="16.5" Width="1.5" />
+    <Position X="16.75" Y="13.5" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAAAAAAAAABEAAAAQAAAAAAAAAAAAAAAIA=</HashCode>
     </TypeIdentifier>
   </Class>
   <Class Name="BmLib.Properties.Settings" Collapsed="true">
-    <Position X="18.5" Y="16.5" Width="1.5" />
+    <Position X="18.5" Y="13.5" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAAAAAAAAAAIAAAAAABAAAAAAAAAAAAAAA=</HashCode>
     </TypeIdentifier>
   </Class>
   <Class Name="BmLib.Themes.ResourceKeys" Collapsed="true">
-    <Position X="25.5" Y="15.5" Width="1.5" />
+    <Position X="23.5" Y="9.75" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AoAABIEAoKhFQAQAAggEAQEIAAQEAQAAAgAAAAAAAAQ=</HashCode>
       <FileName>Themes\ResourceKeys.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="BmLib.Utils.AsyncUtils" Collapsed="true">
-    <Position X="16.75" Y="12.5" Width="1.5" />
+    <Position X="16.75" Y="9.5" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQAAA=</HashCode>
       <FileName>Utils\AsyncUtils.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="BmLib.Utils.UITools" Collapsed="true">
-    <Position X="23.75" Y="16.5" Width="1.5" />
+    <Position X="21.75" Y="10.75" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAAAAAAAAAIAAABCAAAQAAAAAAAAAAAgAA=</HashCode>
       <FileName>Utils\UITools.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Interface Name="BmLib.Interfaces.IEntryViewModel">
-    <Position X="11.25" Y="16.75" Width="1.5" />
+    <Position X="11.5" Y="13.75" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAAAAAABAAAAAAAAAAAQAAAAAAAAAAAAAgAAAAEAABA=</HashCode>
+      <HashCode>AAAAAAABAAAAAAAAAAAQAAAAAAAAAAAAAgAAAAAAABA=</HashCode>
       <FileName>Interfaces\IEntryViewModel.cs</FileName>
     </TypeIdentifier>
   </Interface>
   <Interface Name="BmLib.Interfaces.IOverflown">
-    <Position X="13" Y="16.75" Width="1.5" />
+    <Position X="13.25" Y="13.75" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAABAAAAAAAAAAAAAAA=</HashCode>
       <FileName>Interfaces\IOverflown.cs</FileName>
     </TypeIdentifier>
   </Interface>
   <Interface Name="BmLib.Models.IEntryModel">
-    <Position X="11.25" Y="12.5" Width="2" />
+    <Position X="11.5" Y="9.5" Width="2" />
     <TypeIdentifier>
       <HashCode>CAACAAABEAAgAAAAAAAQQAQAAIAAAAAAAAAAAAAAAAA=</HashCode>
       <FileName>Interfaces\IEntryModel.cs</FileName>
     </TypeIdentifier>
   </Interface>
   <Interface Name="BmLib.Models.IConvertedEntryModel" Collapsed="true">
-    <Position X="11.25" Y="15.75" Width="2" />
+    <Position X="11.5" Y="12.75" Width="2" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAgAAAAAAAAAAAAAAA=</HashCode>
       <FileName>Interfaces\IEntryModel.cs</FileName>
     </TypeIdentifier>
   </Interface>
   <Enum Name="BmLib.Enums.HierarchicalResult" Collapsed="true">
-    <Position X="16.75" Y="18.75" Width="1.5" />
+    <Position X="16.75" Y="15.75" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAACIAAAACAQAAAAAAAAAAAAIAAAAAEAAA=</HashCode>
       <FileName>Enums\HierarchicalResult.cs</FileName>
     </TypeIdentifier>
   </Enum>
   <Enum Name="BmLib.Enums.UpdateMode" Collapsed="true">
-    <Position X="23.75" Y="18.75" Width="1.5" />
+    <Position X="21.75" Y="13" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACA=</HashCode>
       <FileName>Enums\UpdateMode.cs</FileName>
-    </TypeIdentifier>
-  </Enum>
-  <Enum Name="BmLib.IconExtractors.Enums.IconSize" Collapsed="true">
-    <Position X="18.5" Y="18.75" Width="1.5" />
-    <TypeIdentifier>
-      <HashCode>AAAAAAABAAAAAAAIACAAEAAAAAAAQAAAAAAAAAAAAAA=</HashCode>
-      <FileName>IconExtractors\Enums\IconSize.cs</FileName>
-    </TypeIdentifier>
-  </Enum>
-  <Enum Name="BmLib.IconExtractors.Enums.ImageListDrawItemConstants" Collapsed="true">
-    <Position X="20.25" Y="18.75" Width="1.5" />
-    <TypeIdentifier>
-      <HashCode>AAAgAAABAAAAABAAACAAgAAgIAAABAAABQAgAAAQAAA=</HashCode>
-      <FileName>IconExtractors\Enums\ImageListDrawItemConstants.cs</FileName>
-    </TypeIdentifier>
-  </Enum>
-  <Enum Name="BmLib.IconExtractors.Enums.ShellIconStateConstants" Collapsed="true">
-    <Position X="22" Y="18.75" Width="1.5" />
-    <TypeIdentifier>
-      <HashCode>AAAAAAAAAAAACAEAAAAgAAAEAAAAAACAAAAAAAAAAAA=</HashCode>
-      <FileName>IconExtractors\Enums\ShellIconStateConstants.cs</FileName>
     </TypeIdentifier>
   </Enum>
   <Font Name="Segoe UI" Size="9" />

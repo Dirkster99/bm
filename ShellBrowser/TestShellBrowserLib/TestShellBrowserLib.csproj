@@ -58,6 +58,7 @@
     <Compile Include="ParentItemTests.cs" />
     <Compile Include="ParentPIDLTests.cs" />
     <Compile Include="PidlManagerTests.cs" />
+    <Compile Include="PIDL_PathTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ShellInteropTests.cs" />
     <Compile Include="TestHelper.cs" />
