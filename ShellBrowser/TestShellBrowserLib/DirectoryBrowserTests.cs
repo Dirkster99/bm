@@ -168,5 +168,136 @@
             Assert.IsTrue((music.ItemType & DirectoryItemFlags.FileSystemDirectory) != 0);
             Assert.IsTrue(music.PathType == PathHandler.FileSystem);
         }
+
+        [TestMethod]
+        public void GetDriveEquality()
+        {
+            // Get the default drive's path
+            var drivePath = new DirectoryInfo(Environment.SystemDirectory).Root.Name;
+            var driveInfoPath = new System.IO.DriveInfo(drivePath);
+
+            Assert.IsTrue(drivePath != null);
+
+            var drive = ShellBrowser.Create(drivePath);
+            var drive1 = ShellBrowser.Create(drivePath);
+
+            Assert.IsTrue(drive != null);
+            Assert.IsTrue(drive1 != null);
+
+            Assert.IsTrue(drive.Equals(drive1));
+
+            Assert.IsTrue(drive.ParentIdList.Equals(drive.ParentIdList));
+            Assert.IsTrue(drive.ChildIdList.Equals(drive.ChildIdList));
+        }
+
+        [TestMethod]
+        public void GetDirectoryEquality()
+        {
+            string dirPath = null;
+
+            using (var kf = KnownFolderHelper.FromCanonicalName("Windows"))
+            {
+                Assert.IsTrue(kf != null);
+                dirPath = kf.GetPath();
+            }
+
+            Assert.IsTrue(dirPath != null);
+
+            // Lets test the directory browser object with that path
+            var dir = ShellBrowser.Create(dirPath);
+            var dir1 = ShellBrowser.Create(dirPath);
+
+            Assert.IsTrue(dir != null);
+            Assert.IsTrue(dir1 != null);
+
+            Assert.IsTrue(dir.Equals(dir1));
+
+            //Assert.IsTrue(dir.ParentIdList.Equals(dir1.ParentIdList));
+            //Assert.IsTrue(dir.ChildIdList.Equals(dir1.ChildIdList));
+        }
+
+        [TestMethod]
+        public void GetThisPCEquality()
+        {
+            string dirPath = null, id = null, pathShell = null;
+
+            using (var kf = KnownFolderHelper.FromCanonicalName("MyComputerFolder"))
+            {
+                Assert.IsTrue(kf != null);
+                dirPath = kf.GetPath();
+                id = kf.GetId();
+                pathShell = kf.GetPathShell();
+            }
+
+            Assert.IsTrue(dirPath == null);    // Test a special folder that has no
+            Assert.IsTrue(id != null);        // file system representation
+            Assert.IsTrue(pathShell != null);
+            Assert.IsTrue(pathShell != id);
+
+            // Lets test the directory browser object with that path
+            var specialItem = ShellBrowser.Create(pathShell);
+            var specialItem1 = ShellBrowser.Create(pathShell);
+
+            Assert.IsTrue(specialItem != null);
+            Assert.IsTrue(specialItem1 != null);
+
+            Assert.IsTrue(specialItem.Equals(specialItem1));
+
+            //Assert.IsTrue(specialItem.ParentIdList.Equals(specialItem1.ParentIdList));
+            //Assert.IsTrue(specialItem.ChildIdList.Equals(specialItem1.ChildIdList));
+        }
+
+        [TestMethod]
+        public void GetMusicEquality()
+        {
+            var music = ShellBrowser.Create(KF_IID.ID_FOLDERID_Music);
+            var music1 = ShellBrowser.Create(KF_IID.ID_FOLDERID_Music);
+
+            Assert.IsTrue(music != null);
+            Assert.IsTrue(music1 != null);
+
+            Assert.IsTrue(music.Equals(music1));
+
+            //Assert.IsTrue(music.ParentIdList.Equals(music1.ParentIdList));
+            //Assert.IsTrue(music.ChildIdList.Equals(music1.ChildIdList));
+        }
+
+
+        [TestMethod]
+        public void GetInEquality()
+        {
+            // Get the default drive's path
+            var drivePath = new DirectoryInfo(Environment.SystemDirectory).Root.Name;
+            var driveInfoPath = new System.IO.DriveInfo(drivePath);
+            var drive = ShellBrowser.Create(drivePath);
+
+            // Lets test the directory browser object with that path
+            string dirPath = null;
+            using (var kf = KnownFolderHelper.FromCanonicalName("Windows"))
+            {
+                dirPath = kf.GetPath();
+            }
+            var dir = ShellBrowser.Create(dirPath);
+
+            // Get This PC and Music SpecialItem
+            var specialItem = ShellBrowser.Create(KF_IID.ID_FOLDERID_ComputerFolder);
+            var music = ShellBrowser.Create(KF_IID.ID_FOLDERID_Music);
+
+            Assert.IsFalse(drive.Equals(dir));
+            Assert.IsFalse(drive.Equals(specialItem));
+            Assert.IsFalse(drive.Equals(music));
+
+            Assert.IsFalse(dir.Equals(drive));
+            Assert.IsFalse(dir.Equals(specialItem));
+            Assert.IsFalse(dir.Equals(music));
+
+            Assert.IsFalse(specialItem.Equals(dir));
+            Assert.IsFalse(specialItem.Equals(drive));
+            Assert.IsFalse(specialItem.Equals(music));
+
+            Assert.IsFalse(music.Equals(dir));
+            Assert.IsFalse(music.Equals(drive));
+            Assert.IsFalse(music.Equals(specialItem));
+        }
     }
 }

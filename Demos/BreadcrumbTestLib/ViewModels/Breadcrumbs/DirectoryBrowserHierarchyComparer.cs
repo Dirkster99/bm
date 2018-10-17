@@ -11,7 +11,7 @@
     /// Implements a <see cref="IDirectoryBrowser"/> based <seealso ref="ICompareHierarchy"> object
     /// to compute the relationship of two <see cref="IDirectoryBrowser"/> based paths to each other.
     /// </summary>
-    public class IDirectoryHierarchyComparer : ICompareHierarchy<IDirectoryBrowser>
+    public class DirectoryBrowserHierarchyComparer : ICompareHierarchy<IDirectoryBrowser>
     {
         #region fields
         /// <summary>
@@ -26,7 +26,7 @@
         /// <summary>
         /// Class cosntructor
         /// </summary>
-        public IDirectoryHierarchyComparer()
+        public DirectoryBrowserHierarchyComparer()
         {
         }
         #endregion constructors
@@ -54,42 +54,47 @@
             if (a == null || b == null)
                 return HierarchicalResult.Unrelated;
 
-            if (a.FullName.Contains("::") == false && b.FullName.Contains("::") == false)
-                return this._pathComparer.CompareHierarchy(a.FullName, b.FullName);
+            if (string.IsNullOrEmpty(a.PathFileSystem) == false &&
+                string.IsNullOrEmpty(b.PathFileSystem) == false)
+                return this._pathComparer.CompareHierarchy(a.PathFileSystem, b.PathFileSystem);
 
-            if (a.FullName.Equals(b.FullName))
+            if (a.Equals(b))
                 return HierarchicalResult.Current;  // a and b refer to the same location
 
 //            string key = string.Format("{0}-compare-{1}", a.FullName, b.FullName);
 
-            if (a.FullName == b.FullName)
-                return HierarchicalResult.Current;
-            else if (ShellBrowser.HasParent(b, a.FullName))
+            if (ShellBrowser.HasParent(b, a.FullName) == true)
+            {
+////                if (ShellBrowser.HasParent(b, a) == false)
+////                {
+////                    ShellBrowser.HasParent(b, a);
+////                }
+
                 return HierarchicalResult.Child;
-            else if (ShellBrowser.HasParent(a, b.FullName))
-                return HierarchicalResult.Parent;
+
+            }
             else
             {
-                if (a.FullName.Contains("::") == false || b.FullName.Contains("::") == false)
+                if (ShellBrowser.HasParent(a, b.FullName) == true)
                 {
-                    Console.WriteLine("Comparing to Unrelated: {0} - {1}", a.Name, b.Name);
-                }
+////                    if (ShellBrowser.HasParent(a, b) == false)
+////                    {
+////                        ShellBrowser.HasParent(a, b);
+////                    }
 
-                return HierarchicalResult.Unrelated;
+                    return HierarchicalResult.Parent;
+                }
+                else
+                {
+                    if (a.FullName.Contains("::") == false || b.FullName.Contains("::") == false)
+                    {
+                        Console.WriteLine("Comparing to Unrelated: {0} - {1}", a.Name, b.Name);
+                    }
+
+                    return HierarchicalResult.Unrelated;
+                }
             }
         }
-
-        ////    private bool HasParent(FileSystemInfoEx child, DirectoryInfoEx parent)
-        ////    {
-        ////      DirectoryInfoEx current = child.Parent;
-        ////      while (current != null)
-        ////      {
-        ////        if (current.Equals(parent))
-        ////          return true;
-        ////        current = current.Parent;
-        ////      }
-        ////      return false;
-        ////    }
         #endregion methods
     }
 }

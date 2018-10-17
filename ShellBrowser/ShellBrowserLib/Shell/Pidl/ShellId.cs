@@ -71,7 +71,6 @@ namespace ShellBrowserLib.SharpShell.Pidl
         public override string ToString()
         {
             //  Write the bytes of the ID and the string if we can get one.
-
             var bytesString = BitConverter.ToString(_id.ToArray());
             string ascii, utf8;
             try

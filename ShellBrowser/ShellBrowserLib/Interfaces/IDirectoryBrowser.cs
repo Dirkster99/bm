@@ -5,7 +5,9 @@
     using System;
 
     /// <summary>
-    /// Represents a directory in PIDL system.
+    /// Represents a directory in a PIDL Shell system using an abstract .Net
+    /// PIDL representation as <see cref="IdList"/> objects.
+    /// https://docs.microsoft.com/en-us/windows/desktop/api/shtypes/ns-shtypes-_itemidlist
     /// </summary>
     public interface IDirectoryBrowser : ICloneable, IEquatable<IDirectoryBrowser>
     {
