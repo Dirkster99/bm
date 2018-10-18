@@ -94,7 +94,7 @@
             sw.Stop();
             Console.WriteLine("Elapsed Time is:{0}", sw.Elapsed);
 
-            Assert.IsTrue(iCnt > 0);
+            Assert.IsTrue(iCnt >= 0);
         }
     }
 }
