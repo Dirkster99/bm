@@ -3,9 +3,12 @@
     using Microsoft.VisualStudio.TestTools.UnitTesting;
     using ShellBrowserLib;
     using ShellBrowserLib.IDs;
+    using ShellBrowserLib.SharpShell.Interop.ShellFolders;
     using ShellBrowserLib.SharpShell.Pidl;
+    using ShellBrowserLib.Shell.Enums;
     using System;
     using System.IO;
+    using System.Runtime.InteropServices;
 
     /// <summary>
     /// Tests a method for generating a path for a <see cref="IDirectoryBrowser"/>
@@ -18,17 +21,13 @@
         [TestMethod]
         public void TestDesktopPath()
         {
+            // Get test browser object and generate path list of idListPidls
             var testitem = ShellBrowser.Create(KF_IID.ID_FOLDERID_Desktop);
-
             var pathItems = ShellBrowser.GetPathItems(testitem);
-            foreach (var item in pathItems)
-            {
-                string name = PidlManager.GetPidlDisplayName(item);
-                Console.WriteLine(name);
 
-                var browserItem = ShellBrowser.Create(item);
-                Assert.IsTrue(browserItem != null);
-            }
+            // Desktop has no children or parent pidls since its the root of it all
+            Assert.IsTrue(testitem.ParentIdList == null);
+            Assert.IsTrue(testitem.ChildIdList == null);
 
             // Should not contain any idList whatsoever
             Assert.IsTrue(pathItems.Count == 0);
@@ -37,25 +36,40 @@
         [TestMethod]
         public void TestPCPath()
         {
+            // Get test browser object and generate path list of idListPidls
             var testitem = ShellBrowser.Create(KF_IID.ID_FOLDERID_ComputerFolder);
-
             var pathItems = ShellBrowser.GetPathItems(testitem);
-            foreach (var item in pathItems)
-            {
-                string name = PidlManager.GetPidlDisplayName(item);
-                Console.WriteLine(name);
-
-                var browserItem = ShellBrowser.Create(item);
-                Assert.IsTrue(browserItem != null);
-            }
 
             // Should contain the fullpidl to 'This PC'
             Assert.IsTrue(pathItems.Count == 1);
+
+            foreach (var item in pathItems)
+            {
+                string displayName = PidlManager.IdListFullToName(item, SHGDNF.SHGDN_NORMAL);
+                string parseName = PidlManager.IdListFullToName(item, SHGDNF.SHGDN_FORPARSING);
+
+                Console.WriteLine("Display Name '{0}' Parse Name '{1}'", displayName, parseName);
+
+                Assert.IsFalse(string.IsNullOrEmpty(parseName));
+                Console.WriteLine(parseName);
+
+                var browserItem = ShellBrowser.Create(parseName);
+                Assert.IsTrue(browserItem != null);
+
+                Assert.IsTrue(browserItem.EqualsParseName(parseName));
+
+                var browserItem1 = ShellBrowser.Create(item);
+                Assert.IsTrue(browserItem1 != null);
+
+                // Object from PIDL and ParseName should realy describe same location
+                Assert.IsTrue(browserItem1.Equals(browserItem));
+            }
         }
 
         [TestMethod]
         public void TestDrivePath()
         {
+            // Get test browser object and generate path list of idListPidls
             // Get the default drive's path
             var drivePath = new DirectoryInfo(Environment.SystemDirectory).Root.Name;
             var driveInfoPath = new System.IO.DriveInfo(drivePath);
@@ -63,76 +77,131 @@
             Assert.IsTrue(drivePath != null);
 
             var testitem = ShellBrowser.Create(drivePath);
-
             var pathItems = ShellBrowser.GetPathItems(testitem);
-            foreach (var item in pathItems)
-            {
-                string name = PidlManager.GetPidlDisplayName(item);
-                Console.WriteLine(name);
-
-                var browserItem = ShellBrowser.Create(item);
-                Assert.IsTrue(browserItem != null);
-            }
 
             // Should contain the fullpidl to 'This PC', '<Drive (eg.: C:)>'
             Assert.IsTrue(pathItems.Count == 2);
+
+            foreach (var item in pathItems)
+            {
+                string displayName = PidlManager.IdListFullToName(item, SHGDNF.SHGDN_NORMAL);
+                string parseName = PidlManager.IdListFullToName(item, SHGDNF.SHGDN_FORPARSING);
+
+                Console.WriteLine("Display Name '{0}' Parse Name '{1}'", displayName, parseName);
+
+                Assert.IsFalse(string.IsNullOrEmpty(parseName));
+                Console.WriteLine(parseName);
+
+                var browserItem = ShellBrowser.Create(parseName);
+                Assert.IsTrue(browserItem != null);
+
+                Assert.IsTrue(browserItem.EqualsParseName(parseName));
+
+                var browserItem1 = ShellBrowser.Create(item);
+                Assert.IsTrue(browserItem1 != null);
+
+                // Object from PIDL and ParseName should realy describe same location
+                Assert.IsTrue(browserItem1.Equals(browserItem));
+            }
         }
 
         [TestMethod]
         public void TestMusicPath()
         {
+            // Get test browser object and generate path list of idListPidls
             var testitem = ShellBrowser.Create(KF_IID.ID_FOLDERID_Music);
-
             var pathItems = ShellBrowser.GetPathItems(testitem);
-            foreach (var item in pathItems)
-            {
-                string name = PidlManager.GetPidlDisplayName(item);
-                Console.WriteLine(name);
-
-                var browserItem = ShellBrowser.Create(item);
-                Assert.IsTrue(browserItem != null);
-            }
 
             // Should contain the fullpidl to 'This PC', 'Music'
             Assert.IsTrue(pathItems.Count == 2);
+
+            foreach (var item in pathItems)
+            {
+                string displayName = PidlManager.IdListFullToName(item, SHGDNF.SHGDN_NORMAL);
+                string parseName = PidlManager.IdListFullToName(item, SHGDNF.SHGDN_FORPARSING);
+
+                Console.WriteLine("Display Name '{0}' Parse Name '{1}'", displayName, parseName);
+
+                Assert.IsFalse(string.IsNullOrEmpty(parseName));
+                Console.WriteLine(parseName);
+
+                var browserItem = ShellBrowser.Create(parseName);
+                Assert.IsTrue(browserItem != null);
+
+                Assert.IsTrue(browserItem.EqualsParseName(parseName));
+
+                var browserItem1 = ShellBrowser.Create(item);
+                Assert.IsTrue(browserItem1 != null);
+
+                // Object from PIDL and ParseName should realy describe same location
+                Assert.IsTrue(browserItem1.Equals(browserItem));
+            }
         }
 
         [TestMethod]
         public void TestWindowsPath()
         {
+            // Get test browser object and generate path list of idListPidls
             var testitem = ShellBrowser.Create(KF_IID.ID_FOLDERID_Windows);
-
             var pathItems = ShellBrowser.GetPathItems(testitem);
-            foreach (var item in pathItems)
-            {
-                string name = PidlManager.GetPidlDisplayName(item);
-                Console.WriteLine(name);
-
-                var browserItem = ShellBrowser.Create(item);
-                Assert.IsTrue(browserItem != null);
-            }
 
             // Should contain the fullpidls to 'This PC', '<Drive (eg.: C:)>', 'Windows'
             Assert.IsTrue(pathItems.Count == 3);
+
+            foreach (var item in pathItems)
+            {
+                string displayName = PidlManager.IdListFullToName(item, SHGDNF.SHGDN_NORMAL);
+                string parseName = PidlManager.IdListFullToName(item, SHGDNF.SHGDN_FORPARSING);
+
+                Console.WriteLine("Display Name '{0}' Parse Name '{1}'", displayName, parseName);
+
+                Assert.IsFalse(string.IsNullOrEmpty(parseName));
+                Console.WriteLine(parseName);
+
+                var browserItem = ShellBrowser.Create(parseName);
+                Assert.IsTrue(browserItem != null);
+
+                Assert.IsTrue(browserItem.EqualsParseName(parseName));
+
+                var browserItem1 = ShellBrowser.Create(item);
+                Assert.IsTrue(browserItem1 != null);
+
+                // Object from PIDL and ParseName should realy describe same location
+                Assert.IsTrue(browserItem1.Equals(browserItem));
+            }
         }
 
         [TestMethod]
         public void TestFontsPath()
         {
+            // Get test browser object and generate path list of idListPidls
             var testitem = ShellBrowser.Create(KF_IID.ID_FOLDERID_Fonts);
-
             var pathItems = ShellBrowser.GetPathItems(testitem);
-            foreach (var item in pathItems)
-            {
-                string name = PidlManager.GetPidlDisplayName(item);
-                Console.WriteLine(name);
-
-                var browserItem = ShellBrowser.Create(item);
-                Assert.IsTrue(browserItem != null);
-            }
 
             // Should contain the fullpidls to 'This PC', '<Drive (eg.: C:)>', 'Windows'. 'Fonts'
             Assert.IsTrue(pathItems.Count == 4);
+
+            foreach (var item in pathItems)
+            {
+                string displayName = PidlManager.IdListFullToName(item, SHGDNF.SHGDN_NORMAL);
+                string parseName = PidlManager.IdListFullToName(item, SHGDNF.SHGDN_FORPARSING);
+
+                Console.WriteLine("Display Name '{0}' Parse Name '{1}'", displayName, parseName);
+
+                Assert.IsFalse(string.IsNullOrEmpty(parseName));
+                Console.WriteLine(parseName);
+
+                var browserItem = ShellBrowser.Create(parseName);
+                Assert.IsTrue(browserItem != null);
+
+                Assert.IsTrue(browserItem.EqualsParseName(parseName));
+
+                var browserItem1 = ShellBrowser.Create(item);
+                Assert.IsTrue(browserItem1 != null);
+
+                // Object from PIDL and ParseName should realy describe same location
+                Assert.IsTrue(browserItem1.Equals(browserItem));
+            }
         }
     }
 }

@@ -177,6 +177,43 @@
         }
 
         /// <summary>
+        /// Converts a given FULL <see cref="IdList"/> based PIDL into a name
+        /// (display name or parse name etc).
+        /// 
+        /// A Pidl is considered FULL if it can be resolved
+        /// underneath the desktop root item. That is, a relativeChild PIDL
+        /// from another parent (eg.: C: drive) cannot be resolved here and
+        /// results in null being returned.
+        /// </summary>
+        /// <param name="idListPidl"></param>
+        /// <param name="parseOption"></param>
+        /// <returns>Returns the requested string or null if <paramref name="idListPidl"/>
+        /// cannot be resolved underneath the Desktop root item.</returns>
+        public static string IdListFullToName(IdList idListPidl, SHGDNF parseOption)
+        {
+            using (var desktopShellFolder = new ShellFolderDesktop())
+            {
+                IntPtr pidl = default(IntPtr);
+                try
+                {
+                    pidl = PidlManager.IdListToPidl(idListPidl);
+                    if (pidl != default(IntPtr))
+                    {
+                        string parseName = desktopShellFolder.GetShellFolderName(pidl, parseOption);
+
+                        return parseName;
+                    }
+                }
+                finally
+                {
+                    Marshal.FreeCoTaskMem(pidl);
+                }
+            }
+
+            return null;
+        }
+
+        /// <summary>
         /// Combines 2 lists of <see cref="ShellId"/>s and returns a new
         /// list of <see cref="ShellId"/>s. 
         /// </summary>

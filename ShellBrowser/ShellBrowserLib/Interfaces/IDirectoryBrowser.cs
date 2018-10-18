@@ -101,6 +101,19 @@
         /// </summary>
         /// <returns></returns>
         bool DirectoryPathExists();
+
+        /// <summary>
+        /// Compares a given parse name with the parse names known in this object.
+        /// 
+        /// Considers case insensitive string matching for:
+        /// 1> SpecialPathId
+        ///   1.2> PathRAW (if SpecialPathId fails and CLSID may have been used to create this)
+        ///
+        /// 3> PathFileSystem
+        /// </summary>
+        /// <param name="parseName">True is a matching parse name was found and false if not.</param>
+        /// <returns></returns>
+        bool EqualsParseName(string parseName);
         #endregion methods
     }
 }

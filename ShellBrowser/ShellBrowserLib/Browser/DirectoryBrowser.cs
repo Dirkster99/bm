@@ -355,6 +355,48 @@ namespace ShellBrowserLib.Browser
 
             return PathShell.GetHashCode();
         }
+
+        /// <summary>
+        /// Compares a given parse name with the parse names known in this object.
+        /// 
+        /// Considers case insensitive string matching for:
+        /// 1> SpecialPathId
+        ///   1.2> PathRAW (if SpecialPathId fails and CLSID may have been used to create this)
+        ///
+        /// 3> PathFileSystem
+        /// </summary>
+        /// <param name="parseName">True is a matching parse name was found and false if not.</param>
+        /// <returns></returns>
+        public bool EqualsParseName(string parseName)
+        {
+            if (string.IsNullOrEmpty(parseName) == true)
+                return false;
+
+            bool KF_SpecialId = false;
+            if (string.IsNullOrEmpty(SpecialPathId) == false)
+            {
+                KF_SpecialId = string.Compare(SpecialPathId, parseName, true) == 0;
+
+                if (KF_SpecialId == false)
+                {
+                    // There are some corner cases where knownfolder special id is sometimes based on
+                    // a CLSID (as in case of this PC) and the resulting knownfolder_id is different
+                    // from the initial CLSID -> Lets try to cover this one here
+                    if (string.Compare(PathRAW, parseName, true) == 0)
+                        KF_SpecialId = true;
+                }
+            }
+
+            if (KF_SpecialId == false)
+            {
+                if (string.IsNullOrEmpty(PathFileSystem) == false)
+                    return string.Compare(PathFileSystem, parseName, true) == 0;
+            }
+            else
+                return true;
+
+            return false;
+        }
         #endregion methods
     }
 }
