@@ -1,6 +1,6 @@
-﻿namespace ShellBrowserLib.SharpShell.Interop.ShellFolders
+﻿namespace ShellBrowserLib.Shell.Interop.ShellFolders
 {
-    using ShellBrowserLib.SharpShell.Interop.Interfaces.ShellFolders;
+    using ShellBrowserLib.Shell.Interop.Interfaces.ShellFolders;
     using System;
     using System.Runtime.InteropServices;
 

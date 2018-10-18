@@ -1,4 +1,4 @@
-namespace ShellBrowserLib.SharpShell.Pidl
+namespace ShellBrowserLib.Shell.Pidl
 {
     using System;
     using System.Linq;

@@ -1,7 +1,7 @@
-﻿namespace ShellBrowserLib.SharpShell.Pidl
+﻿namespace ShellBrowserLib.Shell.Pidl
 {
-    using ShellBrowserLib.SharpShell.Interop.Knownfolders;
-    using ShellBrowserLib.SharpShell.Interop.ShellFolders;
+    using ShellBrowserLib.Shell.Interop.Knownfolders;
+    using ShellBrowserLib.Shell.Interop.ShellFolders;
     using System;
     using System.Collections.Generic;
     using System.Collections.ObjectModel;

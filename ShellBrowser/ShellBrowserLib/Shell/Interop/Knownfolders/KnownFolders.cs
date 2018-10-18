@@ -1,4 +1,4 @@
-﻿namespace ShellBrowserLib.SharpShell.Interop.KnownFolders
+﻿namespace ShellBrowserLib.Shell.Interop.KnownFolders
 {
     using ShellBrowserLib.IDs;
     using System;

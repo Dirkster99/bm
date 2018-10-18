@@ -1,8 +1,8 @@
 ﻿namespace ShellBrowserLib.Shell.Interop.ResourceIds
 {
-    using ShellBrowserLib.SharpShell.Interop;
-    using ShellBrowserLib.SharpShell.Interop.Dlls;
-    using ShellBrowserLib.SharpShell.Pidl;
+    using ShellBrowserLib.Shell.Interop;
+    using ShellBrowserLib.Shell.Interop.Dlls;
+    using ShellBrowserLib.Shell.Pidl;
     using ShellBrowserLib.Shell.Enums;
     using System;
     using System.Runtime.InteropServices;
@@ -125,7 +125,7 @@
 
             SHFILEINFO shfi = new SHFILEINFO();
             uint shfiSize = (uint)Marshal.SizeOf(shfi.GetType());
-            IntPtr retVal = SharpShell.Interop.Dlls.NativeMethods.SHGetFileInfo(pidlPtr, (UInt32)dwAttr, ref shfi, shfiSize, ((uint)(dwFlags) | (uint)iconState));
+            IntPtr retVal = Shell.Interop.Dlls.NativeMethods.SHGetFileInfo(pidlPtr, (UInt32)dwAttr, ref shfi, shfiSize, ((uint)(dwFlags) | (uint)iconState));
             try
             {
                 if (retVal.Equals(IntPtr.Zero))

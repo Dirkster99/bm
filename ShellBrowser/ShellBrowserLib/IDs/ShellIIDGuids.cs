@@ -53,9 +53,4 @@
         ////internal const string IQueryParser = "2EBDEE67-3505-43f8-9946-EA44ABC8E5B0";
         ////internal const string IQueryParserManager = "A879E3C4-AF77-44fb-8F37-EBD1487CF920";
     }
-
-    internal static class ShellBHIDGuid
-    {
-        internal const string ShellFolderObject = "3981e224-f559-11d3-8e3a-00c04f6837d5";
-    }
 }

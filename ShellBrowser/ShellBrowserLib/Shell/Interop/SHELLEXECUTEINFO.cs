@@ -1,4 +1,4 @@
-﻿namespace ShellBrowserLib.SharpShell.Interop
+﻿namespace ShellBrowserLib.Shell.Interop
 {
     using ShellBrowserLib.Shell.Enums;
     using System;

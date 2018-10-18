@@ -1,4 +1,4 @@
-﻿namespace ShellBrowserLib.SharpShell.Interop.Interfaces.KnownFolders
+﻿namespace ShellBrowserLib.Shell.Interop.Interfaces.KnownFolders
 {
     /// <summary>
     /// https://msdn.microsoft.com/en-us/library/windows/desktop/bb762513(v=vs.85).aspx

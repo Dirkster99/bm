@@ -1,4 +1,4 @@
-﻿namespace ShellBrowserLib.SharpShell.Interop.Dlls
+﻿namespace ShellBrowserLib.Shell.Interop.Dlls
 {
     using System;
     using System.Runtime.InteropServices;

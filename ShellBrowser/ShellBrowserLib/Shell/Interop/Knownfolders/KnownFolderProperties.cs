@@ -1,10 +1,10 @@
-﻿namespace ShellBrowserLib.SharpShell.Interop.Knownfolders
+﻿namespace ShellBrowserLib.Shell.Interop.Knownfolders
 {
-    using ShellBrowserLib.SharpShell.Interop.Dlls;
-    using ShellBrowserLib.SharpShell.Interop.Interfaces.Knownfolders;
-    using ShellBrowserLib.SharpShell.Interop.Interfaces.KnownFolders;
-    using ShellBrowserLib.SharpShell.Interop.ShellFolders;
-    using ShellBrowserLib.SharpShell.Pidl;
+    using ShellBrowserLib.Shell.Interop.Dlls;
+    using ShellBrowserLib.Shell.Interop.Interfaces.Knownfolders;
+    using ShellBrowserLib.Shell.Interop.Interfaces.KnownFolders;
+    using ShellBrowserLib.Shell.Interop.ShellFolders;
+    using ShellBrowserLib.Shell.Pidl;
     using ShellBrowserLib.Shell.Interop.ResourceIds;
     using System;
     using System.Globalization;
@@ -29,7 +29,7 @@
         /// <param name="knownFolderNative"></param>
         /// <param name="nativeFolderDefinition"></param>
         public KnownFolderProperties(IKnownFolderNative knownFolderNative,
-                                     KnownFoldersSafeNativeMethods.NativeFolderDefinition nativeFolderDefinition)
+                                     NativeFolderDefinition nativeFolderDefinition)
             : this()
         {
             try
@@ -194,7 +194,8 @@
             return retval != 0 ? stringValue.ToString() : null;
         }
 
-        private void Init(IKnownFolderNative knownFolderNative, KnownFoldersSafeNativeMethods.NativeFolderDefinition nativeFolderDefinition)
+        private void Init(IKnownFolderNative knownFolderNative,
+                          NativeFolderDefinition nativeFolderDefinition)
         {
             this.Name = Marshal.PtrToStringUni(nativeFolderDefinition.name);
 

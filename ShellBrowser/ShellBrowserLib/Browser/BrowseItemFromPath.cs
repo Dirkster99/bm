@@ -2,13 +2,13 @@
 {
     using ShellBrowserLib.Enums;
     using ShellBrowserLib.IDs;
-    using ShellBrowserLib.SharpShell.Interop.Dlls;
-    using ShellBrowserLib.SharpShell.Interop.Interfaces.Knownfolders;
-    using ShellBrowserLib.SharpShell.Interop.Interfaces.KnownFolders;
-    using ShellBrowserLib.SharpShell.Interop.Interfaces.ShellFolders;
-    using ShellBrowserLib.SharpShell.Interop.Knownfolders;
-    using ShellBrowserLib.SharpShell.Interop.ShellFolders;
-    using ShellBrowserLib.SharpShell.Pidl;
+    using ShellBrowserLib.Shell.Interop.Dlls;
+    using ShellBrowserLib.Shell.Interop.Interfaces.Knownfolders;
+    using ShellBrowserLib.Shell.Interop.Interfaces.KnownFolders;
+    using ShellBrowserLib.Shell.Interop.Interfaces.ShellFolders;
+    using ShellBrowserLib.Shell.Interop.Knownfolders;
+    using ShellBrowserLib.Shell.Interop.ShellFolders;
+    using ShellBrowserLib.Shell.Pidl;
     using ShellBrowserLib.Shell.Enums;
     using ShellBrowserLib.Shell.Interop.Interfaces;
     using ShellBrowserLib.Shell.Interop.Interfaces.ShellItems;

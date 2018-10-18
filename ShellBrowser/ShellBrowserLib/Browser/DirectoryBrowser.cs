@@ -3,7 +3,7 @@ namespace ShellBrowserLib.Browser
     using ShellBrowserLib.Enums;
     using ShellBrowserLib.Interfaces;
     using System;
-    using ShellBrowserLib.SharpShell.Pidl;
+    using ShellBrowserLib.Shell.Pidl;
 
     /// <summary>
     /// Implements a light weight Windows Shell Browser class that can be used

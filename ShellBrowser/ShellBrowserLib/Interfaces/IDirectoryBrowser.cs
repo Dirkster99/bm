@@ -1,7 +1,7 @@
 ﻿namespace ShellBrowserLib.Interfaces
 {
     using ShellBrowserLib.Enums;
-    using ShellBrowserLib.SharpShell.Pidl;
+    using ShellBrowserLib.Shell.Pidl;
     using System;
 
     /// <summary>

@@ -2,11 +2,11 @@
 {
     using Microsoft.VisualStudio.TestTools.UnitTesting;
     using ShellBrowserLib.IDs;
-    using ShellBrowserLib.SharpShell.Interop.Dlls;
-    using ShellBrowserLib.SharpShell.Interop.Knownfolders;
-    using ShellBrowserLib.SharpShell.Interop.KnownFolders;
-    using ShellBrowserLib.SharpShell.Interop.ShellFolders;
-    using ShellBrowserLib.SharpShell.Pidl;
+    using ShellBrowserLib.Shell.Interop.Dlls;
+    using ShellBrowserLib.Shell.Interop.Knownfolders;
+    using ShellBrowserLib.Shell.Interop.KnownFolders;
+    using ShellBrowserLib.Shell.Interop.ShellFolders;
+    using ShellBrowserLib.Shell.Pidl;
     using ShellBrowserLib.Shell.Enums;
     using System;
     using System.IO;

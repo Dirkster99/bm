@@ -3,8 +3,8 @@
     using Microsoft.VisualStudio.TestTools.UnitTesting;
     using ShellBrowserLib;
     using ShellBrowserLib.IDs;
-    using ShellBrowserLib.SharpShell.Interop.ShellFolders;
-    using ShellBrowserLib.SharpShell.Pidl;
+    using ShellBrowserLib.Shell.Interop.ShellFolders;
+    using ShellBrowserLib.Shell.Pidl;
     using ShellBrowserLib.Shell.Enums;
     using System;
     using System.IO;

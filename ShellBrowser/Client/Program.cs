@@ -2,8 +2,8 @@
 {
     using ShellBrowserLib;
     using ShellBrowserLib.IDs;
-    using ShellBrowserLib.SharpShell.Interop.Interfaces.Knownfolders;
-    using ShellBrowserLib.SharpShell.Interop.Knownfolders;
+    using ShellBrowserLib.Shell.Interop.Interfaces.Knownfolders;
+    using ShellBrowserLib.Shell.Interop.Knownfolders;
     using System;
     using System.Collections.Generic;
 

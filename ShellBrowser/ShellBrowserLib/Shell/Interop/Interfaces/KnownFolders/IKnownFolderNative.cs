@@ -1,4 +1,4 @@
-﻿namespace ShellBrowserLib.SharpShell.Interop.Interfaces.KnownFolders
+﻿namespace ShellBrowserLib.Shell.Interop.Interfaces.KnownFolders
 {
     using ShellBrowserLib.Shell.Enums;
     using ShellBrowserLib.Shell.Interop.Interfaces.ShellItems;
@@ -124,6 +124,6 @@
         /// to free this resource.</param>
         [MethodImpl(MethodImplOptions.InternalCall, MethodCodeType = MethodCodeType.Runtime)]
         void GetFolderDefinition([Out, MarshalAs(UnmanagedType.Struct)]
-                                 out KnownFoldersSafeNativeMethods.NativeFolderDefinition definition);
+                                 out NativeFolderDefinition definition);
     }
 }

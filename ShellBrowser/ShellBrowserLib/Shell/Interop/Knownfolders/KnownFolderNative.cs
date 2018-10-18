@@ -1,13 +1,13 @@
-﻿namespace ShellBrowserLib.SharpShell.Interop.ShellFolders
+﻿namespace ShellBrowserLib.Shell.Interop.ShellFolders
 {
     using ShellBrowserLib.IDs;
     using ShellBrowserLib.Shell.Enums;
-    using ShellBrowserLib.SharpShell.Interop.Interfaces.KnownFolders;
+    using ShellBrowserLib.Shell.Interop.Interfaces.KnownFolders;
     using System;
     using System.Diagnostics;
     using System.Runtime.InteropServices;
     using ShellBrowserLib.Shell.Interop.Interfaces.ShellItems;
-    using ShellBrowserLib.SharpShell.Pidl;
+    using ShellBrowserLib.Shell.Pidl;
 
     /// <summary>
     /// Class wraps <see cref="IKnownFolderNative"/> COM interface to ensure

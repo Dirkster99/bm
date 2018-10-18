@@ -3,12 +3,12 @@
     using ShellBrowserLib.Browser;
     using ShellBrowserLib.IDs;
     using ShellBrowserLib.Interfaces;
-    using ShellBrowserLib.SharpShell.Interop;
-    using ShellBrowserLib.SharpShell.Interop.Dlls;
-    using ShellBrowserLib.SharpShell.Interop.Interfaces.ShellFolders;
-    using ShellBrowserLib.SharpShell.Interop.Knownfolders;
-    using ShellBrowserLib.SharpShell.Interop.ShellFolders;
-    using ShellBrowserLib.SharpShell.Pidl;
+    using ShellBrowserLib.Shell.Interop;
+    using ShellBrowserLib.Shell.Interop.Dlls;
+    using ShellBrowserLib.Shell.Interop.Interfaces.ShellFolders;
+    using ShellBrowserLib.Shell.Interop.Knownfolders;
+    using ShellBrowserLib.Shell.Interop.ShellFolders;
+    using ShellBrowserLib.Shell.Pidl;
     using ShellBrowserLib.Shell.Enums;
     using System;
     using System.Collections.Generic;

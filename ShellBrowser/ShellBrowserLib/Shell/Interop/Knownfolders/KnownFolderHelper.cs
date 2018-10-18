@@ -1,18 +1,18 @@
-﻿namespace ShellBrowserLib.SharpShell.Interop.Knownfolders
+﻿namespace ShellBrowserLib.Shell.Interop.Knownfolders
 {
-    using ShellBrowserLib.SharpShell.Interop.KnownFolders;
+    using ShellBrowserLib.Shell.Interop.KnownFolders;
     using ShellBrowserLib.IDs;
     using ShellBrowserLib.Shell.Enums;
-    using ShellBrowserLib.SharpShell.Interop.Interfaces.Knownfolders;
-    using ShellBrowserLib.SharpShell.Interop.Interfaces.KnownFolders;
-    using ShellBrowserLib.SharpShell.Interop.ShellFolders;
+    using ShellBrowserLib.Shell.Interop.Interfaces.Knownfolders;
+    using ShellBrowserLib.Shell.Interop.Interfaces.KnownFolders;
+    using ShellBrowserLib.Shell.Interop.ShellFolders;
     using System;
     using System.Collections.Generic;
     using System.Collections.ObjectModel;
     using System.Diagnostics;
     using System.Runtime.InteropServices;
-    using ShellBrowserLib.SharpShell.Pidl;
-    using ShellBrowserLib.SharpShell.Interop.Dlls;
+    using ShellBrowserLib.Shell.Pidl;
+    using ShellBrowserLib.Shell.Interop.Dlls;
 
     /// <summary>
     /// Creates the helper class for known folders.
@@ -267,7 +267,7 @@
         {
             Debug.Assert(knownFolderNative != null);
 
-            KnownFoldersSafeNativeMethods.NativeFolderDefinition nativeFolderDefinition = default(KnownFoldersSafeNativeMethods.NativeFolderDefinition);
+            NativeFolderDefinition nativeFolderDefinition = default(NativeFolderDefinition);
             try
             {
                 knownFolderNative.GetFolderDefinition(out nativeFolderDefinition);

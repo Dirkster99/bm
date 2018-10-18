@@ -1,9 +1,9 @@
-﻿namespace ShellBrowserLib.SharpShell.Interop.ShellFolders
+﻿namespace ShellBrowserLib.Shell.Interop.ShellFolders
 {
     using ShellBrowserLib.IDs;
     using ShellBrowserLib.Shell.Enums;
     using System;
-    using ShellBrowserLib.SharpShell.Interop.Dlls;
+    using ShellBrowserLib.Shell.Interop.Dlls;
 
     internal static class ShellHelpers
     {

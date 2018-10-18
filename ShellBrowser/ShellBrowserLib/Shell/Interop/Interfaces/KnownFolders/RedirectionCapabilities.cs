@@ -1,4 +1,4 @@
-﻿namespace ShellBrowserLib.SharpShell.Interop.Interfaces.KnownFolders
+﻿namespace ShellBrowserLib.Shell.Interop.Interfaces.KnownFolders
 {
     /// <summary>
     /// Specifies the redirection capabilities for known folders. 

@@ -4,7 +4,7 @@
     using ShellBrowserLib;
     using ShellBrowserLib.Enums;
     using ShellBrowserLib.IDs;
-    using ShellBrowserLib.SharpShell.Interop.Knownfolders;
+    using ShellBrowserLib.Shell.Interop.Knownfolders;
     using System;
     using System.IO;
 

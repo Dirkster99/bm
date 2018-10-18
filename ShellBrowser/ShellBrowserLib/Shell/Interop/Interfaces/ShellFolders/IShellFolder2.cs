@@ -1,4 +1,4 @@
-﻿namespace ShellBrowserLib.SharpShell.Interop.Interfaces.ShellFolders
+﻿namespace ShellBrowserLib.Shell.Interop.Interfaces.ShellFolders
 {
     using ShellBrowserLib.IDs;
     using ShellBrowserLib.Shell.Enums;

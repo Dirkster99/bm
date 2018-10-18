@@ -1,4 +1,4 @@
-﻿namespace ShellBrowserLib.SharpShell.Interop.Messages
+﻿namespace ShellBrowserLib.Shell.Interop.Messages
 {
     using ShellBrowserLib.Shell.Enums;
     using ShellBrowserLib.Shell.Interop.Messages.Resources;

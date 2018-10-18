@@ -3,8 +3,8 @@
     using Microsoft.VisualStudio.TestTools.UnitTesting;
     using ShellBrowserLib;
     using ShellBrowserLib.IDs;
-    using ShellBrowserLib.SharpShell.Interop.Knownfolders;
-    using ShellBrowserLib.SharpShell.Pidl;
+    using ShellBrowserLib.Shell.Interop.Knownfolders;
+    using ShellBrowserLib.Shell.Pidl;
     using System;
 
     [TestClass]

@@ -1,9 +1,9 @@
-﻿namespace ShellBrowserLib.SharpShell.Interop.Interfaces.Knownfolders
+﻿namespace ShellBrowserLib.Shell.Interop.Interfaces.Knownfolders
 {
     using System;
     using System.IO;
-    using ShellBrowserLib.SharpShell.Interop.Interfaces.KnownFolders;
-    using ShellBrowserLib.SharpShell.Pidl;
+    using ShellBrowserLib.Shell.Interop.Interfaces.KnownFolders;
+    using ShellBrowserLib.Shell.Pidl;
 
     /// <summary>
     /// Gets property values for a known folder.

@@ -101,7 +101,6 @@
     <Compile Include="ShellBrowser.cs" />
     <Compile Include="Shell\Enums\GetPropertyStoreFlags.cs" />
     <Compile Include="Shell\Enums\SFGAOF.cs" />
-    <Compile Include="Shell\Enums\SIAttribFlags.cs" />
     <Compile Include="Shell\Enums\SIGDN.cs" />
     <Compile Include="Shell\Interop\DLLs\CoreNativeMethods.cs" />
     <Compile Include="Shell\Interop\DLLs\User32.cs" />
@@ -111,7 +110,7 @@
     <Compile Include="Shell\Interop\Interfaces\KnownFolders\IKnownFolderManager.cs" />
     <Compile Include="Shell\Interop\Interfaces\KnownFolders\IKnownFolderNative.cs" />
     <Compile Include="Shell\Interop\Interfaces\KnownFolders\KnownFoldersIIDGuids.cs" />
-    <Compile Include="Shell\Interop\Interfaces\KnownFolders\KnownFoldersNativeMethods.cs" />
+    <Compile Include="Shell\Interop\Interfaces\KnownFolders\NativeFolderDefinition.cs" />
     <Compile Include="Shell\Interop\Interfaces\KnownFolders\RedirectionCapabilities.cs" />
     <Compile Include="Shell\Interop\Interfaces\KnownFolders\IKnownFolderProperties.cs" />
     <Compile Include="Shell\Interop\Interfaces\ShellItems\IEnumShellItems.cs" />
@@ -141,11 +140,7 @@
     <Compile Include="IDs\ShellIIDGuids.cs" />
     <Compile Include="Shell\Enums\SICHINTF.cs" />
     <Compile Include="Shell\Enums\HRESULT.cs" />
-    <Compile Include="Shell\Enums\ASSOCCLASS.cs" />
     <Compile Include="Shell\Interop\EXTRASEARCH.cs" />
-    <Compile Include="Shell\Enums\FOLDERFLAGS.cs" />
-    <Compile Include="Shell\Interop\FOLDERSETTINGS.cs" />
-    <Compile Include="Shell\Enums\FOLDERVIEWMODE.cs" />
     <Compile Include="Shell\Interop\Interfaces\IEnumExtraSearch.cs" />
     <Compile Include="Shell\Interop\Interfaces\IEnumIDList.cs" />
     <Compile Include="Shell\Interop\Interfaces\ShellFolders\IShellFolder.cs" />
@@ -158,7 +153,6 @@
     <Compile Include="Shell\Interop\MSG.cs" />
     <Compile Include="Shell\Interop\POINT.cs" />
     <Compile Include="Shell\Interop\PROPERTYKEY.cs" />
-    <Compile Include="Shell\Enums\SBSP.cs" />
     <Compile Include="Shell\Enums\SEE.cs" />
     <Compile Include="Shell\Enums\SFGAO.cs" />
     <Compile Include="Enums\SHCOLSTATEF.cs" />
@@ -171,14 +165,10 @@
     <Compile Include="Shell\Enums\SHGFI.cs" />
     <Compile Include="Shell\Interop\DLLs\Shlwapi.cs" />
     <Compile Include="Shell\Interop\STRRET.cs" />
-    <Compile Include="Shell\Enums\SVUIA_STATUS.cs" />
-    <Compile Include="Shell\Enums\_SVGIO.cs" />
-    <Compile Include="Shell\Enums\_SVSIF.cs" />
     <Compile Include="Shell\Pidl\IdList.cs" />
     <Compile Include="Shell\Pidl\PidlManager.cs" />
     <Compile Include="Shell\Pidl\ShellId.cs" />
     <Compile Include="Shell\PropertyKey.cs" />
-    <Compile Include="Shell\Enums\ShellObjectChangeTypes.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Local\Strings.de-DE.resx">
@@ -227,6 +217,7 @@
     <Content Include="Version.txt" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="ClassDiagram1.cd" />
     <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

@@ -1,7 +1,7 @@
-﻿namespace ShellBrowserLib.SharpShell.Interop.Knownfolders
+﻿namespace ShellBrowserLib.Shell.Interop.Knownfolders
 {
     using ShellBrowserLib.Shell.Enums;
-    using ShellBrowserLib.SharpShell.Interop.Interfaces.KnownFolders;
+    using ShellBrowserLib.Shell.Interop.Interfaces.KnownFolders;
     using System;
     using System.Runtime.CompilerServices;
     using System.Runtime.InteropServices;
@@ -45,7 +45,7 @@
             MethodCodeType = MethodCodeType.Runtime)]
         public virtual extern void RegisterFolder(
             [In, MarshalAs(UnmanagedType.LPStruct)] Guid knownFolderGuid,
-            [In] ref KnownFoldersSafeNativeMethods.NativeFolderDefinition knownFolderDefinition);
+            [In] ref NativeFolderDefinition knownFolderDefinition);
 
         [MethodImpl(MethodImplOptions.InternalCall,
             MethodCodeType = MethodCodeType.Runtime)]

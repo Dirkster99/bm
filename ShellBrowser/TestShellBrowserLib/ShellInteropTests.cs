@@ -1,16 +1,16 @@
 ﻿namespace TestShellBrowserLib
 {
     using Microsoft.VisualStudio.TestTools.UnitTesting;
-    using ShellBrowserLib.SharpShell.Interop;
-    using ShellBrowserLib.SharpShell.Interop.Interfaces.ShellFolders;
-    using ShellBrowserLib.SharpShell.Interop.KnownFolders;
-    using ShellBrowserLib.SharpShell.Interop.ShellFolders;
-    using ShellBrowserLib.SharpShell.Pidl;
+    using ShellBrowserLib.Shell.Interop;
+    using ShellBrowserLib.Shell.Interop.Interfaces.ShellFolders;
+    using ShellBrowserLib.Shell.Interop.KnownFolders;
+    using ShellBrowserLib.Shell.Interop.ShellFolders;
+    using ShellBrowserLib.Shell.Pidl;
     using ShellBrowserLib.Shell.Enums;
     using System;
     using System.Runtime.InteropServices;
     using System.Text;
-    using ShellBrowserLib.SharpShell.Interop.Dlls;
+    using ShellBrowserLib.Shell.Interop.Dlls;
     using ShellBrowserLib.IDs;
 
     [TestClass]
