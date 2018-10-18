@@ -132,7 +132,7 @@
                 try
                 {
                     // The resource for loading this item's icon is known
-                    // So, we attempt to extract and display this
+                    // So, we attempt to extract and display it
                     if (iconResourceId != null)
                     {
                         string[] resourceId = iconResourceId.Split(',');
@@ -140,13 +140,22 @@
 
                         if (resourceId != null && resourceId.Length == 2)
                         {
-                            return Extract(resourceId[0], iconIndex, iconSize);
+                            if (string.IsNullOrEmpty(resourceId[0]) == false)
+                            {
+                                return Extract(resourceId[0], iconIndex, iconSize);
+                            }
+                            else
+                            {
+                                Debug.WriteLine(string.Format("---> 0 Failed to get icon from '{0}' with '{1}'",
+                                    path, iconResourceId));
+                            }
                         }
                     }
                 }
                 catch (Exception exception)
                 {
-                    Debug.WriteLine(string.Format("---> 1 Failed to get icon from {0}: {1}{2}", path, Environment.NewLine, exception.ToString()));
+                    Debug.WriteLine(string.Format("---> 1 Failed to get icon from {0}: {1}{2}",
+                        path, Environment.NewLine, exception.ToString()));
                 }
 
                 try
@@ -187,6 +196,9 @@
         /// <returns></returns>
         public ImageSource Extract(string file, int iconIndex, IconSize iconSize)
         {
+            if (string.IsNullOrEmpty(file))
+                return null;
+
             IntPtr large = default(IntPtr);
             IntPtr small = default(IntPtr);
             var hr = NativeMethods.ExtractIconEx(file, iconIndex, out large, out small, 1);

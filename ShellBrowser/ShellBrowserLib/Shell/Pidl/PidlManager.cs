@@ -140,6 +140,8 @@
         /// <summary>
         /// Method converts a List of <see cref="ShellId"/>s into
         /// an <see cref="IntPtr"/> based PIDL.
+        /// 
+        /// Caller must free memory using <see cref="Marshal.FreeCoTaskMem(IntPtr)"/>.
         /// </summary>
         /// <returns><see cref="IntPtr"/> based PIDL object</returns>
         public static IntPtr IdListToPidl(IdList idList)
@@ -277,6 +279,23 @@
         }
 
         /// <summary>
+        /// Gets the display name for a given <see cref="IdList"/> based PIDL.
+        /// </summary>
+        /// <returns>the display name as string</returns>
+        public static string GetPidlDisplayName(IdList item)
+        {
+            IntPtr pidl = PidlManager.IdListToPidl(item);
+            try
+            {
+                return PidlManager.GetPidlDisplayName(pidl);
+            }
+            finally
+            {
+                Marshal.FreeCoTaskMem(pidl);
+            }
+        }
+
+        /// <summary>
         /// Converts a path representation 'C:\' into an
         /// <see cref="IntPtr"/> formated PIDL representation.
         /// 
@@ -362,6 +381,27 @@
         }
 
         /// <summary>
+        /// Converts a <see cref="IdList"/> formated PIDL representation
+        /// into a path (parse name) representation 'C:\'.
+        /// </summary>
+        /// <param name="idList"></param>
+        /// <param name="pathType"></param>
+        /// <returns></returns>
+        public static string GetPathFromPIDL(IdList idList,
+                                             TypOfPath pathType = TypOfPath.LogicalPath)
+        {
+            IntPtr pidl = PidlManager.IdListToPidl(idList);
+            try
+            {
+                return PidlManager.GetPathFromPIDL(pidl, pathType);
+            }
+            finally
+            {
+                Marshal.FreeCoTaskMem(pidl);
+            }
+        }
+
+        /// <summary>
         /// Gets the parent IdList (parent PIDL) if available and a
         /// relative child idList (relative child PIDL).
         /// </summary>
@@ -395,7 +435,7 @@
                 // Convert PIDL into list of shellids and remove last id
                 var ashellListId = PidlManager.Decode(apidl);
 
-                return GetKFParentChildIdList(IdList.Create(ashellListId), out parentList, out relativeChild);
+                return GetParentChildIdList(IdList.Create(ashellListId), out parentList, out relativeChild);
             }
             finally
             {
@@ -413,7 +453,7 @@
         /// <param name="relativeChild"></param>
         /// <returns>True if known folder parent was available in ParentId field,
         /// otherwise false.</returns>
-        public static bool GetKFParentChildIdList(IdList ashellListId
+        public static bool GetParentChildIdList(IdList ashellListId
                                                 , out IdList parentList
                                                 , out IdList relativeChild)
         {
@@ -441,7 +481,7 @@
                         }
                         else
                         {
-                            // Just return the desktop as parent if the givem item has no more parents
+                            // Just return the desktop as parent if the given item has no more parents
                             using (var desktop = KnownFolderHelper.FromKnownFolderGuid(new Guid(KF_ID.ID_FOLDERID_Desktop)))
                             {
                                 IntPtr desktopPtr = default(IntPtr);

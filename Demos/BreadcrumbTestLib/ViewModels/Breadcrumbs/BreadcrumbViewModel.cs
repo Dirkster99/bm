@@ -35,8 +35,6 @@ namespace BreadcrumbTestLib.ViewModels.Breadcrumbs
         private string _BreadcrumbSelectedPath;
 
         private IDirectoryBrowser _RootLocation = ShellBrowser.DesktopDirectory;
-        private ICompareHierarchy<IDirectoryBrowser> _Comparer = new IDirectoryHierarchyComparer();
-
         private Stack<BreadcrumbTreeItemViewModel> _CurrentPath;
         #endregion fields
 
@@ -323,10 +321,11 @@ namespace BreadcrumbTestLib.ViewModels.Breadcrumbs
                         ihintLevel = _CurrentPath.Count();
                 }
 
+                ICompareHierarchy<IDirectoryBrowser> Comparer = new DirectoryBrowserHierarchyComparer();
                 var rootSelector = BreadcrumbSubTree.Selection as ITreeRootSelector<BreadcrumbTreeItemViewModel, IDirectoryBrowser>;
                 var items = await BrowseItemsAsync(BreadcrumbSubTree, location,
                                                    direction, ihintLevel,
-                                                   _CurrentPath, _Comparer);
+                                                   _CurrentPath, Comparer);
 
                 if (items.Count > 0)
                 {
@@ -338,7 +337,6 @@ namespace BreadcrumbTestLib.ViewModels.Breadcrumbs
 
                         var lastList = _CurrentPath.Reverse().ToArray();
                         var pathList = items.Reverse().ToArray();
-                        ICompareHierarchy<IDirectoryBrowser> Comparer = new IDirectoryHierarchyComparer();
 
                         for (int i = 0; i < lastList.Length; i++)
                         {

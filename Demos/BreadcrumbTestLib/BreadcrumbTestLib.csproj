@@ -66,7 +66,7 @@
     <Compile Include="ViewModels\Base\ViewModelBase.cs" />
     <Compile Include="ViewModels\Breadcrumbs\BreadcrumbViewModel.cs" />
     <Compile Include="ViewModels\Breadcrumbs\BreadcrumbTreeItemHelperViewModel.cs" />
-    <Compile Include="ViewModels\Breadcrumbs\IDirectoryHierarchyComparer.cs" />
+    <Compile Include="ViewModels\Breadcrumbs\DirectoryBrowserHierarchyComparer.cs" />
     <Compile Include="ViewModels\Breadcrumbs\BreadcrumbTreeItemViewModel.cs" />
     <Compile Include="ViewModels\Breadcrumbs\ProgressViewModel.cs" />
     <Compile Include="ViewModels\Breadcrumbs\TreeSelectors\TreeRootSelectorViewModel.cs" />

@@ -171,6 +171,16 @@ namespace ShellBrowserLib.Browser
         /// </summary>
         public string PathRAW { get; }
 
+        /// <summary>
+        /// Get Known file system Path  or FolderId for this folder.
+        /// 
+        /// That is:
+        /// 1) A storage location (if it exists) in the filesystem
+        /// 
+        /// 2) A knownfolder GUID (if it exists) is shown
+        ///    here as default preference over
+        ///    
+        /// </summary>
         public string FullName { get; }
         #endregion properties
 

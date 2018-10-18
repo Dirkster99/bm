@@ -18,7 +18,7 @@
     using System.Text;
 
     /// <summary>
-    /// Implements core API tpe methods and properties that are used to interact
+    /// Implements core API type methods and properties that are used to interact
     /// with Windows Shell Items (folders and known folders).
     /// </summary>
     public static class ShellBrowser
@@ -198,6 +198,30 @@
 
                 return null;
             }
+        }
+
+        /// <summary>Creates a new object that implements the
+        /// <see cref="IDirectoryBrowser"/> interface from a
+        /// <paramref name="fullPidl"/> that represents an item in the browsing structure.
+        /// 
+        /// Returns null if a parseName could not be determined.
+        /// </summary>
+        /// <param name="fullPidl"></param>
+        /// <returns></returns>
+        public static IDirectoryBrowser Create(IdList fullPidl)
+        {
+            if (fullPidl == null)
+                return Create(KF_IID.ID_FOLDERID_Desktop);
+
+            if (fullPidl.Size == 0)
+                return Create(KF_IID.ID_FOLDERID_Desktop);
+
+            string parseName = PidlManager.GetPathFromPIDL(fullPidl);
+
+            if (string.IsNullOrEmpty(parseName) == true)
+                return null;
+
+            return Create(parseName);
         }
 
         /// <summary>
@@ -741,7 +765,6 @@
 
         /// <summary>
         /// Return whether parent directory contain child directory.
-        /// Aware UserFiles and Public directory too.
         /// </summary>
         /// <param name="child"></param>
         /// <param name="parentFullName"></param>
@@ -756,10 +779,6 @@
 
             if (parentFullName == DesktopDirectory.FullName)
                 return true;
-
-////            if ((child.FullName.StartsWith(DirectoryInfoEx.IID_UserFiles) ||
-////                 child.FullName.StartsWith(DirectoryInfoEx.IID_Public)))
-////                return false;
 
             var current = child;
             do
@@ -787,87 +806,100 @@
             return (current != null);
         }
 
-        /***
-                /// <summary>
-                /// Return whether parent directory contain child directory.
-                /// Aware UserFiles and Public directory too.
-                /// </summary>
-                /// <param name="child"></param>
-                /// <param name="parentFullName"></param>
-                /// <returns></returns>
-                public static bool HasParent(IDirectoryBrowser child, string parentFullName)
+        /// <summary>
+        /// Gets a list of fullids that represent a path to the given <paramref name="item"/>.
+        /// </summary>
+        /// <param name="item"></param>
+        /// <returns></returns>
+        public static List<IdList> GetPathItems(IDirectoryBrowser item)
+        {
+            List<IdList> pathItems = new List<IdList>();
+
+            // Desktop has no parents and no child to point at
+            if (item.ParentIdList == null && item.ChildIdList == null)
+                return pathItems;
+
+            var fullIdList = PidlManager.CombineParentChild(item.ParentIdList,
+                                                            item.ChildIdList);
+
+            if (fullIdList.Size <= 1)
+            {
+                pathItems.Add(fullIdList); // Reference to 'This PC'(?) directly under desktop
+                return pathItems;
+            }
+
+            IdList parentItem, childItem;
+            while (PidlManager.GetParentChildIdList(fullIdList,
+                                                    out parentItem, out childItem) == true)
+            {
+                pathItems.Add(fullIdList);
+
+                if (fullIdList.Size <= 1)
+                    break;
+
+                fullIdList = parentItem;
+            }
+
+            return pathItems;
+        }
+
+        /// <summary>
+        /// Determine whether parent directory contains child directory.
+        /// </summary>
+        /// <param name="child"></param>
+        /// <param name="parent"></param>
+        /// <returns>Returns true:
+        /// 1) if child and parent are equal or
+        /// 2) if child is a child of parent, otherwise
+        /// false.</returns>
+        public static bool HasParent(IDirectoryBrowser child, IDirectoryBrowser parent)
+        {
+            if (child == null || parent == null)
+                return false;
+
+            if (string.IsNullOrEmpty(child.PathFileSystem) == false &&
+                string.IsNullOrEmpty(parent.PathFileSystem) == false)
+            {
+                if (child.PathFileSystem.StartsWith(parent.PathFileSystem, StringComparison.InvariantCultureIgnoreCase))
+                    return true;
+            }
+
+            if (child.Equals(parent) == true)
+                return true;
+
+            if (string.Compare(parent.SpecialPathId, KF_IID.ID_FOLDERID_Desktop, true) == 0)
+                return false;
+
+            if (string.Compare(child.SpecialPathId, KF_IID.ID_FOLDERID_Desktop, true) == 0)
+                return true;
+
+            var current = child;
+            do
+            {
+                string pathShell = current.PathShell;
+
+                if (string.IsNullOrEmpty(pathShell) == false)
                 {
-                    if (child.FullName.StartsWith(parentFullName, StringComparison.InvariantCultureIgnoreCase))
-                        return true;
+                    var childParent = ShellBrowser.GetParentFolder(pathShell);
 
-                    if (parentFullName == DirectoryInfoEx.DesktopDirectory.FullName)
-                        return true;
-
-                    if ((child.FullName.StartsWith(DirectoryInfoEx.IID_UserFiles) ||
-                            child.FullName.StartsWith(DirectoryInfoEx.IID_Public)))
-                        return false;
-
-                    var current = child.Parent;
-                    while (current != null && parentFullName != current.FullName)
-                        current = current.Parent;
-
-                    return (current != null);
-                }
-
-                /// <summary>
-                /// Return whether parent directory contain child directory.
-                /// Aware Library, UserFiles and Public directory too.
-                /// </summary>
-                /// <param name="child"></param>
-                /// <param name="parent"></param>
-                /// <returns></returns>
-                public static bool HasParent(IDirectoryBrowser child, IDirectoryBrowser parent)
-                {
-                    //0.13: Added HasParent
-                    if (parent == null)
+                    if (childParent != null)
                     {
-                        //if (Debugger.IsAttached)
-                        //    Debugger.Break();
-                        return false;
-                    }
+                        if (string.IsNullOrEmpty(childParent) == false)
+                        {
+                            current = Create(childParent);
+                        }
+                        else
+                            current = null;
 
-                    //::{031E4825-7B94-4DC3-B131-E946B44C8DD5}\Music.library-ms
-                    if (parent.FullName.StartsWith(DirectoryInfoEx.IID_Library) && parent.FullName.EndsWith(".library-ms"))
-                    {
-                        //Reverse
-                        foreach (DirectoryInfoEx subDir in parent.GetDirectories())
-                            if (subDir.Equals(child) || HasParent(child, subDir))
-                                return true;
-                        return false;
                     }
                     else
-                    {
-                        if (child.FullName.StartsWith(parent.FullName.TrimEnd('\\') + "\\", StringComparison.InvariantCultureIgnoreCase))
-                            return true;
-
-                        if (child.FullName.StartsWith(DirectoryInfoEx.IID_UserFiles) || child.FullName.StartsWith(DirectoryInfoEx.IID_Public))
-                            return false;
-
-                        var current = child.Parent;
-                        while (current != null && !parent.Equals(current))
-                            current = current.Parent;
-
-                        return (current != null);
-                    }
+                        current = null;
                 }
+            }
+            while (current != null && parent.Equals(current) == false);
 
-                //0.12: IsLibraryItem
-                /// <summary>
-                /// Return whether if specific path is part of the library item (e.g. Picture, Musics)
-                /// </summary>
-                /// <param name="fullName"></param>
-                /// <returns></returns>
-                public static bool IsLibraryItem(string fullName)
-                {
-                    return (fullName.StartsWith(DirectoryInfoEx.IID_Library) &&
-                            fullName.EndsWith(".library-ms"));
-                }
-        ***/
+            return (current != null);
+        }
         #endregion methods
     }
 }
