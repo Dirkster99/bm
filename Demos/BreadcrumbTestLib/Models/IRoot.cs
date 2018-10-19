@@ -32,6 +32,7 @@
             BrowseRequest<M> requestedLocation,
             string sourceHint,
             HintDirection direction = HintDirection.Unrelated,
-            int ihintLevel = -1);
+            BreadcrumbTreeItemViewModel toBeSelectedLocation = null
+            );
     }
 }

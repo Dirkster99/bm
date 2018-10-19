@@ -23,7 +23,7 @@
         {
             // Get test browser object and generate path list of idListPidls
             var testitem = ShellBrowser.Create(KF_IID.ID_FOLDERID_Desktop);
-            var pathItems = ShellBrowser.GetPathItems(testitem);
+            var pathItems = ShellBrowser.PathItemsAsIdList(testitem);
 
             // Desktop has no children or parent pidls since its the root of it all
             Assert.IsTrue(testitem.ParentIdList == null);
@@ -38,7 +38,7 @@
         {
             // Get test browser object and generate path list of idListPidls
             var testitem = ShellBrowser.Create(KF_IID.ID_FOLDERID_ComputerFolder);
-            var pathItems = ShellBrowser.GetPathItems(testitem);
+            var pathItems = ShellBrowser.PathItemsAsIdList(testitem);
 
             // Should contain the fullpidl to 'This PC'
             Assert.IsTrue(pathItems.Count == 1);
@@ -77,7 +77,7 @@
             Assert.IsTrue(drivePath != null);
 
             var testitem = ShellBrowser.Create(drivePath);
-            var pathItems = ShellBrowser.GetPathItems(testitem);
+            var pathItems = ShellBrowser.PathItemsAsIdList(testitem);
 
             // Should contain the fullpidl to 'This PC', '<Drive (eg.: C:)>'
             Assert.IsTrue(pathItems.Count == 2);
@@ -110,7 +110,7 @@
         {
             // Get test browser object and generate path list of idListPidls
             var testitem = ShellBrowser.Create(KF_IID.ID_FOLDERID_Music);
-            var pathItems = ShellBrowser.GetPathItems(testitem);
+            var pathItems = ShellBrowser.PathItemsAsIdList(testitem);
 
             // Should contain the fullpidl to 'This PC', 'Music'
             Assert.IsTrue(pathItems.Count == 2);
@@ -143,7 +143,7 @@
         {
             // Get test browser object and generate path list of idListPidls
             var testitem = ShellBrowser.Create(KF_IID.ID_FOLDERID_Windows);
-            var pathItems = ShellBrowser.GetPathItems(testitem);
+            var pathItems = ShellBrowser.PathItemsAsIdList(testitem);
 
             // Should contain the fullpidls to 'This PC', '<Drive (eg.: C:)>', 'Windows'
             Assert.IsTrue(pathItems.Count == 3);
@@ -176,7 +176,7 @@
         {
             // Get test browser object and generate path list of idListPidls
             var testitem = ShellBrowser.Create(KF_IID.ID_FOLDERID_Fonts);
-            var pathItems = ShellBrowser.GetPathItems(testitem);
+            var pathItems = ShellBrowser.PathItemsAsIdList(testitem);
 
             // Should contain the fullpidls to 'This PC', '<Drive (eg.: C:)>', 'Windows'. 'Fonts'
             Assert.IsTrue(pathItems.Count == 4);

@@ -807,20 +807,20 @@
         }
 
         /// <summary>
-        /// Gets a list of fullids that represent a path to the given <paramref name="item"/>.
+        /// Gets a list of fullids that represent a path to the given <paramref name="location"/>.
         /// </summary>
-        /// <param name="item"></param>
+        /// <param name="location"></param>
         /// <returns></returns>
-        public static List<IdList> GetPathItems(IDirectoryBrowser item)
+        public static List<IdList> PathItemsAsIdList(IDirectoryBrowser location)
         {
             List<IdList> pathItems = new List<IdList>();
 
             // Desktop has no parents and no child to point at
-            if (item.ParentIdList == null && item.ChildIdList == null)
+            if (location.ParentIdList == null && location.ChildIdList == null)
                 return pathItems;
 
-            var fullIdList = PidlManager.CombineParentChild(item.ParentIdList,
-                                                            item.ChildIdList);
+            var fullIdList = PidlManager.CombineParentChild(location.ParentIdList,
+                                                            location.ChildIdList);
 
             if (fullIdList.Size <= 1)
             {
@@ -838,6 +838,31 @@
                     break;
 
                 fullIdList = parentItem;
+            }
+
+            return pathItems;
+        }
+
+        /// <summary>
+        /// Gets a list of ParseNames that (taken together) represent a path to
+        /// a given <paramref name="location"/>.
+        /// </summary>
+        /// <param name="location"></param>
+        /// <returns></returns>
+        public static List<string> PathItemsAsParseNames(IDirectoryBrowser location)
+        {
+            var pathItems = new List<string>();
+
+            var idLists = PathItemsAsIdList(location);
+
+            foreach (var item in idLists)
+            {
+                string parseName = PidlManager.IdListFullToName(item, SHGDNF.SHGDN_FORPARSING);
+
+                if (string.IsNullOrEmpty(parseName) == false)
+                    pathItems.Add(parseName);
+                else
+                    return pathItems;  // ParseName cannot be determined so we return what we got :-(
             }
 
             return pathItems;

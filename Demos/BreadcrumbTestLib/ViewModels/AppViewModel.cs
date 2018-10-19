@@ -9,7 +9,6 @@
     using ShellBrowserLib.Interfaces;
     using System;
     using System.Diagnostics;
-    using System.IO;
     using System.Threading;
     using System.Threading.Tasks;
     using System.Windows;
@@ -172,8 +171,8 @@
         public async Task InitPathAsync(string initialPath)
         {
             // Revert request to default if requested path is non-existing
-            if (System.IO.Directory.Exists(initialPath) == false)
-                initialPath = new DirectoryInfo(Environment.SystemDirectory).Root.Name;
+            if (ShellBrowser.DirectoryExists(initialPath) == false)
+                initialPath =  ShellBrowser.SysDefault.FullName;
 
             Logger.InfoFormat("'{0}'", initialPath);
             var location = ShellBrowser.Create(initialPath);

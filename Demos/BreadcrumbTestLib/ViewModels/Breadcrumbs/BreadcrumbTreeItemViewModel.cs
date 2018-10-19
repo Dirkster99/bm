@@ -190,14 +190,12 @@
                         if (_Root.IsBrowsing == true)   // Selection change originates from viewmodel
                             return;                    // So, let ignore this one since its browsing anyways...
 
-                        int itemLevel = GetItemLevel();
-
-                        Logger.InfoFormat("itemLevel {0} selectedFolder {1}", itemLevel, selectedFolder);
+                        Logger.InfoFormat("selectedFolder {0}", selectedFolder);
 
                         var request = new BrowseRequest<IDirectoryBrowser>(selectedFolder.GetModel());
                         await _Root.NavigateToAsync(request,
                                                     "BreadcrumbTreeItemViewModel.ItemSelectionChanged",
-                                                    HintDirection.Down, itemLevel);
+                                                    HintDirection.Down, this);
 
                     });
                 }
@@ -228,7 +226,7 @@
                         var request = new BrowseRequest<IDirectoryBrowser>(this.GetModel());
                         await _Root.NavigateToAsync(request,
                             "BreadcrumbTreeItemViewModel.BreadcrumbTreeTreeItemClickCommand",
-                            HintDirection.Up);
+                            HintDirection.Up, this);
                     });
                 }
 
@@ -360,6 +358,22 @@
         }
 
         /// <summary>
+        /// Compares a given parse name with the parse names known in this object's model.
+        /// 
+        /// Considers case insensitive string matching for:
+        /// 1> SpecialPathId
+        ///   1.2> PathRAW (if SpecialPathId fails and CLSID may have been used to create this)
+        ///
+        /// 3> PathFileSystem
+        /// </summary>
+        /// <param name="parseName">True is a matching parse name was found and false if not.</param>
+        /// <returns></returns>
+        internal bool EqualsParseName(string parseName)
+        {
+            return _dir.EqualsParseName(parseName);
+        }
+
+        /// <summary>
         /// Goes through all Parent items of this item and gets a collection of viewmodel
         /// items that represent the path towards this item in the the tree.
         /// </summary>
@@ -422,18 +436,9 @@
         }
         #endregion Disposable Interfaces
 
-        private int GetItemLevel()
+        internal bool EqualsLocation(IDirectoryBrowser location)
         {
-            int iLevel = 0;
-            var parent = _parentNode;
-            while (parent != null)
-            {
-                parent = parent._parentNode;
-                iLevel++;
-            }
-
-
-            return iLevel;
+            return _dir.Equals(location);
         }
         #endregion
     }

@@ -16,12 +16,10 @@
         /// Parameterized class constructor.
         /// </summary>
         public BrowseRequest(T newLocation,
-////                             T[] pathSegments,
                              CancellationToken cancelToken = default(CancellationToken))
           : this()
         {
             this.NewLocation = (T)(newLocation as ICloneable).Clone();
-////            this.PathSegments = pathSegments;
             this.CancelTok = cancelToken;
         }
 
@@ -40,11 +38,6 @@
         /// the target of this browse request.
         /// </summary>
         public T NewLocation { get; }
-
-////        /// <summary>
-////        /// Gets a set of segments where each segment is part of a complete path in <see ref="NewLocation"/>
-////        /// </summary>
-////        public T[] PathSegments { get; }
 
         /// <summary>
         /// Gets the CancelationToken (if any) that can be used by the requesting
