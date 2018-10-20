@@ -107,14 +107,14 @@
                                 <Rectangle x:Name="PART_Background" Opacity="0" Fill="{TemplateBinding BackgroundBrush}" Grid.RowSpan="2" />
                                 <Rectangle x:Name="PART_Highlight"  Opacity="0" Fill="{TemplateBinding HighlightBrush}"  />
                             </Grid>
-                            <Rectangle Visibility="{Binding FillFullRow, RelativeSource={RelativeSource TemplatedParent}, Converter={StaticResource btvc}}">
+                            <!--Rectangle Visibility="{Binding FillFullRow, RelativeSource={RelativeSource TemplatedParent}, Converter={StaticResource btvc}}">
                                 <Rectangle.Fill>
                                     <VisualBrush Stretch="Uniform" Visual="{Binding ElementName=PART_HotTrackGrid}"  />
                                 </Rectangle.Fill>
                                 <Rectangle.RenderTransform>
                                     <ScaleTransform ScaleX="-1" />
                                 </Rectangle.RenderTransform>
-                            </Rectangle>
+                            </Rectangle-->
                             <Border Padding="{TemplateBinding Padding}" Grid.RowSpan="2">
                                 <ContentPresenter x:Name="content" Content="{TemplateBinding Content}"  />
                             </Border>

@@ -21,8 +21,6 @@
         /// </summary>
         protected static readonly log4net.ILog Logger = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
 
-        private DiskTreeNodeViewModel _DiskTest;
-
         private OneTaskLimitedScheduler _OneTaskScheduler;
         private SemaphoreSlim _Semaphore;
         private CancellationTokenSource _CancelTokenSource;
@@ -54,10 +52,6 @@
 
             WeakEventManager<ICanNavigate, BrowsingEventArgs>
                 .AddHandler(BreadcrumbBrowser, "BrowseEvent", Control_BrowseEvent);
-
-            this.DiskTest = null; //// new DiskTreeNodeViewModel(new DirectoryInfo(@"C:\\"), new DirectoryInfo(@"E:\\"));
-
-            this.ExTest = null; //// new BreadcrumbTreeItemViewModel();
         }
 
         /// <summary>
@@ -138,29 +132,6 @@
         /// in this application.
         /// </summary>
         public IBreadcrumbViewModel BreadcrumbBrowser { get; }
-
-        /// <summary>
-        /// Gets a viewmodel that drives the BreadcrumbTree control
-        /// (which is just one part of the Breadcrumb control).
-        /// </summary>
-        public DiskTreeNodeViewModel DiskTest
-        {
-            get
-            {
-                return _DiskTest;
-            }
-
-            private set
-            {
-                _DiskTest = value;
-                NotifyPropertyChanged(() => DiskTest);
-            }
-        }
-
-        /// <summary>
-        /// Gets a viewmodel that drives the Breadcrumb control.
-        /// </summary>
-        public BreadcrumbTreeItemViewModel ExTest { get; private set; }
         #endregion properties
 
         #region methods
@@ -175,14 +146,8 @@
                 initialPath =  ShellBrowser.SysDefault.FullName;
 
             Logger.InfoFormat("'{0}'", initialPath);
+
             var location = ShellBrowser.Create(initialPath);
-////            string[] pathSegments = ShellBrowser.GetFolderSegments(initialPath);
-
-////            var selection = DiskTest.Selection as ITreeRootSelector<DiskTreeNodeViewModel, string>;
-////            selection.SelectAsync(initialPath, new BrowseRequest<string>(initialPath, pathSegments));
-
-////            ExTest.InitRootAsync(new BrowseRequest<string>(initialPath, pathSegments));
-
             await BreadcrumbBrowser.InitPathAsync();
             NavigateToFolder(location);
         }

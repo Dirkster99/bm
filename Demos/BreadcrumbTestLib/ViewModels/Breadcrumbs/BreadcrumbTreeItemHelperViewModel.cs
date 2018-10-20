@@ -327,7 +327,7 @@
                     break;
 
                 default:
-                    throw new NotSupportedException("UpdateMode");
+                    throw new NotSupportedException(updateMode.ToString());
             }
         }
 

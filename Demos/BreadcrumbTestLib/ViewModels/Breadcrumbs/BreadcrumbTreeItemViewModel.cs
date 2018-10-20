@@ -23,8 +23,7 @@
     /// - a list of items below this item (<see cref="BreadcrumbTreeItemHelperViewModel{VM}"/>).
     /// </summary>
     public class BreadcrumbTreeItemViewModel : ViewModelBase,
-                                       ISupportBreadcrumbTreeItemViewModel<BreadcrumbTreeItemViewModel, IDirectoryBrowser>,
-                                       IDisposable
+                                       ISupportBreadcrumbTreeItemViewModel<BreadcrumbTreeItemViewModel, IDirectoryBrowser>
     {
         #region fields
         /// <summary>
@@ -35,12 +34,11 @@
         private IDirectoryBrowser _dir;
         private string _header;
         private BreadcrumbTreeItemViewModel _rootNode, _parentNode;
-        private bool _disposed = false;
 
         // Instance of the root viewmodel - reference is used to invoke central tree related (navigational) methods
         private IRoot<IDirectoryBrowser> _Root;
 
-        private ICommand _ItemSelectionChangedCommand;
+        private ICommand _DropDownItemSelectedCommand;
         private ICommand _BreadcrumbTreeTreeItemClickCommand;
         #endregion fields
 
@@ -84,7 +82,10 @@
             {
                 try
                 {
-                    return ShellBrowser.GetChildItems(_dir.PathShell).Select(d => new BreadcrumbTreeItemViewModel(d, this, _Root));
+                    // FullName has preference for directory file system path over SpecialId
+                    // (if an item has both)
+                    // -> this is useful here to no relist SpecialItems below Desktop or other special items
+                    return ShellBrowser.GetChildItems(_dir.FullName).Select(d => new BreadcrumbTreeItemViewModel(d, this, _Root));
                 }
                 catch (Exception exp)
                 {
@@ -96,16 +97,6 @@
             this.Entries = new BreadcrumbTreeItemHelperViewModel<BreadcrumbTreeItemViewModel>(loadAsyncFunc);
             this.Selection = new TreeSelectorViewModel<BreadcrumbTreeItemViewModel, IDirectoryBrowser>
                                                     (_dir, this, this._parentNode.Selection, this.Entries);
-        }
-
-        /// <summary>
-        /// Class finalizer/destructor
-        /// When the object is eligible for finalization,
-        /// the garbage collector runs the Finalize method of the object. 
-        /// </summary>
-        ~BreadcrumbTreeItemViewModel()
-        {
-            Dispose();
         }
         #endregion constructors
 
@@ -166,13 +157,13 @@
         /// Array of length 1 with an object of type <see cref="BreadcrumbTreeItemViewModel"/>
         /// object[1] = {new <see cref="BreadcrumbTreeItemViewModel"/>() }
         /// </summary>
-        public ICommand ItemSelectionChangedCommand
+        public ICommand DropDownItemSelectedCommand
         {
             get
             {
-                if (_ItemSelectionChangedCommand == null)
+                if (_DropDownItemSelectedCommand == null)
                 {
-                    _ItemSelectionChangedCommand = new RelayCommand<object>(async (param) =>
+                    _DropDownItemSelectedCommand = new RelayCommand<object>(async (param) =>
                     {
                         var parArray = param as object[];
                         if (parArray == null)
@@ -200,7 +191,7 @@
                     });
                 }
 
-                return _ItemSelectionChangedCommand;
+                return _DropDownItemSelectedCommand;
             }
         }
 
@@ -396,45 +387,6 @@
 
             return list;
         }
-
-        #region Disposable Interfaces
-        /// <summary>
-        /// Standard dispose method of the <seealso cref="IDisposable" /> interface.
-        /// </summary>
-        public void Dispose()
-        {
-            Dispose(true);
-        }
-
-        /// <summary>
-        /// Implements standard disposable method.
-        /// Source: http://www.codeproject.com/Articles/15360/Implementing-IDisposable-and-the-Dispose-Pattern-P
-        /// </summary>
-        /// <param name="disposing"></param>
-        protected virtual void Dispose(bool disposing)
-        {
-            if (_disposed == false)
-            {
-                if (disposing == true)
-                {
-                    // Dispose of the model that defines this viemodel
-////                    if (_dir != null)
-////                        _dir.Dispose();
-
-                    _dir = null;
-                }
-
-                // There are no unmanaged resources to release, but
-                // if we add them, they need to be released here.
-            }
-
-            _disposed = true;
-
-            //// If it is available, make the call to the
-            //// base class's Dispose(Boolean) method
-            ////base.Dispose(disposing);
-        }
-        #endregion Disposable Interfaces
 
         internal bool EqualsLocation(IDirectoryBrowser location)
         {

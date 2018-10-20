@@ -24,8 +24,6 @@
         </Grid.Resources>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
-            <RowDefinition Height="Auto" />
-            <RowDefinition Height="Auto" />
             <RowDefinition Height="*" MinHeight="200"/>
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
@@ -45,38 +43,9 @@
             <TextBlock Text=" Breadcrumb Demo" />
         </TextBlock>
 
-        <!-- Display a Disk Drive dropdown list at the left most button in the control -->
-        <TextBlock Text="DiskTest" Grid.Column="0" Grid.Row="1" Margin="3"
-                   HorizontalAlignment="Right" VerticalAlignment="Center" />
-
-        <local:DiskTestView Grid.Column="1" Grid.Row="1" MinHeight="16"
-              DataContext="{Binding DiskTest}" 
-              Visibility="{Binding Path=IsChecked,ElementName=ShowDiskTest,Mode=OneWay, UpdateSourceTrigger=PropertyChanged,Converter={StaticResource BoolToVisibilityConverter}}"
-              />
-        <StackPanel Grid.Column="2" Grid.Row="1" VerticalAlignment="Top" Margin="3">
-            <!-- For Debugging only -->
-            <CheckBox Content="Show DiskTest" Name="ShowDiskTest"
-                      IsChecked="False"
-                      />
-        </StackPanel>
-
-        <TextBlock Text="ExTest" Grid.Column="0" Grid.Row="2" Margin="3"
-                   HorizontalAlignment="Right" VerticalAlignment="Center" />
-        <local:ExTestView 
-            Grid.Column="1" Grid.Row="2" MinHeight="16" DataContext="{Binding ExTest}"
-            Visibility="{Binding Path=IsChecked,ElementName=ShowExTest,Mode=OneWay, UpdateSourceTrigger=PropertyChanged,Converter={StaticResource BoolToVisibilityConverter}}"
-        />
-        
-        <StackPanel Grid.Column="2" Grid.Row="2" VerticalAlignment="Top" Margin="3">
-            <!-- For Debugging only -->
-            <CheckBox Content="Show ExTest" Name="ShowExTest"
-                      IsChecked="False"
-                      />
-        </StackPanel>
-
-        <TextBlock Text="BreadCrumb" Grid.Column="0" Grid.Row="3" Margin="3,6"
+        <TextBlock Text="BreadCrumb" Grid.Column="0" Grid.Row="1" Margin="3,6"
                    HorizontalAlignment="Right" VerticalAlignment="Top" />
-        <Grid Grid.Column="1" Grid.Row="3">
+        <Grid Grid.Column="1" Grid.Row="1">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="Auto"/>
@@ -233,10 +202,7 @@
                                     <Setter.Value>
                                         <ControlTemplate TargetType="{x:Type ListBoxItem}">
                                             <!-- Show Seperator only if items are overflown -->
-                                            <Separator HorizontalAlignment="Stretch"
-                                                        IsEnabled="False"
-                                                        Visibility="{Binding IsOverflown,Converter={StaticResource btv}, UpdateSourceTrigger=PropertyChanged, RelativeSource={RelativeSource AncestorType={x:Type bc:Breadcrumb}}}"
-                                                        />
+                                            <Separator HorizontalAlignment="Stretch" IsEnabled="False" />
                                         </ControlTemplate>
                                     </Setter.Value>
                                 </Setter>
@@ -257,7 +223,7 @@
         </Grid>
 
         <!-- PropertiesView of Breadcrumb control -->
-        <ScrollViewer Grid.Column="2" Grid.Row="3">
+        <ScrollViewer Grid.Column="2" Grid.Row="1">
             <StackPanel VerticalAlignment="Top" Margin="3" Width="200">
                 <!-- For Debugging only -->
                 <CheckBox Content="Show BreadCrumb Control" Name="ShowBreadCrumbControl"

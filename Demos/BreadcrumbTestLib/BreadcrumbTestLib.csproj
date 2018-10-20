@@ -81,12 +81,6 @@
     <Compile Include="Views\DemoView.xaml.cs">
       <DependentUpon>DemoView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\DiskTestView.xaml.cs">
-      <DependentUpon>DiskTestView.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Views\ExTestView.xaml.cs">
-      <DependentUpon>ExTestView.xaml</DependentUpon>
-    </Compile>
   </ItemGroup>
   <ItemGroup>
     <Content Include="SystemIO\folder.ico" />
@@ -105,14 +99,6 @@
     <Page Include="Views\DemoView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Views\DiskTestView.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Views\ExTestView.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
     </Page>
   </ItemGroup>
   <ItemGroup>

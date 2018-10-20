@@ -94,7 +94,7 @@
                                                     IsDropDownOpen="{Binding IsExpanded, Mode=TwoWay, RelativeSource={RelativeSource TemplatedParent}}"
                                                     SelectedItem="{Binding Selection.SelectedChild,Mode=OneWay,UpdateSourceTrigger=PropertyChanged}"
                                                     ItemTemplate="{TemplateBinding MenuItemTemplate}"
-                                                    behav:SelectionChangedCommand.ChangedCommand="{Binding Path=ItemSelectionChangedCommand}"
+                                                    behav:SelectionChangedCommand.ChangedCommand="{Binding Path=DropDownItemSelectedCommand}"
                                     />
                                     <!--    
                                         SelectedValuePath="{Binding ValuePath, RelativeSource={RelativeSource TemplatedParent}}"                                  
