@@ -48,9 +48,6 @@
             _Value = value;
             _ViewModel = viewModel;
 
-            RootSelector = parentSelector.RootSelector;
-            ParentSelector = parentSelector;
-
             EntryHelper = entryHelper;
         }
 
@@ -60,7 +57,7 @@
         protected TreeSelectorViewModel(IBreadcrumbTreeItemHelperViewModel<VM> entryHelper)
         {
             EntryHelper = entryHelper;
-            RootSelector = this as ITreeRootSelector<VM, T>;
+////            RootSelector = this as ITreeRootSelector<VM, T>;
         }
         #endregion
 
@@ -157,16 +154,6 @@
         {
             get { return _ViewModel; }
         }
-
-        /// <summary>
-        /// Gets the parent's ViewModel <see cref="ITreeSelector"/>.
-        /// </summary>
-        public ITreeSelector<VM, T> ParentSelector { get; }
-
-        /// <summary>
-        /// Gets the root's ViewModel <see cref="ITreeSelector"/>.
-        /// </summary>
-        public ITreeRootSelector<VM, T> RootSelector { get; }
 
         /// <summary>
         /// Gets All sub-entries of the current tree item

@@ -136,7 +136,8 @@
             if (this.SelectionChanged != null)
                 this.SelectionChanged(this, EventArgs.Empty);
 
-            await path.Last().EntryHelper.LoadAsync();
+            if (path.Last().EntryHelper.IsLoaded == false)
+                await path.Last().EntryHelper.LoadAsync();
         }
 /***
         /// <summary>

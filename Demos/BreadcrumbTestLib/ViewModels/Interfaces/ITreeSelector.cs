@@ -50,16 +50,6 @@
         VM ViewModel { get; }
 
         /// <summary>
-        /// Gets the parent's ViewModel <see cref="ITreeSelector"/>.
-        /// </summary>
-        ITreeSelector<VM, M> ParentSelector { get; }
-
-        /// <summary>
-        /// Gets the root's ViewModel <see cref="ITreeSelector"/>.
-        /// </summary>
-        ITreeRootSelector<VM, M> RootSelector { get; }
-
-        /// <summary>
         /// Gets All sub-entries of the current tree item
         /// to support loading tree items.
         /// </summary>
