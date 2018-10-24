@@ -64,6 +64,7 @@
     <Compile Include="ViewModels\AppViewModel.cs" />
     <Compile Include="ViewModels\Base\RelayCommand.cs" />
     <Compile Include="ViewModels\Base\ViewModelBase.cs" />
+    <Compile Include="ViewModels\BreadCrumbControllerViewModel.cs" />
     <Compile Include="ViewModels\Breadcrumbs\BreadcrumbViewModel.cs" />
     <Compile Include="ViewModels\Breadcrumbs\BreadcrumbTreeItemHelperViewModel.cs" />
     <Compile Include="ViewModels\Breadcrumbs\DirectoryBrowserHierarchyComparer.cs" />

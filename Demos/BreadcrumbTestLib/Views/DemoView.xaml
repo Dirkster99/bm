@@ -66,7 +66,7 @@
                     <RowDefinition Height="Auto"/>
                 </Grid.RowDefinitions>
 
-                <ctrls:Breadcrumb DataContext="{Binding BreadcrumbBrowser}" Name="BreadcrumbDemoControl"
+                <ctrls:Breadcrumb DataContext="{Binding BreadcrumbController.BreadcrumbBrowser}" Name="BreadcrumbDemoControl"
                                   Visibility="{Binding Path=IsChecked,ElementName=ShowBreadCrumbControl,Mode=OneWay, UpdateSourceTrigger=PropertyChanged,Converter={StaticResource BoolToVisibilityConverter}}"
                                   VerticalAlignment="Top" HorizontalAlignment="Stretch"
                                   RootItems="{Binding BreadcrumbSubTree.Selection.OverflowedAndRootItems,Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"
@@ -74,7 +74,7 @@
                               />
 
                 <Grid Grid.Row="1">
-                    <TreeView DataContext="{Binding BreadcrumbBrowser}" 
+                    <TreeView DataContext="{Binding BreadcrumbController.BreadcrumbBrowser}" 
                               ItemsSource="{Binding BreadcrumbSubTree.Entries.All}"
                               Visibility="{Binding Path=IsChecked,ElementName=ShowTreeviewControl,Mode=OneWay, UpdateSourceTrigger=PropertyChanged,Converter={StaticResource BoolToVisibilityConverter}}"
                           >
@@ -135,7 +135,7 @@
                     </TreeView.ItemContainerStyle>
                 </TreeView>
                     <ListBox 
-                        DataContext="{Binding BreadcrumbBrowser}"
+                        DataContext="{Binding BreadcrumbController.BreadcrumbBrowser}"
                         ItemsSource="{Binding BreadcrumbSubTree.Selection.OverflowedAndRootItems,Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"
                         Visibility="{Binding Path=IsChecked,ElementName=ShowRootItemsOverflowList,Mode=OneWay, UpdateSourceTrigger=PropertyChanged,Converter={StaticResource BoolToVisibilityConverter}}"
                         Margin="3"
@@ -215,6 +215,7 @@
             </Grid>
 
             <TextBox Grid.Column="0" Grid.Row="2" Grid.ColumnSpan="2"
+                     DataContext="{Binding BreadcrumbController}"
                      Text="{Binding Path=BreadcrumbBrowser.BreadcrumbSelectedPath}"
                      TextWrapping="WrapWithOverflow"
                      HorizontalScrollBarVisibility="Auto"
@@ -230,8 +231,9 @@
                           IsChecked="True" />
 
                 <CheckBox Content="EnableBreadcrumb"
+                      DataContext="{Binding BreadcrumbController}"
                       IsChecked="{Binding BreadcrumbBrowser.EnableBreadcrumb}" />
-                
+
                 <CheckBox Content="IsOverflown" IsEnabled="False"
                       IsChecked="{Binding ElementName=BreadcrumbDemoControl,Path=IsOverflown}" />
 
@@ -247,7 +249,7 @@
                     <StackPanel Grid.Column="1"
                                 HorizontalAlignment="Stretch" VerticalAlignment="Top"
                                 Orientation="Vertical">
-                        <Image DataContext="{Binding Path=BreadcrumbBrowser.BreadcrumbSubTree.Selection.SelectedViewModel}"
+                        <Image DataContext="{Binding Path=BreadcrumbController.BreadcrumbBrowser.BreadcrumbSubTree.Selection.SelectedViewModel}"
                                VerticalAlignment="Center" HorizontalAlignment="Center" Width="64"
                                SnapsToDevicePixels="True"
                                RenderOptions.BitmapScalingMode="NearestNeighbor">
@@ -263,7 +265,8 @@
                             </Image.Source>
                         </Image>
 
-                        <Label Content="{Binding Path=BreadcrumbBrowser.BreadcrumbSubTree.Selection.SelectedViewModel.Header}" />
+                        <Label DataContext="{Binding BreadcrumbController}"
+                               Content="{Binding Path=BreadcrumbBrowser.BreadcrumbSubTree.Selection.SelectedViewModel.Header}" />
                     </StackPanel>
                 </Grid>
                 <Grid Margin="3,9">
