@@ -1,4 +1,4 @@
-﻿namespace BreadcrumbTestLib.Models
+namespace SSCoreLib.Browse
 {
     using System;
 
@@ -17,12 +17,14 @@
         /// Parameterized class constructor.
         /// </summary>
         public FinalBrowseResult(T requestedLocation,
+                                 RequestType typeOfRequest,
                                  Guid requestId = default(System.Guid),
                                  BrowseResult result = BrowseResult.Unknown
                                  )
           : this()
         {
             RequestedLocation = requestedLocation;
+            RequestedAction = typeOfRequest;
             Result = result;
             RequestId = requestId;
         }
@@ -51,6 +53,8 @@
         /// </summary>
         public T RequestedLocation { get; }
 
+        public RequestType RequestedAction { get; }
+
         /// <summary>
         /// Gets the Id that identifies this request among all other requests that may
         /// occur if multiple browse requests are initiated or if user interaction also
@@ -66,7 +70,7 @@
         #endregion properties
 
         /// <summary>
-        /// Short-cut to convert a given <seealso cref="BrowseRequest"/> into a final
+        /// ShortCut to convert a given <seealso cref="BrowseRequest"/> into a final
         /// result receipt to support simple closure of requests being full-filled or not etc ...
         /// </summary>
         /// <param name="request"></param>
@@ -75,9 +79,11 @@
         public static FinalBrowseResult<T> FromRequest(BrowseRequest<T> request, BrowseResult result)
         {
             if (request != null)
-                return new FinalBrowseResult<T>(request.NewLocation, request.RequestId, result);
+                return new FinalBrowseResult<T>(request.NewLocation,request.ActionRequested,
+                                                request.RequestId, result);
 
-            return new FinalBrowseResult<T>(default(T), request.RequestId, result);
+            return new FinalBrowseResult<T>(default(T), RequestType.Navigational,
+                                            request.RequestId, result);
         }
     }
 }

@@ -8,6 +8,7 @@ namespace BreadcrumbTestLib.ViewModels.Breadcrumbs
     using ShellBrowserLib;
     using ShellBrowserLib.IDs;
     using ShellBrowserLib.Interfaces;
+    using SSCoreLib.Browse;
     using System;
     using System.Collections.Generic;
     using System.Linq;
@@ -181,7 +182,7 @@ namespace BreadcrumbTestLib.ViewModels.Breadcrumbs
 
                         Logger.InfoFormat("selectedFolder {0}", selectedFolder);
 
-                        var request = new BrowseRequest<IDirectoryBrowser>(selectedFolder.GetModel());
+                        var request = new BrowseRequest<IDirectoryBrowser>(selectedFolder.GetModel(), RequestType.Navigational);
                         if (selectedFolder.Selection.IsOverflowed)
                         {
                             await this.NavigateToAsync(request, "BreadcrumbViewModel.RootDropDownSelectionChangedCommand",
@@ -240,7 +241,7 @@ namespace BreadcrumbTestLib.ViewModels.Breadcrumbs
                 _CurrentPath = new Stack<BreadcrumbTreeItemViewModel>() { };
                 _CurrentPath.Push(BreadcrumbSubTree.Entries.All.First());
 
-                var request = new BrowseRequest<IDirectoryBrowser>(_RootLocation);
+                var request = new BrowseRequest<IDirectoryBrowser>(_RootLocation, RequestType.Navigational);
                 await NavigateToAsync(request, "BreadcrumbViewModel.InitPathAsync");
             });
         }

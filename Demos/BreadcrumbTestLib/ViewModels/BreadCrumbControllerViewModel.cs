@@ -6,6 +6,9 @@ namespace BreadcrumbTestLib.ViewModels
     using BreadcrumbTestLib.ViewModels.Interfaces;
     using ShellBrowserLib;
     using ShellBrowserLib.Interfaces;
+    using SSCoreLib.Browse;
+    using SSCoreLib.Interfaces;
+    using SSCoreLib.ViewModels;
     using System;
     using System.Diagnostics;
     using System.Threading;
@@ -16,7 +19,7 @@ namespace BreadcrumbTestLib.ViewModels
     /// Implements a Breadcrumb Controller ViewModel that contains a BreadCrumb Browser
     /// ViewModel who's background tasks are coordinated by this controller.
     /// </summary>
-    public class BreadCrumbControllerViewModel : Base.ViewModelBase, IDisposable
+    public class BreadCrumbControllerViewModel : Base.ViewModelBase, IDisposable, INavigationController
     {
         #region fields
         /// <summary>
@@ -43,9 +46,36 @@ namespace BreadcrumbTestLib.ViewModels
             // Initialize Breadcrumb Tree ViewModel and SpecialFolders Test ViewModel
             BreadcrumbBrowser = new BreadcrumbViewModel();
 
+            TaskQueue = new BrowseRequestTaskQueueViewModel();
+
             WeakEventManager<ICanNavigate, BrowsingEventArgs>
                 .AddHandler(BreadcrumbBrowser, "BrowseEvent", Control_BrowseEvent);
         }
+        #endregion constructors
+
+        #region properties
+        /// <summary>
+        /// Gets a Breadcrumb Tree ViewModel that drives the Breadcrumb control demo
+        /// in this application.
+        /// </summary>
+        public IBreadcrumbViewModel BreadcrumbBrowser { get; }
+
+        public IBrowseRequestTaskQueueViewModel TaskQueue { get; }
+        #endregion properties
+
+        #region methods
+
+        #region INavigationController interface
+        CancellationTokenSource INavigationController.GetCancelToken()
+        {
+            return TaskQueue.GetCancelTokenSrc();
+        }
+
+        void INavigationController.QueueTask(BrowseRequest<IDirectoryBrowser> request)
+        {
+            TaskQueue.AddTaskToQueue(request);
+        }
+        #endregion INavigationController interface
 
         /// <summary>
         /// One of the controls has changed its location in its space.
@@ -57,72 +87,62 @@ namespace BreadcrumbTestLib.ViewModels
         {
             var location = e.Location;
 
-////            SelectedFolder = location.Path;
-////
-////            if (e.IsBrowsing == false && e.Result == BrowseResult.Complete)
-////            {
-////                // XXX Todo Keep task reference, support cancel, and remove on end?
-////                try
-////                {
-////                    var timeout = TimeSpan.FromSeconds(5);
-////                    var actualTask = new Task(() =>
-////                    {
-////                        var request = new BrowseRequest(location, _CancelTokenSourc.Token);
-////
-////                        var t = Task.Factory.StartNew(() => NavigateToFolderAsync(request, sender),
-////                                                            request.CancelTok,
-////                                                            TaskCreationOptions.LongRunning,
-////                                                            _OneTaskScheduler);
-////
-////                        if (t.Wait(timeout) == true)
-////                            return;
-////
-////                        _CancelTokenSourc.Cancel();           // Task timed out so lets abort it
-////                        return;                         // Signal timeout here...
-////                    });
-////
-////                    actualTask.Start();
-////                    actualTask.Wait();
-////                }
-////                catch (System.AggregateException ex)
-////                {
-////                    Logger.Error(ex);
-////                }
-////                catch (Exception ex)
-////                {
-////                    Logger.Error(ex);
-////                }
-////            }
-////            else
-////            {
-////                if (e.IsBrowsing == true)
-////                {
-////                    // The sender has messaged: "I am changing location..."
-////                    // So, we set this property to tell the others:
-////                    // 1) Don't change your location now (eg.: Disable UI)
-////                    // 2) We'll be back to tell you the location when we know it
-////                    if (TreeBrowser != sender)
-////                        TreeBrowser.SetExternalBrowsingState(true);
-////
-////                    if (FolderTextPath != sender)
-////                        FolderTextPath.SetExternalBrowsingState(true);
-////
-////                    if (FolderItemsView != sender)
-////                        FolderItemsView.SetExternalBrowsingState(true);
-////                }
-////            }
+            ////            SelectedFolder = location.Path;
+            ////
+            ////            if (e.IsBrowsing == false && e.Result == BrowseResult.Complete)
+            ////            {
+            ////                // XXX Todo Keep task reference, support cancel, and remove on end?
+            ////                try
+            ////                {
+            ////                    var timeout = TimeSpan.FromSeconds(5);
+            ////                    var actualTask = new Task(() =>
+            ////                    {
+            ////                        var request = new BrowseRequest(location, _CancelTokenSourc.Token);
+            ////
+            ////                        var t = Task.Factory.StartNew(() => NavigateToFolderAsync(request, sender),
+            ////                                                            request.CancelTok,
+            ////                                                            TaskCreationOptions.LongRunning,
+            ////                                                            _OneTaskScheduler);
+            ////
+            ////                        if (t.Wait(timeout) == true)
+            ////                            return;
+            ////
+            ////                        _CancelTokenSourc.Cancel();           // Task timed out so lets abort it
+            ////                        return;                         // Signal timeout here...
+            ////                    });
+            ////
+            ////                    actualTask.Start();
+            ////                    actualTask.Wait();
+            ////                }
+            ////                catch (System.AggregateException ex)
+            ////                {
+            ////                    Logger.Error(ex);
+            ////                }
+            ////                catch (Exception ex)
+            ////                {
+            ////                    Logger.Error(ex);
+            ////                }
+            ////            }
+            ////            else
+            ////            {
+            ////                if (e.IsBrowsing == true)
+            ////                {
+            ////                    // The sender has messaged: "I am changing location..."
+            ////                    // So, we set this property to tell the others:
+            ////                    // 1) Don't change your location now (eg.: Disable UI)
+            ////                    // 2) We'll be back to tell you the location when we know it
+            ////                    if (TreeBrowser != sender)
+            ////                        TreeBrowser.SetExternalBrowsingState(true);
+            ////
+            ////                    if (FolderTextPath != sender)
+            ////                        FolderTextPath.SetExternalBrowsingState(true);
+            ////
+            ////                    if (FolderItemsView != sender)
+            ////                        FolderItemsView.SetExternalBrowsingState(true);
+            ////                }
+            ////            }
         }
-        #endregion constructors
-
-        #region properties
-        /// <summary>
-        /// Gets a Breadcrumb Tree ViewModel that drives the Breadcrumb control demo
-        /// in this application.
-        /// </summary>
-        public IBreadcrumbViewModel BreadcrumbBrowser { get; }
-        #endregion properties
-
-        #region methods
+ 
         /// <summary>
         /// Method should be called after construction to initialize the viewmodel
         /// to view a default content.
@@ -163,7 +183,8 @@ namespace BreadcrumbTestLib.ViewModels
                     _OneTaskScheduler.Dispose();
                     _Semaphore.Dispose();
                     _CancelTokenSource.Dispose();
-                    
+                    TaskQueue.Dispose();
+
                     _OneTaskScheduler = null;
                     _Semaphore = null;
                     _CancelTokenSource = null;
@@ -200,7 +221,7 @@ namespace BreadcrumbTestLib.ViewModels
                 var actualTask = new Task(() =>
                 {
                     ////string[] pathSegments = DirectoryInfoExLib.Factory.GetFolderSegments(location.FullName);
-                    var request = new BrowseRequest<IDirectoryBrowser>(location, _CancelTokenSource.Token);
+                    var request = new BrowseRequest<IDirectoryBrowser>(location, RequestType.Navigational, _CancelTokenSource.Token);
                     var t = Task.Factory.StartNew(() => NavigateToFolderAsync(request, null),
                                                         request.CancelTok,
                                                         TaskCreationOptions.LongRunning,

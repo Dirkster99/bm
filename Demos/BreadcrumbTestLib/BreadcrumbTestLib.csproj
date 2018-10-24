@@ -46,12 +46,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Behaviors\TreeViewItemBehaviour.cs" />
-    <Compile Include="Models\BrowseRequest.cs" />
-    <Compile Include="Models\BrowseResult.cs" />
-    <Compile Include="Models\BrowsingEventArgs.cs" />
-    <Compile Include="Models\FinalBrowseResult.cs" />
     <Compile Include="Models\HintDirection.cs" />
-    <Compile Include="Models\ICanNavigate.cs" />
     <Compile Include="Models\IRoot.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SystemIO\DiskTreeNodeViewModel.cs" />
@@ -94,6 +89,10 @@
     <ProjectReference Include="..\..\ShellBrowser\ShellBrowserLib\ShellBrowserLib.csproj">
       <Project>{2fb5c730-5836-4ed7-abca-2b9669e8c0a6}</Project>
       <Name>ShellBrowserLib</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\ShellBrowser\SSCCoreLib\SSCoreLib.csproj">
+      <Project>{24ae0c23-875a-4718-bf04-2ccec08def05}</Project>
+      <Name>SSCoreLib</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

@@ -1,4 +1,4 @@
-﻿namespace BreadcrumbTestLib.Models
+﻿namespace SSCoreLib.Browse
 {
     /// <summary>
     /// Determines the state of a browsing process. for instance, browsing a

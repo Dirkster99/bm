@@ -13,6 +13,7 @@
     using BreadcrumbTestLib.Models;
     using System.Windows.Input;
     using ShellBrowserLib;
+    using SSCoreLib.Browse;
 
     /// <summary>
     /// Class implements a ViewModel to manage a sub-tree of a Breadcrumb control.
@@ -183,7 +184,7 @@
 
                         Logger.InfoFormat("selectedFolder {0}", selectedFolder);
 
-                        var request = new BrowseRequest<IDirectoryBrowser>(selectedFolder.GetModel());
+                        var request = new BrowseRequest<IDirectoryBrowser>(selectedFolder.GetModel(), RequestType.Navigational);
                         await _Root.NavigateToAsync(request,
                                                     "BreadcrumbTreeItemViewModel.ItemSelectionChanged",
                                                     HintDirection.Down, this);
@@ -214,7 +215,7 @@
 
                         Logger.InfoFormat("selectedFolder {0}", this);
 
-                        var request = new BrowseRequest<IDirectoryBrowser>(this.GetModel());
+                        var request = new BrowseRequest<IDirectoryBrowser>(this.GetModel(), RequestType.Navigational);
                         await _Root.NavigateToAsync(request,
                             "BreadcrumbTreeItemViewModel.BreadcrumbTreeTreeItemClickCommand",
                             HintDirection.Up, this);

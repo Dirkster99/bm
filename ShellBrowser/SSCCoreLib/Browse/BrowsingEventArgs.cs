@@ -1,7 +1,7 @@
-﻿namespace BreadcrumbTestLib.Models
+namespace SSCoreLib.Browse
 {
-    using ShellBrowserLib.Interfaces;
     using System;
+    using ShellBrowserLib.Interfaces;
 
     /// <summary>
     /// A simple event based state model that informs the subscriber about the

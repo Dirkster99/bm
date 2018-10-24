@@ -2,6 +2,7 @@
 {
     using BreadcrumbTestLib.ViewModels.Breadcrumbs;
     using ShellBrowserLib.Interfaces;
+    using SSCoreLib.Browse;
     using System.Threading.Tasks;
 
     /// <summary>
@@ -28,8 +29,8 @@
         /// It specifies the level in the tree structure from which the next child
         /// in the current path should be searched.</param>
         /// <returns>Returns a result that informs whether the target was reached or not.</returns>
-        Task<FinalBrowseResult<M>> NavigateToAsync(
-            BrowseRequest<M> requestedLocation,
+        Task<FinalBrowseResult<IDirectoryBrowser>> NavigateToAsync(
+            BrowseRequest<IDirectoryBrowser> requestedLocation,
             string sourceHint,
             HintDirection direction = HintDirection.Unrelated,
             BreadcrumbTreeItemViewModel toBeSelectedLocation = null

@@ -1,4 +1,4 @@
-﻿namespace BreadcrumbTestLib.Models
+﻿namespace SSCoreLib.Browse
 {
     using System;
 
@@ -24,3 +24,4 @@
         bool IsBrowsing { get; }
     }
 }
+
