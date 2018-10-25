@@ -15,6 +15,7 @@
     /// </summary>
     public interface IKnownFolderProperties
     {
+        #region properties
         /// <summary>
         /// Gets a string to the non-localized, canonical name for the known folder,
         /// stored as a null-terminated Unicode string. If this folder is a common
@@ -24,14 +25,14 @@
         /// Company.Application.Name. The name given here should not be confused with the display name.
         /// </summary>
         string Name { get; }
-        
+
         /// <summary>
         /// Gets a single value from the KF_CATEGORY constants that classifies the folder as:
         /// virtual, fixed, common, or per-user.
         /// https://msdn.microsoft.com/en-us/library/windows/desktop/bb762512(v=vs.85).aspx
         /// </summary>
         FolderCategory Category { get; }
-        
+
         /// <summary>
         /// Gets a string to the non-localized, canonical name for the known folder,
         /// stored as a null-terminated Unicode string. If this folder is a common
@@ -41,7 +42,7 @@
         /// Company.Application.Name. The name given here should not be confused with the display name.
         /// </summary>
         string CanonicalName { get; }
-        
+
         /// <summary>
         /// Gets an optional One of more values from the KF_DEFINITION_FLAGS enumeration
         /// (https://msdn.microsoft.com/en-us/library/windows/desktop/bb762513(v=vs.85).aspx)
@@ -50,25 +51,25 @@
         /// at which the known folder is created. Set to 0 if not needed.
         /// </summary>
         DefinitionOptions DefinitionOptions { get; }
-        
+
         /// <summary>
         /// Gets a string to a short description of the known folder, stored as a null-terminated
         /// Unicode string. This description should include the folder's purpose and usage.
         /// </summary>
         string Description { get; }
-        
+
         /// <summary>
         /// Gets 
         /// </summary>
         FileAttributes FileAttributes { get; }
-        
+
         /// <summary>
         /// Type: KNOWNFOLDERID (https://msdn.microsoft.com/en-us/library/windows/desktop/dd378457(v=vs.85).aspx)
         /// 
         /// Gets the KNOWNFOLDERID of this folder.
         /// </summary>
         Guid FolderId { get; }
-        
+
         /// <summary>
         /// Gets Type: FOLDERTYPEID (https://msdn.microsoft.com/en-us/library/windows/desktop/bb762581(v=vs.85).aspx)
         ///
@@ -97,7 +98,7 @@
         /// This information is not required for virtual folders.
         /// </summary>
         string LocalizedName { get; }
-        
+
         /// <summary>
         /// Gets an optional string to the default localized name resource used when the folder is created.
         /// This is a null-terminated Unicode string in this form:
@@ -108,7 +109,7 @@
         /// This information is not required for virtual folders.
         /// </summary>
         string LocalizedNameResourceId { get; }
-        
+
         /// <summary>
         /// Gets a KNOWNFOLDERID value that names another known folder to serve as the parent folder.
         /// Applies to common and per-user folders only. This value is used in conjunction with pszRelativePath.
@@ -117,7 +118,7 @@
         /// This value is optional if no value is provided for pszRelativePath.
         /// </summary>
         string Parent { get; }
-        
+
         /// <summary>
         /// Type KNOWNFOLDERID (https://msdn.microsoft.com/en-us/library/windows/desktop/dd378457(v=vs.85).aspx)
         /// Gets a KNOWNFOLDERID value that names another known folder to serve as the parent folder.
@@ -129,7 +130,7 @@
         /// This value is optional if no value is provided for pszRelativePath.
         /// </summary>
         Guid ParentId { get; }
-        
+
         /// <summary>
         /// Gets a string to the Shell namespace folder path of the folder,
         /// stored as a null-terminated Unicode string.
@@ -138,7 +139,7 @@
         /// For example, Control Panel has a parsing name of ::%CLSID_MyComputer%\::%CLSID_ControlPanel%.
         /// </summary>
         string ParsingName { get; }
-        
+
         /// <summary>
         /// Gets a path of the known folder representation in the file system if this folder
         /// has a representation in the file system (is not virtual).
@@ -173,7 +174,7 @@
         /// https://msdn.microsoft.com/en-us/library/windows/desktop/bb761764(v=vs.85).aspx
         /// </summary>
         RedirectionCapability Redirection { get; }
-        
+
         /// <summary>
         /// Gets an optional string to a path relative to the parent folder specified in fidParent.
         /// This is a null-terminated Unicode string, refers to the physical file system path, and
@@ -183,7 +184,7 @@
         /// See Remarks for more details.
         /// </summary>
         string RelativePath { get; }
-        
+
         /// <summary>
         /// Gets an optional Security Descriptor Definition Language format string.
         /// This is a null-terminated Unicode string that describes the default security
@@ -192,7 +193,7 @@
         /// useful for common folders that are accessed by all users.
         /// </summary>
         string Security { get; }
-        
+
         /// <summary>
         /// Gets an optional string to the default tooltip for this known folder
         /// when it is created. This is a null-terminated Unicode string in this form:
@@ -202,7 +203,7 @@
         /// This information is not required for virtual folders.
         /// </summary>
         string Tooltip { get; }
-        
+
         /// <summary>
         /// Gets an optional string to the default tooltip resource used for this known folder
         /// when it is created. This is a null-terminated Unicode string in this form:
@@ -223,5 +224,28 @@
         /// Gets the standard ToString() representation of this object (for debugging only).
         /// </summary>
         string ToString();
+        #endregion properties
+
+        #region methods
+        /// <summary>
+        /// Determines whether the string in <paramref name="iconResourceId"/> contains
+        /// a valid resource id reference of the sample form 'dll, -3'.
+        /// 
+        /// Call this method without parameter to determine this for
+        /// the <see cref="IconResourceId"/> property contained in this object.
+        /// </summary>
+        /// <param name="iconResourceId"></param>
+        /// <returns>True if resource id has more than zero characters and a ','
+        /// character at an index larger 2, otherwise false.</returns>
+        bool IsIconResourceIdValid(string iconResourceId = null);
+
+        /// <summary>
+        /// Resets an icons resource id. Use this property to overwrite available
+        /// values or consider alternative options for retrieving the correct resource id string.
+        /// </summary>
+        /// <param name="filename"></param>
+        /// <param name="index"></param>
+        void ResetIconResourceId(string filename, int index);
+        #endregion methods
     }
 }

@@ -7,16 +7,123 @@
     using System;
     using System.Runtime.InteropServices;
     using System.Text;
+    using ShellBrowserLib.Shell.Interop.Interfaces.ShellFolders;
+    using ShellBrowserLib.Shell.Interop.ShellFolders;
+    using ShellBrowserLib.Shell.Interop.Interfaces;
 
     /// <summary>
-    /// Gets the ResourceId (libararyName, index) of a shell icon to support
+    /// Gets the ResourceId (libaryName, index) of a shell icon to support
     /// IconExtaction and display in UI layer.
     /// 
-    /// Based on SystemImageList created By LYCJ (2014), released under MIT license
+    /// Parts are based on SystemImageList created By LYCJ (2014), released under MIT license
     /// +-> Based on http://vbaccelerator.com/home/net/code/libraries/Shell_Projects/SysImageList/article.asp
     /// </summary>
     internal static class IconHelper
     {
+        /// <summary>
+        /// Gets an icons reource id if available in the format:
+        /// "filename, index"
+        /// where the first part is a string and the 2nd part is a negativ integer number).
+        /// 
+        /// This format is usally used by the Windows Shell libraries so we use it here
+        /// to add missing ResourceIds.
+        /// </summary>
+        /// <param name="parentIdList"></param>
+        /// <param name="filename"></param>
+        /// <param name="index"></param>
+        /// <returns></returns>
+        internal static bool GetIconResourceId(IdList parentIdList,
+                                               out string filename,
+                                               out int index)
+        {
+            filename = null;
+            index = -1;
+
+            IntPtr parentPtr = default(IntPtr);
+            IntPtr relChildPtr = default(IntPtr);
+            IntPtr ptrShellFolder = default(IntPtr);
+            IntPtr ptrExtractIcon = default(IntPtr);
+            IntPtr smallHicon = default(IntPtr);
+            IntPtr largeHicon = default(IntPtr);
+            try
+            {
+                if (parentIdList.Size == 0)
+                {
+                    parentPtr = PidlManager.IdListToPidl(parentIdList);
+                    relChildPtr = PidlManager.IdListToPidl(IdList.Create());
+                }
+                else
+                {
+                    IdList parIdList = null, relChildIdList = null;
+                    PidlManager.GetParentChildIdList(parentIdList, out parIdList, out relChildIdList);
+
+                    parentPtr = PidlManager.IdListToPidl(parIdList);
+                    relChildPtr = PidlManager.IdListToPidl(relChildIdList);
+                }
+
+                if (parentPtr == default(IntPtr) || relChildPtr == default(IntPtr))
+                    return false;
+
+                Guid guid = typeof(IShellFolder2).GUID;
+                HRESULT hr = NativeMethods.SHBindToParent(parentPtr, guid,
+                                                    out ptrShellFolder, ref relChildPtr);
+
+                if (hr != HRESULT.S_OK)
+                    return false;
+
+                using (var shellFolder = new ShellFolder(ptrShellFolder))
+                {
+                    if (shellFolder == null)
+                        return false;
+
+                    guid = typeof(IExtractIcon).GUID;
+                    var pidls = new IntPtr[] { relChildPtr };
+                    hr = shellFolder.Obj.GetUIObjectOf(IntPtr.Zero, 1, pidls, guid,
+                                                        IntPtr.Zero, out ptrExtractIcon);
+
+                    if (hr != HRESULT.S_OK)
+                        return false;
+
+                    using (var extractIcon = new GenericCOMFolder<IExtractIcon>(ptrExtractIcon))
+                    {
+                        if (extractIcon == null)
+                            return false;
+
+                        var iconFile = new StringBuilder(NativeMethods.MAX_PATH);
+                        uint pwFlags = 0;
+
+                        hr = extractIcon.Obj.GetIconLocation(0, iconFile,
+                                                            (uint)iconFile.Capacity,
+                                                            ref index, ref pwFlags);
+
+                        if (hr != HRESULT.S_OK)
+                            return false;
+
+                        if (string.IsNullOrEmpty(iconFile.ToString()))
+                            return false;
+
+                        filename = iconFile.ToString();
+
+                        return true;
+                    }
+                }
+            }
+            finally
+            {
+                if (parentPtr != default(IntPtr))
+                    NativeMethods.ILFree(parentPtr);
+
+                ////if (relChildPtr != default(IntPtr))
+                ////    Shell32.ILFree(relChildPtr);
+
+                if (smallHicon != default(IntPtr))
+                    NativeMethods.DestroyIcon(smallHicon);
+
+                if (largeHicon != default(IntPtr))
+                    NativeMethods.DestroyIcon(largeHicon);
+            }
+        }
+
         /// <summary>
         /// Gets the ResourceId (libararyName, index) of a shell icon
         /// based on an <see cref="IdList"/> object

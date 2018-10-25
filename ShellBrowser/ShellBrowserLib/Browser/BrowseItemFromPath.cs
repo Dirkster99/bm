@@ -17,6 +17,7 @@
     using System.IO;
     using System.Runtime.InteropServices;
     using System.Text;
+    using ShellBrowserLib.Shell.Interop.ResourceIds;
 
     /// <summary>
     /// Implements a class that contains all API call and methods necessary to initialize
@@ -347,7 +348,7 @@
                                 parentIdList, relativeChildIdList, fullIdList);
         }
 
-        internal static BrowseItemFromPath InitItemType(string path, string normPath,
+        private static BrowseItemFromPath InitItemType(string path, string normPath,
                                                         string parseName,
                                                         string name,
                                                         string labelName,
@@ -459,8 +460,7 @@
                                            ref bool isSpecialFolder,
                                            ref string pathSpecialItemId)
         {
-            var knownFolder = KnownFolderHelper.FromPIDL(fullIdList);
-            try
+            using (var knownFolder = KnownFolderHelper.FromPIDL(fullIdList))
             {
                 if (knownFolder != null) // Initialize a known folder item
                 {
@@ -473,43 +473,53 @@
 
                     props = KnownFolderHelper.GetFolderProperties(knownFolder.Obj);
 
-                    pathSpecialItemId = string.Format("{0}{1}{2}{3}", KF_IID.IID_Prefix,
-                                                    "{", props.FolderId, "}");
-
-                    if (string.Compare(pathSpecialItemId, KF_IID.ID_FOLDERID_ComputerFolder, true) == 0)
-                    {
-                        pathType = PathHandler.FileSystem;
-                    }
-
-                    if (props.Category == FolderCategory.Virtual)
-                        itemType |= DirectoryItemFlags.Virtual;
-
-                    // Check for very common known special directory reference
-                    if (KF_IID.ID_FOLDERID_Desktop.Equals(pathSpecialItemId, StringComparison.InvariantCultureIgnoreCase))
-                        itemType |= DirectoryItemFlags.Desktop;
-                    else
-                    if (KF_IID.ID_FOLDERID_Documents.Equals(pathSpecialItemId, StringComparison.InvariantCultureIgnoreCase))
-                        itemType |= DirectoryItemFlags.Documents;
-                    else
-                    if (KF_IID.ID_FOLDERID_Downloads.Equals(pathSpecialItemId, StringComparison.InvariantCultureIgnoreCase))
-                        itemType |= DirectoryItemFlags.Downloads;
-                    else
-                    if (KF_IID.ID_FOLDERID_Music.Equals(pathSpecialItemId, StringComparison.InvariantCultureIgnoreCase))
-                        itemType |= DirectoryItemFlags.Music;
-                    else
-                    if (KF_IID.ID_FOLDERID_Pictures.Equals(pathSpecialItemId, StringComparison.InvariantCultureIgnoreCase))
-                        itemType |= DirectoryItemFlags.Pictures;
-                    else
-                    if (KF_IID.ID_FOLDERID_Videos.Equals(pathSpecialItemId, StringComparison.InvariantCultureIgnoreCase))
-                        itemType |= DirectoryItemFlags.Videos;
-
-                    return true;
                 }
             }
-            finally
+
+            if (props != null) // Initialize a known folder item
             {
-                if (knownFolder != null)
-                    knownFolder.Dispose();
+                pathSpecialItemId = string.Format("{0}{1}{2}{3}", KF_IID.IID_Prefix,
+                                                "{", props.FolderId, "}");
+
+                if (props.IsIconResourceIdValid() == false)
+                {
+                    string filename = null;
+                    int index = -1;
+                    if (IconHelper.GetIconResourceId(fullIdList, out filename, out index))
+                    {
+                        // Store filename and index for Desktop Root ResourceId
+                        props.ResetIconResourceId(filename, index);
+                    }
+                }
+
+                if (string.Compare(pathSpecialItemId, KF_IID.ID_FOLDERID_ComputerFolder, true) == 0)
+                {
+                    pathType = PathHandler.FileSystem;
+                }
+
+                if (props.Category == FolderCategory.Virtual)
+                    itemType |= DirectoryItemFlags.Virtual;
+
+                // Check for very common known special directory reference
+                if (KF_IID.ID_FOLDERID_Desktop.Equals(pathSpecialItemId, StringComparison.InvariantCultureIgnoreCase))
+                    itemType |= DirectoryItemFlags.Desktop;
+                else
+                if (KF_IID.ID_FOLDERID_Documents.Equals(pathSpecialItemId, StringComparison.InvariantCultureIgnoreCase))
+                    itemType |= DirectoryItemFlags.Documents;
+                else
+                if (KF_IID.ID_FOLDERID_Downloads.Equals(pathSpecialItemId, StringComparison.InvariantCultureIgnoreCase))
+                    itemType |= DirectoryItemFlags.Downloads;
+                else
+                if (KF_IID.ID_FOLDERID_Music.Equals(pathSpecialItemId, StringComparison.InvariantCultureIgnoreCase))
+                    itemType |= DirectoryItemFlags.Music;
+                else
+                if (KF_IID.ID_FOLDERID_Pictures.Equals(pathSpecialItemId, StringComparison.InvariantCultureIgnoreCase))
+                    itemType |= DirectoryItemFlags.Pictures;
+                else
+                if (KF_IID.ID_FOLDERID_Videos.Equals(pathSpecialItemId, StringComparison.InvariantCultureIgnoreCase))
+                    itemType |= DirectoryItemFlags.Videos;
+
+                return true;
             }
 
             return false;
@@ -522,126 +532,39 @@
 
             // Use normal desktop special folder as template for naming and properties
             string specialPath = KF_IID.ID_FOLDERID_Desktop;
+            IKnownFolderProperties props = null;
             using (var kf = KnownFolderHelper.FromPath(specialPath))
             {
                 if (kf == null)
                     return null;
 
                 IdList FullPidl = kf.KnownFolderToIdList();
+                props = KnownFolderHelper.GetFolderProperties(kf.Obj);
+            }
 
-                var props = KnownFolderHelper.GetFolderProperties(kf.Obj);
+            // A directory we cannot find in file system is by definition VIRTUAL
+            if (props.Category == FolderCategory.Virtual)
+                ret.ItemType |= DirectoryItemFlags.Virtual;
 
-                // A directory we cannot find in file system is by definition VIRTUAL
-                if (props.Category == FolderCategory.Virtual)
-                    ret.ItemType |= DirectoryItemFlags.Virtual;
+            ret.Name = props.Name;
 
-                ret.Name = props.Name;
-
-                string filename = null; // Get Resoure Id for desktop root item
-                int index = -1;
-                if (GetIconResourceId(IdList.Create(), out filename, out index))
+            string filename = null; // Get Resoure Id for desktop root item
+            int index = -1;
+            if (props.IsIconResourceIdValid() == false)
+            {
+                if (IconHelper.GetIconResourceId(IdList.Create(), out filename, out index))
                 {
                     // Store filename and index for Desktop Root ResourceId
                     ret.IconResourceId = string.Format("{0},{1}", filename, index);
                 }
             }
+            else
+            {
+                ret.IconResourceId = props.IconResourceId;
+            }
 
             return ret;
         }
-
-        /// <summary>
-        /// Gets an icons reource id if available in the format:
-        /// "filename, index"
-        /// where the first par tis a string and the 2nd part is a negativ integer number).
-        /// 
-        /// This format is usally used by the Windows Shell libraries so we use it here
-        /// to add missing ResourceIds.
-        /// </summary>
-        /// <param name="parentIdList"></param>
-        /// <param name="filename"></param>
-        /// <param name="index"></param>
-        /// <returns></returns>
-        internal static bool GetIconResourceId(IdList parentIdList,
-                                               out string filename,
-                                               out int index)
-        {
-            filename = null;
-            index = -1;
-
-            IntPtr parentPtr = default(IntPtr);
-            IntPtr relChildPtr = default(IntPtr);
-            IntPtr ptrShellFolder = default(IntPtr);
-            IntPtr ptrExtractIcon = default(IntPtr);
-            IntPtr smallHicon = default(IntPtr);
-            IntPtr largeHicon = default(IntPtr);
-            try
-            {
-                parentPtr = PidlManager.IdListToPidl(parentIdList);
-                relChildPtr = PidlManager.IdListToPidl(IdList.Create());
-
-                if (parentPtr == default(IntPtr) || relChildPtr == default(IntPtr))
-                    return false;
-
-                Guid guid = typeof(IShellFolder2).GUID;
-                HRESULT hr = NativeMethods.SHBindToParent(parentPtr, guid,
-                                                    out ptrShellFolder, ref relChildPtr);
-
-                if (hr != HRESULT.S_OK)
-                    return false;
-
-                using (var shellFolder = new ShellFolder(ptrShellFolder))
-                {
-                    if (shellFolder == null)
-                        return false;
-
-                    guid = typeof(IExtractIcon).GUID;
-                    var pidls = new IntPtr[] { relChildPtr };
-                    hr = shellFolder.Obj.GetUIObjectOf(IntPtr.Zero, 1, pidls, guid,
-                                                        IntPtr.Zero, out ptrExtractIcon);
-
-                    if (hr != HRESULT.S_OK)
-                        return false;
-
-                    using (var extractIcon = new GenericCOMFolder<IExtractIcon>(ptrExtractIcon))
-                    {
-                        if (extractIcon == null)
-                            return false;
-
-                        var iconFile = new StringBuilder(NativeMethods.MAX_PATH);
-                        uint pwFlags = 0;
-
-                        hr = extractIcon.Obj.GetIconLocation(0, iconFile,
-                                                            (uint)iconFile.Capacity,
-                                                            ref index, ref pwFlags);
-
-                        if (hr != HRESULT.S_OK)
-                            return false;
-
-                        if (string.IsNullOrEmpty(iconFile.ToString()))
-                            return false;
-
-                        filename = iconFile.ToString();
-
-                        return true;
-                    }
-                }
-            }
-            finally
-            {
-                if (parentPtr != default(IntPtr))
-                    NativeMethods.ILFree(parentPtr);
-
-                ////if (relChildPtr != default(IntPtr))
-                ////    Shell32.ILFree(relChildPtr);
-
-                if (smallHicon != default(IntPtr))
-                    NativeMethods.DestroyIcon(smallHicon);
-
-                if (largeHicon != default(IntPtr))
-                    NativeMethods.DestroyIcon(largeHicon);
-            }
-        }
-
 
         /// <summary>
         /// Method gets the display name from a file system path.

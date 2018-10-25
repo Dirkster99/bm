@@ -279,24 +279,46 @@
             if (IsIconResourceIdValid(IconResourceId) == false && PidlIdList != null)
             {
                 IconResourceId = IconHelper.FromPidl(PidlIdList, true, false);
-
-                if (IsIconResourceIdValid(IconResourceId) == false)
-                {
-                    Debug.WriteLine("IconResourceId cannot be determined for '" + this.CanonicalName + "'");
-                }
             }
         }
 
-        private bool IsIconResourceIdValid(string iconResourceId)
+        /// <summary>
+        /// Determines whether the string in <paramref name="iconResourceId"/> contains
+        /// a valid resource id reference of the sample form 'dll, -3'.
+        /// 
+        /// Call this method without parameter to determine this for
+        /// the <see cref="IconResourceId"/> property contained in this object.
+        /// </summary>
+        /// <param name="iconResourceId"></param>
+        /// <returns></returns>
+        public bool IsIconResourceIdValid(string iconResourceId = null)
         {
-            if (string.IsNullOrEmpty(iconResourceId))
+            string testString = null;
+
+            if (string.IsNullOrEmpty(iconResourceId) == false)
+                testString = iconResourceId;
+            else
+                testString = this.IconResourceId;
+
+            if (string.IsNullOrEmpty(testString))
                 return false;
 
-            int indexOfKomma = iconResourceId.IndexOf(',');
-            if (indexOfKomma <= 0)
+            int indexOfKomma = testString.IndexOf(',');
+            if (indexOfKomma <= 2)
                 return false;
 
             return true;
+        }
+
+        /// <summary>
+        /// Resets an icons resource id. Use this property to overwrite available
+        /// values or consider alternative options for retrieving the correct resource id string.
+        /// </summary>
+        /// <param name="filename"></param>
+        /// <param name="index"></param>
+        public void ResetIconResourceId(string filename, int index)
+        {
+            this.IconResourceId = string.Format("{0}, {1}", filename, index);
         }
     }
 }
