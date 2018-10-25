@@ -256,7 +256,7 @@
                             <Image.Source>
                                 <MultiBinding Converter="{x:Static convLib:AssociatedIconConverter.Default}">
                                     <MultiBinding.ConverterParameter>
-                                        <imgSize:IconSize >Large</imgSize:IconSize>
+                                        <imgSize:IconSize>Large</imgSize:IconSize>
                                     </MultiBinding.ConverterParameter>
                                     <Binding Path="ItemPath" />
                                     <Binding Path="ItemName" />
@@ -301,32 +301,5 @@
                           IsChecked="False" />
             </StackPanel>
         </ScrollViewer>
-
-        <!--TextBlock Text="Converter Test" Grid.Column="0" Grid.Row="4" Margin="3" HorizontalAlignment="Right" VerticalAlignment="Top" />
-        <ListBox ItemsSource="{Binding SpecialFoldersTest.Folders}"
-                 Visibility="{Binding Path=IsChecked,ElementName=ShowConverterTest,Mode=OneWay, UpdateSourceTrigger=PropertyChanged,Converter={StaticResource BoolToVisibilityConverter}}"
-                 Grid.Column="1" Grid.Row="4"
-                 Margin="3"
-                 >
-            <ListBox.ItemTemplate>
-                <DataTemplate>
-                    <StackPanel Orientation="Horizontal">
-                        <Image Margin="3" Width="64" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="NearestNeighbor">
-                            <Image.Source>
-                                <MultiBinding Converter="{conv:BrowseItemTypeToImageConverter}">
-                                    <Binding Path="EnumSpecialFolder" />
-                                </MultiBinding>
-                            </Image.Source>
-                        </Image>
-                        <TextBlock Text="{Binding FolderName}" Margin="3,0" />
-                    </StackPanel>
-                </DataTemplate>
-            </ListBox.ItemTemplate>
-        </ListBox>
-        <StackPanel Grid.Column="2" Grid.Row="4" VerticalAlignment="Top" Margin="3">
-            - For Debugging only -
-            <CheckBox Content="Show Converter Test" Name="ShowConverterTest"
-                      IsChecked="False" />
-        </StackPanel-->
     </Grid>
 </UserControl>

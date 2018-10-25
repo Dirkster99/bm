@@ -10,6 +10,7 @@
     using System.Globalization;
     using System.Runtime.InteropServices;
     using System.Text;
+    using System.Diagnostics;
 
     /// <summary>
     /// Store property values for  a known folder.
@@ -36,7 +37,7 @@
             {
                 Init(knownFolderNative, nativeFolderDefinition);
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 logger.Error(ex);
             }
@@ -86,6 +87,9 @@
 
         ////public string folderType { get; protected set; }  Is a manually maintained list of canonical string names in Windows API Pack 1.1
 
+        /// <summary>
+        /// Gets the KnownFolderId of this Known Folder object.
+        /// </summary>
         public Guid FolderId { get; protected set; }
 
         /// <summary>
@@ -161,7 +165,9 @@
         }
 
         /// <summary>
-        /// Get a string resource given a resource Id
+        /// Gets a string resource given a resource Id
+        /// 
+        /// E.g: Given "some.dll,-34" returns a localized string: "ItemName"
         /// </summary>
         /// <param name="resourceId">The resource Id</param>
         /// <returns>The string resource corresponding to the given resource Id. Returns null if the resource id
@@ -184,14 +190,26 @@
             library = library.Replace(@"@", string.Empty);
             library = Environment.ExpandEnvironmentVariables(library);
             IntPtr handle = CoreNativeMethods.LoadLibrary(library);
+            try
+            {
+                if (handle != default(IntPtr))
+                {
+                    parts[1] = parts[1].Replace("-", string.Empty);
+                    index = int.Parse(parts[1], CultureInfo.InvariantCulture);
 
-            parts[1] = parts[1].Replace("-", string.Empty);
-            index = int.Parse(parts[1], CultureInfo.InvariantCulture);
+                    StringBuilder stringValue = new StringBuilder(255);
+                    int retval = CoreNativeMethods.LoadString(handle, index, stringValue, 255);
 
-            StringBuilder stringValue = new StringBuilder(255);
-            int retval = CoreNativeMethods.LoadString(handle, index, stringValue, 255);
+                    return retval != 0 ? stringValue.ToString() : null;
+                }
+            }
+            finally
+            {
+                if (handle != default(IntPtr))
+                    CoreNativeMethods.FreeLibrary(handle);
+            }
 
-            return retval != 0 ? stringValue.ToString() : null;
+            return null;
         }
 
         private void Init(IKnownFolderNative knownFolderNative,
@@ -253,15 +271,32 @@
                     {
                         this.PidlIdList = kfObj.KnownFolderToIdList();
                     }
-                    catch { throw; }
-
-                    // Load Icon ResourceId from Icon Resource helper (if not already present)
-                    if (string.IsNullOrEmpty(IconResourceId) && PidlIdList != null)
-                    {
-                        IconResourceId = IconHelper.FromPidl(PidlIdList, true, false);
-                    }
+                    catch { }
                 }
             }
+
+            // Load Icon ResourceId from Icon Resource helper (if not already present)
+            if (IsIconResourceIdValid(IconResourceId) == false && PidlIdList != null)
+            {
+                IconResourceId = IconHelper.FromPidl(PidlIdList, true, false);
+
+                if (IsIconResourceIdValid(IconResourceId) == false)
+                {
+                    Debug.WriteLine("IconResourceId cannot be determined for '" + this.CanonicalName + "'");
+                }
+            }
+        }
+
+        private bool IsIconResourceIdValid(string iconResourceId)
+        {
+            if (string.IsNullOrEmpty(iconResourceId))
+                return false;
+
+            int indexOfKomma = iconResourceId.IndexOf(',');
+            if (indexOfKomma <= 0)
+                return false;
+
+            return true;
         }
     }
 }

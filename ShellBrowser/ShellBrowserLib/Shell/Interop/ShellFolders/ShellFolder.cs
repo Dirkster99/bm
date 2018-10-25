@@ -6,6 +6,8 @@
     using System;
     using System.Runtime.InteropServices;
     using System.Text;
+    using ShellBrowserLib.Shell.Pidl;
+    using ShellBrowserLib.Shell.Interop.Interfaces;
 
     /// <summary>
     /// Class wraps <see cref="IShellFolder2"/> COM interface to ensure
@@ -36,11 +38,11 @@
         public ShellFolder(IntPtr intPtrShellFolder2)
             : this()
         {
-            InitObject(intPtrShellFolder2);
+            InitObject(intPtrShellFolder2, null);
         }
 
         /// <summary>
-        /// Initializr objrct from <paramref name="intPtrShellFolder2"/>
+        /// Initialize object from <paramref name="intPtrShellFolder2"/>
         /// or <paramref name="iShellFolder2"/>. You should use only one
         /// parameter here and set the other to default if necessary.
         /// </summary>
@@ -108,7 +110,6 @@
 
             return buf.ToString();
         }
-
         #region Disposable Interfaces
         /// <summary>
         /// Standard dispose method of the <seealso cref="IDisposable" /> interface.

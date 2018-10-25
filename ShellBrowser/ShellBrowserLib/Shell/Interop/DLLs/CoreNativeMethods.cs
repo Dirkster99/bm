@@ -148,6 +148,9 @@
         [DllImport("kernel32.dll", SetLastError = true, ThrowOnUnmappableChar = true, BestFitMapping = false)]
         internal static extern IntPtr LoadLibrary([MarshalAs(UnmanagedType.LPStr)] string fileName);
 
+        [DllImport("kernel32.dll", SetLastError = true, ThrowOnUnmappableChar = true, BestFitMapping = false)]
+        internal static extern bool FreeLibrary(IntPtr libraryHandle);
+
         [DllImport("gdi32.dll")]
         [return: MarshalAs(UnmanagedType.Bool)]
         internal static extern bool DeleteObject(IntPtr graphicsObjectHandle);

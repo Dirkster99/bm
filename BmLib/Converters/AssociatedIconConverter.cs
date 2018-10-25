@@ -293,7 +293,7 @@
                 // throw new Exception("Failed to decode icon.");
             }
 
-            // Retrn the icon
+            // Return the icon
             return bitmapDecoder.Frames[0];
         }
         #endregion

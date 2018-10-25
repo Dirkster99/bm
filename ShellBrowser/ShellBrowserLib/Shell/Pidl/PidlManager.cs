@@ -472,7 +472,8 @@
                 // Convert PIDL into list of shellids and remove last id
                 var ashellListId = PidlManager.Decode(apidl);
 
-                return GetParentChildIdList(IdList.Create(ashellListId), out parentList, out relativeChild);
+                return GetParentChildIdList(IdList.Create(ashellListId), 
+                                                          out parentList, out relativeChild);
             }
             finally
             {
@@ -503,43 +504,40 @@
             // Get Parent Id which is always the first part minus last id in the sequence
             if (parentList != null)
                 return true;
-            else
-            {   // Try to find parent through known folder information lookup
-                using (KnownFolderNative kf = KnownFolderHelper.FromPIDL(ashellListId))
+
+            // Try to find parent through known folder information lookup
+            using (KnownFolderNative kf = KnownFolderHelper.FromPIDL(ashellListId))
+            {
+                if (kf != null)
                 {
-                    if (kf != null)
+                    var props = KnownFolderHelper.GetFolderProperties(kf.Obj);
+
+                    if (props.Parent != null)
                     {
-                        var props = KnownFolderHelper.GetFolderProperties(kf.Obj);
-
-                        if (props.Parent != null)
-                        {
-                            if ((parentList = IdList.FromKnownFolderGuid(props.ParentId)) != null)
-                                return true;
-                        }
-                        else
-                        {
-                            // Just return the desktop as parent if the given item has no more parents
-                            using (var desktop = KnownFolderHelper.FromKnownFolderGuid(new Guid(KF_ID.ID_FOLDERID_Desktop)))
-                            {
-                                IntPtr desktopPtr = default(IntPtr);
-                                try
-                                {
-                                    desktopPtr = desktop.KnownFolderToPIDL();
-
-                                    if (desktopPtr != default(IntPtr))
-                                    {
-                                        parentList = IdList.Create(PidlManager.Decode(desktopPtr));
-                                        return true;
-                                    }
-                                }
-                                finally
-                                {
-                                    if (desktopPtr != default(IntPtr))
-                                        desktopPtr = PidlManager.ILFree(desktopPtr);
-                                }
-                            }
-                        }
+                        if ((parentList = IdList.FromKnownFolderGuid(props.ParentId)) != null)
+                            return true;
                     }
+                }
+            }
+
+            // Just return the desktop as parent if the given item has no more parents
+            using (var desktop = KnownFolderHelper.FromKnownFolderGuid(new Guid(KF_ID.ID_FOLDERID_Desktop)))
+            {
+                IntPtr desktopPtr = default(IntPtr);
+                try
+                {
+                    desktopPtr = desktop.KnownFolderToPIDL();
+
+                    if (desktopPtr != default(IntPtr))
+                    {
+                        parentList = IdList.Create(PidlManager.Decode(desktopPtr));
+                        return true;
+                    }
+                }
+                finally
+                {
+                    if (desktopPtr != default(IntPtr))
+                        desktopPtr = PidlManager.ILFree(desktopPtr);
                 }
             }
 

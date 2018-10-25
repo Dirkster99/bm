@@ -42,7 +42,7 @@
         [TestMethod]
         public void GetIconForParentOfSpecialFolder()
         {
-            var testPath = KF_IID.ID_FOLDERID_Documents;
+            var testPath = KF_IID.ID_FOLDERID_Fonts;
 
             IdList parentIdList = null, relativeChild = null;
             var retVal = PidlManager.GetParentIdListFromPath(testPath, out parentIdList, out relativeChild);
@@ -158,6 +158,17 @@
         public void GetIconForControlPanel()
         {
             var path = KF_IID.ID_FOLDERID_ControlPanelFolder;
+            IKnownFolderProperties props = null;
+
+            props = KnownFolderHelper.GetFolderPropertiesFromPath(path);
+
+            Assert.IsTrue(props != null);
+        }
+
+        [TestMethod]
+        public void GetIconForFonts()
+        {
+            var path = KF_IID.ID_FOLDERID_Fonts;
             IKnownFolderProperties props = null;
 
             props = KnownFolderHelper.GetFolderPropertiesFromPath(path);

@@ -232,7 +232,7 @@
         /// <param name="cbSizeFileInfo"></param>
         /// <param name="uFlags"></param>
         /// <returns></returns>
-        [DllImport("shell32.dll")]
+        [DllImport("shell32.dll", CharSet = CharSet.Ansi)]
         internal static extern IntPtr SHGetFileInfo(IntPtr pszPath, UInt32 dwFileAttributes,
                                                     ref SHFILEINFO psfi, uint cbSizeFileInfo, uint uFlags);
 

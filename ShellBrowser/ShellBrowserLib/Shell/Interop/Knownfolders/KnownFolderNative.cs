@@ -78,7 +78,7 @@
         #region methods
         /// <summary>
         /// Gets whether the known folder object managed in this object is a folder
-        /// or file objects that are part of the file system,
+        /// or file objects that is part of the file system,
         /// that is, its a file, directory, or root directory.
         /// </summary>
         /// <returns></returns>

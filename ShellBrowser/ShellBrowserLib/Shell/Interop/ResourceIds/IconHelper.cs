@@ -6,6 +6,7 @@
     using ShellBrowserLib.Shell.Enums;
     using System;
     using System.Runtime.InteropServices;
+    using System.Text;
 
     /// <summary>
     /// Gets the ResourceId (libararyName, index) of a shell icon to support
@@ -125,7 +126,7 @@
 
             SHFILEINFO shfi = new SHFILEINFO();
             uint shfiSize = (uint)Marshal.SizeOf(shfi.GetType());
-            IntPtr retVal = Shell.Interop.Dlls.NativeMethods.SHGetFileInfo(pidlPtr, (UInt32)dwAttr, ref shfi, shfiSize, ((uint)(dwFlags) | (uint)iconState));
+            IntPtr retVal = NativeMethods.SHGetFileInfo(pidlPtr, (UInt32)dwAttr, ref shfi, shfiSize, ((uint)(dwFlags) | (uint)iconState));
             try
             {
                 if (retVal.Equals(IntPtr.Zero))
@@ -134,7 +135,17 @@
                     return null;
                 }
                 else    // Return final "library, index" formated string to extract actual icon
-                   return string.Format("{0}, {1}", shfi.szDisplayName, shfi.iIcon);
+                {
+                    var iconFile = new StringBuilder(NativeMethods.MAX_PATH);
+                    iconFile = iconFile.Insert(0, shfi.szDisplayName);
+
+                    // The parseName of the containing icon is sometimes not set (eg.: 'Fonts' folder on Windows 10)
+                    // Not sure why. So, instead of returning an invalid ResourcedId String this returns null.
+                    if (string.IsNullOrEmpty(iconFile.ToString()) || iconFile.ToString().Length <= 0)
+                        return null;
+
+                    return string.Format("{0}, {1}", iconFile, shfi.iIcon);
+                }
             }
             finally
             {
@@ -163,10 +174,10 @@
             }
             else
                 if (!forceLoadFromDisk)
-            {
-                dwFlags |= SHGFI.SHGFI_USEFILEATTRIBUTES;
-                dwAttr = FileAttribute.FILE_ATTRIBUTE_NORMAL;
-            }
+                {
+                    dwFlags |= SHGFI.SHGFI_USEFILEATTRIBUTES;
+                    dwAttr = FileAttribute.FILE_ATTRIBUTE_NORMAL;
+                }
         }
     }
 }

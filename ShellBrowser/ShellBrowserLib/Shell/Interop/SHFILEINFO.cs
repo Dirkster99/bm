@@ -32,7 +32,7 @@
         /// A string that contains the name of the file as it appears in the Windows Shell,
         /// or the path and file name of the file that contains the icon representing the file.
         /// </summary>
-        [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 260)]
+        [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 260)] // MAX_PATH
         public string szDisplayName;
 
         /// <summary>
