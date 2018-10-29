@@ -26,14 +26,6 @@
         VM SelectedViewModel { get; }
 
         /// <summary>
-        /// Gets the last item in the path of viewmodel items.
-        /// 
-        /// Example path is: 'This PC', 'C:', 'Program Files'
-        /// -> This property should reference the 'Program Files' item.
-        /// </summary>
-        ITreeSelector<VM, M> SelectedSelector { get; }
-
-        /// <summary>
         /// Gets/sets the selected second level root item (eg. This PC, Library Desktop, or Desktop Folder).
         /// below the root desktop item.
         /// 

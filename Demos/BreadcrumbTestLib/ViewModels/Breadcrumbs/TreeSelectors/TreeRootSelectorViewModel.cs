@@ -25,6 +25,7 @@
         private T _selectedValue = default(T);
         private ITreeSelector<VM, T> _selectedSelector;
         private ObservableCollection<VM> _OverflowedAndRootItems = null;
+        private VM _SelectedViewModel = default(VM);
         #endregion fields
 
         #region constructors
@@ -60,24 +61,19 @@
         }
 
         /// <summary>
-        /// Gets the last item in the path of viewmodel items.
-        /// 
-        /// Example path is: 'This PC', 'C:', 'Program Files'
-        /// -> This property should reference the 'Program Files' item.
-        /// </summary>
-        public ITreeSelector<VM, T> SelectedSelector
-        {
-            get { return _selectedSelector; }
-        }
-
-        /// <summary>
         /// Gets the currently selected viewmodel from the currently selected item.
         /// </summary>
         public VM SelectedViewModel
         {
             get
             {
-                return (this.SelectedSelector == null ? default(VM) : this.SelectedSelector.ViewModel);
+                return _SelectedViewModel;
+            }
+
+            set
+            {
+                _SelectedViewModel = value;
+                NotifyPropertyChanged(() => SelectedViewModel);
             }
         }
 
@@ -139,16 +135,17 @@
 
             try
             {
-                ITreeSelector<VM, T> prevSelector = _selectedSelector;
+//                ITreeSelector<VM, T> prevSelector = _selectedSelector;
 
                 T prevSelectedValue = _selectedValue;
                 _selectedSelector = pathItem;
+                SelectedViewModel = pathItem.ViewModel;
                 _selectedValue = pathItem.Value;
 
-                if (prevSelectedValue != null && prevSelectedValue.Equals(pathItem.Value) == false)
-                {
-                    prevSelector.IsSelected = false;
-                }
+////                if (prevSelectedValue != null && prevSelectedValue.Equals(pathItem.Value) == false)
+////                {
+////                    prevSelector.IsSelected = false;
+////                }
 
                 this.NotifyPropertyChanged(() => this.SelectedValue);
                 this.NotifyPropertyChanged(() => this.SelectedViewModel);
