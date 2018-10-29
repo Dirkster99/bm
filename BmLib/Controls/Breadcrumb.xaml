@@ -115,15 +115,15 @@
                                             <!-- Displays a root toggle button with a (root/overflow) dropdown list
                                              at the left most button in the control -->
                                             <ctrls:DropDownList Grid.Column="0"
-                                                            x:Name="PART_DropDownList"
-                                                            VerticalAlignment="Stretch" 
-                                                            ItemsSource="{TemplateBinding RootItemsSource}"
-                                                            SelectedValuePath="Selection.Value"
-                                                            SelectedValue="{Binding BreadcrumbSubTree.Selection.SelectedValue}"                               
-                                                            ItemTemplate="{StaticResource DropDownListItemDataTemplate}"
-                                                            behav:SelectionChangedCommand.ChangedCommand="{Binding Path=RootDropDownSelectionChangedCommand}"
-                                                            BorderThickness="0"
-                                                            Margin="0"
+                                                                x:Name="PART_DropDownList"
+                                                                VerticalAlignment="Stretch" 
+                                                                ItemsSource="{TemplateBinding RootDropDownItemsSource}"
+                                                                SelectedValuePath="Selection.Value"
+                                                                SelectedValue="{Binding BreadcrumbSubTree.Selection.SelectedValue}"                               
+                                                                ItemTemplate="{StaticResource DropDownListItemDataTemplate}"
+                                                                behav:SelectionChangedCommand.ChangedCommand="{Binding Path=RootDropDownSelectionChangedCommand}"
+                                                                BorderThickness="0"
+                                                                Margin="0"
                                                             >
                                                 <ctrls:DropDownList.Header>
                                                     <Border x:Name="border"
@@ -143,7 +143,7 @@
                                                               VerticalAlignment="Stretch"
                                                               IsHitTestVisible="True"
                                                               DataContext="{Binding BreadcrumbSubTree}"
-                                                              Data="{Binding IsOverflown,RelativeSource={RelativeSource AncestorType={x:Type bc:Breadcrumb}}, Converter={StaticResource BoolToOneOfTwoBindingsConverter},Mode=OneWay,UpdateSourceTrigger=PropertyChanged}"
+                                                              Data="{TemplateBinding IsOverflown, Converter={StaticResource BoolToOneOfTwoBindingsConverter}}"
                                                     />
                                                     </Border>
                                                 </ctrls:DropDownList.Header>
@@ -156,10 +156,10 @@
                                                                 <Setter Property="Template">
                                                                     <Setter.Value>
                                                                         <ControlTemplate TargetType="{x:Type ComboBoxItem}">
-                                                                            <!-- BugFix: Show Seperator only if items are overflown -->
+                                                                            <!-- Converter ensure to show Seperator only if items are overflown -->
                                                                             <Separator HorizontalAlignment="Stretch"
-                                                                                   IsEnabled="False"
-                                                                                   Visibility="{Binding IsOverflown,Converter={StaticResource btv}, UpdateSourceTrigger=PropertyChanged, RelativeSource={RelativeSource AncestorType={x:Type bc:Breadcrumb}}}"
+                                                                                       IsEnabled="False"
+                                                                                       Visibility="{Binding IsOverflown,Converter={StaticResource btv}, UpdateSourceTrigger=PropertyChanged, RelativeSource={RelativeSource AncestorType={x:Type bc:Breadcrumb}}}"
                                                                                    />
                                                                         </ControlTemplate>
                                                                     </Setter.Value>

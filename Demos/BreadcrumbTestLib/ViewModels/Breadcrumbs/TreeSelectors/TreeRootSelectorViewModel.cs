@@ -9,6 +9,12 @@
     using System.Threading.Tasks;
     using System.Windows;
 
+    /// <summary>
+    /// Implemented in tree node view model, to provide selection support
+    /// for the list of root drop down items.
+    /// </summary>
+    /// <typeparam name="VM">Sub-node viewmodel type.</typeparam>
+    /// <typeparam name="T">Type to identify a node, commonly string.</typeparam>
     internal class TreeRootSelectorViewModel<VM, T> : TreeSelectorViewModel<VM, T>, ITreeRootSelector<VM, T>
     {
         #region fields
@@ -55,6 +61,12 @@
             }
         }
 
+        /// <summary>
+        /// Gets the last item in the path of viewmodel items.
+        /// 
+        /// Example path is: 'This PC', 'C:', 'Program Files'
+        /// -> This property should reference the 'Program Files' item.
+        /// </summary>
         public ITreeSelector<VM, T> SelectedSelector
         {
             get { return _selectedSelector; }
@@ -72,8 +84,13 @@
         }
 
         /// <summary>
-        /// Gets/sets the select item when the user opens the drop down and selects 1 item
-        /// in the dropdownlist of the RootDropDown button.
+        /// Gets/sets the selected second level root item (eg. This PC, Library Desktop, or Desktop Folder).
+        /// below the root desktop item.
+        /// 
+        /// This property usually changes:
+        /// 1) When the user opens the drop down and selects 1 item in the dropdownlist of the RootDropDown button or
+        /// 2) When the control navigates to a unrelated second level root address
+        ///    (eg.: From 'This PC','C:\' to 'Libraries','Music')
         /// 
         /// Source:
         /// DropDownList Binding with SelectedValue="{Binding Selection.SelectedValue}"
@@ -87,13 +104,25 @@
 
             set
             {
-                if (value == null && _selectedSelector == null)
-                    return;
+                bool bHasChanged = true;
 
-                if (value != null && _selectedSelector != null)
+                if (_selectedValue == null && value == null)
+                    bHasChanged = false;
+                else
                 {
-                    if (value.Equals(_selectedSelector) == true)
-                        return;
+                    if ((_selectedValue != null && value == null) ||
+                        (_selectedValue == null && value != null))
+                        bHasChanged = true;
+                    else
+                    {
+                        bHasChanged = ! _selectedValue.Equals(value);
+                    }
+                }
+
+                if (bHasChanged == true)
+                {
+                    _selectedValue = value;
+                    NotifyPropertyChanged(() => this.SelectedValue);
                 }
             }
         }

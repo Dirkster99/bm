@@ -4,7 +4,8 @@
     using System.Collections.Generic;
 
     /// <summary>
-    /// Implemented in tree node view model, to provide selection support.
+    /// Implemented in tree node view model, to provide selection support
+    /// for the list of root drop down items.
     /// </summary>
     /// <typeparam name="VM">Sub-node viewmodel type.</typeparam>
     /// <typeparam name="T">Type to identify a node, commonly string.</typeparam>
@@ -24,12 +25,24 @@
         VM SelectedViewModel { get; }
 
         /// <summary>
-        /// Get instance of ITreeSelector of the selected ViewModel.
+        /// Gets the last item in the path of viewmodel items.
+        /// 
+        /// Example path is: 'This PC', 'C:', 'Program Files'
+        /// -> This property should reference the 'Program Files' item.
         /// </summary>
         ITreeSelector<VM, T> SelectedSelector { get; }
 
         /// <summary>
-        /// Value of SelectedViewModel.
+        /// Gets/sets the selected second level root item (eg. This PC, Library Desktop, or Desktop Folder).
+        /// below the root desktop item.
+        /// 
+        /// This property usually changes:
+        /// 1) When the user opens the drop down and selects 1 item in the dropdownlist of the RootDropDown button or
+        /// 2) When the control navigates to a unrelated second level root address
+        ///    (eg.: From 'This PC','C:\' to 'Libraries','Music')
+        /// 
+        /// Source:
+        /// DropDownList Binding with SelectedValue="{Binding Selection.SelectedValue}"
         /// </summary>
         T SelectedValue { get; set; }
 

@@ -360,7 +360,10 @@
             PathHandler pathType = PathHandler.Unknown;
             DirectoryItemFlags itemType = DirectoryItemFlags.Unknown;
 
-            if (ShellHelpers.IsSpecialPath(parseName) == ShellHelpers.SpecialPath.IsSpecialPath)
+            var specialPath = ShellHelpers.IsSpecialPath(parseName);
+
+            if (specialPath == ShellHelpers.SpecialPath.IsSpecialPath ||
+                specialPath == ShellHelpers.SpecialPath.ContainsSpecialPath)
                 parseName = null;
             else
             {

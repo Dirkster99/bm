@@ -379,6 +379,7 @@ namespace BreadcrumbTestLib.ViewModels.Breadcrumbs
             await BreadcrumbSubTree.Selection.ReportChildSelectedAsync(path1);
 
             var rootSelector1 = BreadcrumbSubTree.Selection as ITreeRootSelector<BreadcrumbTreeItemViewModel, IDirectoryBrowser>;
+
             UpdateListOfOverflowableRootItems(rootSelector1, _CurrentPath);
             UpdateBreadcrumbSelectedPath();
 
@@ -569,7 +570,7 @@ namespace BreadcrumbTestLib.ViewModels.Breadcrumbs
             BreadcrumbSubTree.Selection.SelectedChild = secLevelRootItem.GetModel();
 
             _CurrentPath.Clear();
-            _CurrentPath.Push(desktopRootItem);          // set the current path to thisPC
+            _CurrentPath.Push(desktopRootItem);   // set the current path to thisPC
             _CurrentPath.Push(secLevelRootItem); // set the current path to thisPC
 
             var path = new Stack<ITreeSelector<BreadcrumbTreeItemViewModel, IDirectoryBrowser>>();
@@ -577,6 +578,7 @@ namespace BreadcrumbTestLib.ViewModels.Breadcrumbs
             await BreadcrumbSubTree.Selection.ReportChildSelectedAsync(path);
 
             var rootSelector = BreadcrumbSubTree.Selection as ITreeRootSelector<BreadcrumbTreeItemViewModel, IDirectoryBrowser>;
+            
             UpdateListOfOverflowableRootItems(rootSelector, _CurrentPath);
             UpdateBreadcrumbSelectedPath();
         }
@@ -626,6 +628,15 @@ namespace BreadcrumbTestLib.ViewModels.Breadcrumbs
 
             // 3) merge both lists from 1) and 2) into updated overflowable list
             rootSelector.UpdateOverflowedItems(rootItems, overflowedItems);
+
+            BreadcrumbTreeItemViewModel secondLevelRootItem = null;
+            var pathList = _CurrentPath.ToArray();
+            if (pathList.Length >= 2)
+            {
+                secondLevelRootItem = pathList[pathList.Length - 2];
+            }
+
+            rootSelector.SelectedValue = secondLevelRootItem.GetModel(); // select item in RootDropDownList if it is visible here
         }
 
         /// <summary>
@@ -653,7 +664,6 @@ namespace BreadcrumbTestLib.ViewModels.Breadcrumbs
                     }
 
                     // Gets the complete path string below root item selector.RootSelector.SelectedValue.FullName;
-
                     BreadcrumbSelectedPath = output;
                 }
             }

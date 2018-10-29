@@ -49,8 +49,8 @@
         /// (overflown items are items that cannot be displayed in the path portion of the
         /// control since UI space is too limited).
         /// </summary>
-        public static readonly DependencyProperty RootItemsSourceProperty =
-            DependencyProperty.Register("RootItemsSource",
+        public static readonly DependencyProperty RootDropDownItemsSourceProperty =
+            DependencyProperty.Register("RootDropDownItemsSource",
                 typeof(IEnumerable<object>),
                 typeof(Breadcrumb), new PropertyMetadata(null));
 
@@ -108,10 +108,10 @@
         /// (overflown items are items that cannot be displayed in the path portion of the
         /// control since UI space is too limited).
         /// </summary>
-        public IEnumerable<object> RootItemsSource
+        public IEnumerable<object> RootDropDownItemsSource
         {
-            get { return (IEnumerable<object>)GetValue(RootItemsSourceProperty); }
-            set { SetValue(RootItemsSourceProperty, value); }
+            get { return (IEnumerable<object>)GetValue(RootDropDownItemsSourceProperty); }
+            set { SetValue(RootDropDownItemsSourceProperty, value); }
         }
 
 
@@ -178,10 +178,10 @@
 #endif
             var sz = base.MeasureOverride(constraint);
 
-            if (RootItemsSource != null)         // Go through root items and
-            {                             // count those that are overflown
+            if (RootDropDownItemsSource != null)         // Go through root items and
+            {                                           // count those that are overflown
                 int overflowCount = 0;
-                foreach (var item in RootItemsSource)
+                foreach (var item in RootDropDownItemsSource)
                 {
                     if (item is IOverflown)
                     {
