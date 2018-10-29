@@ -79,6 +79,14 @@ namespace BreadcrumbTestLib.ViewModels.Breadcrumbs
         /// </summary>
         public BreadcrumbTreeItemViewModel BreadcrumbSubTree { get; }
 
+        public ITreeRootSelector<BreadcrumbTreeItemViewModel, IDirectoryBrowser> RootSelector
+        {
+            get
+            {
+                return BreadcrumbSubTree.Selection as ITreeRootSelector<BreadcrumbTreeItemViewModel, IDirectoryBrowser>;
+            }
+        }
+
         /// <summary>
         /// Gets/sets a property that determines whether a breadcrumb
         /// switch is turned on or off.
@@ -240,7 +248,7 @@ namespace BreadcrumbTestLib.ViewModels.Breadcrumbs
         {
             return Task.Run(async () =>
             {
-                await BreadcrumbSubTree.InitRootAsync(_RootLocation);
+                await BreadcrumbSubTree.InitRootAsync(_RootLocation, RootSelector);
 
                 _CurrentPath = new Stack<BreadcrumbTreeItemViewModel>() { };
                 _CurrentPath.Push(BreadcrumbSubTree.Entries.All.First());
@@ -380,7 +388,7 @@ namespace BreadcrumbTestLib.ViewModels.Breadcrumbs
 
             var path1 = new Stack<ITreeSelector<BreadcrumbTreeItemViewModel, IDirectoryBrowser>>();
             path1.Push(newSelectedLocation.Selection);
-            await BreadcrumbSubTree.Selection.ReportChildSelectedAsync(path1);
+            await RootSelector.ReportChildSelectedAsync(path1);
 
             var rootSelector1 = BreadcrumbSubTree.Selection as ITreeRootSelector<BreadcrumbTreeItemViewModel, IDirectoryBrowser>;
 
@@ -475,7 +483,7 @@ namespace BreadcrumbTestLib.ViewModels.Breadcrumbs
 
             var path1 = new Stack<ITreeSelector<BreadcrumbTreeItemViewModel, IDirectoryBrowser>>();
             path1.Push(targetPath[targetPath.Count - 1].Selection);
-            await BreadcrumbSubTree.Selection.ReportChildSelectedAsync(path1);
+            await RootSelector.ReportChildSelectedAsync(path1);
 
             var rootSelector1 = BreadcrumbSubTree.Selection as ITreeRootSelector<BreadcrumbTreeItemViewModel, IDirectoryBrowser>;
             UpdateListOfOverflowableRootItems(rootSelector1, _CurrentPath);
@@ -578,11 +586,9 @@ namespace BreadcrumbTestLib.ViewModels.Breadcrumbs
 
             var path = new Stack<ITreeSelector<BreadcrumbTreeItemViewModel, IDirectoryBrowser>>();
             path.Push(secLevelRootItem.Selection);
-            await BreadcrumbSubTree.Selection.ReportChildSelectedAsync(path);
+            await RootSelector.ReportChildSelectedAsync(path);
 
-            var rootSelector = BreadcrumbSubTree.Selection as ITreeRootSelector<BreadcrumbTreeItemViewModel, IDirectoryBrowser>;
-            
-            UpdateListOfOverflowableRootItems(rootSelector, _CurrentPath);
+            UpdateListOfOverflowableRootItems(RootSelector, _CurrentPath);
             UpdateBreadcrumbSelectedPath();
         }
 

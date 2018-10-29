@@ -135,7 +135,7 @@
         /// to change the selection to complete the cycle.
         /// </summary>
         /// <param name="path"></param>
-        public override async Task ReportChildSelectedAsync(Stack<ITreeSelector<VM, T>> path)
+        public async Task ReportChildSelectedAsync(Stack<ITreeSelector<VM, T>> path)
         {
             Logger.InfoFormat("_");
 
@@ -168,32 +168,7 @@
             if (path.Last().EntryHelper.IsLoaded == false)
                 await path.Last().EntryHelper.LoadAsync();
         }
-/***
-        /// <summary>
-        /// Method checks value1 and value2 with a set of comparers
-        /// as stored in the <see cref="Comparers"/> property and
-        /// returns when a relation is found.
-        /// 
-        /// The method cycles otherwise through all comparers and returns
-        /// unrelated if no other relation was determined.
-        /// </summary>
-        /// <param name="value1"></param>
-        /// <param name="value2"></param>
-        /// <returns></returns>
-        public HierarchicalResult CompareHierarchy(T value1, T value2)
-        {
-            Logger.InfoFormat("_");
 
-            foreach (var c in this.Comparers)
-            {
-                var retVal = c.CompareHierarchy(value1, value2);
-                if (retVal != HierarchicalResult.Unrelated)
-                    return retVal;
-            }
-
-            return HierarchicalResult.Unrelated;
-        }
-***/
         /// <summary>
         /// Update the root drop down list with the list of root items
         /// and overflowable (non-root) items.

@@ -2,6 +2,7 @@
 {
     using System;
     using System.Collections.Generic;
+    using System.Threading.Tasks;
 
     /// <summary>
     /// Implemented in tree node view model, to provide selection support
@@ -53,6 +54,7 @@
         IEnumerable<VM> OverflowedAndRootItems { get; }
         #endregion properties
 
+        #region methods
         /// <summary>
         /// Update the root drop down list with the list of root items
         /// and overflowable (non-root) items.
@@ -60,5 +62,12 @@
         /// <param name="rootItems"></param>
         /// <param name="pathItems"></param>
         void UpdateOverflowedItems(IEnumerable<VM> rootItems, IEnumerable<VM> pathItems);
+
+        /// <summary>
+        /// Used by a tree node to report to it's root it's selected.
+        /// </summary>
+        /// <param name="path"></param>
+        Task ReportChildSelectedAsync(Stack<ITreeSelector<VM, M>> path);
+        #endregion methods
     }
 }

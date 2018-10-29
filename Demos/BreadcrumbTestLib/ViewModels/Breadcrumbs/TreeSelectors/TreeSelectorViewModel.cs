@@ -209,17 +209,6 @@
                 _Value == null ? string.Empty : _Value.ToString(),
                 _ViewModel == null ? string.Empty : _ViewModel.ToString());
         }
-
-        /// <summary>
-        /// Bubble up to TreeSelectionHelper for selection.
-        /// </summary>
-        /// <param name="path"></param>
-        public virtual Task ReportChildSelectedAsync(Stack<ITreeSelector<VM, M>> path)
-        {
-            Logger.InfoFormat("_");
-
-            return Task.Run(() => { });
-        }
         #endregion
     }
 }

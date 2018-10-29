@@ -93,6 +93,13 @@
         ///    
         /// </summary>
         string FullName { get; }
+
+        /// <summary>
+        /// Gets the raw string that was used to construct this object.
+        /// This property is for debug/filter purposes only and should not be
+        /// visible in any UI or ViewModel.
+        /// </summary>
+        string PathRAW { get; }
         #endregion properties
 
         #region methods

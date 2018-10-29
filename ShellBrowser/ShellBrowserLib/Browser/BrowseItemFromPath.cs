@@ -33,8 +33,8 @@
         /// <param name="pathType"></param>
         /// <param name="itemType"></param>
         public BrowseItemFromPath(string rawPath,
-                                   PathHandler pathType,
-                                   DirectoryItemFlags itemType = DirectoryItemFlags.Unknown)
+                                  PathHandler pathType,
+                                  DirectoryItemFlags itemType = DirectoryItemFlags.Unknown)
             : this()
         {
             Path_RAW = rawPath;
@@ -43,14 +43,14 @@
         }
 
         public BrowseItemFromPath(string path, string normPath, bool isSpecialID,
-                                   string parseName,
-                                   string name,
-                                   string labelName,
-                                   string pathSpecialItemId,
-                                   IdList parentIdList, IdList relativeChildIdList,
-                                   PathHandler pathType,
-                                   DirectoryItemFlags itemType,
-                                   IKnownFolderProperties props = null)
+                                  string parseName,
+                                  string name,
+                                  string labelName,
+                                  string pathSpecialItemId,
+                                  IdList parentIdList, IdList relativeChildIdList,
+                                  PathHandler pathType,
+                                  DirectoryItemFlags itemType,
+                                  IKnownFolderProperties props = null)
         {
             this.Path_RAW = path;
             this.Name = name;
@@ -313,6 +313,16 @@
             }
         }
 
+        /// <summary>
+        /// Class constructor from strings that are commonly exposed by
+        /// <see cref="IShellFolder2"/> interfaces. Constructing from these
+        /// items can speed up enumeration since we do not need to revisit
+        /// each items <see cref="IShellFolder2"/> interfaces.
+        /// </summary>
+        /// <param name="parseName"></param>
+        /// <param name="name"></param>
+        /// <param name="labelName"></param>
+        /// <returns></returns>
         internal static BrowseItemFromPath InitItemType(string parseName,
                                                         string name,
                                                         string labelName)

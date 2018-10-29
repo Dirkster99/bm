@@ -14,6 +14,7 @@
     using System.Windows.Input;
     using ShellBrowserLib;
     using SSCoreLib.Browse;
+    using ShellBrowserLib.IDs;
 
     /// <summary>
     /// Class implements a ViewModel to manage a sub-tree of a Breadcrumb control.
@@ -299,10 +300,15 @@
         /// Gets all root items below the desktop item and makes them available
         /// in the <see cref="Entries"/> collection. The first available item
         /// in the retrieved collection (eg: 'PC') is selected.
+        /// 
+        /// This method should only be called on a root item of the breadcrumb tree to
+        /// initialize/construct a valid root of the tree(!!!)
         /// </summary>
         /// <param name="location"></param>
+        /// <param name="rootSelector"></param>
         /// <returns></returns>
-        public async Task InitRootAsync(IDirectoryBrowser location)
+        internal async Task InitRootAsync(IDirectoryBrowser location,
+                                          ITreeRootSelector<BreadcrumbTreeItemViewModel, IDirectoryBrowser> rootSelector)
         {
             try
             {
@@ -312,11 +318,11 @@
 
                 // and insert desktop sub-entries into Entries property
                 Entries.SetEntries(UpdateMode.Update,
-                    ShellBrowser.GetChildItems(_dir.PathShell).Select(d => new BreadcrumbTreeItemViewModel(d, this, _Root)).ToArray());
-                    //(filter out recycle bin entry if its not that useful...)
-                    //.Where(d => !d.Equals(DirectoryInfoExLib.Factory.RecycleBinDirectory))
-
-                var selector = this.Selection as ITreeRootSelector<BreadcrumbTreeItemViewModel, IDirectoryBrowser>;
+                    ShellBrowser.GetChildItems(_dir.PathShell)
+                                                // (filter out recycle bin and control panel entries since its not that useful...)
+                                                .Where(d => string.Compare(d.SpecialPathId, KF_IID.ID_FOLDERID_RecycleBinFolder,true) != 0)
+                                                .Where(d => string.Compare(d.PathRAW, "::{26EE0668-A00A-44D7-9371-BEB064C98683}", true) != 0)
+                                                .Select(d => new BreadcrumbTreeItemViewModel(d, this, _Root)).ToArray());
 
                 if (Entries.All.Count() > 0)
                 {
@@ -329,9 +335,7 @@
 
                     var path = new Stack<ITreeSelector<BreadcrumbTreeItemViewModel, IDirectoryBrowser>>();
                     path.Push(firstRootItem.Selection);
-
-
-                    await this.Selection.ReportChildSelectedAsync(path);
+                    await rootSelector.ReportChildSelectedAsync(path);
                 }
             }
             catch

@@ -1,8 +1,6 @@
 ﻿namespace BreadcrumbTestLib.ViewModels.Interfaces
 {
-    using System.Collections.Generic;
     using System.ComponentModel;
-    using System.Threading.Tasks;
 
     /// <summary>
     /// Implement Tree based structure and support LookupProcessing.
@@ -74,11 +72,6 @@
         #endregion properties
 
         #region methods
-        /// <summary>
-        /// Used by a tree node to report to it's root it's selected.
-        /// </summary>
-        /// <param name="path"></param>
-        Task ReportChildSelectedAsync(Stack<ITreeSelector<VM, M>> path);
         #endregion methods
     }
 }
