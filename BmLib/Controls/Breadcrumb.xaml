@@ -195,10 +195,11 @@
                                                 <uc:BreadcrumbTree.ItemContainerStyle>
                                                     <Style TargetType="{x:Type uc:BreadcrumbTreeItem}" BasedOn="{StaticResource {x:Type uc:BreadcrumbTreeItem}}">
                                                         <Setter Property="ValuePath" Value="Selection.Value" />
+                                                        <Setter Property="SelectedChild" Value="{Binding Selection.SelectedChild, Mode=OneWay,UpdateSourceTrigger=PropertyChanged}"  />
+
                                                         <Setter Property="IsExpanded" Value="{Binding Entries.IsExpanded, Mode=TwoWay}"  />
                                                         <Setter Property="IsCurrentSelected" Value="{Binding Selection.IsSelected, Mode=TwoWay}"  />
-                                                        <!-- -->
-                                                        <!--Setter Property="SelectedChild" Value="{Binding Selection.SelectedChildUI, Mode=TwoWay}"  /-->
+
                                                         <Setter Property="IsChildSelected" Value="{Binding Selection.IsChildSelected, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"  />
 
                                                         <!--Updated by BreadcrumbTreeItem and it's OverflowableStackPanel-->

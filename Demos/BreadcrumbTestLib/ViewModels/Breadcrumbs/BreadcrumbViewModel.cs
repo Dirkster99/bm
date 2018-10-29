@@ -103,6 +103,10 @@ namespace BreadcrumbTestLib.ViewModels.Breadcrumbs
             }
         }
 
+        /// <summary>
+        /// Gets a string representation of the currently selected path items.
+        /// (mostly useful for debugging purposes).
+        /// </summary>
         public string BreadcrumbSelectedPath
         {
             get
@@ -110,7 +114,7 @@ namespace BreadcrumbTestLib.ViewModels.Breadcrumbs
                 return _BreadcrumbSelectedPath;
             }
 
-            set
+            protected set
             {
                 if (_BreadcrumbSelectedPath != value)
                 {
@@ -566,7 +570,6 @@ namespace BreadcrumbTestLib.ViewModels.Breadcrumbs
 
             // Get thisPC item and set its selection states
             secLevelRootItem.Selection.IsSelected = true;
-            secLevelRootItem.Selection.SelectedChild = null;
             BreadcrumbSubTree.Selection.SelectedChild = secLevelRootItem.GetModel();
 
             _CurrentPath.Clear();
@@ -636,7 +639,10 @@ namespace BreadcrumbTestLib.ViewModels.Breadcrumbs
                 secondLevelRootItem = pathList[pathList.Length - 2];
             }
 
-            rootSelector.SelectedValue = secondLevelRootItem.GetModel(); // select item in RootDropDownList if it is visible here
+            if (secondLevelRootItem != null)
+                rootSelector.SelectedValue = secondLevelRootItem.GetModel(); // select item in RootDropDownList if it is visible here
+            else
+                rootSelector.SelectedValue = null;
         }
 
         /// <summary>

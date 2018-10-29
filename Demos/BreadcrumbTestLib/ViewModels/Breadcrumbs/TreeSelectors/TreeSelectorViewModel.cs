@@ -18,8 +18,6 @@
         /// Log4net logger facility for this class.
         /// </summary>
         protected static readonly log4net.ILog Logger = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
-
-        private readonly AsyncLock _lookupLock = new AsyncLock();
         private bool _isSelected = false;
 
         // Holds the location model of the selected child of this entry (if any)
