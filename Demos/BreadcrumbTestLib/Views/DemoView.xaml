@@ -69,9 +69,10 @@
                 <ctrls:Breadcrumb DataContext="{Binding BreadcrumbController.BreadcrumbBrowser}" Name="BreadcrumbDemoControl"
                                   Visibility="{Binding Path=IsChecked,ElementName=ShowBreadCrumbControl,Mode=OneWay, UpdateSourceTrigger=PropertyChanged,Converter={StaticResource BoolToVisibilityConverter}}"
                                   VerticalAlignment="Top" HorizontalAlignment="Stretch"
-                                  RootItems="{Binding BreadcrumbSubTree.Selection.OverflowedAndRootItems,Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"
+                                  RootItemsSource="{Binding BreadcrumbSubTree.Selection.OverflowedAndRootItems,Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"
                                   Margin="3"
-                              />
+                              >
+                </ctrls:Breadcrumb>
 
                 <Grid Grid.Row="1">
                     <TreeView DataContext="{Binding BreadcrumbController.BreadcrumbBrowser}" 

@@ -43,19 +43,39 @@
             DependencyProperty.Register("OverflowGap",
                 typeof(double), typeof(Breadcrumb), new PropertyMetadata(10.0));
 
-        public static readonly DependencyProperty RootItemsProperty =
-            DependencyProperty.Register("RootItems",
+        /// <summary>
+        /// Getter/Setter for dependency property that binds the root items drop down list
+        /// of the Breadcrumb control. This list should also include overflown items
+        /// (overflown items are items that cannot be displayed in the path portion of the
+        /// control since UI space is too limited).
+        /// </summary>
+        public static readonly DependencyProperty RootItemsSourceProperty =
+            DependencyProperty.Register("RootItemsSource",
                 typeof(IEnumerable<object>),
                 typeof(Breadcrumb), new PropertyMetadata(null));
 
         /// <summary>
-        /// Implement a dependency property to determine whether crumbs fit
-        /// into the current breadcrumb display or not.
+        /// Implement a dependency property to determine whether all path portions of the
+        /// breadcrumb contol fit into the current breadcrumb display or not.
         /// </summary>
         public static readonly DependencyProperty IsOverflownProperty =
             DependencyProperty.Register("IsOverflown",
                 typeof(bool),
                 typeof(Breadcrumb), new PropertyMetadata(false));
+
+        #region BreadCrumbTree Dependency Properties
+        public HierarchicalDataTemplate BreadcrumbTreeItemTemplate
+        {
+            get { return (HierarchicalDataTemplate)GetValue(BreadcrumbTreeItemTemplateProperty); }
+            set { SetValue(BreadcrumbTreeItemTemplateProperty, value); }
+        }
+
+        // Using a DependencyProperty as the backing store for BreadcrumbTreeItemTemplate.  This enables animation, styling, binding, etc...
+        public static readonly DependencyProperty BreadcrumbTreeItemTemplateProperty =
+            DependencyProperty.Register("BreadcrumbTreeItemTemplate",
+                typeof(HierarchicalDataTemplate),
+                typeof(Breadcrumb), new PropertyMetadata(null));
+        #endregion BreadCrumbTree Dependency Properties
 
         private object _LockObject = new object();
         private bool _IsLoaded = false;
@@ -82,15 +102,22 @@
         #endregion constructors
 
         #region properties
-        public IEnumerable<object> RootItems
+        /// <summary>
+        /// Getter/Setter for dependency property that binds the root items drop down list
+        /// of the Breadcrumb control. This list should also include overflown items
+        /// (overflown items are items that cannot be displayed in the path portion of the
+        /// control since UI space is too limited).
+        /// </summary>
+        public IEnumerable<object> RootItemsSource
         {
-            get { return (IEnumerable<object>)GetValue(RootItemsProperty); }
-            set { SetValue(RootItemsProperty, value); }
+            get { return (IEnumerable<object>)GetValue(RootItemsSourceProperty); }
+            set { SetValue(RootItemsSourceProperty, value); }
         }
 
+
         /// <summary>
-        /// Implement a dependency property to determine whether crumbs fit
-        /// into the current breadcrumb display or not.
+        /// Implement a dependency property to determine whether all path portions of the
+        /// breadcrumb contol fit into the current breadcrumb display or not.
         /// </summary>
         public bool IsOverflown
         {
@@ -151,10 +178,10 @@
 #endif
             var sz = base.MeasureOverride(constraint);
 
-            if (RootItems != null)         // Go through root items and
+            if (RootItemsSource != null)         // Go through root items and
             {                             // count those that are overflown
                 int overflowCount = 0;
-                foreach (var item in RootItems)
+                foreach (var item in RootItemsSource)
                 {
                     if (item is IOverflown)
                     {
