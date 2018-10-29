@@ -79,7 +79,10 @@ namespace BreadcrumbTestLib.ViewModels.Breadcrumbs
         /// </summary>
         public BreadcrumbTreeItemViewModel BreadcrumbSubTree { get; }
 
-        public ITreeRootSelector<BreadcrumbTreeItemViewModel, IDirectoryBrowser> RootSelector
+        /// <summary>
+        /// Gets the <see cref="ITreeRootSelector{VM, M}"/> selector for this BreadCrumb ViewModel.
+        /// </summary>
+        internal ITreeRootSelector<BreadcrumbTreeItemViewModel, IDirectoryBrowser> RootSelector
         {
             get
             {
@@ -386,9 +389,7 @@ namespace BreadcrumbTestLib.ViewModels.Breadcrumbs
                 }
             }
 
-            var path1 = new Stack<ITreeSelector<BreadcrumbTreeItemViewModel, IDirectoryBrowser>>();
-            path1.Push(newSelectedLocation.Selection);
-            await RootSelector.ReportChildSelectedAsync(path1);
+            await RootSelector.ReportChildSelectedAsync(newSelectedLocation.Selection);
 
             var rootSelector1 = BreadcrumbSubTree.Selection as ITreeRootSelector<BreadcrumbTreeItemViewModel, IDirectoryBrowser>;
 
@@ -481,9 +482,7 @@ namespace BreadcrumbTestLib.ViewModels.Breadcrumbs
             foreach (var item in targetPath)
                 _CurrentPath.Push(item);
 
-            var path1 = new Stack<ITreeSelector<BreadcrumbTreeItemViewModel, IDirectoryBrowser>>();
-            path1.Push(targetPath[targetPath.Count - 1].Selection);
-            await RootSelector.ReportChildSelectedAsync(path1);
+            await RootSelector.ReportChildSelectedAsync(targetPath[targetPath.Count - 1].Selection);
 
             var rootSelector1 = BreadcrumbSubTree.Selection as ITreeRootSelector<BreadcrumbTreeItemViewModel, IDirectoryBrowser>;
             UpdateListOfOverflowableRootItems(rootSelector1, _CurrentPath);
@@ -584,9 +583,7 @@ namespace BreadcrumbTestLib.ViewModels.Breadcrumbs
             _CurrentPath.Push(desktopRootItem);   // set the current path to thisPC
             _CurrentPath.Push(secLevelRootItem); // set the current path to thisPC
 
-            var path = new Stack<ITreeSelector<BreadcrumbTreeItemViewModel, IDirectoryBrowser>>();
-            path.Push(secLevelRootItem.Selection);
-            await RootSelector.ReportChildSelectedAsync(path);
+            await RootSelector.ReportChildSelectedAsync(secLevelRootItem.Selection);
 
             UpdateListOfOverflowableRootItems(RootSelector, _CurrentPath);
             UpdateBreadcrumbSelectedPath();

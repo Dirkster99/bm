@@ -5,7 +5,6 @@
     using System;
     using System.Collections.Generic;
     using System.Collections.ObjectModel;
-    using System.Linq;
     using System.Threading.Tasks;
     using System.Windows;
 
@@ -25,7 +24,6 @@
 
         private T _selectedValue = default(T);
         private ITreeSelector<VM, T> _selectedSelector;
-        private Stack<ITreeSelector<VM, T>> _prevPath = null;
         private ObservableCollection<VM> _OverflowedAndRootItems = null;
         #endregion fields
 
@@ -134,8 +132,8 @@
         /// control's viewmodel has retrieved all required items and is about
         /// to change the selection to complete the cycle.
         /// </summary>
-        /// <param name="path"></param>
-        public async Task ReportChildSelectedAsync(Stack<ITreeSelector<VM, T>> path)
+        /// <param name="pathItem"></param>
+        public async Task ReportChildSelectedAsync(ITreeSelector<VM, T> pathItem)
         {
             Logger.InfoFormat("_");
 
@@ -144,12 +142,10 @@
                 ITreeSelector<VM, T> prevSelector = _selectedSelector;
 
                 T prevSelectedValue = _selectedValue;
-                _prevPath = path;
+                _selectedSelector = pathItem;
+                _selectedValue = pathItem.Value;
 
-                _selectedSelector = path.Last();
-                _selectedValue = path.Last().Value;
-
-                if (prevSelectedValue != null && prevSelectedValue.Equals(path.Last().Value) == false)
+                if (prevSelectedValue != null && prevSelectedValue.Equals(pathItem.Value) == false)
                 {
                     prevSelector.IsSelected = false;
                 }
@@ -165,8 +161,8 @@
             if (this.SelectionChanged != null)
                 this.SelectionChanged(this, EventArgs.Empty);
 
-            if (path.Last().EntryHelper.IsLoaded == false)
-                await path.Last().EntryHelper.LoadAsync();
+            if (pathItem.EntryHelper.IsLoaded == false)
+                await pathItem.EntryHelper.LoadAsync();
         }
 
         /// <summary>

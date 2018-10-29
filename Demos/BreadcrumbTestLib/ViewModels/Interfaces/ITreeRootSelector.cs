@@ -66,8 +66,8 @@
         /// <summary>
         /// Used by a tree node to report to it's root it's selected.
         /// </summary>
-        /// <param name="path"></param>
-        Task ReportChildSelectedAsync(Stack<ITreeSelector<VM, M>> path);
+        /// <param name="pathItem"></param>
+        Task ReportChildSelectedAsync(ITreeSelector<VM, M> pathItem);
         #endregion methods
     }
 }

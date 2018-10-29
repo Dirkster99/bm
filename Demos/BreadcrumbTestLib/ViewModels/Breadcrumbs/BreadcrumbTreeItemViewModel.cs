@@ -333,9 +333,7 @@
                     var firstRootItem = Entries.All.First();
                     firstRootItem.Selection.IsSelected = true;
 
-                    var path = new Stack<ITreeSelector<BreadcrumbTreeItemViewModel, IDirectoryBrowser>>();
-                    path.Push(firstRootItem.Selection);
-                    await rootSelector.ReportChildSelectedAsync(path);
+                    await rootSelector.ReportChildSelectedAsync(firstRootItem.Selection);
                 }
             }
             catch
