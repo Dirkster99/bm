@@ -165,9 +165,9 @@
             Assert.IsTrue(string.Compare(KF_IID.ID_FOLDERID_DocumentsLibrary, test.SpecialPathId, true)==0);
             Assert.IsTrue(string.Compare(KF_IID.ID_FOLDERID_UsersLibraries, testParent.SpecialPathId, true) == 0);
 
-            // Item should have a physical storage location that is particularly strange:
-            // PathFileSystem = "::{031E4825-7B94-4DC3-B131-E946B44C8DD5}\\Documents.library-ms"
-            Assert.IsFalse(string.IsNullOrEmpty(test.PathFileSystem));
+            // Item should not have a physical storage location:
+            Assert.IsFalse(string.IsNullOrEmpty(test.SpecialPathId));
+            Assert.IsTrue(string.IsNullOrEmpty(test.PathFileSystem));
             Assert.IsTrue(string.IsNullOrEmpty(testParent.PathFileSystem));
 
             // Parent item of Documents at 'C:\Users\<login>\AppData\Roaming\Microsoft\Windows\Libraries\Documents.library-ms'

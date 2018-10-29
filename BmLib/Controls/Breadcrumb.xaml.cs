@@ -3,6 +3,7 @@
     using BmLib.Controls.Breadcrumbs;
     using BmLib.Interfaces;
     using BmLib.Utils;
+    using System;
     using System.Collections.Generic;
     using System.Diagnostics;
     using System.Windows;
@@ -27,10 +28,12 @@
     /// </summary>
     ////    [TemplatePart(Name = "PART_SuggestBox", Type = typeof(SuggestBoxBase))]
     [TemplatePart(Name = "PART_Switch", Type = typeof(Switch))]
-    [TemplatePart(Name = "PART_DropDownList", Type = typeof(DropDownList))]
+    [TemplatePart(Name = PART_RootDropDownList, Type = typeof(DropDownList))]
     public class Breadcrumb : UserControl
     {
         #region fields
+        public const string PART_RootDropDownList = "PART_RootDropDownList";
+
         /// <summary>
         /// Implements the backing store field of the OverflowGap dependency property.
         /// 
@@ -51,8 +54,17 @@
         /// </summary>
         public static readonly DependencyProperty RootDropDownItemsSourceProperty =
             DependencyProperty.Register("RootDropDownItemsSource",
-                typeof(IEnumerable<object>),
-                typeof(Breadcrumb), new PropertyMetadata(null));
+                typeof(IEnumerable<object>), typeof(Breadcrumb), new PropertyMetadata(null));
+
+        public string RootDropDownSelectedValuePath
+        {
+            get { return (string)GetValue(RootDropDownSelectedValuePathProperty); }
+            set { SetValue(RootDropDownSelectedValuePathProperty, value); }
+        }
+
+        public static readonly DependencyProperty RootDropDownSelectedValuePathProperty =
+            DependencyProperty.Register("RootDropDownSelectedValuePath",
+                typeof(string), typeof(Breadcrumb), new PropertyMetadata(null));
 
         /// <summary>
         /// Implement a dependency property to determine whether all path portions of the
@@ -62,20 +74,6 @@
             DependencyProperty.Register("IsOverflown",
                 typeof(bool),
                 typeof(Breadcrumb), new PropertyMetadata(false));
-
-        #region BreadCrumbTree Dependency Properties
-        public HierarchicalDataTemplate BreadcrumbTreeItemTemplate
-        {
-            get { return (HierarchicalDataTemplate)GetValue(BreadcrumbTreeItemTemplateProperty); }
-            set { SetValue(BreadcrumbTreeItemTemplateProperty, value); }
-        }
-
-        // Using a DependencyProperty as the backing store for BreadcrumbTreeItemTemplate.  This enables animation, styling, binding, etc...
-        public static readonly DependencyProperty BreadcrumbTreeItemTemplateProperty =
-            DependencyProperty.Register("BreadcrumbTreeItemTemplate",
-                typeof(HierarchicalDataTemplate),
-                typeof(Breadcrumb), new PropertyMetadata(null));
-        #endregion BreadCrumbTree Dependency Properties
 
         private object _LockObject = new object();
         private bool _IsLoaded = false;
@@ -141,7 +139,7 @@
 
         public Switch Control_Switch { get; set; }
 
-        public DropDownList Control_bexp { get; set; }
+        public DropDownList RootDropDownList { get; set; }
 
         private BreadcrumbTree Control_Tree { get; set; }
         #endregion properties
@@ -153,9 +151,9 @@
         public override void OnApplyTemplate()
         {
             base.OnApplyTemplate();
-////        Control_SuggestBox = this.Template.FindName("PART_SuggestBox", this) as SuggestBoxBase;  // sbox
+            RootDropDownList = this.Template.FindName(PART_RootDropDownList, this) as DropDownList;   // bexp
             Control_Switch = this.Template.FindName("PART_Switch", this) as Switch;                 // switch
-            Control_bexp = this.Template.FindName("PART_DropDownList", this) as DropDownList;      // bexp
+////        Control_SuggestBox = this.Template.FindName("PART_SuggestBox", this) as SuggestBoxBase;  // sbox
 
             OnViewAttached();
         }
@@ -201,9 +199,9 @@
 
         private void OnViewAttached()
         {
-            this.Control_bexp.AddValueChanged(ComboBox.SelectedValueProperty, (o, e) =>
+            this.RootDropDownList.AddValueChanged(ComboBox.SelectedValueProperty, (o, e) =>
             {
-                IEntryViewModel evm = this.Control_bexp.SelectedItem as IEntryViewModel;
+                IEntryViewModel evm = this.RootDropDownList.SelectedItem as IEntryViewModel;
 ////                    if (evm != null)
 ////                        BroadcastDirectoryChanged(evm);
 

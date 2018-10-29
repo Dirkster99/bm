@@ -72,22 +72,22 @@
 
                                 <!-- Show a progress-bar to indicate long running processing -->
                                 <ProgressBar IsIndeterminate="{Binding  Progressing.IsIndeterminate, Mode=OneWay,UpdateSourceTrigger=PropertyChanged}"
-                                         Value="{Binding Progressing.ProgressValue, Mode=OneWay,UpdateSourceTrigger=PropertyChanged}"
-                                         Minimum="{Binding Progressing.MinimumProgressValue, Mode=OneWay,UpdateSourceTrigger=PropertyChanged}"
-                                         Maximum="{Binding Progressing.MaximumProgressValue, Mode=OneWay,UpdateSourceTrigger=PropertyChanged}"
-                                         Visibility="{Binding Progressing.IsProgressbarVisible, Mode=OneWay,UpdateSourceTrigger=PropertyChanged, Converter={StaticResource btv}}"
+                                             Value="{Binding Progressing.ProgressValue, Mode=OneWay,UpdateSourceTrigger=PropertyChanged}"
+                                             Minimum="{Binding Progressing.MinimumProgressValue, Mode=OneWay,UpdateSourceTrigger=PropertyChanged}"
+                                             Maximum="{Binding Progressing.MaximumProgressValue, Mode=OneWay,UpdateSourceTrigger=PropertyChanged}"
+                                             Visibility="{Binding Progressing.IsProgressbarVisible, Mode=OneWay,UpdateSourceTrigger=PropertyChanged, Converter={StaticResource btv}}"
                                                
-                                         Opacity="0.5"
-                                         Background="Transparent"
-                                         Foreground="{DynamicResource {x:Static SystemColors.HotTrackBrushKey}}"
-                                         BorderBrush="Transparent" BorderThickness="0"/>
+                                             Opacity="0.5"
+                                             Background="Transparent"
+                                             Foreground="{DynamicResource {x:Static SystemColors.HotTrackBrushKey}}"
+                                             BorderBrush="Transparent" BorderThickness="0"/>
 
                                 <bc:Switch x:Name="PART_Switch"
-                                       Template="{StaticResource BreadcrumbSwitchTemplate}"                   
-                                       IsSwitchOn="{Binding EnableBreadcrumb, Mode=TwoWay}"
-                                       VerticalAlignment="Center" VerticalContentAlignment="Center"
-                                       HorizontalAlignment="Stretch" HorizontalContentAlignment="Stretch"
-                                       Margin="0"
+                                           Template="{StaticResource BreadcrumbSwitchTemplate}"                   
+                                           IsSwitchOn="{Binding EnableBreadcrumb, Mode=TwoWay}"
+                                           VerticalAlignment="Center" VerticalContentAlignment="Center"
+                                           HorizontalAlignment="Stretch" HorizontalContentAlignment="Stretch"
+                                           Margin="0"
                                      >
                                     <bc:Switch.Header>
                                         <Image DataContext="{Binding BreadcrumbSubTree.Selection.SelectedViewModel}">
@@ -113,13 +113,13 @@
                                             </Grid.ColumnDefinitions>
 
                                             <!-- Displays a root toggle button with a (root/overflow) dropdown list
-                                             at the left most button in the control -->
+                                                 at the left most button in the control -->
                                             <ctrls:DropDownList Grid.Column="0"
-                                                                x:Name="PART_DropDownList"
+                                                                x:Name="PART_RootDropDownList"
                                                                 VerticalAlignment="Stretch" 
                                                                 ItemsSource="{TemplateBinding RootDropDownItemsSource}"
-                                                                SelectedValuePath="Selection.Value"
-                                                                SelectedValue="{Binding BreadcrumbSubTree.Selection.SelectedValue}"                               
+                                                                SelectedValuePath="{TemplateBinding RootDropDownSelectedValuePath}"
+                                                                SelectedValue="{Binding BreadcrumbSubTree.Selection.SelectedValue,Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"                             
                                                                 ItemTemplate="{StaticResource DropDownListItemDataTemplate}"
                                                                 behav:SelectionChangedCommand.ChangedCommand="{Binding Path=RootDropDownSelectionChangedCommand}"
                                                                 BorderThickness="0"
