@@ -10,8 +10,8 @@
     /// based structure and supports LookupProcessing.
     /// </summary>
     /// <typeparam name="VM">Reference to a type of viewmodel</typeparam>
-    /// <typeparam name="T">reference to a type of model that is required by the viewmodel</typeparam>
-    internal class TreeSelectorViewModel<VM, T> : Base.ViewModelBase, ITreeSelector<VM, T>
+    /// <typeparam name="M">reference to a type of model that is required by the viewmodel</typeparam>
+    internal class TreeSelectorViewModel<VM, M> : Base.ViewModelBase, ITreeSelector<VM, M>
     {
         #region fields
         /// <summary>
@@ -21,9 +21,9 @@
         private bool _isSelected = false;
 
         // Holds the location model of the selected child of this entry (if any)
-        private T _SelectedChild = default(T);
+        private M _SelectedChild = default(M);
 
-        private T _Value = default(T);
+        private M _Value = default(M);
         private VM _ViewModel;
 
         private bool _isRoot = false;
@@ -38,9 +38,9 @@
         /// <param name="viewModel">Is the viewmodel object that represents an item in the viewmodel tree structure.</param>
         /// <param name="parentSelector"></param>
         /// <param name="entryHelper"></param>
-        public TreeSelectorViewModel(T value,
+        public TreeSelectorViewModel(M value,
                                      VM viewModel,
-                                     ITreeSelector<VM, T> parentSelector,
+                                     ITreeSelector<VM, M> parentSelector,
                                      IBreadcrumbTreeItemHelperViewModel<VM> entryHelper)
         {
             _Value = value;
@@ -118,7 +118,7 @@
         /// <summary>
         /// Gets the selected child of current view model.          
         /// </summary>
-        public T SelectedChild
+        public M SelectedChild
         {
             get
             {
@@ -140,7 +140,7 @@
         /// The model backs the <see cref="ViewModel"/> property and should be in sync
         /// with it.
         /// </summary>
-        public T Value
+        public M Value
         {
             get { return _Value; }
         }
@@ -214,7 +214,7 @@
         /// Bubble up to TreeSelectionHelper for selection.
         /// </summary>
         /// <param name="path"></param>
-        public virtual Task ReportChildSelectedAsync(Stack<ITreeSelector<VM, T>> path)
+        public virtual Task ReportChildSelectedAsync(Stack<ITreeSelector<VM, M>> path)
         {
             Logger.InfoFormat("_");
 

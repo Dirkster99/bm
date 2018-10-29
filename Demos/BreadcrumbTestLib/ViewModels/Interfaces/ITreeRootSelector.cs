@@ -8,8 +8,8 @@
     /// for the list of root drop down items.
     /// </summary>
     /// <typeparam name="VM">Sub-node viewmodel type.</typeparam>
-    /// <typeparam name="T">Type to identify a node, commonly string.</typeparam>
-    public interface ITreeRootSelector<VM, T> : ITreeSelector<VM, T> ////, ICompareHierarchy<T>
+    /// <typeparam name="M">Type to identify a node, commonly string.</typeparam>
+    public interface ITreeRootSelector<VM, M> : ITreeSelector<VM, M>
     {
         #region events
         /// <summary>
@@ -30,7 +30,7 @@
         /// Example path is: 'This PC', 'C:', 'Program Files'
         /// -> This property should reference the 'Program Files' item.
         /// </summary>
-        ITreeSelector<VM, T> SelectedSelector { get; }
+        ITreeSelector<VM, M> SelectedSelector { get; }
 
         /// <summary>
         /// Gets/sets the selected second level root item (eg. This PC, Library Desktop, or Desktop Folder).
@@ -44,7 +44,7 @@
         /// Source:
         /// DropDownList Binding with SelectedValue="{Binding Selection.SelectedValue}"
         /// </summary>
-        T SelectedValue { get; set; }
+        M SelectedValue { get; set; }
 
         /// <summary>
         /// Used by Breadcrumb, items that are root items or ALL items in the selected path, 

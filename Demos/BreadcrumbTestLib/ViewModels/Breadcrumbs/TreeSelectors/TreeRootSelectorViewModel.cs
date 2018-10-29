@@ -14,8 +14,8 @@
     /// for the list of root drop down items.
     /// </summary>
     /// <typeparam name="VM">Sub-node viewmodel type.</typeparam>
-    /// <typeparam name="T">Type to identify a node, commonly string.</typeparam>
-    internal class TreeRootSelectorViewModel<VM, T> : TreeSelectorViewModel<VM, T>, ITreeRootSelector<VM, T>
+    /// <typeparam name="M">Type to identify a node, commonly string.</typeparam>
+    internal class TreeRootSelectorViewModel<VM, M> : TreeSelectorViewModel<VM, M>, ITreeRootSelector<VM, M>
     {
         #region fields
         /// <summary>
@@ -23,9 +23,9 @@
         /// </summary>
         protected new static readonly log4net.ILog Logger = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
 
-        private T _selectedValue = default(T);
-        private ITreeSelector<VM, T> _selectedSelector;
-        private Stack<ITreeSelector<VM, T>> _prevPath = null;
+        private M _selectedValue = default(M);
+        private ITreeSelector<VM, M> _selectedSelector;
+        private Stack<ITreeSelector<VM, M>> _prevPath = null;
         private ObservableCollection<VM> _OverflowedAndRootItems = null;
         #endregion fields
 
@@ -67,7 +67,7 @@
         /// Example path is: 'This PC', 'C:', 'Program Files'
         /// -> This property should reference the 'Program Files' item.
         /// </summary>
-        public ITreeSelector<VM, T> SelectedSelector
+        public ITreeSelector<VM, M> SelectedSelector
         {
             get { return _selectedSelector; }
         }
@@ -95,7 +95,7 @@
         /// Source:
         /// DropDownList Binding with SelectedValue="{Binding Selection.SelectedValue}"
         /// </summary>
-        public T SelectedValue
+        public M SelectedValue
         {
             get
             {
@@ -135,15 +135,15 @@
         /// to change the selection to complete the cycle.
         /// </summary>
         /// <param name="path"></param>
-        public override async Task ReportChildSelectedAsync(Stack<ITreeSelector<VM, T>> path)
+        public override async Task ReportChildSelectedAsync(Stack<ITreeSelector<VM, M>> path)
         {
             Logger.InfoFormat("_");
 
             try
             {
-                ITreeSelector<VM, T> prevSelector = _selectedSelector;
+                ITreeSelector<VM, M> prevSelector = _selectedSelector;
 
-                T prevSelectedValue = _selectedValue;
+                M prevSelectedValue = _selectedValue;
                 _prevPath = path;
 
                 _selectedSelector = path.Last();
