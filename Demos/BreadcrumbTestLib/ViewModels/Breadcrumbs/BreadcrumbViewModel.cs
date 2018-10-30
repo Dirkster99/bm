@@ -225,46 +225,6 @@ namespace BreadcrumbTestLib.ViewModels.Breadcrumbs
             }
         }
 
-        private async Task RootDropDownSelectionChangedCommand_Executed(BreadcrumbTreeItemViewModel selectedFolder)
-        {
-            var hintDirection = HintDirection.Unrelated;
-            BreadcrumbTreeItemViewModel toBeSelectedLocation = null;
-
-            if (selectedFolder.Selection.IsOverflowed) // We can opimize browsing if target is in current path
-            {
-                // The selected root item is an overflowed root item so we move up towards the item that
-                // is already part of the path
-                hintDirection = HintDirection.Up;      // Hint optimization here ...
-                toBeSelectedLocation = selectedFolder;
-            }
-
-            if (_NavigationController != null)
-            {
-                var cancelTokenSrc = _NavigationController.GetCancelToken();
-                var token = CancellationToken.None;
-
-                var request = new BrowseRequest<IDirectoryBrowser>(selectedFolder.GetModel(), RequestType.Navigational,
-                                                                    token, cancelTokenSrc, null);
-
-                var NaviTask = Task.Factory.StartNew(async (s) =>
-                {
-                    await this.NavigateToAsync(request, "BreadcrumbViewModel.RootDropDownSelectionChangedCommand",
-                        hintDirection, toBeSelectedLocation);
-
-                }, token, TaskCreationOptions.LongRunning);
-
-                request.SetTask(NaviTask);
-                _NavigationController.QueueTask(request);
-            }
-            else
-            {
-                var request = new BrowseRequest<IDirectoryBrowser>(selectedFolder.GetModel(), RequestType.Navigational);
-
-                await this.NavigateToAsync(request, "BreadcrumbViewModel.RootDropDownSelectionChangedCommand",
-                    hintDirection, toBeSelectedLocation);
-            }
-        }
-
         /// <summary>
         /// Gets whether the browser is currently processing
         /// a request for brwosing to a known location.
@@ -383,6 +343,45 @@ namespace BreadcrumbTestLib.ViewModels.Breadcrumbs
 
                 var request = new BrowseRequest<IDirectoryBrowser>(_RootLocation, RequestType.Navigational);
                 await NavigateToAsync(request, "BreadcrumbViewModel.InitPathAsync");
+            }
+        }
+
+        /// <summary>
+        /// Schedules a navigational task and returns immediately
+        /// </summary>
+        /// <param name="selectedFolder"></param>
+        /// <param name="sourceHint"></param>
+        /// <param name="hintDirection"></param>
+        /// <param name="toBeSelectedLocation"></param>
+        public async Task NavigateToScheduledAsync(BreadcrumbTreeItemViewModel selectedFolder,
+                                        string sourceHint,
+                                        HintDirection hintDirection = HintDirection.Unrelated,
+                                        BreadcrumbTreeItemViewModel toBeSelectedLocation = null
+                                )
+        {
+            if (_NavigationController != null)
+            {
+                var cancelTokenSrc = _NavigationController.GetCancelToken();
+                var token = CancellationToken.None;
+
+                var request = new BrowseRequest<IDirectoryBrowser>(selectedFolder.GetModel(), RequestType.Navigational,
+                                                                    token, cancelTokenSrc, null);
+
+                var NaviTask = Task.Factory.StartNew(async (s) =>
+                {
+                    await this.NavigateToAsync(request, sourceHint, hintDirection, toBeSelectedLocation);
+
+                }, token, TaskCreationOptions.LongRunning);
+
+                request.SetTask(NaviTask);
+                _NavigationController.QueueTask(request);
+            }
+            else
+            {
+                var request = new BrowseRequest<IDirectoryBrowser>(selectedFolder.GetModel(), RequestType.Navigational);
+                await NavigateToAsync(request,
+                    "BreadcrumbTreeItemViewModel.BreadcrumbTreeTreeItemClickCommand",
+                    hintDirection, toBeSelectedLocation);
             }
         }
 
@@ -867,6 +866,46 @@ namespace BreadcrumbTestLib.ViewModels.Breadcrumbs
 
             // Gets the complete path string below root item selector.RootSelector.SelectedValue.FullName;
             BreadcrumbSelectedPath = output;
+        }
+
+        private async Task RootDropDownSelectionChangedCommand_Executed(BreadcrumbTreeItemViewModel selectedFolder)
+        {
+            var hintDirection = HintDirection.Unrelated;
+            BreadcrumbTreeItemViewModel toBeSelectedLocation = null;
+
+            if (selectedFolder.Selection.IsOverflowed) // We can opimize browsing if target is in current path
+            {
+                // The selected root item is an overflowed root item so we move up towards the item that
+                // is already part of the path
+                hintDirection = HintDirection.Up;      // Hint optimization here ...
+                toBeSelectedLocation = selectedFolder;
+            }
+
+            if (_NavigationController != null)
+            {
+                var cancelTokenSrc = _NavigationController.GetCancelToken();
+                var token = CancellationToken.None;
+
+                var request = new BrowseRequest<IDirectoryBrowser>(selectedFolder.GetModel(), RequestType.Navigational,
+                                                                    token, cancelTokenSrc, null);
+
+                var NaviTask = Task.Factory.StartNew(async (s) =>
+                {
+                    await this.NavigateToAsync(request, "BreadcrumbViewModel.RootDropDownSelectionChangedCommand",
+                        hintDirection, toBeSelectedLocation);
+
+                }, token, TaskCreationOptions.LongRunning);
+
+                request.SetTask(NaviTask);
+                _NavigationController.QueueTask(request);
+            }
+            else
+            {
+                var request = new BrowseRequest<IDirectoryBrowser>(selectedFolder.GetModel(), RequestType.Navigational);
+
+                await this.NavigateToAsync(request, "BreadcrumbViewModel.RootDropDownSelectionChangedCommand",
+                    hintDirection, toBeSelectedLocation);
+            }
         }
 
         /// <summary>

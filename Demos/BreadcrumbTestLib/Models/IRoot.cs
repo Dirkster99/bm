@@ -1,7 +1,6 @@
 ﻿namespace BreadcrumbTestLib.Models
 {
     using BreadcrumbTestLib.ViewModels.Breadcrumbs;
-    using ShellBrowserLib.Interfaces;
     using SSCoreLib.Browse;
     using System.Threading.Tasks;
 
@@ -16,24 +15,16 @@
     public interface IRoot<M> : ICanNavigate
     {
         /// <summary>
-        /// Navigates the viewmodel (and hopefully the bound control) to a new location
-        /// and ensures correct <see cref="IsBrowsing"/> state and event handling towards
-        /// listing objects for
-        /// <see cref="ICanNavigate"/> events.
+        /// Schedules a navigational task and returns immediately
         /// </summary>
-        /// <param name="requestedLocation"></param>
-        /// <param name="direction">Specifies whether the navigation direction
-        /// is not specified or up or down relative to the current path or
-        /// ihintLevel parameter</param>
-        /// <param name="ihintLevel">This parameter is relevant for Down direction only.
-        /// It specifies the level in the tree structure from which the next child
-        /// in the current path should be searched.</param>
-        /// <returns>Returns a result that informs whether the target was reached or not.</returns>
-        Task<FinalBrowseResult<IDirectoryBrowser>> NavigateToAsync(
-            BrowseRequest<IDirectoryBrowser> requestedLocation,
-            string sourceHint,
-            HintDirection direction = HintDirection.Unrelated,
-            BreadcrumbTreeItemViewModel toBeSelectedLocation = null
-            );
+        /// <param name="selectedFolder"></param>
+        /// <param name="sourceHint"></param>
+        /// <param name="hintDirection"></param>
+        /// <param name="toBeSelectedLocation"></param>
+        Task NavigateToScheduledAsync(BreadcrumbTreeItemViewModel selectedFolder,
+                                      string sourceHint,
+                                      HintDirection hintDirection = HintDirection.Unrelated,
+                                      BreadcrumbTreeItemViewModel toBeSelectedLocation = null
+                                );
     }
 }

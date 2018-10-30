@@ -172,11 +172,8 @@
 
                         Logger.InfoFormat("selectedFolder {0}", selectedFolder);
 
-                        var request = new BrowseRequest<IDirectoryBrowser>(selectedFolder.GetModel(), RequestType.Navigational);
-                        await _Root.NavigateToAsync(request,
-                                                    "BreadcrumbTreeItemViewModel.ItemSelectionChanged",
-                                                    HintDirection.Down, this);
-
+                        await _Root.NavigateToScheduledAsync(selectedFolder, "BreadcrumbTreeItemViewModel.ItemSelectionChanged",
+                                                             HintDirection.Down, this);
                     });
                 }
 
@@ -203,10 +200,8 @@
 
                         Logger.InfoFormat("selectedFolder {0}", this);
 
-                        var request = new BrowseRequest<IDirectoryBrowser>(this.GetModel(), RequestType.Navigational);
-                        await _Root.NavigateToAsync(request,
-                            "BreadcrumbTreeItemViewModel.BreadcrumbTreeTreeItemClickCommand",
-                            HintDirection.Up, this);
+                        await _Root.NavigateToScheduledAsync(this, "BreadcrumbTreeItemViewModel.BreadcrumbTreeTreeItemClickCommand",
+                                                             HintDirection.Up, this);
                     });
                 }
 
