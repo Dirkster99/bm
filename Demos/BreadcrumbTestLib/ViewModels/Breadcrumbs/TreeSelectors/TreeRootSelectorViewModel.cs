@@ -23,7 +23,6 @@
         protected new static readonly log4net.ILog Logger = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
 
         private T _selectedValue = default(T);
-        private ITreeSelector<VM, T> _selectedSelector;
         private ObservableCollection<VM> _OverflowedAndRootItems = null;
         private VM _SelectedViewModel = default(VM);
         #endregion fields
@@ -135,17 +134,9 @@
 
             try
             {
-//                ITreeSelector<VM, T> prevSelector = _selectedSelector;
-
                 T prevSelectedValue = _selectedValue;
-                _selectedSelector = pathItem;
                 SelectedViewModel = pathItem.ViewModel;
                 _selectedValue = pathItem.Value;
-
-////                if (prevSelectedValue != null && prevSelectedValue.Equals(pathItem.Value) == false)
-////                {
-////                    prevSelector.IsSelected = false;
-////                }
 
                 this.NotifyPropertyChanged(() => this.SelectedValue);
                 this.NotifyPropertyChanged(() => this.SelectedViewModel);
