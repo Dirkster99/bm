@@ -40,7 +40,6 @@
         /// <param name="entryHelper"></param>
         public TreeSelectorViewModel(M value,
                                      VM viewModel,
-                                     ITreeSelector<VM, M> parentSelector,
                                      IBreadcrumbTreeItemHelperViewModel<VM> entryHelper)
         {
             _Value = value;

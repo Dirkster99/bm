@@ -252,7 +252,7 @@
                     <StackPanel Grid.Column="1"
                                 HorizontalAlignment="Stretch" VerticalAlignment="Top"
                                 Orientation="Vertical">
-                        <Image DataContext="{Binding Path=BreadcrumbController.BreadcrumbBrowser.BreadcrumbSubTree.Selection.SelectedViewModel}"
+                        <Image DataContext="{Binding Path=BreadcrumbController.BreadcrumbBrowser.SelectedViewModel}"
                                VerticalAlignment="Center" HorizontalAlignment="Center" Width="64"
                                SnapsToDevicePixels="True"
                                RenderOptions.BitmapScalingMode="NearestNeighbor">
@@ -269,7 +269,7 @@
                         </Image>
 
                         <TextBlock DataContext="{Binding BreadcrumbController}"
-                                   Text="{Binding Path=BreadcrumbBrowser.BreadcrumbSubTree.Selection.SelectedViewModel.Header}" />
+                                   Text="{Binding Path=BreadcrumbBrowser.SelectedViewModel.Header}" />
                     </StackPanel>
                 </Grid>
                 <Grid Margin="3,9">

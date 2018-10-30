@@ -1,17 +1,7 @@
 ﻿namespace BreadcrumbTestLib.ViewModels
 {
-    using BreadcrumbTestLib.Models;
-    using BreadcrumbTestLib.SystemIO;
-    using BreadcrumbTestLib.Tasks;
-    using BreadcrumbTestLib.ViewModels.Breadcrumbs;
-    using BreadcrumbTestLib.ViewModels.Interfaces;
-    using ShellBrowserLib;
-    using ShellBrowserLib.Interfaces;
     using System;
-    using System.Diagnostics;
-    using System.Threading;
     using System.Threading.Tasks;
-    using System.Windows;
 
     public class AppViewModel : Base.ViewModelBase, IDisposable
     {

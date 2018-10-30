@@ -3,6 +3,7 @@
     using Microsoft.VisualStudio.TestTools.UnitTesting;
     using ShellBrowserLib;
     using ShellBrowserLib.IDs;
+    using ShellBrowserLib.Shell.Interop.Interfaces.Knownfolders;
     using ShellBrowserLib.Shell.Interop.Knownfolders;
     using ShellBrowserLib.Shell.Pidl;
     using System;
@@ -24,19 +25,11 @@
                                   PidlManager.Combine(item.ParentIdList, item.ChildIdList) :
                                   item.ChildIdList);
 
-                var kf = KnownFolderHelper.FromPIDL(fullIdList);
-                try
+                IKnownFolderProperties props = null;
+                using (var kf = KnownFolderHelper.FromPIDL(fullIdList))
                 {
                     if (kf != null)
-                    {
-                        var props = KnownFolderHelper.GetFolderProperties(kf.Obj);
-                        Console.WriteLine();
-                    }
-                }
-                finally
-                {
-                    if (kf != null)
-                        kf.Dispose();
+                        props = KnownFolderHelper.GetFolderProperties(kf.Obj);
                 }
 
                 Assert.IsTrue(item != null);
@@ -60,19 +53,11 @@
                                   PidlManager.Combine(item.ParentIdList, item.ChildIdList) :
                                   item.ChildIdList);
 
-                var kf = KnownFolderHelper.FromPIDL(fullIdList);
-                try
+                IKnownFolderProperties props = null;
+                using (var kf = KnownFolderHelper.FromPIDL(fullIdList))
                 {
                     if (kf != null)
-                    {
-                        var props = KnownFolderHelper.GetFolderProperties(kf.Obj);
-                        Console.WriteLine();
-                    }
-                }
-                finally
-                {
-                    if (kf != null)
-                        kf.Dispose();
+                        props = KnownFolderHelper.GetFolderProperties(kf.Obj);
                 }
 
                 Assert.IsTrue(item != null);

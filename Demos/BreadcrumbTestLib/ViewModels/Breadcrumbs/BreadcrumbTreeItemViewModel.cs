@@ -46,39 +46,26 @@
 
         #region constructors
         /// <summary>
-        /// Standard class constructor.
-        /// Call the <see cref="InitRoot"/> method after construction to initialize
-        /// root items collection outside of the scope of object construction.
-        /// </summary>
-        internal BreadcrumbTreeItemViewModel(IRoot<IDirectoryBrowser> root)
-        {
-            _Root = root;
-            Entries = new BreadcrumbTreeItemHelperViewModel<BreadcrumbTreeItemViewModel>();
-            Selection = new TreeRootSelectorViewModel<BreadcrumbTreeItemViewModel, IDirectoryBrowser>
-                        (this.Entries);
-        }
-
-        /// <summary>
         /// Class constructor from an available parentNode and directory model
         /// to recurse down on a given structure.
         /// </summary>
         /// <param name="dir"></param>
         /// <param name="parentNode"></param>
         internal BreadcrumbTreeItemViewModel(IDirectoryBrowser dir,
-                                              BreadcrumbTreeItemViewModel parentNode,
-                                              IRoot<IDirectoryBrowser> root
-                                              )
+                                             BreadcrumbTreeItemViewModel parentNode,
+                                             IRoot<IDirectoryBrowser> root
+                                            )
         {
-            Logger.InfoFormat("'{0}'", dir.FullName);
+            Logger.InfoFormat("FullName '{0}'", (dir != null ? dir.FullName : "(null)"));
 
             _Root = root;
             _dir = dir;
 
-            // If parentNode == null => Parent of Root is this item itself.
+            // If parentNode == null => Parent of Root is null
             _rootNode = parentNode == null ? this : parentNode._rootNode;
-
             _parentNode = parentNode;
-            Header = _dir.Label;
+
+            Header = (dir != null ? _dir.Label : string.Empty );
 
             Func<bool, object, Task<IEnumerable<BreadcrumbTreeItemViewModel>>> loadAsyncFunc = (isLoaded, parameter) => Task.Run(() =>
             {
@@ -98,7 +85,7 @@
 
             this.Entries = new BreadcrumbTreeItemHelperViewModel<BreadcrumbTreeItemViewModel>(loadAsyncFunc);
             this.Selection = new TreeSelectorViewModel<BreadcrumbTreeItemViewModel, IDirectoryBrowser>
-                                                    (_dir, this, this._parentNode.Selection, this.Entries);
+                                                    (_dir, this, this.Entries);
         }
         #endregion constructors
 

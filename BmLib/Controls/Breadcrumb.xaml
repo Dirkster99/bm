@@ -89,7 +89,7 @@
                                            Margin="0"
                                      >
                                     <bc:Switch.Header>
-                                        <Image DataContext="{Binding BreadcrumbSubTree.Selection.SelectedViewModel}">
+                                        <Image DataContext="{Binding SelectedViewModel}">
                                             <Image.Source>
                                                 <MultiBinding Converter="{x:Static conv:AssociatedIconConverter.Default}">
                                                     <MultiBinding.ConverterParameter>
@@ -118,7 +118,7 @@
                                                                 VerticalAlignment="Stretch" 
                                                                 ItemsSource="{TemplateBinding RootDropDownItemsSource}"
                                                                 SelectedValuePath="{TemplateBinding RootDropDownSelectedValuePath}"
-                                                                SelectedValue="{Binding BreadcrumbSubTree.Selection.SelectedValue,Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"                             
+                                                                SelectedValue="{Binding SelectedValue,Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"                             
                                                                 ItemTemplate="{StaticResource DropDownListItemDataTemplate}"
                                                                 behav:SelectionChangedCommand.ChangedCommand="{Binding Path=RootDropDownSelectionChangedCommand}"
                                                                 BorderThickness="0"
