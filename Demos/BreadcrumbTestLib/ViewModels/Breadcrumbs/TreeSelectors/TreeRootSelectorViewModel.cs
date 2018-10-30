@@ -7,14 +7,15 @@
     using System.Collections.ObjectModel;
     using System.Threading.Tasks;
     using System.Windows;
+    using System.Linq;
 
     /// <summary>
     /// Implemented in tree node view model, to provide selection support
     /// for the list of root drop down items.
     /// </summary>
     /// <typeparam name="VM">Sub-node viewmodel type.</typeparam>
-    /// <typeparam name="T">Type to identify a node, commonly string.</typeparam>
-    internal class TreeRootSelectorViewModel<VM, T> : TreeSelectorViewModel<VM, T>, ITreeRootSelector<VM, T>
+    /// <typeparam name="M">Type to identify a node, commonly string.</typeparam>
+    internal class TreeRootSelectorViewModel<VM, M> : TreeSelectorViewModel<VM, M>, ITreeRootSelector<VM, M>
     {
         #region fields
         /// <summary>
@@ -22,7 +23,7 @@
         /// </summary>
         protected new static readonly log4net.ILog Logger = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
 
-        private T _selectedValue = default(T);
+        private M _selectedValue = default(M);
         private ObservableCollection<VM> _OverflowedAndRootItems = null;
         private VM _SelectedViewModel = default(VM);
         #endregion fields
@@ -69,7 +70,7 @@
                 return _SelectedViewModel;
             }
 
-            set
+            protected set
             {
                 _SelectedViewModel = value;
                 NotifyPropertyChanged(() => SelectedViewModel);
@@ -88,7 +89,7 @@
         /// Source:
         /// DropDownList Binding with SelectedValue="{Binding Selection.SelectedValue}"
         /// </summary>
-        public T SelectedValue
+        public M SelectedValue
         {
             get
             {
@@ -128,18 +129,22 @@
         /// to change the selection to complete the cycle.
         /// </summary>
         /// <param name="pathItem"></param>
-        public async Task ReportChildSelectedAsync(ITreeSelector<VM, T> pathItem)
+        public async Task ReportChildSelectedAsync(ITreeSelector<VM, M> pathItem)
         {
             Logger.InfoFormat("_");
 
             try
             {
-                T prevSelectedValue = _selectedValue;
-                SelectedViewModel = pathItem.ViewModel;
-                _selectedValue = pathItem.Value;
-
-                this.NotifyPropertyChanged(() => this.SelectedValue);
-                this.NotifyPropertyChanged(() => this.SelectedViewModel);
+                if (pathItem != null)
+                {
+                    SelectedViewModel = pathItem.ViewModel;
+                    SelectedValue = pathItem.Value;
+                }
+                else
+                {
+                    SelectedViewModel = default(VM);
+                    SelectedValue = default(M);
+                }
             }
             catch (Exception exp)
             {

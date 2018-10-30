@@ -47,7 +47,7 @@
         #region constructors
         /// <summary>
         /// Standard class constructor.
-        /// Call the <see cref="InitRootAsync"/> method after construction to initialize
+        /// Call the <see cref="InitRoot"/> method after construction to initialize
         /// root items collection outside of the scope of object construction.
         /// </summary>
         internal BreadcrumbTreeItemViewModel(IRoot<IDirectoryBrowser> root)
@@ -307,8 +307,7 @@
         /// <param name="location"></param>
         /// <param name="rootSelector"></param>
         /// <returns></returns>
-        internal async Task InitRootAsync(IDirectoryBrowser location,
-                                          ITreeRootSelector<BreadcrumbTreeItemViewModel, IDirectoryBrowser> rootSelector)
+        internal BreadcrumbTreeItemViewModel InitRoot(IDirectoryBrowser location)
         {
             try
             {
@@ -320,7 +319,7 @@
                 Entries.SetEntries(UpdateMode.Update,
                     ShellBrowser.GetChildItems(_dir.PathShell)
                                                 // (filter out recycle bin and control panel entries since its not that useful...)
-                                                .Where(d => string.Compare(d.SpecialPathId, KF_IID.ID_FOLDERID_RecycleBinFolder,true) != 0)
+                                                .Where(d => string.Compare(d.SpecialPathId, KF_IID.ID_FOLDERID_RecycleBinFolder, true) != 0)
                                                 .Where(d => string.Compare(d.PathRAW, "::{26EE0668-A00A-44D7-9371-BEB064C98683}", true) != 0)
                                                 .Select(d => new BreadcrumbTreeItemViewModel(d, this, _Root)).ToArray());
 
@@ -333,12 +332,14 @@
                     var firstRootItem = Entries.All.First();
                     firstRootItem.Selection.IsSelected = true;
 
-                    await rootSelector.ReportChildSelectedAsync(firstRootItem.Selection);
+                    return firstRootItem;
                 }
             }
             catch
             {
             }
+
+            return null;
         }
 
         /// <summary>

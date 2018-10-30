@@ -1,6 +1,5 @@
 namespace BreadcrumbTestLib.ViewModels
 {
-    using BreadcrumbTestLib.Models;
     using BreadcrumbTestLib.Tasks;
     using BreadcrumbTestLib.ViewModels.Breadcrumbs;
     using BreadcrumbTestLib.ViewModels.Interfaces;

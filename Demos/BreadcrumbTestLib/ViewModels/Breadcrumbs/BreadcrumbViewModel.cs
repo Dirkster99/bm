@@ -37,7 +37,7 @@ namespace BreadcrumbTestLib.ViewModels.Breadcrumbs
         private string _BreadcrumbSelectedPath;
 
         private IDirectoryBrowser _RootLocation = ShellBrowser.DesktopDirectory;
-        private Stack<BreadcrumbTreeItemViewModel> _CurrentPath;
+        private readonly Stack<BreadcrumbTreeItemViewModel> _CurrentPath;
         #endregion fields
 
         #region constructors
@@ -46,9 +46,9 @@ namespace BreadcrumbTestLib.ViewModels.Breadcrumbs
         /// </summary>
         public BreadcrumbViewModel()
         {
+            _CurrentPath = new Stack<BreadcrumbTreeItemViewModel>() { };
             _EnableBreadcrumb = true;
             _IsBrowsing = false;
-            _CurrentPath = null;
 
             _Semaphore = new SemaphoreSlim(1, 1);
             _OneTaskScheduler = new OneTaskLimitedScheduler();
@@ -251,13 +251,17 @@ namespace BreadcrumbTestLib.ViewModels.Breadcrumbs
         {
             return Task.Run(async () =>
             {
-                await BreadcrumbSubTree.InitRootAsync(_RootLocation, RootSelector);
+                BreadcrumbTreeItemViewModel item = null;
+                item = BreadcrumbSubTree.InitRoot(_RootLocation);
 
-                _CurrentPath = new Stack<BreadcrumbTreeItemViewModel>() { };
-                _CurrentPath.Push(BreadcrumbSubTree.Entries.All.First());
+                if (item != null)
+                {
+                    _CurrentPath.Push(item);
+                    await RootSelector.ReportChildSelectedAsync(item.Selection);
 
-                var request = new BrowseRequest<IDirectoryBrowser>(_RootLocation, RequestType.Navigational);
-                await NavigateToAsync(request, "BreadcrumbViewModel.InitPathAsync");
+                    var request = new BrowseRequest<IDirectoryBrowser>(_RootLocation, RequestType.Navigational);
+                    await NavigateToAsync(request, "BreadcrumbViewModel.InitPathAsync");
+                }
             });
         }
 
@@ -390,10 +394,7 @@ namespace BreadcrumbTestLib.ViewModels.Breadcrumbs
             }
 
             await RootSelector.ReportChildSelectedAsync(newSelectedLocation.Selection);
-
-            var rootSelector1 = BreadcrumbSubTree.Selection as ITreeRootSelector<BreadcrumbTreeItemViewModel, IDirectoryBrowser>;
-
-            UpdateListOfOverflowableRootItems(rootSelector1, _CurrentPath);
+            UpdateListOfOverflowableRootItems(RootSelector, _CurrentPath);
             UpdateBreadcrumbSelectedPath();
 
             if (BrowseEvent != null)
@@ -635,15 +636,11 @@ namespace BreadcrumbTestLib.ViewModels.Breadcrumbs
             // 3) merge both lists from 1) and 2) into updated overflowable list
             rootSelector.UpdateOverflowedItems(rootItems, overflowedItems);
 
-            BreadcrumbTreeItemViewModel secondLevelRootItem = null;
-            var pathList = _CurrentPath.ToArray();
-            if (pathList.Length >= 2)
-            {
-                secondLevelRootItem = pathList[pathList.Length - 2];
-            }
+            var pathList = items.Reverse().ToArray();
 
-            if (secondLevelRootItem != null)
-                rootSelector.SelectedValue = secondLevelRootItem.GetModel(); // select item in RootDropDownList if it is visible here
+            // select item in RootDropDownList if it is visible here
+            if (pathList.Length >= 2)
+                rootSelector.SelectedValue = pathList[1].Selection.Value;
             else
                 rootSelector.SelectedValue = null;
         }

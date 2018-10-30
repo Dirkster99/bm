@@ -268,8 +268,8 @@
                             </Image.Source>
                         </Image>
 
-                        <Label DataContext="{Binding BreadcrumbController}"
-                               Content="{Binding Path=BreadcrumbBrowser.BreadcrumbSubTree.Selection.SelectedViewModel.Header}" />
+                        <TextBlock DataContext="{Binding BreadcrumbController}"
+                                   Text="{Binding Path=BreadcrumbBrowser.BreadcrumbSubTree.Selection.SelectedViewModel.Header}" />
                     </StackPanel>
                 </Grid>
                 <Grid Margin="3,9">
