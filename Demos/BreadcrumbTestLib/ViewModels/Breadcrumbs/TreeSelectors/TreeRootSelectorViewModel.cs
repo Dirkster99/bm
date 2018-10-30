@@ -24,7 +24,6 @@
         protected new static readonly log4net.ILog Logger = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
 
         private M _selectedValue = default(M);
-        private ObservableCollection<VM> _OverflowedAndRootItems = null;
         private VM _SelectedViewModel = default(VM);
         #endregion fields
 
@@ -36,7 +35,6 @@
         public TreeRootSelectorViewModel(IBreadcrumbTreeItemHelperViewModel<VM> entryHelper)
           : base(entryHelper)
         {
-            this._OverflowedAndRootItems = new ObservableCollection<VM>();
         }
         #endregion constructors
 
@@ -48,18 +46,6 @@
         #endregion events
 
         #region properties
-        /// <summary>
-        /// Gets a list of viewmodel items that are shown at the root drop down
-        /// list of the control (left most drop down list)
-        /// </summary>
-        public IEnumerable<VM> OverflowedAndRootItems
-        {
-            get
-            {
-                return _OverflowedAndRootItems;
-            }
-        }
-
         /// <summary>
         /// Gets the currently selected viewmodel from the currently selected item.
         /// </summary>
@@ -156,49 +142,6 @@
 
             if (pathItem.EntryHelper.IsLoaded == false)
                 await pathItem.EntryHelper.LoadAsync();
-        }
-
-        /// <summary>
-        /// Update the root drop down list with the list of root items
-        /// and overflowable (non-root) items.
-        /// </summary>
-        /// <param name="rootItems"></param>
-        /// <param name="pathItems"></param>
-        public void UpdateOverflowedItems(IEnumerable<VM> rootItems,
-                                          IEnumerable<VM> pathItems)
-        {
-            Logger.InfoFormat("_");
-
-            Application.Current.Dispatcher.Invoke(() =>
-            {
-                _OverflowedAndRootItems.Clear();
-            });
-
-            // Get all items that belong to the current path and add them into the
-            // OverflowedAndRootItems collection
-            // The item.IsOverflowed property is (re)-set by OverflowableStackPanel
-            // when the UI changes - a converter in the binding shows only those entries
-            // in the root drop down list with item.IsOverflowed == true
-            foreach (var p in pathItems)
-            {
-                Application.Current.Dispatcher.Invoke(() =>
-                {
-                    _OverflowedAndRootItems.Add(p);
-                });
-            }
-
-            Application.Current.Dispatcher.Invoke(() =>
-            {
-                _OverflowedAndRootItems.Add(default(VM)); // Insert Separator between Root and Overflowed Items
-            });
-
-            foreach (var p in rootItems)
-            {
-                Application.Current.Dispatcher.Invoke(() =>
-                {
-                    _OverflowedAndRootItems.Add(p);
-                });
-            }
         }
         #endregion
     }

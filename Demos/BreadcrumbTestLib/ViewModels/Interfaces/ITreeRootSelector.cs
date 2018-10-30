@@ -38,22 +38,9 @@
         /// DropDownList Binding with SelectedValue="{Binding Selection.SelectedValue}"
         /// </summary>
         M SelectedValue { get; set; }
-
-        /// <summary>
-        /// Used by Breadcrumb, items that are root items or ALL items in the selected path, 
-        /// </summary>
-        IEnumerable<VM> OverflowedAndRootItems { get; }
         #endregion properties
 
         #region methods
-        /// <summary>
-        /// Update the root drop down list with the list of root items
-        /// and overflowable (non-root) items.
-        /// </summary>
-        /// <param name="rootItems"></param>
-        /// <param name="pathItems"></param>
-        void UpdateOverflowedItems(IEnumerable<VM> rootItems, IEnumerable<VM> pathItems);
-
         /// <summary>
         /// Used by a tree node to report to it's root it's selected.
         /// </summary>

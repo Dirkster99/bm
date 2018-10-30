@@ -11,9 +11,11 @@ namespace BreadcrumbTestLib.ViewModels.Breadcrumbs
     using SSCoreLib.Browse;
     using System;
     using System.Collections.Generic;
+    using System.Collections.ObjectModel;
     using System.Linq;
     using System.Threading;
     using System.Threading.Tasks;
+    using System.Windows;
     using System.Windows.Input;
 
     /// <summary>
@@ -37,6 +39,8 @@ namespace BreadcrumbTestLib.ViewModels.Breadcrumbs
         private string _BreadcrumbSelectedPath;
 
         private IDirectoryBrowser _RootLocation = ShellBrowser.DesktopDirectory;
+
+        private readonly ObservableCollection<BreadcrumbTreeItemViewModel> _OverflowedAndRootItems = null;
         private readonly Stack<BreadcrumbTreeItemViewModel> _CurrentPath;
         #endregion fields
 
@@ -46,6 +50,7 @@ namespace BreadcrumbTestLib.ViewModels.Breadcrumbs
         /// </summary>
         public BreadcrumbViewModel()
         {
+            _OverflowedAndRootItems = new ObservableCollection<BreadcrumbTreeItemViewModel>();
             _CurrentPath = new Stack<BreadcrumbTreeItemViewModel>() { };
             _EnableBreadcrumb = true;
             _IsBrowsing = false;
@@ -228,6 +233,19 @@ namespace BreadcrumbTestLib.ViewModels.Breadcrumbs
                 }
             }
         }
+
+        /// <summary>
+        /// Gets a list of viewmodel items that are shown at the root drop down
+        /// list of the control (left most drop down list)
+        /// </summary>
+        public IEnumerable<BreadcrumbTreeItemViewModel> OverflowedAndRootItems
+        {
+            get
+            {
+                return _OverflowedAndRootItems;
+            }
+        }
+
         #endregion properties
 
         #region methods
@@ -590,9 +608,9 @@ namespace BreadcrumbTestLib.ViewModels.Breadcrumbs
             // Update list of overflowable items for bindings from converter on rootdropdownlist
             // 1) Get all rootitems minus seperator minus overflowable pathitems
             List<BreadcrumbTreeItemViewModel> rootItems = new List<BreadcrumbTreeItemViewModel>();
-            if (rootSelector.OverflowedAndRootItems.Count() > 0)
+            if (_OverflowedAndRootItems.Count() > 0)
             {
-                foreach (var item in rootSelector.OverflowedAndRootItems)
+                foreach (var item in _OverflowedAndRootItems)
                 {
                     if (item != null)
                     {
@@ -620,7 +638,7 @@ namespace BreadcrumbTestLib.ViewModels.Breadcrumbs
             var overflowedItems = items.Where(i => i.Selection.IsRoot == false);
 
             // 3) merge both lists from 1) and 2) into updated overflowable list
-            rootSelector.UpdateOverflowedItems(rootItems, overflowedItems);
+            UpdateOverflowedItems(rootItems, overflowedItems);
 
             // Update selection of currently selected item and second level root item
             await rootSelector.ReportChildSelectedAsync(selectedItem.Selection);
@@ -632,6 +650,51 @@ namespace BreadcrumbTestLib.ViewModels.Breadcrumbs
                 rootSelector.SelectedValue = pathList[1].Selection.Value;
             else
                 rootSelector.SelectedValue = null;
+        }
+
+
+        /// <summary>
+        /// Update the root drop down list with the list of root items
+        /// and overflowable (non-root) items.
+        /// </summary>
+        /// <param name="rootItems"></param>
+        /// <param name="pathItems"></param>
+        public void UpdateOverflowedItems(IEnumerable<BreadcrumbTreeItemViewModel> rootItems,
+                                          IEnumerable<BreadcrumbTreeItemViewModel> pathItems)
+        {
+            Logger.InfoFormat("_");
+
+            Application.Current.Dispatcher.Invoke(() =>
+            {
+                _OverflowedAndRootItems.Clear();
+            });
+
+            // Get all items that belong to the current path and add them into the
+            // OverflowedAndRootItems collection
+            // The item.IsOverflowed property is (re)-set by OverflowableStackPanel
+            // when the UI changes - a converter in the binding shows only those entries
+            // in the root drop down list with item.IsOverflowed == true
+            foreach (var p in pathItems)
+            {
+                Application.Current.Dispatcher.Invoke(() =>
+                {
+                    _OverflowedAndRootItems.Add(p);
+                });
+            }
+
+            Application.Current.Dispatcher.Invoke(() =>
+            {
+                // Insert Separator between Root and Overflowed Items
+                _OverflowedAndRootItems.Add(null);
+            });
+
+            foreach (var p in rootItems)
+            {
+                Application.Current.Dispatcher.Invoke(() =>
+                {
+                    _OverflowedAndRootItems.Add(p);
+                });
+            }
         }
 
         /// <summary>

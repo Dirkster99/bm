@@ -70,7 +70,7 @@
                                   Visibility="{Binding Path=IsChecked,ElementName=ShowBreadCrumbControl,Mode=OneWay, UpdateSourceTrigger=PropertyChanged,Converter={StaticResource BoolToVisibilityConverter}}"
                                   VerticalAlignment="Top" HorizontalAlignment="Stretch"
                                   
-                                  RootDropDownItemsSource="{Binding BreadcrumbSubTree.Selection.OverflowedAndRootItems}"
+                                  RootDropDownItemsSource="{Binding OverflowedAndRootItems}"
                                   RootDropDownSelectedValuePath="Selection.Value"
                                   Margin="3"
                               >
@@ -112,7 +112,7 @@
                                             <!-- Is true on the item that is at the far right of the breadcrumb path -->
                                             <TextBlock Text="              Selection.IsSelected: "><TextBlock Text="{Binding Selection.IsSelected}"/></TextBlock><LineBreak/>
                                             
-                                            <!-- It true for items loaded initially in Selection.OverflowedAndRootItems list -->
+                                            <!-- Is true for items loaded initially in OverflowedAndRootItems list -->
                                             <TextBlock Text="                  Selection.IsRoot: "><TextBlock Text="{Binding Selection.IsRoot}"/></TextBlock><LineBreak/>
                                             <TextBlock Text="Selection.IsRootAndIsChildSelected: "><TextBlock Text="{Binding Selection.IsRootAndIsChildSelected}"/></TextBlock><LineBreak/>
                                             
@@ -139,7 +139,7 @@
                 </TreeView>
                     <ListBox 
                         DataContext="{Binding BreadcrumbController.BreadcrumbBrowser}"
-                        ItemsSource="{Binding BreadcrumbSubTree.Selection.OverflowedAndRootItems,Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"
+                        ItemsSource="{Binding OverflowedAndRootItems,Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"
                         Visibility="{Binding Path=IsChecked,ElementName=ShowRootItemsOverflowList,Mode=OneWay, UpdateSourceTrigger=PropertyChanged,Converter={StaticResource BoolToVisibilityConverter}}"
                         Margin="3"
                         ScrollViewer.CanContentScroll="True"
@@ -180,7 +180,7 @@
                                             <!-- Is true on the item that is at the far right of the breadcrumb path -->
                                             <TextBlock Text="              Selection.IsSelected: "><TextBlock Text="{Binding Selection.IsSelected}"/></TextBlock><LineBreak/>
                                             
-                                            <!-- It true for items loaded initially in Selection.OverflowedAndRootItems list -->
+                                            <!-- Is true for items loaded initially in OverflowedAndRootItems list -->
                                             <TextBlock Text="                  Selection.IsRoot: "><TextBlock Text="{Binding Selection.IsRoot}"/></TextBlock><LineBreak/>
                                             <TextBlock Text="Selection.IsRootAndIsChildSelected: "><TextBlock Text="{Binding Selection.IsRootAndIsChildSelected}"/></TextBlock><LineBreak/>
                                             
