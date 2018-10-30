@@ -217,9 +217,10 @@ namespace BreadcrumbTestLib.ViewModels.Breadcrumbs
 
                         Logger.InfoFormat("selectedFolder {0}", selectedFolder);
 
-                        var request = new BrowseRequest<IDirectoryBrowser>(selectedFolder.GetModel(), RequestType.Navigational);
                         if (selectedFolder.Selection.IsOverflowed)
                         {
+                            var request = new BrowseRequest<IDirectoryBrowser>(selectedFolder.GetModel(), RequestType.Navigational);
+
                             // The selected root item is an overflowed root item so we move up towards the item that
                             // is already part of the path
                             await this.NavigateToAsync(request, "BreadcrumbViewModel.RootDropDownSelectionChangedCommand",
@@ -227,6 +228,7 @@ namespace BreadcrumbTestLib.ViewModels.Breadcrumbs
                         }
                         else
                         {
+                            var request = new BrowseRequest<IDirectoryBrowser>(selectedFolder.GetModel(), RequestType.Navigational);
                             await this.NavigateToAsync(request, "BreadcrumbViewModel.RootDropDownSelectionChangedCommand");
                         }
                     });
@@ -381,6 +383,7 @@ namespace BreadcrumbTestLib.ViewModels.Breadcrumbs
 
             try
             {
+                Progressing.ShowIndeterminatedProgress();
                 IsBrowsing = true;
                 try
                 {
@@ -399,6 +402,7 @@ namespace BreadcrumbTestLib.ViewModels.Breadcrumbs
                 }
                 finally
                 {
+                    Progressing.ProgressDisplayOff();
                     IsBrowsing = false;
                 }
             }
