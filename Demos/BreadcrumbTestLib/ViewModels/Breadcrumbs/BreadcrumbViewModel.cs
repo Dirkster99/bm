@@ -217,24 +217,51 @@ namespace BreadcrumbTestLib.ViewModels.Breadcrumbs
 
                         Logger.InfoFormat("selectedFolder {0}", selectedFolder);
 
-                        if (selectedFolder.Selection.IsOverflowed)
-                        {
-                            var request = new BrowseRequest<IDirectoryBrowser>(selectedFolder.GetModel(), RequestType.Navigational);
-
-                            // The selected root item is an overflowed root item so we move up towards the item that
-                            // is already part of the path
-                            await this.NavigateToAsync(request, "BreadcrumbViewModel.RootDropDownSelectionChangedCommand",
-                                HintDirection.Up, selectedFolder);
-                        }
-                        else
-                        {
-                            var request = new BrowseRequest<IDirectoryBrowser>(selectedFolder.GetModel(), RequestType.Navigational);
-                            await this.NavigateToAsync(request, "BreadcrumbViewModel.RootDropDownSelectionChangedCommand");
-                        }
+                        await RootDropDownSelectionChangedCommand_Executed(selectedFolder);
                     });
                 }
 
                 return _RootDropDownSelectionChangedCommand;
+            }
+        }
+
+        private async Task RootDropDownSelectionChangedCommand_Executed(BreadcrumbTreeItemViewModel selectedFolder)
+        {
+            var hintDirection = HintDirection.Unrelated;
+            BreadcrumbTreeItemViewModel toBeSelectedLocation = null;
+
+            if (selectedFolder.Selection.IsOverflowed) // We can opimize browsing if target is in current path
+            {
+                // The selected root item is an overflowed root item so we move up towards the item that
+                // is already part of the path
+                hintDirection = HintDirection.Up;      // Hint optimization here ...
+                toBeSelectedLocation = selectedFolder;
+            }
+
+            if (_NavigationController != null)
+            {
+                var cancelTokenSrc = _NavigationController.GetCancelToken();
+                var token = CancellationToken.None;
+
+                var request = new BrowseRequest<IDirectoryBrowser>(selectedFolder.GetModel(), RequestType.Navigational,
+                                                                    token, cancelTokenSrc, null);
+
+                var NaviTask = Task.Factory.StartNew(async (s) =>
+                {
+                    await this.NavigateToAsync(request, "BreadcrumbViewModel.RootDropDownSelectionChangedCommand",
+                        hintDirection, toBeSelectedLocation);
+
+                }, token, TaskCreationOptions.LongRunning);
+
+                request.SetTask(NaviTask);
+                _NavigationController.QueueTask(request);
+            }
+            else
+            {
+                var request = new BrowseRequest<IDirectoryBrowser>(selectedFolder.GetModel(), RequestType.Navigational);
+
+                await this.NavigateToAsync(request, "BreadcrumbViewModel.RootDropDownSelectionChangedCommand",
+                    hintDirection, toBeSelectedLocation);
             }
         }
 

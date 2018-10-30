@@ -92,7 +92,7 @@ namespace SSCoreLib.Browse
         /// <summary>
         /// The task that fullfills this request (if any)
         /// </summary>
-        public Task BrowseTask { get; }
+        public Task BrowseTask { get; protected set; }
 
         /// <summary>
         /// Gets the Id that identifies this request among all other requests that may
@@ -110,6 +110,16 @@ namespace SSCoreLib.Browse
         public override string ToString()
         {
             return string.Format("RequestId: '{0}', NewLocation: {1}", RequestId, NewLocation);
+        }
+
+        /// <summary>
+        /// Set the task after construction if the task requires the browse request and the
+        /// browse request requires the task ...
+        /// </summary>
+        /// <param name="myWorkTask"></param>
+        public void SetTask(Task myWorkTask)
+        {
+            BrowseTask = myWorkTask;
         }
         #endregion methods
     }
