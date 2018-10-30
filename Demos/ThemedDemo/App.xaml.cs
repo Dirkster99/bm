@@ -147,7 +147,7 @@
                 ShutdownMode = ShutdownMode.OnLastWindowClose;
 
                 // Initialize DemoViewModel stuff ...
-                _appVM.Demo.InitPathAsync(@"C:\Program Files\Application Verifier");
+                _appVM.Demo.InitPath(@"C:\Program Files\Application Verifier");
             }
             catch (Exception exp)
             {

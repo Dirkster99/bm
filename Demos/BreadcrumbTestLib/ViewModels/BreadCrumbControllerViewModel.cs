@@ -42,10 +42,10 @@ namespace BreadcrumbTestLib.ViewModels
             _OneTaskScheduler = new OneTaskLimitedScheduler();
             _CancelTokenSource = new CancellationTokenSource();
 
-            // Initialize Breadcrumb Tree ViewModel and SpecialFolders Test ViewModel
-            BreadcrumbBrowser = new BreadcrumbViewModel();
-
             TaskQueue = new BrowseRequestTaskQueueViewModel();
+
+            // Initialize Breadcrumb Tree ViewModel and SpecialFolders Test ViewModel
+            BreadcrumbBrowser = new BreadcrumbViewModel(TaskQueue, this as INavigationController);
 
             WeakEventManager<ICanNavigate, BrowsingEventArgs>
                 .AddHandler(BreadcrumbBrowser, "BrowseEvent", Control_BrowseEvent);
@@ -65,12 +65,12 @@ namespace BreadcrumbTestLib.ViewModels
         #region methods
 
         #region INavigationController interface
-        CancellationTokenSource INavigationController.GetCancelToken()
+        public CancellationTokenSource GetCancelToken()
         {
             return TaskQueue.GetCancelTokenSrc();
         }
 
-        void INavigationController.QueueTask(BrowseRequest<IDirectoryBrowser> request)
+        public void QueueTask(BrowseRequest<IDirectoryBrowser> request)
         {
             TaskQueue.AddTaskToQueue(request);
         }
@@ -146,7 +146,7 @@ namespace BreadcrumbTestLib.ViewModels
         /// Method should be called after construction to initialize the viewmodel
         /// to view a default content.
         /// </summary>
-        public async Task InitPathAsync(string initialPath)
+        public void InitPath(string initialPath)
         {
             // Revert request to default if requested path is non-existing
             if (ShellBrowser.DirectoryExists(initialPath) == false)
@@ -155,8 +155,22 @@ namespace BreadcrumbTestLib.ViewModels
             Logger.InfoFormat("'{0}'", initialPath);
 
             var location = ShellBrowser.Create(initialPath);
-            await BreadcrumbBrowser.InitPathAsync();
-            NavigateToFolder(location);
+
+            var cancelTokenSrc = GetCancelToken();
+            var token = CancellationToken.None;
+
+            var InitTask = Task.Factory.StartNew(async (s) =>
+            {
+                await BreadcrumbBrowser.InitPathAsync();
+                NavigateToFolder(location);
+
+            }, token, TaskCreationOptions.LongRunning);
+
+            var request = new BrowseRequest<IDirectoryBrowser>(this,
+                                                               RequestType.RefreshChildrenBelowItem,
+                                                               token, cancelTokenSrc, InitTask);
+
+            QueueTask(request);
         }
 
         #region Disposable Interfaces

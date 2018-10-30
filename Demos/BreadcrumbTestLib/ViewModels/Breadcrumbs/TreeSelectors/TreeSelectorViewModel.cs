@@ -1,8 +1,5 @@
 ﻿namespace BreadcrumbTestLib.ViewModels.Breadcrumbs.TreeSelectors
 {
-    using System.Collections.Generic;
-    using System.Threading.Tasks;
-    using BreadcrumbTestLib.Utils;
     using BreadcrumbTestLib.ViewModels.Interfaces;
 
     /// <summary>

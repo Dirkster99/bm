@@ -52,9 +52,9 @@
         /// Method should be called after construction to initialize the viewmodel
         /// to view a default content.
         /// </summary>
-        public async Task InitPathAsync(string initialPath)
+        public void InitPath(string initialPath)
         {
-            await BreadcrumbController.InitPathAsync(initialPath);
+            BreadcrumbController.InitPath(initialPath);
         }
 
         #region Disposable Interfaces

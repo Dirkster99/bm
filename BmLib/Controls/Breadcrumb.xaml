@@ -234,13 +234,13 @@
 
                                 <!-- Button Overlay for Refresh and Cancel Button (only one should be visible at any time) -->
                                 <Button Content="Refresh"
-                                        Visibility="{Binding TreeController.TaskQueue.IsProcessCancelable,Converter={StaticResource BoolToVisibilityConverterNeg},UpdateSourceTrigger=PropertyChanged,Mode=OneWay}"
+                                        Visibility="{Binding TaskQueue.IsProcessCancelable,Converter={StaticResource BoolToVisibilityConverterNeg},UpdateSourceTrigger=PropertyChanged,Mode=OneWay}"
                                         Margin="3"/>
 
                                 <Button Content="Cancel"
-                                        Command="{Binding TreeController.TaskQueue.CancelProcess,UpdateSourceTrigger=PropertyChanged,Mode=OneWay}"
-                                        IsEnabled="{Binding TreeController.TaskQueue.IsProcessCancelable,UpdateSourceTrigger=PropertyChanged,Mode=OneWay}"
-                                        Visibility="{Binding TreeController.TaskQueue.IsProcessCancelable,Converter={StaticResource BoolToVisibilityConverter},UpdateSourceTrigger=PropertyChanged,Mode=OneWay}"
+                                        Command="{Binding TaskQueue.CancelProcess,UpdateSourceTrigger=PropertyChanged,Mode=OneWay}"
+                                        IsEnabled="{Binding TaskQueue.IsProcessCancelable,UpdateSourceTrigger=PropertyChanged,Mode=OneWay}"
+                                        Visibility="{Binding TaskQueue.IsProcessCancelable,Converter={StaticResource BoolToVisibilityConverter},UpdateSourceTrigger=PropertyChanged,Mode=OneWay}"
                                         Margin="0,3,3,3"/>
                             </Grid>
                         </Grid>

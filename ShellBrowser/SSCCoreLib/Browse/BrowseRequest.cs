@@ -1,5 +1,6 @@
 namespace SSCoreLib.Browse
 {
+    using ShellBrowserLib.Interfaces;
     using System;
     using System.Threading;
     using System.Threading.Tasks;
@@ -19,13 +20,13 @@ namespace SSCoreLib.Browse
     /// a request and Id the corresponding result using the BrowsingEvent
     /// and RequestId property.
     /// </summary>
-    public class BrowseRequest<T>
+    public class BrowseRequest<M>
     {
         #region ctors
         /// <summary>
         /// Parameterized class constructor.
         /// </summary>
-        public BrowseRequest(T newLocation,
+        public BrowseRequest(M newLocation,
                              RequestType typeOfRequest,
                              CancellationToken cancelToken = default(CancellationToken),
                              CancellationTokenSource cancelTokenSource = null,
@@ -33,7 +34,8 @@ namespace SSCoreLib.Browse
           : this()
         {
             Item = null;
-            NewLocation = (T)(newLocation as ICloneable).Clone();
+
+            NewLocation = (M)(newLocation as ICloneable).Clone();
             ActionRequested = typeOfRequest;
             CancelTok = cancelToken;
             CancelTokenSource = cancelTokenSource;
@@ -51,7 +53,7 @@ namespace SSCoreLib.Browse
           : this()
         {
             Item = item;
-            NewLocation = default(T);
+            NewLocation = default(M);
             ActionRequested = typeOfRequest;
             CancelTokenSource = cancelTokenSource;
             CancelTok = cancelToken;
@@ -75,7 +77,7 @@ namespace SSCoreLib.Browse
         /// Gets the new location (a path in the file system) to indicate
         /// the target of this browse request.
         /// </summary>
-        public T NewLocation { get; }
+        public M NewLocation { get; }
 
         public RequestType ActionRequested { get; }
 

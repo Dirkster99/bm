@@ -6,7 +6,6 @@
     using ShellBrowserLib.Shell.Interop.Interfaces.Knownfolders;
     using ShellBrowserLib.Shell.Interop.Knownfolders;
     using ShellBrowserLib.Shell.Pidl;
-    using System;
 
     [TestClass]
     public class ChildItemIdListListTests

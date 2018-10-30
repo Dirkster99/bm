@@ -9,8 +9,6 @@
 
         xmlns:imgSize="clr-namespace:BmLib.Converters;assembly=BmLib"
         xmlns:convLib="clr-namespace:BmLib.Converters;assembly=BmLib"
-        xmlns:bc="clr-namespace:BmLib.Controls;assembly=BmLib"
-        xmlns:local="clr-namespace:BreadcrumbTestLib.Views"
 
         mc:Ignorable="d" 
         d:DesignHeight="450" d:DesignWidth="800">

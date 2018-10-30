@@ -8,6 +8,7 @@ namespace BreadcrumbTestLib.ViewModels.Breadcrumbs
     using ShellBrowserLib.IDs;
     using ShellBrowserLib.Interfaces;
     using SSCoreLib.Browse;
+    using SSCoreLib.Interfaces;
     using System;
     using System.Collections.Generic;
     using System.Collections.ObjectModel;
@@ -30,26 +31,44 @@ namespace BreadcrumbTestLib.ViewModels.Breadcrumbs
 
         private OneTaskLimitedScheduler _OneTaskScheduler;
         private SemaphoreSlim _Semaphore;
+
         private bool _EnableBreadcrumb;
         private string _suggestedPath;
 
-        private ICommand _RootDropDownSelectionChangedCommand;
         private bool _IsBrowsing;
         private string _BreadcrumbSelectedPath;
 
-        private IDirectoryBrowser _RootLocation = ShellBrowser.DesktopDirectory;
         private BreadcrumbTreeItemViewModel _SelectedViewModel;
         private IDirectoryBrowser _selectedValue;
+
+        private ICommand _RootDropDownSelectionChangedCommand;
+
+        private readonly INavigationController _NavigationController;
         private readonly ObservableCollection<BreadcrumbTreeItemViewModel> _OverflowedAndRootItems = null;
         private readonly Stack<BreadcrumbTreeItemViewModel> _CurrentPath;
+        private readonly IDirectoryBrowser _RootLocation = ShellBrowser.DesktopDirectory;
         #endregion fields
 
         #region constructors
         /// <summary>
         /// Class constructor
         /// </summary>
-        public BreadcrumbViewModel()
+        /// <param name="taskQueue"></param>
+        public BreadcrumbViewModel(IBrowseRequestTaskQueueViewModel taskQueue,
+                                   INavigationController navigationController)
+            : this()
         {
+            TaskQueue = taskQueue;
+            _NavigationController = navigationController;
+        }
+
+        /// <summary>
+        /// Hidden standard constructor
+        /// </summary>
+        protected BreadcrumbViewModel()
+        {
+            TaskQueue = null;
+
             _OverflowedAndRootItems = new ObservableCollection<BreadcrumbTreeItemViewModel>();
             _CurrentPath = new Stack<BreadcrumbTreeItemViewModel>() { };
             _EnableBreadcrumb = true;
@@ -77,6 +96,8 @@ namespace BreadcrumbTestLib.ViewModels.Breadcrumbs
         #endregion browsing events
 
         #region properties
+        public IBrowseRequestTaskQueueViewModel TaskQueue { get; }
+
         /// <summary>
         /// Gets a viewmodel that manages the progress display that is shown to inform
         /// users of long running processings.
@@ -199,6 +220,8 @@ namespace BreadcrumbTestLib.ViewModels.Breadcrumbs
                         var request = new BrowseRequest<IDirectoryBrowser>(selectedFolder.GetModel(), RequestType.Navigational);
                         if (selectedFolder.Selection.IsOverflowed)
                         {
+                            // The selected root item is an overflowed root item so we move up towards the item that
+                            // is already part of the path
                             await this.NavigateToAsync(request, "BreadcrumbViewModel.RootDropDownSelectionChangedCommand",
                                 HintDirection.Up, selectedFolder);
                         }
@@ -319,22 +342,19 @@ namespace BreadcrumbTestLib.ViewModels.Breadcrumbs
         /// to view a default content.
         /// </summary>
         /// <param name="initialRequest"></param>
-        public Task InitPathAsync()
+        public async Task InitPathAsync()
         {
-            return Task.Run(async () =>
+            BreadcrumbTreeItemViewModel item = null;
+            item = BreadcrumbSubTree.InitRoot(_RootLocation);
+
+            if (item != null)
             {
-                BreadcrumbTreeItemViewModel item = null;
-                item = BreadcrumbSubTree.InitRoot(_RootLocation);
+                _CurrentPath.Push(item);
+                await UpdateListOfOverflowableRootItemsAsync(_CurrentPath, item);
 
-                if (item != null)
-                {
-                    _CurrentPath.Push(item);
-                    await UpdateListOfOverflowableRootItemsAsync(_CurrentPath, item);
-
-                    var request = new BrowseRequest<IDirectoryBrowser>(_RootLocation, RequestType.Navigational);
-                    await NavigateToAsync(request, "BreadcrumbViewModel.InitPathAsync");
-                }
-            });
+                var request = new BrowseRequest<IDirectoryBrowser>(_RootLocation, RequestType.Navigational);
+                await NavigateToAsync(request, "BreadcrumbViewModel.InitPathAsync");
+            }
         }
 
         /// <summary>
@@ -362,12 +382,12 @@ namespace BreadcrumbTestLib.ViewModels.Breadcrumbs
             try
             {
                 IsBrowsing = true;
-                return await Task.Run(async () =>
+                try
                 {
                     BrowseResult result = BrowseResult.Unknown;
 
                     if (toBeSelectedLocation != null &&
-                        (direction == HintDirection.Up || direction == HintDirection.Down ))
+                        (direction == HintDirection.Up || direction == HintDirection.Down))
                         result = await InternalNavigateUpDownAsync(toBeSelectedLocation,
                                                                    requestedLocation, direction);
                     else
@@ -376,11 +396,11 @@ namespace BreadcrumbTestLib.ViewModels.Breadcrumbs
 
                     return FinalBrowseResult<IDirectoryBrowser>.FromRequest(requestedLocation,
                                                                             result);
-                }).ContinueWith((result)=>
+                }
+                finally
                 {
                     IsBrowsing = false;
-                    return result.Result;
-                });
+                }
             }
             catch
             {

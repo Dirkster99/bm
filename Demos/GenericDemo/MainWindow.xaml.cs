@@ -1,6 +1,7 @@
 ﻿namespace GenericDemo
 {
     using System;
+    using System.Threading.Tasks;
     using System.Windows;
     using BreadcrumbTestLib.ViewModels;
 
@@ -23,7 +24,7 @@
             var appVM = new AppViewModel("Generic");
             DataContext = appVM;
 
-            appVM.InitPathAsync(@"C:\");
+            appVM.InitPath(@"C:\");
         }
 
         protected override void OnClosed(EventArgs e)
