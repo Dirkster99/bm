@@ -30,7 +30,6 @@
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type ctrls:Breadcrumb}">
                     <ControlTemplate.Resources>
-                        <conv:FlipBoolToVisibilityCollapsedConverter x:Key="fbtvc" />
                         <conv:BoolToVisibilityCollapsedConverter x:Key="btvc" />
                         <conv:BoolToOneOfTwoBindingsConverter x:Key="BoolToOneOfTwoBindingsConverter"
                                                               TrueSource="{DynamicResource {x:Static reskeys:ResourceKeys.ExpanderArrow}}"

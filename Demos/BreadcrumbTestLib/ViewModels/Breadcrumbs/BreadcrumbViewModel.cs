@@ -80,17 +80,6 @@ namespace BreadcrumbTestLib.ViewModels.Breadcrumbs
         public BreadcrumbTreeItemViewModel BreadcrumbSubTree { get; }
 
         /// <summary>
-        /// Gets the <see cref="ITreeRootSelector{VM, M}"/> selector for this BreadCrumb ViewModel.
-        /// </summary>
-        internal ITreeRootSelector<BreadcrumbTreeItemViewModel, IDirectoryBrowser> RootSelector
-        {
-            get
-            {
-                return BreadcrumbSubTree.Selection as ITreeRootSelector<BreadcrumbTreeItemViewModel, IDirectoryBrowser>;
-            }
-        }
-
-        /// <summary>
         /// Gets/sets a property that determines whether a breadcrumb
         /// switch is turned on or off.
         /// 
@@ -257,7 +246,7 @@ namespace BreadcrumbTestLib.ViewModels.Breadcrumbs
                 if (item != null)
                 {
                     _CurrentPath.Push(item);
-                    await RootSelector.ReportChildSelectedAsync(item.Selection);
+                    await UpdateListOfOverflowableRootItemsAsync(_CurrentPath, item);
 
                     var request = new BrowseRequest<IDirectoryBrowser>(_RootLocation, RequestType.Navigational);
                     await NavigateToAsync(request, "BreadcrumbViewModel.InitPathAsync");
@@ -393,8 +382,7 @@ namespace BreadcrumbTestLib.ViewModels.Breadcrumbs
                 }
             }
 
-            await RootSelector.ReportChildSelectedAsync(newSelectedLocation.Selection);
-            UpdateListOfOverflowableRootItems(RootSelector, _CurrentPath);
+            await UpdateListOfOverflowableRootItemsAsync(_CurrentPath, newSelectedLocation);
             UpdateBreadcrumbSelectedPath();
 
             if (BrowseEvent != null)
@@ -483,10 +471,7 @@ namespace BreadcrumbTestLib.ViewModels.Breadcrumbs
             foreach (var item in targetPath)
                 _CurrentPath.Push(item);
 
-            await RootSelector.ReportChildSelectedAsync(targetPath[targetPath.Count - 1].Selection);
-
-            var rootSelector1 = BreadcrumbSubTree.Selection as ITreeRootSelector<BreadcrumbTreeItemViewModel, IDirectoryBrowser>;
-            UpdateListOfOverflowableRootItems(rootSelector1, _CurrentPath);
+            await UpdateListOfOverflowableRootItemsAsync(_CurrentPath, targetPath[targetPath.Count - 1]);
             UpdateBreadcrumbSelectedPath();
 
             if (BrowseEvent != null)
@@ -584,9 +569,7 @@ namespace BreadcrumbTestLib.ViewModels.Breadcrumbs
             _CurrentPath.Push(desktopRootItem);   // set the current path to thisPC
             _CurrentPath.Push(secLevelRootItem); // set the current path to thisPC
 
-            await RootSelector.ReportChildSelectedAsync(secLevelRootItem.Selection);
-
-            UpdateListOfOverflowableRootItems(RootSelector, _CurrentPath);
+            await UpdateListOfOverflowableRootItemsAsync(_CurrentPath, secLevelRootItem);
             UpdateBreadcrumbSelectedPath();
         }
 
@@ -597,10 +580,13 @@ namespace BreadcrumbTestLib.ViewModels.Breadcrumbs
         /// <param name="rootSelector">Is the <see cref="ITreeRootSelector{VM,M}"/> that contains
         /// the OverflowedAndRootItems list to be updated.</param>
         /// <param name="items">Is the list of new pathitems to be include in OverflowedAndRootItems</param>
-        private void UpdateListOfOverflowableRootItems(
-            ITreeRootSelector<BreadcrumbTreeItemViewModel, IDirectoryBrowser> rootSelector,
-            Stack<BreadcrumbTreeItemViewModel> items)
+        private async Task UpdateListOfOverflowableRootItemsAsync(
+            Stack<BreadcrumbTreeItemViewModel> items,
+            BreadcrumbTreeItemViewModel selectedItem)
         {
+            var rootSelector =
+            BreadcrumbSubTree.Selection as ITreeRootSelector<BreadcrumbTreeItemViewModel, IDirectoryBrowser>;
+
             // Update list of overflowable items for bindings from converter on rootdropdownlist
             // 1) Get all rootitems minus seperator minus overflowable pathitems
             List<BreadcrumbTreeItemViewModel> rootItems = new List<BreadcrumbTreeItemViewModel>();
@@ -636,9 +622,12 @@ namespace BreadcrumbTestLib.ViewModels.Breadcrumbs
             // 3) merge both lists from 1) and 2) into updated overflowable list
             rootSelector.UpdateOverflowedItems(rootItems, overflowedItems);
 
+            // Update selection of currently selected item and second level root item
+            await rootSelector.ReportChildSelectedAsync(selectedItem.Selection);
+
             var pathList = items.Reverse().ToArray();
 
-            // select item in RootDropDownList if it is visible here
+            // select second level root item in RootDropDownList (if available)
             if (pathList.Length >= 2)
                 rootSelector.SelectedValue = pathList[1].Selection.Value;
             else

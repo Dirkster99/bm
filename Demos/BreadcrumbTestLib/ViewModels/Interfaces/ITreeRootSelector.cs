@@ -41,7 +41,6 @@
 
         /// <summary>
         /// Used by Breadcrumb, items that are root items or ALL items in the selected path, 
-        /// There's another Filter in xaml that only 
         /// </summary>
         IEnumerable<VM> OverflowedAndRootItems { get; }
         #endregion properties
