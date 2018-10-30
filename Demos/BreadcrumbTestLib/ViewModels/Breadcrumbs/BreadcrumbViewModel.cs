@@ -218,6 +218,13 @@ namespace BreadcrumbTestLib.ViewModels.Breadcrumbs
                         Logger.InfoFormat("selectedFolder {0}", selectedFolder);
 
                         await RootDropDownSelectionChangedCommand_Executed(selectedFolder);
+                    },
+                    (param) =>
+                    {
+                        if (IsBrowsing == true)
+                            return false;
+
+                        return true;
                     });
                 }
 

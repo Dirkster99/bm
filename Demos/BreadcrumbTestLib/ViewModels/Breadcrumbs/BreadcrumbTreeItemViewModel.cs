@@ -174,6 +174,13 @@
 
                         await _Root.NavigateToScheduledAsync(selectedFolder, "BreadcrumbTreeItemViewModel.ItemSelectionChanged",
                                                              HintDirection.Down, this);
+                    },
+                    (param) =>
+                    {
+                        if (_Root.IsBrowsing == true)
+                            return false;
+
+                        return true;
                     });
                 }
 
@@ -202,6 +209,13 @@
 
                         await _Root.NavigateToScheduledAsync(this, "BreadcrumbTreeItemViewModel.BreadcrumbTreeTreeItemClickCommand",
                                                              HintDirection.Up, this);
+                    },
+                    (param) =>
+                    {
+                        if (_Root.IsBrowsing == true)
+                            return false;
+
+                        return true;
                     });
                 }
 
