@@ -145,6 +145,10 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
+    <Page Include="Themes\LightIcons.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Themes\LightTheme.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -195,6 +199,15 @@
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Resources\Icons\Light\Refresh_16x.svg" />
+    <Resource Include="Resources\Icons\Light\Refresh_grey.ico" />
+    <Resource Include="Resources\Icons\Light\Close.ico" />
+    <Content Include="Resources\Icons\Light\Close_16x.svg" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Resources\Icons\Dark\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

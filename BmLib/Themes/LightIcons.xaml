@@ -1,0 +1,8 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:local="clr-namespace:BmLib.Themes.Default">
+
+    <BitmapImage x:Key="ICON_Close" UriSource="/BmLib;component/Resources/Icons/Light/Close.ico" />
+    <BitmapImage x:Key="ICON_Refresh" UriSource="/BmLib;component/Resources/Icons/Light/Refresh_grey.ico" />
+
+</ResourceDictionary>

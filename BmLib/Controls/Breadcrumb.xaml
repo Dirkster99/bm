@@ -233,15 +233,40 @@
                                 </Grid.Resources>
 
                                 <!-- Button Overlay for Refresh and Cancel Button (only one should be visible at any time) -->
-                                <Button Content="Refresh"
+                                <Button Name="RefreshButton"
+                                        Width="{Binding ElementName=RefreshButton,Path=ActualHeight}"
                                         Visibility="{Binding TaskQueue.IsProcessCancelable,Converter={StaticResource BoolToVisibilityConverterNeg},UpdateSourceTrigger=PropertyChanged,Mode=OneWay}"
-                                        Margin="3"/>
+                                        Margin="3"
+                                        Padding="3"
+                                        VerticalAlignment="Stretch"
+                                        HorizontalAlignment="Right"
+                                        HorizontalContentAlignment="Stretch"
+                                        VerticalContentAlignment="Stretch"
+                                        Focusable="False"
+                                        ToolTip="Refresh"
+                                        >
+                                    <Button.Background>
+                                        <ImageBrush ImageSource="{StaticResource ICON_Refresh}"/>
+                                    </Button.Background>
+                                </Button>
 
-                                <Button Content="Cancel"
+                                <Button Name="CancelButton"
+                                        Width="{Binding ElementName=RefreshButton,Path=ActualHeight}"
                                         Command="{Binding TaskQueue.CancelProcess,UpdateSourceTrigger=PropertyChanged,Mode=OneWay}"
                                         IsEnabled="{Binding TaskQueue.IsProcessCancelable,UpdateSourceTrigger=PropertyChanged,Mode=OneWay}"
                                         Visibility="{Binding TaskQueue.IsProcessCancelable,Converter={StaticResource BoolToVisibilityConverter},UpdateSourceTrigger=PropertyChanged,Mode=OneWay}"
-                                        Margin="0,3,3,3"/>
+                                        Margin="3"
+                                        Padding="3"
+                                        VerticalAlignment="Stretch"
+                                        HorizontalContentAlignment="Stretch"
+                                        VerticalContentAlignment="Stretch"
+                                        Focusable="False"
+                                        ToolTip="Cancel"
+                                        >
+                                    <Button.Background>
+                                        <ImageBrush ImageSource="{StaticResource ICON_Close}"/>
+                                    </Button.Background>
+                                </Button>
                             </Grid>
                         </Grid>
                     </Border>
