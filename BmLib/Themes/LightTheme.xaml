@@ -1,6 +1,7 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation">
 
     <ResourceDictionary.MergedDictionaries>
+        <ResourceDictionary Source="/BmLib;component/Styles/RefreshCancelButton.xaml"/>
         <ResourceDictionary Source="/BmLib;component/Themes/LightIcons.xaml"/>
         <ResourceDictionary Source="/BmLib;component/Themes/LightBrushs.xaml" />
         <ResourceDictionary Source="/BmLib;component/Themes/Default/Geometry.xaml" />

@@ -165,5 +165,22 @@
         /// Implements the background of the Switch control to switch content with click on background
         /// </summary>
         public static readonly ComponentResourceKey BlankButton = new ComponentResourceKey(typeof(ResourceKeys), "BlankButton");
+
+        #region Refresh Cancel Button
+        /// <summary>
+        /// Defines the button style of the Refresh/Cancel button on the far right side of the Breadcrumb control.
+        /// </summary>
+        public static readonly ComponentResourceKey RefreshCancel_ButtonStyle = new ComponentResourceKey(typeof(ResourceKeys), "RefreshCancel_ButtonStyle");
+
+        /// <summary>
+        /// Defines the Icon that is shown for Refresh button displayed on the far right side of the Breadcrumb control.
+        /// </summary>
+        public static readonly ComponentResourceKey ICON_Refresh = new ComponentResourceKey(typeof(ResourceKeys), "ICON_Refresh");
+
+        /// <summary>
+        /// Defines the Icon that is shown for Close button displayed on the far right side of the Breadcrumb control.
+        /// </summary>
+        public static readonly ComponentResourceKey ICON_Close = new ComponentResourceKey(typeof(ResourceKeys), "ICON_Close");
+        #endregion Refresh Cancel Button
     }
 }

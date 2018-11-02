@@ -93,10 +93,10 @@
         /// Class constructor
         /// </summary>
         public Breadcrumb()
-		{
+        {
             this.DataContextChanged += Breadcrumb_DataContextChanged;
             this.Loaded += Breadcrumb_Loaded;
-		}
+        }
         #endregion constructors
 
         #region properties
@@ -153,7 +153,7 @@
             base.OnApplyTemplate();
             RootDropDownList = this.Template.FindName(PART_RootDropDownList, this) as DropDownList;   // bexp
             Control_Switch = this.Template.FindName("PART_Switch", this) as Switch;                 // switch
-////        Control_SuggestBox = this.Template.FindName("PART_SuggestBox", this) as SuggestBoxBase;  // sbox
+                                                                                                    ////        Control_SuggestBox = this.Template.FindName("PART_SuggestBox", this) as SuggestBoxBase;  // sbox
 
             OnViewAttached();
         }
@@ -202,8 +202,8 @@
             this.RootDropDownList.AddValueChanged(ComboBox.SelectedValueProperty, (o, e) =>
             {
                 IEntryViewModel evm = this.RootDropDownList.SelectedItem as IEntryViewModel;
-////                    if (evm != null)
-////                        BroadcastDirectoryChanged(evm);
+                ////                    if (evm != null)
+                ////                        BroadcastDirectoryChanged(evm);
 
                 Control_Switch.Dispatcher.BeginInvoke(new System.Action(() =>
                 {
@@ -215,12 +215,12 @@
             {
                 if (!this.Control_Switch.IsSwitchOn)
                 {
-////                        _sbox.Dispatcher.BeginInvoke(new System.Action(() =>
-////                        {
-////                            Keyboard.Focus(_sbox);
-////                            _sbox.Focus();
-////                            _sbox.SelectAll();
-////                        }), System.Windows.Threading.DispatcherPriority.Background);
+                    ////                        _sbox.Dispatcher.BeginInvoke(new System.Action(() =>
+                    ////                        {
+                    ////                            Keyboard.Focus(_sbox);
+                    ////                            _sbox.Focus();
+                    ////                            _sbox.SelectAll();
+                    ////                        }), System.Windows.Threading.DispatcherPriority.Background);
                 }
             });
         }
