@@ -49,7 +49,21 @@
         public static readonly DependencyProperty TreeItemsSourceProperty =
             DependencyProperty.Register("TreeItemsSource", typeof(System.Collections.IEnumerable),
                 typeof(Breadcrumb), new PropertyMetadata(null));
+
+        /// <summary>
+        /// Backing store of the <see cref="TreeItemContainerStyle"/> dependency property.
+        /// </summary>
+        public static readonly DependencyProperty TreeItemContainerStyleProperty =
+            DependencyProperty.Register("TreeItemContainerStyle", typeof(Style),
+                typeof(Breadcrumb), new PropertyMetadata(null));
         #endregion Tree dependency properties
+
+        /// <summary>
+        /// Backing store of the <see cref="DropDownListItemDataTemplate"/> dependency property.
+        /// </summary>
+        public static readonly DependencyProperty DropDownListItemDataTemplateProperty =
+            DependencyProperty.Register("DropDownListItemDataTemplate", typeof(DataTemplate),
+                typeof(Breadcrumb), new PropertyMetadata(null));
 
         /// <summary>
         /// Implements the backing store field of the OverflowGap dependency property.
@@ -165,11 +179,20 @@
         }
 
         /// <summary>
-        /// Backing store of the <see cref="DropDownListItemDataTemplate"/> dependency property.
+        ///     Gets or sets the <see cref="Style"/> that is applied to the container element
+        ///     generated for each item. of the breadcrumb tree.
+        ///
+        /// Returns:
+        ///     The <see cref="Style"/> that is applied to the container element generated for
+        ///     each item of the breadcrumb tree. The default is null.
         /// </summary>
-        public static readonly DependencyProperty DropDownListItemDataTemplateProperty =
-            DependencyProperty.Register("DropDownListItemDataTemplate", typeof(DataTemplate),
-                typeof(Breadcrumb), new PropertyMetadata(null));
+        [Bindable(true)]
+        [Category("Content")]
+        public Style TreeItemContainerStyle
+        {
+            get { return (Style)GetValue(TreeItemContainerStyleProperty); }
+            set { SetValue(TreeItemContainerStyleProperty, value); }
+        }
         #endregion Tree dependency properties
 
         /// <summary>

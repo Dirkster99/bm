@@ -8,6 +8,7 @@
         xmlns:reskeys="clr-namespace:BmLib.Themes;assembly=BmLib"
 
         xmlns:ctrls="clr-namespace:BmLib.Controls;assembly=BmLib"
+        xmlns:treectrls="clr-namespace:BmLib.Controls.Breadcrumbs;assembly=BmLib"
 
         xmlns:imgSize="clr-namespace:BmLib.Converters;assembly=BmLib"
         xmlns:convLib="clr-namespace:BmLib.Converters;assembly=BmLib"
@@ -66,7 +67,8 @@
                     <RowDefinition Height="Auto"/>
                 </Grid.RowDefinitions>
 
-                <ctrls:Breadcrumb DataContext="{Binding BreadcrumbController.BreadcrumbBrowser}" Name="BreadcrumbDemoControl"
+                <ctrls:Breadcrumb Name="BreadcrumbDemoControl"
+                                  DataContext="{Binding BreadcrumbController.BreadcrumbBrowser}"
                                   Visibility="{Binding Path=IsChecked,ElementName=ShowBreadCrumbControl,Mode=OneWay, UpdateSourceTrigger=PropertyChanged,Converter={StaticResource BoolToVisibilityConverter}}"
                                   VerticalAlignment="Top" HorizontalAlignment="Stretch"
                                   
@@ -76,6 +78,22 @@
                                   TreeItemsSource="{Binding BreadcrumbSubTree.Entries.All, Mode=OneWay,UpdateSourceTrigger=PropertyChanged}"
                                   Margin="3"
                               >
+                    <ctrls:Breadcrumb.TreeItemContainerStyle>
+                        <Style TargetType="{x:Type treectrls:BreadcrumbTreeItem}" BasedOn="{StaticResource {x:Type treectrls:BreadcrumbTreeItem}}">
+                            <Setter Property="ValuePath" Value="Selection.Value" />
+                            <Setter Property="SelectedChild" Value="{Binding Selection.SelectedChild, Mode=OneWay,UpdateSourceTrigger=PropertyChanged}"  />
+
+                            <Setter Property="IsExpanded" Value="{Binding Entries.IsExpanded, Mode=TwoWay}"  />
+                            <Setter Property="IsCurrentSelected" Value="{Binding Selection.IsSelected, Mode=TwoWay}"  />
+
+                            <Setter Property="IsChildSelected" Value="{Binding Selection.IsChildSelected, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"  />
+
+                            <!--Updated by BreadcrumbTreeItem and it's OverflowableStackPanel-->
+                            <Setter Property="IsOverflowed" Value="{Binding Selection.IsOverflowed, Mode=OneWayToSource}"  />
+                            <Setter Property="ClickItemCommand" Value="{Binding BreadcrumbTreeTreeItemClickCommand}" />
+                            <Setter Property="DropDownListItemDataTemplate" Value="{Binding ElementName=BreadcrumbDemoControl, Path=DropDownListItemDataTemplate}"/>
+                        </Style>
+                    </ctrls:Breadcrumb.TreeItemContainerStyle>
                     <ctrls:Breadcrumb.TreeItemTemplate>
                         <!-- Defines a DataTemplate to
                              display a path element within the HORIZONTAL Breadcrumb tree control -->

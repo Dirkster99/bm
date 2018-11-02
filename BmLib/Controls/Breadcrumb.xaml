@@ -176,26 +176,11 @@
                                                                Margin="0"
                                                                ItemsSource="{TemplateBinding TreeItemsSource}"
                                                                ItemTemplate="{TemplateBinding TreeItemTemplate}"
-                                                               >
-                                                <uc:BreadcrumbTree.ItemContainerStyle>
-                                                    <Style TargetType="{x:Type uc:BreadcrumbTreeItem}" BasedOn="{StaticResource {x:Type uc:BreadcrumbTreeItem}}">
-                                                        <Setter Property="ValuePath" Value="Selection.Value" />
-                                                        <Setter Property="SelectedChild" Value="{Binding Selection.SelectedChild, Mode=OneWay,UpdateSourceTrigger=PropertyChanged}"  />
+                                                               ItemContainerStyle="{TemplateBinding TreeItemContainerStyle}"
+                                                               />
 
-                                                        <Setter Property="IsExpanded" Value="{Binding Entries.IsExpanded, Mode=TwoWay}"  />
-                                                        <Setter Property="IsCurrentSelected" Value="{Binding Selection.IsSelected, Mode=TwoWay}"  />
-
-                                                        <Setter Property="IsChildSelected" Value="{Binding Selection.IsChildSelected, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"  />
-
-                                                        <!--Updated by BreadcrumbTreeItem and it's OverflowableStackPanel-->
-                                                        <Setter Property="IsOverflowed" Value="{Binding Selection.IsOverflowed, Mode=OneWayToSource}"  />
-                                                        <Setter Property="ClickItemCommand" Value="{Binding BreadcrumbTreeTreeItemClickCommand}" />
-                                                        <Setter Property="DropDownListItemDataTemplate" Value="{Binding ElementName=PART_BreadcrumbTree, Path=DropDownListItemDataTemplate}"/>
-                                                    </Style>
-                                                </uc:BreadcrumbTree.ItemContainerStyle>
-                                            </uc:BreadcrumbTree>
-
-                                            <!-- Grid.Column="2" Is OverflowGap which is necessary to reach Switch through click on background -->
+                                            <!-- Grid.Column="2" Is OverflowGap which is necessary to reach Switch
+                                                 through click on right-most background of BreadcrumbTree -->
                                         </Grid>
                                     </bc:Switch.ContentOn>
                                     <!-- bc:Switch.ContentOff>
