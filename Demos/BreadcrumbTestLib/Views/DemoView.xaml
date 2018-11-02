@@ -72,6 +72,8 @@
                                   
                                   RootDropDownItemsSource="{Binding OverflowedAndRootItems}"
                                   RootDropDownSelectedValuePath="Selection.Value"
+                                  
+                                  TreeItemsSource="{Binding BreadcrumbSubTree.Entries.All, Mode=OneWay,UpdateSourceTrigger=PropertyChanged}"
                                   Margin="3"
                               >
                     <ctrls:Breadcrumb.TreeItemTemplate>

@@ -35,12 +35,21 @@
         #region fields
         public const string PART_RootDropDownList = "PART_RootDropDownList";
 
+        #region Tree dependency properties
         /// <summary>
         /// Backing store of the <see cref="TreeItemTemplate"/> dependency property.
         /// </summary>
         public static readonly DependencyProperty TreeItemTemplateProperty =
             DependencyProperty.Register("TreeItemTemplate", typeof(DataTemplate),
                 typeof(Breadcrumb), new PropertyMetadata(null));
+
+        /// <summary>
+        /// Backing store of the <see cref="TreeItemsSource"/> dependency property.
+        /// </summary>
+        public static readonly DependencyProperty TreeItemsSourceProperty =
+            DependencyProperty.Register("TreeItemsSource", typeof(System.Collections.IEnumerable),
+                typeof(Breadcrumb), new PropertyMetadata(null));
+        #endregion Tree dependency properties
 
         /// <summary>
         /// Implements the backing store field of the OverflowGap dependency property.
@@ -108,6 +117,7 @@
         #endregion constructors
 
         #region properties
+        #region Tree dependency properties
         /// <summary>
         /// Gets or sets the System.Windows.DataTemplate used to display
         /// each item in the breadcrumb tree control.
@@ -122,6 +132,22 @@
             get { return (DataTemplate)GetValue(TreeItemTemplateProperty); }
             set { SetValue(TreeItemTemplateProperty, value); }
         }
+
+        /// <summary>
+        /// Gets or sets a collection used to generate the content of the
+        /// inner System.Windows.Controls.ItemsControl in the breadcrumb tree control.
+        ///
+        /// Returns:
+        ///     A collection that is used to generate the content of the System.Windows.Controls.ItemsControl.
+        ///     The default is null.
+        /// </summary>
+        [Bindable(true)]
+        public System.Collections.IEnumerable TreeItemsSource
+        {
+            get { return (System.Collections.IEnumerable)GetValue(TreeItemsSourceProperty); }
+            set { SetValue(TreeItemsSourceProperty, value); }
+        }
+        #endregion Tree dependency properties
 
         /// <summary>
         /// Getter/Setter for dependency property that binds the root items drop down list
