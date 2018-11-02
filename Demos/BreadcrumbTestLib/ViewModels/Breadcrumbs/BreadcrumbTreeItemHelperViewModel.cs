@@ -7,7 +7,6 @@
     using System.Linq;
     using System.Threading;
     using System.Threading.Tasks;
-    using System.Windows.Input;
     using BmLib.Enums;
     using System.Windows;
 
@@ -53,14 +52,6 @@
             {
                 default(VM)
             };
-
-            this.CancelCommand = new RelayCommand(obj =>
-            {
-                var token = _lastCancellationToken;
-
-                if (token != null)
-                    token.Cancel();
-            });
         }
 
         /// <summary>
@@ -182,15 +173,6 @@
                     NotifyPropertyChanged(() => IsLoading);
                 }
             }
-        }
-
-        /// <summary>
-        /// Gets the command that can cancel the current LoadASync() operation.
-        /// </summary>
-        public ICommand CancelCommand
-        {
-            get;
-            private set;
         }
 
         /// <summary>

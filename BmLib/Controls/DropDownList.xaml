@@ -38,7 +38,7 @@
         <Setter Property="ItemContainerStyle">
             <Setter.Value>
                 <Style TargetType="{x:Type ComboBoxItem}" BasedOn="{StaticResource {x:Type ComboBoxItem}}" >
-                    <Style.Triggers>
+                    <!-- Style.Triggers>
                         <DataTrigger Binding="{Binding}" Value="{x:Null}">
                             <Setter Property="Template">
                                 <Setter.Value>
@@ -48,7 +48,7 @@
                                 </Setter.Value>
                             </Setter>
                         </DataTrigger>
-                    </Style.Triggers>
+                    </Style.Triggers-->
                 </Style>
             </Setter.Value>
         </Setter>

@@ -69,6 +69,7 @@
     <Compile Include="Controls\DropDownList.xaml.cs">
       <DependentUpon>DropDownList.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Controls\DropDownListItem.cs" />
     <Compile Include="Controls\HotTrack.xaml.cs">
       <DependentUpon>HotTrack.xaml</DependentUpon>
     </Compile>
@@ -112,6 +113,10 @@
     <Page Include="Controls\DropDownList.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Controls\DropDownListItem.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Controls\HotTrack.xaml">
       <Generator>MSBuild:Compile</Generator>
