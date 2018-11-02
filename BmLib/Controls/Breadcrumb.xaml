@@ -35,7 +35,6 @@
                             HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
                             MinHeight="{TemplateBinding MinHeight}"
                             >
-
                         <Grid>
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="*"/>
@@ -116,7 +115,7 @@
                                                                 ItemContainerStyle="{TemplateBinding RootDropDownListItemContainerStyle}"
                                                                 Header="{TemplateBinding RootDropDownListHeader}"
                                                                 HorizontalAlignment="Left"
-                                                                behav:SelectionChangedCommand.ChangedCommand="{Binding Path=RootDropDownSelectionChangedCommand}"
+                                                                behav:SelectionChangedCommand.ChangedCommand="{TemplateBinding RootDropDownSelectionChangedCommand}"
                                                                 BorderThickness="0"
                                                                 Margin="0"
                                                             />

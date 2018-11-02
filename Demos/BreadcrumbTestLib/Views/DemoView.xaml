@@ -81,6 +81,7 @@
                                   
                                   RootDropDownItemsSource="{Binding OverflowedAndRootItems}"
                                   RootDropDownSelectedValuePath="Selection.Value"
+                                  RootDropDownSelectionChangedCommand="{Binding RootDropDownSelectionChangedCommand}"
                                   
                                   TreeItemsSource="{Binding BreadcrumbSubTree.Entries.All, Mode=OneWay,UpdateSourceTrigger=PropertyChanged}"
                                   Margin="3"

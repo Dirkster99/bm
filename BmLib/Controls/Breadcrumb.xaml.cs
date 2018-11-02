@@ -8,6 +8,7 @@
     using System.Diagnostics;
     using System.Windows;
     using System.Windows.Controls;
+    using System.Windows.Input;
 
     /// <summary>
     /// BreadcrumbControl contains 3 main displays:
@@ -77,6 +78,16 @@
                 typeof(double), typeof(Breadcrumb), new PropertyMetadata(10.0));
 
         /// <summary>
+        /// Implement a dependency property to determine whether all path portions of the
+        /// breadcrumb contol fit into the current breadcrumb display or not.
+        /// </summary>
+        public static readonly DependencyProperty IsOverflownProperty =
+            DependencyProperty.Register("IsOverflown",
+                typeof(bool),
+                typeof(Breadcrumb), new PropertyMetadata(false));
+
+        #region RootDropDown
+        /// <summary>
         /// Getter/Setter for dependency property that binds the root items drop down list
         /// of the Breadcrumb control. This list should also include overflown items
         /// (overflown items are items that cannot be displayed in the path portion of the
@@ -105,13 +116,12 @@
                 typeof(Breadcrumb), new PropertyMetadata(null));
 
         /// <summary>
-        /// Implement a dependency property to determine whether all path portions of the
-        /// breadcrumb contol fit into the current breadcrumb display or not.
+        /// Backing store of the <see cref="RootDropDownSelectionChangedCommand"/> dependency property.
         /// </summary>
-        public static readonly DependencyProperty IsOverflownProperty =
-            DependencyProperty.Register("IsOverflown",
-                typeof(bool),
-                typeof(Breadcrumb), new PropertyMetadata(false));
+        public static readonly DependencyProperty RootDropDownSelectionChangedCommandProperty =
+            DependencyProperty.Register("RootDropDownSelectionChangedCommand", typeof(ICommand),
+                typeof(Breadcrumb), new PropertyMetadata(null));
+        #endregion RootDropDown
 
         private object _LockObject = new object();
         private bool _IsLoaded = false;
@@ -202,6 +212,7 @@
         }
         #endregion Tree dependency properties
 
+        #region RootDropDown
         /// <summary>
         /// Getter/Setter for dependency property that binds the root items drop down list
         /// of the Breadcrumb control. This list should also include overflown items
@@ -247,6 +258,18 @@
             get { return (Style)GetValue(RootDropDownListItemContainerStyleProperty); }
             set { SetValue(RootDropDownListItemContainerStyleProperty, value); }
         }
+
+        /// <summary>
+        /// Gets/sets the <see cref="ICommand"/> interface that determines the command
+        /// to be invoked when the selected item in the RootDropDownList was changed by
+        /// the user.
+        /// </summary>
+        public ICommand RootDropDownSelectionChangedCommand
+        {
+            get { return (ICommand)GetValue(RootDropDownSelectionChangedCommandProperty); }
+            set { SetValue(RootDropDownSelectionChangedCommandProperty, value); }
+        }
+        #endregion RootDropDown
 
         /// <summary>
         /// Implement a dependency property to determine whether all path portions of the
