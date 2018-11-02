@@ -3,7 +3,6 @@
     using BmLib.Controls.Breadcrumbs;
     using BmLib.Interfaces;
     using BmLib.Utils;
-    using System;
     using System.Collections.Generic;
     using System.ComponentModel;
     using System.Diagnostics;
@@ -87,15 +86,16 @@
             DependencyProperty.Register("RootDropDownItemsSource",
                 typeof(IEnumerable<object>), typeof(Breadcrumb), new PropertyMetadata(null));
 
-        public string RootDropDownSelectedValuePath
-        {
-            get { return (string)GetValue(RootDropDownSelectedValuePathProperty); }
-            set { SetValue(RootDropDownSelectedValuePathProperty, value); }
-        }
-
         public static readonly DependencyProperty RootDropDownSelectedValuePathProperty =
             DependencyProperty.Register("RootDropDownSelectedValuePath",
                 typeof(string), typeof(Breadcrumb), new PropertyMetadata(null));
+
+        /// <summary>
+        /// Backing store of the <see cref="RootDropDownListHeader"/> dependency property.
+        /// </summary>
+        public static readonly DependencyProperty RootDropDownListHeaderProperty =
+            DependencyProperty.Register("RootDropDownListHeader", typeof(object),
+                typeof(Breadcrumb), new PropertyMetadata(null));
 
         /// <summary>
         /// Implement a dependency property to determine whether all path portions of the
@@ -207,6 +207,23 @@
             set { SetValue(RootDropDownItemsSourceProperty, value); }
         }
 
+        public string RootDropDownSelectedValuePath
+        {
+            get { return (string)GetValue(RootDropDownSelectedValuePathProperty); }
+            set { SetValue(RootDropDownSelectedValuePathProperty, value); }
+        }
+
+        /// <summary>
+        /// Identifies the Header dependency property.
+        ///
+        /// Returns:
+        /// The identifier for the Header dependency property.
+        /// </summary>
+        public object RootDropDownListHeader
+        {
+            get { return (object)GetValue(RootDropDownListHeaderProperty); }
+            set { SetValue(RootDropDownListHeaderProperty, value); }
+        }
 
         /// <summary>
         /// Implement a dependency property to determine whether all path portions of the
