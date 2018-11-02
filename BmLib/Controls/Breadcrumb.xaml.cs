@@ -98,6 +98,13 @@
                 typeof(Breadcrumb), new PropertyMetadata(null));
 
         /// <summary>
+        /// Backing store of the <see cref="RootDropDownListItemContainerStyle"/> dependency property.
+        /// </summary>
+        public static readonly DependencyProperty RootDropDownListItemContainerStyleProperty =
+            DependencyProperty.Register("RootDropDownListItemContainerStyle", typeof(Style),
+                typeof(Breadcrumb), new PropertyMetadata(null));
+
+        /// <summary>
         /// Implement a dependency property to determine whether all path portions of the
         /// breadcrumb contol fit into the current breadcrumb display or not.
         /// </summary>
@@ -179,12 +186,12 @@
         }
 
         /// <summary>
-        ///     Gets or sets the <see cref="Style"/> that is applied to the container element
-        ///     generated for each item. of the breadcrumb tree.
+        /// Gets or sets the <see cref="Style"/> that is applied to the container element
+        /// generated for each item of the breadcrumb tree.
         ///
         /// Returns:
-        ///     The <see cref="Style"/> that is applied to the container element generated for
-        ///     each item of the breadcrumb tree. The default is null.
+        /// The <see cref="Style"/> that is applied to the container element generated for
+        /// each item of the breadcrumb tree. The default is null.
         /// </summary>
         [Bindable(true)]
         [Category("Content")]
@@ -223,6 +230,22 @@
         {
             get { return (object)GetValue(RootDropDownListHeaderProperty); }
             set { SetValue(RootDropDownListHeaderProperty, value); }
+        }
+
+        /// <summary>
+        /// Gets or sets the <see cref="Style"/> that is applied to the container element
+        /// generated for each item of the root drop down list in the breadcrumb control.
+        ///
+        /// Returns:
+        /// The <see cref="Style"/> that is applied to the container element generated for
+        /// each item of the root drop down list in the breadcrumb control. The default is null.
+        /// </summary>
+        [Bindable(true)]
+        [Category("Content")]
+        public Style RootDropDownListItemContainerStyle
+        {
+            get { return (Style)GetValue(RootDropDownListItemContainerStyleProperty); }
+            set { SetValue(RootDropDownListItemContainerStyleProperty, value); }
         }
 
         /// <summary>

@@ -6,6 +6,7 @@
              
         xmlns:themes="clr-namespace:BmLib.Themes;assembly=BmLib"
         xmlns:reskeys="clr-namespace:BmLib.Themes;assembly=BmLib"
+        xmlns:ThemeBehav="clr-namespace:BmLib.Behaviors;assembly=BmLib"
 
         xmlns:ctrls="clr-namespace:BmLib.Controls;assembly=BmLib"
         xmlns:treectrls="clr-namespace:BmLib.Controls.Breadcrumbs;assembly=BmLib"
@@ -164,6 +165,32 @@
                             />
                         </Border>
                     </ctrls:Breadcrumb.RootDropDownListHeader>
+
+                    <!-- Define ItemContainerStyle in RootDropDownList -->
+                    <ctrls:Breadcrumb.RootDropDownListItemContainerStyle>
+                        <Style TargetType="{x:Type ComboBoxItem}" BasedOn="{StaticResource {x:Type ComboBoxItem}}">
+                            <!-- http://social.msdn.microsoft.com/Forums/en-US/wpf/thread/63696841-0358-4f7a-abe1-e6062518e3d6 -->
+                            <Setter Property="ThemeBehav:MergeStyleBehaviour.AutoMergeStyle" Value="True"/>
+
+                            <Setter Property="Visibility" Value="{Binding Selection.IsOverflowedOrRoot, Mode=OneWay, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource btvc}}"  />
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding}" Value="{x:Null}">
+                                    <Setter Property="Template">
+                                        <Setter.Value>
+                                            <ControlTemplate TargetType="{x:Type ComboBoxItem}">
+                                                <!-- Converter ensure to show Seperator only if items are overflown -->
+                                                <Separator HorizontalAlignment="Stretch"
+                                                           IsEnabled="False"
+                                                           Visibility="{Binding IsOverflown,Converter={StaticResource btv}, UpdateSourceTrigger=PropertyChanged, ElementName=BreadcrumbDemoControl}"
+                                                        />
+                                            </ControlTemplate>
+                                        </Setter.Value>
+                                    </Setter>
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </ctrls:Breadcrumb.RootDropDownListItemContainerStyle>
+
                 </ctrls:Breadcrumb>
 
                 <Grid Grid.Row="1">
