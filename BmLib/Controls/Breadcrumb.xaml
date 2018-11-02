@@ -19,20 +19,24 @@
     </ResourceDictionary.MergedDictionaries>
 
     <Style TargetType="{x:Type ctrls:Breadcrumb}">
-        <!-- MinWidth assures nice Breadcrumb display when UI gets too small
-             because Window may be resized to a small portion of its normal size -->
-        <Setter Property="MinWidth" Value="100" />
-        <Setter Property="MinHeight" Value="21" />
-        <Setter Property="BorderBrush" Value="Gray"/>
+        <Setter Property="BorderBrush" Value="{DynamicResource {x:Static reskeys:ResourceKeys.ControlBorderBrushKey}}"/>
         <Setter Property="BorderThickness" Value="1"/>
         <Setter Property="Margin" Value="0" />
+        <Setter Property="HorizontalAlignment" Value="Stretch"/>
+        <Setter Property="VerticalAlignment" Value="Stretch"/>
+        <!-- MinWidth assures nice Breadcrumb display when UI gets too small
+             because Window may be resized to a small portion of its normal size -->
+        <Setter Property="MinWidth" Value="120" />
+        <Setter Property="MinHeight" Value="21" />
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type ctrls:Breadcrumb}">
                     <Border Background="{TemplateBinding Background}"
                             BorderBrush="{TemplateBinding BorderBrush}"
                             BorderThickness="{TemplateBinding BorderThickness}"
-                            HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
+                            HorizontalAlignment="{TemplateBinding HorizontalAlignment}"
+                            VerticalAlignment="{TemplateBinding VerticalAlignment}"
+                            MinWidth="{TemplateBinding MinWidth}"
                             MinHeight="{TemplateBinding MinHeight}"
                             >
                         <Grid>
@@ -79,22 +83,9 @@
                                            IsSwitchOn="{Binding EnableBreadcrumb, Mode=TwoWay}"
                                            VerticalAlignment="Center" VerticalContentAlignment="Center"
                                            HorizontalAlignment="Stretch" HorizontalContentAlignment="Stretch"
+                                           Header="{TemplateBinding SwitchHeader}"
                                            Margin="0"
                                      >
-                                    <bc:Switch.Header>
-                                        <Image DataContext="{Binding SelectedViewModel}">
-                                            <Image.Source>
-                                                <MultiBinding Converter="{x:Static conv:AssociatedIconConverter.Default}">
-                                                    <MultiBinding.ConverterParameter>
-                                                        <imgSize:IconSize >Small</imgSize:IconSize>
-                                                    </MultiBinding.ConverterParameter>
-                                                    <Binding Path="ItemPath" />
-                                                    <Binding Path="ItemName" />
-                                                    <Binding Path="IconResourceId" />
-                                                </MultiBinding>
-                                            </Image.Source>
-                                        </Image>
-                                    </bc:Switch.Header>
                                     <bc:Switch.ContentOn>
                                         <!-- Show TreeView with RootDropDown Items -->
                                         <Grid>

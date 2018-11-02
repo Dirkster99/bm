@@ -35,6 +35,13 @@
         #region fields
         public const string PART_RootDropDownList = "PART_RootDropDownList";
 
+        /// <summary>
+        /// Backing store of the <see cref="SwitchHeader"/> dependency property.
+        /// </summary>
+        public static readonly DependencyProperty SwitchHeaderProperty =
+            DependencyProperty.Register("SwitchHeader", typeof(object),
+                typeof(Breadcrumb), new PropertyMetadata(null));
+
         #region Tree dependency properties
         /// <summary>
         /// Backing store of the <see cref="TreeItemTemplate"/> dependency property.
@@ -155,6 +162,16 @@
         #endregion constructors
 
         #region properties
+        /// <summary>
+        /// Gets/sets the content definition of the RootSwitchButton shown in the
+        /// left most spot of the breadcrumb control.
+        /// </summary>
+        public object SwitchHeader
+        {
+            get { return (object)GetValue(SwitchHeaderProperty); }
+            set { SetValue(SwitchHeaderProperty, value); }
+        }
+
         #region Tree dependency properties
         /// <summary>
         /// Gets or sets the <see cref="DataTemplate"/> used to display

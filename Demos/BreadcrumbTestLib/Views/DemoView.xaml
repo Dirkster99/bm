@@ -194,6 +194,20 @@
                         </Style>
                     </ctrls:Breadcrumb.RootDropDownListItemContainerStyle>
 
+                    <ctrls:Breadcrumb.SwitchHeader>
+                        <Image DataContext="{Binding SelectedViewModel}">
+                            <Image.Source>
+                                <MultiBinding Converter="{x:Static convLib:AssociatedIconConverter.Default}">
+                                    <MultiBinding.ConverterParameter>
+                                        <imgSize:IconSize >Small</imgSize:IconSize>
+                                    </MultiBinding.ConverterParameter>
+                                    <Binding Path="ItemPath" />
+                                    <Binding Path="ItemName" />
+                                    <Binding Path="IconResourceId" />
+                                </MultiBinding>
+                            </Image.Source>
+                        </Image>
+                    </ctrls:Breadcrumb.SwitchHeader>
                 </ctrls:Breadcrumb>
 
                 <Grid Grid.Row="1">

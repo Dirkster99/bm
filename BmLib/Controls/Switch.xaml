@@ -23,7 +23,6 @@
         </Grid>
     </ControlTemplate>
 
-
     <ControlTemplate x:Key="BreadcrumbSwitchTemplate" TargetType="{x:Type bc:Switch}">
         <ControlTemplate.Resources>
             <conv:BoolToVisibilityConverter x:Key="btv" />
