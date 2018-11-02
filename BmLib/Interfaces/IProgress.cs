@@ -1,4 +1,4 @@
-﻿namespace BreadcrumbTestLib.ViewModels.Interfaces
+﻿namespace BmLib.Interfaces
 {
     using System.ComponentModel;
 
@@ -6,7 +6,7 @@
     /// Exposes the properties of a Progress Display (ProgressBar) to enable
     /// UI feedback on long running processings.
     /// </summary>
-    public interface IProgressViewModel : INotifyPropertyChanged
+    public interface IProgress : INotifyPropertyChanged
     {
         #region properties
         /// <summary>

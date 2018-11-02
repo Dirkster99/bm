@@ -1,5 +1,6 @@
 ﻿namespace BreadcrumbTestLib.ViewModels.Interfaces
 {
+    using BmLib.Interfaces;
     using BreadcrumbTestLib.Models;
     using BreadcrumbTestLib.ViewModels.Breadcrumbs;
     using ShellBrowserLib.Interfaces;
@@ -32,7 +33,7 @@
         /// <summary>
         /// Gets an interface to determine whether progress display should currenlty be visible or not.
         /// </summary>
-        IProgressViewModel Progressing { get; }
+        IProgress Progressing { get; }
 
         string SuggestedPath { get; set; }
         #endregion properties

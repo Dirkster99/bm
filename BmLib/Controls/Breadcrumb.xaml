@@ -22,10 +22,10 @@
         <!-- MinWidth assures nice Breadcrumb display when UI gets too small
              because Window may be resized to a small portion of its normal size -->
         <Setter Property="MinWidth" Value="100" />
+        <Setter Property="MinHeight" Value="21" />
         <Setter Property="BorderBrush" Value="Gray"/>
         <Setter Property="BorderThickness" Value="1"/>
         <Setter Property="Margin" Value="0" />
-        <Setter Property="MinHeight" Value="24" />
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type ctrls:Breadcrumb}">
@@ -62,16 +62,17 @@
                                 </Grid.ColumnDefinitions>
 
                                 <!-- Show a progress-bar to indicate long running processing -->
-                                <ProgressBar IsIndeterminate="{Binding Progressing.IsIndeterminate, Mode=OneWay,UpdateSourceTrigger=PropertyChanged}"
-                                             Value="{Binding Progressing.ProgressValue, Mode=OneWay,UpdateSourceTrigger=PropertyChanged}"
-                                             Minimum="{Binding Progressing.MinimumProgressValue, Mode=OneWay,UpdateSourceTrigger=PropertyChanged}"
-                                             Maximum="{Binding Progressing.MaximumProgressValue, Mode=OneWay,UpdateSourceTrigger=PropertyChanged}"
-                                             Visibility="{Binding Progressing.IsProgressbarVisible, Mode=OneWay,UpdateSourceTrigger=PropertyChanged, Converter={StaticResource btv}}"
+                                <ProgressBar DataContext="{TemplateBinding Progressing}"
+                                    IsIndeterminate="{Binding IsIndeterminate, Mode=OneWay,UpdateSourceTrigger=PropertyChanged}"
+                                    Value="{Binding ProgressValue, Mode=OneWay,UpdateSourceTrigger=PropertyChanged}"
+                                    Minimum="{Binding MinimumProgressValue, Mode=OneWay,UpdateSourceTrigger=PropertyChanged}"
+                                    Maximum="{Binding MaximumProgressValue, Mode=OneWay,UpdateSourceTrigger=PropertyChanged}"
+                                    Visibility="{Binding IsProgressbarVisible, Mode=OneWay,UpdateSourceTrigger=PropertyChanged, Converter={StaticResource btv}}"
                                                
-                                             Opacity="0.5"
-                                             Background="Transparent"
-                                             Foreground="{DynamicResource {x:Static SystemColors.HotTrackBrushKey}}"
-                                             BorderBrush="Transparent" BorderThickness="0"/>
+                                    Opacity="0.5"
+                                    Background="Transparent"
+                                    Foreground="{DynamicResource {x:Static SystemColors.HotTrackBrushKey}}"
+                                    BorderBrush="Transparent" BorderThickness="0"/>
 
                                 <bc:Switch x:Name="PART_Switch"
                                            Template="{StaticResource BreadcrumbSwitchTemplate}"                   

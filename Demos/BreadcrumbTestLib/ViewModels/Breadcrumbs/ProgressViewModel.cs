@@ -1,12 +1,12 @@
 ﻿namespace BreadcrumbTestLib.ViewModels.Breadcrumbs
 {
-    using BreadcrumbTestLib.ViewModels.Interfaces;
+    using BmLib.Interfaces;
 
     /// <summary>
     /// Exposes the properties of a Progress Display (ProgressBar) to enable
     /// UI feedback on long running processings.
     /// </summary>
-    internal class ProgressViewModel : Base.ViewModelBase, IProgressViewModel
+    internal class ProgressViewModel : Base.ViewModelBase, IProgress
     {
         #region fields
         /// <summary>

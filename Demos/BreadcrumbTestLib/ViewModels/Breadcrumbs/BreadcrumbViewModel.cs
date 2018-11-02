@@ -1,5 +1,6 @@
 namespace BreadcrumbTestLib.ViewModels.Breadcrumbs
 {
+    using BmLib.Interfaces;
     using BreadcrumbTestLib.Models;
     using BreadcrumbTestLib.Tasks;
     using BreadcrumbTestLib.ViewModels.Base;
@@ -102,7 +103,7 @@ namespace BreadcrumbTestLib.ViewModels.Breadcrumbs
         /// Gets a viewmodel that manages the progress display that is shown to inform
         /// users of long running processings.
         /// </summary>
-        public IProgressViewModel Progressing { get; }
+        public IProgress Progressing { get; }
 
         /// <summary>
         /// Gets a viewmodel that manages the sub-tree brwosing and

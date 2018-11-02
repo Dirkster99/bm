@@ -84,6 +84,8 @@
                                   RootDropDownSelectionChangedCommand="{Binding RootDropDownSelectionChangedCommand}"
                                   
                                   TreeItemsSource="{Binding BreadcrumbSubTree.Entries.All, Mode=OneWay,UpdateSourceTrigger=PropertyChanged}"
+                                  
+                                  Progressing="{Binding Progressing}"
                                   Margin="3"
                               >
                     <ctrls:Breadcrumb.TreeItemContainerStyle>

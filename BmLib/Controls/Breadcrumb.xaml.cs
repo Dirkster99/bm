@@ -123,6 +123,13 @@
                 typeof(Breadcrumb), new PropertyMetadata(null));
         #endregion RootDropDown
 
+        /// <summary>
+        /// Backing store of the <see cref="Progressing"/> dependency property.
+        /// </summary>
+        public static readonly DependencyProperty ProgressingProperty =
+            DependencyProperty.Register("Progressing", typeof(IProgress),
+                typeof(Breadcrumb), new PropertyMetadata(null));
+
         private object _LockObject = new object();
         private bool _IsLoaded = false;
         #endregion fields
@@ -180,6 +187,23 @@
         }
 
         /// <summary>
+        /// Gets or sets the <see cref="Style"/> that is applied to the container element
+        /// generated for each item of the breadcrumb tree.
+        ///
+        /// Returns:
+        /// The <see cref="Style"/> that is applied to the container element generated for
+        /// each item of the breadcrumb tree. The default is null.
+        /// </summary>
+        [Bindable(true)]
+        [Category("Content")]
+        public Style TreeItemContainerStyle
+        {
+            get { return (Style)GetValue(TreeItemContainerStyleProperty); }
+            set { SetValue(TreeItemContainerStyleProperty, value); }
+        }
+        #endregion Tree dependency properties
+
+        /// <summary>
         /// Gets or sets the <see cref="DataTemplate"/> used to display
         /// the:
         /// 1) Root DropDownList of the Breadcrumb control and the
@@ -196,21 +220,26 @@
         }
 
         /// <summary>
-        /// Gets or sets the <see cref="Style"/> that is applied to the container element
-        /// generated for each item of the breadcrumb tree.
-        ///
-        /// Returns:
-        /// The <see cref="Style"/> that is applied to the container element generated for
-        /// each item of the breadcrumb tree. The default is null.
+        /// Implement a dependency property to determine whether all path portions of the
+        /// breadcrumb contol fit into the current breadcrumb display or not.
         /// </summary>
-        [Bindable(true)]
-        [Category("Content")]
-        public Style TreeItemContainerStyle
+        public bool IsOverflown
         {
-            get { return (Style)GetValue(TreeItemContainerStyleProperty); }
-            set { SetValue(TreeItemContainerStyleProperty, value); }
+            get { return (bool)GetValue(IsOverflownProperty); }
+            set { SetValue(IsOverflownProperty, value); }
         }
-        #endregion Tree dependency properties
+
+        /// <summary>
+        /// Implements the OverflowGap dependency property which is the gap
+        /// that is displayed in the right most part of the BreadcrumbTree
+        /// view to let the user click into this area when the switch should
+        /// be turned on to display the text display with the SuggestBox.
+        /// </summary>
+        public double OverflowGap
+        {
+            get { return (double)GetValue(OverflowGapProperty); }
+            set { SetValue(OverflowGapProperty, value); }
+        }
 
         #region RootDropDown
         /// <summary>
@@ -272,25 +301,13 @@
         #endregion RootDropDown
 
         /// <summary>
-        /// Implement a dependency property to determine whether all path portions of the
-        /// breadcrumb contol fit into the current breadcrumb display or not.
+        /// Gets/sets the <see cref="IProgress"/> based values required to display
+        /// a progress display when a long running back task is processing data.
         /// </summary>
-        public bool IsOverflown
+        public IProgress Progressing
         {
-            get { return (bool)GetValue(IsOverflownProperty); }
-            set { SetValue(IsOverflownProperty, value); }
-        }
-
-        /// <summary>
-        /// Implements the OverflowGap dependency property which is the gap
-        /// that is displayed in the right most part of the BreadcrumbTree
-        /// view to let the user click into this area when the switch should
-        /// be turned on to display the text display with the SuggestBox.
-        /// </summary>
-        public double OverflowGap
-        {
-            get { return (double)GetValue(OverflowGapProperty); }
-            set { SetValue(OverflowGapProperty, value); }
+            get { return (IProgress)GetValue(ProgressingProperty); }
+            set { SetValue(ProgressingProperty, value); }
         }
 
         ////        public SuggestBoxBase Control_SuggestBox { get; set; }
