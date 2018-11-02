@@ -5,6 +5,7 @@
     using BmLib.Utils;
     using System;
     using System.Collections.Generic;
+    using System.ComponentModel;
     using System.Diagnostics;
     using System.Windows;
     using System.Windows.Controls;
@@ -33,6 +34,13 @@
     {
         #region fields
         public const string PART_RootDropDownList = "PART_RootDropDownList";
+
+        /// <summary>
+        /// Backing store of the <see cref="TreeItemTemplate"/> dependency property.
+        /// </summary>
+        public static readonly DependencyProperty TreeItemTemplateProperty =
+            DependencyProperty.Register("TreeItemTemplate", typeof(DataTemplate),
+                typeof(Breadcrumb), new PropertyMetadata(null));
 
         /// <summary>
         /// Implements the backing store field of the OverflowGap dependency property.
@@ -100,6 +108,21 @@
         #endregion constructors
 
         #region properties
+        /// <summary>
+        /// Gets or sets the System.Windows.DataTemplate used to display
+        /// each item in the breadcrumb tree control.
+        ///
+        /// Returns:
+        /// A System.Windows.DataTemplate that specifies the visualization of the data objects.
+        /// The default is null (none).
+        /// </summary>
+        [Bindable(true)]
+        public DataTemplate TreeItemTemplate
+        {
+            get { return (DataTemplate)GetValue(TreeItemTemplateProperty); }
+            set { SetValue(TreeItemTemplateProperty, value); }
+        }
+
         /// <summary>
         /// Getter/Setter for dependency property that binds the root items drop down list
         /// of the Breadcrumb control. This list should also include overflown items

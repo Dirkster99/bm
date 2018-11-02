@@ -3,7 +3,9 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             
         xmlns:themes="clr-namespace:BmLib.Themes;assembly=BmLib"
+        xmlns:reskeys="clr-namespace:BmLib.Themes;assembly=BmLib"
 
         xmlns:ctrls="clr-namespace:BmLib.Controls;assembly=BmLib"
 
@@ -72,6 +74,21 @@
                                   RootDropDownSelectedValuePath="Selection.Value"
                                   Margin="3"
                               >
+                    <ctrls:Breadcrumb.TreeItemTemplate>
+                        <!-- Defines a DataTemplate to
+                             display a path element within the HORIZONTAL Breadcrumb tree control -->
+                        <HierarchicalDataTemplate ItemsSource="{Binding Entries.All}">
+                            <TextBlock Text="{Binding Header}"
+                                       VerticalAlignment="Center"
+                                       Background="Transparent"
+                                       Foreground="{DynamicResource {x:Static reskeys:ResourceKeys.ControlTextBrushKey}}"
+                                       >
+                                <TextBlock.ToolTip>
+                                    <TextBlock Text="{Binding Header}"/>
+                                </TextBlock.ToolTip>
+                            </TextBlock>
+                        </HierarchicalDataTemplate>
+                    </ctrls:Breadcrumb.TreeItemTemplate>
                 </ctrls:Breadcrumb>
 
                 <Grid Grid.Row="1">

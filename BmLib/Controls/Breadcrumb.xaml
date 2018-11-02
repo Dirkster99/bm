@@ -175,10 +175,11 @@
                                                                MenuItemTemplate="{StaticResource DropDownListItemDataTemplate}"
                                                                x:Name="PART_BreadcrumbTree"
                                                                Margin="0"
+                                                               ItemTemplate="{TemplateBinding TreeItemTemplate}"
                                                                >
-                                                <uc:BreadcrumbTree.ItemTemplate>
-                                                    <!-- Define a default datat template to
-                                                         display a path element within the HORIZONTAL Breadcrumb tree control -->
+                                                <!--uc:BreadcrumbTree.ItemTemplate>
+                                                    - Define a default DataTemplate to
+                                                         display a path element within the HORIZONTAL Breadcrumb tree control -
                                                    <HierarchicalDataTemplate ItemsSource="{Binding Entries.All}">
                                                         <TextBlock Text="{Binding Header}"
                                                                    VerticalAlignment="Center"
@@ -190,7 +191,7 @@
                                                             </TextBlock.ToolTip>
                                                         </TextBlock>
                                                     </HierarchicalDataTemplate>
-                                                </uc:BreadcrumbTree.ItemTemplate>
+                                                </uc:BreadcrumbTree.ItemTemplate -->
                                                 <uc:BreadcrumbTree.ItemContainerStyle>
                                                     <Style TargetType="{x:Type uc:BreadcrumbTreeItem}" BasedOn="{StaticResource {x:Type uc:BreadcrumbTreeItem}}">
                                                         <Setter Property="ValuePath" Value="Selection.Value" />
