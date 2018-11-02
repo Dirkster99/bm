@@ -119,7 +119,7 @@
         #region properties
         #region Tree dependency properties
         /// <summary>
-        /// Gets or sets the System.Windows.DataTemplate used to display
+        /// Gets or sets the <see cref="DataTemplate"/> used to display
         /// each item in the breadcrumb tree control.
         ///
         /// Returns:
@@ -147,6 +147,29 @@
             get { return (System.Collections.IEnumerable)GetValue(TreeItemsSourceProperty); }
             set { SetValue(TreeItemsSourceProperty, value); }
         }
+
+        /// <summary>
+        /// Gets or sets the <see cref="DataTemplate"/> used to display
+        /// the:
+        /// 1) Root DropDownList of the Breadcrumb control and the
+        /// 2) DropDownList of each item in the breadcrumb tree control.
+        ///
+        /// Returns:
+        /// A <see cref="DataTemplate"/> that specifies the visualization of the data objects.
+        /// The default is null (none).
+        /// </summary>
+        public DataTemplate DropDownListItemDataTemplate
+        {
+            get { return (DataTemplate)GetValue(DropDownListItemDataTemplateProperty); }
+            set { SetValue(DropDownListItemDataTemplateProperty, value); }
+        }
+
+        /// <summary>
+        /// Backing store of the <see cref="DropDownListItemDataTemplate"/> dependency property.
+        /// </summary>
+        public static readonly DependencyProperty DropDownListItemDataTemplateProperty =
+            DependencyProperty.Register("DropDownListItemDataTemplate", typeof(DataTemplate),
+                typeof(Breadcrumb), new PropertyMetadata(null));
         #endregion Tree dependency properties
 
         /// <summary>

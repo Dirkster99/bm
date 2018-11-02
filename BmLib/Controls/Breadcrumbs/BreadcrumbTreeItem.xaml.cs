@@ -1,6 +1,7 @@
 ﻿namespace BmLib.Controls.Breadcrumbs
 {
-	using System.Windows;
+    using System.ComponentModel;
+    using System.Windows;
 	using System.Windows.Controls;
     using System.Windows.Input;
     using BmLib.BaseControls;
@@ -10,13 +11,16 @@
 	public class BreadcrumbTreeItem : TreeViewItem
 	{
         #region fields
-        public DependencyObject ClickItemCommand
-        {
-            get { return (DependencyObject)GetValue(ClickItemCommandProperty); }
-            set { SetValue(ClickItemCommandProperty, value); }
-        }
+        /// <summary>
+        /// Backing store of the <see cref="DropDownListItemDataTemplate"/> dependency property.
+        /// </summary>
+        public static readonly DependencyProperty DropDownListItemDataTemplateProperty =
+            DependencyProperty.Register("DropDownListItemDataTemplate", typeof(DataTemplate),
+                typeof(BreadcrumbTreeItem), new PropertyMetadata(null));
 
-        // Using a DependencyProperty as the backing store for ClickItemCommand.  This enables animation, styling, binding, etc...
+        /// <summary>
+        /// Backing store of the <see cref="ClickItemCommand"/> dependency property.
+        /// </summary>
         public static readonly DependencyProperty ClickItemCommandProperty =
             DependencyProperty.Register("ClickItemCommand",
                 typeof(ICommand),
@@ -28,9 +32,6 @@
 
 		public static readonly DependencyProperty IsOverflowedProperty = DependencyProperty.Register("IsOverflowed", typeof(bool),
 		 typeof(BreadcrumbTreeItem), new PropertyMetadata(false));
-
-////		public static readonly DependencyProperty OverflowedItemContainerStyleProperty =
-////						BreadcrumbTree.OverflowedItemContainerStyleProperty.AddOwner(typeof(BreadcrumbTreeItem));
 
 		public static readonly DependencyProperty SelectedChildProperty =
 			DependencyProperty.Register("SelectedChild", typeof(object), typeof(BreadcrumbTreeItem),
@@ -51,9 +52,6 @@
 		public static readonly DependencyProperty IsCaptionVisibleProperty =
 								DependencyProperty.Register("IsCaptionVisible", typeof(bool), typeof(BreadcrumbTreeItem),
 								new UIPropertyMetadata(true, OnIsCaptionVisibleChanged));
-
-		public static readonly DependencyProperty MenuItemTemplateProperty =
-						BreadcrumbTree.MenuItemTemplateProperty.AddOwner(typeof(BreadcrumbTreeItem));
         #endregion fields
 
         #region Constructor
@@ -72,10 +70,38 @@
 		public BreadcrumbTreeItem()
 		{
 		}
-		#endregion
+        #endregion
 
-		#region properties
-		public int OverflowItemCount
+        #region properties
+        /// <summary>
+        /// Gets or sets the <see cref="DataTemplate"/> used to display
+        /// the drop down list of each item in the breadcrumb tree control.
+        ///
+        /// Returns:
+        /// A <see cref="DataTemplate"/> that specifies the visualization of the data objects.
+        /// The default is null (none).
+        /// </summary>
+        [Bindable(true)]
+        public DataTemplate DropDownListItemDataTemplate
+        {
+            get { return (DataTemplate)GetValue(DropDownListItemDataTemplateProperty); }
+            set { SetValue(DropDownListItemDataTemplateProperty, value); }
+        }
+
+        /// <summary>
+        /// Gets or sets the <see cref="ICommand"/> that can be bound and executed when a
+        /// user clicks on a tree views item.
+        /// 
+        /// Default: null
+        /// </summary>
+        [Bindable(true)]
+        public DependencyObject ClickItemCommand
+        {
+            get { return (DependencyObject)GetValue(ClickItemCommandProperty); }
+            set { SetValue(ClickItemCommandProperty, value); }
+        }
+
+        public int OverflowItemCount
 		{
 			get { return (int)GetValue(OverflowItemCountProperty); }
 			set { this.SetValue(OverflowItemCountProperty, value); }
@@ -118,12 +144,6 @@
 		{
 			get { return (bool)GetValue(IsCaptionVisibleProperty); }
 			set { this.SetValue(IsCaptionVisibleProperty, value); }
-		}
-
-		public DataTemplate MenuItemTemplate
-		{
-			get { return (DataTemplate)GetValue(MenuItemTemplateProperty); }
-			set { this.SetValue(MenuItemTemplateProperty, value); }
 		}
 		#endregion properties
 

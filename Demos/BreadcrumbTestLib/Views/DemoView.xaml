@@ -91,6 +91,34 @@
                             </TextBlock>
                         </HierarchicalDataTemplate>
                     </ctrls:Breadcrumb.TreeItemTemplate>
+                    <ctrls:Breadcrumb.DropDownListItemDataTemplate>
+                        <DataTemplate>
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto" />
+                                    <ColumnDefinition Width="*" />
+                                </Grid.ColumnDefinitions>
+
+                                <Image Margin="3,0" HorizontalAlignment="Left" VerticalAlignment="Center">
+                                    <Image.Source>
+                                        <MultiBinding Converter="{x:Static convLib:AssociatedIconConverter.Default}">
+                                            <MultiBinding.ConverterParameter>
+                                                <imgSize:IconSize >Small</imgSize:IconSize>
+                                            </MultiBinding.ConverterParameter>
+                                            <Binding Path="ItemPath" />
+                                            <Binding Path="ItemName" />
+                                            <Binding Path="IconResourceId" />
+                                        </MultiBinding>
+                                    </Image.Source>
+                                </Image>
+
+                                <TextBlock Text="{Binding Header}"
+                                           Foreground="{DynamicResource {x:Static reskeys:ResourceKeys.ControlTextBrushKey}}"
+                                           VerticalAlignment="Center"
+                                           Grid.Column="1" />
+                            </Grid>
+                        </DataTemplate>
+                    </ctrls:Breadcrumb.DropDownListItemDataTemplate>
                 </ctrls:Breadcrumb>
 
                 <Grid Grid.Row="1">

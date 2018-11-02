@@ -5,46 +5,16 @@
     xmlns:ctrls="clr-namespace:BmLib.Controls"
     xmlns:bc="clr-namespace:BmLib.BaseControls"
     xmlns:uc="clr-namespace:BmLib.Controls.Breadcrumbs"
-    xmlns:imgSize="clr-namespace:BmLib.Converters"
     xmlns:conv="clr-namespace:BmLib.Converters"
     xmlns:reskeys="clr-namespace:BmLib.Themes"
     xmlns:behav="clr-namespace:BmLib.Behaviors"
  >
-    <DataTemplate x:Key="DropDownListItemDataTemplate">
-        <Grid>
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="Auto" />
-                <ColumnDefinition Width="*" />
-            </Grid.ColumnDefinitions>
-
-            <Image Margin="3,0" HorizontalAlignment="Left" VerticalAlignment="Center">
-                <Image.Source>
-                    <MultiBinding Converter="{x:Static conv:AssociatedIconConverter.Default}">
-                        <MultiBinding.ConverterParameter>
-                            <imgSize:IconSize >Small</imgSize:IconSize>
-                        </MultiBinding.ConverterParameter>
-                        <Binding Path="ItemPath" />
-                        <Binding Path="ItemName" />
-                        <Binding Path="IconResourceId" />
-                    </MultiBinding>
-                </Image.Source>
-            </Image>
-
-            <TextBlock Text="{Binding Header}"
-                        Foreground="{DynamicResource {x:Static reskeys:ResourceKeys.ControlTextBrushKey}}"
-                        VerticalAlignment="Center"
-                        Grid.Column="1" />
-        </Grid>
-    </DataTemplate>
-
-    <!-- x:Key="BreadcrumbTreeItemStyle"
-         This is now a Default Style which is loaded through Themes/Generic.xaml via style key propoerty registered in static constructor -->
+    <!-- Defines the default style which is loaded through Themes/Generic.xaml
+         via style key property registered in static constructor -->
     <Style TargetType="{x:Type uc:BreadcrumbTreeItem}">
         <Setter Property="Background" Value="Transparent"/>
         <Setter Property="BorderThickness" Value="0" />
         <Setter Property="BorderBrush" Value="{DynamicResource {x:Static reskeys:ResourceKeys.ControlBorderBrushKey}}" />
-        <!-- Setter Property="OverflowedItemContainerStyle" Value="{Binding OverflowedItemContainerStyle, RelativeSource={RelativeSource AncestorType={x:Type uc:BreadcrumbTree}}}" / -->
-        <!--<Setter Property="FocusVisualStyle" Value="{StaticResource TreeViewItemFocusVisual}"/>-->
         <Setter Property="Padding" Value="1,0,0,0"/>
         <Setter Property="Margin" Value="0"/>
         <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}"/>
@@ -94,13 +64,9 @@
                                                     SelectedValuePath="{Binding ValuePath, RelativeSource={RelativeSource TemplatedParent}}"                                  
                                                     SelectedValue="{Binding SelectedChild, Mode=OneWay, UpdateSourceTrigger=PropertyChanged, RelativeSource={RelativeSource TemplatedParent}}"
                                                     IsDropDownOpen="{Binding IsExpanded, Mode=TwoWay, RelativeSource={RelativeSource TemplatedParent}}"
-                                                    ItemTemplate="{TemplateBinding MenuItemTemplate}"
+                                                    ItemTemplate="{TemplateBinding DropDownListItemDataTemplate}"
                                                     behav:SelectionChangedCommand.ChangedCommand="{Binding Path=DropDownItemSelectedCommand}"
                                     />
-                                    <!--    
-                                        SelectedValuePath="{Binding ValuePath, RelativeSource={RelativeSource TemplatedParent}}"                                  
-                                        SelectedValue="{Binding SelectedChild, Mode=OneWay,UpdateSourceTrigger=PropertyChanged, RelativeSource={RelativeSource TemplatedParent}}"
-                                    -->
                             </Grid>
                         </ctrls:HotTrack>
 
@@ -116,21 +82,13 @@
                                 <Setter Property="Visibility" Value="Collapsed"/>
                             </MultiTrigger.Setters>
                         </MultiTrigger>
-                        <!--<Trigger Property="IsExpanded" Value="true">
-                            <Setter Property="Visibility" Value="Visible"/>
-                        </Trigger>-->
-                                    <!--<Trigger Property="HasItems" Value="false">
-                            <Setter Property="Visibility" TargetName="Expander" Value="Hidden"/>
-                        </Trigger>-->
                     </ControlTemplate.Triggers>
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
 
-        <!-- Setter Property="ItemsPanel" Value="{StaticResource StackItemPanelTemplate}" / -->
-        <Setter Property="MenuItemTemplate" Value="{StaticResource DropDownListItemDataTemplate}" />
         <Style.Triggers>
-            <!--This trigger is needed, because RelativeSource binding can only succeeds if the current MenuItem is already connected to its visual parent-->
+            <!--This trigger is needed, because RelativeSource binding can only succeeds if the current item is already connected to its visual parent-->
             <Trigger Property="IsVisible" Value="True">
                 <Setter Property="HorizontalContentAlignment" Value="{Binding Path=HorizontalContentAlignment, RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}}}"/>
                 <Setter Property="VerticalContentAlignment" Value="{Binding Path=VerticalContentAlignment, RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}}}"/>

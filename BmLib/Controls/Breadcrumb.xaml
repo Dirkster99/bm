@@ -119,7 +119,7 @@
                                                                 ItemsSource="{TemplateBinding RootDropDownItemsSource}"
                                                                 SelectedValuePath="{TemplateBinding RootDropDownSelectedValuePath}"
                                                                 SelectedValue="{Binding SelectedValue,Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"                             
-                                                                ItemTemplate="{StaticResource DropDownListItemDataTemplate}"
+                                                                ItemTemplate="{TemplateBinding DropDownListItemDataTemplate}"
                                                                 behav:SelectionChangedCommand.ChangedCommand="{Binding Path=RootDropDownSelectionChangedCommand}"
                                                                 BorderThickness="0"
                                                                 Margin="0"
@@ -171,7 +171,7 @@
 
                                             <!-- The BreadcrumbTree control displays the complete path and each drop down list -->
                                             <uc:BreadcrumbTree Grid.Column="1"
-                                                               MenuItemTemplate="{StaticResource DropDownListItemDataTemplate}"
+                                                               DropDownListItemDataTemplate="{TemplateBinding DropDownListItemDataTemplate}"
                                                                x:Name="PART_BreadcrumbTree"
                                                                Margin="0"
                                                                ItemsSource="{TemplateBinding TreeItemsSource}"
@@ -190,6 +190,7 @@
                                                         <!--Updated by BreadcrumbTreeItem and it's OverflowableStackPanel-->
                                                         <Setter Property="IsOverflowed" Value="{Binding Selection.IsOverflowed, Mode=OneWayToSource}"  />
                                                         <Setter Property="ClickItemCommand" Value="{Binding BreadcrumbTreeTreeItemClickCommand}" />
+                                                        <Setter Property="DropDownListItemDataTemplate" Value="{Binding ElementName=PART_BreadcrumbTree, Path=DropDownListItemDataTemplate}"/>
                                                     </Style>
                                                 </uc:BreadcrumbTree.ItemContainerStyle>
                                             </uc:BreadcrumbTree>
