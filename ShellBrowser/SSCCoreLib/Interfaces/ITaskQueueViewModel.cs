@@ -12,7 +12,7 @@ namespace SSCoreLib.Interfaces
     /// that can be canceled in order to support management of Cancel-able background tasks
     /// that can run longer than 1 second in dependence of the actual runtime environment.
     /// </summary>
-    public interface IBrowseRequestTaskQueueViewModel : IDisposable, INotifyPropertyChanged
+    public interface ITaskQueueViewModel : IDisposable, INotifyPropertyChanged
     {
         #region properties
         /// <summary>

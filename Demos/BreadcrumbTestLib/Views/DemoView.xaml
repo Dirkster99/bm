@@ -8,6 +8,7 @@
         xmlns:reskeys="clr-namespace:BmLib.Themes;assembly=BmLib"
         xmlns:ThemeBehav="clr-namespace:BmLib.Behaviors;assembly=BmLib"
 
+        xmlns:base="clr-namespace:BmLib.BaseControls;assembly=BmLib"
         xmlns:ctrls="clr-namespace:BmLib.Controls;assembly=BmLib"
         xmlns:treectrls="clr-namespace:BmLib.Controls.Breadcrumbs;assembly=BmLib"
 
@@ -68,6 +69,9 @@
             <Grid Grid.Column="0" Grid.Row="0"
                   xmlns:behav="clr-namespace:BreadcrumbTestLib.Behaviors"
                   >
+                <Grid.Resources>
+                    <base:BindingProxy x:Key="AppDataContextProxy" Data="{Binding}" />
+                </Grid.Resources>
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto"/>
                     <RowDefinition Height="*"/>
@@ -86,6 +90,7 @@
                                   
                                   TreeItemsSource="{Binding BreadcrumbSubTree.Entries.All, Mode=OneWay,UpdateSourceTrigger=PropertyChanged}"
                                   
+                                  TaskQueueProcessing="{Binding Data.BreadcrumbController.TaskQueue, Source={StaticResource AppDataContextProxy}}"
                                   Progressing="{Binding Progressing}"
                                   Margin="3"
                               >

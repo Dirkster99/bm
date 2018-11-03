@@ -147,7 +147,8 @@
                                 <!-- Button Overlay for Refresh and Cancel Button (only one should be visible at any time) -->
                                 <Button Name="RefreshButton"
                                         Style="{DynamicResource {x:Static reskeys:ResourceKeys.RefreshCancel_ButtonStyle}}"
-                                        Visibility="{Binding TaskQueue.IsProcessCancelable,Converter={StaticResource BoolToVisibilityConverterNeg},UpdateSourceTrigger=PropertyChanged,Mode=OneWay}"
+                                        DataContext="{TemplateBinding TaskQueueProcessing}"
+                                        Visibility="{Binding IsProcessCancelable,Converter={StaticResource BoolToVisibilityConverterNeg},UpdateSourceTrigger=PropertyChanged,Mode=OneWay}"
                                         ToolTip="Refresh"
                                         >
                                     <Button.Background>
@@ -157,9 +158,10 @@
 
                                 <Button Name="CancelButton"
                                         Style="{DynamicResource {x:Static reskeys:ResourceKeys.RefreshCancel_ButtonStyle}}"
-                                        Command="{Binding TaskQueue.CancelProcess,UpdateSourceTrigger=PropertyChanged,Mode=OneWay}"
-                                        IsEnabled="{Binding TaskQueue.IsProcessCancelable,UpdateSourceTrigger=PropertyChanged,Mode=OneWay}"
-                                        Visibility="{Binding TaskQueue.IsProcessCancelable,Converter={StaticResource BoolToVisibilityConverter},UpdateSourceTrigger=PropertyChanged,Mode=OneWay}"
+                                        DataContext="{TemplateBinding TaskQueueProcessing}"
+                                        Command="{Binding CancelProcess,UpdateSourceTrigger=PropertyChanged,Mode=OneWay}"
+                                        IsEnabled="{Binding IsProcessCancelable,UpdateSourceTrigger=PropertyChanged,Mode=OneWay}"
+                                        Visibility="{Binding IsProcessCancelable,Converter={StaticResource BoolToVisibilityConverter},UpdateSourceTrigger=PropertyChanged,Mode=OneWay}"
                                         ToolTip="Cancel"
                                         >
                                     <Button.Background>

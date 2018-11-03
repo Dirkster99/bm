@@ -16,7 +16,7 @@ namespace SSCoreLib.ViewModels
     /// management of Cancel-able background tasks that can run longer than 1 second
     /// in dependence of the actual runtime environment.
     /// </summary>
-    public class BrowseRequestTaskQueueViewModel : ViewModelBase, IBrowseRequestTaskQueueViewModel
+    public class TaskQueueViewModel : ViewModelBase, ITaskQueueViewModel
     {
         #region fields
         private bool _Disposed = false;
@@ -33,7 +33,7 @@ namespace SSCoreLib.ViewModels
         /// <summary>
         /// Class constructor
         /// </summary>
-        public BrowseRequestTaskQueueViewModel()
+        public TaskQueueViewModel()
         {
             _CancelTokenSourc = new CancellationTokenSource();
             _TaskQueue = new Dictionary<string, BrowseRequest<IDirectoryBrowser>>();

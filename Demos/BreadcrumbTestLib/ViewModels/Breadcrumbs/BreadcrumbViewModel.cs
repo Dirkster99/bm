@@ -9,7 +9,6 @@ namespace BreadcrumbTestLib.ViewModels.Breadcrumbs
     using ShellBrowserLib.IDs;
     using ShellBrowserLib.Interfaces;
     using SSCoreLib.Browse;
-    using SSCoreLib.Interfaces;
     using System;
     using System.Collections.Generic;
     using System.Collections.ObjectModel;
@@ -55,11 +54,9 @@ namespace BreadcrumbTestLib.ViewModels.Breadcrumbs
         /// Class constructor
         /// </summary>
         /// <param name="taskQueue"></param>
-        public BreadcrumbViewModel(IBrowseRequestTaskQueueViewModel taskQueue,
-                                   INavigationController navigationController)
+        public BreadcrumbViewModel(INavigationController navigationController)
             : this()
         {
-            TaskQueue = taskQueue;
             _NavigationController = navigationController;
         }
 
@@ -68,8 +65,6 @@ namespace BreadcrumbTestLib.ViewModels.Breadcrumbs
         /// </summary>
         protected BreadcrumbViewModel()
         {
-            TaskQueue = null;
-
             _OverflowedAndRootItems = new ObservableCollection<BreadcrumbTreeItemViewModel>();
             _CurrentPath = new Stack<BreadcrumbTreeItemViewModel>() { };
             _EnableBreadcrumb = true;
@@ -97,8 +92,6 @@ namespace BreadcrumbTestLib.ViewModels.Breadcrumbs
         #endregion browsing events
 
         #region properties
-        public IBrowseRequestTaskQueueViewModel TaskQueue { get; }
-
         /// <summary>
         /// Gets a viewmodel that manages the progress display that is shown to inform
         /// users of long running processings.

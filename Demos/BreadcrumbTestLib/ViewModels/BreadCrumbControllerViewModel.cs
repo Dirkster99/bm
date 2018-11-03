@@ -6,8 +6,6 @@ namespace BreadcrumbTestLib.ViewModels
     using ShellBrowserLib;
     using ShellBrowserLib.Interfaces;
     using SSCoreLib.Browse;
-    using SSCoreLib.Interfaces;
-    using SSCoreLib.ViewModels;
     using System;
     using System.Diagnostics;
     using System.Threading;
@@ -45,7 +43,7 @@ namespace BreadcrumbTestLib.ViewModels
             TaskQueue = new BrowseRequestTaskQueueViewModel();
 
             // Initialize Breadcrumb Tree ViewModel and SpecialFolders Test ViewModel
-            BreadcrumbBrowser = new BreadcrumbViewModel(TaskQueue, this as INavigationController);
+            BreadcrumbBrowser = new BreadcrumbViewModel(this as INavigationController);
 
             WeakEventManager<ICanNavigate, BrowsingEventArgs>
                 .AddHandler(BreadcrumbBrowser, "BrowseEvent", Control_BrowseEvent);
@@ -59,7 +57,13 @@ namespace BreadcrumbTestLib.ViewModels
         /// </summary>
         public IBreadcrumbViewModel BreadcrumbBrowser { get; }
 
-        public IBrowseRequestTaskQueueViewModel TaskQueue { get; }
+        /// <summary>
+        /// Gets a task queue object that is used to queue and
+        /// maintain a reference to executing tasks. Executing tasks
+        /// can be cancelable and thus be cancelled when things go
+        /// very wrong in terms of performance and so forth...
+        /// </summary>
+        public BrowseRequestTaskQueueViewModel TaskQueue { get; }
         #endregion properties
 
         #region methods

@@ -147,6 +147,13 @@
             DependencyProperty.Register("Progressing", typeof(IProgress),
                 typeof(Breadcrumb), new PropertyMetadata(null));
 
+        /// <summary>
+        /// Backing store of the <see cref="TaskQueueProcessing"/> dependency property.
+        /// </summary>
+        public static readonly DependencyProperty TaskQueueProcessingProperty =
+            DependencyProperty.Register("TaskQueueProcessing", typeof(IBrowseRequestTaskQueue),
+                typeof(Breadcrumb), new PropertyMetadata(null));
+
         private object _LockObject = new object();
         private bool _IsLoaded = false;
         #endregion fields
@@ -349,6 +356,17 @@
         {
             get { return (IProgress)GetValue(ProgressingProperty); }
             set { SetValue(ProgressingProperty, value); }
+        }
+
+        /// <summary>
+        /// Gets/sets the <see cref="IBrowseRequestTaskQueue"/> based values required to display
+        /// status about the ability to cancel currently executing tasks and commands
+        /// to actually cancel executing tasks.
+        /// </summary>
+        public IBrowseRequestTaskQueue TaskQueueProcessing
+        {
+            get { return (IBrowseRequestTaskQueue)GetValue(TaskQueueProcessingProperty); }
+            set { SetValue(TaskQueueProcessingProperty, value); }
         }
 
         ////        public SuggestBoxBase Control_SuggestBox { get; set; }

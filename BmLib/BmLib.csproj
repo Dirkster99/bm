@@ -85,6 +85,7 @@
       <DependentUpon>Switch.xaml</DependentUpon>
     </Compile>
     <Compile Include="Converters\AssociatedIconConverter.cs" />
+    <Compile Include="Interfaces\IBrowseRequestTaskQueue.cs" />
     <Compile Include="Interfaces\IProgress.cs" />
     <Compile Include="Interfaces\SuggestBox\IHierarchyHelper.cs" />
     <Compile Include="Interfaces\SuggestBox\ISuggestSource.cs" />
