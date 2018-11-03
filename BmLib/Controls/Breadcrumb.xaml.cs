@@ -154,6 +154,13 @@
             DependencyProperty.Register("TaskQueueProcessing", typeof(IBrowseRequestTaskQueue),
                 typeof(Breadcrumb), new PropertyMetadata(null));
 
+        /// <summary>
+        /// Backing store of the <see cref="IsSwitchOn"/> dependency property.
+        /// </summary>
+        public static readonly DependencyProperty IsSwitchOnProperty =
+            DependencyProperty.Register("IsSwitchOn", typeof(bool),
+                typeof(Breadcrumb), new PropertyMetadata(false));
+
         private object _LockObject = new object();
         private bool _IsLoaded = false;
         #endregion fields
@@ -369,15 +376,17 @@
             set { SetValue(TaskQueueProcessingProperty, value); }
         }
 
+        /// <summary>
+        /// Gets/sets whether the <see cref="Switch"/> control that can host 2 controls
+        /// is currently switched:
+        /// 1) On  (true)  (Showing BreadcrumbTree control) or
+        /// 2) off (false) (Showing TextInput control)
+        /// </summary>
         public bool IsSwitchOn
         {
             get { return (bool)GetValue(IsSwitchOnProperty); }
             set { SetValue(IsSwitchOnProperty, value); }
         }
-        // Using a DependencyProperty as the backing store for IsSwitchOn.  This enables animation, styling, binding, etc...
-        public static readonly DependencyProperty IsSwitchOnProperty =
-            DependencyProperty.Register("IsSwitchOn", typeof(bool),
-                typeof(Breadcrumb), new PropertyMetadata(false));
 
 ////        public SuggestBoxBase Control_SuggestBox { get; set; }
 
