@@ -265,7 +265,14 @@ namespace BreadcrumbTestLib.ViewModels.Breadcrumbs
         }
 
         /// <summary>
-        /// Selected node.
+        /// Gets/sets the selected second level root item VIEWMODEL
+        /// (eg. This PC, Library Desktop, or Desktop Folder).
+        /// below the root desktop item.
+        /// 
+        /// This property usually changes:
+        /// 1) When the user opens the drop down and selects 1 item in the dropdownlist of the RootDropDown button or
+        /// 2) When the control navigates to a unrelated second level root address
+        ///    (eg.: From 'This PC','C:\' to 'Libraries','Music')
         /// </summary>
         public BreadcrumbTreeItemViewModel SelectedRootViewModel
         {
@@ -282,7 +289,8 @@ namespace BreadcrumbTestLib.ViewModels.Breadcrumbs
         }
 
         /// <summary>
-        /// Gets/sets the selected second level root item (eg. This PC, Library Desktop, or Desktop Folder).
+        /// Gets/sets the selected second level root item MODEL
+        /// (eg. This PC, Library Desktop, or Desktop Folder)
         /// below the root desktop item.
         /// 
         /// This property usually changes:
