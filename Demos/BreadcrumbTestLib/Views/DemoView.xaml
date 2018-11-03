@@ -80,6 +80,7 @@
                                   VerticalAlignment="Top" HorizontalAlignment="Stretch"
                                   
                                   RootDropDownItemsSource="{Binding OverflowedAndRootItems}"
+                                  RootDropDownSelectedValue="{Binding SelectedRootValue,Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                                   RootDropDownSelectedValuePath="Selection.Value"
                                   RootDropDownSelectionChangedCommand="{Binding RootDropDownSelectionChangedCommand}"
                                   
@@ -195,7 +196,7 @@
                     </ctrls:Breadcrumb.RootDropDownListItemContainerStyle>
 
                     <ctrls:Breadcrumb.SwitchHeader>
-                        <Image DataContext="{Binding SelectedViewModel}">
+                        <Image DataContext="{Binding SelectedRootViewModel}">
                             <Image.Source>
                                 <MultiBinding Converter="{x:Static convLib:AssociatedIconConverter.Default}">
                                     <MultiBinding.ConverterParameter>
@@ -386,7 +387,7 @@
                     <StackPanel Grid.Column="1"
                                 HorizontalAlignment="Stretch" VerticalAlignment="Top"
                                 Orientation="Vertical">
-                        <Image DataContext="{Binding Path=BreadcrumbController.BreadcrumbBrowser.SelectedViewModel}"
+                        <Image DataContext="{Binding Path=BreadcrumbController.BreadcrumbBrowser.SelectedRootViewModel}"
                                VerticalAlignment="Center" HorizontalAlignment="Center" Width="64"
                                SnapsToDevicePixels="True"
                                RenderOptions.BitmapScalingMode="NearestNeighbor">
@@ -403,7 +404,7 @@
                         </Image>
 
                         <TextBlock DataContext="{Binding BreadcrumbController}"
-                                   Text="{Binding Path=BreadcrumbBrowser.SelectedViewModel.Header}" />
+                                   Text="{Binding Path=BreadcrumbBrowser.SelectedRootViewModel.Header}" />
                     </StackPanel>
                 </Grid>
                 <Grid Margin="3,9">

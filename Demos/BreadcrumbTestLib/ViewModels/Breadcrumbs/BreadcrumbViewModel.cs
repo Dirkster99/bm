@@ -39,8 +39,8 @@ namespace BreadcrumbTestLib.ViewModels.Breadcrumbs
         private bool _IsBrowsing;
         private string _BreadcrumbSelectedPath;
 
-        private BreadcrumbTreeItemViewModel _SelectedViewModel;
-        private IDirectoryBrowser _selectedValue;
+        private BreadcrumbTreeItemViewModel _SelectedRootViewModel;
+        private IDirectoryBrowser _SelectedRootValue;
 
         private ICommand _RootDropDownSelectionChangedCommand;
 
@@ -274,17 +274,17 @@ namespace BreadcrumbTestLib.ViewModels.Breadcrumbs
         /// <summary>
         /// Selected node.
         /// </summary>
-        public BreadcrumbTreeItemViewModel SelectedViewModel
+        public BreadcrumbTreeItemViewModel SelectedRootViewModel
         {
             get
             {
-                return _SelectedViewModel;
+                return _SelectedRootViewModel;
             }
 
             protected set
             {
-                _SelectedViewModel = value;
-                NotifyPropertyChanged(() => SelectedViewModel);
+                _SelectedRootViewModel = value;
+                NotifyPropertyChanged(() => SelectedRootViewModel);
             }
         }
 
@@ -300,34 +300,34 @@ namespace BreadcrumbTestLib.ViewModels.Breadcrumbs
         /// Source:
         /// DropDownList Binding with SelectedValue="{Binding Selection.SelectedValue}"
         /// </summary>
-        public IDirectoryBrowser SelectedValue
+        public IDirectoryBrowser SelectedRootValue
         {
             get
             {
-                return _selectedValue;
+                return _SelectedRootValue;
             }
 
             set
             {
                 bool bHasChanged = true;
 
-                if (_selectedValue == null && value == null)
+                if (_SelectedRootValue == null && value == null)
                     bHasChanged = false;
                 else
                 {
-                    if ((_selectedValue != null && value == null) ||
-                        (_selectedValue == null && value != null))
+                    if ((_SelectedRootValue != null && value == null) ||
+                        (_SelectedRootValue == null && value != null))
                         bHasChanged = true;
                     else
                     {
-                        bHasChanged = !_selectedValue.Equals(value);
+                        bHasChanged = !_SelectedRootValue.Equals(value);
                     }
                 }
 
                 if (bHasChanged == true)
                 {
-                    _selectedValue = value;
-                    NotifyPropertyChanged(() => this.SelectedValue);
+                    _SelectedRootValue = value;
+                    NotifyPropertyChanged(() => this.SelectedRootValue);
                 }
             }
         }
@@ -766,9 +766,9 @@ namespace BreadcrumbTestLib.ViewModels.Breadcrumbs
 
             // select second level root item in RootDropDownList (if available)
             if (pathList.Length >= 2)
-                SelectedValue = pathList[1].Selection.Value;
+                SelectedRootValue = pathList[1].Selection.Value;
             else
-                SelectedValue = null;
+                SelectedRootValue = null;
         }
 
         /// <summary>
@@ -830,13 +830,13 @@ namespace BreadcrumbTestLib.ViewModels.Breadcrumbs
             {
                 if (pathItem != null)
                 {
-                    SelectedViewModel = pathItem.ViewModel;
-                    SelectedValue = pathItem.Value;
+                    SelectedRootViewModel = pathItem.ViewModel;
+                    SelectedRootValue = pathItem.Value;
                 }
                 else
                 {
-                    SelectedViewModel = null;
-                    SelectedValue = null;
+                    SelectedRootViewModel = null;
+                    SelectedRootValue = null;
                 }
             }
             catch (Exception exp)
@@ -857,9 +857,9 @@ namespace BreadcrumbTestLib.ViewModels.Breadcrumbs
         private void UpdateBreadcrumbSelectedPath()
         {
             string output = string.Empty;
-            if (SelectedViewModel != null)
+            if (SelectedRootViewModel != null)
             {
-                var pathItems = SelectedViewModel.GetPathItems();
+                var pathItems = SelectedRootViewModel.GetPathItems();
 
                 foreach (var item in pathItems)
                 {

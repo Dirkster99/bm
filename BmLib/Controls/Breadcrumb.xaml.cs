@@ -104,6 +104,16 @@
             DependencyProperty.Register("RootDropDownItemsSource",
                 typeof(IEnumerable<object>), typeof(Breadcrumb), new PropertyMetadata(null));
 
+        /// <summary>
+        /// Backing store of the <see cref="RootDropDownSelectedValue"/> dependency property.
+        /// </summary>
+        public static readonly DependencyProperty RootDropDownSelectedValueProperty =
+            DependencyProperty.Register("RootDropDownSelectedValue",
+                typeof(object), typeof(Breadcrumb), new PropertyMetadata(null));
+
+        /// <summary>
+        /// Backing store of the <see cref="RootDropDownSelectedValuePath"/> dependency property.
+        /// </summary>
         public static readonly DependencyProperty RootDropDownSelectedValuePathProperty =
             DependencyProperty.Register("RootDropDownSelectedValuePath",
                 typeof(string), typeof(Breadcrumb), new PropertyMetadata(null));
@@ -260,7 +270,7 @@
 
         #region RootDropDown
         /// <summary>
-        /// Getter/Setter for dependency property that binds the root items drop down list
+        /// Getter/Setter for dependency property that binds the RootItemsDropDownList
         /// of the Breadcrumb control. This list should also include overflown items
         /// (overflown items are items that cannot be displayed in the path portion of the
         /// control since UI space is too limited).
@@ -271,6 +281,20 @@
             set { SetValue(RootDropDownItemsSourceProperty, value); }
         }
 
+        /// <summary>
+        /// Getter/Setter for dependency property that binds the Selected Value of the
+        /// RootItemsDropDownList of the Breadcrumb control.
+        /// </summary>
+        public object RootDropDownSelectedValue
+        {
+            get { return (object)GetValue(RootDropDownSelectedValueProperty); }
+            set { SetValue(RootDropDownSelectedValueProperty, value); }
+        }
+
+        /// <summary>
+        /// Getter/Setter to determine the Selected Value Path for the Selected Value of
+        /// the RootItemsDropDownList of the Breadcrumb control.
+        /// </summary>
         public string RootDropDownSelectedValuePath
         {
             get { return (string)GetValue(RootDropDownSelectedValuePathProperty); }

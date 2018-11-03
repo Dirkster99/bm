@@ -102,7 +102,7 @@
                                                                 VerticalAlignment="Stretch" 
                                                                 ItemsSource="{TemplateBinding RootDropDownItemsSource}"
                                                                 SelectedValuePath="{TemplateBinding RootDropDownSelectedValuePath}"
-                                                                SelectedValue="{Binding SelectedValue,Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"                             
+                                                                SelectedValue="{Binding RootDropDownSelectedValue,Mode=TwoWay, UpdateSourceTrigger=PropertyChanged,RelativeSource={RelativeSource AncestorType={x:Type ctrls:Breadcrumb}}}"
                                                                 ItemTemplate="{TemplateBinding DropDownListItemDataTemplate}"
                                                                 ItemContainerStyle="{TemplateBinding RootDropDownListItemContainerStyle}"
                                                                 Header="{TemplateBinding RootDropDownListHeader}"
@@ -115,9 +115,9 @@
 
                                             <!-- The BreadcrumbTree control displays the complete path and each drop down list -->
                                             <uc:BreadcrumbTree Grid.Column="1"
-                                                               DropDownListItemDataTemplate="{TemplateBinding DropDownListItemDataTemplate}"
                                                                x:Name="PART_BreadcrumbTree"
                                                                Margin="0"
+                                                               DropDownListItemDataTemplate="{TemplateBinding DropDownListItemDataTemplate}"
                                                                ItemsSource="{TemplateBinding TreeItemsSource}"
                                                                ItemTemplate="{TemplateBinding TreeItemTemplate}"
                                                                ItemContainerStyle="{TemplateBinding TreeItemContainerStyle}"
