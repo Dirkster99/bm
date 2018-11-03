@@ -369,7 +369,17 @@
             set { SetValue(TaskQueueProcessingProperty, value); }
         }
 
-        ////        public SuggestBoxBase Control_SuggestBox { get; set; }
+        public bool IsSwitchOn
+        {
+            get { return (bool)GetValue(IsSwitchOnProperty); }
+            set { SetValue(IsSwitchOnProperty, value); }
+        }
+        // Using a DependencyProperty as the backing store for IsSwitchOn.  This enables animation, styling, binding, etc...
+        public static readonly DependencyProperty IsSwitchOnProperty =
+            DependencyProperty.Register("IsSwitchOn", typeof(bool),
+                typeof(Breadcrumb), new PropertyMetadata(false));
+
+////        public SuggestBoxBase Control_SuggestBox { get; set; }
 
         public Switch Control_Switch { get; set; }
 

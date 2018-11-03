@@ -80,7 +80,7 @@
 
                                 <bc:Switch x:Name="PART_Switch"
                                            Template="{StaticResource BreadcrumbSwitchTemplate}"                   
-                                           IsSwitchOn="{Binding EnableBreadcrumb, Mode=TwoWay}"
+                                           IsSwitchOn="{Binding IsSwitchOn,RelativeSource={RelativeSource AncestorType={x:Type bc:Breadcrumb}},Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
                                            VerticalAlignment="Center" VerticalContentAlignment="Center"
                                            HorizontalAlignment="Stretch" HorizontalContentAlignment="Stretch"
                                            Header="{TemplateBinding SwitchHeader}"

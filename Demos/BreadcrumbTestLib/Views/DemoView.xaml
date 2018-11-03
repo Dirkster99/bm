@@ -81,6 +81,7 @@
                 <ctrls:Breadcrumb Name="BreadcrumbDemoControl"
                                   DataContext="{Binding BreadcrumbController.BreadcrumbBrowser}"
                                   Visibility="{Binding Path=IsChecked,ElementName=ShowBreadCrumbControl,Mode=OneWay, UpdateSourceTrigger=PropertyChanged,Converter={StaticResource BoolToVisibilityConverter}}"
+                                  IsSwitchOn="{Binding EnableBreadcrumb, Mode=TwoWay}"
                                   VerticalAlignment="Top" HorizontalAlignment="Stretch"
                                   
                                   RootDropDownItemsSource="{Binding OverflowedAndRootItems}"
