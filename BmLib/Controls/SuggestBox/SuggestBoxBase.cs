@@ -200,10 +200,22 @@
 
             this.LostKeyboardFocus += (o, e) =>
             {
-                if (!IsKeyboardFocusWithin)
-                    this.hidePopup();
+                logger.DebugFormat("LostKeyboardFocus Old Focus {0} New Focus {1}",
+                    (e.OldFocus==null ? "" : e.OldFocus.ToString()),
+                    (e.NewFocus == null ? "" : e.NewFocus.ToString()));
 
-                IsHintVisible = String.IsNullOrEmpty(Text);
+                if (e.NewFocus == null)
+                    this.hidePopup();
+                else
+                {
+                    if (IsKeyboardFocusWithin == false)
+                    {
+                        logger.DebugFormat("IsKeyboardFocusWithin {0} -> hidePopup()", IsKeyboardFocusWithin);
+                        this.hidePopup();
+                    }
+                }
+
+                IsHintVisible = string.IsNullOrEmpty(Text);
                 this._suggestionIsConsumed = false;
             };
 
@@ -251,6 +263,7 @@
         private void AttachHandlers(ListBox itemList)
         {
             logger.DebugFormat("{0}", (string.IsNullOrEmpty(Text) ? "" : Text));
+
             itemList.MouseDoubleClick += (o, e) => { updateValueFromListBox(); };
 
             itemList.PreviewMouseUp += (o, e) =>
@@ -520,16 +533,21 @@
             logger.DebugFormat("Old Value: {0}, New Value: {1}, Text {2}",
                 e.NewValue, e.OldValue, this.Text);
 
-            // Set cursor at end of string when pop is closed
-            if (((bool)e.NewValue) == false && ((bool)e.OldValue) == true)
+            // Do not react if focuse is travelled off from here
+            // since that cancels the drop down selection workflow
+            if (IsKeyboardFocusWithin == true)
             {
-                if (string.IsNullOrEmpty(this.Text) == false)
-                    this.SelectionStart = this.Text.Length;
-                else
-                    this.SelectionStart = 0;
+                // Set cursor at end of string when pop is closed
+                if (((bool)e.NewValue) == false && ((bool)e.OldValue) == true)
+                {
+                    if (string.IsNullOrEmpty(this.Text) == false)
+                        this.SelectionStart = this.Text.Length;
+                    else
+                        this.SelectionStart = 0;
 
-                this._suggestionIsConsumed = true;
-                this.Focus();
+                    this._suggestionIsConsumed = true;
+                    this.Focus();
+                }
             }
         }
         #endregion

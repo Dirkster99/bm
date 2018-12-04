@@ -100,7 +100,7 @@
             </Grid>
         </Grid>
 
-        <TextBox Grid.Row="1"/>
+        <TextBox Grid.Row="1" Margin="3"/>
 
         <Grid Grid.Row="2"
             Visibility="{Binding Processing,Converter={StaticResource BoolToVisibilityCollapsedConverter}}">
