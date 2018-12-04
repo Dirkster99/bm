@@ -14,6 +14,8 @@
     /// </summary>
     public class SuggestBox : SuggestBoxBase
     {
+        protected static readonly new log4net.ILog logger = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
+
         #region fields
         public static readonly DependencyProperty RootItemProperty = DependencyProperty.Register("RootItem",
             typeof(object), typeof(SuggestBox), new PropertyMetadata(null));
@@ -76,26 +78,35 @@
         /// </summary>
         protected override void updateSource()
         {
-            var txtBindingExpr = this.GetBindingExpression(TextBox.TextProperty);
-            if (txtBindingExpr == null)
-                return;
+            logger.DebugFormat("{0}", (string.IsNullOrEmpty(Text) ? "" : Text));
 
-            bool valid = true;
-            if (HierarchyHelper != null)
-                valid = HierarchyHelper.GetItem(RootItem, Text) != null;
-
-            if (valid)
+            try
             {
-                if (txtBindingExpr != null)
-                    txtBindingExpr.UpdateSource();
+                var txtBindingExpr = this.GetBindingExpression(TextBox.TextProperty);
+                if (txtBindingExpr == null)
+                    return;
 
-                RaiseEvent(new RoutedEventArgs(ValueChangedEvent));
+                bool valid = true;
+                if (HierarchyHelper != null)
+                    valid = HierarchyHelper.GetItem(RootItem, Text) != null;
+
+                if (valid)
+                {
+                    if (txtBindingExpr != null)
+                        txtBindingExpr.UpdateSource();
+
+                    RaiseEvent(new RoutedEventArgs(ValueChangedEvent));
+                }
+                else
+                    Validation.MarkInvalid(txtBindingExpr,
+                                           new ValidationError(new PathExistsValidationRule(),
+                                                               txtBindingExpr,
+                                                               "Path does not exists.", null));
             }
-            else
-                Validation.MarkInvalid(txtBindingExpr,
-                                       new ValidationError(new PathExistsValidationRule(),
-                                                           txtBindingExpr,
-                                                           "Path does not exists.", null));
+            catch (Exception exp)
+            {
+                logger.Error(exp);
+            }
         }
 
         /// <summary>
@@ -104,30 +115,44 @@
         /// <param name="e"></param>
         protected override void OnTextChanged(TextChangedEventArgs e)
         {
+            logger.DebugFormat("{0}", (string.IsNullOrEmpty(Text) ? "" : Text));
+
             base.OnTextChanged(e);
 
-            var suggestSources = SuggestSources;
-            var hierarchyHelper = HierarchyHelper;
-            string text = Text;
-            object data = RootItem;
-            IsHintVisible = String.IsNullOrEmpty(text);
+            try
+            {
+                var suggestSources = SuggestSources;
+                var hierarchyHelper = HierarchyHelper;
+                string text = Text;
+                object data = RootItem;
+                IsHintVisible = String.IsNullOrEmpty(text);
 
-            if (IsEnabled && suggestSources != null)
-                Task.Run(async () =>
+                if (IsEnabled == true)
+                    this._suggestionIsConsumed = false;
+
+                if (IsEnabled && suggestSources != null)
                 {
-                    var tasks = from s in suggestSources
-                                select s.SuggestAsync(data, text, hierarchyHelper);
-                                       await Task.WhenAll(tasks);
-
-                    return tasks.SelectMany(tsk => tsk.Result).Distinct().ToList();
-                }
-                ).ContinueWith(
-                    (pTask) =>
+                    Task.Run(async () =>
                     {
-                        if (!pTask.IsFaulted)
-                            this.SetValue(SuggestionsProperty, pTask.Result);
+                        var tasks = from s in suggestSources
+                                    select s.SuggestAsync(data, text, hierarchyHelper);
+                        await Task.WhenAll(tasks);
 
-                    }, TaskScheduler.FromCurrentSynchronizationContext());
+                        return tasks.SelectMany(tsk => tsk.Result).Distinct().ToList();
+                    }
+                        ).ContinueWith(
+                            (pTask) =>
+                            {
+                                if (!pTask.IsFaulted)
+                                    this.SetValue(SuggestionsProperty, pTask.Result);
+
+                            }, TaskScheduler.FromCurrentSynchronizationContext());
+                }
+            }
+            catch (Exception exp)
+            {
+                logger.Error(exp);
+            }
         }
         #endregion
     }

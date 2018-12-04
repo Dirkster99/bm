@@ -8,6 +8,8 @@
 
     public class PathExistsValidationRule : ValidationRule
     {
+        protected static readonly log4net.ILog logger = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
+
         #region Constructor
 
         public PathExistsValidationRule(IHierarchyHelper hierarchyHelper, object root)

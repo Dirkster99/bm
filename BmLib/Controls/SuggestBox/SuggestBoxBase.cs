@@ -17,6 +17,8 @@
     [TemplatePart(Name = PART_ResizeableGrid, Type = typeof(Grid))]
     public class SuggestBoxBase : TextBox
     {
+        protected static readonly log4net.ILog logger = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
+
         public const string PART_Root = "PART_Root";
         public const string PART_Popup = "PART_Popup";
         public const string PART_ItemList = "PART_ItemList";
@@ -34,6 +36,10 @@
         protected Thumb _PART_ResizeGripThumb;
         protected Grid _PART_ResizeableGrid;
 
+        // Controls whether the PopUp should open when the control has focus and suggestion
+        // or not (not should be implemented if the pop-up just closed and the textbox is
+        // focused to let the user continue to type into the text portion).
+        protected bool _suggestionIsConsumed = false;
         private bool _prevState;
 
         public static readonly DependencyProperty DisplayMemberPathProperty = DependencyProperty.Register(
@@ -50,7 +56,7 @@
 
         public static readonly DependencyProperty IsPopupOpenedProperty =
             DependencyProperty.Register("IsPopupOpened", typeof(bool),
-            typeof(SuggestBoxBase), new UIPropertyMetadata(false));
+            typeof(SuggestBoxBase), new UIPropertyMetadata(false, OnIsPopUpOpenChanged));
 
         public static readonly DependencyProperty HintProperty =
             DependencyProperty.Register("Hint", typeof(string), typeof(SuggestBoxBase), new PropertyMetadata(""));
@@ -78,7 +84,6 @@
         public SuggestBoxBase()
         {
         }
-
         #endregion
 
         #region Events
@@ -165,6 +170,8 @@
         /// </summary>
         public override void OnApplyTemplate()
         {
+            logger.DebugFormat("{0}", (string.IsNullOrEmpty(Text) ? "" : Text));
+
             base.OnApplyTemplate();
             _PART_Popup = this.Template.FindName(PART_Popup, this) as Popup;
             _PART_ItemList = this.Template.FindName(PART_ItemList, this) as ListBox;
@@ -197,6 +204,7 @@
                     this.hidePopup();
 
                 IsHintVisible = String.IsNullOrEmpty(Text);
+                this._suggestionIsConsumed = false;
             };
 
             if (_PART_Popup != null && _PART_Root != null)
@@ -222,6 +230,8 @@
         /// </summary>
         private void SaveRestorePopUpStateOnWindowDeActivation()
         {
+            logger.DebugFormat("{0}", (string.IsNullOrEmpty(Text) ? "" : Text));
+
             Window parentWindow = UITools.FindLogicalAncestor<Window>(this);
             if (parentWindow != null)
             {
@@ -240,6 +250,7 @@
         /// <param name="itemList"></param>
         private void AttachHandlers(ListBox itemList)
         {
+            logger.DebugFormat("{0}", (string.IsNullOrEmpty(Text) ? "" : Text));
             itemList.MouseDoubleClick += (o, e) => { updateValueFromListBox(); };
 
             itemList.PreviewMouseUp += (o, e) =>
@@ -295,6 +306,7 @@
         /// in a derived class) if true, method is not invoked otherwise.</param>
         private void updateValueFromListBox(bool updateSrc = true)
         {
+            logger.DebugFormat("{0}", (string.IsNullOrEmpty(Text) ? "" : Text));
             this.SetValue(TextBox.TextProperty, _PART_ItemList.SelectedValue);
 
             if (updateSrc == true)
@@ -310,6 +322,7 @@
         /// </summary>
         protected virtual void updateSource()
         {
+            logger.DebugFormat("{0}", (string.IsNullOrEmpty(Text) ? "" : Text));
             var txtBindingExpr = this.GetBindingExpression(TextBox.TextProperty);
             if (txtBindingExpr == null)
                 return;
@@ -324,15 +337,20 @@
 
         #region Utils - Popup show / hide
         /// <summary>
-        /// Opens the popup coontrol if SuggestBox has currently focus
+        /// Opens the popup control if SuggestBox has currently focus
         /// and there are suggestions available.
         /// </summary>
         protected void PopupIfSuggest()
         {
+            logger.DebugFormat("{0}", (string.IsNullOrEmpty(Text) ? "" : Text));
+
             if (this.IsFocused)
             {
                 if (Suggestions != null && Suggestions.Count > 0)
-                    IsPopupOpened = true;
+                {
+                    if (this._suggestionIsConsumed == false)
+                        IsPopupOpened = true;
+                }
                 else
                     IsPopupOpened = false;
             }
@@ -343,6 +361,7 @@
         /// </summary>
         protected void hidePopup()
         {
+            logger.DebugFormat("{0}", (string.IsNullOrEmpty(Text) ? "" : Text));
             IsPopupOpened = false;
         }
         #endregion
@@ -354,6 +373,7 @@
         /// <param name="e"></param>
         protected override void OnPreviewKeyDown(KeyEventArgs e)
         {
+            logger.DebugFormat("{0}", (string.IsNullOrEmpty(Text) ? "" : Text));
             base.OnPreviewKeyDown(e);
 
             switch (e.Key)
@@ -378,7 +398,7 @@
                     }
                     break;
 
-                case Key.Return:
+                case Key.Return:                              // close pop-up on enter
                     if (_PART_ItemList.IsKeyboardFocusWithin)
                         updateValueFromListBox();
 
@@ -414,6 +434,7 @@
         /// <returns></returns>
         protected static string getDirectoryName(string path)
         {
+            logger.DebugFormat("{0}", (string.IsNullOrEmpty(path) ? "" : path));
             if (path.EndsWith("\\"))
                 return path;
             //path = path.Substring(0, path.Length - 1); //Remove ending slash.
@@ -437,9 +458,27 @@
             SuggestBoxBase sbox = sender as SuggestBoxBase;
 
             if (args.OldValue != args.NewValue)
+            {
+                logger.DebugFormat("_", (string.IsNullOrEmpty(sbox.Text) ? "" : sbox.Text));
                 sbox.PopupIfSuggest();
+            }
         }
         #endregion
+
+        /// <summary>
+        /// Method is attached on the changed handler of the IsPopUp dependency property.
+        /// The IsPopUp dependency property in turn is bound to the popup and changes between
+        /// true and false when the popup opens or closes.
+        /// </summary>
+        /// <param name="d"></param>
+        /// <param name="e"></param>
+        private static void OnIsPopUpOpenChanged(DependencyObject d,
+                                                 DependencyPropertyChangedEventArgs e)
+        {
+            var ctrl = d as SuggestBoxBase;
+            if (ctrl != null)
+                ctrl.OnIsPopUpOpenChanged(e);
+        }
 
         /// <summary>
         /// https://stackoverflow.com/questions/1695101/why-are-actualwidth-and-actualheight-0-0-in-this-case
@@ -451,6 +490,7 @@
         /// <param name="e"></param>
         private void MyThumb_DragDelta(object sender, DragDeltaEventArgs e)
         {
+            logger.Debug("_");
             Thumb MyThumb = sender as Thumb;
 
             // Set the new Width and Height fo Grid, Popup they will inherit
@@ -463,6 +503,34 @@
 
             if (yAdjust >= 0)
                 _PART_ResizeableGrid.Height = yAdjust;
+        }
+
+        /// <summary>
+        /// Method executes when the Pop-up list is opened or closed.
+        /// 
+        /// The method re-focuses the textbox when the popup closes
+        /// and sets the cursor at the end of the textbox string.
+        /// </summary>
+        /// <param name="e"></param>
+        private void OnIsPopUpOpenChanged(DependencyPropertyChangedEventArgs e)
+        {
+            if (e == null)
+                return;
+
+            logger.DebugFormat("Old Value: {0}, New Value: {1}, Text {2}",
+                e.NewValue, e.OldValue, this.Text);
+
+            // Set cursor at end of string when pop is closed
+            if (((bool)e.NewValue) == false && ((bool)e.OldValue) == true)
+            {
+                if (string.IsNullOrEmpty(this.Text) == false)
+                    this.SelectionStart = this.Text.Length;
+                else
+                    this.SelectionStart = 0;
+
+                this._suggestionIsConsumed = true;
+                this.Focus();
+            }
         }
         #endregion
     }

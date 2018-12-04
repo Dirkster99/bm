@@ -35,28 +35,12 @@
         <Border Name="Border" Background="{DynamicResource {x:Static SystemColors.WindowBrushKey}}" 
                 BorderBrush="{TemplateBinding BorderBrush}" 
                 BorderThickness="{TemplateBinding BorderThickness}" Padding="1" >
-            <!--<VisualStateManager.VisualStateGroups>
-                <VisualStateGroup x:Name="FocusStates">
-                    <VisualState x:Name="Focused" >
-                        <Storyboard>
-                            <BooleanAnimationUsingKeyFrames Storyboard.TargetName="PART_Popup" Storyboard.TargetProperty="IsOpen">
-                                <DiscreteBooleanKeyFrame  KeyTime="0"  Value="True" />
-                            </BooleanAnimationUsingKeyFrames>
-                        </Storyboard>
-                    </VisualState>
-                    <VisualState x:Name="Unfocused" >
-                        <Storyboard>
-                            <BooleanAnimationUsingKeyFrames Storyboard.TargetName="PART_Popup" Storyboard.TargetProperty="IsOpen">
-                                <DiscreteBooleanKeyFrame  KeyTime="0"  Value="False" />
-                            </BooleanAnimationUsingKeyFrames>
-                        </Storyboard>
-                    </VisualState>
-                </VisualStateGroup>
-            </VisualStateManager.VisualStateGroups>-->
+
             <Grid x:Name="PART_Root">
-                <TextBlock Text="{TemplateBinding Hint}" Foreground="{DynamicResource {x:Static SystemColors.GrayTextBrushKey}}"
+                <TextBlock Text="{TemplateBinding Hint}"
+                           Foreground="{DynamicResource {x:Static SystemColors.GrayTextBrushKey}}"
                            Visibility="{Binding IsHintVisible, RelativeSource={RelativeSource TemplatedParent}, 
-                            Converter={StaticResource btv}}"  Opacity="0.5"  />
+                            Converter={StaticResource btv}}"  Opacity="0.75"  />
                 <ScrollViewer Margin="0" x:Name="PART_ContentHost" />
                 <Popup x:Name="PART_Popup" AllowsTransparency="true"  
                        PlacementTarget="{Binding ElementName=PART_ContentHost}"                                   
@@ -101,7 +85,6 @@
                                VerticalAlignment="Bottom"
                                Width="12" Height="12" />
                     </Grid>
-
                 </Popup>
             </Grid>
         </Border>

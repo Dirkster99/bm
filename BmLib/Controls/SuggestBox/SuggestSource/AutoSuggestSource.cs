@@ -52,6 +52,5 @@
             return Task.FromResult<IList<object>>(retVal);
         }
         #endregion
-
     }
 }

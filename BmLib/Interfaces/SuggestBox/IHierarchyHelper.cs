@@ -34,7 +34,12 @@
 
         string ExtractName(string pathName);
 
+        /// <summary>
+        /// Gets a seperator character that is usually used to seperate one
+        /// entry of one level from its sub-level entry (eg.: '/' or '\')
+        /// </summary>
         char Separator { get; }
+
         StringComparison StringComparisonOption { get; }
 
         string ParentPath { get; }

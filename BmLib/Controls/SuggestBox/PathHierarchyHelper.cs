@@ -12,9 +12,12 @@
     /// </summary>
     public class PathHierarchyHelper : IHierarchyHelper
     {
-        #region Constructor
+        protected static readonly log4net.ILog logger = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
 
-        public PathHierarchyHelper(string parentPath, string valuePath, string subEntriesPath)
+        #region Constructor
+        public PathHierarchyHelper(string parentPath,
+                                   string valuePath,
+                                   string subEntriesPath)
         {
             ParentPath = parentPath;
             ValuePath = valuePath;
@@ -26,15 +29,16 @@
         #endregion
 
         #region Methods
-
         #region Utils Func - extractPath/Name
         public virtual string ExtractPath(string pathName)
         {
             if (String.IsNullOrEmpty(pathName))
                 return "";
+
             if (pathName.IndexOf(Separator) == -1)
                 return "";
-            else return pathName.Substring(0, pathName.LastIndexOf(Separator));
+            else
+                return pathName.Substring(0, pathName.LastIndexOf(Separator));
         }
 
         public virtual string ExtractName(string pathName)
@@ -43,7 +47,8 @@
                 return "";
             if (pathName.IndexOf(Separator) == -1)
                 return pathName;
-            else return pathName.Substring(pathName.LastIndexOf(Separator) + 1);
+            else
+                return pathName.Substring(pathName.LastIndexOf(Separator) + 1);
         }
         #endregion
 
@@ -58,15 +63,19 @@
         {
             return PropertyPathHelper.GetValueFromPropertyInfo(item, ValuePath) as string;
         }
+
         protected virtual IEnumerable getSubEntries(object item)
         {
             return PropertyPathHelper.GetValueFromPropertyInfo(item, SubentriesPath) as IEnumerable;
         }
-
         #endregion
 
         #region Implements
-
+        /// <summary>
+        /// Used to generate ItemsSource for BreadcrumbCore.
+        /// </summary>
+        /// <param name="item"></param>
+        /// <returns></returns>
         public IEnumerable<object> GetHierarchy(object item, bool includeCurrent)
         {
             if (includeCurrent)
@@ -80,6 +89,11 @@
             }
         }
 
+        /// <summary>
+        /// Generate Path from an item;
+        /// </summary>
+        /// <param name="item"></param>
+        /// <returns></returns>
         public string GetPath(object item)
         {
             return item == null ? "" : getValuePath(item);
@@ -97,6 +111,12 @@
             return retVal;
         }
 
+        /// <summary>
+        /// Get Item from path.
+        /// </summary>
+        /// <param name="rootItem">RootItem or ItemSource which can be used to lookup from.</param>
+        /// <param name="path"></param>
+        /// <returns></returns>
         public object GetItem(object rootItem, string path)
         {
             var queue = new Queue<string>(path.Split(new char[] { Separator }, StringSplitOptions.RemoveEmptyEntries));
@@ -120,17 +140,17 @@
             return current;
         }
 
-        #endregion
-
-        #endregion
-
-        #region Data        
-
-        #endregion
+        #endregion Implements
+        #endregion methods
 
         #region Public Properties
 
+        /// <summary>
+        /// Gets a seperator character that is usually used to seperate one
+        /// entry of one level from its sub-level entry (eg.: '/' or '\')
+        /// </summary>
         public char Separator { get; set; }
+
         public StringComparison StringComparisonOption { get; set; }
         public string ParentPath { get; set; }
         public string ValuePath { get; set; }
