@@ -348,7 +348,7 @@
             {
                 if (Suggestions != null && Suggestions.Count > 0)
                 {
-                    if (this._suggestionIsConsumed == false)
+                    if (this._suggestionIsConsumed == false && IsKeyboardFocusWithin)
                         IsPopupOpened = true;
                 }
                 else

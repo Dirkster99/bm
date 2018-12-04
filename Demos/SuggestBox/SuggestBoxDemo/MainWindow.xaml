@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:SuggestBoxDemo"
         xmlns:demo="clr-namespace:SuggestBoxTestLib.Views;assembly=SuggestBoxTestLib"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="600">
+        Title="MainWindow" Height="450" Width="800">
     <Grid>
         <demo:DemoView DataContext="{Binding}" />
     </Grid>

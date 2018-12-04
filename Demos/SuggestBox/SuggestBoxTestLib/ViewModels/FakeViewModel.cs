@@ -4,10 +4,14 @@
     using System.Collections.ObjectModel;
     using System.Threading;
 
+    /// <summary>
+    /// Implements a tree like viewmodel to demonstrate usage of the suggestion
+    /// boxes with "Sub" string entries.
+    /// </summary>
     public class FakeViewModel : Base.ViewModelBase
     {
         #region Fields
-        private ObservableCollection<FakeViewModel> _subDirectories;
+        private readonly ObservableCollection<FakeViewModel> _subDirectories;
         bool _loaded = false;
         #endregion Fields
 
@@ -36,42 +40,43 @@
             return root;
         }
 
-        public FakeViewModel(params FakeViewModel[] rootModels)
+        /// <summary>
+        /// Class constructor for root item (which has same value and header)
+        /// </summary>
+        public FakeViewModel()
         {
             Header = "Root";
             Value = "";
             Latency = TimeSpan.FromSeconds(0);
             _subDirectories = new ObservableCollection<FakeViewModel>();
-            foreach (var rm in rootModels)
-            {
-                rm.Parent = this;
-                _subDirectories.Add(rm);
-            }
-        }
-
-        public FakeViewModel(string header, params string[] subHeaders)
-        {
-            Header = header;
-            Value = header;
-            SubDirectories = new ObservableCollection<FakeViewModel>();
-            foreach (var sh in subHeaders)
-                _subDirectories.Add(new FakeViewModel(sh) { Value = header + "\\" + sh, Parent = this });
         }
         #endregion constructors
 
         #region properties
+        /// <summary>
+        /// Gets/sets the parent node of this node in the tree.
+        /// </summary>
         public FakeViewModel Parent { get; set; }
+
+        /// <summary>
+        /// Gets/sets the header (display string) of this node.
+        /// </summary>
         public string Header { get; set; }
+
+        /// <summary>
+        /// Gets/sets the actual path used for matching (eg: "Root\Sub1\Sub2").
+        /// </summary>
         public string Value { get; set; }
+
+        /// <summary>
+        /// Gets sets a latency that will defer looking up items at retrieval time
+        /// (this can also defer construction of a given tree).
+        /// </summary>
         public TimeSpan Latency { get; set; }
-        #endregion properties
 
-        #region methods
-        public override string ToString()
-        {
-            return Value;
-        }
-
+        /// <summary>
+        /// Gets all child nodes of this node.
+        /// </summary>
         public ObservableCollection<FakeViewModel> SubDirectories
         {
             get
@@ -83,8 +88,26 @@
                 }
                 return _subDirectories;
             }
+        }
+        #endregion properties
 
-            set { _subDirectories = value; }
+        #region methods
+        /// <summary>
+        /// Returns a string that represents the current object.
+        /// </summary>
+        /// <returns></returns>
+        public override string ToString()
+        {
+            return Value;
+        }
+
+        /// <summary>
+        /// Add another childitem into the collection.
+        /// </summary>
+        /// <param name="item"></param>
+        public void AddSubDirectoryItem(FakeViewModel item)
+        {
+            _subDirectories.Add(item);
         }
         #endregion methods
     }

@@ -5,53 +5,112 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:SuggestBoxTestLib.Views"
              xmlns:bc="clr-namespace:BmLib.Controls.SuggestBox;assembly=BmLib"
+             xmlns:conv="clr-namespace:BmLib.Converters;assembly=BmLib"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
     <Grid>
-        <Grid>
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="Auto" MinWidth="200"/>
-            </Grid.ColumnDefinitions>
+        <Grid.Resources>
+            <conv:BoolToVisibilityCollapsedConverter x:Key="BoolToVisibilityCollapsedConverter"/>
+            <conv:FlipBoolConverter x:Key="FlipBoolConverter"/>
+        </Grid.Resources>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
 
+        <Grid Grid.Row="0">
             <Grid.RowDefinitions>
-                <RowDefinition Height="Auto"/>
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="Auto"/>
             </Grid.RowDefinitions>
 
-            <TextBlock Text="Test Input" FontWeight="Bold" />
-            <TextBlock Text="Test Result" FontWeight="Bold" Grid.Column="1"/>
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
 
-            <bc:SuggestBox x:Name="suggestBoxDummy" Grid.Column="0" Grid.Row="1"
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+
+                <TextBlock Text="Test Result:" HorizontalAlignment="Right" Margin="3"
+                           FontWeight="Bold" Grid.Column="0" Grid.Row="0"/>
+                <TextBlock Text="{Binding Text,ElementName=suggestBoxDummy}"
+                       Grid.Column="1" Grid.Row="0" Margin="3,0"
+                       VerticalAlignment="Center"/>
+
+                <TextBlock Text="Test Input:" HorizontalAlignment="Right" Margin="3"
+                           FontWeight="Bold" Grid.Column="0" Grid.Row="1" />
+                <bc:SuggestBox x:Name="suggestBoxDummy" Grid.Column="1" Grid.Row="1"
                         Hint="Custom implement (+xyz/abc)"
                         SuggestSources="{Binding SuggestBoxDummy_SuggestSources}"
                         MinHeight="21"
-                        MinWidth="100"
+                        MinWidth="100" Margin="3"
                         />
-            <TextBlock Text="{Binding Text,ElementName=suggestBoxDummy}"
-                       Grid.Column="1" Grid.Row="1" Margin="3,0"/>
 
-            <bc:SuggestBox x:Name="suggestBoxAuto" Grid.Column="0" Grid.Row="2"
+                <Separator Grid.Row="2" Grid.ColumnSpan="2" Margin="3"/>
+
+                <TextBlock Text="Test Result:" HorizontalAlignment="Right" Margin="3"
+                           FontWeight="Bold" Grid.Column="0" Grid.Row="3"/>
+                <TextBlock x:Name="txtAuto" Grid.Column="1" Grid.Row="3" Margin="3,0"
+                       VerticalAlignment="Center"/>
+
+                <TextBlock Text="Test Input:" HorizontalAlignment="Right" Margin="3"
+                           FontWeight="Bold" Grid.Column="0" Grid.Row="4" />
+                <bc:SuggestBox x:Name="suggestBoxAuto" Grid.Column="1" Grid.Row="4"
                         DisplayMemberPath="Value"
                         Hint="Uses ViewModel, try Sub1\Sub12"                                   
                         Text="{Binding Text, ElementName=txtAuto, UpdateSourceTrigger=Explicit}"
                         RootItem="{Binding SuggestBoxAuto_RootItems}"
                         HierarchyHelper="{Binding SuggestBoxAuto_HierarchyHelper}"
                         MinHeight="21"
-                        MinWidth="100"
+                        MinWidth="100" Margin="3"
+                        IsEnabled="{Binding Processing,Converter={StaticResource FlipBoolConverter}}"
                         />
-            <TextBlock x:Name="txtAuto" Grid.Column="1" Grid.Row="2" Margin="3,0" />
 
-            <bc:SuggestBox x:Name="suggestBoxAuto2" Grid.Column="0" Grid.Row="3"
+                <Separator Grid.Row="5" Grid.ColumnSpan="2" Margin="3"/>
+
+                <TextBlock Text="Test Result:" HorizontalAlignment="Right" Margin="3"
+                           FontWeight="Bold" Grid.Column="0" Grid.Row="6"/>
+                <TextBlock x:Name="txtAuto2" Grid.Column="1" Grid.Row="6" Margin="3,0"
+                           VerticalAlignment="Center"/>
+
+                <TextBlock Text="Test Input:" HorizontalAlignment="Right" Margin="3"
+                           FontWeight="Bold" Grid.Column="0" Grid.Row="7" />
+                <bc:SuggestBox x:Name="suggestBoxAuto2" Grid.Column="1" Grid.Row="7"
                            DisplayMemberPath="Value"
                            Hint="With delay 1 sec"                                   
                            RootItem="{Binding SuggestBoxAuto2_RootItems}"
                            HierarchyHelper="{Binding SuggestBoxAuto2_HierarchyHelper}"
                            SuggestSources="{Binding SuggestBoxAuto2_SuggestSources}"
-                           Text="{Binding Text, ElementName=txtAuto2, UpdateSourceTrigger=Explicit}" />
-            <TextBlock x:Name="txtAuto2" Grid.Column="1" Grid.Row="3" Margin="3,0"  />
-        </Grid>            
+                           Text="{Binding Text, ElementName=txtAuto2, UpdateSourceTrigger=Explicit}"
+                           Margin="3"    
+                        />
+            </Grid>
+        </Grid>
+
+        <TextBox Grid.Row="1"/>
+
+        <Grid Grid.Row="2"
+            Visibility="{Binding Processing,Converter={StaticResource BoolToVisibilityCollapsedConverter}}">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+
+            <TextBlock Text="We are working on it..." Margin="3" />
+            <ProgressBar IsIndeterminate="True" Grid.Row="1" MinHeight="10" Margin="3"/>
+        </Grid>
     </Grid>
 </UserControl>
