@@ -1,9 +1,7 @@
 ﻿namespace BmLib.Controls.SuggestBox
 {
     using BmLib.Utils;
-    using System;
     using System.Collections.Generic;
-    using System.Linq;
     using System.Windows;
     using System.Windows.Controls;
     using System.Windows.Controls.Primitives;
@@ -30,8 +28,8 @@
         protected Popup _PART_Popup;
         protected ListBox _PART_ItemList;
         protected Grid _PART_Root;
-        protected ScrollViewer _PART_ContentHost;
-        protected UIElement _TextBoxView;
+        ////protected ScrollViewer _PART_ContentHost;
+        ////protected UIElement _TextBoxView;
 
         protected Thumb _PART_ResizeGripThumb;
         protected Grid _PART_ResizeableGrid;
@@ -40,16 +38,20 @@
         // or not (not should be implemented if the pop-up just closed and the textbox is
         // focused to let the user continue to type into the text portion).
         protected bool _suggestionIsConsumed = false;
+        protected bool _PopUpIsCancelled = false;
         private bool _prevState;
 
         public static readonly DependencyProperty DisplayMemberPathProperty = DependencyProperty.Register(
-                    "DisplayMemberPath", typeof(string), typeof(SuggestBoxBase), new PropertyMetadata("Header"));
+                    "DisplayMemberPath", typeof(string), typeof(SuggestBoxBase),
+                    new PropertyMetadata("Header"));
 
         public static readonly DependencyProperty ValuePathProperty = DependencyProperty.Register(
-                    "ValuePath", typeof(string), typeof(SuggestBoxBase), new PropertyMetadata("Value"));
+                    "ValuePath", typeof(string), typeof(SuggestBoxBase),
+                    new PropertyMetadata("Value"));
 
         public static readonly DependencyProperty SuggestionsProperty = DependencyProperty.Register(
-            "Suggestions", typeof(IList<object>), typeof(SuggestBoxBase), new PropertyMetadata(null, OnSuggestionsChanged));
+            "Suggestions", typeof(IList<object>), typeof(SuggestBoxBase),
+            new PropertyMetadata(null, OnSuggestionsChanged));
 
         public static readonly DependencyProperty HeaderTemplateProperty =
             HeaderedItemsControl.HeaderTemplateProperty.AddOwner(typeof(SuggestBoxBase));
@@ -79,7 +81,7 @@
         }
 
         /// <summary>
-        /// standard class constructor
+        /// Standard class constructor
         /// </summary>
         public SuggestBoxBase()
         {
@@ -175,7 +177,7 @@
             base.OnApplyTemplate();
             _PART_Popup = this.Template.FindName(PART_Popup, this) as Popup;
             _PART_ItemList = this.Template.FindName(PART_ItemList, this) as ListBox;
-            _PART_ContentHost = this.Template.FindName(PART_ContentHost, this) as ScrollViewer;
+            ////_PART_ContentHost = this.Template.FindName(PART_ContentHost, this) as ScrollViewer;
 
             // Find Grid for resizing with Thumb
             _PART_ResizeableGrid = Template.FindName(PART_ResizeableGrid, this) as Grid;
@@ -187,13 +189,14 @@
             if (_PART_ResizeGripThumb != null && _PART_ResizeableGrid != null)
                 _PART_ResizeGripThumb.DragDelta += new DragDeltaEventHandler(MyThumb_DragDelta);
 
-            if (_PART_ContentHost != null)
-                _TextBoxView = LogicalTreeHelper.GetChildren(_PART_ContentHost).OfType<UIElement>().First();
+            ////if (_PART_ContentHost != null)
+            ////    _TextBoxView = LogicalTreeHelper.GetChildren(_PART_ContentHost).OfType<UIElement>().First();
 
             _PART_Root = this.Template.FindName(PART_Root, this) as Grid;
 
             this.GotKeyboardFocus += (o, e) =>
             {
+                _PopUpIsCancelled = false;
                 this.PopupIfSuggest();
                 IsHintVisible = false;
             };
@@ -201,16 +204,19 @@
             this.LostKeyboardFocus += (o, e) =>
             {
                 logger.DebugFormat("LostKeyboardFocus Old Focus {0} New Focus {1}",
-                    (e.OldFocus==null ? "" : e.OldFocus.ToString()),
+                    (e.OldFocus == null ? "" : e.OldFocus.ToString()),
                     (e.NewFocus == null ? "" : e.NewFocus.ToString()));
 
                 if (e.NewFocus == null)
+                {
                     this.hidePopup();
+                }
                 else
                 {
                     if (IsKeyboardFocusWithin == false)
                     {
                         logger.DebugFormat("IsKeyboardFocusWithin {0} -> hidePopup()", IsKeyboardFocusWithin);
+                        _PopUpIsCancelled = true;
                         this.hidePopup();
                     }
                 }
@@ -336,13 +342,12 @@
         protected virtual void updateSource()
         {
             logger.DebugFormat("{0}", (string.IsNullOrEmpty(Text) ? "" : Text));
+
             var txtBindingExpr = this.GetBindingExpression(TextBox.TextProperty);
             if (txtBindingExpr == null)
                 return;
 
-            if (txtBindingExpr != null)
-                txtBindingExpr.UpdateSource();
-
+            txtBindingExpr.UpdateSource();
             RaiseEvent(new RoutedEventArgs(ValueChangedEvent));
         }
 
@@ -401,8 +406,7 @@
                         _PART_ItemList.Focus();
                         _PART_ItemList.SelectedIndex = 0;
 
-                        ListBoxItem lbi = _PART_ItemList.ItemContainerGenerator
-                            .ContainerFromIndex(0) as ListBoxItem;
+                        ListBoxItem lbi = _PART_ItemList.ItemContainerGenerator.ContainerFromIndex(0) as ListBoxItem;
 
                         if (lbi != null)
                             lbi.Focus();
@@ -432,7 +436,16 @@
                         this.Select(Text.Length, 0);
                         e.Handled = true;
                     }
+                    break;
 
+                case Key.Escape:
+                    _PopUpIsCancelled = true;
+                    hidePopup();
+                    e.Handled = true;
+                    break;
+
+                default:
+                    // Other key gestures can be processed without special handlers
                     break;
             }
         }
@@ -533,8 +546,9 @@
             logger.DebugFormat("Old Value: {0}, New Value: {1}, Text {2}",
                 e.NewValue, e.OldValue, this.Text);
 
-            // Do not react if focuse is travelled off from here
-            // since that cancels the drop down selection workflow
+            // Do not react if popup was cancelled (eg: focuse travelled off from here)
+            // since gestures like Escape key of focus travelling should cancel
+            // the drop down selection workflow
             if (IsKeyboardFocusWithin == true)
             {
                 // Set cursor at end of string when pop is closed

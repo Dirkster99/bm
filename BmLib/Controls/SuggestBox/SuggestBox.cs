@@ -128,7 +128,10 @@
                 IsHintVisible = String.IsNullOrEmpty(text);
 
                 if (IsEnabled == true)
+                {
+                    this._PopUpIsCancelled = false;
                     this._suggestionIsConsumed = false;
+                }
 
                 if (IsEnabled && suggestSources != null)
                 {
