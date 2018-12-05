@@ -8,8 +8,6 @@
 	[ValueConversion(typeof(string), typeof(Visibility))]
 	public class FlipBoolToVisibilityConverter : IValueConverter
 	{
-		public static FlipBoolToVisibilityConverter Instance = new FlipBoolToVisibilityConverter();
-
 		#region IValueConverter Members
 
 		public object Convert(object value, Type targetType, object parameter, CultureInfo culture)

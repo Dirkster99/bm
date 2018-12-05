@@ -15,7 +15,7 @@
     internal class XMLLayer
     {
         #region fields
-        public readonly static char[] ResvedOptionListCharacters = new char[] { '$', '{', '}' };
+        internal readonly static char[] ResvedOptionListCharacters = new char[] { '$', '{', '}' };
         protected static readonly log4net.ILog logger = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
         #endregion fields
 

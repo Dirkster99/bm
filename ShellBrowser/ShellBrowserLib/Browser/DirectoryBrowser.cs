@@ -4,6 +4,7 @@ namespace ShellBrowserLib.Browser
     using ShellBrowserLib.Interfaces;
     using System;
     using ShellBrowserLib.Shell.Pidl;
+    using System.Text;
 
     /// <summary>
     /// Implements a light weight Windows Shell Browser class that can be used
@@ -248,14 +249,14 @@ namespace ShellBrowserLib.Browser
         /// <returns></returns>
         public override string ToString()
         {
-            string itemFlags = string.Empty;
+            StringBuilder itemFlags = new StringBuilder();
 
             Array values = Enum.GetValues(typeof(DirectoryItemFlags));
 
             foreach (DirectoryItemFlags val in values)
             {
                 if ((ItemType & val) != 0)
-                    itemFlags += (string.IsNullOrEmpty(itemFlags) ? val.ToString() : " | " + val.ToString());
+                    itemFlags.Append(itemFlags.Length == 0 ? val.ToString() : " | " + val.ToString());
             }
 
             return string.Format("Name: '{0}',PathRAW: '{1}', SpecialPathId: '{2}', PathFileSystem '{3}', Flags: '{4}'",

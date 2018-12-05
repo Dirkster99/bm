@@ -17,10 +17,10 @@
 				typeof(OverflowableStackPanel), new PropertyMetadata(0));
 
 		public static DependencyProperty CanOverflowProperty = DependencyProperty.RegisterAttached("CanOverflow", typeof(bool),
-				typeof(OverflowableStackPanel), new UIPropertyMetadata(false));
+                typeof(OverflowableStackPanel), new UIPropertyMetadata(false));
 
 		public static DependencyProperty IsOverflowProperty = DependencyProperty.RegisterAttached("IsOverflow", typeof(bool),
-			 typeof(OverflowableStackPanel), new UIPropertyMetadata(false));
+                typeof(OverflowableStackPanel), new UIPropertyMetadata(false));
 
 		private double overflowableWH = 0;
 		private double nonoverflowableWH = 0;
