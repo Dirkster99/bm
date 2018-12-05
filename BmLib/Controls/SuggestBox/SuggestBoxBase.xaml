@@ -49,42 +49,53 @@
                        PopupAnimation="None"
                        Focusable="False"
                     >
-                    <Grid x:Name="PART_ResizeableGrid" Background="White">
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="*"/>
-                            <RowDefinition Height="Auto"/>
-                        </Grid.RowDefinitions>
+                    <Border BorderBrush="{TemplateBinding BorderBrush}"
+                            Background="{DynamicResource {x:Static SystemColors.WindowBrushKey}}"  
+                            BorderThickness="1">
+                        <Grid x:Name="PART_ResizeableGrid" Background="Transparent">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="*"/>
+                                <RowDefinition Height="Auto"/>
+                            </Grid.RowDefinitions>
 
-                        <Border
-                            x:Name="DropDownBorder" Background="{DynamicResource {x:Static SystemColors.WindowBrushKey}}"  
-                            Width="{Binding ActualWidth, ElementName=PART_ContentHost}"                                             
-                            Height="{Binding ActualHeight, ElementName=PART_ContentHost}"                                             
-                            BorderBrush="{TemplateBinding BorderBrush}"
-                            BorderThickness="1"/>
+                            <Border
+                                x:Name="DropDownBorder"
+                                Background="{DynamicResource {x:Static SystemColors.WindowBrushKey}}"  
+                                Width="{Binding ActualWidth, ElementName=PART_ContentHost}"                                             
+                                Height="{Binding ActualHeight, ElementName=PART_ContentHost}"
+                                HorizontalAlignment="Stretch"
+                                VerticalAlignment="Stretch"
+                                Grid.RowSpan="2"
+                                BorderThickness="0"
+                                />
 
-                        <ListBox
-                            x:Name="PART_ItemList" Grid.Row="0"
-                            SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"                                                             
-                            VerticalContentAlignment="Stretch" HorizontalContentAlignment="Stretch"
-                            DisplayMemberPath="{TemplateBinding DisplayMemberPath}"
-                            SelectedValuePath="{TemplateBinding ValuePath}"
-                            ItemTemplate="{TemplateBinding HeaderTemplate}"
-                            ItemsSource="{Binding Suggestions, RelativeSource={RelativeSource TemplatedParent}}"
-                            ScrollViewer.HorizontalScrollBarVisibility="Auto" 
-                            ScrollViewer.VerticalScrollBarVisibility="Auto" 
-                            ScrollViewer.CanContentScroll="True"
-                            KeyboardNavigation.AcceptsReturn="True"
-                            KeyboardNavigation.DirectionalNavigation="Cycle" />
+                            <ListBox
+                                x:Name="PART_ItemList" Grid.Row="0"
+                                SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"                                                             
+                                VerticalContentAlignment="Stretch" HorizontalContentAlignment="Stretch"
+                                DisplayMemberPath="{TemplateBinding DisplayMemberPath}"
+                                SelectedValuePath="{TemplateBinding ValuePath}"
+                                ItemTemplate="{TemplateBinding HeaderTemplate}"
+                                ItemsSource="{Binding Suggestions, RelativeSource={RelativeSource TemplatedParent}}"
+                                ScrollViewer.HorizontalScrollBarVisibility="Auto" 
+                                ScrollViewer.VerticalScrollBarVisibility="Auto" 
+                                ScrollViewer.CanContentScroll="True"
+                                KeyboardNavigation.AcceptsReturn="True"
+                                KeyboardNavigation.DirectionalNavigation="Cycle"
+                                BorderThickness="0 0 0 1"
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                />
                         
-                        <!-- Our Thumb -->
-                        <Thumb x:Name="PART_ResizeGripThumb" Grid.Row="1"
-                               Style="{StaticResource ResizeGripStyle}"
-                               HorizontalAlignment="Right"
-                               Margin="3"
-                               Background="Transparent"
-                               VerticalAlignment="Bottom"
-                               Width="12" Height="12" />
-                    </Grid>
+                            <!-- Our Thumb -->
+                            <Thumb x:Name="PART_ResizeGripThumb" Grid.Row="1"
+                                   Style="{StaticResource ResizeGripStyle}"
+                                   HorizontalAlignment="Right"
+                                   Margin="3"
+                                   Background="Transparent"
+                                   VerticalAlignment="Bottom"
+                                   Width="12" Height="12" />
+                        </Grid>
+                    </Border>
                 </Popup>
             </Grid>
         </Border>
