@@ -79,11 +79,10 @@ namespace SSCoreLib.Browse
         public static FinalBrowseResult<T> FromRequest(BrowseRequest<T> request, BrowseResult result)
         {
             if (request != null)
-                return new FinalBrowseResult<T>(request.NewLocation,request.ActionRequested,
+                return new FinalBrowseResult<T>(request.NewLocation, request.ActionRequested,
                                                 request.RequestId, result);
 
-            return new FinalBrowseResult<T>(default(T), RequestType.Navigational,
-                                            request.RequestId, result);
+            return new FinalBrowseResult<T>(default(T), RequestType.Navigational, Guid.NewGuid(), result);
         }
     }
 }

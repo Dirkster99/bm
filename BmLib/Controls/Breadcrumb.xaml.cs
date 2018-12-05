@@ -388,7 +388,7 @@
             set { SetValue(IsSwitchOnProperty, value); }
         }
 
-////        public SuggestBoxBase Control_SuggestBox { get; set; }
+        ////        public SuggestBoxBase Control_SuggestBox { get; set; }
 
         public Switch Control_Switch { get; set; }
 
@@ -455,8 +455,8 @@
             this.RootDropDownList.AddValueChanged(ComboBox.SelectedValueProperty, (o, e) =>
             {
                 IEntryViewModel evm = this.RootDropDownList.SelectedItem as IEntryViewModel;
-                ////                    if (evm != null)
-                ////                        BroadcastDirectoryChanged(evm);
+                //// if (evm != null)
+                ////   BroadcastDirectoryChanged(evm);
 
                 Control_Switch.Dispatcher.BeginInvoke(new System.Action(() =>
                 {
@@ -468,12 +468,12 @@
             {
                 if (!this.Control_Switch.IsSwitchOn)
                 {
-                    ////                        _sbox.Dispatcher.BeginInvoke(new System.Action(() =>
-                    ////                        {
-                    ////                            Keyboard.Focus(_sbox);
-                    ////                            _sbox.Focus();
-                    ////                            _sbox.SelectAll();
-                    ////                        }), System.Windows.Threading.DispatcherPriority.Background);
+                    //// _sbox.Dispatcher.BeginInvoke(new System.Action(() =>
+                    //// {
+                    ////   Keyboard.Focus(_sbox);
+                    ////   _sbox.Focus();
+                    ////   _sbox.SelectAll();
+                    //// }), System.Windows.Threading.DispatcherPriority.Background);
                 }
             });
         }

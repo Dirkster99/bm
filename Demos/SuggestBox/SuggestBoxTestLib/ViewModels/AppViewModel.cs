@@ -46,15 +46,49 @@
                 new[] {
                     //This is default value, suggest based on HierarchyLister.List()
                     new AutoSuggestSource()
-                }); 
+                });
         }
+        #endregion constructors
+
+        #region properties
+        public List<ISuggestSource> SuggestBoxDummy_SuggestSources { get; }
+
+        #region SuggestBoxAuto
+        public PathHierarchyHelper SuggestBoxAuto_HierarchyHelper { get; }
+
+        public FakeViewModel SuggestBoxAuto_RootItems { get; }
+        #endregion SuggestBoxAuto
+
+        #region SuggestBoxAuto2
+        public PathHierarchyHelper SuggestBoxAuto2_HierarchyHelper { get; }
+
+        public FakeViewModel SuggestBoxAuto2_RootItems { get; }
+
+        public List<ISuggestSource> SuggestBoxAuto2_SuggestSources { get; }
+
+        public bool Processing
+        {
+            get { return _Processing; }
+            private set
+            {
+                if (_Processing != value)
+                {
+                    _Processing = value;
+                    NotifyPropertyChanged(() => Processing);
+                }
+            }
+        }
+        #endregion SuggestBoxAuto2
+        #endregion properties
+
+        #region methods
 
         /// <summary>
         /// Returns a tree of <see cref="FakeViewModel"/> items with a depth
         /// of <paramref name="iLevels"/> and
         /// a number of <paramref name="iSubDirectories"/> per item.
         /// 
-        /// Be careful when playing with this parameters because memory consumption
+        /// Be careful when playing with these parameters because memory consumption
         /// grows exponentially if you increase both parameters or only one of them
         /// by a large amount :-(
         /// </summary>
@@ -65,7 +99,7 @@
         private Task<FakeViewModel> ConstructHierarchy(
             FakeViewModel fvm,
             int iLevels = 9,
-            int iSubDirectories=5)
+            int iSubDirectories = 5)
         {
             return Task.Run(() =>
             {
@@ -87,7 +121,7 @@
                         models.Clear();
                         for (int i = 0; i < iSubDirectories; i++, counter++)
                         {
-                            string nextItem = "Sub" + (iLevel +1) + "_" + counter;
+                            string nextItem = "Sub" + (iLevel + 1) + "_" + counter;
                             var vm = new FakeViewModel()
                             {
                                 Header = nextItem,
@@ -114,40 +148,6 @@
                 return fvm;
             });
         }
-        #endregion constructors
-
-        #region properties
-        public List<ISuggestSource> SuggestBoxDummy_SuggestSources { get; }
-
-        #region SuggestBoxAuto
-        public PathHierarchyHelper SuggestBoxAuto_HierarchyHelper { get; }
-
-        public FakeViewModel SuggestBoxAuto_RootItems { get; }
-        #endregion SuggestBoxAuto
-
-        #region SuggestBoxAuto2
-        public PathHierarchyHelper SuggestBoxAuto2_HierarchyHelper { get; }
-
-        public FakeViewModel SuggestBoxAuto2_RootItems { get; }
-
-        public List<ISuggestSource>  SuggestBoxAuto2_SuggestSources { get; }
-
-        public bool Processing
-        {
-            get { return _Processing; }
-            private set
-            {
-                if (_Processing != value)
-                {
-                    _Processing = value;
-                    NotifyPropertyChanged(() => Processing);
-                }
-            }
-        }
-        #endregion SuggestBoxAuto2
-        #endregion properties
-
-        #region methods
         #endregion methods
     }
 }

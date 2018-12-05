@@ -110,10 +110,14 @@
         {
             string message;
 
-            if (string.IsNullOrEmpty(message = CheckForValidName(nameOfOptionGroup)) == false)
+            message = CheckForValidName(nameOfOptionGroup);
+
+            if (string.IsNullOrEmpty(message) == false)
                 throw new Exception(message);
 
-            if (string.IsNullOrEmpty(message = CheckForValidName(optionName)) == false)
+            message = CheckForValidName(optionName);
+
+            if (string.IsNullOrEmpty(message) == false)
                 throw new Exception(message);
 
             OptionGroup opgroup;

@@ -107,7 +107,8 @@
         /// </summary>
         protected BrowseItemFromPath()
         {
-            ParentIdList = ChildIdList = null;
+            ChildIdList = null;
+            ParentIdList = null;
         }
         #endregion constructors
 
@@ -467,7 +468,7 @@
         }
 
         private static bool GetKnownFolder(IdList fullIdList,
-                                           ref PathHandler pathType,     
+                                           ref PathHandler pathType,
                                            ref DirectoryItemFlags itemType,
                                            ref IKnownFolderProperties props,
                                            ref bool isSpecialFolder,

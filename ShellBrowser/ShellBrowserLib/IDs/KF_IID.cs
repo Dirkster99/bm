@@ -27,13 +27,13 @@
         /// be able to destinguish special directories from normal path
         /// references.
         /// </summary>
-        public const string IID_Prefix = "::";
+        public static readonly string IID_Prefix = "::";
 
         /// <summary>
         /// Invented Id for Desktop Root Item which is root above all other items
         /// (Not to be confused with user desktop special folder item).
         /// </summary>
-        public const string ID_ROOT_Desktop = IID_Prefix + "{00000001-0001-0001-0001-000000000001}";
+        public static readonly string ID_ROOT_Desktop = IID_Prefix + "{00000001-0001-0001-0001-000000000001}";
 
         /// <summary>
         /// Display Name         Network
@@ -43,7 +43,7 @@
         /// Legacy Display Name  My Network Places
         /// Legacy Default Path  Not applicable—virtual folder
         /// </summary>
-        public const string ID_FOLDERID_NetworkFolder = IID_Prefix + KF_ID.ID_FOLDERID_NetworkFolder;
+        public static readonly string ID_FOLDERID_NetworkFolder = IID_Prefix + KF_ID.ID_FOLDERID_NetworkFolder;
 
         /// <summary>
         /// Display Name          Computer
@@ -53,8 +53,8 @@
         /// Legacy Display Name   My Computer
         /// Legacy Default Path   Not applicable—virtual folder
         /// </summary>
-        public const string ID_FOLDERID_ComputerFolder = IID_Prefix + KF_ID.ID_FOLDERID_ComputerFolder;
-////    public const string ID_FOLDERID_ComputerFolder_CLSID = IID_Prefix + "{20d04fe0-3aea-1069-a2d8-08002b30309d}"; // CLSID
+        public static readonly string ID_FOLDERID_ComputerFolder = IID_Prefix + KF_ID.ID_FOLDERID_ComputerFolder;
+////    public static readonly string ID_FOLDERID_ComputerFolder_CLSID = IID_Prefix + "{20d04fe0-3aea-1069-a2d8-08002b30309d}"; // CLSID
 
         /// <summary>
         /// Display Name         Internet Explorer
@@ -64,7 +64,7 @@
         /// Legacy Display Name  Internet Explorer
         /// Legacy Default Path  Not applicable—virtual folder
         /// </summary>
-        public const string ID_FOLDERID_InternetFolder = IID_Prefix + KF_ID.ID_FOLDERID_InternetFolder;
+        public static readonly string ID_FOLDERID_InternetFolder = IID_Prefix + KF_ID.ID_FOLDERID_InternetFolder;
 
         /// <summary>
         /// Display Name         Control Panel
@@ -74,7 +74,7 @@
         /// Legacy Display Name  Control Panel
         /// Legacy Default Path  Not applicable—virtual folder
         /// </summary>
-        public const string ID_FOLDERID_ControlPanelFolder = IID_Prefix + KF_ID.ID_FOLDERID_ControlPanelFolder;
+        public static readonly string ID_FOLDERID_ControlPanelFolder = IID_Prefix + KF_ID.ID_FOLDERID_ControlPanelFolder;
 
         /// <summary>
         /// Display Name         Printers
@@ -84,7 +84,7 @@
         /// Legacy Display Name  Printers and Faxes
         /// Legacy Default Path  Not applicable—virtual folder
         /// </summary>
-        public const string ID_FOLDERID_PrintersFolder = IID_Prefix + KF_ID.ID_FOLDERID_PrintersFolder;
+        public static readonly string ID_FOLDERID_PrintersFolder = IID_Prefix + KF_ID.ID_FOLDERID_PrintersFolder;
 
         /// <summary>
         /// Display Name         Sync Center
@@ -94,7 +94,7 @@
         /// Legacy Display Name  Not applicable
         /// Legacy Default Path  Not applicable
         /// </summary>
-        public const string ID_FOLDERID_SyncManagerFolder = IID_Prefix + KF_ID.ID_FOLDERID_SyncManagerFolder;
+        public static readonly string ID_FOLDERID_SyncManagerFolder = IID_Prefix + KF_ID.ID_FOLDERID_SyncManagerFolder;
 
         /// <summary>
         /// Display Name         Sync Setup
@@ -104,7 +104,7 @@
         /// Legacy Display Name  Not applicable
         /// Legacy Default Path  Not applicable
         /// </summary>
-        public const string ID_FOLDERID_SyncSetupFolder = IID_Prefix + KF_ID.ID_FOLDERID_SyncSetupFolder;
+        public static readonly string ID_FOLDERID_SyncSetupFolder = IID_Prefix + KF_ID.ID_FOLDERID_SyncSetupFolder;
 
         /// <summary>
         /// Display Name          Conflicts
@@ -114,7 +114,7 @@
         /// Legacy Display Name   Not applicable. This KNOWNFOLDERID refers to the Windows Vista Synchronization Manager. It is not the folder referenced by the older ISyncMgrConflictFolder.
         /// Legacy Default Path   Not applicable
         /// </summary>
-        public const string ID_FOLDERID_ConflictFolder = IID_Prefix + KF_ID.ID_FOLDERID_ConflictFolder;
+        public static readonly string ID_FOLDERID_ConflictFolder = IID_Prefix + KF_ID.ID_FOLDERID_ConflictFolder;
 
         /// <summary>
         /// Display Name         Control Panel
@@ -124,7 +124,7 @@
         /// Legacy Display Name  Control Panel
         /// Legacy Default Path  Not applicable—virtual folder
         /// </summary>
-        public const string ID_FOLDERID_SyncResultsFolder = IID_Prefix + KF_ID.ID_FOLDERID_SyncResultsFolder;
+        public static readonly string ID_FOLDERID_SyncResultsFolder = IID_Prefix + KF_ID.ID_FOLDERID_SyncResultsFolder;
 
         /// <summary>
         /// Display Name         Recycle Bin
@@ -134,7 +134,7 @@
         /// Legacy Display Name  Recycle Bin
         /// Legacy Default Path  Not applicable—virtual folder
         /// </summary>
-        public const string ID_FOLDERID_RecycleBinFolder = IID_Prefix + KF_ID.ID_FOLDERID_RecycleBinFolder;
+        public static readonly string ID_FOLDERID_RecycleBinFolder = IID_Prefix + KF_ID.ID_FOLDERID_RecycleBinFolder;
 
         /// <summary>
         /// Display Name         Network Connections
@@ -144,7 +144,7 @@
         /// Legacy Display Name  Network Connections
         /// Legacy Default Path  Not applicable—virtual folder
         /// </summary>
-        public const string ID_FOLDERID_ConnectionsFolder = IID_Prefix + KF_ID.ID_FOLDERID_ConnectionsFolder;
+        public static readonly string ID_FOLDERID_ConnectionsFolder = IID_Prefix + KF_ID.ID_FOLDERID_ConnectionsFolder;
 
         /// <summary>
         /// Display Name         Fonts
@@ -154,7 +154,7 @@
         /// Legacy Display Name  Fonts
         /// Legacy Default Path  %windir%\Fonts
         /// </summary>
-        public const string ID_FOLDERID_Fonts = IID_Prefix + KF_ID.ID_FOLDERID_Fonts;
+        public static readonly string ID_FOLDERID_Fonts = IID_Prefix + KF_ID.ID_FOLDERID_Fonts;
 
         /// <summary>
         /// Display Name         Desktop
@@ -164,7 +164,7 @@
         /// Legacy Display Name  Desktop
         /// Legacy Default Path  %USERPROFILE%\Desktop
         /// </summary>
-        public const string ID_FOLDERID_Desktop = IID_Prefix + KF_ID.ID_FOLDERID_Desktop;
+        public static readonly string ID_FOLDERID_Desktop = IID_Prefix + KF_ID.ID_FOLDERID_Desktop;
 
         /// <summary>
         /// Display Name         Startup
@@ -174,7 +174,7 @@
         /// Legacy Display Name  Startup
         /// Legacy Default Path  %USERPROFILE%\Start Menu\Programs\StartUp
         /// </summary>
-        public const string ID_FOLDERID_Startup = IID_Prefix + KF_ID.ID_FOLDERID_Startup;
+        public static readonly string ID_FOLDERID_Startup = IID_Prefix + KF_ID.ID_FOLDERID_Startup;
 
         /// <summary>
         /// Display Name         Programs
@@ -184,7 +184,7 @@
         /// Legacy Display Name  Programs
         /// Legacy Default Path  %USERPROFILE%\Start Menu\Programs
         /// </summary>
-        public const string ID_FOLDERID_Programs = IID_Prefix + KF_ID.ID_FOLDERID_Programs;
+        public static readonly string ID_FOLDERID_Programs = IID_Prefix + KF_ID.ID_FOLDERID_Programs;
 
         /// <summary>
         /// Display Name         Start Menu
@@ -194,7 +194,7 @@
         /// Legacy Display Name  Start Menu
         /// Legacy Default Path  %USERPROFILE%\Start Menu
         /// </summary>
-        public const string ID_FOLDERID_StartMenu = IID_Prefix + KF_ID.ID_FOLDERID_StartMenu;
+        public static readonly string ID_FOLDERID_StartMenu = IID_Prefix + KF_ID.ID_FOLDERID_StartMenu;
 
         /// <summary>
         /// Display Name         Recent Items
@@ -204,7 +204,7 @@
         /// Legacy Display Name  My Recent Documents
         /// Legacy Default Path  %USERPROFILE%\Recent
         /// </summary>
-        public const string ID_FOLDERID_Recent = IID_Prefix + KF_ID.ID_FOLDERID_Recent;
+        public static readonly string ID_FOLDERID_Recent = IID_Prefix + KF_ID.ID_FOLDERID_Recent;
 
         /// <summary>
         /// Display Name         SendTo
@@ -214,7 +214,7 @@
         /// Legacy Display Name  SendTo
         /// Legacy Default Path  %USERPROFILE%\SendTo
         /// </summary>
-        public const string ID_FOLDERID_SendTo = IID_Prefix + KF_ID.ID_FOLDERID_SendTo;
+        public static readonly string ID_FOLDERID_SendTo = IID_Prefix + KF_ID.ID_FOLDERID_SendTo;
 
         /// <summary>
         /// Display Name         Documents
@@ -224,7 +224,7 @@
         /// Legacy Display Name  My Documents
         /// Legacy Default Path  %USERPROFILE%\My Documents
         /// </summary>
-        public const string ID_FOLDERID_Documents = IID_Prefix + KF_ID.ID_FOLDERID_Documents;
+        public static readonly string ID_FOLDERID_Documents = IID_Prefix + KF_ID.ID_FOLDERID_Documents;
 
         /// <summary>
         /// Display Name         Favorites
@@ -234,7 +234,7 @@
         /// Legacy Display Name  Favorites
         /// Legacy Default Path  %USERPROFILE%\Favorites
         /// </summary>
-        public const string ID_FOLDERID_Favorites = IID_Prefix + KF_ID.ID_FOLDERID_Favorites;
+        public static readonly string ID_FOLDERID_Favorites = IID_Prefix + KF_ID.ID_FOLDERID_Favorites;
 
         /// <summary>
         /// Display Name         Network Shortcuts
@@ -244,7 +244,7 @@
         /// Legacy Display Name  NetHood
         /// Legacy Default Path  %USERPROFILE%\NetHood
         /// </summary>
-        public const string ID_FOLDERID_NetHood = IID_Prefix + KF_ID.ID_FOLDERID_NetHood;
+        public static readonly string ID_FOLDERID_NetHood = IID_Prefix + KF_ID.ID_FOLDERID_NetHood;
 
         /// <summary>
         /// Display Name         Printer Shortcuts
@@ -254,7 +254,7 @@
         /// Legacy Display Name  PrintHood
         /// Legacy Default Path  %USERPROFILE%\PrintHood
         /// </summary>
-        public const string ID_FOLDERID_PrintHood = IID_Prefix + KF_ID.ID_FOLDERID_PrintHood;
+        public static readonly string ID_FOLDERID_PrintHood = IID_Prefix + KF_ID.ID_FOLDERID_PrintHood;
 
         /// <summary>
         /// Display Name         Templates
@@ -264,7 +264,7 @@
         /// Legacy Display Name  Templates
         /// Legacy Default Path  %USERPROFILE%\Templates
         /// </summary>
-        public const string ID_FOLDERID_Templates = IID_Prefix + KF_ID.ID_FOLDERID_Templates;
+        public static readonly string ID_FOLDERID_Templates = IID_Prefix + KF_ID.ID_FOLDERID_Templates;
 
         /// <summary>
         /// Display Name          Startup
@@ -274,7 +274,7 @@
         /// Legacy Display Name   Startup
         /// Legacy Default Path   %ALLUSERSPROFILE%\Start Menu\Programs\StartUp
         /// </summary>
-        public const string ID_FOLDERID_CommonStartup = IID_Prefix + KF_ID.ID_FOLDERID_CommonStartup;
+        public static readonly string ID_FOLDERID_CommonStartup = IID_Prefix + KF_ID.ID_FOLDERID_CommonStartup;
 
         /// <summary>
         /// Display Name          Programs
@@ -284,7 +284,7 @@
         /// Legacy Display Name   Programs
         /// Legacy Default Path   %ALLUSERSPROFILE%\Start Menu\Programs
         /// </summary>
-        public const string ID_FOLDERID_CommonPrograms = IID_Prefix + KF_ID.ID_FOLDERID_CommonPrograms;
+        public static readonly string ID_FOLDERID_CommonPrograms = IID_Prefix + KF_ID.ID_FOLDERID_CommonPrograms;
 
         /// <summary>
         /// Display Name          Start Menu
@@ -294,7 +294,7 @@
         /// Legacy Display Name   Start Menu
         /// Legacy Default Path   %ALLUSERSPROFILE%\Start Menu
         /// </summary>
-        public const string ID_FOLDERID_CommonStartMenu = IID_Prefix + KF_ID.ID_FOLDERID_CommonStartMenu;
+        public static readonly string ID_FOLDERID_CommonStartMenu = IID_Prefix + KF_ID.ID_FOLDERID_CommonStartMenu;
 
         /// <summary>
         /// Display Name         Public Desktop
@@ -304,7 +304,7 @@
         /// Legacy Display Name  Desktop
         /// Legacy Default Path  %ALLUSERSPROFILE%\Desktop
         /// </summary>
-        public const string ID_FOLDERID_PublicDesktop = IID_Prefix + KF_ID.ID_FOLDERID_PublicDesktop;
+        public static readonly string ID_FOLDERID_PublicDesktop = IID_Prefix + KF_ID.ID_FOLDERID_PublicDesktop;
 
         /// <summary>
         /// Display Name         ProgramData
@@ -314,7 +314,7 @@
         /// Legacy Display Name  Application Data
         /// Legacy Default Path  %ALLUSERSPROFILE%\Application Data
         /// </summary>
-        public const string ID_FOLDERID_ProgramData = IID_Prefix + KF_ID.ID_FOLDERID_ProgramData;
+        public static readonly string ID_FOLDERID_ProgramData = IID_Prefix + KF_ID.ID_FOLDERID_ProgramData;
 
         /// <summary>
         /// Display Name          Templates
@@ -324,7 +324,7 @@
         /// Legacy Display Name   Templates
         /// Legacy Default Path   %ALLUSERSPROFILE%\Templates
         /// </summary>
-        public const string ID_FOLDERID_CommonTemplates = IID_Prefix + KF_ID.ID_FOLDERID_CommonTemplates;
+        public static readonly string ID_FOLDERID_CommonTemplates = IID_Prefix + KF_ID.ID_FOLDERID_CommonTemplates;
 
         /// <summary>
         /// Display Name         Public Documents
@@ -334,7 +334,7 @@
         /// Legacy Display Name  Shared Documents
         /// Legacy Default Path  %ALLUSERSPROFILE%\Documents
         /// </summary>
-        public const string ID_FOLDERID_PublicDocuments = IID_Prefix + KF_ID.ID_FOLDERID_PublicDocuments;
+        public static readonly string ID_FOLDERID_PublicDocuments = IID_Prefix + KF_ID.ID_FOLDERID_PublicDocuments;
 
         /// <summary>
         /// Display Name         Roaming
@@ -344,7 +344,7 @@
         /// Legacy Display Name  Application Data
         /// Legacy Default Path  %APPDATA% (%USERPROFILE%\Application Data)
         /// </summary>
-        public const string ID_FOLDERID_RoamingAppData = IID_Prefix + KF_ID.ID_FOLDERID_RoamingAppData;
+        public static readonly string ID_FOLDERID_RoamingAppData = IID_Prefix + KF_ID.ID_FOLDERID_RoamingAppData;
 
         /// <summary>
         /// Display Name         Local
@@ -354,7 +354,7 @@
         /// Legacy Display Name  Application Data
         /// Legacy Default Path  %USERPROFILE%\Local Settings\Application Data
         /// </summary>
-        public const string ID_FOLDERID_LocalAppData = IID_Prefix + KF_ID.ID_FOLDERID_LocalAppData;
+        public static readonly string ID_FOLDERID_LocalAppData = IID_Prefix + KF_ID.ID_FOLDERID_LocalAppData;
 
         /// <summary>
         /// Display Name         LocalLow
@@ -364,7 +364,7 @@
         /// Legacy Display Name  Not applicable
         /// Legacy Default Path  Not applicable
         /// </summary>
-        public const string ID_FOLDERID_LocalAppDataLow = IID_Prefix + KF_ID.ID_FOLDERID_LocalAppDataLow;
+        public static readonly string ID_FOLDERID_LocalAppDataLow = IID_Prefix + KF_ID.ID_FOLDERID_LocalAppDataLow;
 
         /// <summary>
         /// Display Name         Temporary Internet Files
@@ -374,7 +374,7 @@
         /// Legacy Display Name  Temporary Internet Files
         /// Legacy Default Path  %USERPROFILE%\Local Settings\Temporary Internet Files
         /// </summary>
-        public const string ID_FOLDERID_InternetCache = IID_Prefix + KF_ID.ID_FOLDERID_InternetCache;
+        public static readonly string ID_FOLDERID_InternetCache = IID_Prefix + KF_ID.ID_FOLDERID_InternetCache;
 
         /// <summary>
         /// Display Name         Cookies
@@ -384,7 +384,7 @@
         /// Legacy Display Name  Cookies
         /// Legacy Default Path  %USERPROFILE%\Cookies
         /// </summary>
-        public const string ID_FOLDERID_Cookies = IID_Prefix + KF_ID.ID_FOLDERID_Cookies;
+        public static readonly string ID_FOLDERID_Cookies = IID_Prefix + KF_ID.ID_FOLDERID_Cookies;
 
         /// <summary>
         /// Display Name         History
@@ -394,7 +394,7 @@
         /// Legacy Display Name  History
         /// Legacy Default Path  %USERPROFILE%\Local Settings\History
         /// </summary>
-        public const string ID_FOLDERID_History = IID_Prefix + KF_ID.ID_FOLDERID_History;
+        public static readonly string ID_FOLDERID_History = IID_Prefix + KF_ID.ID_FOLDERID_History;
 
         /// <summary>
         /// Display Name         System32
@@ -404,7 +404,7 @@
         /// Legacy Display Name  system32
         /// Legacy Default Path  %windir%\system32
         /// </summary>
-        public const string ID_FOLDERID_System = IID_Prefix + KF_ID.ID_FOLDERID_System;
+        public static readonly string ID_FOLDERID_System = IID_Prefix + KF_ID.ID_FOLDERID_System;
 
         /// <summary>
         /// Display Name         System32
@@ -414,7 +414,7 @@
         /// Legacy Display Name  system32
         /// Legacy Default Path  %windir%\system32
         /// </summary>
-        public const string ID_FOLDERID_SystemX86 = IID_Prefix + KF_ID.ID_FOLDERID_SystemX86;
+        public static readonly string ID_FOLDERID_SystemX86 = IID_Prefix + KF_ID.ID_FOLDERID_SystemX86;
 
         /// <summary>
         /// Display Name         Windows
@@ -424,7 +424,7 @@
         /// Legacy Display Name  WINDOWS
         /// Legacy Default Path  %windir%
         /// </summary>
-        public const string ID_FOLDERID_Windows = IID_Prefix + KF_ID.ID_FOLDERID_Windows;
+        public static readonly string ID_FOLDERID_Windows = IID_Prefix + KF_ID.ID_FOLDERID_Windows;
 
         /// <summary>
         /// Display Name         The user's username (%USERNAME%)
@@ -434,7 +434,7 @@
         /// Legacy Display Name  The user's username (%USERNAME%)
         /// Legacy Default Path  %USERPROFILE% (%SystemDrive%\Documents and Settings\%USERNAME%)
         /// </summary>
-        public const string ID_FOLDERID_Profile = IID_Prefix + KF_ID.ID_FOLDERID_Profile;
+        public static readonly string ID_FOLDERID_Profile = IID_Prefix + KF_ID.ID_FOLDERID_Profile;
 
         /// <summary>
         /// Display Name         Pictures
@@ -444,7 +444,7 @@
         /// Legacy Display Name  My Pictures
         /// Legacy Default Path  %USERPROFILE%\My Documents\My Pictures
         /// </summary>
-        public const string ID_FOLDERID_Pictures = IID_Prefix + KF_ID.ID_FOLDERID_Pictures;
+        public static readonly string ID_FOLDERID_Pictures = IID_Prefix + KF_ID.ID_FOLDERID_Pictures;
 
         /// <summary>
         /// Display Name         Program Files
@@ -454,7 +454,7 @@
         /// Legacy Display Name  Program Files
         /// Legacy Default Path  %ProgramFiles% (%SystemDrive%\Program Files)
         /// </summary>
-        public const string ID_FOLDERID_ProgramFilesX86 = IID_Prefix + KF_ID.ID_FOLDERID_ProgramFilesX86;
+        public static readonly string ID_FOLDERID_ProgramFilesX86 = IID_Prefix + KF_ID.ID_FOLDERID_ProgramFilesX86;
 
         /// <summary>
         /// Display Name         Common Files
@@ -464,7 +464,7 @@
         /// Legacy Display Name  Common Files
         /// Legacy Default Path  %ProgramFiles%\Common Files
         /// </summary>
-        public const string ID_FOLDERID_ProgramFilesCommonX86 = IID_Prefix + KF_ID.ID_FOLDERID_ProgramFilesCommonX86;
+        public static readonly string ID_FOLDERID_ProgramFilesCommonX86 = IID_Prefix + KF_ID.ID_FOLDERID_ProgramFilesCommonX86;
 
         /// <summary>
         /// Display Name         Program Files
@@ -474,7 +474,7 @@
         /// Legacy Display Name  Program Files
         /// Legacy Default Path  %ProgramFiles% (%SystemDrive%\Program Files)
         /// </summary>
-        public const string ID_FOLDERID_ProgramFilesX64 = IID_Prefix + KF_ID.ID_FOLDERID_ProgramFilesX64;
+        public static readonly string ID_FOLDERID_ProgramFilesX64 = IID_Prefix + KF_ID.ID_FOLDERID_ProgramFilesX64;
 
         /// <summary>
         /// Display Name         Common Files
@@ -484,7 +484,7 @@
         /// Legacy Display Name  Common Files
         /// Legacy Default Path  %ProgramFiles%\Common Files
         /// </summary>
-        public const string ID_FOLDERID_ProgramFilesCommonX64 = IID_Prefix + KF_ID.ID_FOLDERID_ProgramFilesCommonX64;
+        public static readonly string ID_FOLDERID_ProgramFilesCommonX64 = IID_Prefix + KF_ID.ID_FOLDERID_ProgramFilesCommonX64;
 
         /// <summary>
         /// Display Name         Program Files
@@ -494,7 +494,7 @@
         /// Legacy Display Name  Program Files
         /// Legacy Default Path  %ProgramFiles% (%SystemDrive%\Program Files)
         /// </summary>
-        public const string ID_FOLDERID_ProgramFiles = IID_Prefix + KF_ID.ID_FOLDERID_ProgramFiles;
+        public static readonly string ID_FOLDERID_ProgramFiles = IID_Prefix + KF_ID.ID_FOLDERID_ProgramFiles;
 
         /// <summary>
         /// Display Name         Common Files
@@ -504,33 +504,33 @@
         /// Legacy Display Name  Common Files
         /// Legacy Default Path  %ProgramFiles%\Common Files
         /// </summary>
-        public const string ID_FOLDERID_ProgramFilesCommon = IID_Prefix + KF_ID.ID_FOLDERID_ProgramFilesCommon;
+        public static readonly string ID_FOLDERID_ProgramFilesCommon = IID_Prefix + KF_ID.ID_FOLDERID_ProgramFilesCommon;
 
         /// <summary>
         /// UsersLibraries
         /// </summary>
-        public const string ID_FOLDERID_UsersLibraries = IID_Prefix + KF_ID.ID_FOLDERID_UsersLibraries;
+        public static readonly string ID_FOLDERID_UsersLibraries = IID_Prefix + KF_ID.ID_FOLDERID_UsersLibraries;
         #region Win7 KnownFolders
 
         /// <summary>
         /// UserProgramFiles
         /// </summary>
-        public const string ID_FOLDERID_UserProgramFiles = IID_Prefix + KF_ID.ID_FOLDERID_UserProgramFiles;
+        public static readonly string ID_FOLDERID_UserProgramFiles = IID_Prefix + KF_ID.ID_FOLDERID_UserProgramFiles;
 
         /// <summary>
         /// UserProgramFilesCommon
         /// </summary>
-        public const string ID_FOLDERID_UserProgramFilesCommon = IID_Prefix + KF_ID.ID_FOLDERID_UserProgramFilesCommon;
+        public static readonly string ID_FOLDERID_UserProgramFilesCommon = IID_Prefix + KF_ID.ID_FOLDERID_UserProgramFilesCommon;
 
         /// <summary>
         /// Ringtones
         /// </summary>
-        public const string ID_FOLDERID_Ringtones = IID_Prefix + KF_ID.ID_FOLDERID_Ringtones;
+        public static readonly string ID_FOLDERID_Ringtones = IID_Prefix + KF_ID.ID_FOLDERID_Ringtones;
 
         /// <summary>
         /// PublicRingtones
         /// </summary>
-        public const string ID_FOLDERID_PublicRingtones = IID_Prefix + KF_ID.ID_FOLDERID_PublicRingtones;
+        public static readonly string ID_FOLDERID_PublicRingtones = IID_Prefix + KF_ID.ID_FOLDERID_PublicRingtones;
 
         /// <summary>
         /// Display Name         Documents
@@ -540,42 +540,42 @@
         /// Legacy Display Name  Not applicable
         /// Legacy Default Path  Not applicable
         /// </summary>
-        public const string ID_FOLDERID_DocumentsLibrary = IID_Prefix + KF_ID.ID_FOLDERID_DocumentsLibrary;
+        public static readonly string ID_FOLDERID_DocumentsLibrary = IID_Prefix + KF_ID.ID_FOLDERID_DocumentsLibrary;
 
         /// <summary>
         /// MusicLibrary
         /// </summary>
-        public const string ID_FOLDERID_MusicLibrary = IID_Prefix + KF_ID.ID_FOLDERID_MusicLibrary;
+        public static readonly string ID_FOLDERID_MusicLibrary = IID_Prefix + KF_ID.ID_FOLDERID_MusicLibrary;
 
         /// <summary>
         /// PicturesLibrary
         /// </summary>
-        public const string ID_FOLDERID_PicturesLibrary = IID_Prefix + KF_ID.ID_FOLDERID_PicturesLibrary;
+        public static readonly string ID_FOLDERID_PicturesLibrary = IID_Prefix + KF_ID.ID_FOLDERID_PicturesLibrary;
 
         /// <summary>
         /// VideosLibrary
         /// </summary>
-        public const string ID_FOLDERID_VideosLibrary = IID_Prefix + KF_ID.ID_FOLDERID_VideosLibrary;
+        public static readonly string ID_FOLDERID_VideosLibrary = IID_Prefix + KF_ID.ID_FOLDERID_VideosLibrary;
 
         /// <summary>
         /// RecordedTVLibrary
         /// </summary>
-        public const string ID_FOLDERID_RecordedTVLibrary = IID_Prefix + KF_ID.ID_FOLDERID_RecordedTVLibrary;
+        public static readonly string ID_FOLDERID_RecordedTVLibrary = IID_Prefix + KF_ID.ID_FOLDERID_RecordedTVLibrary;
 
         /// <summary>
         /// OtherUsers
         /// </summary>
-        public const string ID_FOLDERID_HomeGroup = IID_Prefix + KF_ID.ID_FOLDERID_HomeGroup;
+        public static readonly string ID_FOLDERID_HomeGroup = IID_Prefix + KF_ID.ID_FOLDERID_HomeGroup;
 
         /// <summary>
         /// DeviceMetadataStore
         /// </summary>        
-        public const string ID_FOLDERID_DeviceMetadataStore = IID_Prefix + KF_ID.ID_FOLDERID_DeviceMetadataStore;
+        public static readonly string ID_FOLDERID_DeviceMetadataStore = IID_Prefix + KF_ID.ID_FOLDERID_DeviceMetadataStore;
 
         /// <summary>
         /// Libraries
         /// </summary>
-        public const string ID_FOLDERID_Libraries = IID_Prefix + KF_ID.ID_FOLDERID_Libraries;
+        public static readonly string ID_FOLDERID_Libraries = IID_Prefix + KF_ID.ID_FOLDERID_Libraries;
 
         /// <summary>
         /// Display Name        Libraries
@@ -585,17 +585,17 @@
         /// Legacy Display Name Not applicable
         /// Legacy Default Path Not applicable
         /// </summary>
-        public const string ID_FOLDERID_PublicLibraries = IID_Prefix + KF_ID.ID_FOLDERID_PublicLibraries;
+        public static readonly string ID_FOLDERID_PublicLibraries = IID_Prefix + KF_ID.ID_FOLDERID_PublicLibraries;
 
         /// <summary>
         /// UserPinned
         /// </summary>
-        public const string ID_FOLDERID_UserPinned = IID_Prefix + KF_ID.ID_FOLDERID_UserPinned;
+        public static readonly string ID_FOLDERID_UserPinned = IID_Prefix + KF_ID.ID_FOLDERID_UserPinned;
 
         /// <summary>
         /// ImplicitAppShortcuts
         /// </summary>
-        public const string ID_FOLDERID_ImplicitAppShortcuts = IID_Prefix + KF_ID.ID_FOLDERID_ImplicitAppShortcuts;
+        public static readonly string ID_FOLDERID_ImplicitAppShortcuts = IID_Prefix + KF_ID.ID_FOLDERID_ImplicitAppShortcuts;
         #endregion Win7 KnownFolders
 
         /// <summary>
@@ -606,7 +606,7 @@
         /// Legacy Display Name Administrative Tools
         /// Legacy Default Path %USERPROFILE%\Start Menu\Programs\Administrative Tools
         /// </summary>
-        public const string ID_FOLDERID_AdminTools = IID_Prefix + KF_ID.ID_FOLDERID_AdminTools;
+        public static readonly string ID_FOLDERID_AdminTools = IID_Prefix + KF_ID.ID_FOLDERID_AdminTools;
 
         /// <summary>
         /// Display Name            Administrative Tools
@@ -616,7 +616,7 @@
         /// Legacy Display Name     Administrative Tools
         /// Legacy Default Path     %ALLUSERSPROFILE%\Start Menu\Programs\Administrative Tools
         /// </summary>
-        public const string ID_FOLDERID_CommonAdminTools = IID_Prefix + KF_ID.ID_FOLDERID_CommonAdminTools;
+        public static readonly string ID_FOLDERID_CommonAdminTools = IID_Prefix + KF_ID.ID_FOLDERID_CommonAdminTools;
 
         /// <summary>
         /// Display Name         Music
@@ -626,7 +626,7 @@
         /// Legacy Display Name  My Music
         /// Legacy Default Path  %USERPROFILE%\My Documents\My Music
         /// </summary>
-        public const string ID_FOLDERID_Music = IID_Prefix + KF_ID.ID_FOLDERID_Music;
+        public static readonly string ID_FOLDERID_Music = IID_Prefix + KF_ID.ID_FOLDERID_Music;
 
         /// <summary>
         /// Display Name         Videos
@@ -636,7 +636,7 @@
         /// Legacy Display Name  My Videos
         /// Legacy Default Path  %USERPROFILE%\My Documents\My Videos
         /// </summary>
-        public const string ID_FOLDERID_Videos = IID_Prefix + KF_ID.ID_FOLDERID_Videos;
+        public static readonly string ID_FOLDERID_Videos = IID_Prefix + KF_ID.ID_FOLDERID_Videos;
 
         /// <summary>
         /// Display Name         Public Pictures
@@ -646,7 +646,7 @@
         /// Legacy Display Name  Shared Pictures
         /// Legacy Default Path  %ALLUSERSPROFILE%\Documents\My Pictures
         /// </summary>
-        public const string ID_FOLDERID_PublicPictures = IID_Prefix + KF_ID.ID_FOLDERID_PublicPictures;
+        public static readonly string ID_FOLDERID_PublicPictures = IID_Prefix + KF_ID.ID_FOLDERID_PublicPictures;
 
         /// <summary>
         /// Display Name         Public Music
@@ -656,7 +656,7 @@
         /// Legacy Display Name  Shared Music
         /// Legacy Default Path  %ALLUSERSPROFILE%\Documents\My Music
         /// </summary>
-        public const string ID_FOLDERID_PublicMusic = IID_Prefix + KF_ID.ID_FOLDERID_PublicMusic;
+        public static readonly string ID_FOLDERID_PublicMusic = IID_Prefix + KF_ID.ID_FOLDERID_PublicMusic;
 
         /// <summary>
         /// Display Name         Public Videos
@@ -666,7 +666,7 @@
         /// Legacy Display Name  Shared Video
         /// Legacy Default Path  %ALLUSERSPROFILE%\Documents\My Videos
         /// </summary>
-        public const string ID_FOLDERID_PublicVideos = IID_Prefix + KF_ID.ID_FOLDERID_PublicVideos;
+        public static readonly string ID_FOLDERID_PublicVideos = IID_Prefix + KF_ID.ID_FOLDERID_PublicVideos;
 
         /// <summary>
         /// Display Name         Resources
@@ -676,7 +676,7 @@
         /// Legacy Display Name  Resources
         /// Legacy Default Path  %windir%\Resources
         /// </summary>
-        public const string ID_FOLDERID_ResourceDir = IID_Prefix + KF_ID.ID_FOLDERID_ResourceDir;
+        public static readonly string ID_FOLDERID_ResourceDir = IID_Prefix + KF_ID.ID_FOLDERID_ResourceDir;
 
         /// <summary>
         /// Display Name         None
@@ -686,7 +686,7 @@
         /// Legacy Display Name  None
         /// Legacy Default Path  %windir%\resources\0409 (code page)
         /// </summary>
-        public const string ID_FOLDERID_LocalizedResourcesDir = IID_Prefix + KF_ID.ID_FOLDERID_LocalizedResourcesDir;
+        public static readonly string ID_FOLDERID_LocalizedResourcesDir = IID_Prefix + KF_ID.ID_FOLDERID_LocalizedResourcesDir;
 
         /// <summary>
         /// Display Name        OEM Links
@@ -696,7 +696,7 @@
         /// Legacy Display Name OEM Links
         /// Legacy Default Path %ALLUSERSPROFILE%\OEM Links
         /// </summary>
-        public const string ID_FOLDERID_CommonOEMLinks = IID_Prefix + KF_ID.ID_FOLDERID_CommonOEMLinks;
+        public static readonly string ID_FOLDERID_CommonOEMLinks = IID_Prefix + KF_ID.ID_FOLDERID_CommonOEMLinks;
 
         /// <summary>
         /// Display Name        Temporary Burn Folder
@@ -706,7 +706,7 @@
         /// Legacy Display Name CD Burning
         /// Legacy Default Path %USERPROFILE%\Local Settings\Application Data\Microsoft\CD Burning
         /// </summary>
-        public const string ID_FOLDERID_CDBurning = IID_Prefix + KF_ID.ID_FOLDERID_CDBurning;
+        public static readonly string ID_FOLDERID_CDBurning = IID_Prefix + KF_ID.ID_FOLDERID_CDBurning;
 
         /// <summary>
         /// Display Name         Users
@@ -716,7 +716,7 @@
         /// Legacy Display Name  Not applicable
         /// Legacy Default Path  Not applicable
         /// </summary>
-        public const string ID_FOLDERID_UserProfiles = IID_Prefix + KF_ID.ID_FOLDERID_UserProfiles;
+        public static readonly string ID_FOLDERID_UserProfiles = IID_Prefix + KF_ID.ID_FOLDERID_UserProfiles;
 
         /// <summary>
         /// Display Name         Playlists
@@ -726,7 +726,7 @@
         /// Legacy Display Name  Not applicable
         /// Legacy Default Path  Not applicable
         /// </summary>
-        public const string ID_FOLDERID_Playlists = IID_Prefix + KF_ID.ID_FOLDERID_Playlists;
+        public static readonly string ID_FOLDERID_Playlists = IID_Prefix + KF_ID.ID_FOLDERID_Playlists;
 
         /// <summary>
         /// Display Name         Sample Playlists
@@ -736,7 +736,7 @@
         /// Legacy Display Name  Not applicable
         /// Legacy Default Path  Not applicable
         /// </summary>
-        public const string ID_FOLDERID_SamplePlaylists = IID_Prefix + KF_ID.ID_FOLDERID_SamplePlaylists;
+        public static readonly string ID_FOLDERID_SamplePlaylists = IID_Prefix + KF_ID.ID_FOLDERID_SamplePlaylists;
 
         /// <summary>
         /// Display Name         Sample Music
@@ -746,7 +746,7 @@
         /// Legacy Display Name  Sample Music
         /// Legacy Default Path  %ALLUSERSPROFILE%\Documents\My Music\Sample Music
         /// </summary>
-        public const string ID_FOLDERID_SampleMusic = IID_Prefix + KF_ID.ID_FOLDERID_SampleMusic;
+        public static readonly string ID_FOLDERID_SampleMusic = IID_Prefix + KF_ID.ID_FOLDERID_SampleMusic;
 
         /// <summary>
         /// Display Name         Sample Pictures
@@ -756,7 +756,7 @@
         /// Legacy Display Name  Sample Pictures
         /// Legacy Default Path  %ALLUSERSPROFILE%\Documents\My Pictures\Sample Pictures
         /// </summary>
-        public const string ID_FOLDERID_SamplePictures = IID_Prefix + KF_ID.ID_FOLDERID_SamplePictures;
+        public static readonly string ID_FOLDERID_SamplePictures = IID_Prefix + KF_ID.ID_FOLDERID_SamplePictures;
 
         /// <summary>
         /// Display Name         Sample Videos
@@ -766,7 +766,7 @@
         /// Legacy Display Name  Not applicable
         /// Legacy Default Path  Not applicable
         /// </summary>
-        public const string ID_FOLDERID_SampleVideos = IID_Prefix + KF_ID.ID_FOLDERID_SampleVideos;
+        public static readonly string ID_FOLDERID_SampleVideos = IID_Prefix + KF_ID.ID_FOLDERID_SampleVideos;
 
         /// <summary>
         /// Display Name         Slide Shows
@@ -776,7 +776,7 @@
         /// Legacy Display Name  Not applicable
         /// Legacy Default Path  Not applicable
         /// </summary>
-        public const string ID_FOLDERID_PhotoAlbums = IID_Prefix + KF_ID.ID_FOLDERID_PhotoAlbums;
+        public static readonly string ID_FOLDERID_PhotoAlbums = IID_Prefix + KF_ID.ID_FOLDERID_PhotoAlbums;
 
         /// <summary>
         /// Display Name         Public
@@ -786,7 +786,7 @@
         /// Legacy Display Name  Not applicable
         /// Legacy Default Path  Not applicable
         /// </summary>
-        public const string ID_FOLDERID_Public = IID_Prefix + KF_ID.ID_FOLDERID_Public;
+        public static readonly string ID_FOLDERID_Public = IID_Prefix + KF_ID.ID_FOLDERID_Public;
 
         /// <summary>
         /// Display Name        Programs and Features
@@ -796,7 +796,7 @@
         /// Legacy Display Name Add or Remove Programs
         /// Legacy Default Path Not applicable—virtual folder
         /// </summary>
-        public const string ID_FOLDERID_ChangeRemovePrograms = IID_Prefix + KF_ID.ID_FOLDERID_ChangeRemovePrograms;
+        public static readonly string ID_FOLDERID_ChangeRemovePrograms = IID_Prefix + KF_ID.ID_FOLDERID_ChangeRemovePrograms;
 
         /// <summary>
         /// Display Name        Installed Updates
@@ -806,7 +806,7 @@
         /// Legacy Display Name None, new in Windows Vista. In earlier versions of Microsoft Windows, the information on this page was included in Add or Remove Programs if the Show updates box was checked.
         /// Legacy Default Path Not applicable
         /// </summary>
-        public const string ID_FOLDERID_AppUpdates = IID_Prefix + KF_ID.ID_FOLDERID_AppUpdates;
+        public static readonly string ID_FOLDERID_AppUpdates = IID_Prefix + KF_ID.ID_FOLDERID_AppUpdates;
 
         /// <summary>
         /// Display Name        Get Programs
@@ -816,7 +816,7 @@
         /// Legacy Display Name Add New Programs (found in the Add or Remove Programs item in the Control Panel)
         /// Legacy Default Path Not applicable—virtual folder
         /// </summary>
-        public const string ID_FOLDERID_AddNewPrograms = IID_Prefix + KF_ID.ID_FOLDERID_AddNewPrograms;
+        public static readonly string ID_FOLDERID_AddNewPrograms = IID_Prefix + KF_ID.ID_FOLDERID_AddNewPrograms;
 
         /// <summary>
         /// Display Name         Downloads
@@ -826,7 +826,7 @@
         /// Legacy Display Name  Not applicable
         /// Legacy Default Path  Not applicable
         /// </summary>
-        public const string ID_FOLDERID_Downloads = IID_Prefix + KF_ID.ID_FOLDERID_Downloads;
+        public static readonly string ID_FOLDERID_Downloads = IID_Prefix + KF_ID.ID_FOLDERID_Downloads;
 
         /// <summary>
         /// Display Name         Public Downloads
@@ -836,7 +836,7 @@
         /// Legacy Display Name  Not applicable
         /// Legacy Default Path  Not applicable
         /// </summary>
-        public const string ID_FOLDERID_PublicDownloads = IID_Prefix + KF_ID.ID_FOLDERID_PublicDownloads;
+        public static readonly string ID_FOLDERID_PublicDownloads = IID_Prefix + KF_ID.ID_FOLDERID_PublicDownloads;
 
         /// <summary>
         /// Display Name         Searches
@@ -846,7 +846,7 @@
         /// Legacy Display Name  Not applicable
         /// Legacy Default Path  Not applicable
         /// </summary>
-        public const string ID_FOLDERID_SavedSearches = IID_Prefix + KF_ID.ID_FOLDERID_SavedSearches;
+        public static readonly string ID_FOLDERID_SavedSearches = IID_Prefix + KF_ID.ID_FOLDERID_SavedSearches;
 
         /// <summary>
         /// Display Name         Quick Launch
@@ -856,7 +856,7 @@
         /// Legacy Display Name  Quick Launch
         /// Legacy Default Path  %APPDATA%\Microsoft\Internet Explorer\Quick Launch
         /// </summary>
-        public const string ID_FOLDERID_QuickLaunch = IID_Prefix + KF_ID.ID_FOLDERID_QuickLaunch;
+        public static readonly string ID_FOLDERID_QuickLaunch = IID_Prefix + KF_ID.ID_FOLDERID_QuickLaunch;
 
         /// <summary>
         /// Display Name         Contacts
@@ -866,7 +866,7 @@
         /// Legacy Display Name  Not applicable
         /// Legacy Default Path  Not applicable
         /// </summary>
-        public const string ID_FOLDERID_Contacts = IID_Prefix + KF_ID.ID_FOLDERID_Contacts;
+        public static readonly string ID_FOLDERID_Contacts = IID_Prefix + KF_ID.ID_FOLDERID_Contacts;
 
         /// <summary>
         /// Display Name         Gadgets
@@ -876,7 +876,7 @@
         /// Legacy Display Name  Not applicable
         /// Legacy Default Path  Not applicable
         /// </summary>
-        public const string ID_FOLDERID_SidebarParts = IID_Prefix + KF_ID.ID_FOLDERID_SidebarParts;
+        public static readonly string ID_FOLDERID_SidebarParts = IID_Prefix + KF_ID.ID_FOLDERID_SidebarParts;
 
         /// <summary>
         /// Display Name         Gadgets
@@ -886,7 +886,7 @@
         /// Legacy Display Name  Not applicable
         /// Legacy Default Path  Not applicable
         /// </summary>
-        public const string ID_FOLDERID_SidebarDefaultParts = IID_Prefix + KF_ID.ID_FOLDERID_SidebarDefaultParts;
+        public static readonly string ID_FOLDERID_SidebarDefaultParts = IID_Prefix + KF_ID.ID_FOLDERID_SidebarDefaultParts;
 
         /// <summary>
         /// Display Name         GameExplorer
@@ -896,7 +896,7 @@
         /// Legacy Display Name  Not applicable
         /// Legacy Default Path  Not applicable
         /// </summary>
-        public const string ID_FOLDERID_PublicGameTasks = IID_Prefix + KF_ID.ID_FOLDERID_PublicGameTasks;
+        public static readonly string ID_FOLDERID_PublicGameTasks = IID_Prefix + KF_ID.ID_FOLDERID_PublicGameTasks;
 
         /// <summary>
         /// Display Name         GameExplorer
@@ -906,7 +906,7 @@
         /// Legacy Display Name  Not applicable
         /// Legacy Default Path  Not applicable
         /// </summary>
-        public const string ID_FOLDERID_GameTasks = IID_Prefix + KF_ID.ID_FOLDERID_GameTasks;
+        public static readonly string ID_FOLDERID_GameTasks = IID_Prefix + KF_ID.ID_FOLDERID_GameTasks;
 
         /// <summary>
         /// Display Name         Saved Games
@@ -916,7 +916,7 @@
         /// Legacy Display Name  Not applicable
         /// Legacy Default Path  Not applicable
         /// </summary>
-        public const string ID_FOLDERID_SavedGames = IID_Prefix + KF_ID.ID_FOLDERID_SavedGames;
+        public static readonly string ID_FOLDERID_SavedGames = IID_Prefix + KF_ID.ID_FOLDERID_SavedGames;
 
         /// <summary>
         /// Display Name         Saved Games
@@ -926,7 +926,7 @@
         /// Legacy Display Name  Not applicable
         /// Legacy Default Path  Not applicable
         /// </summary>
-        public const string ID_FOLDERID_Games = IID_Prefix + KF_ID.ID_FOLDERID_Games;
+        public static readonly string ID_FOLDERID_Games = IID_Prefix + KF_ID.ID_FOLDERID_Games;
 
         /// <summary>
         /// Display Name         Microsoft Office Outlook
@@ -936,7 +936,7 @@
         /// Legacy Display Name  Not applicable
         /// Legacy Default Path  Not applicable
         /// </summary>
-        public const string ID_FOLDERID_SEARCH_MAPI = IID_Prefix + KF_ID.ID_FOLDERID_SEARCH_MAPI;
+        public static readonly string ID_FOLDERID_SEARCH_MAPI = IID_Prefix + KF_ID.ID_FOLDERID_SEARCH_MAPI;
 
         /// <summary>
         /// Display Name         Offline Files
@@ -946,7 +946,7 @@
         /// Legacy Display Name  Not applicable
         /// Legacy Default Path  Not applicable
         /// </summary>
-        public const string ID_FOLDERID_SEARCH_CSC = IID_Prefix + KF_ID.ID_FOLDERID_SEARCH_CSC;
+        public static readonly string ID_FOLDERID_SEARCH_CSC = IID_Prefix + KF_ID.ID_FOLDERID_SEARCH_CSC;
 
         /// <summary>
         /// Display Name         Links
@@ -956,7 +956,7 @@
         /// Legacy Display Name  Not applicable
         /// Legacy Default Path  Not applicable
         /// </summary>
-        public const string ID_FOLDERID_Links = IID_Prefix + KF_ID.ID_FOLDERID_Links;
+        public static readonly string ID_FOLDERID_Links = IID_Prefix + KF_ID.ID_FOLDERID_Links;
 
         /// <summary>
         /// Display Name         The user's full name (for instance, Jean Philippe Bagel) entered when the user account was created.
@@ -966,7 +966,7 @@
         /// Legacy Display Name  Not applicable
         /// Legacy Default Path  Not applicable
         /// </summary>
-        public const string ID_FOLDERID_UsersFiles = IID_Prefix + KF_ID.ID_FOLDERID_UsersFiles;
+        public static readonly string ID_FOLDERID_UsersFiles = IID_Prefix + KF_ID.ID_FOLDERID_UsersFiles;
 
         /// <summary>
         /// Display Name         Search Results
@@ -976,7 +976,7 @@
         /// Legacy Display Name  Not applicable
         /// Legacy Default Path  Not applicable
         /// </summary>
-        public const string ID_FOLDERID_SearchHome = IID_Prefix + KF_ID.ID_FOLDERID_SearchHome;
+        public static readonly string ID_FOLDERID_SearchHome = IID_Prefix + KF_ID.ID_FOLDERID_SearchHome;
 
         /// <summary>
         /// Display Name         Original Images
@@ -986,7 +986,7 @@
         /// Legacy Display Name  Not applicable
         /// Legacy Default Path  Not applicable
         /// </summary>
-        public const string ID_FOLDERID_OriginalImages = IID_Prefix + KF_ID.ID_FOLDERID_OriginalImages;
+        public static readonly string ID_FOLDERID_OriginalImages = IID_Prefix + KF_ID.ID_FOLDERID_OriginalImages;
 
         /// <summary>
         /// Display Name         The user's username (%USERNAME%)
@@ -996,7 +996,7 @@
         /// Legacy Display Name  Not applicable
         /// Legacy Default Path  Not applicable
         /// </summary>
-        public const string ID_FOLDERID_HomeGroupCurrentUser = IID_Prefix + KF_ID.ID_FOLDERID_HomeGroupCurrentUser;
+        public static readonly string ID_FOLDERID_HomeGroupCurrentUser = IID_Prefix + KF_ID.ID_FOLDERID_HomeGroupCurrentUser;
 
         /// <summary>
         /// Display Name         Account Pictures
@@ -1006,7 +1006,7 @@
         /// Legacy Display Name  Not applicable
         /// Legacy Default Path  Not applicable
         /// </summary>
-        public const string ID_FOLDERID_AccountPictures = IID_Prefix + KF_ID.ID_FOLDERID_AccountPictures;
+        public static readonly string ID_FOLDERID_AccountPictures = IID_Prefix + KF_ID.ID_FOLDERID_AccountPictures;
 
         /// <summary>
         /// Display Name         Public Account Pictures
@@ -1016,7 +1016,7 @@
         /// Legacy Display Name  Not applicable
         /// Legacy Default Path  Not applicable
         /// </summary>
-        public const string ID_FOLDERID_PublicUserTiles = IID_Prefix + KF_ID.ID_FOLDERID_PublicUserTiles;
+        public static readonly string ID_FOLDERID_PublicUserTiles = IID_Prefix + KF_ID.ID_FOLDERID_PublicUserTiles;
 
         /// <summary>
         /// Display Name         Applications
@@ -1026,7 +1026,7 @@
         /// Legacy Display Name  Not applicable
         /// Legacy Default Path  Not applicable
         /// </summary>
-        public const string ID_FOLDERID_AppsFolder = IID_Prefix + KF_ID.ID_FOLDERID_AppsFolder;
+        public static readonly string ID_FOLDERID_AppsFolder = IID_Prefix + KF_ID.ID_FOLDERID_AppsFolder;
 
         /// <summary>
         /// Display Name         Application Shortcuts
@@ -1036,7 +1036,7 @@
         /// Legacy Display Name  Not applicable
         /// Legacy Default Path  Not applicable
         /// </summary>
-        public const string ID_FOLDERID_ApplicationShortcuts = IID_Prefix + KF_ID.ID_FOLDERID_ApplicationShortcuts;
+        public static readonly string ID_FOLDERID_ApplicationShortcuts = IID_Prefix + KF_ID.ID_FOLDERID_ApplicationShortcuts;
 
         /// <summary>
         /// Display Name         RoamingTiles
@@ -1046,7 +1046,7 @@
         /// Legacy Display Name  Not applicable
         /// Legacy Default Path  Not applicable
         /// </summary>
-        public const string ID_FOLDERID_RoamingTiles = IID_Prefix + KF_ID.ID_FOLDERID_RoamingTiles;
+        public static readonly string ID_FOLDERID_RoamingTiles = IID_Prefix + KF_ID.ID_FOLDERID_RoamingTiles;
 
         /// <summary>
         /// Display Name         RoamedTileImages
@@ -1056,7 +1056,7 @@
         /// Legacy Display Name  Not applicable
         /// Legacy Default Path  Not applicable
         /// </summary>
-        public const string ID_FOLDERID_RoamedTileImages = IID_Prefix + KF_ID.ID_FOLDERID_RoamedTileImages;
+        public static readonly string ID_FOLDERID_RoamedTileImages = IID_Prefix + KF_ID.ID_FOLDERID_RoamedTileImages;
 
         /// <summary>
         /// Display Name         Screenshots
@@ -1066,7 +1066,7 @@
         /// Legacy Display Name  Not applicable
         /// Legacy Default Path  Not applicable
         /// </summary>
-        public const string ID_FOLDERID_Screenshots = IID_Prefix + KF_ID.ID_FOLDERID_Screenshots;
+        public static readonly string ID_FOLDERID_Screenshots = IID_Prefix + KF_ID.ID_FOLDERID_Screenshots;
 
         /// <summary>
         /// Returns a dictionary of all constants and their Ids in this class.

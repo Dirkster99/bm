@@ -38,7 +38,7 @@
             Assert.IsTrue(drive.DirectoryPathExists());
             Assert.IsTrue((drive.ItemType & DirectoryItemFlags.FileSystemDirectory) != 0);
             Assert.IsTrue(drive.PathType == PathHandler.FileSystem);
-//            Assert.IsTrue(string.Compare(drive.Label, driveInfoPath.VolumeLabel,true) == 0);
+            //            Assert.IsTrue(string.Compare(drive.Label, driveInfoPath.VolumeLabel,true) == 0);
         }
 
         /// <summary>

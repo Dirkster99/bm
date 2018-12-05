@@ -69,7 +69,9 @@
                 HRESULT result = NativeMethods.SHGetKnownFolderPath(kf_guid, 0, IntPtr.Zero, out pidlPtr);
 
                 if (result == HRESULT.S_OK)
+                {
                     return pidlPtr;
+                }
 
                 return IntPtr.Zero;
             }
@@ -87,7 +89,7 @@
 
             return IntPtr.Zero;
         }
-       
+
         /// <summary>
         /// Gets the PIDL from a given parsing name as <see cref="IntPtr"/> reference
         /// or IntPtr.Zero if knownfolder could not be resolved.
@@ -102,12 +104,12 @@
         internal static IntPtr PidlFromParsingName(string name)
         {
             IntPtr pidlFull = default(IntPtr);
-        
+
             SFGAOF sfgao;
 
             var retCode = NativeMethods.SHParseDisplayName(name, IntPtr.Zero,
                                                            out pidlFull, (SFGAOF)0, out sfgao);
-        
+
             return (retCode == HRESULT.S_OK ? pidlFull : IntPtr.Zero);
         }
     }

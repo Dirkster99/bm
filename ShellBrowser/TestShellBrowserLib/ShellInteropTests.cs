@@ -132,10 +132,12 @@
                 IntPtr apidl = default(IntPtr);
 
                 // Get one item below desktop root at a time and process by getting its display name
-                for ( ; enumIDs.Next(1, out apidl, out fetched) == HRESULT.S_OK; count++)
+                for (; enumIDs.Next(1, out apidl, out fetched) == HRESULT.S_OK; count++)
                 {
                     if (fetched <= 0)  // End this loop if no more items are available
+                    {
                         break;
+                    }
 
                     IntPtr ptrStr = default(IntPtr); // get strings for this item
                     try
@@ -240,8 +242,8 @@
                 if (relChildPtr != default(IntPtr))
                     NativeMethods.ILFree(relChildPtr);
 
-//                if (relChildPtr != default(IntPtr))
-//                    NativeMethods.ILFree(relChildPtr1);
+                //                if (relChildPtr != default(IntPtr))
+                //                    NativeMethods.ILFree(relChildPtr1);
             }
         }
     }

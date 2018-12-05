@@ -12,6 +12,11 @@
     internal class GenericCOMFolder<T> : IDisposable
     {
         #region fields
+        /// <summary>
+        /// Log4net logger facility for this class.
+        /// </summary>
+        protected static readonly log4net.ILog Logger = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
+
         private bool _disposed = false;
         private IntPtr _intPtrICOMInterface = IntPtr.Zero;
         #endregion fields
@@ -50,7 +55,9 @@
             _intPtrICOMInterface = intPtrICOMInterface;
 
             if (_intPtrICOMInterface != IntPtr.Zero)
+            {
                 Obj = (T)Marshal.GetTypedObjectForIUnknown(intPtrICOMInterface, typeof(T));
+            }
             else
                 Obj = ICOMInterface;
         }
@@ -97,7 +104,10 @@
                         {
                             Marshal.ReleaseComObject(Obj);
                         }
-                        catch{}
+                        catch (Exception exp)
+                        {
+                            Logger.Error(exp);
+                        }
                         finally
                         {
                             Obj = default(T);

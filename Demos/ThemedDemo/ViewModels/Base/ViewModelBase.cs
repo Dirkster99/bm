@@ -35,7 +35,9 @@
                 memberExpression = (MemberExpression)unaryExpression.Operand;
             }
             else
+            {
                 memberExpression = (MemberExpression)lambda.Body;
+            }
 
             this.RaisePropertyChanged(memberExpression.Member.Name);
         }
@@ -48,7 +50,9 @@
         protected virtual void RaisePropertyChanged(string propertyName)
         {
             if (this.PropertyChanged != null)
+            {
                 this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+            }
         }
     }
 }

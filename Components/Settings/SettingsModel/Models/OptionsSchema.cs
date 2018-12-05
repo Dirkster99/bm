@@ -28,7 +28,7 @@
         #region fields
         private Dictionary<object, object> mValues;
         #endregion fields
-        
+
         #region constructors
         /// <summary>
         /// Class constructor
@@ -54,7 +54,8 @@
                 case OptionSchemaType.SingleValue:
                 case OptionSchemaType.List:
                     // Value and default value is same at construction time
-                    Value = DefaultValue = defaultValue;
+                    DefaultValue = defaultValue;
+                    Value = defaultValue;
                     break;
 
                 default:
@@ -165,7 +166,7 @@
 
             if (this.mValues != null)
                 return this.mValues.TryGetValue(key, out value);
-                
+
             return false;
         }
 

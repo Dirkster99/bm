@@ -21,8 +21,8 @@
         private bool _isInitialized = false;       // application should be initialized through one method ONLY!
         private object _lockObject = new object(); // thread lock semaphore
 
-        private ICommand _ThemeSelectionChangedCommand = null;
-        private ThemeViewModel _AppTheme = null;
+        private ICommand _ThemeSelectionChangedCommand;
+        private ThemeViewModel _AppTheme;
         private readonly DemoViewModel _demo;
         #endregion private fields
 
@@ -81,7 +81,7 @@
                         ThemeDefinitionViewModel theme = null;
 
                         // Try to convert object[0] command parameter
-                        if(paramets != null)
+                        if (paramets != null)
                         {
                             if (paramets.Length == 1)
                             {
@@ -145,33 +145,33 @@
         #region Get/set Session Application Data
         internal void GetSessionData(IProfile sessionData)
         {
-/***
-            if (sessionData.LastActiveTargetFile != TargetFile.FileName)
-                sessionData.LastActiveTargetFile = TargetFile.FileName;
+            /***
+                        if (sessionData.LastActiveTargetFile != TargetFile.FileName)
+                            sessionData.LastActiveTargetFile = TargetFile.FileName;
 
-            sessionData.LastActiveSourceFiles = new List<SettingsModel.Models.FileReference>();
-            if (SourceFiles != null)
-            {
-                foreach (var item in SourceFiles)
-                    sessionData.LastActiveSourceFiles.Add(new SettingsModel.Models.FileReference()
-                    { path = item.FileName }
-                                                         );
-            }
-***/
+                        sessionData.LastActiveSourceFiles = new List<SettingsModel.Models.FileReference>();
+                        if (SourceFiles != null)
+                        {
+                            foreach (var item in SourceFiles)
+                                sessionData.LastActiveSourceFiles.Add(new SettingsModel.Models.FileReference()
+                                { path = item.FileName }
+                                                                     );
+                        }
+            ***/
         }
 
         internal void SetSessionData(IProfile sessionData)
         {
-/***
-            TargetFile.FileName = sessionData.LastActiveTargetFile;
+            /***
+                        TargetFile.FileName = sessionData.LastActiveTargetFile;
 
-            _SourceFiles = new ObservableCollection<FileInfoViewModel>();
-            if (sessionData.LastActiveSourceFiles != null)
-            {
-                foreach (var item in sessionData.LastActiveSourceFiles)
-                    _SourceFiles.Add(new FileInfoViewModel(item.path));
-            }
-***/
+                        _SourceFiles = new ObservableCollection<FileInfoViewModel>();
+                        if (sessionData.LastActiveSourceFiles != null)
+                        {
+                            foreach (var item in sessionData.LastActiveSourceFiles)
+                                _SourceFiles.Add(new FileInfoViewModel(item.path));
+                        }
+            ***/
         }
         #endregion Get/set Session Application Data
 
@@ -255,7 +255,12 @@
         /// <param name="e"></param>
         private void Appearance_AccentColorChanged(object sender, MLib.Events.ColorChangedEventArgs e)
         {
-
+            // Add code here to react on changes of accent color
+            // Changing other custom control styles is possible in XAML using the BindToMLib pattern:
+            // https://www.codeproject.com/Articles/1236588/File-System-Controls-in-WPF-Version-III#ExtensionPoints
+            //
+            // So, most of the time you will not need this but its there in case you prefer code behind
+            // for this and do actually need it.
         }
         #endregion methods
     }

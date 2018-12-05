@@ -16,7 +16,7 @@
     internal class ShellFolder : IDisposable
     {
         #region fields
-        private bool _disposed = false;
+        private bool _disposed;
         private IntPtr _intPtrShellFolder2 = IntPtr.Zero;
         #endregion fields
 
@@ -38,7 +38,7 @@
         public ShellFolder(IntPtr intPtrShellFolder2)
             : this()
         {
-            InitObject(intPtrShellFolder2, null);
+            InitObject(intPtrShellFolder2);
         }
 
         /// <summary>
@@ -54,9 +54,13 @@
             _intPtrShellFolder2 = intPtrShellFolder2;
 
             if (_intPtrShellFolder2 != IntPtr.Zero)
+            {
                 Obj = (IShellFolder2)Marshal.GetTypedObjectForIUnknown(intPtrShellFolder2, typeof(IShellFolder2));
+            }
             else
+            {
                 Obj = iShellFolder2;
+            }
         }
 
         /// <summary>
@@ -90,7 +94,9 @@
                                          SHGDNF uFlags)
         {
             if (Obj == null)
+            {
                 return null;
+            }
 
             IntPtr ptrStr = Marshal.AllocCoTaskMem(NativeMethods.MAX_PATH * 2 + 4);
             Marshal.WriteInt32(ptrStr, 0, 0);
@@ -99,12 +105,17 @@
             try
             {
                 if (Obj.GetDisplayNameOf(ptr, uFlags, ptrStr) == HRESULT.S_OK)
+                {
                     NativeMethods.StrRetToBuf(ptrStr, ptr, buf, NativeMethods.MAX_PATH);
+                }
             }
             finally
             {
                 if (ptrStr != IntPtr.Zero)
+                {
                     Marshal.FreeCoTaskMem(ptrStr);
+                }
+
                 ptrStr = IntPtr.Zero;
             }
 
@@ -135,7 +146,10 @@
                         {
                             Marshal.ReleaseComObject(Obj);
                         }
-                        catch{}
+                        catch
+                        {
+                            // Ignoring this on exit of lifetime
+                        }
                         finally
                         {
                             Obj = null;

@@ -441,8 +441,11 @@
                 <CheckBox Content="Show TreeView Debug Control" Name="ShowTreeviewControl"
                           IsChecked="False" />
 
-                <CheckBox Content="Show Root Items (Overflowed) List Control" Name="ShowRootItemsOverflowList"
+                <CheckBox Content="Root (Overflowed) Items List" Name="ShowRootItemsOverflowList"
                           IsChecked="False" />
+
+                <CheckBox Content="IsEnabled"
+                          IsChecked="{Binding ElementName=BreadcrumbDemoControl,Path=IsEnabled}" />
             </StackPanel>
         </ScrollViewer>
     </Grid>
