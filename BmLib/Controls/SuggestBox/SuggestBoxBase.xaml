@@ -39,8 +39,8 @@
             <Grid x:Name="PART_Root">
                 <TextBlock Text="{TemplateBinding Hint}"
                            Foreground="{DynamicResource {x:Static SystemColors.GrayTextBrushKey}}"
-                           Visibility="{Binding IsHintVisible, RelativeSource={RelativeSource TemplatedParent}, 
-                            Converter={StaticResource btv}}"  Opacity="0.5"  />
+                           Visibility="{Binding IsHintVisible, RelativeSource={RelativeSource TemplatedParent}, Converter={StaticResource btv}}"
+                           Opacity="0.5" />
                 <ScrollViewer Margin="0" x:Name="PART_ContentHost" />
                 <Popup x:Name="PART_Popup" AllowsTransparency="true"  
                        PlacementTarget="{Binding ElementName=PART_ContentHost}"                                   

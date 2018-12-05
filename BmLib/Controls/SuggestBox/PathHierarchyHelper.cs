@@ -15,6 +15,9 @@
         protected static readonly log4net.ILog logger = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
 
         #region Constructor
+        /// <summary>
+        /// Class constructor.
+        /// </summary>
         public PathHierarchyHelper(string parentPath,
                                    string valuePath,
                                    string subEntriesPath)
@@ -36,7 +39,9 @@
                 return "";
 
             if (pathName.IndexOf(Separator) == -1)
+            {
                 return "";
+            }
             else
                 return pathName.Substring(0, pathName.LastIndexOf(Separator));
         }
@@ -193,7 +198,6 @@
         {
             return propInfoValue.GetValue(item) as string;
         }
-
         #endregion
 
         #region Data

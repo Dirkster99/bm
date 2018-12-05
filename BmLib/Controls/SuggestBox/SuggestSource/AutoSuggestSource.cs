@@ -33,11 +33,12 @@
 
             if (valuePath == "" && input.EndsWith("" + helper.Separator))
                 valuePath = valueName;
+
             var found = helper.GetItem(data, valuePath);
 
             List<object> retVal = new List<object>();
 
-            if (found != null && helper != null)
+            if (found != null)
             {
                 foreach (var item in helper.List(found))
                 {
