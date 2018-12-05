@@ -15,7 +15,7 @@
     /// Usage: http://social.msdn.microsoft.com/Forums/da-DK/wpf/thread/63696841-0358-4f7a-abe1-e6062518e3d6
     /// Source: http://stackoverflow.com/questions/5223133/merge-control-style-with-global-style-set-by-another-project-dynamically
     /// </summary>
-    public class MergeStyleBehaviour
+    public static class MergeStyleBehaviour
     {
         #region fields
         /// <summary>
@@ -40,6 +40,11 @@
         public static readonly DependencyProperty OriginalStyleProperty =
                                 DependencyProperty.RegisterAttached("OriginalStyle", typeof(Style), typeof(MergeStyleBehaviour),
                                 new FrameworkPropertyMetadata((Style)null));
+
+        /// <summary>
+        /// Log4net logger facility for this class.
+        /// </summary>
+        public static readonly log4net.ILog Logger = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
         #endregion fields
 
         #region public static methods
@@ -56,7 +61,7 @@
             }
             catch (Exception exp)
             {
-                Console.WriteLine(exp.ToString());
+                Logger.Error(exp);
             }
 
             return false;
@@ -75,7 +80,7 @@
             }
             catch (Exception exp)
             {
-                Console.WriteLine(exp.ToString());
+                Logger.Error(exp);
             }
         }
 
