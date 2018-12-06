@@ -22,11 +22,14 @@
 
         public static readonly DependencyProperty HierarchyHelperProperty =
             DependencyProperty.Register("HierarchyHelper", typeof(IHierarchyHelper),
-            typeof(SuggestBox), new UIPropertyMetadata(new PathHierarchyHelper("Parent", "Value", "SubEntries")));
+            typeof(SuggestBox),
+            new UIPropertyMetadata(new PathHierarchyHelper("Parent", "Value", "SubEntries")));
 
         public static readonly DependencyProperty SuggestSourcesProperty = DependencyProperty.Register(
-            "SuggestSources", typeof(IEnumerable<ISuggestSource>), typeof(SuggestBox), new PropertyMetadata(
-                new List<ISuggestSource>(new[] { new AutoSuggestSource() })));
+            "SuggestSources",
+            typeof(IEnumerable<ISuggestSource>),
+            typeof(SuggestBox),
+            new PropertyMetadata(new List<ISuggestSource>(new[] { new AutoSuggestSource() })));
         #endregion fields
 
         #region Constructor
@@ -137,8 +140,16 @@
                 {
                     Task.Run(async () =>
                     {
-                        var tasks = from s in suggestSources
-                                    select s.SuggestAsync(data, text, hierarchyHelper);
+                        List<Task<IList<object>>> tasks = new List<Task<IList<object>>>();
+                        foreach (var item in suggestSources)
+                        {
+                            tasks.Add(item.SuggestAsync(data, text, hierarchyHelper));
+                        }
+
+                        //// Not sure why but this LINQ statement generates 2 queries - doubling the effort
+                        ////var tasks = from s in suggestSources
+                        ////            select s.SuggestAsync(data, text, hierarchyHelper);
+
                         await Task.WhenAll(tasks);
 
                         return tasks.SelectMany(tsk => tsk.Result).Distinct().ToList();

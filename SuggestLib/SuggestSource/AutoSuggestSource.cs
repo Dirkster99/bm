@@ -6,7 +6,8 @@
     using System.Threading.Tasks;
 
     /// <summary>
-    /// Suggest based on sub entries of specified data.
+    /// Implements a suggestion object to generate suggestions
+    /// based on sub entries of specified data.
     /// </summary>
     public class AutoSuggestSource : ISuggestSource
     {
@@ -20,7 +21,20 @@
         #endregion
 
         #region Methods
-        public Task<IList<object>> SuggestAsync(object data, string input, IHierarchyHelper helper)
+        /// <summary>
+        /// Method returns a task that returns a list of suggestion objects
+        /// that are associated to the <paramref name="input"/> string
+        /// and given <paramref name="data"/> object.
+        /// 
+        /// The list of suggestion is empty if helper object is null.
+        /// </summary>
+        /// <param name="data"></param>
+        /// <param name="input"></param>
+        /// <param name="helper"></param>
+        /// <returns></returns>
+        public Task<IList<object>> SuggestAsync(object data,
+                                                string input,
+                                                IHierarchyHelper helper)
         {
             if (helper == null)
                 return Task.FromResult<IList<object>>(new List<Object>());

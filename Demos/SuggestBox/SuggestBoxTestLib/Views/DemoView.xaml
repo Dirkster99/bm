@@ -38,6 +38,10 @@
 
                     <RowDefinition Height="Auto"/>
                     <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
                 </Grid.RowDefinitions>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="Auto"/>
@@ -88,15 +92,33 @@
 
                 <TextBlock Text="Test Input:" HorizontalAlignment="Right" Margin="3"
                            FontWeight="Bold" Grid.Column="0" Grid.Row="7" />
-                <bc:SuggestBox x:Name="suggestBoxAuto2" Grid.Column="1" Grid.Row="7"
+                <bc:SuggestBox Grid.Column="1" Grid.Row="7"
                            DisplayMemberPath="Value"
                            Hint="With delay 1 sec"                                   
                            RootItem="{Binding SuggestBoxAuto2_RootItems}"
                            HierarchyHelper="{Binding SuggestBoxAuto2_HierarchyHelper}"
-                           SuggestSources="{Binding SuggestBoxAuto2_SuggestSources}"
+                           
                            Text="{Binding Text, ElementName=txtAuto2, UpdateSourceTrigger=Explicit}"
                            Margin="3"    
+                        /><!-- SuggestSources="{Binding SuggestBoxAuto2_SuggestSources}" -->
+
+                <Separator Grid.Row="8" Grid.ColumnSpan="2" Margin="3"/>
+
+                <TextBlock Text="Test Result:" HorizontalAlignment="Right" Margin="3"
+                           FontWeight="Bold" Grid.Column="0" Grid.Row="9"/>
+                <TextBlock Grid.Column="1" Grid.Row="9" Margin="3,0"
+                           VerticalAlignment="Center"
+                           Text="{Binding ElementName=DiskPathSuggestBox,Path=Text}"
+                           />
+
+                <TextBlock Text="Test Input:" HorizontalAlignment="Right" Margin="3"
+                           FontWeight="Bold" Grid.Column="0" Grid.Row="10" />
+                <bc:SuggestBox Grid.Column="1" Grid.Row="10" x:Name="DiskPathSuggestBox"
+                           Hint="Enter a file system path"                                   
+                           SuggestSources="{Binding DiskPathSuggestBox_SuggestSources}"
+                           Margin="3"    
                         />
+
             </Grid>
         </Grid>
 

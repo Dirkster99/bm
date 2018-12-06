@@ -49,6 +49,7 @@
     <Compile Include="ViewModels\AppViewModel.cs" />
     <Compile Include="ViewModels\Base\RelayCommand.cs" />
     <Compile Include="ViewModels\Base\ViewModelBase.cs" />
+    <Compile Include="ViewModels\DirectorySuggestSource.cs" />
     <Compile Include="ViewModels\DummySuggestSource.cs" />
     <Compile Include="ViewModels\FakeViewModel.cs" />
     <Compile Include="Views\DemoView.xaml.cs">

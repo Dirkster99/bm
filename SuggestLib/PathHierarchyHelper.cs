@@ -21,14 +21,18 @@
         public PathHierarchyHelper(string parentPath,
                                    string valuePath,
                                    string subEntriesPath)
+            : this()
         {
             ParentPath = parentPath;
             ValuePath = valuePath;
             SubentriesPath = subEntriesPath;
+        }
+
+        protected PathHierarchyHelper()
+        {
             Separator = '\\';
             StringComparisonOption = StringComparison.CurrentCultureIgnoreCase;
         }
-
         #endregion
 
         #region Methods
@@ -134,33 +138,42 @@
         }
 
         /// <summary>
-        /// Get Item from path.
+        /// Attempts to find an hierarchy item from a given
+        /// <paramref name="path"/> and <paramref name="rootItem"/>.
+        /// 
+        /// Assuming we give it a path like 'sub2/sub3' and the hierarchy contains
+        /// this path then the method should return an object that represents sub3.
         /// </summary>
         /// <param name="rootItem">RootItem or ItemSource which can be used to lookup from.</param>
         /// <param name="path"></param>
-        /// <returns></returns>
+        /// <returns>The item found or null</returns>
         public object GetItem(object rootItem, string path)
         {
             logger.InfoFormat("Path {0}", (path == null ? "" : path));
 
-            var queue = new Queue<string>(path.Split(new char[] { Separator }, StringSplitOptions.RemoveEmptyEntries));
-            object current = rootItem;
+            var queue = new Queue<string>(path.Split(new char[] { this.Separator }, StringSplitOptions.RemoveEmptyEntries));
+
+            object current = rootItem;              // Return root item if queue is empty
             while (current != null && queue.Any())
             {
-                var nextSegment = queue.Dequeue();
-                object found = null;
+                var nextSegment = queue.Dequeue();  // Get each part of the path from root to sub-item and
+                object found = null;               // and attempt to locate the object associated with the path
+
                 foreach (var item in List(current))
                 {
                     string valuePathName = getValuePath(item);
                     string value = ExtractName(valuePathName); //Value may be full path, or just current value.
+
                     if (value.Equals(nextSegment, StringComparisonOption))
                     {
                         found = item;
                         break;
                     }
                 }
+
                 current = found;
             }
+
             return current;
         }
 
@@ -176,6 +189,7 @@
         public char Separator { get; set; }
 
         public StringComparison StringComparisonOption { get; set; }
+
         public string ParentPath { get; set; }
         public string ValuePath { get; set; }
         public string SubentriesPath { get; set; }
@@ -184,24 +198,34 @@
     }
 
     /// <summary>
-    /// Generic version of AutoHierarchyHelper, which use Path to query for hierarchy of ViewModels
+    /// Generic version of AutoHierarchyHelper,
+    /// which uses Path to query for hierarchy of ViewModels.
     /// </summary>
     /// <typeparam name="T"></typeparam>
-    public class PathHierarchyHelper<T> : PathHierarchyHelper
+    internal class PathHierarchyHelper<T> : PathHierarchyHelper
     {
         #region Constructor
+        /// <summary>
+        /// Class constructor
+        /// </summary>
+        /// <param name="parentPath"></param>
+        /// <param name="valuePath"></param>
+        /// <param name="subEntriesPath"></param>
+        public PathHierarchyHelper(string parentPath,
+                                   string valuePath,
+                                   string subEntriesPath)
 
-        public PathHierarchyHelper(string parentPath, string valuePath, string subEntriesPath)
             : base(parentPath, valuePath, subEntriesPath)
         {
             propInfoSubEntries = typeof(T).GetProperty(subEntriesPath);
             propInfoValue = typeof(T).GetProperty(valuePath);
             propInfoParent = typeof(T).GetProperty(parentPath);
         }
-
         #endregion
 
-        #region Methods
+        PropertyInfo propInfoValue;
+        PropertyInfo propInfoSubEntries;
+        PropertyInfo propInfoParent;
 
         protected override object getParent(object item)
         {
@@ -217,12 +241,5 @@
         {
             return propInfoValue.GetValue(item) as string;
         }
-        #endregion
-
-        #region Data
-        PropertyInfo propInfoValue, propInfoSubEntries, propInfoParent;
-        #endregion
-        #region Public Properties
-        #endregion
     }
 }

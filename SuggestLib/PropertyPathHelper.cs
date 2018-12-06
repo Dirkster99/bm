@@ -11,7 +11,7 @@
     /// <summary>
     /// Thomas Levesque - http://stackoverflow.com/questions/3577802/wpf-getting-a-property-value-from-a-binding-path
     /// </summary>
-    public static class PropertyPathHelper
+    internal static class PropertyPathHelper
     {
         internal static Dictionary<Tuple<Type, string>, PropertyInfo> _cacheDic
             = new Dictionary<Tuple<Type, string>, PropertyInfo>();

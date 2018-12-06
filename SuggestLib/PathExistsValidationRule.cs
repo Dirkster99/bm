@@ -6,26 +6,34 @@
     using System.Globalization;
     using System.Windows.Controls;
 
-    public class PathExistsValidationRule : ValidationRule
+    internal class PathExistsValidationRule : ValidationRule
     {
+        #region fields
         protected static readonly log4net.ILog logger = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
+        private IHierarchyHelper _hierarchyHelper;
+        private object _root;
+        #endregion fields
 
         #region Constructor
-
+        /// <summary>
+        /// Class constructor
+        /// </summary>
+        /// <param name="hierarchyHelper"></param>
+        /// <param name="root"></param>
         public PathExistsValidationRule(IHierarchyHelper hierarchyHelper, object root)
         {
             _hierarchyHelper = hierarchyHelper;
             _root = root;
         }
 
+        /// <summary>
+        /// Class constructor
+        /// </summary>
         public PathExistsValidationRule()
         {
 
         }
-
         #endregion
-
-        #region Methods
 
         public override ValidationResult Validate(object value, CultureInfo cultureInfo)
         {
@@ -40,22 +48,11 @@
             catch (Exception ex)
             {
                 Debug.WriteLine("Validate Exception: '{0}'\n{1}", ex.Message, ex.StackTrace);
+
                 return new ValidationResult(false, "Invalid Path");
             }
+
             return new ValidationResult(true, null);
         }
-
-        #endregion
-
-        #region Data
-
-        IHierarchyHelper _hierarchyHelper;
-        object _root;
-
-        #endregion
-
-        #region Public Properties
-
-        #endregion
     }
 }

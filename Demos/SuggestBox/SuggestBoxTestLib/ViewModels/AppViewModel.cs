@@ -23,7 +23,6 @@
             SuggestBoxDummy_SuggestSources = new List<ISuggestSource>(new[] { new DummySuggestSource() });
 
             FakeViewModel fvm = new FakeViewModel();
-
             this.Processing = true;
             var t = ConstructHierarchy(fvm);
             t.ContinueWith((result) =>
@@ -42,15 +41,24 @@
 
             SuggestBoxAuto2_RootItems = FakeViewModel.GenerateFakeViewModels(TimeSpan.FromSeconds(0.5));
 
-            SuggestBoxAuto2_SuggestSources = new List<ISuggestSource>(
-                new[] {
-                    //This is default value, suggest based on HierarchyLister.List()
-                    new AutoSuggestSource()
-                });
+            //// This class source is set by default
+            //// - so we should set it only if there was a custom source that is different from this
+            ////
+            //// SuggestBoxAuto2_SuggestSources = new List<ISuggestSource>(
+            ////     new[] {
+            ////         //This is default value, suggest based on HierarchyLister.List()
+            ////         new AutoSuggestSource()
+            ////     });
+
+            DiskPathSuggestBox_SuggestSources = new List<ISuggestSource>(new[] { new DirectorySuggestSource() });
         }
         #endregion constructors
 
         #region properties
+        /// <summary>
+        /// Gets a simple data provider object that will always suggest a list of 2 items
+        /// based on any given input string (by adding a constant output to any given input).
+        /// </summary>
         public List<ISuggestSource> SuggestBoxDummy_SuggestSources { get; }
 
         #region SuggestBoxAuto
@@ -79,6 +87,10 @@
             }
         }
         #endregion SuggestBoxAuto2
+
+        #region DiskPathSuggestBox
+        public List<ISuggestSource> DiskPathSuggestBox_SuggestSources { get; }
+        #endregion DiskPathSuggestBox
         #endregion properties
 
         #region methods
