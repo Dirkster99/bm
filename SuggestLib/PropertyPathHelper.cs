@@ -1,4 +1,4 @@
-﻿namespace BmLib.Controls.SuggestBox
+﻿namespace SuggestLib
 {
     using System;
     using System.Collections.Generic;

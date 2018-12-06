@@ -1,7 +1,7 @@
-﻿namespace BmLib.Controls.SuggestBox
+﻿namespace SuggestLib
 {
-    using BmLib.Interfaces.SuggestBox;
-    using SuggestBoxDemo.SuggestSource;
+    using Interfaces;
+    using SuggestLib.SuggestSource;
     using System;
     using System.Collections.Generic;
     using System.Linq;

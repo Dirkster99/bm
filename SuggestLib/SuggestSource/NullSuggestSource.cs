@@ -1,6 +1,6 @@
-﻿namespace BmLib.Controls.SuggestBox.SuggestSource
+﻿namespace SuggestLib.SuggestSource
 {
-    using BmLib.Interfaces.SuggestBox;
+    using SuggestLib.Interfaces;
     using System.Collections.Generic;
     using System.Threading.Tasks;
 

@@ -1,6 +1,6 @@
 ﻿namespace SuggestBoxTestLib.ViewModels
 {
-    using BmLib.Interfaces.SuggestBox;
+    using SuggestLib.Interfaces;
     using System.Collections.Generic;
     using System.Threading.Tasks;
 

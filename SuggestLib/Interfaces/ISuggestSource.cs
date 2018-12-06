@@ -1,4 +1,4 @@
-﻿namespace BmLib.Interfaces.SuggestBox
+﻿namespace SuggestLib.Interfaces
 {
     using System.Collections.Generic;
     using System.Threading.Tasks;

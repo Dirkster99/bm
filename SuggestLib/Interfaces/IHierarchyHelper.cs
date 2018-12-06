@@ -1,10 +1,10 @@
-﻿namespace BmLib.Interfaces.SuggestBox
+﻿namespace SuggestLib.Interfaces
 {
     using System;
     using System.Collections;
     using System.Collections.Generic;
 
-    public interface IHierarchyHelper
+    public interface IHierarchyHelper : ISuggestBoxHierarchyHelper
     {
         /// <summary>
         /// Used to generate ItemsSource for BreadcrumbCore.
@@ -21,20 +21,6 @@
         string GetPath(object item);
 
         /// <summary>
-        /// Get Item from path.
-        /// </summary>
-        /// <param name="rootItem">RootItem or ItemSource which can be used to lookup from.</param>
-        /// <param name="path"></param>
-        /// <returns></returns>
-        object GetItem(object rootItem, string path);
-
-        IEnumerable List(object item);
-
-        string ExtractPath(string pathName);
-
-        string ExtractName(string pathName);
-
-        /// <summary>
         /// Gets a seperator character that is usually used to seperate one
         /// entry of one level from its sub-level entry (eg.: '/' or '\')
         /// </summary>
@@ -47,5 +33,23 @@
         string ValuePath { get; }
 
         string SubentriesPath { get; }
+    }
+
+    public interface ISuggestBoxHierarchyHelper
+    {
+
+        /// <summary>
+        /// Get Item from path.
+        /// </summary>
+        /// <param name="rootItem">RootItem or ItemSource which can be used to lookup from.</param>
+        /// <param name="path"></param>
+        /// <returns></returns>
+        object GetItem(object rootItem, string path);
+
+        string ExtractPath(string pathName);
+
+        string ExtractName(string pathName);
+
+        IEnumerable List(object item);
     }
 }

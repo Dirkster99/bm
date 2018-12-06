@@ -1,8 +1,8 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
 
-                    xmlns:bc="clr-namespace:BmLib.Controls.SuggestBox"
-                    xmlns:conv="clr-namespace:BmLib.Converters"
+                    xmlns:bc="clr-namespace:SuggestLib"
+                    xmlns:conv="clr-namespace:SuggestLib.Converters"
                     >
 
     <!-- ResizeGrip Style -->

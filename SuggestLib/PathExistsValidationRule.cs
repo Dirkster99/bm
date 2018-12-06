@@ -1,6 +1,6 @@
-﻿namespace BmLib.Controls.SuggestBox
+﻿namespace SuggestLib
 {
-    using Interfaces.SuggestBox;
+    using Interfaces;
     using System;
     using System.Diagnostics;
     using System.Globalization;

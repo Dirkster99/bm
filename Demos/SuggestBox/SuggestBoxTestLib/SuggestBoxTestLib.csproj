@@ -56,12 +56,11 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\BmLib\BmLib.csproj">
-      <Project>{0f864f5c-ce7a-438b-b943-620d3b13fa11}</Project>
-      <Name>BmLib</Name>
+    <ProjectReference Include="..\..\..\SuggestLib\SuggestLib.csproj">
+      <Project>{78bf82dc-38fd-41dc-a8ce-45c79f628103}</Project>
+      <Name>SuggestLib</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup />
   <ItemGroup>
     <Page Include="Views\DemoView.xaml">
       <SubType>Designer</SubType>

@@ -76,22 +76,12 @@
     <Compile Include="Controls\HotTrack.xaml.cs">
       <DependentUpon>HotTrack.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Controls\SuggestBox\PathExistsValidationRule.cs" />
-    <Compile Include="Controls\SuggestBox\PathHierarchyHelper.cs" />
-    <Compile Include="Controls\SuggestBox\PropertyPathHelper.cs" />
-    <Compile Include="Controls\SuggestBox\SuggestBox.cs" />
-    <Compile Include="Controls\SuggestBox\SuggestBoxBase.cs" />
-    <Compile Include="Controls\SuggestBox\SuggestSource\AutoSuggestSource.cs" />
-    <Compile Include="Controls\SuggestBox\SuggestSource\MultiSuggestSource.cs" />
-    <Compile Include="Controls\SuggestBox\SuggestSource\NullSuggestSource.cs" />
     <Compile Include="Controls\Switch.xaml.cs">
       <DependentUpon>Switch.xaml</DependentUpon>
     </Compile>
     <Compile Include="Converters\AssociatedIconConverter.cs" />
     <Compile Include="Interfaces\IBrowseRequestTaskQueue.cs" />
     <Compile Include="Interfaces\IProgress.cs" />
-    <Compile Include="Interfaces\SuggestBox\IHierarchyHelper.cs" />
-    <Compile Include="Interfaces\SuggestBox\ISuggestSource.cs" />
     <Compile Include="Themes\ResourceKeys.cs" />
     <Compile Include="Utils\AsyncUtils.cs" />
     <Compile Include="Utils\UITools.cs" />
@@ -120,10 +110,6 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="Controls\HotTrack.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Controls\SuggestBox\SuggestBoxBase.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>

@@ -1,8 +1,8 @@
 ﻿namespace SuggestBoxTestLib.ViewModels
 {
-    using BmLib.Controls.SuggestBox;
-    using BmLib.Interfaces.SuggestBox;
-    using SuggestBoxDemo.SuggestSource;
+    using SuggestLib;
+    using SuggestLib.Interfaces;
+    using SuggestLib.SuggestSource;
     using System;
     using System.Collections.Generic;
     using System.Linq;
