@@ -23,7 +23,6 @@
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="Auto"/>
-                <RowDefinition Height="Auto"/>
             </Grid.RowDefinitions>
 
             <Grid>
@@ -54,7 +53,7 @@
                        Grid.Column="1" Grid.Row="0" Margin="3,0"
                        VerticalAlignment="Center"/>
 
-                <TextBlock Text="Test Input:" HorizontalAlignment="Right" Margin="3"
+                <TextBlock Text="Test Input 1:" HorizontalAlignment="Right" Margin="3"
                            FontWeight="Bold" Grid.Column="0" Grid.Row="1" />
                 <bc:SuggestBox x:Name="suggestBoxDummy" Grid.Column="1" Grid.Row="1"
                         Hint="Custom implement (+xyz/abc)"
@@ -70,7 +69,7 @@
                 <TextBlock x:Name="txtAuto" Grid.Column="1" Grid.Row="3" Margin="3,0"
                        VerticalAlignment="Center"/>
 
-                <TextBlock Text="Test Input:" HorizontalAlignment="Right" Margin="3"
+                <TextBlock Text="Test Input 2:" HorizontalAlignment="Right" Margin="3"
                            FontWeight="Bold" Grid.Column="0" Grid.Row="4" />
                 <bc:SuggestBox x:Name="suggestBoxAuto" Grid.Column="1" Grid.Row="4"
                         DisplayMemberPath="Value"
@@ -90,7 +89,7 @@
                 <TextBlock x:Name="txtAuto2" Grid.Column="1" Grid.Row="6" Margin="3,0"
                            VerticalAlignment="Center"/>
 
-                <TextBlock Text="Test Input:" HorizontalAlignment="Right" Margin="3"
+                <TextBlock Text="Test Input 3:" HorizontalAlignment="Right" Margin="3"
                            FontWeight="Bold" Grid.Column="0" Grid.Row="7" />
                 <bc:SuggestBox Grid.Column="1" Grid.Row="7"
                            DisplayMemberPath="Value"
@@ -111,7 +110,7 @@
                            Text="{Binding ElementName=DiskPathSuggestBox,Path=Text}"
                            />
 
-                <TextBlock Text="Test Input:" HorizontalAlignment="Right" Margin="3"
+                <TextBlock Text="Test Input 4:" HorizontalAlignment="Right" Margin="3"
                            FontWeight="Bold" Grid.Column="0" Grid.Row="10" />
                 <bc:SuggestBox Grid.Column="1" Grid.Row="10" x:Name="DiskPathSuggestBox"
                            Hint="Enter a file system path"                                   
@@ -122,16 +121,14 @@
             </Grid>
         </Grid>
 
-        <TextBox Grid.Row="1" Margin="3"/>
-
-        <Grid Grid.Row="2"
+        <Grid Grid.Row="3" VerticalAlignment="Bottom"
             Visibility="{Binding Processing,Converter={StaticResource BoolToVisibilityCollapsedConverter}}">
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="Auto"/>
             </Grid.RowDefinitions>
 
-            <TextBlock Text="We are working on it..." Margin="3" />
+            <TextBlock Text="Building test data for Test Input 2..." Margin="3" />
             <ProgressBar IsIndeterminate="True" Grid.Row="1" MinHeight="10" Margin="3"/>
         </Grid>
     </Grid>

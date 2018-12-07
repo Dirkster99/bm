@@ -24,7 +24,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Demos", "Demos", "{51467FF2
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BmLib", "BmLib\BmLib.csproj", "{0F864F5C-CE7A-438B-B943-620D3B13FA11}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SuggestBoxDemo", "Demos\SuggestBox\SuggestBoxDemo\SuggestBoxDemo.csproj", "{4F7C1E4D-48DA-4B48-A206-7E880BBE39D0}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GenericSuggestBoxDemo", "Demos\SuggestBox\SuggestBoxDemo\GenericSuggestBoxDemo.csproj", "{4F7C1E4D-48DA-4B48-A206-7E880BBE39D0}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "SuggestBox", "SuggestBox", "{E5B93A3B-845A-447E-B730-E7074E8D2B7A}"
 EndProject
@@ -41,6 +41,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SSCoreLib", "ShellBrowser\SSCCoreLib\SSCoreLib.csproj", "{24AE0C23-875A-4718-BF04-2CCEC08DEF05}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SuggestLib", "SuggestLib\SuggestLib.csproj", "{78BF82DC-38FD-41DC-A8CE-45C79F628103}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ThemedSuggestBoxDemo", "Demos\SuggestBox\ThemedSuggestBoxDemo\ThemedSuggestBoxDemo.csproj", "{6D9EE64D-07A4-4C8A-B5F0-0D59DD525A52}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -230,6 +232,18 @@ Global
 		{78BF82DC-38FD-41DC-A8CE-45C79F628103}.Release|x64.Build.0 = Release|Any CPU
 		{78BF82DC-38FD-41DC-A8CE-45C79F628103}.Release|x86.ActiveCfg = Release|Any CPU
 		{78BF82DC-38FD-41DC-A8CE-45C79F628103}.Release|x86.Build.0 = Release|Any CPU
+		{6D9EE64D-07A4-4C8A-B5F0-0D59DD525A52}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6D9EE64D-07A4-4C8A-B5F0-0D59DD525A52}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6D9EE64D-07A4-4C8A-B5F0-0D59DD525A52}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{6D9EE64D-07A4-4C8A-B5F0-0D59DD525A52}.Debug|x64.Build.0 = Debug|Any CPU
+		{6D9EE64D-07A4-4C8A-B5F0-0D59DD525A52}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{6D9EE64D-07A4-4C8A-B5F0-0D59DD525A52}.Debug|x86.Build.0 = Debug|Any CPU
+		{6D9EE64D-07A4-4C8A-B5F0-0D59DD525A52}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6D9EE64D-07A4-4C8A-B5F0-0D59DD525A52}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6D9EE64D-07A4-4C8A-B5F0-0D59DD525A52}.Release|x64.ActiveCfg = Release|Any CPU
+		{6D9EE64D-07A4-4C8A-B5F0-0D59DD525A52}.Release|x64.Build.0 = Release|Any CPU
+		{6D9EE64D-07A4-4C8A-B5F0-0D59DD525A52}.Release|x86.ActiveCfg = Release|Any CPU
+		{6D9EE64D-07A4-4C8A-B5F0-0D59DD525A52}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -250,6 +264,7 @@ Global
 		{8BB7BFC8-1A2E-401B-8F90-1A5C45C91F76} = {CE4D1B55-5B70-4753-8CC6-17C4DC79C11A}
 		{534DE0E7-B6F9-4AD6-9036-82A6102B83D5} = {CE4D1B55-5B70-4753-8CC6-17C4DC79C11A}
 		{24AE0C23-875A-4718-BF04-2CCEC08DEF05} = {CE4D1B55-5B70-4753-8CC6-17C4DC79C11A}
+		{6D9EE64D-07A4-4C8A-B5F0-0D59DD525A52} = {E5B93A3B-845A-447E-B730-E7074E8D2B7A}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {BF54795A-160E-4272-A394-F23A4AA5AF62}

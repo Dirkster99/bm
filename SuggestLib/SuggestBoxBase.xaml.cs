@@ -288,6 +288,7 @@
                     switch (e.Key)
                     {
                         case Key.Enter:
+                        case Key.Tab:
                             //Handle in OnPreviewKeyDown
                             break;
                         case Key.Oem5:
@@ -416,6 +417,7 @@
                     break;
 
                 case Key.Return:                              // close pop-up on enter
+                case Key.Tab:
                     if (_PART_ItemList.IsKeyboardFocusWithin)
                         updateValueFromListBox();
 

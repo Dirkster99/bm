@@ -3,28 +3,8 @@
 
                     xmlns:bc="clr-namespace:SuggestLib"
                     xmlns:conv="clr-namespace:SuggestLib.Converters"
+                    xmlns:reskeys="clr-namespace:SuggestLib.Themes"
                     >
-
-    <!-- ResizeGrip Style -->
-    <Style x:Key="ResizeGripStyle" TargetType="{x:Type Thumb}">
-        <Setter Property="SnapsToDevicePixels" Value="True" />
-        <Setter Property="Cursor" Value="SizeNWSE" />
-
-        <Setter Property="Template">
-            <Setter.Value>
-                <ControlTemplate TargetType="{x:Type Thumb}">
-                    <Grid Background="Transparent">
-                        <Path Width="{TemplateBinding Width}"
-                              Height="{TemplateBinding Height}"
-                              Stretch="Fill"
-                              SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"
-                              Fill="Gray"
-                              Data="M8,0L10,0 10,2 8,2z M4,4L6,4 6,6 4,6z M8,4L10,4 10,6 8,6z M0,8L2,8 2,10 0,10z M4,8L6,8 6,10 4,10z M8,8L10,8 10,10 8,10z "/>
-                    </Grid>
-                </ControlTemplate>
-            </Setter.Value>
-        </Setter>
-    </Style>
 
     <ControlTemplate x:Key="suggestableTextBoxTemplate"
                      TargetType="{x:Type bc:SuggestBoxBase}">
@@ -32,9 +12,11 @@
             <conv:BoolToVisibilityConverter x:Key="btv" />
         </ControlTemplate.Resources>
 
-        <Border Name="Border" Background="{DynamicResource {x:Static SystemColors.WindowBrushKey}}" 
+        <Border Name="Border"
+                Background="{DynamicResource {x:Static SystemColors.WindowBrushKey}}" 
                 BorderBrush="{TemplateBinding BorderBrush}" 
-                BorderThickness="{TemplateBinding BorderThickness}" Padding="1" >
+                BorderThickness="{TemplateBinding BorderThickness}"
+                Padding="1" >
 
             <Grid x:Name="PART_Root">
                 <TextBlock Text="{TemplateBinding Hint}"
@@ -55,7 +37,6 @@
                         <Grid x:Name="PART_ResizeableGrid" Background="Transparent">
                             <Grid.RowDefinitions>
                                 <RowDefinition Height="*"/>
-                                <RowDefinition Height="Auto"/>
                             </Grid.RowDefinitions>
 
                             <Border
@@ -71,8 +52,10 @@
 
                             <ListBox
                                 x:Name="PART_ItemList" Grid.Row="0"
+                                Template="{DynamicResource {x:Static reskeys:ResourceKeys.PopListBoxControlTemplate}}"
                                 SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"                                                             
-                                VerticalContentAlignment="Stretch" HorizontalContentAlignment="Stretch"
+                                VerticalContentAlignment="Stretch"
+                                HorizontalContentAlignment="Stretch"
                                 DisplayMemberPath="{TemplateBinding DisplayMemberPath}"
                                 SelectedValuePath="{TemplateBinding ValuePath}"
                                 ItemTemplate="{TemplateBinding HeaderTemplate}"
@@ -87,13 +70,14 @@
                                 />
                         
                             <!-- Our Thumb -->
-                            <Thumb x:Name="PART_ResizeGripThumb" Grid.Row="1"
-                                   Style="{StaticResource ResizeGripStyle}"
+                            <Thumb x:Name="PART_ResizeGripThumb"
+                                   Grid.Row="0"
+                                   Style="{DynamicResource {x:Static reskeys:ResourceKeys.ResizeGripStyleKey}}"
                                    HorizontalAlignment="Right"
-                                   Margin="3"
-                                   Background="Transparent"
                                    VerticalAlignment="Bottom"
-                                   Width="12" Height="12" />
+                                   Margin="0"
+                                   Background="Transparent"
+                                   Width="16" Height="16" />
                         </Grid>
                     </Border>
                 </Popup>

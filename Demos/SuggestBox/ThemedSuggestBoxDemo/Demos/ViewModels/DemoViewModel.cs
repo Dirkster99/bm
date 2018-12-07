@@ -1,6 +1,6 @@
-﻿namespace ThemedDemo.Demos.ViewModels
+﻿namespace ThemedSuggestBoxDemo.Demos.ViewModels
 {
-    public class DemoViewModel : BreadcrumbTestLib.ViewModels.AppViewModel
+    public class DemoViewModel : SuggestBoxTestLib.ViewModels.AppViewModel
     {
         #region private fields
         #endregion private fields
@@ -10,7 +10,7 @@
         /// Class constructor
         /// </summary>
         public DemoViewModel()
-            : base ("Themed Demo")
+            : base ()
         {
         }
         #endregion constructors

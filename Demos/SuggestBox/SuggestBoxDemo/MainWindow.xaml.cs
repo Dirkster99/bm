@@ -1,4 +1,4 @@
-﻿namespace SuggestBoxDemo
+﻿namespace GenericSuggestBoxDemo
 {
     using SuggestBoxTestLib.ViewModels;
     using System.Windows;
