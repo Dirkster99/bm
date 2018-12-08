@@ -54,7 +54,7 @@
 
                 <DockPanel Grid.Column="1" Grid.Row="1"
                            LastChildFill="false"
-                           Background="{DynamicResource {x:Static SystemColors.WindowBrushKey}}"
+                           Background="{DynamicResource {x:Static SystemColors.ControlBrushKey}}"
                            Visibility="{Binding ElementName=PART_VerticalScrollBar,Path=Visibility,Mode=OneWay,UpdateSourceTrigger=PropertyChanged}"/>
 
                 <ResizeGrip HorizontalAlignment="Right" VerticalAlignment="Stretch"

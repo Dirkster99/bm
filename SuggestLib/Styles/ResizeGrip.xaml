@@ -3,30 +3,26 @@
                     xmlns:reskeys="clr-namespace:SuggestLib.Themes"
                     >
 
-    <!-- ResizeGrip Style -->
+    <!-- ResizeGrip Thumb Style and Template to drag pop-up control portion -->
     <Style x:Key="{ComponentResourceKey TypeInTargetAssembly={x:Type reskeys:ResourceKeys},
            ResourceId=ResizeGripStyleKey}" TargetType="{x:Type Thumb}">
         <Setter Property="SnapsToDevicePixels" Value="True" />
         <Setter Property="Cursor" Value="SizeNWSE" />
-
+        <Setter Property="Foreground" Value="#FFa0a0a0"/>
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type Thumb}">
-                    <Grid Background="Transparent">
-                        <Path Width="{TemplateBinding Width}"
-                              Height="{TemplateBinding Height}"
+                    <Border Background="{TemplateBinding Background}"
+                            SnapsToDevicePixels="True"
+                            Width="10"
+                            Height="10">
+                        <Path Data="M7.677,7.5300003 L9.677,7.5300003 9.677,9.5300002 7.677,9.5300002 z M3.786,7.5300003 L5.7859998,7.5300003 5.7859998,9.5300002 3.786,9.5300002 z M0,7.5300003 L2,7.5300003 2,9.5300002 0,9.5300002 z M3.786,3.8280003 L5.7859998,3.8280003 5.7859998,5.8280003 3.786,5.8280003 z M7.677,3.7660003 L9.677,3.7660003 9.677,5.7659999 7.677,5.7659999 z M7.677,0 L9.677,0 9.677,2 7.677,2 z"
+                              Fill="{TemplateBinding Foreground}"
+                              Height="9.53"
                               Stretch="Fill"
-                              Stroke="#FFD8d8d8" Fill="#FFD8d8d8"
-                              Data="F1 M 100,0 L100,0 L100,100 L 0,100 Z "/>
-
-                        <Path Width="{TemplateBinding Width}"
-                              Height="{TemplateBinding Height}"
-                              Stretch="Fill"
-                              Margin="2,2,0,0"
-                              SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"
-                              Fill="#FFA0A0A0"
-                              Data="M8,0L10,0 10,2 8,2z M4,4L6,4 6,6 4,6z M8,4L10,4 10,6 8,6z M0,8L2,8 2,10 0,10z M4,8L6,8 6,10 4,10z M8,8L10,8 10,10 8,10z "/>
-                    </Grid>
+                              VerticalAlignment="Top"
+                              Width="9.677"/>
+                    </Border>
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
