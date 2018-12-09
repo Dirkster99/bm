@@ -22,7 +22,13 @@
                      ResourceId=ControlInputBorderKey}"
                      Color="#cccccc" />
 
-    
+    <!-- Pop-up Colors -->
+    <Color x:Key="{ComponentResourceKey TypeInTargetAssembly={x:Type reskeys:ResourceKeys},
+                                ResourceId=ControlPopupBackgroundKey}">#ffffff</Color>
+    <SolidColorBrush x:Key="{ComponentResourceKey TypeInTargetAssembly={x:Type reskeys:ResourceKeys},
+                     ResourceId=ControlPopupBackgroundBrushKey}"
+                     Color="{DynamicResource {x:Static reskeys:ResourceKeys.ControlPopupBackgroundKey}}" />
+
     <!-- Color definitions for pop-up ReiszeThumb dragging area -->
     <SolidColorBrush x:Key="{ComponentResourceKey TypeInTargetAssembly={x:Type reskeys:ResourceKeys},
                      ResourceId=ResizeThumbBackgroundDraggingKey}"

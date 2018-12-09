@@ -25,7 +25,8 @@
                            Visibility="{Binding IsHintVisible, RelativeSource={RelativeSource TemplatedParent}, Converter={StaticResource btv}}"
                            Opacity="0.5" />
                 <ScrollViewer Margin="0" x:Name="PART_ContentHost" />
-                <Popup x:Name="PART_Popup" AllowsTransparency="true"  
+                <Popup x:Name="PART_Popup"
+                       AllowsTransparency="true"  
                        PlacementTarget="{Binding ElementName=PART_ContentHost}"                                   
                        Placement="Bottom"                                                        
                        IsOpen="{TemplateBinding IsPopupOpened}"                                     
@@ -33,7 +34,7 @@
                        Focusable="False"
                     >
                     <Border BorderBrush="{TemplateBinding BorderBrush}"
-                            Background="{DynamicResource {x:Static SystemColors.WindowBrushKey}}"  
+                            Background="{DynamicResource {x:Static reskeys:ResourceKeys.ControlPopupBackgroundBrushKey}}"  
                             BorderThickness="1">
                         <Grid x:Name="PART_ResizeableGrid" Background="Transparent">
                             <Grid.RowDefinitions>
@@ -66,7 +67,7 @@
                                 ScrollViewer.CanContentScroll="True"
                                 KeyboardNavigation.AcceptsReturn="True"
                                 KeyboardNavigation.DirectionalNavigation="Cycle"
-                                BorderThickness="0 0 0 1"
+                                BorderThickness="0"
                                 BorderBrush="{TemplateBinding BorderBrush}"
                                 />
                         

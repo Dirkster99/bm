@@ -56,6 +56,17 @@
         /// </summary>
         public static readonly ComponentResourceKey ControlInputBorderKey = new ComponentResourceKey(typeof(ResourceKeys), "ControlInputBorderKey");
 
+        #region Pop-Up
+        /// <summary>
+        /// Gets a background Color key of a Pop-Up control.
+        /// </summary>
+        public static readonly ComponentResourceKey ControlPopupBackgroundKey = new ComponentResourceKey(typeof(ResourceKeys), "ControlPopupBackgroundKey");
+
+        /// <summary>
+        /// Gets a background Brush key of a Pop-Up control.
+        /// </summary>
+        public static readonly ComponentResourceKey ControlPopupBackgroundBrushKey = new ComponentResourceKey(typeof(ResourceKeys), "ControlPopupBackgroundBrushKey");
+
         // Color definitions for pop-up ResizeThumb dragging area
         #region Popup ResizeThumb Item
         /// <summary>
@@ -64,5 +75,6 @@
         /// </summary>
         public static readonly ComponentResourceKey ResizeThumbBackgroundDraggingKey = new ComponentResourceKey(typeof(ResourceKeys), "ResizeThumbBackgroundDraggingKey");
         #endregion Popup ResizeThumb Item
+        #endregion Pop-Up
     }
 }
