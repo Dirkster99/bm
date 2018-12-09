@@ -7,10 +7,12 @@ ECHO This script deletes all temporary build files in their
 ECHO corresponding BIN and OBJ Folder contained in the following projects
 ECHO.
 ECHO BmLib
+ECHO SuggestLib
 ECHO.
 ECHO ShellBrowser\Client
 ECHO ShellBrowser\ShellBrowserLib
 ECHO ShellBrowser\TestShellBrowserLib
+ECHO ShellBrowser\SSCCoreLib
 ECHO Icons
 ECHO.
 ECHO Components\ServiceLocator
@@ -19,6 +21,7 @@ ECHO Components\Settings\SettingsModel
 ECHO.
 ECHO Demos\SuggestBox\SuggestBoxDemo
 ECHO Demos\SuggestBox\SuggestBoxTestLib
+ECHO Demos\SuggestBox\ThemedSuggestBoxDemo
 ECHO.
 ECHO Demos\GenericDemo
 ECHO Demos\BreadcrumbTestLib
@@ -42,6 +45,12 @@ RMDIR /S /Q BmLib\bin
 RMDIR /S /Q BmLib\obj
 
 ECHO.
+ECHO Deleting BIN and OBJ Folders in SuggestLib folder
+ECHO.
+RMDIR /S /Q SuggestLib\bin
+RMDIR /S /Q SuggestLib\obj
+
+ECHO.
 ECHO Deleting BIN and OBJ Folders in ShellBrowserLib folder
 ECHO.
 RMDIR /S /Q ShellBrowser\ShellBrowserLib\bin
@@ -58,6 +67,11 @@ ECHO Deleting BIN and OBJ Folders in UnitTests folder
 ECHO.
 RMDIR /S /Q ShellBrowser\TestShellBrowserLib\bin
 RMDIR /S /Q ShellBrowser\TestShellBrowserLib\obj
+
+ECHO Deleting BIN and OBJ Folders in ShellBrowser\SSCCoreLib folder
+ECHO.
+RMDIR /S /Q ShellBrowser\SSCCoreLib\bin
+RMDIR /S /Q ShellBrowser\SSCCoreLib\obj
 
 ECHO Deleting BIN and OBJ Folders in Icons folder
 ECHO.
@@ -86,6 +100,13 @@ ECHO Deleting BIN and OBJ Folders in Demos\SuggestBox\SuggestBoxDemo folder
 ECHO.
 RMDIR /S /Q Demos\SuggestBox\SuggestBoxDemo\bin
 RMDIR /S /Q Demos\SuggestBox\SuggestBoxDemo\obj
+ECHO.
+
+ECHO.
+ECHO Deleting BIN and OBJ Folders in Demos\SuggestBox\ThemedSuggestBoxDemo folder
+ECHO.
+RMDIR /S /Q Demos\SuggestBox\ThemedSuggestBoxDemo\bin
+RMDIR /S /Q Demos\SuggestBox\ThemedSuggestBoxDemo\obj
 ECHO.
 
 ECHO.

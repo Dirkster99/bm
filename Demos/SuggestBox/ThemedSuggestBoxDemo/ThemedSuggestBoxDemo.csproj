@@ -83,6 +83,10 @@
     <Compile Include="ViewModels\Base\ViewModelBase.cs" />
     <Compile Include="ViewModels\ThemeDefinitionViewModel.cs" />
     <Compile Include="ViewModels\ThemeViewModel.cs" />
+    <Page Include="BindToMLib\SuggestionLibDarkLightBrushs.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="BindToMLib\MWindowLib\DarkLightBrushs.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -140,6 +144,10 @@
     <ProjectReference Include="..\..\..\Components\Settings\Settings\Settings.csproj">
       <Project>{2807b493-cc2e-402e-901a-eb138698fedc}</Project>
       <Name>Settings</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\SuggestLib\SuggestLib.csproj">
+      <Project>{78bf82dc-38fd-41dc-a8ce-45c79f628103}</Project>
+      <Name>SuggestLib</Name>
     </ProjectReference>
     <ProjectReference Include="..\SuggestBoxTestLib\SuggestBoxTestLib.csproj">
       <Project>{f6a08289-52e8-45cd-928b-e71d7bcb6290}</Project>
