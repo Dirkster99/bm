@@ -4,8 +4,8 @@
                     >
 
     <!-- This ControlTemplate defines the inner content of the scrollviewer
-             that is shown inside the listbox below.
-        ScrollViewTemplate -->
+         that is shown inside the listbox below.
+         ScrollViewTemplate -->
     <ControlTemplate  x:Key="{ComponentResourceKey TypeInTargetAssembly={x:Type reskeys:ResourceKeys},
                        ResourceId=PopListBoxScrollViewerControlTemplate}"
                        TargetType="{x:Type ScrollViewer}">
@@ -44,18 +44,18 @@
 	                        Visibility="{TemplateBinding ComputedVerticalScrollBarVisibility}"/>
 
                 <ScrollBar Name="PART_HorizontalScrollBar"
-                            Grid.Column="0" Grid.Row="1"
-                            Orientation="Horizontal"
-                            Padding="0,0,6,0"
-                            Value="{TemplateBinding HorizontalOffset}"
-                            Maximum="{TemplateBinding ScrollableWidth}"
-                            ViewportSize="{TemplateBinding ViewportWidth}"
-                            Visibility="{TemplateBinding ComputedHorizontalScrollBarVisibility}"/>
+                           Grid.Column="0" Grid.Row="1"
+                           Orientation="Horizontal"
+                           Padding="0,0,6,0"
+                           Value="{TemplateBinding HorizontalOffset}"
+                           Maximum="{TemplateBinding ScrollableWidth}"
+                           ViewportSize="{TemplateBinding ViewportWidth}"
+                           Visibility="{TemplateBinding ComputedHorizontalScrollBarVisibility}"/>
 
                 <DockPanel Grid.Column="1" Grid.Row="1"
                            LastChildFill="false"
-                           Background="{DynamicResource {x:Static SystemColors.ControlBrushKey}}"
-                           Visibility="{Binding ElementName=PART_VerticalScrollBar,Path=Visibility,Mode=OneWay,UpdateSourceTrigger=PropertyChanged}"/>
+                           Background="{DynamicResource {x:Static reskeys:ResourceKeys.ResizeThumbBackgroundDraggingKey}}"
+                           Visibility="{TemplateBinding ComputedVerticalScrollBarVisibility}"/>
 
                 <ResizeGrip HorizontalAlignment="Right" VerticalAlignment="Stretch"
                             Grid.Column="1" Grid.Row="1"

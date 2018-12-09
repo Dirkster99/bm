@@ -9,6 +9,7 @@
         <Setter Property="SnapsToDevicePixels" Value="True" />
         <Setter Property="Cursor" Value="SizeNWSE" />
         <Setter Property="Foreground" Value="#FFa0a0a0"/>
+        <Setter Property="Background" Value="{DynamicResource {x:Static reskeys:ResourceKeys.ResizeThumbBackgroundDraggingKey}}"/>
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type Thumb}">

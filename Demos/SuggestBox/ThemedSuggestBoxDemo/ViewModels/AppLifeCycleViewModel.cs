@@ -131,6 +131,7 @@
                     // Todo: Add Additional references to theming resources here
                     new Uri("/MWindowLib;component/Themes/DarkTheme.xaml", UriKind.RelativeOrAbsolute)
                    ,new Uri("/ThemedSuggestBoxDemo;component/BindToMLib/MWindowLib/DarkLightBrushs.xaml", UriKind.RelativeOrAbsolute)
+                   ,new Uri("/SuggestLib;component/Themes/DarkBrushs.xaml", UriKind.RelativeOrAbsolute)
 
                 }, settings.Themes);
             }
@@ -146,6 +147,7 @@
                     // Todo: Add Additional references to theming resources here
                     new Uri("/MWindowLib;component/Themes/LightTheme.xaml", UriKind.RelativeOrAbsolute)
                    ,new Uri("/ThemedSuggestBoxDemo;component/BindToMLib/MWindowLib/DarkLightBrushs.xaml", UriKind.RelativeOrAbsolute)
+                   ,new Uri("/SuggestLib;component/Themes/LightBrushs.xaml", UriKind.RelativeOrAbsolute)
 
                 }, settings.Themes);
             }

@@ -2,6 +2,7 @@
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation">
 
     <ResourceDictionary.MergedDictionaries>
+        <ResourceDictionary Source="/SuggestLib;component/Themes/LightBrushs.xaml" />
         <ResourceDictionary Source="/SuggestLib;component/Styles/ListBoxTemplate.xaml" />
         <ResourceDictionary Source="/SuggestLib;component/Styles/ResizeGrip.xaml" />
         <ResourceDictionary Source="/SuggestLib;component/SuggestBoxBase.xaml" />
