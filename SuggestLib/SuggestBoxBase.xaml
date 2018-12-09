@@ -6,7 +6,21 @@
                     xmlns:reskeys="clr-namespace:SuggestLib.Themes"
                     >
 
-    <ControlTemplate x:Key="suggestableTextBoxTemplate" TargetType="{x:Type bc:SuggestBoxBase}">
+    <ContextMenu x:Key="SuggestBoxContextMenu">
+        <MenuItem Command="ApplicationCommands.Cut" />
+        <MenuItem Command="ApplicationCommands.Copy" />
+        <MenuItem Command="ApplicationCommands.Paste" />
+        <Separator/>
+        <MenuItem Command="ApplicationCommands.SelectAll" />
+        <Separator/>
+        <MenuItem Command="ApplicationCommands.Undo" />
+        <MenuItem Command="ApplicationCommands.Redo" />
+    </ContextMenu>
+
+    <ControlTemplate x:Key="suggestableTextBoxTemplate"
+                     TargetType="{x:Type bc:SuggestBoxBase}"
+                     >
+
         <ControlTemplate.Resources>
             <conv:BoolToVisibilityConverter x:Key="btv" />
         </ControlTemplate.Resources>
@@ -88,8 +102,7 @@
         </Border>
     </ControlTemplate>
 
-    <Style TargetType="{x:Type bc:SuggestBoxBase}"
-           BasedOn="{StaticResource {x:Type TextBox}}">
+    <Style TargetType="{x:Type bc:SuggestBoxBase}" BasedOn="{StaticResource {x:Type TextBox}}">
         <Setter Property="Template" Value="{StaticResource suggestableTextBoxTemplate}" />
         <Setter Property="VerticalContentAlignment" Value="Center" />
         <Setter Property="Foreground" Value="{DynamicResource {x:Static reskeys:ResourceKeys.ControlTextBrushKey}}"/>
@@ -99,11 +112,14 @@
         <Setter Property="Padding" Value="2,1,1,1"/>
         <Setter Property="AllowDrop" Value="true"/>
         <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
+        <Setter Property="ContextMenu" Value="{StaticResource SuggestBoxContextMenu}"/>
         <!--Setter Property="ScrollViewer.PanningMode" Value="VerticalFirst"/-->
         <Setter Property="Stylus.IsFlicksEnabled" Value="False"/>
         <Setter Property="SelectionBrush" Value="{DynamicResource {x:Static reskeys:ResourceKeys.ControlAccentBrushKey}}" />
     </Style>
 
-    <Style TargetType="{x:Type bc:SuggestBox}" BasedOn="{StaticResource {x:Type bc:SuggestBoxBase}}" />
+    <Style TargetType="{x:Type bc:SuggestBox}"
+           BasedOn="{StaticResource {x:Type bc:SuggestBoxBase}}"
+           />
 
 </ResourceDictionary>
