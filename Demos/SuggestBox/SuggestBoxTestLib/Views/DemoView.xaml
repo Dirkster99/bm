@@ -17,6 +17,7 @@
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
             <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
 
         <Grid Grid.Row="0">
@@ -117,11 +118,14 @@
                            SuggestSources="{Binding DiskPathSuggestBox_SuggestSources}"
                            Margin="3"    
                         />
-
             </Grid>
         </Grid>
 
-        <Grid Grid.Row="3" VerticalAlignment="Bottom"
+
+        <TextBox Text="Test Text Control ..."
+                  Grid.Row="3" />
+
+        <Grid Grid.Row="4" VerticalAlignment="Bottom"
             Visibility="{Binding Processing,Converter={StaticResource BoolToVisibilityCollapsedConverter}}">
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"/>

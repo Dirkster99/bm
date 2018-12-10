@@ -43,9 +43,10 @@
                        AllowsTransparency="true"  
                        PlacementTarget="{Binding ElementName=PART_ContentHost}"                                   
                        Placement="Bottom"                                                        
-                       IsOpen="{TemplateBinding IsPopupOpened}"                                     
+                       IsOpen="{Binding IsPopupOpened, Mode=TwoWay, RelativeSource={RelativeSource TemplatedParent}}"                                     
                        PopupAnimation="None"
                        Focusable="False"
+                       StaysOpen="True"
                     >
                     <Border BorderBrush="{TemplateBinding BorderBrush}"
                             Background="{DynamicResource {x:Static reskeys:ResourceKeys.ControlPopupBackgroundBrushKey}}"  

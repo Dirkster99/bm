@@ -1,6 +1,7 @@
 ﻿namespace SuggestLib
 {
     using SuggestLib.Utils;
+    using System;
     using System.Collections.Generic;
     using System.Windows;
     using System.Windows.Controls;
@@ -177,7 +178,6 @@
             base.OnApplyTemplate();
             _PART_Popup = this.Template.FindName(PART_Popup, this) as Popup;
             _PART_ItemList = this.Template.FindName(PART_ItemList, this) as ListBox;
-            ////_PART_ContentHost = this.Template.FindName(PART_ContentHost, this) as ScrollViewer;
 
             // Find Grid for resizing with Thumb
             _PART_ResizeableGrid = Template.FindName(PART_ResizeableGrid, this) as Grid;
@@ -189,50 +189,11 @@
             if (_PART_ResizeGripThumb != null && _PART_ResizeableGrid != null)
                 _PART_ResizeGripThumb.DragDelta += new DragDeltaEventHandler(MyThumb_DragDelta);
 
-            ////if (_PART_ContentHost != null)
-            ////    _TextBoxView = LogicalTreeHelper.GetChildren(_PART_ContentHost).OfType<UIElement>().First();
-
             _PART_Root = this.Template.FindName(PART_Root, this) as Grid;
 
-            this.GotKeyboardFocus += (o, e) =>
-            {
-                _PopUpIsCancelled = false;
-                this.PopupIfSuggest();
-                IsHintVisible = false;
-            };
+            this.GotKeyboardFocus += SuggestBoxBase_GotKeyboardFocus;
 
-            this.LostKeyboardFocus += (o, e) =>
-            {
-                logger.DebugFormat("LostKeyboardFocus Old Focus {0} New Focus {1}",
-                    (e.OldFocus == null ? "" : e.OldFocus.ToString()),
-                    (e.NewFocus == null ? "" : e.NewFocus.ToString()));
-
-                if (e.NewFocus == null)
-                {
-                    this.hidePopup();
-                }
-                else
-                {
-                    if (IsKeyboardFocusWithin == false)
-                    {
-                        logger.DebugFormat("IsKeyboardFocusWithin {0} -> hidePopup()", IsKeyboardFocusWithin);
-                        _PopUpIsCancelled = true;
-                        this.hidePopup();
-                    }
-                }
-
-                IsHintVisible = string.IsNullOrEmpty(Text);
-                this._suggestionIsConsumed = false;
-            };
-
-            if (_PART_Popup != null && _PART_Root != null)
-            {
-                //09-04-09 Based on SilverLaw's approach 
-                _PART_Popup.CustomPopupPlacementCallback += new CustomPopupPlacementCallback(
-                    (popupSize, targetSize, offset) => new CustomPopupPlacement[] {
-                new CustomPopupPlacement(new Point((0.01 - offset.X),
-                    (_PART_Root.ActualHeight - offset.Y)), PopupPrimaryAxis.None) });
-            }
+            this.LostKeyboardFocus += SuggestBoxBase_LostKeyboardFocus;
 
             if (_PART_ItemList != null)
                 AttachHandlers(_PART_ItemList);
@@ -240,9 +201,70 @@
             SaveRestorePopUpStateOnWindowDeActivation();
         }
 
+        private void SuggestBoxBase_LostKeyboardFocus(object sender,
+                                                      KeyboardFocusChangedEventArgs e)
+        {
+            logger.DebugFormat("Old Focus {0} New Focus {1}",
+                (e.OldFocus == null ? "" : e.OldFocus.ToString()),
+                (e.NewFocus == null ? "" : e.NewFocus.ToString()));
+
+            if (e.NewFocus == null)
+                SetPopUp(false, "LostKeyboardFocus");
+            else
+            {
+                if (IsKeyboardFocusWithin == false &&
+                    e.NewFocus != e.OldFocus)
+                {
+                    logger.DebugFormat("IsKeyboardFocusWithin {0} -> hidePopup()", IsKeyboardFocusWithin);
+
+                    _PopUpIsCancelled = true;
+                    SetPopUp(false, "LostKeyboardFocus");
+                }
+            }
+
+            IsHintVisible = string.IsNullOrEmpty(Text);
+            this._suggestionIsConsumed = false;
+        }
+
+        protected override void OnPreviewMouseLeftButtonDown(MouseButtonEventArgs e)
+        {
+            logger.DebugFormat("_");
+
+            base.OnPreviewMouseLeftButtonDown(e);
+
+            // if (this.AutoSelectBehavior == AutoSelectBehavior.Never)
+            //     return;
+
+            // Select All on gaining focus requires to not implement cursor
+            // positioning on mouse click into the TextBox control
+            if (this.IsKeyboardFocusWithin == false)
+            {
+                this.Focus();
+                e.Handled = true;  //prevent from removing the selection
+            }
+        }
+
+        private void SuggestBoxBase_GotKeyboardFocus(object sender,
+                                                     KeyboardFocusChangedEventArgs e)
+        {
+            logger.DebugFormat("Old Focus {0} New Focus {1}",
+                (e.OldFocus == null ? "" : e.OldFocus.ToString()),
+                (e.NewFocus == null ? "" : e.NewFocus.ToString()));
+
+            // Select all text when control gains focus from a different control.
+            // If the focus was not in one of the children (or popup),
+            // we select all the text 
+            if (!TreeHelper.IsDescendantOf(e.OldFocus as DependencyObject, this))
+                this.SelectAll();
+
+            _PopUpIsCancelled = false;
+            this.PopupIfSuggest();
+            IsHintVisible = false;
+        }
+
         /// <summary>
         /// Attempts to find the window that contains this pop-up control
-        /// and attaches a handler for window activation and decativation
+        /// and attaches a handler for window activation and deactivation
         /// to save and restore pop-up state such that pop up is never open
         /// when window is deactivated.
         /// </summary>
@@ -254,10 +276,64 @@
             if (parentWindow != null)
             {
                 // Save Popup state and close popup on Window deactivated
-                parentWindow.Deactivated += delegate { _prevState = IsPopupOpened; IsPopupOpened = false; };
+                parentWindow.Deactivated += delegate
+                {
+                    _prevState = IsPopupOpened;
+                    SetPopUp(false, "parentWindow.Deactivated");
+                };
 
                 // Restore Popup state (may open or close popup) on Window activated
-                parentWindow.Activated += delegate { IsPopupOpened = _prevState; };
+                parentWindow.Activated += delegate
+                {
+                    SetPopUp(_prevState, "parentWindow.Activated");
+                };
+
+                parentWindow.PreviewMouseDown += ParentWindow_PreviewMouseDown;
+                parentWindow.SizeChanged += ParentWindow_SizeChanged;
+            }
+        }
+
+        /// <summary>
+        /// The pop-up element cannot be re-position when the containing window
+        /// changes its vertical size (the popup with does resize on change of
+        /// window size though). So, we close the pop up whenever the vertical
+        /// size of the parent window is changed (instead of looking realy stupid
+        /// with an open popup at the now invalid x,y position).
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void ParentWindow_SizeChanged(object sender, SizeChangedEventArgs e)
+        {
+            if (e.HeightChanged == true && e.WidthChanged == false)
+            {
+                if (IsPopupOpened)
+                {
+                    _PopUpIsCancelled = true;
+                    SetPopUp(false, "OnPreviewKeyDown");
+                    //e.Handled = true;
+                }
+            }
+        }
+
+        /// <summary>
+        /// Is invoked when any element in the window is clicked and closes
+        /// the popup if it was open and the clicked item was something else.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void ParentWindow_PreviewMouseDown(object sender,
+                                                   MouseButtonEventArgs e)
+        {
+            // Close the pop-up if target of mouse click was not within the visual tree
+            // of this control - this closes the pop-up when window is moved on open popup
+            if (!TreeHelper.IsDescendantOf(e.OriginalSource as DependencyObject, this))
+            {
+                if (IsPopupOpened)
+                {
+                    _PopUpIsCancelled = true;
+                    SetPopUp(false, "ParentWindow_PreviewMouseDown");
+                    //e.Handled = true;
+                }
             }
         }
 
@@ -297,7 +373,7 @@
                             break;
                         case Key.Escape:
                             this.Focus();
-                            hidePopup();
+                            SetPopUp(false, "itemList.PreviewKeyDown");
                             break;
                         default: e.Handled = false; break;
                     }
@@ -305,7 +381,7 @@
                     if (e.Handled)
                     {
                         Keyboard.Focus(this);
-                        hidePopup();
+                        SetPopUp(false, "itemList.PreviewKeyDown");
                         this.Select(Text.Length, 0); //Select last char
                     }
                 }
@@ -332,7 +408,7 @@
             if (updateSrc == true)
                 updateSource();
 
-            hidePopup();
+            SetPopUp(false, "updateValueFromListBox");
         }
 
         /// <summary>
@@ -368,20 +444,20 @@
                 if (Suggestions != null && Suggestions.Count > 0)
                 {
                     if (this._suggestionIsConsumed == false && IsKeyboardFocusWithin)
-                        IsPopupOpened = true;
+                        SetPopUp(true, "PopupIfSuggest() 1");
                 }
                 else
-                    IsPopupOpened = false;
+                    SetPopUp(false, "PopupIfSuggest() 2");
             }
         }
 
-        /// <summary>
-        /// Closes the popup with the list of suggestions.
-        /// </summary>
-        protected void hidePopup()
+        private void SetPopUp(bool newIsOpenValue, string sourceOfReuqest)
         {
-            logger.DebugFormat("{0}", (string.IsNullOrEmpty(Text) ? "" : Text));
-            IsPopupOpened = false;
+            if (IsPopupOpened != newIsOpenValue)
+            {
+                logger.InfoFormat("{0} -> {1} '{2}'", IsPopupOpened, newIsOpenValue, sourceOfReuqest);
+                IsPopupOpened = newIsOpenValue;
+            }
         }
         #endregion
 
@@ -416,15 +492,18 @@
                     }
                     break;
 
-                case Key.Return:                              // close pop-up on enter
+                case Key.Return:    // close pop-up with selection on enter or tab
                 case Key.Tab:
-                    if (_PART_ItemList.IsKeyboardFocusWithin)
-                        updateValueFromListBox();
+                    if (IsPopupOpened == true)
+                    {
+                        if (_PART_ItemList.IsKeyboardFocusWithin)
+                            updateValueFromListBox();
 
-                    hidePopup();
-                    updateSource();
+                        SetPopUp(false, "OnPreviewKeyDown");
+                        updateSource();
 
-                    e.Handled = true;
+                        e.Handled = true;
+                    }
                     break;
 
                 case Key.Back:
@@ -442,7 +521,7 @@
 
                 case Key.Escape:
                     _PopUpIsCancelled = true;
-                    hidePopup();
+                    SetPopUp(false, "OnPreviewKeyDown");
                     e.Handled = true;
                     break;
 
@@ -548,7 +627,7 @@
             logger.DebugFormat("Old Value: {0}, New Value: {1}, Text {2}",
                 e.NewValue, e.OldValue, this.Text);
 
-            // Do not react if popup was cancelled (eg: focuse travelled off from here)
+            // Do not react if popup was cancelled (eg: focus travelled off from here)
             // since gestures like Escape key of focus travelling should cancel
             // the drop down selection workflow
             if (IsKeyboardFocusWithin == true)
@@ -557,9 +636,10 @@
                 if (((bool)e.NewValue) == false && ((bool)e.OldValue) == true)
                 {
                     if (string.IsNullOrEmpty(this.Text) == false)
-                        this.SelectionStart = this.Text.Length;
-                    else
-                        this.SelectionStart = 0;
+                        this.SelectAll();
+////                        this.SelectionStart = this.Text.Length;
+////                    else
+////                        this.SelectionStart = 0;
 
                     this._suggestionIsConsumed = true;
                     this.Focus();
