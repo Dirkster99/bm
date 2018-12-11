@@ -172,7 +172,8 @@
 
                         Logger.InfoFormat("selectedFolder {0}", selectedFolder);
 
-                        await _Root.NavigateToScheduledAsync(selectedFolder, "BreadcrumbTreeItemViewModel.ItemSelectionChanged",
+                        await _Root.NavigateToScheduledAsync(selectedFolder.GetModel(),
+                                                             "BreadcrumbTreeItemViewModel.ItemSelectionChanged",
                                                              HintDirection.Down, this);
                     },
                     (param) =>
@@ -207,7 +208,8 @@
 
                         Logger.InfoFormat("selectedFolder {0}", this);
 
-                        await _Root.NavigateToScheduledAsync(this, "BreadcrumbTreeItemViewModel.BreadcrumbTreeTreeItemClickCommand",
+                        await _Root.NavigateToScheduledAsync(this.GetModel(),
+                                                             "BreadcrumbTreeItemViewModel.BreadcrumbTreeTreeItemClickCommand",
                                                              HintDirection.Up, this);
                     },
                     (param) =>

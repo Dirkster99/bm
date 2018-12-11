@@ -61,6 +61,7 @@
     <Compile Include="ViewModels\Breadcrumbs\BreadcrumbViewModel.cs" />
     <Compile Include="ViewModels\Breadcrumbs\BreadcrumbTreeItemHelperViewModel.cs" />
     <Compile Include="ViewModels\Breadcrumbs\BreadcrumbTreeItemViewModel.cs" />
+    <Compile Include="ViewModels\DirectorySuggestSource.cs" />
     <Compile Include="ViewModels\Breadcrumbs\ProgressViewModel.cs" />
     <Compile Include="ViewModels\Breadcrumbs\TreeSelectors\TreeSelectorViewModel.cs" />
     <Compile Include="ViewModels\BrowseRequestTaskQueueViewModel.cs" />
@@ -85,6 +86,10 @@
     <ProjectReference Include="..\..\ShellBrowser\SSCCoreLib\SSCoreLib.csproj">
       <Project>{24ae0c23-875a-4718-bf04-2ccec08def05}</Project>
       <Name>SSCoreLib</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\SuggestLib\SuggestLib.csproj">
+      <Project>{78BF82DC-38FD-41DC-A8CE-45C79F628103}</Project>
+      <Name>SuggestLib</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

@@ -9,6 +9,7 @@ namespace BreadcrumbTestLib.ViewModels.Breadcrumbs
     using ShellBrowserLib.IDs;
     using ShellBrowserLib.Interfaces;
     using SSCoreLib.Browse;
+    using SuggestLib.Interfaces;
     using System;
     using System.Collections.Generic;
     using System.Collections.ObjectModel;
@@ -21,7 +22,8 @@ namespace BreadcrumbTestLib.ViewModels.Breadcrumbs
     /// <summary>
     /// Class implements the viewmodel that manages the complete breadcrump control.
     /// </summary>
-    internal class BreadcrumbViewModel : Base.ViewModelBase, IBreadcrumbViewModel
+    internal class BreadcrumbViewModel : Base.ViewModelBase, IBreadcrumbViewModel,
+                                         BmLib.Interfaces.IBreadcrumbModel
     {
         #region fields
         /// <summary>
@@ -75,6 +77,9 @@ namespace BreadcrumbTestLib.ViewModels.Breadcrumbs
 
             Progressing = new ProgressViewModel();
             BreadcrumbSubTree = new BreadcrumbTreeItemViewModel(null, null, this);
+
+            SuggestSources = new List<ISuggestSource>(new[]
+                                { new DirectorySuggestSource() });
         }
         #endregion constructors
 
@@ -92,6 +97,8 @@ namespace BreadcrumbTestLib.ViewModels.Breadcrumbs
         #endregion browsing events
 
         #region properties
+        public List<ISuggestSource> SuggestSources { get; }
+
         /// <summary>
         /// Gets a viewmodel that manages the progress display that is shown to inform
         /// users of long running processings.
@@ -157,25 +164,8 @@ namespace BreadcrumbTestLib.ViewModels.Breadcrumbs
                 _suggestedPath = value;
 
                 NotifyPropertyChanged(() => SuggestedPath);
-                OnSuggestPathChanged();
             }
         }
-
-        ////        /// <summary>
-        ////        /// Contains a list of items that maps into the SuggestBox control.
-        ////        /// </summary>
-        ////        public IEnumerable<ISuggestSource> SuggestSources
-        ////        {
-        ////            get
-        ////            {
-        ////                return _suggestSources;
-        ////            }
-        ////            set
-        ////            {
-        ////                _suggestSources = value;
-        ////                NotifyOfPropertyChange(() => SuggestSources);
-        ////            }
-        ////        }
 
         /// <summary>
         /// Gets a command that can change the navigation target of the currently
@@ -336,6 +326,44 @@ namespace BreadcrumbTestLib.ViewModels.Breadcrumbs
 
         #region methods
         /// <summary>
+        /// This navigates the bound tree view model to the requested
+        /// location when the user switches the display from:
+        /// 
+        /// - the string based and path oriented suggestbox back to
+        /// - the tree view item based and path orient tree view.
+        /// </summary>
+        /// <param name="navigateToThisLocation"></param>
+        /// <returns></returns>
+        Task<bool> IBreadcrumbModel.NavigateTreeViewModel(string navigateToThisLocation)
+        {
+            return Task.Run<bool>(async () =>
+            {
+                bool isPathValid = true;
+                if (string.IsNullOrEmpty(navigateToThisLocation))
+                    isPathValid = false;
+                else
+                {
+                    try
+                    {
+                        isPathValid = ShellBrowser.DirectoryExists(navigateToThisLocation);
+                    }
+                    catch
+                    {
+                        isPathValid = false;
+                    }
+                }
+
+                if (isPathValid == true)
+                {
+                    var location = ShellBrowser.Create(navigateToThisLocation);
+                    await NavigateToScheduledAsync(location, "BreadcrumbViewModel.NavigateTreeViewModel");
+                }
+
+                return isPathValid;
+            });
+        }
+
+        /// <summary>
         /// Method should be called after construction to initialize the viewmodel
         /// to view a default content.
         /// </summary>
@@ -358,11 +386,11 @@ namespace BreadcrumbTestLib.ViewModels.Breadcrumbs
         /// <summary>
         /// Schedules a navigational task and returns immediately
         /// </summary>
-        /// <param name="selectedFolder"></param>
+        /// <param name="targetLocation"></param>
         /// <param name="sourceHint"></param>
         /// <param name="hintDirection"></param>
         /// <param name="toBeSelectedLocation"></param>
-        public async Task NavigateToScheduledAsync(BreadcrumbTreeItemViewModel selectedFolder,
+        public async Task NavigateToScheduledAsync(IDirectoryBrowser targetLocation,
                                         string sourceHint,
                                         HintDirection hintDirection = HintDirection.Unrelated,
                                         BreadcrumbTreeItemViewModel toBeSelectedLocation = null
@@ -373,7 +401,7 @@ namespace BreadcrumbTestLib.ViewModels.Breadcrumbs
                 var cancelTokenSrc = _NavigationController.GetCancelToken();
                 var token = CancellationToken.None;
 
-                var request = new BrowseRequest<IDirectoryBrowser>(selectedFolder.GetModel(), RequestType.Navigational,
+                var request = new BrowseRequest<IDirectoryBrowser>(targetLocation, RequestType.Navigational,
                                                                     token, cancelTokenSrc, null);
 
                 var NaviTask = Task.Factory.StartNew(async (s) =>
@@ -387,7 +415,7 @@ namespace BreadcrumbTestLib.ViewModels.Breadcrumbs
             }
             else
             {
-                var request = new BrowseRequest<IDirectoryBrowser>(selectedFolder.GetModel(), RequestType.Navigational);
+                var request = new BrowseRequest<IDirectoryBrowser>(targetLocation, RequestType.Navigational);
                 await NavigateToAsync(request,
                     "BreadcrumbTreeItemViewModel.BreadcrumbTreeTreeItemClickCommand",
                     hintDirection, toBeSelectedLocation);
@@ -858,6 +886,8 @@ namespace BreadcrumbTestLib.ViewModels.Breadcrumbs
         private void UpdateBreadcrumbSelectedPath()
         {
             string output = string.Empty;
+            BreadcrumbTreeItemViewModel selectedItem = null;
+
             if (SelectedRootViewModel != null)
             {
                 var pathItems = SelectedRootViewModel.GetPathItems();
@@ -870,11 +900,19 @@ namespace BreadcrumbTestLib.ViewModels.Breadcrumbs
                     output = (string.IsNullOrEmpty(output) ?
                         itemString :
                         output + "/" + itemString);
+
+                    if (item.Selection.IsSelected == true)
+                        selectedItem = item;
                 }
             }
 
             // Gets the complete path string below root item selector.RootSelector.SelectedValue.FullName;
             BreadcrumbSelectedPath = output;
+
+            if (selectedItem != null)
+            {
+                SuggestedPath = selectedItem.ItemPath;
+            }
         }
 
         private async Task RootDropDownSelectionChangedCommand_Executed(BreadcrumbTreeItemViewModel selectedFolder)
@@ -915,39 +953,6 @@ namespace BreadcrumbTestLib.ViewModels.Breadcrumbs
                 await this.NavigateToAsync(request, "BreadcrumbViewModel.RootDropDownSelectionChangedCommand",
                     hintDirection, toBeSelectedLocation);
             }
-        }
-
-        /// <summary>
-        /// Method executes when the text path portion in the
-        /// Breadcrumb control has been edit.
-        /// </summary>
-        private void OnSuggestPathChanged()
-        {
-            Logger.InfoFormat("_");
-
-            /***
-            if (!ShowBreadcrumb)
-            {
-              Task.Run(async () =>
-              {
-                foreach (var p in _profiles)
-                  if (p.MatchPathPattern(SuggestedPath))
-                  {
-                    if (String.IsNullOrEmpty(SuggestedPath) && Entries.AllNonBindable.Count() > 0)
-                      SuggestedPath = Entries.AllNonBindable.First().EntryModel.FullPath;
-
-                    var found = await p.ParseThenLookupAsync(SuggestedPath, CancellationToken.None);
-                    if (found != null)
-                    {
-                      _sbox.Dispatcher.BeginInvoke(new System.Action(() => { SelectAsync(found); }));
-                      ShowBreadcrumb = true;
-                      BroadcastDirectoryChanged(EntryViewModel.FromEntryModel(found));
-                    }
-                    //else not found
-                  }
-              });//.Start();
-            }
-             ***/
         }
         #endregion methods
     }

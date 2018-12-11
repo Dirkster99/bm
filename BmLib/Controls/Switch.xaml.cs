@@ -54,9 +54,16 @@
 		#endregion properties
 
 		#region Methods
-		public static void OnIsSwitchOnChanged(object sender, DependencyPropertyChangedEventArgs args)
+		public static void OnIsSwitchOnChanged(object sender,
+                                               DependencyPropertyChangedEventArgs args)
 		{
-		}
+////            var dp = sender as Switch;
+////
+////            if (dp == null)
+////                return;
+////
+////            System.Console.WriteLine("OnIsSwitchOnChanged {0}:{1} -> {2}", sender, args.OldValue, args.NewValue);
+        }
 
 		/// <summary>
 		/// Is called when a control template is applied.
@@ -65,11 +72,11 @@
 		{
 			base.OnApplyTemplate();
 
-			////this.AddHandler(HeaderedContentControl.MouseDownEvent, (RoutedEventHandler)((o, e) =>
-			////    {
-			////        this.SetValue(IsSwitchOnProperty, !IsSwitchOn);
-			////    }));
-		}
+            ////this.AddHandler(HeaderedContentControl.MouseDownEvent, (RoutedEventHandler)((o, e) =>
+            ////    {
+            ////        this.SetValue(IsSwitchOnProperty, !IsSwitchOn);
+            ////    }));
+        }
 
         /// <summary>
         /// Measures the child elements of a <seealso cref="StackPanel"/> 

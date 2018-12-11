@@ -9,10 +9,8 @@
     xmlns:conv="clr-namespace:BmLib.Converters"
     xmlns:reskeys="clr-namespace:BmLib.Themes"
     xmlns:behav="clr-namespace:BmLib.Behaviors"
+    xmlns:sbox="clr-namespace:SuggestLib;assembly=SuggestLib"
    >
-    <!--
-    xmlns:sbox="clr-namespace:BmLib.Controls.SuggestBox"
-    -->
     <ResourceDictionary.MergedDictionaries>
         <ResourceDictionary Source="/BmLib;component/Controls/Breadcrumbs/BreadcrumbTreeItem.xaml" />
         <ResourceDictionary Source="/BmLib;component/Controls/Switch.xaml" />
@@ -127,13 +125,20 @@
                                                  through click on right-most background of BreadcrumbTree -->
                                         </Grid>
                                     </bc:Switch.ContentOn>
-                                    <!-- bc:Switch.ContentOff>
-                                      <sbox:SuggestBox x:Name="PART_SuggestBox" BorderThickness="0" Text="{Binding SuggestedPath, UpdateSourceTrigger=Explicit}"
-                                                       DisplayMemberPath="FullPath" ValuePath="FullPath" 
-                                                       IsEnabled="{Binding EnableBreadcrumb, Mode=OneWay, Converter={StaticResource fb}}"
-                                                       SuggestSources="{Binding SuggestSources}" HierarchyHelper="{x:Null}">
+                                    <bc:Switch.ContentOff>
+                                      <sbox:SuggestBox
+                                          x:Name="PART_SuggestBox"
+                                          BorderThickness="0"
+                                          Text="{Binding SuggestedPath, UpdateSourceTrigger=Explicit}"
+                                          IsEnabled="{Binding EnableBreadcrumb, Mode=OneWay, Converter={StaticResource fb}}"
+                                          SuggestSources="{Binding SuggestSources}"
+                                          HierarchyHelper="{x:Null}">
+                                          <!--
+                                            DisplayMemberPath="FullPath"
+                                              ValuePath="FullPath" 
+                                          -->
                                       </sbox:SuggestBox>
-                                    </bc:Switch.ContentOff -->
+                                    </bc:Switch.ContentOff>
                                 </bc:Switch>
                             </Grid>
 

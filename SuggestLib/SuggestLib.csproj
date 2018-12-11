@@ -55,6 +55,7 @@
   <ItemGroup>
     <Compile Include="Converters\BoolToVisibilityCollapsedConverter.cs" />
     <Compile Include="Converters\FlipBoolConverter.cs" />
+    <Compile Include="Events\NextTargetLocationArgs.cs" />
     <Compile Include="SuggestBoxBase.xaml.cs">
       <DependentUpon>SuggestBoxBase.xaml</DependentUpon>
     </Compile>

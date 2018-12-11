@@ -1,5 +1,6 @@
 ﻿namespace SuggestLib
 {
+    using SuggestLib.Events;
     using SuggestLib.Utils;
     using System;
     using System.Collections.Generic;
@@ -29,9 +30,6 @@
         protected Popup _PART_Popup;
         protected ListBox _PART_ItemList;
         protected Grid _PART_Root;
-        ////protected ScrollViewer _PART_ContentHost;
-        ////protected UIElement _TextBoxView;
-
         protected Thumb _PART_ResizeGripThumb;
         protected Grid _PART_ResizeableGrid;
 
@@ -41,6 +39,8 @@
         protected bool _suggestionIsConsumed = false;
         protected bool _PopUpIsCancelled = false;
         private bool _prevState;
+
+        protected string _previousLocation = string.Empty;
 
         public static readonly DependencyProperty DisplayMemberPathProperty = DependencyProperty.Register(
                     "DisplayMemberPath", typeof(string), typeof(SuggestBoxBase),
@@ -99,6 +99,8 @@
             add { AddHandler(ValueChangedEvent, value); }
             remove { RemoveHandler(ValueChangedEvent, value); }
         }
+
+        public event EventHandler<NextTargetLocationArgs> NewLocationRequestEvent;
         #endregion
 
         #region Public Properties
@@ -254,8 +256,12 @@
             // Select all text when control gains focus from a different control.
             // If the focus was not in one of the children (or popup),
             // we select all the text 
-            if (!TreeHelper.IsDescendantOf(e.OldFocus as DependencyObject, this))
-                this.SelectAll();
+            //            if (!TreeHelper.IsDescendantOf(e.OldFocus as DependencyObject, this))
+            //                this.SelectAll();
+
+            // Save current location for eventing that fires a
+            // prev /new location request event on enter/tab out ...
+            _previousLocation = Text;
 
             _PopUpIsCancelled = false;
             this.PopupIfSuggest();
@@ -504,6 +510,12 @@
 
                         e.Handled = true;
                     }
+                    else
+                    {
+                        // Time to tell the outside world: We are changing location
+                        NewLocationRequestEvent.Invoke(this,
+                            new NextTargetLocationArgs(_previousLocation, Text));
+                    }
                     break;
 
                 case Key.Back:
@@ -636,10 +648,9 @@
                 if (((bool)e.NewValue) == false && ((bool)e.OldValue) == true)
                 {
                     if (string.IsNullOrEmpty(this.Text) == false)
-                        this.SelectAll();
-////                        this.SelectionStart = this.Text.Length;
-////                    else
-////                        this.SelectionStart = 0;
+                        this.SelectionStart = this.Text.Length;
+                    else
+                        this.SelectionStart = 0;
 
                     this._suggestionIsConsumed = true;
                     this.Focus();

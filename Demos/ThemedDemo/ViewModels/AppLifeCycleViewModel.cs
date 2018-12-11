@@ -133,6 +133,8 @@
                    ,new Uri("/ThemedDemo;component/BindToMLib/MWindowLib/DarkLightBrushs.xaml", UriKind.RelativeOrAbsolute)
                    ,new Uri("/BmLib;component/Themes/DarkTheme.xaml", UriKind.RelativeOrAbsolute)
                    ,new Uri("/ThemedDemo;component/BindToMLib/BmLib/DarkLightBrushs.xaml", UriKind.RelativeOrAbsolute)
+                   ,new Uri("/SuggestLib;component/Themes/DarkBrushs.xaml", UriKind.RelativeOrAbsolute)
+                   ,new Uri("/ThemedDemo;component/BindToMLib/SuggestionLibDarkLightBrushs.xaml", UriKind.RelativeOrAbsolute)
 
                 }, settings.Themes);
             }
@@ -150,6 +152,8 @@
                    ,new Uri("/ThemedDemo;component/BindToMLib/MWindowLib/DarkLightBrushs.xaml", UriKind.RelativeOrAbsolute)
                    ,new Uri("/BmLib;component/Themes/LightTheme.xaml", UriKind.RelativeOrAbsolute)
                    ,new Uri("/ThemedDemo;component/BindToMLib/BmLib/DarkLightBrushs.xaml", UriKind.RelativeOrAbsolute)
+                   ,new Uri("/SuggestLib;component/Themes/LightBrushs.xaml", UriKind.RelativeOrAbsolute)
+                   ,new Uri("/ThemedDemo;component/BindToMLib/SuggestionLibDarkLightBrushs.xaml", UriKind.RelativeOrAbsolute)
 
                 }, settings.Themes);
             }

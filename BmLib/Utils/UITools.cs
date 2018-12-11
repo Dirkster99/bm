@@ -12,8 +12,12 @@
 		public static void AddValueChanged<T>(this T obj, DependencyProperty property, EventHandler handler) where T : DependencyObject
 		{
 			DependencyPropertyDescriptor desc = DependencyPropertyDescriptor.FromProperty(property, typeof(T));
-			desc.AddValueChanged(obj, handler);
-		}
+
+            if (desc != null)
+            {
+                desc.AddValueChanged(obj, handler);
+            }
+        }
 
 		public static void AddValueChangedDispatcher<T>(this T obj, DependencyProperty property,
 				EventHandler handler, DispatcherPriority priority) where T : DependencyObject

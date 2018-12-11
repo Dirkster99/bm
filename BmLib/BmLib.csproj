@@ -80,6 +80,7 @@
       <DependentUpon>Switch.xaml</DependentUpon>
     </Compile>
     <Compile Include="Converters\AssociatedIconConverter.cs" />
+    <Compile Include="Interfaces\IBreadcrumbModel.cs" />
     <Compile Include="Interfaces\IBrowseRequestTaskQueue.cs" />
     <Compile Include="Interfaces\IProgress.cs" />
     <Compile Include="Themes\ResourceKeys.cs" />
@@ -170,9 +171,7 @@
     <Compile Include="Utils\AttachedProperties.cs" />
     <Compile Include="Enums\HierarchicalResult.cs" />
     <Compile Include="Enums\UpdateMode.cs" />
-    <Compile Include="Interfaces\IEntryViewModel.cs" />
     <Compile Include="Interfaces\IOverflown.cs" />
-    <Compile Include="Interfaces\IEntryModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -205,6 +204,12 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Resources\Icons\Dark\" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\SuggestLib\SuggestLib.csproj">
+      <Project>{78bf82dc-38fd-41dc-a8ce-45c79f628103}</Project>
+      <Name>SuggestLib</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

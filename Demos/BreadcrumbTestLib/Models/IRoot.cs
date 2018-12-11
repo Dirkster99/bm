@@ -1,6 +1,7 @@
 ﻿namespace BreadcrumbTestLib.Models
 {
     using BreadcrumbTestLib.ViewModels.Breadcrumbs;
+    using ShellBrowserLib.Interfaces;
     using SSCoreLib.Browse;
     using System.Threading.Tasks;
 
@@ -17,11 +18,11 @@
         /// <summary>
         /// Schedules a navigational task and returns immediately
         /// </summary>
-        /// <param name="selectedFolder"></param>
+        /// <param name="targetLocation"></param>
         /// <param name="sourceHint"></param>
         /// <param name="hintDirection"></param>
         /// <param name="toBeSelectedLocation"></param>
-        Task NavigateToScheduledAsync(BreadcrumbTreeItemViewModel selectedFolder,
+        Task NavigateToScheduledAsync(IDirectoryBrowser targetLocation,
                                       string sourceHint,
                                       HintDirection hintDirection = HintDirection.Unrelated,
                                       BreadcrumbTreeItemViewModel toBeSelectedLocation = null

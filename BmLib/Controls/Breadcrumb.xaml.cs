@@ -2,7 +2,8 @@
 {
     using BmLib.Controls.Breadcrumbs;
     using BmLib.Interfaces;
-    using BmLib.Utils;
+    using SuggestLib;
+    using System;
     using System.Collections.Generic;
     using System.ComponentModel;
     using System.Diagnostics;
@@ -25,15 +26,18 @@
     /// 3 - A ToggleButton,
     ///     and when ToggleButton is clicked, show it's content as a
     ///     combobox dropdown.
-    /// 
     /// </summary>
-    ////    [TemplatePart(Name = "PART_SuggestBox", Type = typeof(SuggestBoxBase))]
-    [TemplatePart(Name = "PART_Switch", Type = typeof(Switch))]
+    [TemplatePart(Name = PART_SuggestBox, Type = typeof(SuggestBoxBase))]
+    [TemplatePart(Name = PART_Switch, Type = typeof(Switch))]
     [TemplatePart(Name = PART_RootDropDownList, Type = typeof(DropDownList))]
+    [TemplatePart(Name = PART_BreadcrumbTree, Type = typeof(BreadcrumbTree))]
     public class Breadcrumb : UserControl
     {
         #region fields
         public const string PART_RootDropDownList = "PART_RootDropDownList";
+        public const string PART_Switch = "PART_Switch";
+        public const string PART_SuggestBox = "PART_SuggestBox";
+        public const string PART_BreadcrumbTree = "PART_BreadcrumbTree";
 
         /// <summary>
         /// Backing store of the <see cref="SwitchHeader"/> dependency property.
@@ -159,17 +163,18 @@
         /// </summary>
         public static readonly DependencyProperty IsSwitchOnProperty =
             DependencyProperty.Register("IsSwitchOn", typeof(bool),
-                typeof(Breadcrumb), new PropertyMetadata(false));
+                typeof(Breadcrumb), new PropertyMetadata(true, OnIsSwitchOnChanged));
 
         private object _LockObject = new object();
-        private bool _IsLoaded = false;
+        private bool _IsLoaded;
+        private IBreadcrumbModel _BreadcrumbModel;
         #endregion fields
 
         #region constructors
         /// <summary>
-		/// Static constructor
-		/// </summary>
-		static Breadcrumb()
+        /// Static constructor
+        /// </summary>
+        static Breadcrumb()
         {
             DefaultStyleKeyProperty.OverrideMetadata(typeof(Breadcrumb),
                     new System.Windows.FrameworkPropertyMetadata(typeof(Breadcrumb)));
@@ -180,8 +185,6 @@
         /// </summary>
         public Breadcrumb()
         {
-            this.DataContextChanged += Breadcrumb_DataContextChanged;
-            this.Loaded += Breadcrumb_Loaded;
         }
         #endregion constructors
 
@@ -388,11 +391,11 @@
             set { SetValue(IsSwitchOnProperty, value); }
         }
 
-        ////        public SuggestBoxBase Control_SuggestBox { get; set; }
+        private SuggestBoxBase Control_SuggestBox { get; set; }
 
-        public Switch Control_Switch { get; set; }
+        private Switch Control_Switch { get; set; }
 
-        public DropDownList RootDropDownList { get; set; }
+        private DropDownList RootDropDownList { get; set; }
 
         private BreadcrumbTree Control_Tree { get; set; }
         #endregion properties
@@ -405,10 +408,17 @@
         {
             base.OnApplyTemplate();
             RootDropDownList = this.Template.FindName(PART_RootDropDownList, this) as DropDownList;   // bexp
-            Control_Switch = this.Template.FindName("PART_Switch", this) as Switch;                 // switch
-                                                                                                    ////        Control_SuggestBox = this.Template.FindName("PART_SuggestBox", this) as SuggestBoxBase;  // sbox
+            Control_Switch = this.Template.FindName(PART_Switch, this) as Switch;                  // switch
+            Control_SuggestBox = this.Template.FindName(PART_SuggestBox, this) as SuggestBoxBase; // sbox
+            Control_Tree = this.Template.FindName(PART_BreadcrumbTree, this) as BreadcrumbTree;
 
-            OnViewAttached();
+            if (Control_SuggestBox != null)
+            {
+                Control_SuggestBox.NewLocationRequestEvent += Control_SuggestBox_NewLocationRequestEvent;
+            }
+
+            this.Loaded += Breadcrumb_Loaded;
+            DataContextChanged += Breadcrumb_DataContextChanged;
         }
 
         /// <summary>
@@ -450,32 +460,67 @@
             return sz; // Return current size constrain
         }
 
-        private void OnViewAttached()
+        /// <summary>
+        /// Method executes when the Switch property changed its value.
+        /// </summary>
+        /// <param name="d"></param>
+        /// <param name="e"></param>
+        private static void OnIsSwitchOnChanged(DependencyObject d,
+                                                DependencyPropertyChangedEventArgs e)
         {
-            this.RootDropDownList.AddValueChanged(ComboBox.SelectedValueProperty, (o, e) =>
-            {
-                IEntryViewModel evm = this.RootDropDownList.SelectedItem as IEntryViewModel;
-                //// if (evm != null)
-                ////   BroadcastDirectoryChanged(evm);
+            var dp = d as Breadcrumb;
+            
+            if (dp == null)
+                return;
 
-                Control_Switch.Dispatcher.BeginInvoke(new System.Action(() =>
-                {
-                    Control_Switch.IsSwitchOn = true;
-                }));
-            });
+            dp.OnSwitchChanged((bool)e.OldValue, (bool)e.NewValue);
+        }
 
-            this.Control_Switch.AddValueChanged(Switch.IsSwitchOnProperty, (o, e) =>
+        private async void OnSwitchChanged(bool OldValue, bool NewValue)
+        {
+            if (OldValue == false && NewValue == true)
             {
-                if (!this.Control_Switch.IsSwitchOn)
+                bool isPathValid = true;
+
+                if (_BreadcrumbModel == null)
+                    isPathValid = false;      // Cannot invoke viewmodel method
+                else
+                    isPathValid = await _BreadcrumbModel.NavigateTreeViewModel(Control_SuggestBox.Text);
+
+                // Stay with false path if path does not exist
+                // or viewmodel method cannot invoked here ...
+                if (isPathValid == false)
                 {
-                    //// _sbox.Dispatcher.BeginInvoke(new System.Action(() =>
-                    //// {
-                    ////   Keyboard.Focus(_sbox);
-                    ////   _sbox.Focus();
-                    ////   _sbox.SelectAll();
-                    //// }), System.Windows.Threading.DispatcherPriority.Background);
+                    IsSwitchOn = false;  // Switch back to SuggestBox
+                    return;
                 }
-            });
+            }
+            else
+            {
+                if (OldValue == true && NewValue == false)
+                {
+                    await Control_SuggestBox.Dispatcher.BeginInvoke(new Action(() =>
+                    {
+                        Keyboard.Focus(Control_SuggestBox);
+                        Control_SuggestBox.SelectAll();
+                        Control_SuggestBox.Focus();
+
+                    }), System.Windows.Threading.DispatcherPriority.Background);
+                }
+            }
+        }
+
+        private void Breadcrumb_DataContextChanged(object sender,
+                                                   DependencyPropertyChangedEventArgs e)
+        {
+            lock (_LockObject)
+            {
+                if (_IsLoaded == true)
+                {
+                    if (e.NewValue != null)
+                        OnViewAttached();
+                }
+            }
         }
 
         /// <summary>
@@ -494,21 +539,19 @@
             }
         }
 
-        /// <summary>
-        /// Method executes when the datacontext is changed.
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void Breadcrumb_DataContextChanged(object sender, System.Windows.DependencyPropertyChangedEventArgs e)
+        private void OnViewAttached()
         {
-            lock (_LockObject)
-            {
-                if (_IsLoaded == true)
-                {
-                    if (e.NewValue != null)
-                        OnViewAttached();
-                }
-            }
+            this._BreadcrumbModel = this.DataContext as IBreadcrumbModel;
+        }
+
+        private void Control_SuggestBox_NewLocationRequestEvent(
+            object sender,
+            SuggestLib.Events.NextTargetLocationArgs e)
+        {
+            // The user requests a new location via SuggestBox Text control
+            // lets have the switch do the lifting of navigating the tree view
+            if (IsSwitchOn == false)
+                IsSwitchOn = true;
         }
         #endregion methods
     }
