@@ -10,11 +10,4 @@ This project implements an open source Breadcrumb control that was originally de
 
 ![](https://raw.githubusercontent.com/Dirkster99/Docu/master/bm/DarkBreadcrumb3.png)
 
-## BreadcrumbRootDropDown
-![](https://github.com/Dirkster99/Docu/blob/master/bm/BreadcrumbRootDropDown.png)
-
-## BreadcrumbComputerDropDown
-![](https://github.com/Dirkster99/Docu/blob/master/bm/BreadcrumbComputerDropDown.png)
-
-## BreadcrumbFolderDropDown
-![](https://github.com/Dirkster99/Docu/blob/master/bm/BreadcrumbFolderDropDown.png)
+![](https://raw.githubusercontent.com/Dirkster99/Docu/master/bm/DarkBreadcrumb4.png)
