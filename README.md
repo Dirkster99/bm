@@ -2,7 +2,13 @@
 
 # Breadcrumb.Metro
 
-This project implements an open source Breadcrumb control that was originally developed by *<a href="https://github.com/lycj">lycj</a>* in his FileExplorer application.
+This project implements an open source Breadcrumb control that was originally developed by <b>Leung Yat Chun Joseph <a href="https://github.com/lycj">lycj</a></b> in his FileExplorer application originating from CodePlex and <a href="https://www.codeproject.com/Members/Fainx">CodeProject</a>.
+
+![](https://raw.githubusercontent.com/Dirkster99/Docu/master/bm/DarkBreadcrumb.png)
+
+![](https://raw.githubusercontent.com/Dirkster99/Docu/master/bm/DarkBreadcrumb2.png)
+
+![](https://raw.githubusercontent.com/Dirkster99/Docu/master/bm/DarkBreadcrumb3.png)
 
 ## BreadcrumbRootDropDown
 ![](https://github.com/Dirkster99/Docu/blob/master/bm/BreadcrumbRootDropDown.png)
