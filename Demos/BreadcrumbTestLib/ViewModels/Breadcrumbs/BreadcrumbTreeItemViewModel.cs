@@ -291,14 +291,32 @@
         ///    instead of its knownfolder GUID which is never shown
         ///    here
         /// </summary>
-        public string ShellUserPath
+        public string ShellSpacePath
         {
             get
             {
                 if (_dir != null)
                 {
-                    // Return Name to avoid Special PathId being shown in UI
-                    return (_dir.DirectoryPathExists() ? _dir.FullName : _dir.Name );
+                    var shellSpacePath = _dir.GetShellSpacePath();
+
+                    if (_dir.DirectoryPathExists())
+                        return _dir.FullName;
+
+                    var node = this;
+                    string path = string.Empty;
+
+                    do
+                    {
+                        // Add all non-desktop items into name based path
+                        if (node._parentNode != null)
+                            path = (path.Length > 0 ? node.ItemName + "\\" : node.ItemName) + path;
+
+                        node = node._parentNode;
+                    }
+                    while (node != null);
+
+                    // Return Name based path to avoid Special PathId being shown in UI
+                    return path;
                 }
 
                 return null;

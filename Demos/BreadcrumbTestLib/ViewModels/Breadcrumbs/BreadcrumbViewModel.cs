@@ -812,7 +812,7 @@ namespace BreadcrumbTestLib.ViewModels.Breadcrumbs
             // Update last selected item in chain of selected items and SuggestPath
             BreadcrumbSelectedItem = selectedItem;
             var model = selectedItem.GetModel();
-            SuggestedPath = (model.DirectoryPathExists() ? model.FullName : model.Name );
+            SuggestedPath = model.GetShellSpacePath();
 
             // select second level root item in RootDropDownList (if available)
             if (items.Count >= 2)

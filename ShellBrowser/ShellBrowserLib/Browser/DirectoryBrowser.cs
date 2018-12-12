@@ -398,6 +398,32 @@ namespace ShellBrowserLib.Browser
 
             return false;
         }
+
+        /// <summary>
+        /// Gets a path that contains either the real file system location
+        /// or a location based on names items along the path (to avoid using SpecialPathIDs.
+        /// </summary>
+        /// <returns></returns>
+        public string GetShellSpacePath()
+        {
+            if (DirectoryPathExists())
+                return FullName;
+
+            var node = this as IDirectoryBrowser;
+            var parentNode = node.GetParent();
+
+            string path = string.Empty;
+
+            while ((node.ItemType & DirectoryItemFlags.Desktop) == 0)
+            {
+                // Add all non-desktop items into name based path
+                path = (path.Length > 0 ? node.Name + "\\" : node.Name) + path;
+                node = node.GetParent();
+            }
+
+            // Return Name based path to avoid Special PathId being shown in UI
+            return path;
+        }
         #endregion methods
     }
 }

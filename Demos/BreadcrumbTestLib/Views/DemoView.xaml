@@ -396,7 +396,7 @@
 
             <TextBox Grid.Column="0" Grid.Row="2" Grid.ColumnSpan="2"
                      DataContext="{Binding BreadcrumbController}"
-                     Text="{Binding Path=BreadcrumbBrowser.BreadcrumbSelectedItem.ShellUserPath, Mode=OneWay,UpdateSourceTrigger=PropertyChanged}"
+                     Text="{Binding Path=BreadcrumbBrowser.BreadcrumbSelectedItem.ShellSpacePath, Mode=OneWay,UpdateSourceTrigger=PropertyChanged}"
                      TextWrapping="WrapWithOverflow"
                      HorizontalScrollBarVisibility="Auto"
                      VerticalScrollBarVisibility="Auto"
