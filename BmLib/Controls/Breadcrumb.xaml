@@ -106,7 +106,6 @@
                                                                 Header="{TemplateBinding RootDropDownListHeader}"
                                                                 HorizontalAlignment="Left"
                                                                 behav:SelectionChangedCommand.ChangedCommand="{TemplateBinding RootDropDownSelectionChangedCommand}"
-                                                                BorderThickness="0"
                                                                 Margin="0"
                                                             />
 

@@ -50,11 +50,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BaseControls\BindingProxy.cs" />
-    <Compile Include="BaseControls\ClipCorner.xaml.cs">
-      <DependentUpon>ClipCorner.xaml</DependentUpon>
-    </Compile>
     <Compile Include="BaseControls\Invert.cs" />
-    <Compile Include="BaseControls\MultiContentControl.cs" />
     <Compile Include="BaseControls\OverflowableStackPanel.cs" />
     <Compile Include="Behaviors\MergeStyleBehaviour.cs" />
     <Compile Include="Behaviors\SelectionChangedCommand.cs" />
@@ -86,10 +82,6 @@
     <Compile Include="Themes\ResourceKeys.cs" />
     <Compile Include="Utils\AsyncUtils.cs" />
     <Compile Include="Utils\UITools.cs" />
-    <Page Include="BaseControls\ClipCorner.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
     <Page Include="Controls\Breadcrumb.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>

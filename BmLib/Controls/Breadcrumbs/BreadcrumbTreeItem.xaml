@@ -15,7 +15,7 @@
         <Setter Property="Background" Value="Transparent"/>
         <Setter Property="BorderThickness" Value="0" />
         <Setter Property="BorderBrush" Value="{DynamicResource {x:Static reskeys:ResourceKeys.ControlBorderBrushKey}}" />
-        <Setter Property="Padding" Value="1,0,0,0"/>
+        <Setter Property="Padding" Value="0"/>
         <Setter Property="Margin" Value="0"/>
         <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}"/>
         <Setter Property="Template">
@@ -45,7 +45,7 @@
                                         Template="{DynamicResource {x:Static reskeys:ResourceKeys.BaseButton}}"
                                         MaxWidth="1000"
                                         Margin="0"
-                                        Padding="3,0"
+                                        Padding="0"
                                         Command="{TemplateBinding ClickItemCommand}"
                                     >
                                     <ContentPresenter x:Name="PART_Header"

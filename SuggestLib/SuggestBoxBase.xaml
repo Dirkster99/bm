@@ -86,7 +86,7 @@
                                 BorderBrush="{TemplateBinding BorderBrush}"
                                 />
                         
-                            <!-- Our Thumb -->
+                            <!-- RezizeGrip Thumb to support resizing the suggestion lib -->
                             <Thumb x:Name="PART_ResizeGripThumb"
                                    Grid.Row="0"
                                    Style="{DynamicResource {x:Static reskeys:ResourceKeys.ResizeGripStyleKey}}"
@@ -110,7 +110,7 @@
         <Setter Property="Background" Value="{DynamicResource {x:Static reskeys:ResourceKeys.ControlInputBackgroundKey}}"/>
         <Setter Property="BorderThickness" Value="1" />
         <Setter Property="BorderBrush" Value="{DynamicResource {x:Static reskeys:ResourceKeys.ControlInputBorderKey}}"/>
-        <Setter Property="Padding" Value="2,1,1,1"/>
+        <Setter Property="Padding" Value="0"/>
         <Setter Property="AllowDrop" Value="true"/>
         <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
         <Setter Property="ContextMenu" Value="{StaticResource SuggestBoxContextMenu}"/>

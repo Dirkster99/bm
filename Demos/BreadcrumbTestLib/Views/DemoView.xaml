@@ -127,6 +127,8 @@
                             </TextBlock>
                         </HierarchicalDataTemplate>
                     </ctrls:Breadcrumb.TreeItemTemplate>
+                    <!-- Defines a DataTemplate to
+                             display an item within the VERTICAL List below each breadcrumb tree item -->
                     <ctrls:Breadcrumb.DropDownListItemDataTemplate>
                         <DataTemplate>
                             <Grid>

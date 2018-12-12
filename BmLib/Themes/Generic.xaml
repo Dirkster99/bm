@@ -10,8 +10,6 @@
         <ResourceDictionary Source="/BmLib;component/Controls/HotTrack.xaml" />
         <ResourceDictionary Source="/BmLib;component/Controls/Switch.xaml" />
 
-        <ResourceDictionary Source="/BmLib;component/baseControls/ClipCorner.xaml" />
-
         <ResourceDictionary Source="/BmLib;component/Controls/Breadcrumbs/BreadcrumbTreeItem.xaml" />
         <ResourceDictionary Source="/BmLib;component/Controls/Breadcrumbs/BreadcrumbTree.xaml" />
 
