@@ -280,6 +280,30 @@
                 return null;
             }
         }
+
+        /// <summary>
+        /// Get Known file system Path  or FolderId for this folder.
+        /// 
+        /// That is:
+        /// 1) A storage location (if it exists) in the filesystem
+        /// 
+        /// 2) The Name of the item eg.: 'Libraries' for that Special Folder
+        ///    instead of its knownfolder GUID which is never shown
+        ///    here
+        /// </summary>
+        public string ShellUserPath
+        {
+            get
+            {
+                if (_dir != null)
+                {
+                    // Return Name to avoid Special PathId being shown in UI
+                    return (_dir.DirectoryPathExists() ? _dir.FullName : _dir.Name );
+                }
+
+                return null;
+            }
+        }
         #endregion properties
 
         #region methods

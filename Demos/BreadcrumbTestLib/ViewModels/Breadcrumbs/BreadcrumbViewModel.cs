@@ -41,10 +41,10 @@ namespace BreadcrumbTestLib.ViewModels.Breadcrumbs
         private string _BreadcrumbSelectedPath;
 
         private BreadcrumbTreeItemViewModel _SelectedRootViewModel;
+        private BreadcrumbTreeItemViewModel _BreadcrumbSelectedItem;
         private IDirectoryBrowser _SelectedRootValue;
 
         private ICommand _RootDropDownSelectionChangedCommand;
-
         private readonly INavigationController _NavigationController;
         private readonly ObservableCollection<BreadcrumbTreeItemViewModel> _OverflowedAndRootItems = null;
         private readonly Stack<BreadcrumbTreeItemViewModel> _CurrentPath;
@@ -152,6 +152,27 @@ namespace BreadcrumbTestLib.ViewModels.Breadcrumbs
                 {
                     _BreadcrumbSelectedPath = value;
                     NotifyPropertyChanged(() => BreadcrumbSelectedPath);
+                }
+            }
+        }
+
+        /// <summary>
+        /// Gets a currently selected item that is at the end
+        /// of the currently selected path.
+        /// </summary>
+        public BreadcrumbTreeItemViewModel BreadcrumbSelectedItem
+        {
+            get
+            {
+                return _BreadcrumbSelectedItem;
+            }
+
+            protected set
+            {
+                if (_BreadcrumbSelectedItem != value)
+                {
+                    _BreadcrumbSelectedItem = value;
+                    NotifyPropertyChanged(() => BreadcrumbSelectedItem);
                 }
             }
         }
@@ -553,7 +574,6 @@ namespace BreadcrumbTestLib.ViewModels.Breadcrumbs
             }
 
             await UpdateListOfOverflowableRootItemsAsync(_CurrentPath, newSelectedLocation);
-            UpdateBreadcrumbSelectedPath();
 
             if (BrowseEvent != null)
                 BrowseEvent(this, new BrowsingEventArgs(newSelectedLocation.GetModel(),
@@ -642,7 +662,6 @@ namespace BreadcrumbTestLib.ViewModels.Breadcrumbs
                 _CurrentPath.Push(item);
 
             await UpdateListOfOverflowableRootItemsAsync(_CurrentPath, targetPath[targetPath.Count - 1]);
-            UpdateBreadcrumbSelectedPath();
 
             if (BrowseEvent != null)
                 BrowseEvent(this, new BrowsingEventArgs(location, false, BrowseResult.Complete));
@@ -740,7 +759,6 @@ namespace BreadcrumbTestLib.ViewModels.Breadcrumbs
             _CurrentPath.Push(secLevelRootItem); // set the current path to thisPC
 
             await UpdateListOfOverflowableRootItemsAsync(_CurrentPath, secLevelRootItem);
-            UpdateBreadcrumbSelectedPath();
         }
 
         /// <summary>
@@ -791,11 +809,17 @@ namespace BreadcrumbTestLib.ViewModels.Breadcrumbs
             // Update selection of currently selected item and second level root item
             await ReportChildSelectedAsync(selectedItem.Selection);
 
-            var pathList = items.Reverse().ToArray();
+            // Update last selected item in chain of selected items and SuggestPath
+            BreadcrumbSelectedItem = selectedItem;
+            var model = selectedItem.GetModel();
+            SuggestedPath = (model.DirectoryPathExists() ? model.FullName : model.Name );
 
             // select second level root item in RootDropDownList (if available)
-            if (pathList.Length >= 2)
+            if (items.Count >= 2)
+            {
+                var pathList = items.Reverse().ToArray();
                 SelectedRootValue = pathList[1].Selection.Value;
+            }
             else
                 SelectedRootValue = null;
         }
@@ -853,7 +877,7 @@ namespace BreadcrumbTestLib.ViewModels.Breadcrumbs
         public async Task ReportChildSelectedAsync(
             ITreeSelector<BreadcrumbTreeItemViewModel, IDirectoryBrowser> pathItem)
         {
-            Logger.InfoFormat("_");
+            Logger.InfoFormat("{0}", pathItem);
 
             try
             {
@@ -879,7 +903,7 @@ namespace BreadcrumbTestLib.ViewModels.Breadcrumbs
             if (pathItem.EntryHelper.IsLoaded == false)
                 await pathItem.EntryHelper.LoadAsync();
         }
-
+/***
         /// <summary>
         /// Method updates the BreadcrumbSelectedPath property for debugging purposes.
         /// </summary>
@@ -890,9 +914,7 @@ namespace BreadcrumbTestLib.ViewModels.Breadcrumbs
 
             if (SelectedRootViewModel != null)
             {
-                var pathItems = SelectedRootViewModel.GetPathItems();
-
-                foreach (var item in pathItems)
+                foreach (var item in SelectedRootViewModel.GetPathItems())
                 {
                     var itemString = string.Format("{0} {1}", item.Header,
                         (item.Selection.IsSelected == false ? "" : "(Selected)"));
@@ -911,10 +933,16 @@ namespace BreadcrumbTestLib.ViewModels.Breadcrumbs
 
             if (selectedItem != null)
             {
-                SuggestedPath = selectedItem.ItemPath;
+                var model = selectedItem.GetModel();
+
+                string path = model.FullName;
+                if (model.DirectoryPathExists() == false)
+                    path = model.Name;
+
+                SuggestedPath = path;
             }
         }
-
+***/
         private async Task RootDropDownSelectionChangedCommand_Executed(BreadcrumbTreeItemViewModel selectedFolder)
         {
             var hintDirection = HintDirection.Unrelated;
