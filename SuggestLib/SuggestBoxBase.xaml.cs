@@ -40,8 +40,6 @@
         protected bool _PopUpIsCancelled = false;
         private bool _prevState;
 
-        protected string _previousLocation = string.Empty;
-
         public static readonly DependencyProperty DisplayMemberPathProperty = DependencyProperty.Register(
                     "DisplayMemberPath", typeof(string), typeof(SuggestBoxBase),
                     new PropertyMetadata("Header"));
@@ -258,10 +256,6 @@
             // we select all the text 
             //            if (!TreeHelper.IsDescendantOf(e.OldFocus as DependencyObject, this))
             //                this.SelectAll();
-
-            // Save current location for eventing that fires a
-            // prev /new location request event on enter/tab out ...
-            _previousLocation = Text;
 
             _PopUpIsCancelled = false;
             this.PopupIfSuggest();
@@ -513,8 +507,7 @@
                     else
                     {
                         // Time to tell the outside world: We are changing location
-                        NewLocationRequestEvent.Invoke(this,
-                            new NextTargetLocationArgs(_previousLocation, Text));
+                        MessageEditResult(EditPathResult.OK);
                     }
                     break;
 
@@ -532,15 +525,30 @@
                     break;
 
                 case Key.Escape:
-                    _PopUpIsCancelled = true;
-                    SetPopUp(false, "OnPreviewKeyDown");
-                    e.Handled = true;
+                    if (IsPopupOpened == true)
+                    {
+                        _PopUpIsCancelled = true;
+                        SetPopUp(false, "OnPreviewKeyDown");
+                        e.Handled = true;
+                    }
+                    else
+                    {
+                        // Tell the outside world: We are NOT changing location
+                        MessageEditResult(EditPathResult.Cancel);
+                    }
                     break;
 
                 default:
                     // Other key gestures can be processed without special handlers
                     break;
             }
+        }
+
+        protected void MessageEditResult(EditPathResult result)
+        {
+            var message = new EditResult(result, Text);
+
+            NewLocationRequestEvent?.Invoke(this, new NextTargetLocationArgs(message));
         }
 
         /// <summary>
