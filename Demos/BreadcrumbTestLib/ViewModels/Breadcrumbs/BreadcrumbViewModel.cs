@@ -369,10 +369,14 @@ namespace BreadcrumbTestLib.ViewModels.Breadcrumbs
                     if (string.IsNullOrEmpty(navigateToThisLocation) || goBackToPreviousLocation)
                     {
                         isPathValid = false;
+                        var previousLocation = BreadcrumbSelectedItem.GetModel();
 
-                        if (BreadcrumbSelectedItem != null)
+                        // Previous location should be valid if we can re-create the model
+                        isPathValid = (ShellBrowser.Create(previousLocation.PathShell) != null);
+
+                        if (isPathValid)
                         {
-                            await NavigateToScheduledAsync(BreadcrumbSelectedItem.GetModel(), "BreadcrumbViewModel.NavigateTreeViewModel");
+                            await NavigateToScheduledAsync(previousLocation, "BreadcrumbViewModel.NavigateTreeViewModel");
                             return true;
                         }
                     }
@@ -383,7 +387,7 @@ namespace BreadcrumbTestLib.ViewModels.Breadcrumbs
                         if (isPathValid == true)
                         {
                             var location = ShellBrowser.Create(navigateToThisLocation);
-                            await NavigateToScheduledAsync(location, "BreadcrumbViewModel.NavigateTreeViewModel");
+                            await NavigateToScheduledAsync(location, "BreadcrumbViewModel.NavigateTreeViewModel 1");
                         }
                     }
                 }
@@ -915,46 +919,7 @@ namespace BreadcrumbTestLib.ViewModels.Breadcrumbs
             if (pathItem.EntryHelper.IsLoaded == false)
                 await pathItem.EntryHelper.LoadAsync();
         }
-/***
-        /// <summary>
-        /// Method updates the BreadcrumbSelectedPath property for debugging purposes.
-        /// </summary>
-        private void UpdateBreadcrumbSelectedPath()
-        {
-            string output = string.Empty;
-            BreadcrumbTreeItemViewModel selectedItem = null;
 
-            if (SelectedRootViewModel != null)
-            {
-                foreach (var item in SelectedRootViewModel.GetPathItems())
-                {
-                    var itemString = string.Format("{0} {1}", item.Header,
-                        (item.Selection.IsSelected == false ? "" : "(Selected)"));
-
-                    output = (string.IsNullOrEmpty(output) ?
-                        itemString :
-                        output + "/" + itemString);
-
-                    if (item.Selection.IsSelected == true)
-                        selectedItem = item;
-                }
-            }
-
-            // Gets the complete path string below root item selector.RootSelector.SelectedValue.FullName;
-            BreadcrumbSelectedPath = output;
-
-            if (selectedItem != null)
-            {
-                var model = selectedItem.GetModel();
-
-                string path = model.FullName;
-                if (model.DirectoryPathExists() == false)
-                    path = model.Name;
-
-                SuggestedPath = path;
-            }
-        }
-***/
         private async Task RootDropDownSelectionChangedCommand_Executed(BreadcrumbTreeItemViewModel selectedFolder)
         {
             var hintDirection = HintDirection.Unrelated;
