@@ -4,11 +4,11 @@
 
     xmlns:uc="clr-namespace:BmLib.Controls.Breadcrumbs"
     >
-    <ResourceDictionary.MergedDictionaries>
+    <!--ResourceDictionary.MergedDictionaries>
         <ResourceDictionary Source="/BmLib;component/Controls/Breadcrumbs/BreadcrumbTreeItem.xaml" />
-    </ResourceDictionary.MergedDictionaries>
+    </ResourceDictionary.MergedDictionaries-->
 
-    <Style TargetType="{x:Type uc:BreadcrumbTree}">
+    <Style TargetType="{x:Type uc:BreadcrumbTree}" BasedOn="{StaticResource {x:Type TreeView}}">
         <!-- Setter Property="ItemTemplate" Value="{StaticResource {x:Type uc:BreadcrumbTreeItem}}" / -->
         <Setter Property="BorderThickness" Value="0" />
         <Setter Property="Margin" Value="0" />

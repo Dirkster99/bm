@@ -96,7 +96,7 @@
 
                         </VisualStateManager.VisualStateGroups>
 
-                        <Grid>
+                        <Grid Background="Transparent">
                             <Grid x:Name="PART_HotTrackGrid">
                                 <Grid.RowDefinitions>
                                     <RowDefinition />

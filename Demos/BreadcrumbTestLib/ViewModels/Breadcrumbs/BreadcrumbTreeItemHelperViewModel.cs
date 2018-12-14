@@ -116,18 +116,7 @@
             {
                 if (_isExpanded != value)
                 {
-                    try
-                    {
-                        Logger.InfoFormat("{0} -> {1}", value, _isExpanded);
-                        ////                        Console.WriteLine("{0}: {1} -> {2}", this.ToString(), value, _isExpanded);
-
-                        ////if (value && _isExpanded == false)
-                        ////    AsyncUtils.RunAsync(() => this.LoadAsync());
-                    }
-                    catch (Exception exc)
-                    {
-                        Logger.Error(exc);
-                    }
+                    Logger.InfoFormat("{0} -> {1}", value, _isExpanded);
 
                     _isExpanded = value;
                     NotifyPropertyChanged(() => IsExpanded);
