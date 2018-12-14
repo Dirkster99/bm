@@ -165,14 +165,14 @@
 		{
 			base.OnApplyTemplate();
 
-            this.AddHandler(Button.ClickEvent, (RoutedEventHandler)((o, e) =>
-			{
-				if (e.Source is Button)
-				{
-					this.SetValue(IsCurrentSelectedProperty, true);
-					e.Handled = true;
-				}
-			}));
+////            this.AddHandler(Button.ClickEvent, (RoutedEventHandler)((o, e) =>
+////			{
+////				if (e.Source is Button)
+////				{
+////					this.SetValue(IsCurrentSelectedProperty, true);
+////					e.Handled = true;
+////				}
+////			}));
 
 			////this.AddHandler(OverflowItem.SelectedEvent, (RoutedEventHandler)((o, e) =>
 			////    {
