@@ -175,14 +175,18 @@
                         await _Root.NavigateToScheduledAsync(selectedFolder.GetModel(),
                                                              "BreadcrumbTreeItemViewModel.ItemSelectionChanged",
                                                              HintDirection.Down, this);
-                    },
-                    (param) =>
-                    {
-                        if (_Root.IsBrowsing == true)
-                            return false;
-
-                        return true;
-                    });
+                    }
+                    //// Partial rollback from commit on 2018-10-30:
+                    //// https://github.com/Dirkster99/bm/commit/4ccb72b2ef6e500175cc99c63b37e2fa1d608e5a
+                    //// Not needed and causes timing problems since other elements in the tree receive the event
+                    //// ,(param) =>
+                    //// {
+                    ////     if (_Root.IsBrowsing == true)
+                    ////         return false;
+                    ////
+                    ////     return true;
+                    //// }
+                    );
                 }
 
                 return _DropDownItemSelectedCommand;
@@ -211,14 +215,18 @@
                         await _Root.NavigateToScheduledAsync(this.GetModel(),
                                                              "BreadcrumbTreeItemViewModel.BreadcrumbTreeTreeItemClickCommand",
                                                              HintDirection.Up, this);
-                    },
-                    (param) =>
-                    {
-                        if (_Root.IsBrowsing == true)
-                            return false;
-
-                        return true;
-                    });
+                    }
+                    //// Partial rollback from commit on 2018-10-30:
+                    //// https://github.com/Dirkster99/bm/commit/4ccb72b2ef6e500175cc99c63b37e2fa1d608e5a
+                    //// Not needed and causes timing problems since other elements in the tree receive the event
+                    //// ,(param) =>
+                    //// {
+                    ////     if (_Root.IsBrowsing == true)
+                    ////         return false;
+                    ////
+                    ////     return true;
+                    //// }
+                    );
                 }
 
                 return _BreadcrumbTreeTreeItemClickCommand;
