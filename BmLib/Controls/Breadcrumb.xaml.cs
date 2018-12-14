@@ -488,15 +488,20 @@
 
         private async void OnSwitchChanged(bool OldValue, bool NewValue)
         {
+            // Switch from suggestbox to tree view
             if (OldValue == false && NewValue == true)
             {
-                bool isPathValid = true;
+                bool isPathValid = true, goBackToPreviousLocation = false;
                 string path;
 
                 if (_SwitchBoxEditResult != null)
                 {
+                    // Editing was cancelled by the user (eg.: user pressed Escape key)
                     if (_SwitchBoxEditResult.Result == EditPathResult.Cancel)
-                        path = _previousLocation;
+                    {
+                        path = string.Empty;
+                        goBackToPreviousLocation = true;
+                    }
                     else
                         path = _SwitchBoxEditResult.NewLocation;
                 }
@@ -506,10 +511,11 @@
                 if (_BreadcrumbModel == null)
                     isPathValid = false;      // Cannot invoke viewmodel method
                 else
-                    isPathValid = await _BreadcrumbModel.NavigateTreeViewModel(path);
+                    isPathValid = await _BreadcrumbModel.NavigateTreeViewModel(path, goBackToPreviousLocation);
 
-                // Stay with false path if path does not exist
-                // or viewmodel method cannot be invoked here ...
+                // Canceling navigation from edit result since path appears to be invalid
+                // > Stay with false path if path does not exist
+                //   or viewmodel method cannot be invoked here ...
                 if (isPathValid == false)
                 {
                     _SwitchToOnCanceled = true;
@@ -518,13 +524,14 @@
             }
             else
             {
+                // Switch from tree view to suggestbox
                 if (OldValue == true && NewValue == false)
                 {
                     // Assumption: Control is already bound and current location
                     // is available in text property
                     if (_SwitchToOnCanceled == false)
                     {
-                        // Overwrite this only if are not in a cancel-suggestion-workflow
+                        // Overwrite this only if we are not in a cancel-suggestion-workflow
                         _previousLocation = Control_SuggestBox.Text;
                     }
                     else

@@ -258,6 +258,7 @@
             //                this.SelectAll();
 
             _PopUpIsCancelled = false;
+            InitializeSuggestions();
             this.PopupIfSuggest();
             IsHintVisible = false;
         }
@@ -663,6 +664,15 @@
                     this._suggestionIsConsumed = true;
                     this.Focus();
                 }
+            }
+        }
+
+        private void InitializeSuggestions()
+        {
+            if (Suggestions != null)
+            {
+                if (Suggestions.Count > 0)
+                    Suggestions.Clear();  // Clear previous suggestion to ensure new/current results
             }
         }
         #endregion

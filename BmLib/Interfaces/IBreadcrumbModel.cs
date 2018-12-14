@@ -13,6 +13,7 @@
         /// </summary>
         /// <param name="navigateToThisLocation"></param>
         /// <returns></returns>
-        Task<bool> NavigateTreeViewModel(string navigateToThisLocation);
+        Task<bool> NavigateTreeViewModel(string navigateToThisLocation,
+                                         bool goBackToPreviousLocation);
     }
 }

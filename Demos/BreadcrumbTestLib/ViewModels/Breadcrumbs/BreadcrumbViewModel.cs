@@ -355,29 +355,41 @@ namespace BreadcrumbTestLib.ViewModels.Breadcrumbs
         /// </summary>
         /// <param name="navigateToThisLocation"></param>
         /// <returns></returns>
-        Task<bool> IBreadcrumbModel.NavigateTreeViewModel(string navigateToThisLocation)
+        Task<bool> IBreadcrumbModel.NavigateTreeViewModel(string navigateToThisLocation,
+                                                          bool goBackToPreviousLocation)
         {
             return Task.Run<bool>(async () =>
             {
                 bool isPathValid = true;
-                if (string.IsNullOrEmpty(navigateToThisLocation))
-                    isPathValid = false;
-                else
+
+                try
                 {
-                    try
-                    {
-                        isPathValid = ShellBrowser.DirectoryExists(navigateToThisLocation);
-                    }
-                    catch
+                    // Navigation to new location was cancelled of given path is obviously empty
+                    // Lets try and roolback to previously active location
+                    if (string.IsNullOrEmpty(navigateToThisLocation) || goBackToPreviousLocation)
                     {
                         isPathValid = false;
+
+                        if (BreadcrumbSelectedItem != null)
+                        {
+                            await NavigateToScheduledAsync(BreadcrumbSelectedItem.GetModel(), "BreadcrumbViewModel.NavigateTreeViewModel");
+                            return true;
+                        }
+                    }
+                    else
+                    {
+                        isPathValid = ShellBrowser.DirectoryExists(navigateToThisLocation);
+
+                        if (isPathValid == true)
+                        {
+                            var location = ShellBrowser.Create(navigateToThisLocation);
+                            await NavigateToScheduledAsync(location, "BreadcrumbViewModel.NavigateTreeViewModel");
+                        }
                     }
                 }
-
-                if (isPathValid == true)
+                catch
                 {
-                    var location = ShellBrowser.Create(navigateToThisLocation);
-                    await NavigateToScheduledAsync(location, "BreadcrumbViewModel.NavigateTreeViewModel");
+                    isPathValid = false;
                 }
 
                 return isPathValid;
