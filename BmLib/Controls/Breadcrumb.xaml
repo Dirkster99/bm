@@ -74,7 +74,10 @@
                                     Opacity="0.5"
                                     Background="Transparent"
                                     Foreground="{DynamicResource {x:Static SystemColors.HotTrackBrushKey}}"
-                                    BorderBrush="Transparent" BorderThickness="0"/>
+                                    BorderBrush="Transparent" BorderThickness="0"
+                                    IsHitTestVisible="False"
+                                    Focusable="False"
+                                />
 
                                 <bc:Switch x:Name="PART_Switch"
                                            Template="{StaticResource BreadcrumbSwitchTemplate}"                   
