@@ -53,4 +53,16 @@
                      options:Freeze="true"
                      Color="{DynamicResource {x:Static MLib_reskeys:ResourceKeys.ControlAccentColorKey}}" />
 
+    <!-- Setting ProgressBar foreground color
+         Not really needed here since ProgressBar style is overwritten below
+         but its redefined just in case ... -->
+    <SolidColorBrush x:Key="{x:Static reskeys:ResourceKeys.HotTrackBrushKey}"
+                     Color="{DynamicResource {x:Static MLib_reskeys:ResourceKeys.ControlAccentColorKey}}"/>
+
+    <!-- Setting ProgressBar style to use a standard progressbar display instead of the
+         infinite metro progress display ... -->
+    <Style x:Key="{x:Static reskeys:ResourceKeys.BreadcrumbProgressBarStyleKey}"
+           BasedOn="{StaticResource {x:Static MLib_reskeys:ResourceKeys.ProgressStyleKey }}"
+           TargetType="ProgressBar"/>
+
 </ResourceDictionary>

@@ -88,4 +88,8 @@
     <SolidColorBrush x:Key="{x:Static reskeys:ResourceKeys.ControlDisabledBackgroundKey}"
                      Color="#20000000" options:Freeze="true" />
 
+    <!-- Setting ProgressBar foreground color -->
+    <SolidColorBrush x:Key="{x:Static reskeys:ResourceKeys.HotTrackBrushKey}"
+                     Color="{DynamicResource {x:Static reskeys:ResourceKeys.ControlAccentColorKey}}"/>
+
 </ResourceDictionary>

@@ -70,13 +70,7 @@
                                     Minimum="{Binding MinimumProgressValue, Mode=OneWay,UpdateSourceTrigger=PropertyChanged}"
                                     Maximum="{Binding MaximumProgressValue, Mode=OneWay,UpdateSourceTrigger=PropertyChanged}"
                                     Visibility="{Binding IsProgressbarVisible, Mode=OneWay,UpdateSourceTrigger=PropertyChanged, Converter={StaticResource btv}}"
-                                               
-                                    Opacity="0.5"
-                                    Background="Transparent"
-                                    Foreground="{DynamicResource {x:Static SystemColors.HotTrackBrushKey}}"
-                                    BorderBrush="Transparent" BorderThickness="0"
-                                    IsHitTestVisible="False"
-                                    Focusable="False"
+                                    Style="{DynamicResource {x:Static reskeys:ResourceKeys.BreadcrumbProgressBarStyleKey}}"                                               
                                 />
 
                                 <bc:Switch x:Name="PART_Switch"

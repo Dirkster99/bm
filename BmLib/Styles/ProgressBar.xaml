@@ -1,0 +1,20 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:reskeys="clr-namespace:BmLib.Themes">
+
+    <!-- Use Generic default style - use this to customize the ProgressBar style -->
+    <Style x:Key="{ComponentResourceKey TypeInTargetAssembly={x:Type reskeys:ResourceKeys},
+           ResourceId=BreadcrumbProgressBarStyleKey}"
+        TargetType="ProgressBar"
+        BasedOn="{StaticResource {x:Type ProgressBar}}">
+        <Setter Property="Opacity" Value="0.75"/>
+        <Setter Property="Background" Value="Transparent"/>
+        <!--Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.HotTrackBrushKey}}"/-->
+        <Setter Property="Foreground" Value="{DynamicResource {x:Static reskeys:ResourceKeys.HotTrackBrushKey}}"/>
+        <Setter Property="BorderBrush" Value="Transparent"/>
+        <Setter Property="BorderThickness" Value="0"/>
+        <Setter Property="IsHitTestVisible" Value="False"/>
+        <Setter Property="Focusable" Value="False"/>
+    </Style>
+
+</ResourceDictionary>

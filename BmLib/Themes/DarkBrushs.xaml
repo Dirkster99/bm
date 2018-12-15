@@ -106,4 +106,8 @@
                      ResourceId=ControlDisabledBackgroundKey}"
                      Color="Transparent" options:Freeze="true"/>
 
+    <!-- Setting ProgressBar foreground color -->
+    <SolidColorBrush x:Key="{x:Static reskeys:ResourceKeys.HotTrackBrushKey}"
+                     Color="{DynamicResource {x:Static reskeys:ResourceKeys.ControlAccentColorKey}}"/>
+    
 </ResourceDictionary>
