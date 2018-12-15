@@ -368,6 +368,10 @@ namespace BreadcrumbTestLib.ViewModels.Breadcrumbs
                     // Lets try and roolback to previously active location
                     if (string.IsNullOrEmpty(navigateToThisLocation) || goBackToPreviousLocation)
                     {
+                        // Lets just go back to this without further processing
+                        if (BreadcrumbSelectedItem != null)
+                            return true;
+
                         isPathValid = false;
                         var previousLocation = BreadcrumbSelectedItem.GetModel();
 
@@ -382,12 +386,24 @@ namespace BreadcrumbTestLib.ViewModels.Breadcrumbs
                     }
                     else
                     {
-                        isPathValid = ShellBrowser.DirectoryExists(navigateToThisLocation);
+                        IDirectoryBrowser[] pathItems = null;
+                        isPathValid = ShellBrowser.DirectoryExists(navigateToThisLocation, out pathItems);
 
                         if (isPathValid == true)
                         {
-                            var location = ShellBrowser.Create(navigateToThisLocation);
-                            await NavigateToScheduledAsync(location, "BreadcrumbViewModel.NavigateTreeViewModel 1");
+                            // The path is valid but we do not have any objects for it, yet.
+                            // So, lets update the tree view based on the string representation.
+                            if (pathItems == null)
+                            {
+                                var location = ShellBrowser.Create(navigateToThisLocation);
+                                await NavigateToScheduledAsync(location, "BreadcrumbViewModel.NavigateTreeViewModel 1");
+                            }
+                            else
+                            {
+                                // We already have the objects representing the path
+                                // so lets navigate the tree to this location
+                                await NavigateToScheduledAsync(pathItems, "BreadcrumbViewModel.NavigateTreeViewModel 1");
+                            }
                         }
                     }
                 }
@@ -427,19 +443,21 @@ namespace BreadcrumbTestLib.ViewModels.Breadcrumbs
         /// <param name="sourceHint"></param>
         /// <param name="hintDirection"></param>
         /// <param name="toBeSelectedLocation"></param>
-        public async Task NavigateToScheduledAsync(IDirectoryBrowser targetLocation,
-                                        string sourceHint,
-                                        HintDirection hintDirection = HintDirection.Unrelated,
-                                        BreadcrumbTreeItemViewModel toBeSelectedLocation = null
-                                )
+        public async Task NavigateToScheduledAsync(
+            IDirectoryBrowser targetLocation,
+            string sourceHint,
+            HintDirection hintDirection = HintDirection.Unrelated,
+            BreadcrumbTreeItemViewModel toBeSelectedLocation = null
+        )
         {
             if (_NavigationController != null)
             {
                 var cancelTokenSrc = _NavigationController.GetCancelToken();
                 var token = CancellationToken.None;
 
-                var request = new BrowseRequest<IDirectoryBrowser>(targetLocation, RequestType.Navigational,
-                                                                    token, cancelTokenSrc, null);
+                var request = new BrowseRequest<IDirectoryBrowser>(targetLocation,
+                                                                   RequestType.Navigational,
+                                                                   token, cancelTokenSrc, null);
 
                 var NaviTask = Task.Factory.StartNew(async (s) =>
                 {
@@ -456,6 +474,36 @@ namespace BreadcrumbTestLib.ViewModels.Breadcrumbs
                 await NavigateToAsync(request,
                     "BreadcrumbTreeItemViewModel.BreadcrumbTreeTreeItemClickCommand",
                     hintDirection, toBeSelectedLocation);
+            }
+        }
+
+        private async Task NavigateToScheduledAsync(IDirectoryBrowser[] targetLocations,
+                                                    string sourceHint)
+        {
+            if (_NavigationController != null)
+            {
+                var cancelTokenSrc = _NavigationController.GetCancelToken();
+                var token = CancellationToken.None;
+
+                var request = new BrowseRequest<IDirectoryBrowser>(targetLocations,
+                                                                   RequestType.Navigational,
+                                                                   token, cancelTokenSrc, null);
+
+                var NaviTask = Task.Factory.StartNew(async (s) =>
+                {
+                    await this.NavigateToAsync(request, sourceHint);
+
+                }, token, TaskCreationOptions.LongRunning);
+
+                request.SetTask(NaviTask);
+                _NavigationController.QueueTask(request);
+            }
+            else
+            {
+                var location = targetLocations[targetLocations.Length - 1];
+                var request = new BrowseRequest<IDirectoryBrowser>(location, RequestType.Navigational);
+                await NavigateToAsync(request,
+                    "BreadcrumbTreeItemViewModel.BreadcrumbTreeTreeItemClickCommand");
             }
         }
 
@@ -489,13 +537,26 @@ namespace BreadcrumbTestLib.ViewModels.Breadcrumbs
                 {
                     BrowseResult result = BrowseResult.Unknown;
 
+                    // Optimize browsing up or down in current path
                     if (toBeSelectedLocation != null &&
                         (direction == HintDirection.Up || direction == HintDirection.Down))
                         result = await InternalNavigateUpDownAsync(toBeSelectedLocation,
                                                                    requestedLocation, direction);
                     else
-                        result = await InternalNavigateAsyncToNewLocationAsync(BreadcrumbSubTree,
-                                                                             requestedLocation.NewLocation);
+                    {
+                        if (requestedLocation.PathConfirmed == true)
+                        {
+                            // We have a verified path of model items - lets get the viewmodel items for this
+                            result = await InternalNavigateAsyncToNewLocationAsync(BreadcrumbSubTree,
+                                                                                   requestedLocation.LocationsPath);
+                        }
+                        else
+                        {
+                            // Unwind the string location based on the available SubTree ViewModel Items
+                            result = await InternalNavigateAsyncToNewLocationAsync(BreadcrumbSubTree,
+                                                                                   requestedLocation.NewLocation);
+                        }
+                    }
 
                     return FinalBrowseResult<IDirectoryBrowser>.FromRequest(requestedLocation,
                                                                             result);
@@ -526,8 +587,8 @@ namespace BreadcrumbTestLib.ViewModels.Breadcrumbs
             BrowseRequest<IDirectoryBrowser> requestedLocation,
             HintDirection direction)
         {
-            bool isMatchAvailable=false;               // Make sure requested location is really
-            foreach (var item in _CurrentPath)        // part of current path (before edit current path...)
+            bool isMatchAvailable=false;        // Make sure requested location is really
+            foreach (var item in _CurrentPath) // part of current path (before edit current path...)
             {
                 if (item.Equals(toBeSelectedLocation))
                 {
@@ -598,6 +659,72 @@ namespace BreadcrumbTestLib.ViewModels.Breadcrumbs
             return BrowseResult.Complete;
         }
 
+        private async Task<BrowseResult> InternalNavigateAsyncToNewLocationAsync(
+            BreadcrumbTreeItemViewModel desktopRootItem,
+            IDirectoryBrowser[] modelLocations)
+        {
+            if (modelLocations == null)
+                return BrowseResult.InComplete;
+
+            if (modelLocations.Length <= 0)
+                return BrowseResult.InComplete;
+
+            // First location needs to be a second level root item (This PC, Desktop, Music or such)
+            BreadcrumbTreeItemViewModel secLevelRootItem = null;
+            var secLevelRootItems = desktopRootItem.Entries.All.Where(i => i.EqualsLocation(modelLocations[0]));
+            if (secLevelRootItems.Count() > 0)
+                secLevelRootItem = secLevelRootItems.First();
+            else
+                return BrowseResult.InComplete;
+
+            // Count=0: Indicates that Desktop root (This PC is selected) item is destination of selection
+            // locationRootItem Indicates a 2nd Level root item directly under the Desktop
+            // Either case: Clear Path, insert DesktopRoot + (ThisPC or 2ndLevelRootItem)
+            if (modelLocations.Length == 1)
+            {
+                await SelectSecLevelRootItem(desktopRootItem, secLevelRootItem);
+
+                if (BrowseEvent != null)
+                    BrowseEvent(this, new BrowsingEventArgs(modelLocations[0], false, BrowseResult.Complete));
+
+                return BrowseResult.Complete;
+            }
+
+            foreach (var item in _CurrentPath)    // Reset Selection states from last selection
+            {
+                item.Selection.IsSelected = false;
+                item.Selection.SelectedChild = null;
+            }
+
+            var targetPath = await FindLoadTargetTreeViewModelItems(modelLocations, secLevelRootItem);
+            if (targetPath.Count == 0)
+                return BrowseResult.InComplete;
+
+            // Chain new path items by their SelectedChild property
+            for (int i = 0; i < targetPath.Count - 1; i++)
+            {
+                targetPath[i].Selection.IsSelected = false;
+                targetPath[i].Selection.SelectedChild = targetPath[i + 1].GetModel();
+            }
+
+            // Select last item and make sure there is no further selected child
+            targetPath[targetPath.Count - 1].Selection.IsSelected = true;
+            targetPath[targetPath.Count - 1].Selection.SelectedChild = null;
+
+            _CurrentPath.Clear();               // Push new path items into current path
+            _CurrentPath.Push(desktopRootItem);
+
+            foreach (var item in targetPath)
+                _CurrentPath.Push(item);
+
+            await UpdateListOfOverflowableRootItemsAsync(_CurrentPath, targetPath[targetPath.Count - 1]);
+
+            if (BrowseEvent != null)
+                BrowseEvent(this, new BrowsingEventArgs(modelLocations[modelLocations.Length-1], false, BrowseResult.Complete));
+
+            return BrowseResult.Complete;
+        }
+
         /// <summary>
         /// Find a location that may be completely unrelated to the current location.
         /// Load all sub-items beginning at the root and select the destination.
@@ -658,7 +785,7 @@ namespace BreadcrumbTestLib.ViewModels.Breadcrumbs
                 item.Selection.SelectedChild = null;
             }
 
-            var targetPath = await FindLoadTarget(targetItems, firstSourceItem);
+            var targetPath = await FindLoadTargetTreeViewModelItems(targetItems, firstSourceItem);
 
             // Chain new path items by their SelectedChild property
             for (int i = 0; i < targetPath.Count - 1; i++)
@@ -688,11 +815,75 @@ namespace BreadcrumbTestLib.ViewModels.Breadcrumbs
         /// <summary>
         /// Do a level order traversal on source root tree to find new target
         /// and re-load missing sub-items as we go deeper into the tree...
+        /// 
+        /// Update TreeViewModel of TreeItemViewModels along the given
+        /// locations in <paramref name="modelLocations"/>. The <paramref name="firstSourceItem"/>
+        /// represents the root item along which this tree is to be updated/reloaded.
+        /// 
+        /// Use of this method is recommended only if a previous method has confirmed the
+        /// path in <paramref name="modelLocations"/> to be valid - there is no second verification
+        /// on existance in this method.
+        /// </summary>
+        /// <param name="modelLocations"></param>
+        /// <param name="firstSourceItem"></param>
+        /// <returns></returns>
+        private static async Task<List<BreadcrumbTreeItemViewModel>> FindLoadTargetTreeViewModelItems(
+                                        IDirectoryBrowser[] modelLocations,
+                                        BreadcrumbTreeItemViewModel firstSourceItem)
+        {
+            List<BreadcrumbTreeItemViewModel> targetPath = new List<BreadcrumbTreeItemViewModel>();
+            Queue<Tuple<int, BreadcrumbTreeItemViewModel>> queue = new Queue<Tuple<int, BreadcrumbTreeItemViewModel>>();
+
+            queue.Enqueue(new Tuple<int, BreadcrumbTreeItemViewModel>(0, firstSourceItem));
+            while (queue.Count() > 0)
+            {
+                var deQueuedItem = queue.Dequeue();
+                int iLevel = deQueuedItem.Item1;
+                var current = deQueuedItem.Item2;
+
+                // Process the node
+                if (current.EqualsLocation(modelLocations[iLevel]) == true)
+                {
+                    targetPath.Add(current);
+
+                    if (current.Entries.IsLoaded == false)
+                        await current.Entries.LoadAsync();
+
+                    // Find next match in next level if any
+                    if (modelLocations.Length > (iLevel + 1))
+                    {
+                        BreadcrumbTreeItemViewModel matchedItem = null;
+                        foreach (var item in current.Entries.All)
+                        {
+                            if (item.EqualsLocation(modelLocations[iLevel + 1]))
+                            {
+                                matchedItem = item;
+                                break;
+                            }
+                        }
+
+                        if (matchedItem != null)
+                        {
+                            queue.Clear();
+                            queue.Enqueue(new Tuple<int, BreadcrumbTreeItemViewModel>(iLevel + 1, matchedItem));
+                        }
+                    }
+                }
+            }
+
+            return targetPath;
+        }
+
+        /// <summary>
+        /// Do a level order traversal on source root tree to find new target
+        /// and re-load missing sub-items as we go deeper into the tree...
         /// </summary>
         /// <param name="targetItems"></param>
         /// <param name="firstSourceItem"></param>
         /// <returns></returns>
-        private static async Task<List<BreadcrumbTreeItemViewModel>> FindLoadTarget(string[] targetItems, BreadcrumbTreeItemViewModel firstSourceItem)
+        private static async Task<List<BreadcrumbTreeItemViewModel>> FindLoadTargetTreeViewModelItems(
+                                        string[] targetItems,
+                                        BreadcrumbTreeItemViewModel firstSourceItem)
         {
             List<BreadcrumbTreeItemViewModel> targetPath = new List<BreadcrumbTreeItemViewModel>();
             Queue<Tuple<int, BreadcrumbTreeItemViewModel>> queue = new Queue<Tuple<int, BreadcrumbTreeItemViewModel>>();

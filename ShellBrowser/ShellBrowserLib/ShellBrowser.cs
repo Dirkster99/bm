@@ -552,6 +552,82 @@
         }
 
         /// <summary>
+        /// Determines if a directory (special or not) exists at the givem path
+        /// (path can be a formatted as special path KF_IDD).
+        /// </summary>
+        /// <param name="path"></param>
+        /// <param name="pathItems"></param>
+        /// <returns>Returns true if item has a filesystem path otherwise false.</returns>
+        public static bool DirectoryExists(string path, out IDirectoryBrowser[] pathItems)
+        {
+            pathItems = null;
+                
+            if (string.IsNullOrEmpty(path))
+                return false;
+
+            if (ShellHelpers.IsSpecialPath(path) == ShellHelpers.SpecialPath.IsSpecialPath)
+            {
+                // translate KF_IID into file system path and check if it exists
+                string fs_path = KnownFolderHelper.GetKnownFolderPath(path);
+
+                if (fs_path != null)
+                    return System.IO.Directory.Exists(fs_path);
+
+                return false;
+            }
+            else
+            {
+                if (path.Length < 2)
+                    return false;
+
+                if ((path[0] == '\\' && path[1] == '\\') || path[1] == ':')
+                    return System.IO.Directory.Exists(path);
+
+                try
+                {
+                    // Try to resolve an abstract Windows Shell Space description like:
+                    // 'Libraries/Documents' (in a localized fashion)
+                    string[] pathNames = path.Split('\\');
+
+                    if (pathNames == null)
+                        return false;
+
+                    if (pathNames.Length == 0)
+                        return false;
+
+                    pathItems = new IDirectoryBrowser[pathNames.Length];
+
+                    string parentPath = KF_IID.ID_FOLDERID_Desktop;
+                    for (int i = 0; i < pathItems.Length; i++)
+                    {
+                        if (i > 0)
+                            parentPath = pathItems[i - 1].PathShell;
+
+                        foreach (var item in ShellBrowser.GetChildItems(parentPath))
+                        {
+                            if (string.Compare(item.Name, pathNames[i], true) == 0)
+                            {
+                                pathItems[i] = item;
+                                break;
+                            }
+                        }
+                    }
+
+                    // This path exists as sequence of localized names of windows shell items
+                    if (pathItems[pathItems.Length - 1] != null)
+                        return true;
+                }
+                catch
+                {
+                    // Something went wrong so we signal that we cannot resolve this one...
+                    return false;
+                }
+
+                return false;
+            }
+        }
+
+        /// <summary>
         /// Attempts to find the parent path representation via translation of given path
         /// into PIDL and lookup of Parent PIDL.
         ///

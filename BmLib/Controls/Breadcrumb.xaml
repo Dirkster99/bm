@@ -70,7 +70,10 @@
                                     Minimum="{Binding MinimumProgressValue, Mode=OneWay,UpdateSourceTrigger=PropertyChanged}"
                                     Maximum="{Binding MaximumProgressValue, Mode=OneWay,UpdateSourceTrigger=PropertyChanged}"
                                     Visibility="{Binding IsProgressbarVisible, Mode=OneWay,UpdateSourceTrigger=PropertyChanged, Converter={StaticResource btv}}"
-                                    Style="{DynamicResource {x:Static reskeys:ResourceKeys.BreadcrumbProgressBarStyleKey}}"                                               
+                                    Style="{DynamicResource {x:Static reskeys:ResourceKeys.BreadcrumbProgressBarStyleKey}}"
+                                    Height="3"
+                                    HorizontalAlignment="Stretch"
+                                    VerticalAlignment="Bottom"
                                 />
 
                                 <bc:Switch x:Name="PART_Switch"

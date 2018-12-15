@@ -1,7 +1,6 @@
 ﻿namespace BreadcrumbTestLib.ViewModels
 {
     using System;
-    using System.Threading.Tasks;
 
     public class AppViewModel : Base.ViewModelBase, IDisposable
     {

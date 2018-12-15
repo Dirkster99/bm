@@ -1,6 +1,5 @@
 namespace SSCoreLib.Browse
 {
-    using ShellBrowserLib.Interfaces;
     using System;
     using System.Threading;
     using System.Threading.Tasks;
@@ -33,8 +32,6 @@ namespace SSCoreLib.Browse
                              Task t = null)
           : this()
         {
-            Item = null;
-
             NewLocation = (M)(newLocation as ICloneable).Clone();
             ActionRequested = typeOfRequest;
             CancelTok = cancelToken;
@@ -42,23 +39,25 @@ namespace SSCoreLib.Browse
             BrowseTask = t;
         }
 
-        /// <summary>
-        /// Parameterized class constructor.
-        /// </summary>
-        public BrowseRequest(object item,
+        public BrowseRequest(M[] locationsPath,
                              RequestType typeOfRequest,
                              CancellationToken cancelToken = default(CancellationToken),
                              CancellationTokenSource cancelTokenSource = null,
                              Task t = null)
           : this()
         {
-            Item = item;
-            NewLocation = default(M);
+            NewLocation = (M)(locationsPath[locationsPath.Length-1] as ICloneable).Clone();
+
+            LocationsPath = new M[locationsPath.Length];
+            for (int i = 0; i < locationsPath.Length; i++)
+                LocationsPath[i] = (M)(locationsPath[i] as ICloneable).Clone();
+
             ActionRequested = typeOfRequest;
-            CancelTokenSource = cancelTokenSource;
             CancelTok = cancelToken;
+            CancelTokenSource = cancelTokenSource;
             BrowseTask = t;
         }
+
 
         /// <summary>
         /// Class constructor.
@@ -70,14 +69,13 @@ namespace SSCoreLib.Browse
         #endregion ctors
 
         #region properties
-
-        public object Item { get; }
-
         /// <summary>
         /// Gets the new location (a path in the file system) to indicate
         /// the target of this browse request.
         /// </summary>
         public M NewLocation { get; }
+
+        public M[] LocationsPath { get; }
 
         public RequestType ActionRequested { get; }
 
@@ -100,6 +98,20 @@ namespace SSCoreLib.Browse
         /// causes additional browse processing...
         /// </summary>
         public Guid RequestId { get; }
+
+        public bool PathConfirmed
+        {
+            get
+            {
+                if (LocationsPath == null)
+                    return false;
+
+                if (LocationsPath.Length <= 0)
+                    return false;
+
+                return true;
+            }
+        }
         #endregion properties
 
         #region methods

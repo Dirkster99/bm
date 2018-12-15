@@ -170,7 +170,8 @@ namespace BreadcrumbTestLib.ViewModels
 
             }, token, TaskCreationOptions.LongRunning);
 
-            var request = new BrowseRequest<IDirectoryBrowser>(this, RequestType.Navigational,
+            var request = new BrowseRequest<IDirectoryBrowser>(location,
+                                                               RequestType.Navigational,
                                                                token, cancelTokenSrc, InitTask);
 
             QueueTask(request);
