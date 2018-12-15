@@ -123,13 +123,6 @@
         bool EqualsParseName(string parseName);
 
         /// <summary>
-        /// Gets a path that contains either the real file system location
-        /// or a location based on names items along the path (to avoid using SpecialPathIDs.
-        /// </summary>
-        /// <returns></returns>
-        string GetShellSpacePath();
-
-        /// <summary>
         /// Gets a parent <see cref="IDirectoryBrowser"/> object if a parent can be determent
         /// or null if item does not have a parent.
         /// </summary>

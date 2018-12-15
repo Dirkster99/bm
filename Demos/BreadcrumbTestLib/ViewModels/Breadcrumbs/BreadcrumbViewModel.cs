@@ -6,6 +6,7 @@ namespace BreadcrumbTestLib.ViewModels.Breadcrumbs
     using BreadcrumbTestLib.ViewModels.Base;
     using BreadcrumbTestLib.ViewModels.Interfaces;
     using ShellBrowserLib;
+    using ShellBrowserLib.Enums;
     using ShellBrowserLib.IDs;
     using ShellBrowserLib.Interfaces;
     using SSCoreLib.Browse;
@@ -38,7 +39,6 @@ namespace BreadcrumbTestLib.ViewModels.Breadcrumbs
         private string _suggestedPath;
 
         private bool _IsBrowsing;
-        private string _BreadcrumbSelectedPath;
 
         private BreadcrumbTreeItemViewModel _SelectedRootViewModel;
         private BreadcrumbTreeItemViewModel _BreadcrumbSelectedItem;
@@ -136,23 +136,36 @@ namespace BreadcrumbTestLib.ViewModels.Breadcrumbs
         }
 
         /// <summary>
-        /// Gets a string representation of the currently selected path items.
-        /// (mostly useful for debugging purposes).
+        /// Get Known file system Path  or FolderId for this folder.
+        /// 
+        /// That is:
+        /// 1) A storage location (if it exists) in the filesystem
+        /// 
+        /// 2) The Name of the item eg.: 'Libraries' for that Special Folder
+        ///    instead of its knownfolder GUID which is never shown
+        ///    here
         /// </summary>
-        public string BreadcrumbSelectedPath
+        public string ShellSpacePath
         {
             get
             {
-                return _BreadcrumbSelectedPath;
-            }
+                if (BreadcrumbSelectedItem == null)
+                    return string.Empty;
 
-            protected set
-            {
-                if (_BreadcrumbSelectedPath != value)
+                if (_CurrentPath.Count == 0)
+                    return string.Empty;
+
+                bool checkFileSystem = false;
+                if (SelectedRootValue != null)
                 {
-                    _BreadcrumbSelectedPath = value;
-                    NotifyPropertyChanged(() => BreadcrumbSelectedPath);
+                    if (string.Compare(SelectedRootValue.SpecialPathId, KF_IID.ID_FOLDERID_ComputerFolder, true) == 0)
+                        checkFileSystem = true;
                 }
+
+                var shellSpacePath = GetShellSpacePath(BreadcrumbSelectedItem, checkFileSystem,
+                                                      _CurrentPath.Reverse().ToArray());
+
+                return shellSpacePath;
             }
         }
 
@@ -173,6 +186,7 @@ namespace BreadcrumbTestLib.ViewModels.Breadcrumbs
                 {
                     _BreadcrumbSelectedItem = value;
                     NotifyPropertyChanged(() => BreadcrumbSelectedItem);
+                    NotifyPropertyChanged(() => ShellSpacePath);
                 }
             }
         }
@@ -417,6 +431,20 @@ namespace BreadcrumbTestLib.ViewModels.Breadcrumbs
         }
 
         /// <summary>
+        /// Updates the bound text path property of the SuggestBox if the path of the
+        /// currently selected item. This method should be called whenever the SuggestBox
+        /// is switched from invisible to visible.
+        /// </summary>
+        /// <returns></returns>
+        string IBreadcrumbModel.UpdateSuggestPath()
+        {
+            // Update path in bound textBox with value from currently selected item
+            SuggestedPath = ShellSpacePath;
+
+            return SuggestedPath;
+        }
+
+        /// <summary>
         /// Method should be called after construction to initialize the viewmodel
         /// to view a default content.
         /// </summary>
@@ -526,7 +554,7 @@ namespace BreadcrumbTestLib.ViewModels.Breadcrumbs
             HintDirection direction = HintDirection.Unrelated,
             BreadcrumbTreeItemViewModel toBeSelectedLocation = null)
         {
-            Logger.InfoFormat("Request '{0}' direction {1} source: {3} IsBrowsing {4}",
+            Logger.InfoFormat("Request '{0}' direction {1} source: {2} IsBrowsing {3}",
                 requestedLocation.NewLocation, direction, sourceHint, IsBrowsing);
 
             try
@@ -587,7 +615,7 @@ namespace BreadcrumbTestLib.ViewModels.Breadcrumbs
             BrowseRequest<IDirectoryBrowser> requestedLocation,
             HintDirection direction)
         {
-            bool isMatchAvailable=false;        // Make sure requested location is really
+            bool isMatchAvailable = false;        // Make sure requested location is really
             foreach (var item in _CurrentPath) // part of current path (before edit current path...)
             {
                 if (item.Equals(toBeSelectedLocation))
@@ -720,7 +748,7 @@ namespace BreadcrumbTestLib.ViewModels.Breadcrumbs
             await UpdateListOfOverflowableRootItemsAsync(_CurrentPath, targetPath[targetPath.Count - 1]);
 
             if (BrowseEvent != null)
-                BrowseEvent(this, new BrowsingEventArgs(modelLocations[modelLocations.Length-1], false, BrowseResult.Complete));
+                BrowseEvent(this, new BrowsingEventArgs(modelLocations[modelLocations.Length - 1], false, BrowseResult.Complete));
 
             return BrowseResult.Complete;
         }
@@ -1019,7 +1047,6 @@ namespace BreadcrumbTestLib.ViewModels.Breadcrumbs
             // Update last selected item in chain of selected items and SuggestPath
             BreadcrumbSelectedItem = selectedItem;
             var model = selectedItem.GetModel();
-            SuggestedPath = model.GetShellSpacePath();
 
             // select second level root item in RootDropDownList (if available)
             if (items.Count >= 2)
@@ -1029,6 +1056,35 @@ namespace BreadcrumbTestLib.ViewModels.Breadcrumbs
             }
             else
                 SelectedRootValue = null;
+        }
+
+        /// <summary>
+        /// Gets a path that contains either the real file system location
+        /// or a location based on Named items along the current path (to avoid using SpecialPathIDs).
+        /// </summary>
+        /// <param name="checkFileSystem"></param>
+        /// <returns></returns>
+        public string GetShellSpacePath(BreadcrumbTreeItemViewModel selectedItem,
+                                        bool checkFileSystem,
+                                        BreadcrumbTreeItemViewModel[] currentPath)
+        {
+            if (checkFileSystem)
+            {
+                if (selectedItem.GetModel().DirectoryPathExists())
+                    return selectedItem.GetModel().FullName;
+            }
+
+            string path = string.Empty;
+
+            // Skip showing the desktop in the string based path
+            int i = 0;
+            if ((currentPath[i].GetModel().ItemType & DirectoryItemFlags.Desktop) != 0)
+                i = 1;
+
+            for ( ; i < currentPath.Length; i++)
+                path = path + (path.Length > 0 ? "\\" + currentPath[i].ItemName : currentPath[i].ItemName);
+
+            return path;
         }
 
         /// <summary>

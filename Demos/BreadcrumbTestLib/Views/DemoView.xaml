@@ -164,15 +164,15 @@
                                 VerticalAlignment="Stretch"
                                 HorizontalAlignment="Center"
                                 Margin="0"
-                                Padding="3,0"
                                 SnapsToDevicePixels="True"
-                                MinWidth="15"
                             >
                             <Path Stroke="{DynamicResource {x:Static reskeys:ResourceKeys.ControlNormalForegroundBrushKey}}"
                                   StrokeThickness="1.2"
                                   HorizontalAlignment="Center"
                                   VerticalAlignment="Stretch"
                                   IsHitTestVisible="True"
+                                  Stretch="Fill"
+                                  Margin="3,6"
                                   Data="{Binding IsOverflown, ElementName=BreadcrumbDemoControl, Converter={StaticResource BoolToOneOfTwoBindingsConverter}}"
                             />
                         </Border>
@@ -207,9 +207,9 @@
                         <Grid>
                             <!-- This should be visible when TreeView browsing is turned on -->
                             <Image DataContext="{Binding SelectedRootViewModel}"
+                                   Visibility="{Binding Data.BreadcrumbController.BreadcrumbBrowser.EnableBreadcrumb,Mode=OneWay,UpdateSourceTrigger=PropertyChanged, Converter={StaticResource BoolToVisibilityConverter},Source={StaticResource AppDataContextProxy}}"
                                    SnapsToDevicePixels="true"
                                    RenderOptions.BitmapScalingMode="NearestNeighbor"
-                                   Visibility="{Binding Data.BreadcrumbController.BreadcrumbBrowser.EnableBreadcrumb,Mode=OneWay,UpdateSourceTrigger=PropertyChanged, Converter={StaticResource BoolToVisibilityConverter},Source={StaticResource AppDataContextProxy}}"
                                >
                                 <Image.Source>
                                     <MultiBinding Converter="{x:Static convLib:AssociatedIconConverter.Default}">
@@ -223,7 +223,9 @@
                                 </Image.Source>
                             </Image>
 
-                            <!-- This should be visible when SugestBox editing is turned on -->
+                            <!-- This should be visible when SugestBox editing is turned off -->
+                            <!-- Shows an '>' like symbol to style a 'Go' button that is in fact
+                                 just the toggle button of the switch -->
                             <Border
                                 Visibility="{Binding Data.BreadcrumbController.BreadcrumbBrowser.EnableBreadcrumb,Mode=OneWay,UpdateSourceTrigger=PropertyChanged, Converter={StaticResource InvertedBoolToVisibilityConverter},Source={StaticResource AppDataContextProxy}}"
                                 Background="Transparent"
@@ -231,7 +233,7 @@
                                 BorderThickness="0"
                                 VerticalAlignment="Stretch"
                                 HorizontalAlignment="Center"
-                                Margin="3,6"
+                                Margin="3"
                                 Padding="0"
                                 SnapsToDevicePixels="True"
                                 MinWidth="15"
@@ -395,7 +397,7 @@
 
             <TextBox Grid.Column="0" Grid.Row="2" Grid.ColumnSpan="2"
                      DataContext="{Binding BreadcrumbController}"
-                     Text="{Binding Path=BreadcrumbBrowser.BreadcrumbSelectedItem.ShellSpacePath, Mode=OneWay,UpdateSourceTrigger=PropertyChanged}"
+                     Text="{Binding Path=BreadcrumbBrowser.ShellSpacePath, Mode=OneWay,UpdateSourceTrigger=PropertyChanged}"
                      TextWrapping="WrapWithOverflow"
                      HorizontalScrollBarVisibility="Auto"
                      VerticalScrollBarVisibility="Auto"

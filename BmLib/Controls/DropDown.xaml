@@ -8,7 +8,7 @@
   <Style TargetType="{x:Type ctlrs:DropDown}">
     <Setter Property="Background" Value="{DynamicResource {x:Static reskeys:ResourceKeys.ControlNormalBackgroundKey}}" />
     <Setter Property="BorderBrush" Value="{DynamicResource {x:Static reskeys:ResourceKeys.ControlBorderBrushKey}}" />
-    <Setter Property="BorderThickness" Value="1" />
+    <Setter Property="BorderThickness" Value="0" />
     <Setter Property="HeaderButtonTemplate" Value="{DynamicResource {x:Static reskeys:ResourceKeys.BaseToggleButton}}" />
     <Setter Property="Template">
       <Setter.Value>
@@ -25,7 +25,8 @@
                           Padding="0"
                           IsChecked="{Binding IsDropDownOpen, Mode=TwoWay, RelativeSource={RelativeSource TemplatedParent}}">
               <Grid>
-                <ContentPresenter Content="{TemplateBinding Header}" />
+                <ContentPresenter Content="{TemplateBinding Header}"
+                                  VerticalAlignment="Stretch"/>
               </Grid>
             </ToggleButton>
 

@@ -585,6 +585,9 @@
 
                 try
                 {
+                    if (path.Length > 1)
+                        path = path.TrimEnd('\\');
+
                     // Try to resolve an abstract Windows Shell Space description like:
                     // 'Libraries/Documents' (in a localized fashion)
                     string[] pathNames = path.Split('\\');

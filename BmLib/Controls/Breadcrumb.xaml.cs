@@ -531,8 +531,15 @@
                     // is available in text property
                     if (_SwitchToOnCanceled == false)
                     {
-                        // Overwrite this only if we are not in a cancel-suggestion-workflow
-                        _previousLocation = Control_SuggestBox.Text;
+                        if (_BreadcrumbModel == null)
+                        {
+                            // Overwrite this only if we are not in a cancel-suggestion-workflow
+                            _previousLocation = Control_SuggestBox.Text;
+                        }
+                        else
+                        {
+                            _previousLocation = _BreadcrumbModel.UpdateSuggestPath();
+                        }
                     }
                     else
                         _SwitchToOnCanceled = false;

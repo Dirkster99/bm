@@ -15,5 +15,7 @@
         /// <returns></returns>
         Task<bool> NavigateTreeViewModel(string navigateToThisLocation,
                                          bool goBackToPreviousLocation);
+
+        string UpdateSuggestPath();
     }
 }

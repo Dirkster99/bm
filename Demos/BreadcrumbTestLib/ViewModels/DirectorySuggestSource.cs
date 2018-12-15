@@ -37,35 +37,45 @@
 
         private List<object> ListSubDirs(string input)
         {
+            if (string.IsNullOrEmpty(input) == true)
+                return new List<object>();
+
             var subDirs = GetLogicalDriveOrSubDirs(input, input);
             if (subDirs != null)
                 return subDirs;
 
-            // Find last seperator and list directories underneath
-            // with * searchpattern
-            if (subDirs == null)
+            try
             {
-                int sepIdx = input.LastIndexOf('\\');
-
-                if (sepIdx < input.Length)
+                // Find last seperator and list directories underneath
+                // with * searchpattern
+                if (subDirs == null)
                 {
-                    string folder = input.Substring(0, sepIdx+1);
-                    string searchPattern = input.Substring(sepIdx + 1) + "*";
-                    var directories = Directory.GetDirectories(folder, searchPattern).ToList();
+                    int sepIdx = input.LastIndexOf('\\');
 
-                    if (directories != null)
+                    if (sepIdx < input.Length)
                     {
-                        List<object> dirs = new List<object>();
+                        string folder = input.Substring(0, sepIdx + 1);
+                        string searchPattern = input.Substring(sepIdx + 1) + "*";
+                        var directories = Directory.GetDirectories(folder, searchPattern).ToList();
 
-                        for (int i = 0; i < directories.Count; i++)
-                            dirs.Add(new { Header = directories[i], Value = directories[i] });
+                        if (directories != null)
+                        {
+                            List<object> dirs = new List<object>();
 
-                        return dirs;
+                            for (int i = 0; i < directories.Count; i++)
+                                dirs.Add(new { Header = directories[i], Value = directories[i] });
+
+                            return dirs;
+                        }
                     }
                 }
-            }
 
-            return GetLogicalDrives();
+                return GetLogicalDrives();
+            }
+            catch
+            {
+                return subDirs;
+            }
         }
 
         /// <summary>

@@ -38,21 +38,21 @@
                             MinHeight="{TemplateBinding MinHeight}"
                             >
                         <Grid>
+                            <Grid.Resources>
+                                <conv:BoolToVisibilityPropConverter x:Key="btv1" FalseValue="Visible" TrueValue="Hidden"/>
+                                <conv:BoolToVisibilityCollapsedConverter x:Key="btv" />
+                                <conv:FlipBoolConverter x:Key="fb" />
+                            </Grid.Resources>
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="*"/>
                                 <ColumnDefinition Width="Auto"/>
                             </Grid.ColumnDefinitions>
                             
-                            <!-- Press Bar and Switch Control with Breadcrumb Tree and TextBox input -->
+                            <!-- Progress Bar and Switch Control with Breadcrumb Tree and TextBox input -->
                             <Grid HorizontalAlignment="Stretch"
                                   VerticalAlignment="Stretch"
                                   Margin="0"
                             >
-                                <Grid.Resources>
-                                    <conv:BoolToVisibilityCollapsedConverter x:Key="btv" />
-                                    <conv:FlipBoolConverter x:Key="fb" />
-                                </Grid.Resources>
-
                                 <Grid.ColumnDefinitions>
                                     <!-- This needs to be * because OverflowableStackpanel inside
                                      Switch inside BreadCrumbTree cannot function when this is set to Auto
@@ -77,11 +77,11 @@
                                 />
 
                                 <bc:Switch x:Name="PART_Switch"
+                                           Header="{TemplateBinding SwitchHeader}"
                                            Template="{StaticResource BreadcrumbSwitchTemplate}"                   
                                            IsSwitchOn="{Binding IsSwitchOn,RelativeSource={RelativeSource AncestorType={x:Type bc:Breadcrumb}},Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
                                            VerticalAlignment="Center" VerticalContentAlignment="Center"
                                            HorizontalAlignment="Stretch" HorizontalContentAlignment="Stretch"
-                                           Header="{TemplateBinding SwitchHeader}"
                                            Margin="0"
                                      >
                                     <bc:Switch.ContentOn>
@@ -125,18 +125,26 @@
                                         </Grid>
                                     </bc:Switch.ContentOn>
                                     <bc:Switch.ContentOff>
-                                      <sbox:SuggestBox
-                                          x:Name="PART_SuggestBox"
-                                          BorderThickness="0"
-                                          Text="{Binding SuggestedPath, UpdateSourceTrigger=Explicit}"
-                                          IsEnabled="{Binding EnableBreadcrumb, Mode=OneWay, Converter={StaticResource fb}}"
-                                          SuggestSources="{Binding SuggestSources}"
-                                          HierarchyHelper="{x:Null}">
-                                          <!--
-                                            DisplayMemberPath="FullPath"
-                                              ValuePath="FullPath" 
-                                          -->
-                                      </sbox:SuggestBox>
+                                        <Grid>
+                                            <sbox:SuggestBox
+                                                  x:Name="PART_SuggestBox"
+                                                  Visibility="{Binding IsSwitchOn, RelativeSource={RelativeSource AncestorType=ctrls:Switch}, Mode=OneWay, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource btv1}}"
+                                                  BorderThickness="0"
+                                                  BorderBrush="Transparent"
+                                                  Margin="0" Padding="0"
+                                                  FontFamily="{TemplateBinding FontFamily}"
+                                                  FontSize="{TemplateBinding FontSize}"
+                                                  Text="{Binding SuggestedPath, UpdateSourceTrigger=Explicit}"
+                                                  IsEnabled="{Binding EnableBreadcrumb, Mode=OneWay, Converter={StaticResource fb}}"
+                                                  SuggestSources="{Binding SuggestSources}"
+                                                  HierarchyHelper="{x:Null}">
+                                                <!--
+                                                    DisplayMemberPath="FullPath"
+                                                      ValuePath="FullPath" 
+                                                -->
+                                            </sbox:SuggestBox>
+
+                                        </Grid>
                                     </bc:Switch.ContentOff>
                                 </bc:Switch>
                             </Grid>
@@ -154,6 +162,7 @@
                                         DataContext="{TemplateBinding TaskQueueProcessing}"
                                         Visibility="{Binding IsProcessCancelable,Converter={StaticResource BoolToVisibilityConverterNeg},UpdateSourceTrigger=PropertyChanged,Mode=OneWay}"
                                         ToolTip="Refresh"
+                                        Margin="3" Padding="0"
                                         >
                                     <Button.Background>
                                         <ImageBrush ImageSource="{DynamicResource {x:Static reskeys:ResourceKeys.ICON_Refresh}}"/>
@@ -167,6 +176,7 @@
                                         IsEnabled="{Binding IsProcessCancelable,UpdateSourceTrigger=PropertyChanged,Mode=OneWay}"
                                         Visibility="{Binding IsProcessCancelable,Converter={StaticResource BoolToVisibilityConverter},UpdateSourceTrigger=PropertyChanged,Mode=OneWay}"
                                         ToolTip="Cancel"
+                                        Margin="3" Padding="0"
                                         >
                                     <Button.Background>
                                         <ImageBrush ImageSource="{DynamicResource {x:Static reskeys:ResourceKeys.ICON_Close}}"/>
