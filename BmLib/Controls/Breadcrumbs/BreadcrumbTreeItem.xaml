@@ -3,7 +3,6 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
 
     xmlns:ctrls="clr-namespace:BmLib.Controls"
-    xmlns:bc="clr-namespace:BmLib.BaseControls"
     xmlns:uc="clr-namespace:BmLib.Controls.Breadcrumbs"
     xmlns:conv="clr-namespace:BmLib.Converters"
     xmlns:reskeys="clr-namespace:BmLib.Themes"
@@ -22,12 +21,12 @@
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type uc:BreadcrumbTreeItem}">
                     <!-- The orientation in this panel layouts sub-items horizontally -->
-                    <bc:OverflowableStackPanel HorizontalAlignment="Stretch"
-                                               Orientation="Horizontal" 
-                                               OverflowItemCount="{Binding OverflowItemCount, RelativeSource={RelativeSource TemplatedParent}
+                    <ctrls:OverflowableStackPanel HorizontalAlignment="Stretch"
+                                                  Orientation="Horizontal" 
+                                                  OverflowItemCount="{Binding OverflowItemCount, RelativeSource={RelativeSource TemplatedParent}
                                                                  , Mode=OneWayToSource}" >
                         <ctrls:HotTrack x:Name="headerHL"
-                                        bc:OverflowableStackPanel.CanOverflow="True"
+                                        ctrls:OverflowableStackPanel.CanOverflow="True"
                                         SelectedBorderBrush="{TemplateBinding BorderBrush}"
                                         MaxWidth="1000"
                                         BorderThickness="0"
@@ -71,7 +70,7 @@
                         </ctrls:HotTrack>
 
                         <ItemsPresenter x:Name="ItemsHost" />
-                    </bc:OverflowableStackPanel>
+                    </ctrls:OverflowableStackPanel>
                     <ControlTemplate.Triggers>
                         <MultiTrigger >
                             <MultiTrigger.Conditions>

@@ -35,26 +35,6 @@
 			return sb.ToString();
 		}
 
-		public static T FindAncestor<T>(DependencyObject obj, Func<T, bool> filter = null) where T : DependencyObject
-		{
-			filter = filter ?? (depObj => true);
-
-			while (obj != null && obj is Visual)
-			{
-				T o = obj as T;
-
-				if (o != null && filter(o))
-					return o;
-
-				obj = VisualTreeHelper.GetParent(obj);
-
-				if (obj != null && AttachedProperties.GetSkipLookup(obj))
-					obj = null;
-			}
-
-			return default(T);
-		}
-
 		public static T FindLogicalAncestor<T>(DependencyObject obj, Func<T, bool> filter = null) where T : DependencyObject
 		{
 			filter = filter ?? (depObj => true);

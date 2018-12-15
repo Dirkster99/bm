@@ -8,7 +8,6 @@
         xmlns:reskeys="clr-namespace:BmLib.Themes;assembly=BmLib"
         xmlns:ThemeBehav="clr-namespace:BmLib.Behaviors;assembly=BmLib"
 
-        xmlns:base="clr-namespace:BmLib.BaseControls;assembly=BmLib"
         xmlns:ctrls="clr-namespace:BmLib.Controls;assembly=BmLib"
         xmlns:treectrls="clr-namespace:BmLib.Controls.Breadcrumbs;assembly=BmLib"
 
@@ -71,7 +70,7 @@
                   xmlns:behav="clr-namespace:BreadcrumbTestLib.Behaviors"
                   >
                 <Grid.Resources>
-                    <base:BindingProxy x:Key="AppDataContextProxy" Data="{Binding}" />
+                    <ctrls:BindingProxy x:Key="AppDataContextProxy" Data="{Binding}" />
                 </Grid.Resources>
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto"/>

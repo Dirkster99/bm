@@ -1,4 +1,4 @@
-﻿namespace BmLib.BaseControls
+﻿namespace BmLib.Controls
 {
 	using System;
     using System.Diagnostics;

@@ -49,9 +49,8 @@
     <Reference Include="PresentationFramework" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="BaseControls\BindingProxy.cs" />
-    <Compile Include="BaseControls\Invert.cs" />
-    <Compile Include="BaseControls\OverflowableStackPanel.cs" />
+    <Compile Include="Controls\BindingProxy.cs" />
+    <Compile Include="Controls\OverflowableStackPanel.cs" />
     <Compile Include="Behaviors\MergeStyleBehaviour.cs" />
     <Compile Include="Behaviors\SelectionChangedCommand.cs" />
     <Compile Include="Controls\Breadcrumb.xaml.cs">
@@ -80,8 +79,6 @@
     <Compile Include="Interfaces\IBrowseRequestTaskQueue.cs" />
     <Compile Include="Interfaces\IProgress.cs" />
     <Compile Include="Themes\ResourceKeys.cs" />
-    <Compile Include="Utils\AsyncUtils.cs" />
-    <Compile Include="Utils\UITools.cs" />
     <Page Include="Controls\Breadcrumb.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -164,7 +161,6 @@
     </Page>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Utils\AttachedProperties.cs" />
     <Compile Include="Enums\HierarchicalResult.cs" />
     <Compile Include="Enums\UpdateMode.cs" />
     <Compile Include="Interfaces\IOverflown.cs" />

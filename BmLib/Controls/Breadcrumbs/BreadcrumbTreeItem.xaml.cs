@@ -4,7 +4,6 @@
     using System.Windows;
 	using System.Windows.Controls;
     using System.Windows.Input;
-    using BmLib.BaseControls;
 
 	[TemplateVisualState(Name = "ShowCaption", GroupName = "CaptionStates")]
 	[TemplateVisualState(Name = "HideCaption", GroupName = "CaptionStates")]
