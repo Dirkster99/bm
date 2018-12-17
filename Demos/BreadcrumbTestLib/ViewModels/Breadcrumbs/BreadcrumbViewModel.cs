@@ -196,9 +196,11 @@ namespace BreadcrumbTestLib.ViewModels.Breadcrumbs
             get { return _suggestedPath; }
             set
             {
-                _suggestedPath = value;
-
-                NotifyPropertyChanged(() => SuggestedPath);
+                if (_suggestedPath != value)
+                {
+                    _suggestedPath = value;
+                    NotifyPropertyChanged(() => SuggestedPath);
+                }
             }
         }
 

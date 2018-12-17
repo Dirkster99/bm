@@ -99,6 +99,14 @@ namespace SSCoreLib.Browse
         /// </summary>
         public Guid RequestId { get; }
 
+        /// <summary>
+        /// Determines if we have a list of path items in <see cref="LocationsPath"/>
+        /// (these are elements from a previously confirmed path) or
+        /// 
+        /// not: (we just have a string - know the destionation exists -
+        /// but still have to do the parsing
+        /// and conversion into model and viewmodel items.
+        /// </summary>
         public bool PathConfirmed
         {
             get

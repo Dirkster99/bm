@@ -1,10 +1,9 @@
 ﻿namespace BreadcrumbTestLib.ViewModels
 {
+    using ShellBrowserLib.IDs;
+    using ShellBrowserLib.Interfaces;
     using SuggestLib.Interfaces;
-    using System;
     using System.Collections.Generic;
-    using System.IO;
-    using System.Linq;
     using System.Threading.Tasks;
 
     /// <summary>
@@ -26,160 +25,81 @@
                                                 string input,
                                                 IHierarchyHelper helper)
         {
-            if (string.IsNullOrEmpty(input) == false)
+            input = (input == null ? string.Empty : input);
+
+            if (input.Length <= 2)
+                return Task.FromResult<IList<object>>(ListRootItems());
+
+            // Are we searching a drive based path ?
+            if ((char.ToLower(input[0]) >= 'a' && char.ToLower(input[0]) <= 'z' &&   // Drive based file system path
+                 input[1] == ':' && input[2] == '\\') ||
+                 (char.ToLower(input[0]) == '\\' && char.ToLower(input[0]) <= '\\')  // UNC file system path
+                )
             {
-                if (input.Length <= 3)
-                    return Task.FromResult<IList<object>>(ListDrives(input));
+                return Task.FromResult<IList<object>>(ListDriveItems(input));
             }
-
-            return Task.FromResult<IList<object>>(ListSubDirs(input));
-        }
-
-        private List<object> ListSubDirs(string input)
-        {
-            if (string.IsNullOrEmpty(input) == true)
-                return new List<object>();
-
-            var subDirs = GetLogicalDriveOrSubDirs(input, input);
-            if (subDirs != null)
-                return subDirs;
-
-            try
+            else
             {
-                // Find last seperator and list directories underneath
-                // with * searchpattern
-                if (subDirs == null)
+                // Shellspace path folder
+                IDirectoryBrowser[] path = null;
+                if (ShellBrowserLib.ShellBrowser.DirectoryExists(input, out path))
                 {
-                    int sepIdx = input.LastIndexOf('\\');
+                    List<object> Items = new List<object>();
+                    var dirPath = path[path.Length - 1];
 
-                    if (sepIdx < input.Length)
+                    string namedPath = path[0].Name;
+                    for (int i = 1; i < path.Length; i++)
+                        namedPath = namedPath + '\\' + path[i].Name;
+
+                    foreach (var item in ShellBrowserLib.ShellBrowser.GetChildItems(dirPath.PathShell))
                     {
-                        string folder = input.Substring(0, sepIdx + 1);
-                        string searchPattern = input.Substring(sepIdx + 1) + "*";
-                        var directories = Directory.GetDirectories(folder, searchPattern).ToList();
-
-                        if (directories != null)
-                        {
-                            List<object> dirs = new List<object>();
-
-                            for (int i = 0; i < directories.Count; i++)
-                                dirs.Add(new { Header = directories[i], Value = directories[i] });
-
-                            return dirs;
-                        }
+                        Items.Add(new { Header = item.Label, Value = namedPath + '\\' + item.Name });
                     }
-                }
 
-                return GetLogicalDrives();
+                    return Task.FromResult<IList<object>>(Items);
+                }
             }
-            catch
-            {
-                return subDirs;
-            }
+
+            return Task.FromResult<IList<object>>(new List<object>());
         }
 
         /// <summary>
         /// Gets a list of logical drives attached to thisPC.
         /// </summary>
         /// <returns></returns>
-        private List<object> ListDrives(string input)
+        private List<object> ListRootItems()
         {
-            if (string.IsNullOrEmpty(input))
-                return GetLogicalDrives();
+            List<object> rootItems = new List<object>();
 
-            if (input.Length == 1)
+            // Get Root Items below Desktop
+            // (filter out recycle bin and control panel entries since its not that useful...)
+            foreach (var item in ShellBrowserLib.ShellBrowser.GetChildItems(KF_IID.ID_FOLDERID_Desktop))
             {
-                if (char.ToUpper(input[0]) >= 'A' && char.ToUpper(input[0]) <= 'Z')
+                if (string.Compare(item.SpecialPathId, KF_IID.ID_FOLDERID_RecycleBinFolder, true) != 0 &&
+                    string.Compare(item.PathRAW, "::{26EE0668-A00A-44D7-9371-BEB064C98683}", true) != 0)
                 {
-                    // Check if we know this drive and list it with sub-folders if we do
-                    var testDrive = input + ":\\";
-                    var folders = GetLogicalDriveOrSubDirs(testDrive, input);
-                    if (folders != null)
-                        return folders;
+                    rootItems.Add(new { Header = item.Label, Value = item.Name });
                 }
             }
 
-            if (input.Length == 2)
-            {
-                if (char.ToUpper(input[1]) == ':' &&
-                    char.ToUpper(input[0]) >= 'A' && char.ToUpper(input[0]) <= 'Z')
-                {
-                    // Check if we know this drive and list it with sub-folders if we do
-                    var testDrive = input + "\\";
-                    var folders = GetLogicalDriveOrSubDirs(testDrive, input);
-                    if (folders != null)
-                        return folders;
-                }
-            }
-
-            if (input.Length == 3)
-            {
-                if (char.ToUpper(input[1]) == ':' &&
-                    char.ToUpper(input[2]) == '\\' &&
-                    char.ToUpper(input[0]) >= 'A' && char.ToUpper(input[0]) <= 'Z')
-                {
-                    // Check if we know this drive and list it with sub-folders if we do
-                    var folders = GetLogicalDriveOrSubDirs(input, input);
-                    if (folders != null)
-                        return folders;
-                }
-            }
-
-            return GetLogicalDrives();
+            return rootItems;
         }
 
-        private static List<object> GetLogicalDrives()
+        /// <summary>
+        /// Gets a list of subdirectories to the given path if it exists.
+        /// The returned items Value contain a complete path for each item.
+        /// </summary>
+        /// <returns></returns>
+        private List<object> ListDriveItems(string input)
         {
-            List<object> drives = new List<object>();
+            List<object> Items = new List<object>();
 
-            foreach (var driveName in Environment.GetLogicalDrives())
+            foreach (var item in ShellBrowserLib.ShellBrowser.GetChildItems(input))
             {
-                if (string.IsNullOrEmpty(driveName) == false)
-                {
-                    string header;
-
-                    try
-                    {
-                        DriveInfo d = new DriveInfo(driveName);
-                        if (string.IsNullOrEmpty(d.VolumeLabel) == false)
-                            header = string.Format("{0} ({1})", d.VolumeLabel, d.Name);
-                        else
-                            header = driveName;
-                    }
-                    catch
-                    {
-                        header = driveName;
-                    }
-
-                    drives.Add(new { Header = header, Value = driveName });
-                }
+                Items.Add(new { Header = item.Label, Value = item.PathFileSystem });
             }
 
-            return drives;
-        }
-
-        private static List<object> GetLogicalDriveOrSubDirs(
-            string testDrive,
-            string input)
-        {
-            if (Directory.Exists(testDrive) == true)
-            {
-                List<object> drives = new List<object>();
-
-                // List the drive itself if there was only 1 or 2 letters
-                // since this is not a valid drive and we don'nt know if the user
-                // wants to go to the drive or a folder contained in it
-                if (input.Length <= 2)
-                    drives.Add(new { Header = testDrive, Value = testDrive });
-
-                // and list all sub-directories of that drive
-                foreach (var item in Directory.GetDirectories(testDrive))
-                    drives.Add(new { Header = item, Value = item });
-
-                return drives;
-            }
-
-            return null;
+            return Items;
         }
     }
 }
