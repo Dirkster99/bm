@@ -17,6 +17,17 @@
     using System.Runtime.InteropServices;
     using System.Text;
 
+    public enum PathType
+    {
+        Unknown,
+
+        ShellSpace,
+
+        SpecialFolder,
+
+        FilseSystem
+    };
+
     /// <summary>
     /// Implements core API type methods and properties that are used to interact
     /// with Windows Shell Items (folders and known folders).
@@ -549,6 +560,39 @@
             }
             else
                 return System.IO.Directory.Exists(path);
+        }
+
+        /// <summary>
+        /// Parses the first two characters of a given path to determine its type.
+        /// Paths that are shorter than 2 characters are classified <see cref="PathType.Unknown"/>.
+        /// 
+        /// Paths with 2 or more characters having no File Fystem or Special Folder signature
+        /// are clasified as <seealso cref="PathType.ShellSpace"/>.
+        /// 
+        /// Returns false for strings 
+        /// </summary>
+        /// <param name="input"></param>
+        /// <returns></returns>
+        public static PathType IsTypeOf(string input)
+        {
+            if (string.IsNullOrEmpty(input))
+                return PathType.Unknown;
+
+            if (input.Length < 2)
+                return PathType.Unknown;
+
+            // Could be drive based like 'c:\Windows' or a network share like '\\MyServer\share'
+            if ((char.ToLower(input[0]) >= 'a' && char.ToLower(input[0]) <= 'z' &&   // Drive based file system path
+                 input[1] == ':') ||
+                 (char.ToLower(input[0]) == '\\' && char.ToLower(input[1]) <= '\\'))  // UNC file system path
+                return PathType.FilseSystem;
+
+            // Could be something like '::{Guid}' which is usually a known folder's path
+            if (input[0] == ':' && input[1] == ':')
+                return PathType.SpecialFolder;
+
+            // Could be something like 'Libraries\Music'
+            return PathType.ShellSpace;
         }
 
         /// <summary>

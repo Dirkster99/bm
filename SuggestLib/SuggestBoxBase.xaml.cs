@@ -201,6 +201,24 @@
             SaveRestorePopUpStateOnWindowDeActivation();
         }
 
+        /// <summary>
+        /// Call this method to clear the list of available suggestion before
+        /// or after using this SuggestionBox. Usually this method should be called
+        /// before the SuggestBox is used (eg. is visible or gets the focus).
+        /// 
+        /// But it can also be called after using the SuggestionBox to select an entry
+        /// to initialize the control for its next usage - doing so makes ensure fresh
+        /// values being pulled each time the SuggestionBox is used (with different values).
+        /// </summary>
+        public void InitializeSuggestions()
+        {
+            if (Suggestions != null)
+            {
+                if (Suggestions.Count > 0)
+                    Suggestions.Clear();  // Clear previous suggestion to ensure new/current results
+            }
+        }
+
         private void SuggestBoxBase_LostKeyboardFocus(object sender,
                                                       KeyboardFocusChangedEventArgs e)
         {
@@ -247,10 +265,10 @@
         private void SuggestBoxBase_GotKeyboardFocus(object sender,
                                                      KeyboardFocusChangedEventArgs e)
         {
-            logger.DebugFormat("Old Focus {0} New Focus {1}",
+            logger.DebugFormat("Source {0} Old Focus {1} New Focus {2}", e.Source,
                 (e.OldFocus == null ? "" : e.OldFocus.ToString()),
                 (e.NewFocus == null ? "" : e.NewFocus.ToString()));
-
+                        
             // Select all text when control gains focus from a different control.
             // If the focus was not in one of the children (or popup),
             // we select all the text 
@@ -258,7 +276,6 @@
             //                this.SelectAll();
 
             _PopUpIsCancelled = false;
-            InitializeSuggestions();
             this.PopupIfSuggest();
             IsHintVisible = false;
         }
@@ -664,15 +681,6 @@
                     this._suggestionIsConsumed = true;
                     this.Focus();
                 }
-            }
-        }
-
-        private void InitializeSuggestions()
-        {
-            if (Suggestions != null)
-            {
-                if (Suggestions.Count > 0)
-                    Suggestions.Clear();  // Clear previous suggestion to ensure new/current results
             }
         }
         #endregion

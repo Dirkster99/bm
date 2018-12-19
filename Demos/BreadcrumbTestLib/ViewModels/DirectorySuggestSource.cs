@@ -1,5 +1,6 @@
 ﻿namespace BreadcrumbTestLib.ViewModels
 {
+    using ShellBrowserLib;
     using ShellBrowserLib.IDs;
     using ShellBrowserLib.Interfaces;
     using SuggestLib.Interfaces;
@@ -27,40 +28,59 @@
         {
             input = (input == null ? string.Empty : input);
 
-            if (input.Length <= 2)
+            if (input.Length <= 1)
                 return Task.FromResult<IList<object>>(ListRootItems());
 
             // Are we searching a drive based path ?
-            if ((char.ToLower(input[0]) >= 'a' && char.ToLower(input[0]) <= 'z' &&   // Drive based file system path
-                 input[1] == ':' && input[2] == '\\') ||
-                 (char.ToLower(input[0]) == '\\' && char.ToLower(input[0]) <= '\\')  // UNC file system path
-                )
-            {
-                return Task.FromResult<IList<object>>(ListDriveItems(input));
-            }
+            if (ShellBrowser.IsTypeOf(input) == PathType.FilseSystem)
+                return Task.FromResult<IList<object>>(ParseFileSystemPath(input));
             else
             {
                 // Shellspace path folder
                 IDirectoryBrowser[] path = null;
                 if (ShellBrowserLib.ShellBrowser.DirectoryExists(input, out path))
+                    return ListChildren(path);
+                else
                 {
-                    List<object> Items = new List<object>();
-                    var dirPath = path[path.Length - 1];
-
-                    string namedPath = path[0].Name;
-                    for (int i = 1; i < path.Length; i++)
-                        namedPath = namedPath + '\\' + path[i].Name;
-
-                    foreach (var item in ShellBrowserLib.ShellBrowser.GetChildItems(dirPath.PathShell))
+                    // List RootItems or last known parent folder's children based on seperator
+                    int sepIdx = input.LastIndexOf('\\');
+                    if (sepIdx <= 0)
+                        return Task.FromResult<IList<object>>(ListRootItems());
+                    else
                     {
-                        Items.Add(new { Header = item.Label, Value = namedPath + '\\' + item.Name });
-                    }
+                        var parentDir = input.Substring(0, sepIdx);
 
-                    return Task.FromResult<IList<object>>(Items);
+                        // Shellspace path folder
+                        path = null;
+                        if (ShellBrowserLib.ShellBrowser.DirectoryExists(parentDir, out path))
+                            return ListChildren(path);
+                    }
                 }
             }
 
             return Task.FromResult<IList<object>>(new List<object>());
+        }
+
+        /// <summary>
+        /// Gets a list of child elements (if any available) of the list item in the array.
+        /// </summary>
+        /// <param name="path"></param>
+        /// <returns></returns>
+        private static Task<IList<object>> ListChildren(IDirectoryBrowser[] path)
+        {
+            var dirPath = path[path.Length - 1];
+
+            List<object> Items = new List<object>();
+            string namedPath = path[0].Name;
+            for (int i = 1; i < path.Length; i++)
+                namedPath = namedPath + '\\' + path[i].Name;
+
+            foreach (var item in ShellBrowserLib.ShellBrowser.GetChildItems(dirPath.PathShell))
+            {
+                Items.Add(new { Header = item.Label, Value = namedPath + '\\' + item.Name });
+            }
+
+            return Task.FromResult<IList<object>>(Items);
         }
 
         /// <summary>
@@ -83,6 +103,25 @@
             }
 
             return rootItems;
+        }
+
+        private List<object> ParseFileSystemPath(string input)
+        {
+            if (ShellBrowser.DirectoryExists(input))
+                return ListDriveItems(input);
+
+            // List RootItems or last known parent folder's children based on seperator
+            int sepIdx = input.LastIndexOf('\\');
+            if (sepIdx > 0)
+            {
+                var parentDir = input.Substring(0, sepIdx);
+
+                // Shellspace path folder
+                if (ShellBrowserLib.ShellBrowser.DirectoryExists(parentDir))
+                    return ListDriveItems(parentDir);
+            }
+
+            return new List<object>();
         }
 
         /// <summary>

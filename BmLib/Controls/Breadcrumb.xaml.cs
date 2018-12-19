@@ -546,6 +546,7 @@
 
                     await Control_SuggestBox.Dispatcher.BeginInvoke(new Action(() =>
                     {
+                        Control_SuggestBox.InitializeSuggestions();
                         Keyboard.Focus(Control_SuggestBox);
                         Control_SuggestBox.SelectAll();
                         Control_SuggestBox.Focus();
