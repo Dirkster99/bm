@@ -86,13 +86,13 @@
             </Setter.Value>
         </Setter>
 
-        <Style.Triggers>
-            <!--This trigger is needed, because RelativeSource binding can only succeeds if the current item is already connected to its visual parent-->
+        <!--Style.Triggers>
+            -This trigger is needed, because RelativeSource binding can only succeed if the current item is already connected to its visual parent-
             <Trigger Property="IsVisible" Value="True">
                 <Setter Property="HorizontalContentAlignment" Value="{Binding Path=HorizontalContentAlignment, RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}}}"/>
                 <Setter Property="VerticalContentAlignment" Value="{Binding Path=VerticalContentAlignment, RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}}}"/>
             </Trigger>
-        </Style.Triggers>
+        </Style.Triggers-->
     </Style>
 
 </ResourceDictionary>
