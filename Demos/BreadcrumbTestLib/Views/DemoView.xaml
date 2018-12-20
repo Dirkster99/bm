@@ -415,6 +415,10 @@
                       DataContext="{Binding BreadcrumbController}"
                       IsChecked="{Binding BreadcrumbBrowser.EnableBreadcrumb}" />
 
+                <CheckBox Content="Breadcrumb.IsEnabled"
+                      DataContext="{Binding ElementName=BreadcrumbDemoControl}"
+                      IsChecked="{Binding Path=IsEnabled}" />
+
                 <CheckBox Content="IsOverflown" IsEnabled="False"
                       IsChecked="{Binding ElementName=BreadcrumbDemoControl,Path=IsOverflown}" />
 

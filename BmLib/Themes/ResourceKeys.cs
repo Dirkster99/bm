@@ -129,6 +129,11 @@
         public static readonly ComponentResourceKey ControlDisabledBackgroundKey = new ComponentResourceKey(typeof(ResourceKeys), "ControlDisabledBackgroundKey");
 
         /// <summary>
+        /// Gets the Brush key of a control's background color when it is in disabled state.
+        /// </summary>
+        public static readonly ComponentResourceKey ControlDisabledBorderKey = new ComponentResourceKey(typeof(ResourceKeys), "ControlDisabledBorderKey");
+
+        /// <summary>
         /// Gets the Geometry (an right arrow) that is displayed on mouse over on a Breadcrumb ToggleButton.
         /// </summary>
         public static readonly ComponentResourceKey NormalArrow = new ComponentResourceKey(typeof(ResourceKeys), "NormalArrow");
