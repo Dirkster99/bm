@@ -50,6 +50,7 @@
     <Compile Include="Browser\BrowseItemFromPath.cs" />
     <Compile Include="Browser\DirectoryBrowser.cs" />
     <Compile Include="Enums\DirectoryItemFlags.cs" />
+    <Compile Include="Enums\PathType.cs" />
     <Compile Include="Enums\PathHandler.cs" />
     <Compile Include="FileSystemCommands.cs" />
     <Compile Include="Interfaces\IDirectoryBrowser.cs" />

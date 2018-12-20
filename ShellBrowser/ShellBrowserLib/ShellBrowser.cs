@@ -16,17 +16,7 @@
     using System.IO;
     using System.Runtime.InteropServices;
     using System.Text;
-
-    public enum PathType
-    {
-        Unknown,
-
-        ShellSpace,
-
-        SpecialFolder,
-
-        FilseSystem
-    };
+    using ShellBrowserLib.Enums;
 
     /// <summary>
     /// Implements core API type methods and properties that are used to interact

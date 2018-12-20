@@ -131,7 +131,7 @@
                                                   Visibility="{Binding IsSwitchOn, RelativeSource={RelativeSource AncestorType=ctrls:Switch}, Mode=OneWay, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource btv1}}"
                                                   BorderThickness="0"
                                                   BorderBrush="Transparent"
-                                                  Margin="0" Padding="0"
+                                                  Margin="0,3" Padding="0"
                                                   FontFamily="{TemplateBinding FontFamily}"
                                                   FontSize="{TemplateBinding FontSize}"
                                                   Text="{Binding SuggestedPath, UpdateSourceTrigger=Explicit}"

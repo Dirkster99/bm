@@ -1,6 +1,7 @@
 ﻿namespace BreadcrumbTestLib.ViewModels
 {
     using ShellBrowserLib;
+    using ShellBrowserLib.Enums;
     using ShellBrowserLib.IDs;
     using ShellBrowserLib.Interfaces;
     using SuggestLib.Interfaces;
