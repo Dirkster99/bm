@@ -62,8 +62,11 @@
                      Color="#cccccc" />
 
     <SolidColorBrush x:Key="{x:Static reskeys:ResourceKeys.ControlDisabledBackgroundKey}" options:Freeze="true"
-                     Color="#20000000" />
+                     Color="Transparent" />
 
+    <SolidColorBrush x:Key="{x:Static reskeys:ResourceKeys.ControlDisabledBorderKey}"
+                     Color="Transparent" options:Freeze="true" />
+    
     <SolidColorBrush x:Key="{x:Static reskeys:ResourceKeys.HotTrackBrushKey}"
                      Color="{DynamicResource {x:Static SystemColors.HotTrackColorKey}}"/>
     
