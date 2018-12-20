@@ -491,6 +491,8 @@
             // Switch from suggestbox to tree view
             if (OldValue == false && NewValue == true)
             {
+                this.InvalidateMeasure();
+
                 bool isPathValid = true, goBackToPreviousLocation = false;
                 string path;
 
