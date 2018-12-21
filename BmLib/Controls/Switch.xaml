@@ -30,28 +30,34 @@
         </ControlTemplate.Resources>
 
         <Border BorderBrush="{TemplateBinding BorderBrush}"
-                BorderThickness="{TemplateBinding BorderThickness}">
-            <ToggleButton x:Name="PART_Toggle" 
-                          Grid.Column="0"
-                          Padding="1,0"
-                          VerticalAlignment="Stretch"
-                          HorizontalAlignment="Stretch"
-                          VerticalContentAlignment="Stretch"
-                          HorizontalContentAlignment="Stretch"
-                          IsChecked="{Binding IsSwitchOn, RelativeSource={RelativeSource TemplatedParent}, Mode=TwoWay}" 
-                          Focusable="False"
-                          Template="{DynamicResource {x:Static reskeys:ResourceKeys.BlankButton}}"
-                          Background="Transparent" >
+                BorderThickness="{TemplateBinding BorderThickness}"
+                >
+            <bc:LockableToggleButton x:Name="PART_Toggle" 
+                Grid.Column="0"
+                Padding="1,0"
+                VerticalAlignment="Stretch"
+                HorizontalAlignment="Stretch"
+                VerticalContentAlignment="Stretch"
+                HorizontalContentAlignment="Stretch"
+                IsChecked="{Binding IsSwitchOn, RelativeSource={RelativeSource TemplatedParent}, Mode=TwoWay}" 
+                Focusable="False"
+                Template="{DynamicResource {x:Static reskeys:ResourceKeys.BlankButton}}"
+                Background="Transparent"
+                CanToggle="{TemplateBinding CanSwitchContent}"
+                >
                 <Grid>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="Auto" />
                         <ColumnDefinition Width="*" />
-                        <ColumnDefinition Width="Auto" />
                     </Grid.ColumnDefinitions>
 
-                    <bc:HotTrack Grid.Column="0" 
+                    <!-- Implements the left most button that behaves like a toggle button 
+                         to switch the Switch back and forth -->
+                    <bc:HotTrack Grid.Column="0"
                                  x:Name="PART_ToggleHotTrack"
-                                 Width="{Binding ActualHeight, ElementName=PART_ToggleHotTrack}">
+                                 Width="{Binding ActualHeight, ElementName=PART_ToggleHotTrack}"
+                                 IsEnabled="{TemplateBinding CanSwitchContent}"
+                                 >
                         <ContentControl ContentTemplate="{TemplateBinding HeaderTemplate}"
                                         Content="{TemplateBinding Header}" Margin="2" />
                     </bc:HotTrack>
@@ -68,9 +74,8 @@
                               Visibility="{Binding IsSwitchOn,
                                           RelativeSource={RelativeSource TemplatedParent}, Converter={StaticResource fbtv},Mode=OneWay}" />
                     </Grid>
-
                 </Grid>
-            </ToggleButton>
+            </bc:LockableToggleButton>
         </Border>
     </ControlTemplate>
 

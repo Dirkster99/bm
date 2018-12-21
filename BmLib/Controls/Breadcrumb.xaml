@@ -82,6 +82,7 @@
                                            IsSwitchOn="{Binding IsSwitchOn,RelativeSource={RelativeSource AncestorType={x:Type bc:Breadcrumb}},Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
                                            VerticalAlignment="Center" VerticalContentAlignment="Center"
                                            HorizontalAlignment="Stretch" HorizontalContentAlignment="Stretch"
+                                           CanSwitchContent="{TemplateBinding IsSwitchEnabled}"
                                            Margin="0"
                                      >
                                     <bc:Switch.ContentOn>

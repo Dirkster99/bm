@@ -21,11 +21,18 @@
 		public static readonly DependencyProperty ContentOffProperty =
 				DependencyProperty.Register("ContentOff", typeof(object),
 				typeof(Switch), new UIPropertyMetadata(null));
-		#endregion fields
 
-		#region Constructor
+        /// <summary>
+        /// Backing store of the <see cref="CanSwitchContent"/> dependency property.
+        /// </summary>
+        public static readonly DependencyProperty CanSwitchContentProperty =
+            DependencyProperty.Register("CanSwitchContent", typeof(bool),
+                typeof(Switch), new PropertyMetadata(true));
+        #endregion fields
 
-		static Switch()
+        #region Constructor
+
+        static Switch()
 		{
 			DefaultStyleKeyProperty.OverrideMetadata(typeof(Switch),
 					new FrameworkPropertyMetadata(typeof(Switch)));
@@ -51,10 +58,21 @@
 			get { return (object)GetValue(ContentOffProperty); }
 			set { this.SetValue(ContentOffProperty, value); }
 		}
-		#endregion properties
 
-		#region Methods
-		public static void OnIsSwitchOnChanged(object sender,
+        /// <summary>
+        /// Gets/sets whether the <see cref="Switch"/> control that can host 2 controls
+        /// can currently by switched by the user (by clicking the left most root toggle
+        /// button) or not.
+        /// </summary>
+        public bool CanSwitchContent
+        {
+            get { return (bool)GetValue(CanSwitchContentProperty); }
+            set { SetValue(CanSwitchContentProperty, value); }
+        }
+        #endregion properties
+
+        #region Methods
+        public static void OnIsSwitchOnChanged(object sender,
                                                DependencyPropertyChangedEventArgs args)
 		{
 ////            var dp = sender as Switch;

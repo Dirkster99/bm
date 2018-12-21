@@ -67,9 +67,6 @@
             if (item == null)
                 return;
 
-            if (e.NewValue is bool == false)
-                return;
-
             if ((bool)e.NewValue)
             {
                 item.Selected += item_Selected;
@@ -77,6 +74,7 @@
             else
             {
                 item.Selected -= item_Selected;
+                return;
             }
         }
 

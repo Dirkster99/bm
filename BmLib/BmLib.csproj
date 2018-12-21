@@ -50,6 +50,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Controls\BindingProxy.cs" />
+    <Compile Include="Controls\LockableToggleButton.cs" />
     <Compile Include="Controls\OverflowableStackPanel.cs" />
     <Compile Include="Behaviors\MergeStyleBehaviour.cs" />
     <Compile Include="Behaviors\SelectionChangedCommand.cs" />

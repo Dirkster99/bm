@@ -40,12 +40,28 @@
         public const string PART_SuggestBox = "PART_SuggestBox";
         public const string PART_BreadcrumbTree = "PART_BreadcrumbTree";
 
+        #region Switch DPs
         /// <summary>
         /// Backing store of the <see cref="SwitchHeader"/> dependency property.
         /// </summary>
         public static readonly DependencyProperty SwitchHeaderProperty =
             DependencyProperty.Register("SwitchHeader", typeof(object),
                 typeof(Breadcrumb), new PropertyMetadata(null));
+
+        /// <summary>
+        /// Backing store of the <see cref="IsSwitchOn"/> dependency property.
+        /// </summary>
+        public static readonly DependencyProperty IsSwitchOnProperty =
+            DependencyProperty.Register("IsSwitchOn", typeof(bool),
+                typeof(Breadcrumb), new PropertyMetadata(true, OnIsSwitchOnChanged));
+
+        /// <summary>
+        /// Backing store of the <see cref="IsSwitchEnabled"/> dependency property.
+        /// </summary>
+        public static readonly DependencyProperty IsSwitchEnabledProperty =
+            DependencyProperty.Register("IsSwitchEnabled", typeof(bool),
+                typeof(Breadcrumb), new PropertyMetadata(true));
+        #endregion Switch DPs
 
         #region Tree dependency properties
         /// <summary>
@@ -159,13 +175,6 @@
             DependencyProperty.Register("TaskQueueProcessing", typeof(IBrowseRequestTaskQueue),
                 typeof(Breadcrumb), new PropertyMetadata(null));
 
-        /// <summary>
-        /// Backing store of the <see cref="IsSwitchOn"/> dependency property.
-        /// </summary>
-        public static readonly DependencyProperty IsSwitchOnProperty =
-            DependencyProperty.Register("IsSwitchOn", typeof(bool),
-                typeof(Breadcrumb), new PropertyMetadata(true, OnIsSwitchOnChanged));
-
         private object _LockObject = new object();
         private bool _IsLoaded;
         private IBreadcrumbModel _BreadcrumbModel;
@@ -176,6 +185,7 @@
         /// cancelling and roll-back to previous location if required.
         /// </summary>
         private string _previousLocation;
+        private bool _SwitchToOnCanceled;
         #endregion fields
 
         #region constructors
@@ -197,6 +207,7 @@
         #endregion constructors
 
         #region properties
+        #region Switch DPs
         /// <summary>
         /// Gets/sets the content definition of the RootSwitchButton shown in the
         /// left most spot of the breadcrumb control.
@@ -206,6 +217,30 @@
             get { return (object)GetValue(SwitchHeaderProperty); }
             set { SetValue(SwitchHeaderProperty, value); }
         }
+
+        /// <summary>
+        /// Gets/sets whether the <see cref="Switch"/> control that can host 2 controls
+        /// is currently switched:
+        /// 1) On  (true)  (Showing BreadcrumbTree control) or
+        /// 2) off (false) (Showing TextInput control)
+        /// </summary>
+        public bool IsSwitchOn
+        {
+            get { return (bool)GetValue(IsSwitchOnProperty); }
+            set { SetValue(IsSwitchOnProperty, value); }
+        }
+
+        /// <summary>
+        /// Gets/sets whether the <see cref="Switch"/> control that can host 2 controls
+        /// can currently by switched by the user (by clicking into the <see cref="OverflowGap"/>
+        /// or clicking the left most root toggle button) or not.
+        /// </summary>
+        public bool IsSwitchEnabled
+        {
+            get { return (bool)GetValue(IsSwitchEnabledProperty); }
+            set { SetValue(IsSwitchEnabledProperty, value); }
+        }
+        #endregion DPs
 
         #region Tree dependency properties
         /// <summary>
@@ -387,20 +422,6 @@
             set { SetValue(TaskQueueProcessingProperty, value); }
         }
 
-        private bool _SwitchToOnCanceled;
-
-        /// <summary>
-        /// Gets/sets whether the <see cref="Switch"/> control that can host 2 controls
-        /// is currently switched:
-        /// 1) On  (true)  (Showing BreadcrumbTree control) or
-        /// 2) off (false) (Showing TextInput control)
-        /// </summary>
-        public bool IsSwitchOn
-        {
-            get { return (bool)GetValue(IsSwitchOnProperty); }
-            set { SetValue(IsSwitchOnProperty, value); }
-        }
-
         private SuggestBoxBase Control_SuggestBox { get; set; }
 
         private Switch Control_Switch { get; set; }
@@ -491,8 +512,6 @@
             // Switch from suggestbox to tree view
             if (OldValue == false && NewValue == true)
             {
-                this.InvalidateMeasure();
-
                 bool isPathValid = true, goBackToPreviousLocation = false;
                 string path;
 
