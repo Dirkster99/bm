@@ -169,6 +169,20 @@ namespace BreadcrumbTestLib.ViewModels.Breadcrumbs
             }
         }
 
+        public string FileSystemPath
+        {
+            get
+            {
+                if (BreadcrumbSelectedItem == null)
+                    return string.Empty;
+
+                if (_CurrentPath.Count == 0)
+                    return string.Empty;
+
+                return GetfileSystemPath(_CurrentPath.Reverse().ToArray());
+            }
+        }
+
         /// <summary>
         /// Gets a currently selected item that is at the end
         /// of the currently selected path.
@@ -187,6 +201,7 @@ namespace BreadcrumbTestLib.ViewModels.Breadcrumbs
                     _BreadcrumbSelectedItem = value;
                     NotifyPropertyChanged(() => BreadcrumbSelectedItem);
                     NotifyPropertyChanged(() => ShellSpacePath);
+                    NotifyPropertyChanged(() => FileSystemPath);
                 }
             }
         }
@@ -1064,16 +1079,17 @@ namespace BreadcrumbTestLib.ViewModels.Breadcrumbs
         /// Gets a path that contains either the real file system location
         /// or a location based on Named items along the current path (to avoid using SpecialPathIDs).
         /// </summary>
-        /// <param name="checkFileSystem"></param>
+        /// <param name="checkFileSystem">Check if the currently selected item is a file system
+        /// path item and return its path, if it is.</param>
         /// <returns></returns>
-        public string GetShellSpacePath(BreadcrumbTreeItemViewModel selectedItem,
+        public string GetShellSpacePath(BreadcrumbTreeItemViewModel item,
                                         bool checkFileSystem,
                                         BreadcrumbTreeItemViewModel[] currentPath)
         {
             if (checkFileSystem)
             {
-                if (selectedItem.GetModel().DirectoryPathExists())
-                    return selectedItem.GetModel().FullName;
+                if (item.GetModel().DirectoryPathExists())
+                    return item.GetModel().FullName;
             }
 
             string path = string.Empty;
@@ -1087,6 +1103,37 @@ namespace BreadcrumbTestLib.ViewModels.Breadcrumbs
                 path = path + (path.Length > 0 ? "\\" + currentPath[i].ItemName : currentPath[i].ItemName);
 
             return path;
+        }
+
+        public string GetfileSystemPath(BreadcrumbTreeItemViewModel[] currentPath)
+        {
+            string fileSystemPath = string.Empty;
+
+            // Skip showing the desktop in the string based path
+            int i = 0;
+            if ((currentPath[i].GetModel().ItemType & DirectoryItemFlags.Desktop) != 0)
+                i = 1;
+
+            for (; i < currentPath.Length; i++)
+            {
+
+                if (fileSystemPath == string.Empty)
+                {
+                    var fspath = currentPath[i].GetModel().PathFileSystem;
+
+                    if (ShellBrowser.IsTypeOf(fspath) == PathType.FilseSystem)
+                    {
+                        if (ShellBrowser.DirectoryExists(fspath))
+                            fileSystemPath = fspath;
+                    }
+                }
+                else
+                {
+                    fileSystemPath = fileSystemPath + '\\' + currentPath[i].ItemName;
+                }
+            }
+
+            return fileSystemPath;
         }
 
         /// <summary>
