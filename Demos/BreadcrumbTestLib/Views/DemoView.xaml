@@ -397,11 +397,11 @@
         </Grid>
 
         <TextBlock Grid.Column="0" Grid.Row="2"
-                           Text="Shell Space Path:" HorizontalAlignment="Right" Margin="3"/>
+                   Text="Windows Shell Path:" HorizontalAlignment="Right" Margin="3"/>
         <TextBox Grid.Column="1" Grid.Row="2"
                 IsReadOnly="True"
                 DataContext="{Binding BreadcrumbController}"
-                Text="{Binding Path=BreadcrumbBrowser.ShellSpacePath, Mode=OneWay,UpdateSourceTrigger=PropertyChanged}"
+                Text="{Binding Path=BreadcrumbBrowser.WinShellPath, Mode=OneWay,UpdateSourceTrigger=PropertyChanged}"
                 TextWrapping="WrapWithOverflow"
                 HorizontalScrollBarVisibility="Auto"
                 VerticalScrollBarVisibility="Auto"

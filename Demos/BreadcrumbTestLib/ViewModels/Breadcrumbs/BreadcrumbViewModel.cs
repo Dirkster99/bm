@@ -79,7 +79,7 @@ namespace BreadcrumbTestLib.ViewModels.Breadcrumbs
             BreadcrumbSubTree = new BreadcrumbTreeItemViewModel(null, null, this);
 
             SuggestSources = new List<ISuggestSource>(new[]
-                                { new DirectorySuggestSource() });
+                                { new SuggestSourceDirectory() });
         }
         #endregion constructors
 
@@ -145,7 +145,7 @@ namespace BreadcrumbTestLib.ViewModels.Breadcrumbs
         ///    instead of its knownfolder GUID which is never shown
         ///    here
         /// </summary>
-        public string ShellSpacePath
+        public string WinShellPath
         {
             get
             {
@@ -155,17 +155,9 @@ namespace BreadcrumbTestLib.ViewModels.Breadcrumbs
                 if (_CurrentPath.Count == 0)
                     return string.Empty;
 
-                bool checkFileSystem = false;
-                if (SelectedRootValue != null)
-                {
-                    if (string.Compare(SelectedRootValue.SpecialPathId, KF_IID.ID_FOLDERID_ComputerFolder, true) == 0)
-                        checkFileSystem = true;
-                }
+                var winShellPath = GetWinShellPath(_CurrentPath.Reverse().ToArray());
 
-                var shellSpacePath = GetShellSpacePath(BreadcrumbSelectedItem, checkFileSystem,
-                                                      _CurrentPath.Reverse().ToArray());
-
-                return shellSpacePath;
+                return winShellPath;
             }
         }
 
@@ -179,7 +171,7 @@ namespace BreadcrumbTestLib.ViewModels.Breadcrumbs
                 if (_CurrentPath.Count == 0)
                     return string.Empty;
 
-                return GetfileSystemPath(_CurrentPath.Reverse().ToArray());
+                return GetFileSystemPath(_CurrentPath.Reverse().ToArray());
             }
         }
 
@@ -200,7 +192,7 @@ namespace BreadcrumbTestLib.ViewModels.Breadcrumbs
                 {
                     _BreadcrumbSelectedItem = value;
                     NotifyPropertyChanged(() => BreadcrumbSelectedItem);
-                    NotifyPropertyChanged(() => ShellSpacePath);
+                    NotifyPropertyChanged(() => WinShellPath);
                     NotifyPropertyChanged(() => FileSystemPath);
                 }
             }
@@ -455,8 +447,19 @@ namespace BreadcrumbTestLib.ViewModels.Breadcrumbs
         /// <returns></returns>
         string IBreadcrumbModel.UpdateSuggestPath()
         {
+            string path = string.Empty;
+
+            if (_CurrentPath.Count() > 0)
+            {
+                var currentPath = _CurrentPath.Reverse().ToArray();
+                path = this.GetFileSystemPath(currentPath);
+
+                if (string.IsNullOrEmpty(path))
+                    path = WinShellPath;
+            }
+
             // Update path in bound textBox with value from currently selected item
-            SuggestedPath = ShellSpacePath;
+            SuggestedPath = path;
 
             return SuggestedPath;
         }
@@ -1079,19 +1082,10 @@ namespace BreadcrumbTestLib.ViewModels.Breadcrumbs
         /// Gets a path that contains either the real file system location
         /// or a location based on Named items along the current path (to avoid using SpecialPathIDs).
         /// </summary>
-        /// <param name="checkFileSystem">Check if the currently selected item is a file system
-        /// path item and return its path, if it is.</param>
+        /// <param name="currentPath"></param>
         /// <returns></returns>
-        public string GetShellSpacePath(BreadcrumbTreeItemViewModel item,
-                                        bool checkFileSystem,
-                                        BreadcrumbTreeItemViewModel[] currentPath)
+        public string GetWinShellPath(BreadcrumbTreeItemViewModel[] currentPath)
         {
-            if (checkFileSystem)
-            {
-                if (item.GetModel().DirectoryPathExists())
-                    return item.GetModel().FullName;
-            }
-
             string path = string.Empty;
 
             // Skip showing the desktop in the string based path
@@ -1105,35 +1099,36 @@ namespace BreadcrumbTestLib.ViewModels.Breadcrumbs
             return path;
         }
 
-        public string GetfileSystemPath(BreadcrumbTreeItemViewModel[] currentPath)
+        /// <summary>
+        /// Analyses the given path and returns:
+        /// 1) a filesystem path ('X:\Data\'), if it exists, or
+        /// 2) An empty string, if the current path cannot directly be mapped into the filesystem
+        ///    (eg: 'Libraries/Music').
+        /// </summary>
+        /// <param name="currentPath"></param>
+        /// <returns></returns>
+        public string GetFileSystemPath(BreadcrumbTreeItemViewModel[] currentPath)
         {
             string fileSystemPath = string.Empty;
+
+            if (currentPath.Length == 0)
+                return string.Empty;
 
             // Skip showing the desktop in the string based path
             int i = 0;
             if ((currentPath[i].GetModel().ItemType & DirectoryItemFlags.Desktop) != 0)
                 i = 1;
 
-            for (; i < currentPath.Length; i++)
-            {
+            if (i > (currentPath.Length - 1))
+                return string.Empty;
 
-                if (fileSystemPath == string.Empty)
-                {
-                    var fspath = currentPath[i].GetModel().PathFileSystem;
+            var lastElement = currentPath[currentPath.Length - 1];
+            var fspath = lastElement.GetModel().PathFileSystem;
 
-                    if (ShellBrowser.IsTypeOf(fspath) == PathType.FilseSystem)
-                    {
-                        if (ShellBrowser.DirectoryExists(fspath))
-                            fileSystemPath = fspath;
-                    }
-                }
-                else
-                {
-                    fileSystemPath = fileSystemPath + '\\' + currentPath[i].ItemName;
-                }
-            }
+            if (ShellBrowser.IsTypeOf(fspath) == PathType.FileSystemPath)
+                return fspath;
 
-            return fileSystemPath;
+            return string.Empty;
         }
 
         /// <summary>

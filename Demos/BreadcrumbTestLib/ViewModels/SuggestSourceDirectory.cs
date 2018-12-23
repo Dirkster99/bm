@@ -12,7 +12,7 @@
     /// Defines a suggestion object to generate suggestions
     /// based on sub entries of specified string.
     /// </summary>
-    public class DirectorySuggestSource : ISuggestSource
+    public class SuggestSourceDirectory : ISuggestSource
     {
         /// <summary>
         /// Method returns a task that returns a list of suggestion objects
@@ -33,11 +33,11 @@
                 return Task.FromResult<IList<object>>(ListRootItems());
 
             // Are we searching a drive based path ?
-            if (ShellBrowser.IsTypeOf(input) == PathType.FilseSystem)
+            if (ShellBrowser.IsTypeOf(input) == PathType.FileSystemPath)
                 return Task.FromResult<IList<object>>(ParseFileSystemPath(input));
             else
             {
-                // Shellspace path folder
+                // Win shell path folder
                 IDirectoryBrowser[] path = null;
                 if (ShellBrowserLib.ShellBrowser.DirectoryExists(input, out path))
                     return ListChildren(path);
@@ -51,7 +51,7 @@
                     {
                         var parentDir = input.Substring(0, sepIdx);
 
-                        // Shellspace path folder
+                        // Win shell path folder
                         path = null;
                         if (ShellBrowserLib.ShellBrowser.DirectoryExists(parentDir, out path))
                             return ListChildren(path);
@@ -117,7 +117,7 @@
             {
                 var parentDir = input.Substring(0, sepIdx);
 
-                // Shellspace path folder
+                // Win shell path folder
                 if (ShellBrowserLib.ShellBrowser.DirectoryExists(parentDir))
                     return ListDriveItems(parentDir);
             }

@@ -16,7 +16,7 @@
         /// 'Libraries\Documents'    in English
         /// 'Bibleotheken\Dokumente' in German
         /// </summary>
-        ShellSpace,
+        WinShellPath,
 
         /// <summary>
         /// The path is based on a SpecialFolder id
@@ -28,6 +28,6 @@
         /// The path is based on a drive or UNC based reference.
         /// Eg: 'C:\Windows\' or '\\MyServer\MyShare\'
         /// </summary>
-        FilseSystem
+        FileSystemPath
     };
 }

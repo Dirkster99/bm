@@ -557,7 +557,7 @@
         /// Paths that are shorter than 2 characters are classified <see cref="PathType.Unknown"/>.
         /// 
         /// Paths with 2 or more characters having no File Fystem or Special Folder signature
-        /// are clasified as <seealso cref="PathType.ShellSpace"/>.
+        /// are clasified as <seealso cref="PathType.WinShellPath"/>.
         /// 
         /// Returns false for strings 
         /// </summary>
@@ -575,14 +575,14 @@
             if ((char.ToLower(input[0]) >= 'a' && char.ToLower(input[0]) <= 'z' &&   // Drive based file system path
                  input[1] == ':') ||
                  (char.ToLower(input[0]) == '\\' && char.ToLower(input[1]) <= '\\'))  // UNC file system path
-                return PathType.FilseSystem;
+                return PathType.FileSystemPath;
 
             // Could be something like '::{Guid}' which is usually a known folder's path
             if (input[0] == ':' && input[1] == ':')
                 return PathType.SpecialFolder;
 
             // Could be something like 'Libraries\Music'
-            return PathType.ShellSpace;
+            return PathType.WinShellPath;
         }
 
         /// <summary>
@@ -1037,6 +1037,30 @@
             while (current != null && parent.Equals(current) == false);
 
             return (current != null);
+        }
+
+        /// <summary>
+        /// Performs a literal match of the given path elements and determines
+        /// if the <paramref name="childPath"/> does syntax-wise appear below
+        /// the given <paramref name="parentPath"/>.
+        /// 
+        /// Both paths should be normalized ('C:' vs. 'C:\') befores this is invoked.
+        /// Method returns false if any of the given paths is empty.
+        /// </summary>
+        /// <param name="parentPath"></param>
+        /// <param name="childPath"></param>
+        /// <returns></returns>
+        public static bool IsParentPathOf(string parentPath, string childPath)
+        {
+            if (string.IsNullOrEmpty(parentPath) == true || string.IsNullOrEmpty(childPath) == true)
+                return false;
+
+            if (parentPath.Length > childPath.Length)
+                return false;
+
+            string childRoot = childPath.Substring(0, parentPath.Length);
+
+            return (string.Compare(childRoot, parentPath, true) == 0);
         }
         #endregion methods
     }
