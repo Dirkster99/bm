@@ -6,7 +6,6 @@ namespace BreadcrumbTestLib.ViewModels.Breadcrumbs
     using BreadcrumbTestLib.ViewModels.Base;
     using BreadcrumbTestLib.ViewModels.Interfaces;
     using ShellBrowserLib;
-    using ShellBrowserLib.Enums;
     using ShellBrowserLib.IDs;
     using ShellBrowserLib.Interfaces;
     using SSCoreLib.Browse;
@@ -47,7 +46,7 @@ namespace BreadcrumbTestLib.ViewModels.Breadcrumbs
         private ICommand _RootDropDownSelectionChangedCommand;
         private readonly INavigationController _NavigationController;
         private readonly ObservableCollection<BreadcrumbTreeItemViewModel> _OverflowedAndRootItems = null;
-        private readonly List<BreadcrumbTreeItemViewModel> _CurrentPath;
+        private readonly BreadcrumbTreeItemPath _CurrentPath;
         private readonly IDirectoryBrowser _RootLocation = ShellBrowser.DesktopDirectory;
         #endregion fields
 
@@ -68,7 +67,7 @@ namespace BreadcrumbTestLib.ViewModels.Breadcrumbs
         protected BreadcrumbViewModel()
         {
             _OverflowedAndRootItems = new ObservableCollection<BreadcrumbTreeItemViewModel>();
-            _CurrentPath = new List<BreadcrumbTreeItemViewModel>() { };
+            _CurrentPath = new BreadcrumbTreeItemPath();
             _EnableBreadcrumb = true;
             _IsBrowsing = false;
 
@@ -97,6 +96,10 @@ namespace BreadcrumbTestLib.ViewModels.Breadcrumbs
         #endregion browsing events
 
         #region properties
+        /// <summary>
+        /// Gets a list of suggestion sources that are queries when the <see cref="SuggestionBox"/>
+        /// is visible and the user can enter a string based path.
+        /// </summary>
         public List<ISuggestSource> SuggestSources { get; }
 
         /// <summary>
@@ -136,44 +139,14 @@ namespace BreadcrumbTestLib.ViewModels.Breadcrumbs
         }
 
         /// <summary>
-        /// Gets the Windows Shell Path which is the literal sequence of
-        /// the items names that make up a path
-        /// (minus Desktop since its always given as root):
-        /// 'Libraries\Music'
+        /// Gets a seperate viewmodel object that keeps track of the current 
+        /// path and all its viewmodel object items.
         /// </summary>
-        public string WinShellPath
+        public BreadcrumbTreeItemPath CurrentPath
         {
             get
             {
-                if (BreadcrumbSelectedItem == null)
-                    return string.Empty;
-
-                if (_CurrentPath.Count == 0)
-                    return string.Empty;
-
-                var winShellPath = GetWinShellPath(_CurrentPath.ToArray());
-
-                return winShellPath;
-            }
-        }
-
-        /// <summary>
-        /// Gets the current path as
-        /// 1) a filesystem path ('X:\Data\'), if it exists, or
-        /// 2) An empty string, if the current path cannot directly
-        ///    be mapped into the filesystem (eg: 'Libraries/Music').
-        /// </summary>
-        public string FileSystemPath
-        {
-            get
-            {
-                if (BreadcrumbSelectedItem == null)
-                    return string.Empty;
-
-                if (_CurrentPath.Count == 0)
-                    return string.Empty;
-
-                return GetFileSystemPath(_CurrentPath.ToArray());
+                return _CurrentPath;
             }
         }
 
@@ -194,12 +167,15 @@ namespace BreadcrumbTestLib.ViewModels.Breadcrumbs
                 {
                     _BreadcrumbSelectedItem = value;
                     NotifyPropertyChanged(() => BreadcrumbSelectedItem);
-                    NotifyPropertyChanged(() => WinShellPath);
-                    NotifyPropertyChanged(() => FileSystemPath);
+                    NotifyPropertyChanged(() => CurrentPath);
                 }
             }
         }
 
+        /// <summary>
+        /// Gets/Sets the string based path that binds to the SuggestBox and changes
+        /// when it is visible and the user enters queries...
+        /// </summary>
         public string SuggestedPath
         {
             get { return _suggestedPath; }
@@ -371,6 +347,7 @@ namespace BreadcrumbTestLib.ViewModels.Breadcrumbs
         #endregion properties
 
         #region methods
+        #region IBreadcrumbModel
         /// <summary>
         /// This navigates the bound tree view model to the requested
         /// location when the user switches the display from:
@@ -451,13 +428,12 @@ namespace BreadcrumbTestLib.ViewModels.Breadcrumbs
         {
             string path = string.Empty;
 
-            if (_CurrentPath.Count() > 0)
+            if (_CurrentPath.Count > 0)
             {
-                var currentPath = _CurrentPath.ToArray();
-                path = this.GetFileSystemPath(currentPath);
+                path = _CurrentPath.GetFileSystemPath();
 
                 if (string.IsNullOrEmpty(path))
-                    path = WinShellPath;
+                    path = _CurrentPath.WinShellPath;
             }
 
             // Update path in bound textBox with value from currently selected item
@@ -465,6 +441,7 @@ namespace BreadcrumbTestLib.ViewModels.Breadcrumbs
 
             return SuggestedPath;
         }
+        #endregion IBreadcrumbModel
 
         /// <summary>
         /// Method should be called after construction to initialize the viewmodel
@@ -479,7 +456,7 @@ namespace BreadcrumbTestLib.ViewModels.Breadcrumbs
             if (item != null)
             {
                 _CurrentPath.Add(item);
-                await UpdateListOfOverflowableRootItemsAsync(_CurrentPath, item);
+                await UpdateListOfOverflowableRootItemsAsync(_CurrentPath.Items, item);
 
                 var request = new BrowseRequest<IDirectoryBrowser>(_RootLocation, RequestType.Navigational);
                 await NavigateToAsync(request, "BreadcrumbViewModel.InitPathAsync");
@@ -524,36 +501,6 @@ namespace BreadcrumbTestLib.ViewModels.Breadcrumbs
                 await NavigateToAsync(request,
                     "BreadcrumbTreeItemViewModel.BreadcrumbTreeTreeItemClickCommand",
                     hintDirection, toBeSelectedLocation);
-            }
-        }
-
-        private async Task NavigateToScheduledAsync(IDirectoryBrowser[] targetLocations,
-                                                    string sourceHint)
-        {
-            if (_NavigationController != null)
-            {
-                var cancelTokenSrc = _NavigationController.GetCancelToken();
-                var token = CancellationToken.None;
-
-                var request = new BrowseRequest<IDirectoryBrowser>(targetLocations,
-                                                                   RequestType.Navigational,
-                                                                   token, cancelTokenSrc, null);
-
-                var NaviTask = Task.Factory.StartNew(async (s) =>
-                {
-                    await this.NavigateToAsync(request, sourceHint);
-
-                }, token, TaskCreationOptions.LongRunning);
-
-                request.SetTask(NaviTask);
-                _NavigationController.QueueTask(request);
-            }
-            else
-            {
-                var location = targetLocations[targetLocations.Length - 1];
-                var request = new BrowseRequest<IDirectoryBrowser>(location, RequestType.Navigational);
-                await NavigateToAsync(request,
-                    "BreadcrumbTreeItemViewModel.BreadcrumbTreeTreeItemClickCommand");
             }
         }
 
@@ -625,6 +572,43 @@ namespace BreadcrumbTestLib.ViewModels.Breadcrumbs
         }
 
         /// <summary>
+        /// Schedules a navigational request from a list of path model items and
+        /// executes the request via asynchronous task execution.
+        /// </summary>
+        /// <param name="targetLocations"></param>
+        /// <param name="sourceHint"></param>
+        /// <returns></returns>
+        private async Task NavigateToScheduledAsync(IDirectoryBrowser[] targetLocations,
+                                                    string sourceHint)
+        {
+            if (_NavigationController != null)
+            {
+                var cancelTokenSrc = _NavigationController.GetCancelToken();
+                var token = CancellationToken.None;
+
+                var request = new BrowseRequest<IDirectoryBrowser>(targetLocations,
+                                                                   RequestType.Navigational,
+                                                                   token, cancelTokenSrc, null);
+
+                var NaviTask = Task.Factory.StartNew(async (s) =>
+                {
+                    await this.NavigateToAsync(request, sourceHint);
+
+                }, token, TaskCreationOptions.LongRunning);
+
+                request.SetTask(NaviTask);
+                _NavigationController.QueueTask(request);
+            }
+            else
+            {
+                var location = targetLocations[targetLocations.Length - 1];
+                var request = new BrowseRequest<IDirectoryBrowser>(location, RequestType.Navigational);
+                await NavigateToAsync(request,
+                    "BreadcrumbTreeItemViewModel.BreadcrumbTreeTreeItemClickCommand");
+            }
+        }
+
+        /// <summary>
         /// Implements an optimized browse path behavior for browsing back to an item that is
         /// already part of the currently selected path.
         /// </summary>
@@ -637,8 +621,8 @@ namespace BreadcrumbTestLib.ViewModels.Breadcrumbs
             BrowseRequest<IDirectoryBrowser> requestedLocation,
             HintDirection direction)
         {
-            bool isMatchAvailable = false;        // Make sure requested location is really
-            foreach (var item in _CurrentPath) // part of current path (before edit current path...)
+            bool isMatchAvailable = false;            // Make sure requested location is really
+            foreach (var item in _CurrentPath.Items) // part of current path (before edit current path...)
             {
                 if (item.Equals(toBeSelectedLocation))
                 {
@@ -650,16 +634,16 @@ namespace BreadcrumbTestLib.ViewModels.Breadcrumbs
             if (isMatchAvailable == false)
                 return BrowseResult.InComplete;
 
-            if (_CurrentPath.Last().Equals(toBeSelectedLocation) == false)
+            if (_CurrentPath.Peek().Equals(toBeSelectedLocation) == false)
             {
                 // Pop current path items until we find the one we need
-                var lastPathItem = Pop<BreadcrumbTreeItemViewModel>(_CurrentPath);
+                var lastPathItem = _CurrentPath.Pop();
                 while (lastPathItem != null)
                 {
                     lastPathItem.Selection.SelectedChild = null;
                     lastPathItem.Selection.IsSelected = false;
 
-                    var nextLastPathItem = _CurrentPath.Last();
+                    var nextLastPathItem = _CurrentPath.Peek();
 
                     if (nextLastPathItem != null)
                     {
@@ -669,7 +653,7 @@ namespace BreadcrumbTestLib.ViewModels.Breadcrumbs
                         if (nextLastPathItem.Equals(toBeSelectedLocation))
                             break;
 
-                        lastPathItem = Pop<BreadcrumbTreeItemViewModel>(_CurrentPath);
+                        lastPathItem = _CurrentPath.Pop();
                     }
                     else
                         break;
@@ -686,7 +670,7 @@ namespace BreadcrumbTestLib.ViewModels.Breadcrumbs
                 {
                     if (item.EqualsLocation(requestedLocation.NewLocation))
                     {
-                        var topItem = _CurrentPath.Last();
+                        var topItem = _CurrentPath.Peek();
 
                         topItem.Selection.IsSelected = false;
                         topItem.Selection.SelectedChild = item.GetModel();
@@ -701,35 +685,13 @@ namespace BreadcrumbTestLib.ViewModels.Breadcrumbs
                 }
             }
 
-            await UpdateListOfOverflowableRootItemsAsync(_CurrentPath, newSelectedLocation);
+            await UpdateListOfOverflowableRootItemsAsync(_CurrentPath.Items, newSelectedLocation);
 
             if (BrowseEvent != null)
                 BrowseEvent(this, new BrowsingEventArgs(newSelectedLocation.GetModel(),
                                                         false, BrowseResult.Complete));
 
             return BrowseResult.Complete;
-        }
-
-        /// <summary>
-        /// Pops the last element from a list and returns it if it exists,
-        /// or returns null if the list was emtpy.
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="list"></param>
-        /// <returns></returns>
-        public T Pop<T>(List<T> list)
-        {
-            if (list.Any() == false)
-                return default(T);
-
-            // first assign the  last value to a seperate string 
-            T extractedElement = list.Last();
-
-            // then remove it from list
-            list.RemoveAt(list.Count - 1);
-
-            // then return the value 
-            return extractedElement;
         }
 
         private async Task<BrowseResult> InternalNavigateAsyncToNewLocationAsync(
@@ -763,7 +725,7 @@ namespace BreadcrumbTestLib.ViewModels.Breadcrumbs
                 return BrowseResult.Complete;
             }
 
-            foreach (var item in _CurrentPath)    // Reset Selection states from last selection
+            foreach (var item in _CurrentPath.Items) // Reset Selection states from last selection
             {
                 item.Selection.IsSelected = false;
                 item.Selection.SelectedChild = null;
@@ -790,7 +752,8 @@ namespace BreadcrumbTestLib.ViewModels.Breadcrumbs
             foreach (var item in targetPath)
                 _CurrentPath.Add(item);
 
-            await UpdateListOfOverflowableRootItemsAsync(_CurrentPath, targetPath[targetPath.Count - 1]);
+            await UpdateListOfOverflowableRootItemsAsync(_CurrentPath.Items,
+                                                         targetPath[targetPath.Count - 1]);
 
             if (BrowseEvent != null)
                 BrowseEvent(this, new BrowsingEventArgs(modelLocations[modelLocations.Length - 1], false, BrowseResult.Complete));
@@ -852,7 +815,7 @@ namespace BreadcrumbTestLib.ViewModels.Breadcrumbs
             if (firstSourceItem == null)
                 return BrowseResult.InComplete;   // No source tree root to navigate ???
 
-            foreach (var item in _CurrentPath)    // Reset Selection states from last selection
+            foreach (var item in _CurrentPath.Items) // Reset Selection states from last selection
             {
                 item.Selection.IsSelected = false;
                 item.Selection.SelectedChild = null;
@@ -877,7 +840,7 @@ namespace BreadcrumbTestLib.ViewModels.Breadcrumbs
             foreach (var item in targetPath)
                 _CurrentPath.Add(item);
 
-            await UpdateListOfOverflowableRootItemsAsync(_CurrentPath, targetPath[targetPath.Count - 1]);
+            await UpdateListOfOverflowableRootItemsAsync(_CurrentPath.Items, targetPath[targetPath.Count - 1]);
 
             if (BrowseEvent != null)
                 BrowseEvent(this, new BrowsingEventArgs(location, false, BrowseResult.Complete));
@@ -1024,7 +987,7 @@ namespace BreadcrumbTestLib.ViewModels.Breadcrumbs
                 secLevelRootItem = thisPC.First();
             }
 
-            foreach (var item in _CurrentPath)      // Reset Selection states from last selection
+            foreach (var item in _CurrentPath.Items)      // Reset Selection states from last selection
             {
                 item.Selection.IsSelected = false;
                 item.Selection.SelectedChild = null;
@@ -1038,7 +1001,7 @@ namespace BreadcrumbTestLib.ViewModels.Breadcrumbs
             _CurrentPath.Add(desktopRootItem);   // set the current path to thisPC
             _CurrentPath.Add(secLevelRootItem); // set the current path to thisPC
 
-            await UpdateListOfOverflowableRootItemsAsync(_CurrentPath, secLevelRootItem);
+            await UpdateListOfOverflowableRootItemsAsync(_CurrentPath.Items, secLevelRootItem);
         }
 
         /// <summary>
@@ -1048,7 +1011,7 @@ namespace BreadcrumbTestLib.ViewModels.Breadcrumbs
         /// <param name="items">Is the list of new pathitems to be include in OverflowedAndRootItems</param>
         /// <param name="selectedItem"></param>
         private async Task UpdateListOfOverflowableRootItemsAsync(
-            List<BreadcrumbTreeItemViewModel> items,
+            IList<BreadcrumbTreeItemViewModel> items,
             BreadcrumbTreeItemViewModel selectedItem)
         {
             // Update list of overflowable items for bindings from converter on rootdropdownlist
@@ -1096,64 +1059,10 @@ namespace BreadcrumbTestLib.ViewModels.Breadcrumbs
             // select second level root item in RootDropDownList (if available)
             if (items.Count >= 2)
             {
-                var pathList = items.ToArray();
-                SelectedRootValue = pathList[1].Selection.Value;
+                SelectedRootValue = items[1].Selection.Value;
             }
             else
                 SelectedRootValue = null;
-        }
-
-        /// <summary>
-        /// Gets a path that contains either the real file system location
-        /// or a location based on Named items along the current path (to avoid using SpecialPathIDs).
-        /// </summary>
-        /// <param name="currentPath"></param>
-        /// <returns></returns>
-        public string GetWinShellPath(BreadcrumbTreeItemViewModel[] currentPath)
-        {
-            string path = string.Empty;
-
-            // Skip showing the desktop in the string based path
-            int i = 0;
-            if ((currentPath[i].GetModel().ItemType & DirectoryItemFlags.Desktop) != 0)
-                i = 1;
-
-            for ( ; i < currentPath.Length; i++)
-                path = path + (path.Length > 0 ? "\\" + currentPath[i].ItemName : currentPath[i].ItemName);
-
-            return path;
-        }
-
-        /// <summary>
-        /// Analyses the given path and returns:
-        /// 1) a filesystem path ('X:\Data\'), if it exists, or
-        /// 2) An empty string, if the current path cannot directly be mapped into the filesystem
-        ///    (eg: 'Libraries/Music').
-        /// </summary>
-        /// <param name="currentPath"></param>
-        /// <returns></returns>
-        public string GetFileSystemPath(BreadcrumbTreeItemViewModel[] currentPath)
-        {
-            string fileSystemPath = string.Empty;
-
-            if (currentPath.Length == 0)
-                return string.Empty;
-
-            // Skip showing the desktop in the string based path
-            int i = 0;
-            if ((currentPath[i].GetModel().ItemType & DirectoryItemFlags.Desktop) != 0)
-                i = 1;
-
-            if (i > (currentPath.Length - 1))
-                return string.Empty;
-
-            var lastElement = currentPath[currentPath.Length - 1];
-            var fspath = lastElement.GetModel().PathFileSystem;
-
-            if (ShellBrowser.IsTypeOf(fspath) == PathType.FileSystemPath)
-                return fspath;
-
-            return string.Empty;
         }
 
         /// <summary>
@@ -1162,7 +1071,7 @@ namespace BreadcrumbTestLib.ViewModels.Breadcrumbs
         /// </summary>
         /// <param name="rootItems"></param>
         /// <param name="pathItems"></param>
-        public void UpdateOverflowedItems(IEnumerable<BreadcrumbTreeItemViewModel> rootItems,
+        private void UpdateOverflowedItems(IEnumerable<BreadcrumbTreeItemViewModel> rootItems,
                                           IEnumerable<BreadcrumbTreeItemViewModel> pathItems)
         {
             Logger.InfoFormat("_");
@@ -1206,7 +1115,7 @@ namespace BreadcrumbTestLib.ViewModels.Breadcrumbs
         /// to change the selection to complete the cycle.
         /// </summary>
         /// <param name="pathItem"></param>
-        public async Task ReportChildSelectedAsync(
+        private async Task ReportChildSelectedAsync(
             ITreeSelector<BreadcrumbTreeItemViewModel, IDirectoryBrowser> pathItem)
         {
             Logger.InfoFormat("{0}", pathItem);
