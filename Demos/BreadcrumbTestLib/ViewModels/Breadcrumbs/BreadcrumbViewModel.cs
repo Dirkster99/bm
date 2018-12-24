@@ -1011,7 +1011,7 @@ namespace BreadcrumbTestLib.ViewModels.Breadcrumbs
         /// <param name="items">Is the list of new pathitems to be include in OverflowedAndRootItems</param>
         /// <param name="selectedItem"></param>
         private async Task UpdateListOfOverflowableRootItemsAsync(
-            IList<BreadcrumbTreeItemViewModel> items,
+            IEnumerable<BreadcrumbTreeItemViewModel> items,
             BreadcrumbTreeItemViewModel selectedItem)
         {
             // Update list of overflowable items for bindings from converter on rootdropdownlist
@@ -1057,9 +1057,9 @@ namespace BreadcrumbTestLib.ViewModels.Breadcrumbs
             var model = selectedItem.GetModel();
 
             // select second level root item in RootDropDownList (if available)
-            if (items.Count >= 2)
+            if (items.Count() >= 2)
             {
-                SelectedRootValue = items[1].Selection.Value;
+                SelectedRootValue = items.ElementAt(1).Selection.Value;
             }
             else
                 SelectedRootValue = null;

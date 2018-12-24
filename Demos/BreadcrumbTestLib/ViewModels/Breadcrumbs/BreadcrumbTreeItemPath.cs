@@ -29,7 +29,7 @@
         /// <summary>
         /// Gets all items currently present in this list of path items.
         /// </summary>
-        public IList<BreadcrumbTreeItemViewModel> Items
+        public IEnumerable<BreadcrumbTreeItemViewModel> Items
         {
             get
             {
