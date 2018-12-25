@@ -21,7 +21,7 @@
             DependencyProperty.Register("CanToggle", typeof(bool), typeof(LockableToggleButton),
                 new PropertyMetadata(true));
 
-        public LockableToggleButton()
+        static LockableToggleButton()
         {
             DefaultStyleKeyProperty.OverrideMetadata(typeof(LockableToggleButton),
                     new FrameworkPropertyMetadata(typeof(LockableToggleButton)));

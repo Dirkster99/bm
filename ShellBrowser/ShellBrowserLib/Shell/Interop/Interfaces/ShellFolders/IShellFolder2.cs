@@ -6,14 +6,16 @@
     using System.Runtime.InteropServices;
 
     /// <summary>
-    /// Extends the capabilities of IShellFolder. Its methods provide a variety of information about the contents of a Shell folder.
+    /// Extends the capabilities of IShellFolder.
+    /// Its methods provide a variety of information about the contents of a Shell folder.
+    /// 
+    /// https://docs.microsoft.com/en-us/windows/desktop/api/shobjidl_core/nn-shobjidl_core-ishellfolder2
     /// </summary>
     [ComImport, InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
     [Guid(ShellIIDGuids.IShellFolder2)]
     internal interface IShellFolder2 : IShellFolder
     {
         #region IShellFolder overrides for COM/C# compatibility.
-
         [PreserveSig]
         new HRESULT ParseDisplayName(IntPtr hwnd,
                                    IntPtr pbc,

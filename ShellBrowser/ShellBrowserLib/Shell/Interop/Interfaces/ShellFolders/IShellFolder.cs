@@ -7,6 +7,8 @@
 
     /// <summary>
     /// Exposed by all Shell namespace folder objects, its methods are used to manage folders.
+    /// 
+    /// https://docs.microsoft.com/en-us/windows/desktop/api/shobjidl_core/nn-shobjidl_core-ishellfolder
     /// </summary>
     [ComImport, InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
     [Guid(ShellIIDGuids.IShellFolder)]
@@ -32,12 +34,16 @@
                                  ref SFGAO pdwAttributes);
 
         /// <summary>
-        /// Allows a client to determine the contents of a folder by creating an item identifier enumeration object and returning its IEnumIDList interface. 
+        /// Allows a client to determine the contents of a folder by creating an item identifier
+        /// enumeration object and returning its IEnumIDList interface. 
         /// Return value: error code, if any
         /// </summary>
-        /// <param name="hwnd">If user input is required to perform the enumeration, this window handle should be used by the enumeration object as the parent window to take user input.</param>
-        /// <param name="grfFlags">Flags indicating which items to include in the  enumeration. For a list of possible values, see the SHCONTF enum. </param>
-        /// <param name="ppenumIDList">Address that receives a pointer to the IEnumIDList interface of the enumeration object created by this method. </param>
+        /// <param name="hwnd">If user input is required to perform the enumeration,
+        /// this window handle should be used by the enumeration object as the parent window to take user input.</param>
+        /// <param name="grfFlags">Flags indicating which items to include in the  enumeration.
+        /// For a list of possible values, see the <see cref="ShellBrowserLib.Shell.Enums.SHCONTF"/> enum.</param>
+        /// <param name="ppenumIDList">Address that receives a pointer to the IEnumIDList interface of the enumeration object
+        /// created by this method. </param>
         /// <returns>If this method succeeds, it returns S_OK. Otherwise, it returns an HRESULT error code.</returns>
         [PreserveSig]
         HRESULT EnumObjects(IntPtr hwnd, SHCONTF grfFlags, out IntPtr ppenumIDList);
@@ -98,6 +104,22 @@
         [PreserveSig]
         Int32 CreateViewObject(IntPtr hwndOwner, [In] ref Guid riid, out IntPtr ppv);
 
+        /// <summary>
+        /// Gets the attributes of one or more file or folder objects contained in the object represented by <see cref="IShellFolder"/>.
+        /// </summary>
+        /// <param name="cidl">The number of items from which to retrieve attributes.</param>
+        /// <param name="apidl">Type: PCUITEMID_CHILD_ARRAY*
+        /// 
+        /// The address of an array of pointers to ITEMIDLIST structures, each of which uniquely identifies an
+        /// item relative to the parent folder.Each ITEMIDLIST structure must contain exactly one SHITEMID structure
+        /// followed by a terminating zero.</param>
+        /// <param name="rgfInOut">Type: SFGAOF*
+        /// 
+        /// Pointer to a single ULONG value that, on entry, contains the bitwise SFGAO attributes that the calling application
+        /// is requesting.On exit, this value contains the requested attributes that are common to all of the specified items.</param>
+        /// <returns>Type: HRESULT
+        /// 
+        /// If this method succeeds, it returns S_OK.Otherwise, it returns an HRESULT error code.</returns>
         [PreserveSig]
         int GetAttributesOf(UInt32 cidl,
                             [MarshalAs(UnmanagedType.LPArray)]

@@ -230,9 +230,12 @@
         /// Gets an enumeration of all childitems below the
         /// <paramref name="folderParseName"/> item.
         /// </summary>
-        /// <param name="folderParseName"></param>
+        /// <param name="folderParseName">Is the parse name that should be used to emit child items for.</param>
+        /// <param name="searchName">Optional name of an item that should be filtered
+        /// in case insensitive fashion when searching for a certain child rather than all children.</param>
         /// <returns>returns each item as <see cref="IDirectoryBrowser"/> object</returns>
-        public static IEnumerable<IDirectoryBrowser> GetChildItems(string folderParseName)
+        public static IEnumerable<IDirectoryBrowser> GetChildItems(string folderParseName,
+                                                                   string searchName = null)
         {
             if (string.IsNullOrEmpty(folderParseName) == true)
                 yield break;
@@ -317,15 +320,6 @@
 
                     try
                     {
-                        string parseName = string.Empty;
-                        if (iFolder.GetDisplayNameOf(apidl, SHGDNF.SHGDN_FORPARSING, ptrStr) == HRESULT.S_OK)
-                        {
-                            NativeMethods.StrRetToBuf(ptrStr, default(IntPtr),
-                                                      strbuf, NativeMethods.MAX_PATH);
-
-                            parseName = strbuf.ToString();
-                        }
-
                         string name = string.Empty;
                         if (iFolder.GetDisplayNameOf(apidl, SHGDNF.SHGDN_INFOLDER | SHGDNF.SHGDN_FOREDITING, ptrStr) == HRESULT.S_OK)
                         {
@@ -333,6 +327,22 @@
                                                       strbuf, NativeMethods.MAX_PATH);
 
                             name = strbuf.ToString();
+                        }
+
+                        // Skip this item if search parameter is set and this appears to be a non-match
+                        if (searchName != null)
+                        {
+                            if (string.Compare(searchName, name, true) != 0)
+                                continue;
+                        }
+
+                        string parseName = string.Empty;
+                        if (iFolder.GetDisplayNameOf(apidl, SHGDNF.SHGDN_FORPARSING, ptrStr) == HRESULT.S_OK)
+                        {
+                            NativeMethods.StrRetToBuf(ptrStr, default(IntPtr),
+                                                      strbuf, NativeMethods.MAX_PATH);
+
+                            parseName = strbuf.ToString();
                         }
 
                         string labelName = string.Empty;
@@ -369,129 +379,6 @@
                     Marshal.Release(ptrFolder);
 
                 ptrStr = PidlManager.FreeCoTaskMem(ptrStr);
-            }
-        }
-
-        /// <summary>
-        /// Gets an enumeration of all childitems below the
-        /// <paramref name="folderParseName"/> item.
-        /// </summary>
-        /// <param name="folderParseName"></param>
-        /// <returns>returns each items ParseName as string</returns>
-        public static IEnumerable<string> GetChildItemsParseName(string folderParseName)
-        {
-            if (string.IsNullOrEmpty(folderParseName) == true)
-                yield break;
-
-            // Defines the type of items that we want to retieve below the item passed in
-            const SHCONTF flags = SHCONTF.FOLDERS | SHCONTF.INCLUDEHIDDEN | SHCONTF.FASTITEMS;
-
-            //  Get the desktop root folder.
-            IntPtr enumerator = default(IntPtr);
-            IntPtr pidlFull = default(IntPtr);
-            IntPtr ptrFolder = default(IntPtr);
-            IShellFolder2 iFolder = null;
-            IEnumIDList enumIDs = null;
-            try
-            {
-                HRESULT hr;
-
-                if (KF_IID.ID_FOLDERID_Desktop.Equals(folderParseName, StringComparison.InvariantCultureIgnoreCase))
-                    hr = NativeMethods.SHGetDesktopFolder(out ptrFolder);
-                else
-                {
-                    pidlFull = ShellHelpers.PidlFromParsingName(folderParseName);
-
-                    if (pidlFull == default(IntPtr)) // 2nd chance try known folders
-                    {
-                        using (var kf = KnownFolderHelper.FromPath(folderParseName))
-                        {
-                            if (kf != null)
-                                kf.Obj.GetIDList(KNOWN_FOLDER_FLAG.KF_NO_FLAGS, out pidlFull);
-                        }
-                    }
-
-                    if (pidlFull == default(IntPtr))
-                    yield break;
-
-                    using (var desktopFolder = new ShellFolderDesktop())
-                    {
-                        hr = desktopFolder.Obj.BindToObject(pidlFull, IntPtr.Zero,
-                                                            typeof(IShellFolder2).GUID,
-                                                            out ptrFolder);
-                    }
-                }
-
-                if (hr != HRESULT.S_OK)
-                    yield break;
-
-                if (ptrFolder != IntPtr.Zero)
-                    iFolder = (IShellFolder2)Marshal.GetTypedObjectForIUnknown(ptrFolder, typeof(IShellFolder2));
-
-                if (iFolder == null)
-                    yield break;
-
-                //  Create an enumerator and enumerate over each item.
-                hr = iFolder.EnumObjects(IntPtr.Zero, flags, out enumerator);
-
-                if (hr != HRESULT.S_OK)
-                    yield break;
-
-                // Convert enum IntPtr to interface
-                enumIDs = (IEnumIDList)Marshal.GetTypedObjectForIUnknown(enumerator, typeof(IEnumIDList));
-
-                if (enumIDs == null)
-                    yield break;
-
-                uint fetched, count = 0;
-                IntPtr apidl = default(IntPtr);
-
-                IntPtr ptrStr = default(IntPtr); // Fetch parse name for this item
-                try
-                {
-                    ptrStr = Marshal.AllocCoTaskMem(NativeMethods.MAX_PATH * 2 + 4);
-                    Marshal.WriteInt32(ptrStr, 0, 0);
-                    StringBuilder buf = new StringBuilder(NativeMethods.MAX_PATH);
-
-                    // Get one item below root item at a time and process by getting its display name
-                    for (; enumIDs.Next(1, out apidl, out fetched) == HRESULT.S_OK; count++)
-                    {
-                        if (fetched <= 0)  // End this loop if no more items are available
-                            break;
-
-                        try
-                        {
-                            if (iFolder.GetDisplayNameOf(apidl, SHGDNF.SHGDN_FORPARSING, ptrStr) == HRESULT.S_OK)
-                                NativeMethods.StrRetToBuf(ptrStr, ptrFolder, buf, NativeMethods.MAX_PATH);
-
-                            string parseName = buf.ToString();
-
-                            yield return parseName;
-                        }
-                        finally
-                        {
-                            apidl = PidlManager.FreeCoTaskMem(apidl);
-                        }
-                    }
-                }
-                finally
-                {
-                    ptrStr = PidlManager.FreeCoTaskMem(ptrStr);
-                }
-            }
-            finally
-            {
-                if (enumIDs != null)
-                    Marshal.ReleaseComObject(enumIDs);
-
-                if (enumerator != default(IntPtr))
-                    Marshal.Release(enumerator);
-
-                if (iFolder != null)
-                    Marshal.ReleaseComObject(iFolder);
-
-                if (ptrFolder != default(IntPtr))
-                    Marshal.Release(ptrFolder);
             }
         }
 
@@ -1191,8 +1078,7 @@
                 {
                     var currentRootParseName = pathList[pathList.Count - 1].PathShell;
 
-                    var nxt = ShellBrowser.GetChildItems(currentRootParseName)
-                                    .Where(it => string.Compare(it.Name, altPathNames[i], true) == 0);
+                    var nxt = ShellBrowser.GetChildItems(currentRootParseName, altPathNames[i]);
 
                     if (nxt.Any() == false)
                         return false;
