@@ -116,10 +116,11 @@
             if (sepIdx > 0)
             {
                 var parentDir = input.Substring(0, sepIdx);
+                var searchMask = input.Substring(sepIdx + 1) + "*";
 
                 // Win shell path folder
                 if (ShellBrowserLib.ShellBrowser.DirectoryExists(parentDir))
-                    return ListDriveItems(parentDir);
+                    return ListDriveItems(parentDir, searchMask);
             }
 
             return new List<object>();
@@ -130,11 +131,12 @@
         /// The returned items Value contain a complete path for each item.
         /// </summary>
         /// <returns></returns>
-        private List<object> ListDriveItems(string input)
+        private List<object> ListDriveItems(string input,
+                                            string searchMask = null)
         {
             List<object> Items = new List<object>();
 
-            foreach (var item in ShellBrowserLib.ShellBrowser.GetChildItems(input))
+            foreach (var item in ShellBrowserLib.ShellBrowser.GetChildItems(input, searchMask))
             {
                 Items.Add(new { Header = item.Label, Value = item.PathFileSystem });
             }

@@ -10,17 +10,15 @@
     using ShellBrowserLib.Shell.Interop.ShellFolders;
     using ShellBrowserLib.Shell.Pidl;
     using ShellBrowserLib.Shell.Enums;
-    using ShellBrowserLib.Shell.Interop.Interfaces;
     using ShellBrowserLib.Shell.Interop.Interfaces.ShellItems;
     using System;
     using System.Diagnostics;
     using System.IO;
     using System.Runtime.InteropServices;
-    using System.Text;
     using ShellBrowserLib.Shell.Interop.ResourceIds;
 
     /// <summary>
-    /// Implements a class that contains all API call and methods necessary to initialize
+    /// Implements a class that contains all API calls and methods necessary to initialize
     /// an <seealso cref="DirectoryBrowser"/> object through its constructor.
     /// </summary>
     internal class BrowseItemFromPath

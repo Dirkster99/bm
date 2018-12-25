@@ -92,7 +92,10 @@
             foreach (var item in ShellBrowser.GetChildItems(KF_IID.ID_FOLDERID_ProgramFiles))
             {
                 Assert.IsTrue(item != null);
-                filterReferenceItem = item;
+
+                if (filterReferenceItem == null)
+                    filterReferenceItem = item;
+
                 iCnt++;
             }
 
@@ -101,6 +104,18 @@
             int iCntFiltered = 0;
             foreach (var item in ShellBrowser.GetChildItems(KF_IID.ID_FOLDERID_ProgramFiles,
                                                             filterReferenceItem.Name))
+            {
+                Assert.IsTrue(item != null);
+                iCntFiltered++;
+            }
+
+            Assert.IsTrue(iCntFiltered == 1);
+
+            // Filtering for an arbitrary '*' item in the programm files folder should yield
+            // a collection with one item (assuming that all item names are unique)
+            iCntFiltered = 0;
+            foreach (var item in ShellBrowser.GetChildItems(KF_IID.ID_FOLDERID_ProgramFiles,
+                                                            "*" + filterReferenceItem.Name + "*"))
             {
                 Assert.IsTrue(item != null);
                 iCntFiltered++;

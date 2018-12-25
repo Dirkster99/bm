@@ -49,6 +49,7 @@
   <ItemGroup>
     <Compile Include="Browser\BrowseItemFromPath.cs" />
     <Compile Include="Browser\DirectoryBrowser.cs" />
+    <Compile Include="Browser\FilterMask.cs" />
     <Compile Include="Enums\DirectoryItemFlags.cs" />
     <Compile Include="Enums\PathType.cs" />
     <Compile Include="Enums\PathHandler.cs" />

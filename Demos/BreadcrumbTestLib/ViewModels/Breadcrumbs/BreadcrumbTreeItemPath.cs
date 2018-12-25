@@ -9,9 +9,10 @@
 
     /// <summary>
     /// Class models a current path by keeping track of the involved
-    /// viewmodel item objects that are also visible in the tree view.
+    /// viewmodel item objects that are also visible in selected path
+    /// of the tree view portion in the Breadcrumb control.
     /// </summary>
-    internal class BreadcrumbTreeItemPath : Base.ViewModelBase, IBreadcrumbTreeItemPath
+    internal class BreadcrumbTreeItemPath : IBreadcrumbTreeItemPath
     {
         #region fields
         private readonly List<BreadcrumbTreeItemViewModel> _CurrentPath;

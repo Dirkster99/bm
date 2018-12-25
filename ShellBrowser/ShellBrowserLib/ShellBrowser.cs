@@ -301,6 +301,10 @@
                 if (enumIDs == null)
                     yield break;
 
+                FilterMask filter = null;
+                if (searchName != null)
+                    filter = new FilterMask();
+
                 uint fetched, count = 0;
                 IntPtr apidl = default(IntPtr);
 
@@ -330,9 +334,9 @@
                         }
 
                         // Skip this item if search parameter is set and this appears to be a non-match
-                        if (searchName != null)
+                        if (filter != null)
                         {
-                            if (string.Compare(searchName, name, true) != 0)
+                            if (filter.MatchFileMask(name, searchName) == false)
                                 continue;
                         }
 
@@ -426,18 +430,26 @@
             if (string.IsNullOrEmpty(path))
                 return false;
 
-            if (ShellHelpers.IsSpecialPath(path) == ShellHelpers.SpecialPath.IsSpecialPath)
+            try
             {
-                // translate KF_IID into file system path and check if it exists
-                string fs_path = KnownFolderHelper.GetKnownFolderPath(path);
+                if (ShellHelpers.IsSpecialPath(path) == ShellHelpers.SpecialPath.IsSpecialPath)
+                {
+                    // translate KF_IID into file system path and check if it exists
+                    string fs_path = KnownFolderHelper.GetKnownFolderPath(path);
 
-                if (fs_path != null)
-                    return System.IO.Directory.Exists(fs_path);
+                    if (fs_path != null)
+                        return System.IO.Directory.Exists(fs_path);
 
+                    return false;
+                }
+                else
+                    return System.IO.Directory.Exists(path);
+            }
+            catch (System.ArgumentException)
+            {
+                // Is thrown by System.IO.Directory.Exists(...) if path contains illegal caharacter (eg: '<')
                 return false;
             }
-            else
-                return System.IO.Directory.Exists(path);
         }
 
         /// <summary>
