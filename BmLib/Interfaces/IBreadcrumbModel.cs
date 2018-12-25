@@ -2,6 +2,10 @@
 {
     using System.Threading.Tasks;
 
+    /// <summary>
+    /// Defines the core methods that are called when switching the SuggestBox on and off
+    /// which requires synchronization and path re-mounting between TreeView and SuggestBox.
+    /// </summary>
     public interface IBreadcrumbModel
     {
         /// <summary>
@@ -16,6 +20,12 @@
         Task<bool> NavigateTreeViewModel(string navigateToThisLocation,
                                          bool goBackToPreviousLocation);
 
+        /// <summary>
+        /// Updates the bound text path property of the SuggestBox with the path of the
+        /// currently selected item. This method should be called whenever the SuggestBox
+        /// is switched from invisible to visible.
+        /// </summary>
+        /// <returns></returns>
         string UpdateSuggestPath();
     }
 }

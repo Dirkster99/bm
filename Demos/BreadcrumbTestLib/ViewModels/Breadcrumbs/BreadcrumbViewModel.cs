@@ -46,7 +46,7 @@ namespace BreadcrumbTestLib.ViewModels.Breadcrumbs
         private ICommand _RootDropDownSelectionChangedCommand;
         private readonly INavigationController _NavigationController;
         private readonly ObservableCollection<BreadcrumbTreeItemViewModel> _OverflowedAndRootItems = null;
-        private readonly BreadcrumbTreeItemPath _CurrentPath;
+        private readonly IBreadcrumbTreeItemPath _CurrentPath;
         private readonly IDirectoryBrowser _RootLocation = ShellBrowser.DesktopDirectory;
         #endregion fields
 
@@ -142,7 +142,7 @@ namespace BreadcrumbTestLib.ViewModels.Breadcrumbs
         /// Gets a seperate viewmodel object that keeps track of the current 
         /// path and all its viewmodel object items.
         /// </summary>
-        public BreadcrumbTreeItemPath CurrentPath
+        public IBreadcrumbTreeItemPath CurrentPath
         {
             get
             {
@@ -367,7 +367,7 @@ namespace BreadcrumbTestLib.ViewModels.Breadcrumbs
                 try
                 {
                     // Navigation to new location was cancelled of given path is obviously empty
-                    // Lets try and roolback to previously active location
+                    // Lets try and rollback to previously active location
                     if (string.IsNullOrEmpty(navigateToThisLocation) || goBackToPreviousLocation)
                     {
                         // Lets just go back to this without further processing
@@ -388,6 +388,30 @@ namespace BreadcrumbTestLib.ViewModels.Breadcrumbs
                     }
                     else
                     {
+                        // Attempt re-mounting if we find a common root for the given path
+                        var currentPath = _CurrentPath.GetPathModels();
+                        string extendPath = null;
+                        int idxCommonRoot = ShellBrowser.FindCommonRoot(currentPath, navigateToThisLocation, out extendPath);
+
+                        if (idxCommonRoot > 0 && extendPath != null)
+                        {
+                            List<IDirectoryBrowser> pathList = new List<IDirectoryBrowser>();
+                            for (int i = 0; i <= idxCommonRoot; i++)
+                            {
+                                pathList.Add(currentPath[i].Clone() as IDirectoryBrowser);
+                            }
+
+                            bool joinSuccess = true;
+                            if (string.IsNullOrEmpty(extendPath) == false)
+                                joinSuccess = ShellBrowser.ExtendPath(ref pathList, extendPath);
+
+                            if (joinSuccess) // path joined successfully -> lets go where no one has been before...
+                            {
+                                await NavigateToScheduledAsync(pathList.ToArray(), "BreadcrumbViewModel.NavigateTreeViewModel 4");
+                                return true;
+                            }
+                        }
+
                         IDirectoryBrowser[] pathItems = null;
                         isPathValid = ShellBrowser.DirectoryExists(navigateToThisLocation, out pathItems);
 
@@ -398,7 +422,7 @@ namespace BreadcrumbTestLib.ViewModels.Breadcrumbs
                             if (pathItems == null)
                             {
                                 var location = ShellBrowser.Create(navigateToThisLocation);
-                                await NavigateToScheduledAsync(location, "BreadcrumbViewModel.NavigateTreeViewModel 1");
+                                await NavigateToScheduledAsync(location, "BreadcrumbViewModel.NavigateTreeViewModel 0");
                             }
                             else
                             {
@@ -419,7 +443,7 @@ namespace BreadcrumbTestLib.ViewModels.Breadcrumbs
         }
 
         /// <summary>
-        /// Updates the bound text path property of the SuggestBox if the path of the
+        /// Updates the bound text path property of the SuggestBox with the path of the
         /// currently selected item. This method should be called whenever the SuggestBox
         /// is switched from invisible to visible.
         /// </summary>
@@ -433,7 +457,7 @@ namespace BreadcrumbTestLib.ViewModels.Breadcrumbs
                 path = _CurrentPath.GetFileSystemPath();
 
                 if (string.IsNullOrEmpty(path))
-                    path = _CurrentPath.WinShellPath;
+                    path = _CurrentPath.GetWinShellPath();
             }
 
             // Update path in bound textBox with value from currently selected item

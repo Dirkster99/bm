@@ -1,15 +1,17 @@
 ﻿namespace BreadcrumbTestLib.ViewModels.Breadcrumbs
 {
+    using BreadcrumbTestLib.ViewModels.Interfaces;
     using ShellBrowserLib;
     using ShellBrowserLib.Enums;
+    using ShellBrowserLib.Interfaces;
     using System.Collections.Generic;
     using System.Linq;
 
     /// <summary>
     /// Class models a current path by keeping track of the involved
-    /// viewmodel item objects that are also viaible in the tree view.
+    /// viewmodel item objects that are also visible in the tree view.
     /// </summary>
-    internal class BreadcrumbTreeItemPath : Base.ViewModelBase
+    internal class BreadcrumbTreeItemPath : Base.ViewModelBase, IBreadcrumbTreeItemPath
     {
         #region fields
         private readonly List<BreadcrumbTreeItemViewModel> _CurrentPath;
@@ -27,6 +29,17 @@
 
         #region properties
         /// <summary>
+        /// Gets the length of the current path.
+        /// </summary>
+        public int Count
+        {
+            get
+            {
+                return _CurrentPath.Count;
+            }
+        }
+
+        /// <summary>
         /// Gets all items currently present in this list of path items.
         /// </summary>
         public IEnumerable<BreadcrumbTreeItemViewModel> Items
@@ -36,15 +49,45 @@
                 return _CurrentPath;
             }
         }
-
+/***
         /// <summary>
-        /// Gets the length of the current path.
+        /// Gets the root of the current path as
+        /// 1) a filesystem path ('X:\Data\'), if it exists, or
+        /// 2) An empty string, if the current path cannot directly
+        ///    be mapped into the filesystem (eg: 'Libraries/Music').
+        ///    
+        /// This property is necessary to determine a non-trivial root since a
+        /// Windows Shell Path like '<User>\Music\Mozart' can map into:
+        /// 1- 'C:\Users\<User>'
+        /// 2- 'X:\Data\MyMusicCollection\'
+        /// 3- 'X:\Data\MyMusicCollection\Mozart'
+        /// (Assuming Music is re-directed to 3) -> 2 is the root for 3(!).
         /// </summary>
-        public int Count
+        public string RootFileSystemPath
         {
             get
             {
-                return _CurrentPath.Count;
+                if (_CurrentPath.Count == 0)
+                    return string.Empty;
+
+                return GetRootFileSystemPath();
+            }
+        }
+
+        /// <summary>
+        /// Gets the current path as
+        /// 1) a filesystem path ('X:\Data\'), if it exists, or
+        /// 2) An empty string, if the current path cannot directly
+        ///    be mapped into the filesystem (eg: 'Libraries/Music').
+        /// </summary>
+        public string FileSystemPath
+        {
+            get
+            {
+                if (_CurrentPath.Count == 0)
+                    return string.Empty;
+
+                return GetFileSystemPath();
             }
         }
 
@@ -66,59 +109,30 @@
                 return winShellPath;
             }
         }
-
-        /// <summary>
-        /// Gets the current path as
-        /// 1) a filesystem path ('X:\Data\'), if it exists, or
-        /// 2) An empty string, if the current path cannot directly
-        ///    be mapped into the filesystem (eg: 'Libraries/Music').
-        /// </summary>
-        public string FileSystemPath
-        {
-            get
-            {
-                if (_CurrentPath.Count == 0)
-                    return string.Empty;
-
-                return GetFileSystemPath();
-            }
-        }
-
-        public string RootFileSystemPath
-        {
-            get
-            {
-                if (_CurrentPath.Count == 0)
-                    return string.Empty;
-
-                return GetRootFileSystemPath();
-            }
-        }
+***/
         #endregion properties
 
         #region methods
         /// <summary>
-        /// Gets a path that contains either the real file system location
-        /// or a location based on Named items along the current path (to avoid using SpecialPathIDs).
+        /// Gets an array of <see cref="IDirectoryBrowser"/> model objects
+        /// that describe the current path managed in this object.
         /// </summary>
-        /// <param name="currentPath"></param>
         /// <returns></returns>
-        public string GetWinShellPath()
+        public IDirectoryBrowser[] GetPathModels()
         {
-            string path = string.Empty;
-
             // Skip showing the desktop in the string based path
-            int i = 0;
-            if ((_CurrentPath[i].GetModel().ItemType & DirectoryItemFlags.Desktop) != 0)
-                i = 1;
-
-            for (; i < _CurrentPath.Count; i++)
+            int idxSrc = 0, size = _CurrentPath.Count;
+            if ((_CurrentPath[idxSrc].GetModel().ItemType & DirectoryItemFlags.Desktop) != 0)
             {
-                path = path + (path.Length > 0 ? "\\" + _CurrentPath[i].ItemName :
-                                               _CurrentPath[i].ItemName);
+                idxSrc = 1;
+                size = size - 1;
             }
 
-            return path;
+            IDirectoryBrowser[] ret = new IDirectoryBrowser[size];
+            for (int i = 0; i < size; i++)
+                ret[i] = _CurrentPath[idxSrc++].GetModel().Clone() as IDirectoryBrowser;
+
+            return ret;
         }
 
         /// <summary>
@@ -153,20 +167,25 @@
             return string.Empty;
         }
 
+        /// <summary>
+        /// Gets the root of the current path as
+        /// 1) a filesystem path ('X:\Data\'), if it exists, or
+        /// 2) An empty string, if the current path cannot directly
+        ///    be mapped into the filesystem (eg: 'Libraries/Music').
+        ///    
+        /// This property is necessary to determine a non-trivial root since a
+        /// Windows Shell Path like '<User>\Music\Mozart' can map into:
+        /// 1- 'C:\Users\<User>'
+        /// 2- 'X:\Data\MyMusicCollection\'
+        /// 3- 'X:\Data\MyMusicCollection\Mozart'
+        /// (Assuming Music is re-directed to 3) -> 2 is the root for 3(!).
+        /// </summary>
         public string GetRootFileSystemPath()
         {
             string fileSystemPath = string.Empty;
 
             if (_CurrentPath.Count == 0)
                 return string.Empty;
-
-////            // Skip showing the desktop in the string based path
-////            int i = 0;
-////            if ((_CurrentPath[i].GetModel().ItemType & DirectoryItemFlags.Desktop) != 0)
-////                i = 1;
-////
-////            if (i > (_CurrentPath.Count - 1))
-////                return string.Empty;
 
             int lastIdx = _CurrentPath.Count - 1;
             var lastElement = _CurrentPath[lastIdx];
@@ -195,23 +214,27 @@
         }
 
         /// <summary>
-        /// Pops the last element in the list and returns it or
-        /// returns null if list is empty.
+        /// Gets a path that contains either the real file system location
+        /// or a location based on Named items along the current path (to avoid using SpecialPathIDs).
         /// </summary>
+        /// <param name="currentPath"></param>
         /// <returns></returns>
-        public BreadcrumbTreeItemViewModel Pop()
+        public string GetWinShellPath()
         {
-            return Pop<BreadcrumbTreeItemViewModel>(_CurrentPath);
-        }
+            string path = string.Empty;
 
-        /// <summary>
-        /// Peeks the last element in the list and returns it or
-        /// raises an <see cref="System.InvalidOperationException"/> if the list is empty.
-        /// </summary>
-        /// <returns></returns>
-        public BreadcrumbTreeItemViewModel Peek()
-        {
-            return _CurrentPath.Last();
+            // Skip showing the desktop in the string based path
+            int i = 0;
+            if ((_CurrentPath[i].GetModel().ItemType & DirectoryItemFlags.Desktop) != 0)
+                i = 1;
+
+            for (; i < _CurrentPath.Count; i++)
+            {
+                path = path + (path.Length > 0 ? "\\" + _CurrentPath[i].ItemName :
+                                               _CurrentPath[i].ItemName);
+            }
+
+            return path;
         }
 
         /// <summary>
@@ -229,6 +252,26 @@
         public void Clear()
         {
             _CurrentPath.Clear();
+        }
+
+        /// <summary>
+        /// Peeks the last element in the list and returns it or
+        /// raises an <see cref="System.InvalidOperationException"/> if the list is empty.
+        /// </summary>
+        /// <returns></returns>
+        public BreadcrumbTreeItemViewModel Peek()
+        {
+            return _CurrentPath.Last();
+        }
+
+        /// <summary>
+        /// Pops the last element in the list and returns it or
+        /// returns null if list is empty.
+        /// </summary>
+        /// <returns></returns>
+        public BreadcrumbTreeItemViewModel Pop()
+        {
+            return Pop<BreadcrumbTreeItemViewModel>(_CurrentPath);
         }
 
         /// <summary>

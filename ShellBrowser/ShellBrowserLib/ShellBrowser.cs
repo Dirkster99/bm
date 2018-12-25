@@ -17,6 +17,7 @@
     using System.Runtime.InteropServices;
     using System.Text;
     using ShellBrowserLib.Enums;
+    using System.Linq;
 
     /// <summary>
     /// Implements core API type methods and properties that are used to interact
@@ -1043,6 +1044,7 @@
         /// Performs a literal match of the given path elements and determines
         /// if the <paramref name="childPath"/> does syntax-wise appear below
         /// the given <paramref name="parentPath"/>.
+        /// The method performs parsing of the given strings only.
         /// 
         /// Both paths should be normalized ('C:' vs. 'C:\') befores this is invoked.
         /// Method returns false if any of the given paths is empty.
@@ -1061,6 +1063,149 @@
             string childRoot = childPath.Substring(0, parentPath.Length);
 
             return (string.Compare(childRoot, parentPath, true) == 0);
+        }
+
+        /// <summary>
+        /// Determines if the given <paramref name="childPath"/> could be mounted
+        /// somewhere into the path of the <paramref name="parentPath"/> and returns
+        /// true if thats the case.
+        /// </summary>
+        /// <param name="parentPath"></param>
+        /// <param name="childPath"></param>
+        /// <param name="pathExtension">Contains the part of the <paramref name="childPath"/>
+        /// that could be used to extend the <paramref name="parentPath"/> in order to find
+        /// an alternative path representation.</param>
+        /// <returns></returns>
+        public static bool IsParentPathOf(string parentPath,
+                                          string childPath,
+                                          out string pathExtension)
+        {
+            pathExtension = null;
+
+            if (string.IsNullOrEmpty(parentPath) == true || string.IsNullOrEmpty(childPath) == true)
+                return false;
+
+            if (parentPath.Length > childPath.Length)
+                return false;
+
+            string childRoot = childPath.Substring(0, parentPath.Length);
+
+            bool ret = string.Compare(childRoot, parentPath, true) == 0;
+
+            if (ret == true)
+            {
+                pathExtension = childPath.Substring(childRoot.Length);
+
+                if (pathExtension.Length > 0)       // Skip seperator at beginning of string
+                {
+                    if (pathExtension[0] == '\\')
+                        pathExtension = pathExtension.Substring(1);
+                }
+
+                if (pathExtension.Length > 0)      // Skip last seperator char if present
+                {
+                    int idx = pathExtension.LastIndexOf('\\');
+                    if (idx > 0 && idx == pathExtension.Length - 1)
+                        pathExtension = pathExtension.Substring(0, idx);
+                }
+            }
+
+            return ret;
+        }
+
+        /// <summary>
+        /// Determines if 2 string based paths describe the same location or not.
+        /// The method performs parsing of the given strings only.
+        /// 
+        /// Both paths should be normalized ('C:' vs. 'C:\') befores this is invoked.
+        /// Method returns false if any of the given paths is empty.
+        /// </summary>
+        /// <param name="parentPath"></param>
+        /// <param name="childPath"></param>
+        /// <returns></returns>
+        public static bool IsPathSameLocation(string parentPath, string childPath)
+        {
+            if (string.IsNullOrEmpty(parentPath) == true || string.IsNullOrEmpty(childPath) == true)
+                return false;
+
+            int idx = parentPath.LastIndexOf('\\');         // Remove last seperator char if present
+            if (idx > 0 && idx == parentPath.Length - 1)
+                parentPath = parentPath.Substring(0, idx);
+
+            idx = childPath.LastIndexOf('\\');              // Remove last seperator char if present
+            if (idx > 0 && idx == childPath.Length - 1)
+                childPath = childPath.Substring(0, idx);
+
+            return (string.Compare(childPath, parentPath, true) == 0);
+        }
+
+        /// <summary>
+        /// Attempts to find a common root between the given path of <see cref="IDirectoryBrowser"/>
+        /// model items and the string based path and returns the part of the alternative path
+        /// that could be joined on to the element with the indicated index.
+        /// 
+        /// Returns the maximum common root (eg.: 'C:\Windows' is returned instead of 'C:\').
+        /// </summary>
+        /// <param name="currentPath"></param>
+        /// <param name="navigateToThisLocation"></param>
+        /// <param name="pathExtension"></param>
+        /// <returns></returns>
+        public static int FindCommonRoot(IDirectoryBrowser[] currentPath,
+                                         string navigateToThisLocation,
+                                         out string pathExtension)
+        {
+            pathExtension = null;
+
+            if (currentPath.Length > 0)
+            {
+                for (int i = currentPath.Length - 1; i >= 0; i--)
+                {
+                    var model = currentPath[i];
+
+                    if (string.IsNullOrEmpty(model.PathFileSystem))
+                        break;
+
+                    // found a common root item for path discription
+                    if (ShellBrowser.IsParentPathOf(model.PathFileSystem, navigateToThisLocation, out pathExtension))
+                        return i;
+                }
+            }
+
+            return -1;
+        }
+
+        /// <summary>
+        /// Extends a list of <see cref="IDirectoryBrowser"/> path models with the
+        /// given path extension if these items can be verified in the file system structure.
+        /// </summary>
+        /// <param name="pathList"></param>
+        /// <param name="pathExtension"></param>
+        /// <returns></returns>
+        public static bool ExtendPath(ref List<IDirectoryBrowser> pathList,
+                                      string pathExtension)
+        {
+            string[] altPathNames = pathExtension.Split('\\');
+            for (int i = 0; i < altPathNames.Length; i++)
+            {
+                try
+                {
+                    var currentRootParseName = pathList[pathList.Count - 1].PathShell;
+
+                    var nxt = ShellBrowser.GetChildItems(currentRootParseName)
+                                    .Where(it => string.Compare(it.Name, altPathNames[i], true) == 0);
+
+                    if (nxt.Any() == false)
+                        return false;
+
+                    pathList.Add(nxt.First());
+                }
+                catch
+                {
+                    return false;
+                }
+            }
+
+            return true;
         }
         #endregion methods
     }

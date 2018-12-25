@@ -23,7 +23,7 @@ namespace SSCoreLib.Browse
     {
         #region ctors
         /// <summary>
-        /// Parameterized class constructor.
+        /// Parameterized class constructor from (single) location indicator.
         /// </summary>
         public BrowseRequest(M newLocation,
                              RequestType typeOfRequest,
@@ -39,6 +39,9 @@ namespace SSCoreLib.Browse
             BrowseTask = t;
         }
 
+        /// <summary>
+        /// Parameterized class constructor from (multiple items) path location indicator.
+        /// </summary>
         public BrowseRequest(M[] locationsPath,
                              RequestType typeOfRequest,
                              CancellationToken cancelToken = default(CancellationToken),
