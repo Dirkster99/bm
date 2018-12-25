@@ -512,7 +512,7 @@
 
                     // Try to resolve an abstract Windows Shell Space description like:
                     // 'Libraries/Documents' (in a localized fashion)
-                    string[] pathNames = path.Split('\\');
+                    string[] pathNames = GetDirectories(path);
 
                     if (pathNames == null)
                         return false;
@@ -734,7 +734,7 @@
         public static bool ExtendPath(ref List<IDirectoryBrowser> pathList,
                                       string pathExtension)
         {
-            string[] altPathNames = pathExtension.Split('\\');
+            string[] altPathNames = GetDirectories(pathExtension);
             for (int i = 0; i < altPathNames.Length; i++)
             {
                 try
