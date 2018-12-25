@@ -833,7 +833,8 @@
             while (PidlManager.GetParentChildIdList(fullIdList,
                                                     out parentItem, out childItem) == true)
             {
-                pathItems.Add(fullIdList);
+                // Reverse order since parent lookup would otherwise produce wrong order
+                pathItems.Insert(0, fullIdList);
 
                 if (fullIdList.Size <= 1)
                     break;

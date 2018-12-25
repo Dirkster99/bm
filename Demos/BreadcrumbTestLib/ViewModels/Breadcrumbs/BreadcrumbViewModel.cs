@@ -825,7 +825,7 @@ namespace BreadcrumbTestLib.ViewModels.Breadcrumbs
                 return BrowseResult.Complete;
             }
 
-            var targetItems = locations.ToArray().Reverse().ToArray();
+            var targetItems = locations.ToArray();
             if (targetItems.Count() == 0)
                 return BrowseResult.InComplete;   // No target to navigate to ???
 
