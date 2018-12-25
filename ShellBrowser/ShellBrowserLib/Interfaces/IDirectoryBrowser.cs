@@ -121,13 +121,6 @@
         /// <param name="parseName">True is a matching parse name was found and false if not.</param>
         /// <returns></returns>
         bool EqualsParseName(string parseName);
-
-        /// <summary>
-        /// Gets a parent <see cref="IDirectoryBrowser"/> object if a parent can be determent
-        /// or null if item does not have a parent.
-        /// </summary>
-        /// <returns></returns>
-        IDirectoryBrowser GetParent();
         #endregion methods
     }
 }

@@ -20,38 +20,6 @@
         /// Gets all items currently present in this list of path items.
         /// </summary>
         IEnumerable<BreadcrumbTreeItemViewModel> Items { get; }
-/***
-        /// <summary>
-        /// Gets the root of the current path as
-        /// 1) a filesystem path ('X:\Data\'), if it exists, or
-        /// 2) An empty string, if the current path cannot directly
-        ///    be mapped into the filesystem (eg: 'Libraries/Music').
-        ///    
-        /// This property is necessary to determine a non-trivial root since a
-        /// Windows Shell Path like '<User>\Music\Mozart' can map into:
-        /// 1- 'C:\Users\<User>'
-        /// 2- 'X:\Data\MyMusicCollection\'
-        /// 3- 'X:\Data\MyMusicCollection\Mozart'
-        /// (Assuming Music is re-directed to 3) -> 2 is the root for 3(!).
-        /// </summary>
-        string RootFileSystemPath { get; }
-
-        /// <summary>
-        /// Gets the current path as
-        /// 1) a filesystem path ('X:\Data\'), if it exists, or
-        /// 2) An empty string, if the current path cannot directly
-        ///    be mapped into the filesystem (eg: 'Libraries/Music').
-        /// </summary>
-        string FileSystemPath { get; }
-
-        /// <summary>
-        /// Gets the Windows Shell Path which is the literal sequence of
-        /// the items names that make up a path
-        /// (minus Desktop since its always given as root):
-        /// 'Libraries\Music'
-        /// </summary>
-        string WinShellPath { get; }
-***/
         #endregion properties
 
         #region methods
@@ -71,21 +39,6 @@
         /// <param name="currentPath"></param>
         /// <returns></returns>
         string GetFileSystemPath();
-
-        /// <summary>
-        /// Gets the root of the current path as
-        /// 1) a filesystem path ('X:\Data\'), if it exists, or
-        /// 2) An empty string, if the current path cannot directly
-        ///    be mapped into the filesystem (eg: 'Libraries/Music').
-        ///    
-        /// This property is necessary to determine a non-trivial root since a
-        /// Windows Shell Path like '<User>\Music\Mozart' can map into:
-        /// 1- 'C:\Users\<User>'
-        /// 2- 'X:\Data\MyMusicCollection\'
-        /// 3- 'X:\Data\MyMusicCollection\Mozart'
-        /// (Assuming Music is re-directed to 3) -> 2 is the root for 3(!).
-        /// </summary>
-        string GetRootFileSystemPath();
 
         /// <summary>
         /// Gets a path that contains either the real file system location

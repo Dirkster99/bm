@@ -49,67 +49,6 @@
                 return _CurrentPath;
             }
         }
-/***
-        /// <summary>
-        /// Gets the root of the current path as
-        /// 1) a filesystem path ('X:\Data\'), if it exists, or
-        /// 2) An empty string, if the current path cannot directly
-        ///    be mapped into the filesystem (eg: 'Libraries/Music').
-        ///    
-        /// This property is necessary to determine a non-trivial root since a
-        /// Windows Shell Path like '<User>\Music\Mozart' can map into:
-        /// 1- 'C:\Users\<User>'
-        /// 2- 'X:\Data\MyMusicCollection\'
-        /// 3- 'X:\Data\MyMusicCollection\Mozart'
-        /// (Assuming Music is re-directed to 3) -> 2 is the root for 3(!).
-        /// </summary>
-        public string RootFileSystemPath
-        {
-            get
-            {
-                if (_CurrentPath.Count == 0)
-                    return string.Empty;
-
-                return GetRootFileSystemPath();
-            }
-        }
-
-        /// <summary>
-        /// Gets the current path as
-        /// 1) a filesystem path ('X:\Data\'), if it exists, or
-        /// 2) An empty string, if the current path cannot directly
-        ///    be mapped into the filesystem (eg: 'Libraries/Music').
-        /// </summary>
-        public string FileSystemPath
-        {
-            get
-            {
-                if (_CurrentPath.Count == 0)
-                    return string.Empty;
-
-                return GetFileSystemPath();
-            }
-        }
-
-        /// <summary>
-        /// Gets the Windows Shell Path which is the literal sequence of
-        /// the items names that make up a path
-        /// (minus Desktop since its always given as root):
-        /// 'Libraries\Music'
-        /// </summary>
-        public string WinShellPath
-        {
-            get
-            {
-                if (_CurrentPath.Count == 0)
-                    return string.Empty;
-
-                var winShellPath = GetWinShellPath();
-
-                return winShellPath;
-            }
-        }
-***/
         #endregion properties
 
         #region methods
@@ -165,52 +104,6 @@
                 return fspath;
 
             return string.Empty;
-        }
-
-        /// <summary>
-        /// Gets the root of the current path as
-        /// 1) a filesystem path ('X:\Data\'), if it exists, or
-        /// 2) An empty string, if the current path cannot directly
-        ///    be mapped into the filesystem (eg: 'Libraries/Music').
-        ///    
-        /// This property is necessary to determine a non-trivial root since a
-        /// Windows Shell Path like '<User>\Music\Mozart' can map into:
-        /// 1- 'C:\Users\<User>'
-        /// 2- 'X:\Data\MyMusicCollection\'
-        /// 3- 'X:\Data\MyMusicCollection\Mozart'
-        /// (Assuming Music is re-directed to 3) -> 2 is the root for 3(!).
-        /// </summary>
-        public string GetRootFileSystemPath()
-        {
-            string fileSystemPath = string.Empty;
-
-            if (_CurrentPath.Count == 0)
-                return string.Empty;
-
-            int lastIdx = _CurrentPath.Count - 1;
-            var lastElement = _CurrentPath[lastIdx];
-            var fspath = lastElement.GetModel().PathFileSystem;
-
-            if (ShellBrowser.IsTypeOf(fspath) != PathType.FileSystemPath)
-                return string.Empty;
-
-            for (int idx = _CurrentPath.Count - 2; idx >= 0; idx--)
-            {
-                var thisElement = _CurrentPath[idx];
-                var thisFsPath = thisElement.GetModel().PathFileSystem;
-
-                if (string.IsNullOrEmpty(thisFsPath))
-                    return fspath;
-
-                if (ShellBrowser.IsParentPathOf(thisFsPath, fspath))
-                {
-                    lastIdx = idx;
-                    lastElement = _CurrentPath[lastIdx];
-                    fspath = thisFsPath;
-                }
-            }
-
-            return fspath;
         }
 
         /// <summary>

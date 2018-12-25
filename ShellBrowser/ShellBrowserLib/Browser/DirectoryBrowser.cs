@@ -219,23 +219,6 @@ namespace ShellBrowserLib.Browser
             return false;
         }
 
-        /// <summary>
-        /// Gets a parent <see cref="IDirectoryBrowser"/> object if a parent can be determent
-        /// or null if item does not have a parent.
-        /// </summary>
-        /// <returns></returns>
-        public IDirectoryBrowser GetParent()
-        {
-            var itemPath = (string.IsNullOrEmpty(SpecialPathId) == false ? SpecialPathId : PathFileSystem);
-
-            var parentPath = ShellBrowser.GetParentFolder(itemPath, TypOfPath.LogicalPath);
-
-            if (parentPath != null)
-                return ShellBrowser.Create(parentPath);
-
-            return null;
-        }
-
         #region ICloneable
         public object Clone()
         {

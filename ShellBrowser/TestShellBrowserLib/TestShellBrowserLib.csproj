@@ -55,7 +55,6 @@
     <Compile Include="ChildItemTests.cs" />
     <Compile Include="DirectoryBrowserTests.cs" />
     <Compile Include="KnownFolderIconLocation.cs" />
-    <Compile Include="ParentItemTests.cs" />
     <Compile Include="ParentPIDLTests.cs" />
     <Compile Include="PidlManagerTests.cs" />
     <Compile Include="PIDL_PathTests.cs" />
