@@ -36,6 +36,7 @@
             <RowDefinition Height="*" MinHeight="200"/>
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
 
         <Grid.ColumnDefinitions>
@@ -410,8 +411,21 @@
             />
 
         <TextBlock Grid.Column="0" Grid.Row="3"
-                   Text="File System Path:" HorizontalAlignment="Right" Margin="3"/>
+                   Text="Root File System Path:" HorizontalAlignment="Right" Margin="3"/>
         <TextBox Grid.Column="1" Grid.Row="3"
+                IsReadOnly="True"
+                DataContext="{Binding BreadcrumbController}"
+                Text="{Binding Path=BreadcrumbBrowser.CurrentPath.RootFileSystemPath, Mode=OneWay,UpdateSourceTrigger=PropertyChanged}"
+                TextWrapping="WrapWithOverflow"
+                HorizontalScrollBarVisibility="Auto"
+                VerticalScrollBarVisibility="Auto"
+                BorderThickness="0"
+                Margin="3"
+            />
+
+        <TextBlock Grid.Column="0" Grid.Row="4"
+                   Text="File System Path:" HorizontalAlignment="Right" Margin="3"/>
+        <TextBox Grid.Column="1" Grid.Row="4"
                 IsReadOnly="True"
                 DataContext="{Binding BreadcrumbController}"
                 Text="{Binding Path=BreadcrumbBrowser.CurrentPath.FileSystemPath, Mode=OneWay,UpdateSourceTrigger=PropertyChanged}"
@@ -421,14 +435,11 @@
                 BorderThickness="0"
                 Margin="3"
             />
-
+        
         <!-- PropertiesView of Breadcrumb control -->
         <ScrollViewer Grid.Column="2" Grid.Row="1">
             <StackPanel VerticalAlignment="Top" Margin="3" Width="200">
                 <!-- For Debugging only -->
-                <CheckBox Content="Show BreadCrumb Control" Name="ShowBreadCrumbControl"
-                          IsChecked="True" />
-
                 <CheckBox Content="EnableBreadcrumb"
                       DataContext="{Binding BreadcrumbController}"
                       IsChecked="{Binding BreadcrumbBrowser.EnableBreadcrumb}" />
@@ -436,10 +447,6 @@
                 <CheckBox Content="Breadcrumb.IsEnabled"
                       DataContext="{Binding ElementName=BreadcrumbDemoControl}"
                       IsChecked="{Binding Path=IsEnabled}" />
-
-                <CheckBox Content="Breadcrumb.IsSwitchEnabled"
-                      DataContext="{Binding ElementName=BreadcrumbDemoControl}"
-                      IsChecked="{Binding Path=IsSwitchEnabled}" />
 
                 <CheckBox Content="IsOverflown" IsEnabled="False"
                       IsChecked="{Binding ElementName=BreadcrumbDemoControl,Path=IsOverflown}" />
@@ -507,8 +514,15 @@
                 <CheckBox Content="Root (Overflowed) Items List" Name="ShowRootItemsOverflowList"
                           IsChecked="False" />
 
+                <CheckBox Content="Show BreadCrumb Control" Name="ShowBreadCrumbControl"
+                          IsChecked="True" Margin="0,12,0,0" />
+
                 <CheckBox Content="IsEnabled"
                           IsChecked="{Binding ElementName=BreadcrumbDemoControl,Path=IsEnabled}" />
+
+                <CheckBox Content="Breadcrumb.IsSwitchEnabled"
+                          DataContext="{Binding ElementName=BreadcrumbDemoControl}"
+                          IsChecked="{Binding Path=IsSwitchEnabled}" />
             </StackPanel>
         </ScrollViewer>
     </Grid>

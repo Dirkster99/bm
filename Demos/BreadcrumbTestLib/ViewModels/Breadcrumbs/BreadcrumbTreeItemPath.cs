@@ -83,6 +83,17 @@
                 return GetFileSystemPath();
             }
         }
+
+        public string RootFileSystemPath
+        {
+            get
+            {
+                if (_CurrentPath.Count == 0)
+                    return string.Empty;
+
+                return GetRootFileSystemPath();
+            }
+        }
         #endregion properties
 
         #region methods
@@ -140,6 +151,47 @@
                 return fspath;
 
             return string.Empty;
+        }
+
+        public string GetRootFileSystemPath()
+        {
+            string fileSystemPath = string.Empty;
+
+            if (_CurrentPath.Count == 0)
+                return string.Empty;
+
+////            // Skip showing the desktop in the string based path
+////            int i = 0;
+////            if ((_CurrentPath[i].GetModel().ItemType & DirectoryItemFlags.Desktop) != 0)
+////                i = 1;
+////
+////            if (i > (_CurrentPath.Count - 1))
+////                return string.Empty;
+
+            int lastIdx = _CurrentPath.Count - 1;
+            var lastElement = _CurrentPath[lastIdx];
+            var fspath = lastElement.GetModel().PathFileSystem;
+
+            if (ShellBrowser.IsTypeOf(fspath) != PathType.FileSystemPath)
+                return string.Empty;
+
+            for (int idx = _CurrentPath.Count - 2; idx >= 0; idx--)
+            {
+                var thisElement = _CurrentPath[idx];
+                var thisFsPath = thisElement.GetModel().PathFileSystem;
+
+                if (string.IsNullOrEmpty(thisFsPath))
+                    return fspath;
+
+                if (ShellBrowser.IsParentPathOf(thisFsPath, fspath))
+                {
+                    lastIdx = idx;
+                    lastElement = _CurrentPath[lastIdx];
+                    fspath = thisFsPath;
+                }
+            }
+
+            return fspath;
         }
 
         /// <summary>
