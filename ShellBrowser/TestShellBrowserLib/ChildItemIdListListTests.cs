@@ -3,6 +3,7 @@
     using Microsoft.VisualStudio.TestTools.UnitTesting;
     using ShellBrowserLib;
     using ShellBrowserLib.IDs;
+    using ShellBrowserLib.Interfaces;
     using ShellBrowserLib.Shell.Interop.Interfaces.Knownfolders;
     using ShellBrowserLib.Shell.Interop.Knownfolders;
     using ShellBrowserLib.Shell.Pidl;
@@ -78,6 +79,34 @@
                 Assert.IsTrue(item != null);
                 iCnt++;
             }
+        }
+
+        /// <summary>
+        /// Tests the filter enumeration parameter which should currently result in exactly one match.
+        /// </summary>
+        [TestMethod]
+        public void GetFilteredProgramFilesChildItem()
+        {
+            IDirectoryBrowser filterReferenceItem = null;
+            int iCnt = 0;
+            foreach (var item in ShellBrowser.GetChildItems(KF_IID.ID_FOLDERID_ProgramFiles))
+            {
+                Assert.IsTrue(item != null);
+                filterReferenceItem = item;
+                iCnt++;
+            }
+
+            // Filtering for an arbitrary item in the programm files folder should yield
+            // a collection with one item (assuming that all item names are unique)
+            int iCntFiltered = 0;
+            foreach (var item in ShellBrowser.GetChildItems(KF_IID.ID_FOLDERID_ProgramFiles,
+                                                            filterReferenceItem.Name))
+            {
+                Assert.IsTrue(item != null);
+                iCntFiltered++;
+            }
+
+            Assert.IsTrue(iCntFiltered == 1);
         }
 
         /// <summary>

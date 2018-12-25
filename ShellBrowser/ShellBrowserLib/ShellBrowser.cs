@@ -181,7 +181,7 @@
         /// <param name="labelName"></param>
         /// <param name="name"></param>
         /// <returns></returns>
-        public static IDirectoryBrowser Create(string parseName,
+        private static IDirectoryBrowser Create(string parseName,
                                                string name,
                                                string labelName)
         {
