@@ -35,7 +35,7 @@
 
         /// <summary>
         /// Allows a client to determine the contents of a folder by creating an item identifier
-        /// enumeration object and returning its IEnumIDList interface. 
+        /// enumeration object and returning its <see cref="IEnumIDList"/> interface. 
         /// Return value: error code, if any
         /// </summary>
         /// <param name="hwnd">If user input is required to perform the enumeration,

@@ -75,7 +75,9 @@
         ENABLE_ASYNC = 0x08000,
 
         /// <summary>
-        /// Windows 7 and later. Include hidden system items in the enumeration. This value does not include hidden non-system items. (To include hidden non-system items, use SHCONTF_INCLUDEHIDDEN.)
+        /// Windows 7 and later. Include hidden system items in the enumeration.
+        /// This value does not include hidden non-system items.
+        /// (To include hidden non-system items, use <see cref="INCLUDEHIDDEN"/>.)
         /// </summary>
         INCLUDESUPERHIDDEN = 0x10000
     }
