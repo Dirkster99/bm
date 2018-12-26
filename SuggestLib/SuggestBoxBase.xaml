@@ -27,7 +27,7 @@
 
         <Border Name="Border"
                 Background="{DynamicResource {x:Static reskeys:ResourceKeys.ControlInputBackgroundKey}}"
-                BorderBrush="{DynamicResource {x:Static reskeys:ResourceKeys.ControlInputBorderKey}}" 
+                BorderBrush="{TemplateBinding BorderBrush}" 
                 BorderThickness="{TemplateBinding BorderThickness}"
                 Padding="{TemplateBinding Padding}"
                 SnapsToDevicePixels="true"
@@ -48,9 +48,10 @@
                        Focusable="False"
                        StaysOpen="True"
                     >
-                    <Border BorderBrush="{TemplateBinding BorderBrush}"
+                    <Border BorderBrush="{TemplateBinding PopupBorderBrush}"
+                            BorderThickness="{TemplateBinding PopupBorderThickness}"
                             Background="{DynamicResource {x:Static reskeys:ResourceKeys.ControlPopupBackgroundBrushKey}}"  
-                            BorderThickness="1">
+                            >
                         <Grid x:Name="PART_ResizeableGrid" Background="Transparent">
                             <Grid.RowDefinitions>
                                 <RowDefinition Height="*"/>
@@ -108,7 +109,9 @@
         <Setter Property="VerticalContentAlignment" Value="Center" />
         <Setter Property="Foreground" Value="{DynamicResource {x:Static reskeys:ResourceKeys.ControlTextBrushKey}}"/>
         <Setter Property="Background" Value="{DynamicResource {x:Static reskeys:ResourceKeys.ControlInputBackgroundKey}}"/>
-        <Setter Property="BorderThickness" Value="1" />
+        <Setter Property="BorderThickness" Value="0" />
+        <Setter Property="PopupBorderBrush" Value="{DynamicResource {x:Static reskeys:ResourceKeys.ControlInputBorderKey}}"/>
+        <Setter Property="PopupBorderThickness" Value="1"/>
         <Setter Property="Padding" Value="0"/>
         <Setter Property="AllowDrop" Value="true"/>
         <Setter Property="FocusVisualStyle" Value="{x:Null}"/>

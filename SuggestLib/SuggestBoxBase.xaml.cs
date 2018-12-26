@@ -8,6 +8,7 @@
     using System.Windows.Controls;
     using System.Windows.Controls.Primitives;
     using System.Windows.Input;
+    using System.Windows.Media;
 
     /// <summary>
     /// User update Suggestions when TextChangedEvent raised.
@@ -40,33 +41,71 @@
         protected bool _PopUpIsCancelled = false;
         private bool _prevState;
 
-        public static readonly DependencyProperty DisplayMemberPathProperty = DependencyProperty.Register(
-                    "DisplayMemberPath", typeof(string), typeof(SuggestBoxBase),
+        /// <summary>
+        /// Implements the backing store of the <see cref="DisplayMemberPath"/> dependency property.
+        /// </summary>
+        public static readonly DependencyProperty DisplayMemberPathProperty =
+            DependencyProperty.Register("DisplayMemberPath", typeof(string), typeof(SuggestBoxBase),
                     new PropertyMetadata("Header"));
 
-        public static readonly DependencyProperty ValuePathProperty = DependencyProperty.Register(
-                    "ValuePath", typeof(string), typeof(SuggestBoxBase),
+        /// <summary>
+        /// Implements the backing store of the <see cref="Value"/> dependency property.
+        /// </summary>
+        public static readonly DependencyProperty ValuePathProperty =
+            DependencyProperty.Register("ValuePath", typeof(string), typeof(SuggestBoxBase),
                     new PropertyMetadata("Value"));
 
-        public static readonly DependencyProperty SuggestionsProperty = DependencyProperty.Register(
-            "Suggestions", typeof(IList<object>), typeof(SuggestBoxBase),
+        /// <summary>
+        /// Implements the backing store of the <see cref="Suggestions"/> dependency property.
+        /// </summary>
+        public static readonly DependencyProperty SuggestionsProperty =
+            DependencyProperty.Register("Suggestions", typeof(IList<object>), typeof(SuggestBoxBase),
             new PropertyMetadata(null, OnSuggestionsChanged));
 
+        /// <summary>
+        /// Implements the backing store of the <see cref="HeaderTemplate"/> dependency property.
+        /// </summary>
         public static readonly DependencyProperty HeaderTemplateProperty =
             HeaderedItemsControl.HeaderTemplateProperty.AddOwner(typeof(SuggestBoxBase));
 
+        /// <summary>
+        /// Implements the backing store of the <see cref="IsPopupOpened"/> dependency property.
+        /// </summary>
         public static readonly DependencyProperty IsPopupOpenedProperty =
             DependencyProperty.Register("IsPopupOpened", typeof(bool),
             typeof(SuggestBoxBase), new UIPropertyMetadata(false, OnIsPopUpOpenChanged));
 
+        /// <summary>
+        /// Implements the backing store of the <see cref="Hint"/> dependency property.
+        /// </summary>
         public static readonly DependencyProperty HintProperty =
-            DependencyProperty.Register("Hint", typeof(string), typeof(SuggestBoxBase), new PropertyMetadata(""));
+            DependencyProperty.Register("Hint", typeof(string),
+                typeof(SuggestBoxBase), new PropertyMetadata(""));
 
+        /// <summary>
+        /// Implements the backing store of the <see cref="IsHintVisible"/> dependency property.
+        /// </summary>
         public static readonly DependencyProperty IsHintVisibleProperty =
             DependencyProperty.Register("IsHintVisible", typeof(bool), typeof(SuggestBoxBase), new PropertyMetadata(true));
 
-        public static readonly RoutedEvent ValueChangedEvent = EventManager.RegisterRoutedEvent("ValueChanged",
-          RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(SuggestBoxBase));
+        public static readonly RoutedEvent ValueChangedEvent =
+            EventManager.RegisterRoutedEvent("ValueChanged",
+                  RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(SuggestBoxBase));
+
+        /// <summary>
+        /// Implements the backing store of the <see cref="PopupBorderBrush"/> dependency property.
+        /// </summary>
+        public static readonly DependencyProperty PopupBorderBrushProperty =
+            DependencyProperty.Register("PopupBorderBrush", typeof(Brush),
+                typeof(SuggestBoxBase),
+                new PropertyMetadata(new SolidColorBrush(Color.FromArgb(00, 00, 00, 00))));
+
+        /// <summary>
+        /// Implements the backing store of the <see cref="PopupBorderThickness"/> dependency property.
+        /// </summary>
+        public static readonly DependencyProperty PopupBorderThicknessProperty =
+            DependencyProperty.Register("PopupBorderThickness", typeof(Thickness),
+                typeof(SuggestBoxBase), new PropertyMetadata(default(Thickness)));
         #endregion fields
 
         #region Constructor
@@ -149,7 +188,8 @@
         }
 
         /// <summary>
-        /// Gets/sets the Watermark Hint that is shown if the user has not typed anything, yet. 
+        /// Gets/sets the Watermark Hint that is shown if the user has not typed anything, yet,
+        /// and if <see cref="IsHintVisible"/> is consfigured accordingly.
         /// </summary>
         public string Hint
         {
@@ -158,12 +198,33 @@
         }
 
         /// <summary>
-        /// Gets/sets whether popup portion of suggestion box is currently visible or not.
+        /// Gets/sets whether Watermark in the textbox portion of suggestion box
+        /// is currently visible or not.
         /// </summary>
         public bool IsHintVisible
         {
             get { return (bool)GetValue(IsHintVisibleProperty); }
             set { SetValue(IsHintVisibleProperty, value); }
+        }
+
+        /// <summary>
+        /// Gets/sets the <see cref="Brush"/> of the border in the popup
+        /// of the suggestion box.
+        /// </summary>
+        public Brush PopupBorderBrush
+        {
+            get { return (Brush)GetValue(PopupBorderBrushProperty); }
+            set { SetValue(PopupBorderBrushProperty, value); }
+        }
+
+        /// <summary>
+        /// Gets/sets the <see cref="Thickness"/> of the border in the popup
+        /// of the suggestion box.
+        /// </summary>
+        public Thickness PopupBorderThickness
+        {
+            get { return (Thickness)GetValue(PopupBorderThicknessProperty); }
+            set { SetValue(PopupBorderThicknessProperty, value); }
         }
         #endregion
 
