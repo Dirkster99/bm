@@ -92,9 +92,7 @@
             foreach (var item in ShellBrowser.GetChildItems(KF_IID.ID_FOLDERID_ProgramFiles))
             {
                 Assert.IsTrue(item != null);
-
-                if (filterReferenceItem == null)
-                    filterReferenceItem = item;
+                filterReferenceItem = item;
 
                 iCnt++;
             }

@@ -487,7 +487,8 @@
 
         /// <summary>
         /// Determines if a directory (special or not) exists at the givem path
-        /// (path can be a formatted as special path KF_IDD).
+        /// (path can be formatted as special path KF_IDD) and returns <paramref name="pathItems"/>
+        /// if path was a sequence of Windows shell named items (eg 'Libraries\Music').
         /// </summary>
         /// <param name="path"></param>
         /// <param name="pathItems"></param>
@@ -501,11 +502,18 @@
 
             if (ShellHelpers.IsSpecialPath(path) == ShellHelpers.SpecialPath.IsSpecialPath)
             {
-                // translate KF_IID into file system path and check if it exists
-                string fs_path = KnownFolderHelper.GetKnownFolderPath(path);
+                try
+                {
+                    // translate KF_IID into file system path and check if it exists
+                    string fs_path = KnownFolderHelper.GetKnownFolderPath(path);
 
-                if (fs_path != null)
-                    return System.IO.Directory.Exists(fs_path);
+                    if (fs_path != null)
+                        return System.IO.Directory.Exists(fs_path);
+                }
+                catch
+                {
+                    return false;
+                }
 
                 return false;
             }
@@ -514,11 +522,11 @@
                 if (path.Length < 2)
                     return false;
 
-                if ((path[0] == '\\' && path[1] == '\\') || path[1] == ':')
-                    return System.IO.Directory.Exists(path);
-
                 try
                 {
+                    if ((path[0] == '\\' && path[1] == '\\') || path[1] == ':')
+                        return System.IO.Directory.Exists(path);
+
                     if (path.Length > 1)
                         path = path.TrimEnd('\\');
 
@@ -540,14 +548,13 @@
                         if (i > 0)
                             parentPath = pathItems[i - 1].PathShell;
 
-                        foreach (var item in ShellBrowser.GetChildItems(parentPath))
+                        var subList = ShellBrowser.GetChildItems(parentPath, pathNames[i]);
+                        if (subList.Any())
                         {
-                            if (string.Compare(item.Name, pathNames[i], true) == 0)
-                            {
-                                pathItems[i] = item;
-                                break;
-                            }
+                            pathItems[i] = subList.First();
                         }
+                        else
+                            return false;
                     }
 
                     // This path exists as sequence of localized names of windows shell items

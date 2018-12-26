@@ -50,11 +50,12 @@
                     else
                     {
                         var parentDir = input.Substring(0, sepIdx);
+                        var searchMask = input.Substring(sepIdx+1) + "*";
 
                         // Win shell path folder
                         path = null;
                         if (ShellBrowserLib.ShellBrowser.DirectoryExists(parentDir, out path))
-                            return ListChildren(path);
+                            return ListChildren(path, searchMask);
                     }
                 }
             }
@@ -66,8 +67,10 @@
         /// Gets a list of child elements (if any available) of the list item in the array.
         /// </summary>
         /// <param name="path"></param>
+        /// <param name="searchMask"></param>
         /// <returns></returns>
-        private static Task<IList<object>> ListChildren(IDirectoryBrowser[] path)
+        private static Task<IList<object>> ListChildren(IDirectoryBrowser[] path,
+                                                        string searchMask = null)
         {
             var dirPath = path[path.Length - 1];
 
@@ -76,7 +79,7 @@
             for (int i = 1; i < path.Length; i++)
                 namedPath = namedPath + '\\' + path[i].Name;
 
-            foreach (var item in ShellBrowserLib.ShellBrowser.GetChildItems(dirPath.PathShell))
+            foreach (var item in ShellBrowserLib.ShellBrowser.GetChildItems(dirPath.PathShell, searchMask))
             {
                 Items.Add(new { Header = item.Label, Value = namedPath + '\\' + item.Name });
             }
