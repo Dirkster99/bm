@@ -5,50 +5,34 @@
 
     internal class FilterMask
     {
+        #region fields
+        private readonly string _fileMask;
+        private readonly bool _forceSlashCheck;
+        private string _pattern;
+        private Regex _regexPattern;
+        #endregion fields
+
         #region ctors
         /// <summary>
-        /// Class constructor
+        /// Parameterized class constructor.
         /// </summary>
-        public FilterMask()
+        /// <param name="fileMask"></param>
+        /// <param name="forceSlashCheck"></param>
+        public FilterMask(string fileMask,
+                          bool forceSlashCheck = false)
+            : this()
+        {
+            _fileMask = fileMask;
+            _forceSlashCheck = forceSlashCheck;
+        }
+
+        /// <summary>
+        /// Hidden class constructor
+        /// </summary>
+        protected FilterMask()
         {
         }
         #endregion ctors
-
-        /// <summary>
-        /// Determine whether filename matches a regular expression
-        /// specified in <paramref name="fileMask"/> ( * and ? supported) or not.
-        /// </summary>
-        /// <param name="fileName"></param>
-        /// <param name="fileMask"></param>
-        /// <returns></returns>
-        public bool MatchFileMask(string fileName, string fileMask)
-        {
-            return MatchFileMask(fileName, fileMask, false);
-        }
-
-        /// <summary>
-        /// Determine whether filename matches a regular expression
-        /// specified in <paramref name="fileMasks"/> ( * and ? supported) or not.
-        /// 
-        /// The <paramref name="fileMasks"/> parameter can contain more than 1 regular
-        /// expression by delimiting each expression with ',' or ';' character.
-        /// </summary>
-        /// <param name="fileName"></param>
-        /// <param name="fileMasks">List of filter parameters.</param>
-        /// <returns></returns>
-        public bool MatchFileMasks(string fileName, string fileMasks)
-        {
-            string[] fileMaskList = fileMasks.Split(new char[] { ',', ';' });
-
-            foreach (string fileMask in fileMaskList)
-            {
-                if (MatchFileMask(fileName, fileMask))
-                    return true;
-
-            }
-
-            return false;
-        }
 
         /// <summary>
         /// Determine whether filename matches a regular expression
@@ -60,17 +44,21 @@
         /// <param name="fileMask"></param>
         /// <param name="forceSlashCheck"></param>
         /// <returns></returns>
-        public bool MatchFileMask(string fileName, string fileMask, bool forceSlashCheck)
+        public bool MatchFileMask(string fileName)
         {
-            if (fileName.Equals(fileMask, StringComparison.InvariantCultureIgnoreCase))
+            if (fileName.Equals(_fileMask, StringComparison.InvariantCultureIgnoreCase))
                 return true;
 
-            if (fileMask == "*.*" || fileMask == "*" && !forceSlashCheck)
+            if (_fileMask == "*.*" || _fileMask == "*" && _forceSlashCheck == false)
                 return true;
 
-            string pattern = constructFileMaskRegexPattern(fileMask, forceSlashCheck);
+            if (_pattern == null)
+            {
+                _pattern = constructFileMaskRegexPattern(_fileMask, _forceSlashCheck);
+                _regexPattern = new Regex(_pattern, RegexOptions.IgnoreCase);
+            }
 
-            return new Regex(pattern, RegexOptions.IgnoreCase).IsMatch(fileName);
+            return _regexPattern.IsMatch(fileName);
         }
 
         /// <summary>

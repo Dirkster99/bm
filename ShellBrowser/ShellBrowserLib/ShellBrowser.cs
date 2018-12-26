@@ -231,11 +231,11 @@
         /// <paramref name="folderParseName"/> item.
         /// </summary>
         /// <param name="folderParseName">Is the parse name that should be used to emit child items for.</param>
-        /// <param name="searchName">Optional name of an item that should be filtered
+        /// <param name="searchMask">Optional name of an item that should be filtered
         /// in case insensitive fashion when searching for a certain child rather than all children.</param>
         /// <returns>returns each item as <see cref="IDirectoryBrowser"/> object</returns>
         public static IEnumerable<IDirectoryBrowser> GetChildItems(string folderParseName,
-                                                                   string searchName = null)
+                                                                   string searchMask = null)
         {
             if (string.IsNullOrEmpty(folderParseName) == true)
                 yield break;
@@ -302,8 +302,8 @@
                     yield break;
 
                 FilterMask filter = null;
-                if (searchName != null)
-                    filter = new FilterMask();
+                if (searchMask != null)
+                    filter = new FilterMask(searchMask);
 
                 uint fetched, count = 0;
                 IntPtr apidl = default(IntPtr);
@@ -336,7 +336,7 @@
                         // Skip this item if search parameter is set and this appears to be a non-match
                         if (filter != null)
                         {
-                            if (filter.MatchFileMask(name, searchName) == false)
+                            if (filter.MatchFileMask(name) == false)
                                 continue;
                         }
 
