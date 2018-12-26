@@ -10,6 +10,10 @@
     xmlns:behav="clr-namespace:BmLib.Behaviors"
     xmlns:sbox="clr-namespace:SuggestLib;assembly=SuggestLib"
    >
+    <ResourceDictionary.MergedDictionaries>
+        <ResourceDictionary Source="/BmLib;component/Controls/BreadcrumbSwitchStyle.xaml" />
+    </ResourceDictionary.MergedDictionaries>
+    
     <Style TargetType="{x:Type ctrls:Breadcrumb}">
         <Setter Property="BorderBrush" Value="{DynamicResource {x:Static reskeys:ResourceKeys.ControlBorderBrushKey}}"/>
         <Setter Property="BorderThickness" Value="1"/>
@@ -20,66 +24,7 @@
              because Window may be resized to a small portion of its normal size -->
         <Setter Property="MinWidth" Value="120" />
         <Setter Property="MinHeight" Value="21" />
-        <Setter Property="SwitchTemplate">
-            <Setter.Value>
-                <ControlTemplate TargetType="{x:Type bc:Switch}">
-                    <ControlTemplate.Resources>
-                        <conv:BoolToVisibilityConverter x:Key="btv" />
-                        <conv:FlipBoolToVisibilityConverter x:Key="fbtv" />
-                    </ControlTemplate.Resources>
-
-                    <Border BorderBrush="{TemplateBinding BorderBrush}"
-                            BorderThickness="{TemplateBinding BorderThickness}"
-                            >
-                        <bc:LockableToggleButton x:Name="PART_Toggle" 
-                            Grid.Column="0"
-                            Padding="1,0"
-                            VerticalAlignment="Stretch"
-                            HorizontalAlignment="Stretch"
-                            VerticalContentAlignment="Stretch"
-                            HorizontalContentAlignment="Stretch"
-                            IsChecked="{Binding IsSwitchOn, RelativeSource={RelativeSource TemplatedParent}, Mode=TwoWay}" 
-                            Focusable="False"
-                            Template="{DynamicResource {x:Static reskeys:ResourceKeys.BlankButton}}"
-                            Background="Transparent"
-                            CanToggle="{TemplateBinding CanSwitchContent}"
-                            >
-                            <Grid>
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="Auto" />
-                                    <ColumnDefinition Width="*" />
-                                </Grid.ColumnDefinitions>
-
-                                <!-- Implements the left most button that behaves like a toggle button 
-                                     to switch the Switch back and forth -->
-                                <bc:HotTrack Grid.Column="0"
-                                 x:Name="PART_ToggleHotTrack"
-                                 Width="{Binding ActualHeight, ElementName=PART_ToggleHotTrack}"
-                                 IsEnabled="{TemplateBinding CanSwitchContent}"
-                                 >
-                                    <ContentControl ContentTemplate="{TemplateBinding HeaderTemplate}"
-                                        Content="{TemplateBinding Header}" Margin="2" />
-                                </bc:HotTrack>
-
-                                <Grid Grid.Column="1" Margin="0">
-                                    <ContentPresenter 
-                                        x:Name="PART_ContentOn"
-                                        Content="{TemplateBinding ContentOn}" 
-                                        Visibility="{Binding IsSwitchOn,
-                                            RelativeSource={RelativeSource TemplatedParent}, Converter={StaticResource btv},Mode=OneWay}" />
-
-                                    <ContentPresenter
-                                        x:Name="PART_ContentOff"
-                                        Content="{TemplateBinding ContentOff}" 
-                                        Visibility="{Binding IsSwitchOn,
-                                                    RelativeSource={RelativeSource TemplatedParent}, Converter={StaticResource fbtv},Mode=OneWay}" />
-                                </Grid>
-                            </Grid>
-                        </bc:LockableToggleButton>
-                    </Border>
-                </ControlTemplate>
-            </Setter.Value>
-        </Setter>
+        <Setter Property="SwitchStyle" Value="{StaticResource {x:Static reskeys:ResourceKeys.BreadcrumbSwitchStyleKey}}"/>
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type ctrls:Breadcrumb}">
@@ -132,7 +77,7 @@
 
                                 <bc:Switch x:Name="PART_Switch"
                                            Header="{TemplateBinding SwitchHeader}"
-                                           Template="{TemplateBinding SwitchTemplate}"
+                                           Style="{StaticResource {x:Static reskeys:ResourceKeys.BreadcrumbSwitchStyleKey}}"
                                            IsSwitchOn="{Binding IsSwitchOn,RelativeSource={RelativeSource AncestorType={x:Type bc:Breadcrumb}},Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
                                            VerticalAlignment="Center" VerticalContentAlignment="Center"
                                            HorizontalAlignment="Stretch" HorizontalContentAlignment="Stretch"

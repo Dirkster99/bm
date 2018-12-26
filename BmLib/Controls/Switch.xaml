@@ -3,9 +3,7 @@
 
     xmlns:bc="clr-namespace:BmLib.Controls"
     xmlns:conv="clr-namespace:BmLib.Converters"
-    xmlns:reskeys="clr-namespace:BmLib.Themes"
     >
-
     <ControlTemplate x:Key="SwitchTemplateKey" TargetType="{x:Type bc:Switch}">
         <ControlTemplate.Resources>
             <conv:FlipBoolToVisibilityCollapsedConverter x:Key="fbtvc" />
@@ -23,7 +21,7 @@
         </Grid>
     </ControlTemplate>
 
-    <Style TargetType="{x:Type bc:Switch}">
+    <Style TargetType="{x:Type bc:Switch}" x:Key="{x:Type bc:Switch}">
         <Setter Property="Template" Value="{StaticResource SwitchTemplateKey}" />
         <Setter Property="Focusable" Value="False" />
     </Style>

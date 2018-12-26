@@ -63,11 +63,11 @@
                 typeof(Breadcrumb), new PropertyMetadata(true));
 
         /// <summary>
-        /// Backing store of the <see cref="SwitchTemplate"/> dependency property.
+        /// Backing store of the <see cref="SwitchStyle"/> dependency property.
         /// </summary>
-        public static readonly DependencyProperty SwitchTemplateProperty =
-            DependencyProperty.Register("SwitchTemplate",
-                typeof(ControlTemplate), typeof(Breadcrumb), new PropertyMetadata(null));
+        public static readonly DependencyProperty SwitchStyleProperty =
+            DependencyProperty.Register("SwitchStyle", typeof(Style),
+                typeof(Breadcrumb), new PropertyMetadata(null));
         #endregion Switch DPs
 
         #region Tree dependency properties
@@ -249,15 +249,15 @@
         }
 
         /// <summary>
-        /// Gets/sets the control template for the <see cref="Switch"/> control implemented
+        /// Gets/sets the style for the <see cref="Switch"/> control implemented
         /// inside the <see cref="Breadcrumb"/> control. The <see cref="Switch"/> control
         /// is used to switch between the Tree and the <see cref="SuggestBox"/>  view if
         /// the <see cref="Breadcrumb"/> control should support both views.
         /// </summary>
-        public ControlTemplate SwitchTemplate
+        public Style SwitchStyle
         {
-            get { return (ControlTemplate)GetValue(SwitchTemplateProperty); }
-            set { SetValue(SwitchTemplateProperty, value); }
+            get { return (Style)GetValue(SwitchStyleProperty); }
+            set { SetValue(SwitchStyleProperty, value); }
         }
         #endregion DPs
 

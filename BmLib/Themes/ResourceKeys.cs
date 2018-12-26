@@ -188,11 +188,19 @@
         public static readonly ComponentResourceKey ICON_Close = new ComponentResourceKey(typeof(ResourceKeys), "ICON_Close");
         #endregion Refresh Cancel Button
 
+        /// <summary>
+        /// Defines the style of the progress bar shown inside the Breadcrumb control.
+        /// </summary>
         public static readonly ComponentResourceKey BreadcrumbProgressBarStyleKey = new ComponentResourceKey(typeof(ResourceKeys), "BreadcrumbProgressBarStyleKey");
 
         /// <summary>
         /// Determines the foreground color of the ProgressBar display.
         /// </summary>
         public static readonly ComponentResourceKey HotTrackBrushKey = new ComponentResourceKey(typeof(ResourceKeys), "HotTrackBrushKey");
+
+        /// <summary>
+        /// Defines the style of Switch control inside the Breadcrumb control.
+        /// </summary>
+        public static readonly ComponentResourceKey BreadcrumbSwitchStyleKey = new ComponentResourceKey(typeof(ResourceKeys), "BreadcrumbSwitchStyleKey");
     }
 }
