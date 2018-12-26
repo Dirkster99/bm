@@ -441,13 +441,13 @@
             set { SetValue(TaskQueueProcessingProperty, value); }
         }
 
-        private SuggestBoxBase Control_SuggestBox { get; set; }
-
-        private Switch Control_Switch { get; set; }
-
         private DropDownList RootDropDownList { get; set; }
 
         private BreadcrumbTree Control_Tree { get; set; }
+
+        private Switch Control_Switch { get; set; }
+
+        private SuggestBox Control_SuggestBox { get; set; }
         #endregion properties
 
         #region methods
@@ -457,10 +457,11 @@
         public override void OnApplyTemplate()
         {
             base.OnApplyTemplate();
-            RootDropDownList = this.Template.FindName(PART_RootDropDownList, this) as DropDownList;   // bexp
-            Control_Switch = this.Template.FindName(PART_Switch, this) as Switch;                  // switch
-            Control_SuggestBox = this.Template.FindName(PART_SuggestBox, this) as SuggestBoxBase; // sbox
+
+            RootDropDownList = this.Template.FindName(PART_RootDropDownList, this) as DropDownList;
             Control_Tree = this.Template.FindName(PART_BreadcrumbTree, this) as BreadcrumbTree;
+            Control_Switch = this.Template.FindName(PART_Switch, this) as Switch;
+            Control_SuggestBox = this.Template.FindName(PART_SuggestBox, this) as SuggestBox;
 
             if (Control_SuggestBox != null)
             {
@@ -578,7 +579,9 @@
                         }
                         else
                         {
-                            _previousLocation = _BreadcrumbModel.UpdateSuggestPath();
+                            object location;
+                            _previousLocation = _BreadcrumbModel.UpdateSuggestPath(out location);
+                            Control_SuggestBox.RootItem = location;
                         }
                     }
                     else

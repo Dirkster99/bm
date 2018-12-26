@@ -17,8 +17,12 @@
         protected static readonly new log4net.ILog logger = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
 
         #region fields
-        public static readonly DependencyProperty RootItemProperty = DependencyProperty.Register("RootItem",
-            typeof(object), typeof(SuggestBox), new PropertyMetadata(null));
+        /// <summary>
+        /// Implements the backing property of the <see cref="RootItem"/> dependency property.
+        /// </summary>
+        public static readonly DependencyProperty RootItemProperty =
+            DependencyProperty.Register("RootItem", typeof(object),
+                typeof(SuggestBox), new PropertyMetadata(null));
 
         public static readonly DependencyProperty HierarchyHelperProperty =
             DependencyProperty.Register("HierarchyHelper", typeof(IHierarchyHelper),
@@ -64,7 +68,13 @@
         }
 
         /// <summary>
-        /// Assigned by Breadcrumb
+        /// Gets/sets a dependency property that holds an object that represents the current
+        /// location. This location object is also handed down to the SuggestedSources
+        /// object to make finding the next list of suggestions a simple matter of retrieving
+        /// the children of the current the rootitem.
+        /// 
+        /// This property should be assigned by the client application (eg. Breadcrumb) and be
+        /// updated throughout the browsing with the suggestions.
         /// </summary>
         public object RootItem
         {
@@ -126,14 +136,14 @@
             {
                 var suggestSources = SuggestSources;
                 var hierarchyHelper = HierarchyHelper;
-                string text = Text;
-                object data = RootItem;
-                IsHintVisible = String.IsNullOrEmpty(text);
+                string input = Text;
+                object location = RootItem;
+                IsHintVisible = String.IsNullOrEmpty(input);
 
                 if (IsEnabled == true)
                 {
-                    this._PopUpIsCancelled = false;
-                    this._suggestionIsConsumed = false;
+                    _PopUpIsCancelled = false;
+                    _suggestionIsConsumed = false;
                 }
 
                 if (IsEnabled && suggestSources != null)
@@ -143,7 +153,8 @@
                         List<Task<IList<object>>> tasks = new List<Task<IList<object>>>();
                         foreach (var item in suggestSources)
                         {
-                            tasks.Add(item.SuggestAsync(data, text, hierarchyHelper));
+                            // Query suggestion source for suggestions on this input
+                            tasks.Add(item.SuggestAsync(location, input, hierarchyHelper));
                         }
 
                         //// Not sure why but this LINQ statement generates 2 queries - doubling the effort
@@ -154,13 +165,13 @@
 
                         return tasks.SelectMany(tsk => tsk.Result).Distinct().ToList();
                     }
-                        ).ContinueWith(
-                            (pTask) =>
-                            {
-                                if (!pTask.IsFaulted)
-                                    this.SetValue(SuggestionsProperty, pTask.Result);
+                    ).ContinueWith(
+                        (pTask) =>
+                        {
+                            if (!pTask.IsFaulted)
+                                this.SetValue(SuggestionsProperty, pTask.Result);
 
-                            }, TaskScheduler.FromCurrentSynchronizationContext());
+                        }, TaskScheduler.FromCurrentSynchronizationContext());
                 }
             }
             catch (Exception exp)

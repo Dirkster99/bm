@@ -36,17 +36,17 @@
         /// 2) An empty string, if the current path cannot directly be mapped into the filesystem
         ///    (eg: 'Libraries/Music').
         /// </summary>
-        /// <param name="currentPath"></param>
+        /// <param name="location"></param>
         /// <returns></returns>
-        string GetFileSystemPath();
+        string GetFileSystemPath(out IDirectoryBrowser location);
 
         /// <summary>
         /// Gets a path that contains either the real file system location
         /// or a location based on Named items along the current path (to avoid using SpecialPathIDs).
         /// </summary>
-        /// <param name="currentPath"></param>
+        /// <param name="location"></param>
         /// <returns></returns>
-        string GetWinShellPath();
+        string GetWinShellPath(out IDirectoryBrowser location);
 
         /// <summary>
         /// Adds another <paramref name="item"/> as the last item in the current path.

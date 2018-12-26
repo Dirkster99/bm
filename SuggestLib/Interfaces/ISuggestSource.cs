@@ -16,11 +16,11 @@
         /// 
         /// The list of suggestion is empty if helper object is null.
         /// </summary>
-        /// <param name="data"></param>
-        /// <param name="input"></param>
+        /// <param name="location">Currently selected location.</param>
+        /// <param name="input">Text input to formulate string based path.</param>
         /// <param name="helper"></param>
         /// <returns></returns>
-        Task<IList<object>> SuggestAsync(object data,
+        Task<IList<object>> SuggestAsync(object location,
                                          string input,
                                          IHierarchyHelper helper);
     }

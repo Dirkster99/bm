@@ -448,16 +448,20 @@ namespace BreadcrumbTestLib.ViewModels.Breadcrumbs
         /// is switched from invisible to visible.
         /// </summary>
         /// <returns></returns>
-        string IBreadcrumbModel.UpdateSuggestPath()
+        string IBreadcrumbModel.UpdateSuggestPath(out object RootItem)
         {
+            RootItem = null;
             string path = string.Empty;
 
             if (_CurrentPath.Count > 0)
             {
-                path = _CurrentPath.GetFileSystemPath();
+                IDirectoryBrowser location;
+                path = _CurrentPath.GetFileSystemPath(out location);
 
                 if (string.IsNullOrEmpty(path))
-                    path = _CurrentPath.GetWinShellPath();
+                    path = _CurrentPath.GetWinShellPath(out location);
+
+                RootItem = location;
             }
 
             // Update path in bound textBox with value from currently selected item

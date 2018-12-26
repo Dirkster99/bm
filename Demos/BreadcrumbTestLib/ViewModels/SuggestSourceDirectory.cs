@@ -19,11 +19,11 @@
         /// that are associated to the <paramref name="input"/> string
         /// and given <paramref name="data"/> object.
         /// </summary>
-        /// <param name="data"></param>
-        /// <param name="input"></param>
+        /// <param name="location">Currently selected location.</param>
+        /// <param name="input">Text input to formulate string based path.</param>
         /// <param name="helper"></param>
         /// <returns></returns>
-        public Task<IList<object>> SuggestAsync(object data,
+        public Task<IList<object>> SuggestAsync(object location,
                                                 string input,
                                                 IHierarchyHelper helper)
         {

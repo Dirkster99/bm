@@ -81,10 +81,11 @@
         /// 2) An empty string, if the current path cannot directly be mapped into the filesystem
         ///    (eg: 'Libraries/Music').
         /// </summary>
-        /// <param name="currentPath"></param>
+        /// <param name="location"></param>
         /// <returns></returns>
-        public string GetFileSystemPath()
+        public string GetFileSystemPath(out IDirectoryBrowser location)
         {
+            location = null;
             string fileSystemPath = string.Empty;
 
             if (_CurrentPath.Count == 0)
@@ -102,7 +103,10 @@
             var fspath = lastElement.GetModel().PathFileSystem;
 
             if (ShellBrowser.IsTypeOf(fspath) == PathType.FileSystemPath)
+            {
+                location = lastElement.GetModel().Clone() as IDirectoryBrowser;
                 return fspath;
+            }
 
             return string.Empty;
         }
@@ -111,10 +115,11 @@
         /// Gets a path that contains either the real file system location
         /// or a location based on Named items along the current path (to avoid using SpecialPathIDs).
         /// </summary>
-        /// <param name="currentPath"></param>
+        /// <param name="location"></param>
         /// <returns></returns>
-        public string GetWinShellPath()
+        public string GetWinShellPath(out IDirectoryBrowser location)
         {
+            location = null;
             string path = string.Empty;
 
             // Skip showing the desktop in the string based path
@@ -127,6 +132,8 @@
                 path = path + (path.Length > 0 ? "\\" + _CurrentPath[i].ItemName :
                                                _CurrentPath[i].ItemName);
             }
+
+            location = _CurrentPath[_CurrentPath.Count - 1].GetModel().Clone() as IDirectoryBrowser;
 
             return path;
         }

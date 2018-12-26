@@ -26,6 +26,6 @@
         /// is switched from invisible to visible.
         /// </summary>
         /// <returns></returns>
-        string UpdateSuggestPath();
+        string UpdateSuggestPath(out object RootItem);
     }
 }
