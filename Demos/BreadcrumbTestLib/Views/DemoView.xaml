@@ -249,7 +249,7 @@
                     </ctrls:Breadcrumb.SwitchHeader>
                 </ctrls:Breadcrumb>
 
-                <Grid Grid.Row="1">
+                <!--Grid Grid.Row="1">
                     <TreeView DataContext="{Binding BreadcrumbController.BreadcrumbBrowser}" 
                               ItemsSource="{Binding BreadcrumbSubTree.Entries.All}"
                               Visibility="{Binding Path=IsChecked,ElementName=ShowTreeviewControl,Mode=OneWay, UpdateSourceTrigger=PropertyChanged,Converter={StaticResource BoolToVisibilityConverter}}"
@@ -282,19 +282,19 @@
                                                Grid.Column="1" >
                                         <TextBlock.ToolTip>
                                             <TextBlock FontFamily="Courier New">
-                                            <!-- Is true on the item that is at the far right of the breadcrumb path -->
+                                            - Is true on the item that is at the far right of the breadcrumb path -
                                             <TextBlock Text="              Selection.IsSelected: "><TextBlock Text="{Binding Selection.IsSelected}"/></TextBlock><LineBreak/>
                                             
-                                            <!-- Is true for items loaded initially in OverflowedAndRootItems list -->
+                                            - Is true for items loaded initially in OverflowedAndRootItems list -
                                             <TextBlock Text="                  Selection.IsRoot: "><TextBlock Text="{Binding Selection.IsRoot}"/></TextBlock><LineBreak/>
                                             <TextBlock Text="Selection.IsRootAndIsChildSelected: "><TextBlock Text="{Binding Selection.IsRootAndIsChildSelected}"/></TextBlock><LineBreak/>
                                             
-                                            <!-- Is true only for root elements with a selected child item in their path -->
+                                            - Is true only for root elements with a selected child item in their path -
                                             <TextBlock Text="         Selection.IsChildSelected: "><TextBlock Text="{Binding Selection.IsChildSelected}"/></TextBlock><LineBreak/>
                                             <TextBlock Text="            Selection.IsOverflowed: "><TextBlock Text="{Binding Selection.IsOverflowed}"/></TextBlock><LineBreak/>
                                             
-                                            <!-- Is this used at all? -->
-                                            <!-- Might be used to bind drop down list control IsOpen when it pops-open -->
+                                            - Is this used at all? -
+                                            - Might be used to bind drop down list control IsOpen when it pops-open -
                                             <TextBlock Text="                Entries.IsExpanded: "><TextBlock Text="{Binding Entries.IsExpanded}"/></TextBlock>
                                         </TextBlock>
                                     </TextBlock.ToolTip>
@@ -308,7 +308,7 @@
                             <Setter Property="IsExpanded" Value="{Binding Selection.IsChildSelected, Mode=OneWay,UpdateSourceTrigger=PropertyChanged}"  />
                             <Setter Property="IsSelected" Value="{Binding Selection.IsSelected, Mode=OneWay,UpdateSourceTrigger=PropertyChanged}"  />
 
-                            <!-- http://social.msdn.microsoft.com/Forums/en-US/wpf/thread/63696841-0358-4f7a-abe1-e6062518e3d6 -->
+                            - http://social.msdn.microsoft.com/Forums/en-US/wpf/thread/63696841-0358-4f7a-abe1-e6062518e3d6 -
                             <Setter Property="ThemeBehav:MergeStyleBehaviour.AutoMergeStyle" Value="True"/>
                         </Style>
                     </TreeView.ItemContainerStyle>
@@ -353,19 +353,19 @@
                                            Grid.Column="1" >
                                         <TextBlock.ToolTip>
                                             <TextBlock FontFamily="Courier New">
-                                            <!-- Is true on the item that is at the far right of the breadcrumb path -->
+                                            - Is true on the item that is at the far right of the breadcrumb path -
                                             <TextBlock Text="              Selection.IsSelected: "><TextBlock Text="{Binding Selection.IsSelected}"/></TextBlock><LineBreak/>
                                             
-                                            <!-- Is true for items loaded initially in OverflowedAndRootItems list -->
+                                            - Is true for items loaded initially in OverflowedAndRootItems list -
                                             <TextBlock Text="                  Selection.IsRoot: "><TextBlock Text="{Binding Selection.IsRoot}"/></TextBlock><LineBreak/>
                                             <TextBlock Text="Selection.IsRootAndIsChildSelected: "><TextBlock Text="{Binding Selection.IsRootAndIsChildSelected}"/></TextBlock><LineBreak/>
                                             
-                                            <!-- Is true only for root elements with a selected child item in their path -->
+                                            - Is true only for root elements with a selected child item in their path -
                                             <TextBlock Text="         Selection.IsChildSelected: "><TextBlock Text="{Binding Selection.IsChildSelected}"/></TextBlock><LineBreak/>
                                             <TextBlock Text="            Selection.IsOverflowed: "><TextBlock Text="{Binding Selection.IsOverflowed}"/></TextBlock><LineBreak/>
                                             
-                                            <!-- Is this used at all? -->
-                                            <!-- Might be used to bind drop down list control IsOpen when it pops-open -->
+                                            - Is this used at all? -
+                                            - Might be used to bind drop down list control IsOpen when it pops-open -
                                             <TextBlock Text="                Entries.IsExpanded: "><TextBlock Text="{Binding Entries.IsExpanded}"/></TextBlock>
                                         </TextBlock>
                                     </TextBlock.ToolTip>
@@ -380,7 +380,7 @@
                                 <Setter Property="Template">
                                     <Setter.Value>
                                         <ControlTemplate TargetType="{x:Type ListBoxItem}">
-                                            <!-- Show Seperator only if items are overflown -->
+                                            - Show Seperator only if items are overflown -
                                             <Separator HorizontalAlignment="Stretch" IsEnabled="False" />
                                         </ControlTemplate>
                                     </Setter.Value>
@@ -390,7 +390,7 @@
                     </Style>
                     </ListBox.ItemContainerStyle>
                 </ListBox>
-                </Grid>
+                </Grid-->
             </Grid>
         </Grid>
         
@@ -466,11 +466,11 @@
                         />
                 </Grid>
 
-                <CheckBox Content="Show TreeView Debug Control" Name="ShowTreeviewControl"
+                <!--CheckBox Content="Show TreeView Debug Control" Name="ShowTreeviewControl"
                           IsChecked="False" />
 
                 <CheckBox Content="Root (Overflowed) Items List" Name="ShowRootItemsOverflowList"
-                          IsChecked="False" />
+                          IsChecked="False" /-->
 
                 <CheckBox Content="Show BreadCrumb Control" Name="ShowBreadCrumbControl"
                           IsChecked="True" Margin="0,12,0,0" />

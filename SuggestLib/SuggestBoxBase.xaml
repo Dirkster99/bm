@@ -27,7 +27,7 @@
 
         <Border Name="Border"
                 Background="{DynamicResource {x:Static reskeys:ResourceKeys.ControlInputBackgroundKey}}"
-                BorderBrush="{TemplateBinding BorderBrush}" 
+                BorderBrush="{DynamicResource {x:Static reskeys:ResourceKeys.ControlInputBorderKey}}" 
                 BorderThickness="{TemplateBinding BorderThickness}"
                 Padding="{TemplateBinding Padding}"
                 SnapsToDevicePixels="true"
@@ -109,7 +109,6 @@
         <Setter Property="Foreground" Value="{DynamicResource {x:Static reskeys:ResourceKeys.ControlTextBrushKey}}"/>
         <Setter Property="Background" Value="{DynamicResource {x:Static reskeys:ResourceKeys.ControlInputBackgroundKey}}"/>
         <Setter Property="BorderThickness" Value="1" />
-        <Setter Property="BorderBrush" Value="{DynamicResource {x:Static reskeys:ResourceKeys.ControlInputBorderKey}}"/>
         <Setter Property="Padding" Value="0"/>
         <Setter Property="AllowDrop" Value="true"/>
         <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
