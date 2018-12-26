@@ -6,7 +6,7 @@
     xmlns:reskeys="clr-namespace:BmLib.Themes"
     >
 
-    <ControlTemplate x:Key="SwitchTemplate" TargetType="{x:Type bc:Switch}">
+    <ControlTemplate x:Key="SwitchTemplateKey" TargetType="{x:Type bc:Switch}">
         <ControlTemplate.Resources>
             <conv:FlipBoolToVisibilityCollapsedConverter x:Key="fbtvc" />
             <conv:BoolToVisibilityCollapsedConverter x:Key="btvc" />
@@ -23,64 +23,8 @@
         </Grid>
     </ControlTemplate>
 
-    <ControlTemplate x:Key="BreadcrumbSwitchTemplate" TargetType="{x:Type bc:Switch}">
-        <ControlTemplate.Resources>
-            <conv:BoolToVisibilityConverter x:Key="btv" />
-            <conv:FlipBoolToVisibilityConverter x:Key="fbtv" />
-        </ControlTemplate.Resources>
-
-        <Border BorderBrush="{TemplateBinding BorderBrush}"
-                BorderThickness="{TemplateBinding BorderThickness}"
-                >
-            <bc:LockableToggleButton x:Name="PART_Toggle" 
-                Grid.Column="0"
-                Padding="1,0"
-                VerticalAlignment="Stretch"
-                HorizontalAlignment="Stretch"
-                VerticalContentAlignment="Stretch"
-                HorizontalContentAlignment="Stretch"
-                IsChecked="{Binding IsSwitchOn, RelativeSource={RelativeSource TemplatedParent}, Mode=TwoWay}" 
-                Focusable="False"
-                Template="{DynamicResource {x:Static reskeys:ResourceKeys.BlankButton}}"
-                Background="Transparent"
-                CanToggle="{TemplateBinding CanSwitchContent}"
-                >
-                <Grid>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="Auto" />
-                        <ColumnDefinition Width="*" />
-                    </Grid.ColumnDefinitions>
-
-                    <!-- Implements the left most button that behaves like a toggle button 
-                         to switch the Switch back and forth -->
-                    <bc:HotTrack Grid.Column="0"
-                                 x:Name="PART_ToggleHotTrack"
-                                 Width="{Binding ActualHeight, ElementName=PART_ToggleHotTrack}"
-                                 IsEnabled="{TemplateBinding CanSwitchContent}"
-                                 >
-                        <ContentControl ContentTemplate="{TemplateBinding HeaderTemplate}"
-                                        Content="{TemplateBinding Header}" Margin="2" />
-                    </bc:HotTrack>
-
-                    <Grid Grid.Column="1" Margin="0">
-                        <ContentPresenter 
-                            x:Name="PART_ContentOn"
-                            Content="{TemplateBinding ContentOn}" 
-                            Visibility="{Binding IsSwitchOn,
-                                RelativeSource={RelativeSource TemplatedParent}, Converter={StaticResource btv},Mode=OneWay}" />
-
-                        <ContentPresenter x:Name="PART_ContentOff"
-                              Content="{TemplateBinding ContentOff}" 
-                              Visibility="{Binding IsSwitchOn,
-                                          RelativeSource={RelativeSource TemplatedParent}, Converter={StaticResource fbtv},Mode=OneWay}" />
-                    </Grid>
-                </Grid>
-            </bc:LockableToggleButton>
-        </Border>
-    </ControlTemplate>
-
     <Style TargetType="{x:Type bc:Switch}">
-        <Setter Property="Template" Value="{StaticResource SwitchTemplate}" />
+        <Setter Property="Template" Value="{StaticResource SwitchTemplateKey}" />
         <Setter Property="Focusable" Value="False" />
     </Style>
 

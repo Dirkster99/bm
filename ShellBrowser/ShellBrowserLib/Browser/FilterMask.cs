@@ -36,13 +36,11 @@
 
         /// <summary>
         /// Determine whether filename matches a regular expression
-        /// specified in <paramref name="fileMask"/> ( * and ? supported) or not.
+        /// specified in constructors parameters ( * and ? supported) or not.
         /// 
         /// Source: http://stackoverflow.com/questions/725341/c-file-mask
         /// </summary>
         /// <param name="fileName"></param>
-        /// <param name="fileMask"></param>
-        /// <param name="forceSlashCheck"></param>
         /// <returns></returns>
         public bool MatchFileMask(string fileName)
         {
