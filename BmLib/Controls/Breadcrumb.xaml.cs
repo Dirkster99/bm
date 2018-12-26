@@ -259,7 +259,7 @@
             get { return (Style)GetValue(SwitchStyleProperty); }
             set { SetValue(SwitchStyleProperty, value); }
         }
-        #endregion DPs
+        #endregion Switch DPs
 
         #region Tree dependency properties
         /// <summary>

@@ -4,13 +4,13 @@
     xmlns:ctrls="clr-namespace:BmLib.Controls"
     xmlns:uc="clr-namespace:BmLib.Controls.Breadcrumbs"
                     
-    xmlns:bc="clr-namespace:BmLib.Controls"
     xmlns:conv="clr-namespace:BmLib.Converters"
     xmlns:reskeys="clr-namespace:BmLib.Themes"
     xmlns:behav="clr-namespace:BmLib.Behaviors"
     xmlns:sbox="clr-namespace:SuggestLib;assembly=SuggestLib"
    >
     <ResourceDictionary.MergedDictionaries>
+        <!-- Define the style of the switch control inside the Breadcrumb control -->
         <ResourceDictionary Source="/BmLib;component/Controls/BreadcrumbSwitchStyle.xaml" />
     </ResourceDictionary.MergedDictionaries>
     
@@ -75,16 +75,16 @@
                                     VerticalAlignment="Bottom"
                                 />
 
-                                <bc:Switch x:Name="PART_Switch"
+                                <ctrls:Switch x:Name="PART_Switch"
                                            Header="{TemplateBinding SwitchHeader}"
                                            Style="{StaticResource {x:Static reskeys:ResourceKeys.BreadcrumbSwitchStyleKey}}"
-                                           IsSwitchOn="{Binding IsSwitchOn,RelativeSource={RelativeSource AncestorType={x:Type bc:Breadcrumb}},Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
+                                           IsSwitchOn="{Binding IsSwitchOn,RelativeSource={RelativeSource AncestorType={x:Type ctrls:Breadcrumb}},Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
                                            VerticalAlignment="Center" VerticalContentAlignment="Center"
                                            HorizontalAlignment="Stretch" HorizontalContentAlignment="Stretch"
                                            CanSwitchContent="{TemplateBinding IsSwitchEnabled}"
                                            Margin="0"
                                      >
-                                    <bc:Switch.ContentOn>
+                                    <ctrls:Switch.ContentOn>
                                         <!-- Show TreeView with RootDropDown Items -->
                                         <Grid>
                                             <Grid.ColumnDefinitions>
@@ -123,8 +123,8 @@
                                             <!-- Grid.Column="2" Is OverflowGap which is necessary to reach Switch
                                                  through click on right-most background of BreadcrumbTree -->
                                         </Grid>
-                                    </bc:Switch.ContentOn>
-                                    <bc:Switch.ContentOff>
+                                    </ctrls:Switch.ContentOn>
+                                    <ctrls:Switch.ContentOff>
                                         <Grid>
                                             <sbox:SuggestBox
                                                   x:Name="PART_SuggestBox"
@@ -145,8 +145,8 @@
                                             </sbox:SuggestBox>
 
                                         </Grid>
-                                    </bc:Switch.ContentOff>
-                                </bc:Switch>
+                                    </ctrls:Switch.ContentOff>
+                                </ctrls:Switch>
                             </Grid>
 
                             <!-- Cancel/Refesh Buttons -->
