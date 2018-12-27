@@ -128,16 +128,16 @@
         /// <param name="e"></param>
         protected override void OnTextChanged(TextChangedEventArgs e)
         {
-            logger.DebugFormat("{0}", (string.IsNullOrEmpty(Text) ? "" : Text));
+            logger.DebugFormat("{0}", (string.IsNullOrEmpty(this.Text) ? "" : this.Text));
 
             base.OnTextChanged(e);
 
             try
             {
-                var suggestSources = SuggestSources;
-                var hierarchyHelper = HierarchyHelper;
-                string input = Text;
-                object location = RootItem;
+                var suggestSources = this.SuggestSources;
+                var hierarchyHelper = this.HierarchyHelper;
+                string input = this.Text;
+                object location = this.RootItem;
                 IsHintVisible = String.IsNullOrEmpty(input);
 
                 if (IsEnabled == true)

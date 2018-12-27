@@ -388,7 +388,7 @@
                 if (IsPopupOpened)
                 {
                     _PopUpIsCancelled = true;
-                    SetPopUp(false, "OnPreviewKeyDown");
+                    SetPopUp(false, "ParentWindow_SizeChanged");
                     //e.Handled = true;
                 }
             }
@@ -439,29 +439,33 @@
                 {
                     ListBoxItem lbItem = e.OriginalSource as ListBoxItem;
 
+                    bool Eventhandled = false;
                     e.Handled = true;
                     switch (e.Key)
                     {
                         case Key.Enter:
                         case Key.Tab:
-                            //Handle in OnPreviewKeyDown
+                            //Handle in OnPreviewKeyDown of TextBox
                             break;
-                        case Key.Oem5:
-                            updateValueFromListBox(false);
-                            SetValue(TextProperty, Text + "\\");
-                            break;
+
                         case Key.Escape:
-                            this.Focus();
+                            Keyboard.Focus(this);
                             SetPopUp(false, "itemList.PreviewKeyDown");
+                            Eventhandled = true;
                             break;
-                        default: e.Handled = false; break;
+
+                        default:
+                            e.Handled = false;
+                            Eventhandled = true;
+                            break;
                     }
 
-                    if (e.Handled)
+                    // Close pop-up and update textbox with selected item from listbox
+                    if (Eventhandled == false)
                     {
                         Keyboard.Focus(this);
                         SetPopUp(false, "itemList.PreviewKeyDown");
-                        this.Select(Text.Length, 0); //Select last char
+                        this.Select(Text.Length, 0); // Select last char
                     }
                 }
             };

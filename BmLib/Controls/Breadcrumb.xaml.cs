@@ -10,6 +10,7 @@
     using System.Diagnostics;
     using System.Windows;
     using System.Windows.Controls;
+    using System.Windows.Controls.Primitives;
     using System.Windows.Input;
 
     /// <summary>
@@ -468,6 +469,12 @@
                 Control_SuggestBox.NewLocationRequestEvent += Control_SuggestBox_NewLocationRequestEvent;
             }
 
+            var Ctrl_CancelSuggestion = this.Template.FindName("PART_CancelSuggestion", this) as ButtonBase;
+            if (Ctrl_CancelSuggestion != null)
+            {
+                Ctrl_CancelSuggestion.Click += Ctrl_CancelSuggestion_Click;
+            }
+
             this.Loaded += Breadcrumb_Loaded;
             DataContextChanged += Breadcrumb_DataContextChanged;
         }
@@ -599,6 +606,22 @@
             }
 
             _SwitchBoxEditResult = null;
+        }
+
+        /// <summary>
+        /// Method executes when user clicks the cancel button in the SuggestionsBox view.
+        /// 
+        /// The editing is cancelled and switch flips back to previous visiblilty of TreeView.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void Ctrl_CancelSuggestion_Click(object sender, RoutedEventArgs e)
+        {
+            if (IsSwitchOn == false)
+            {
+                _SwitchBoxEditResult = new EditResult(EditPathResult.Cancel, string.Empty);
+                IsSwitchOn = true;
+            }
         }
 
         /// <summary>
