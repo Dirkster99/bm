@@ -226,6 +226,7 @@
                                  just the toggle button of the switch -->
                             <Border
                                 Visibility="{Binding Data.BreadcrumbController.BreadcrumbBrowser.EnableBreadcrumb,Mode=OneWay,UpdateSourceTrigger=PropertyChanged, Converter={StaticResource InvertedBoolToVisibilityConverter},Source={StaticResource AppDataContextProxy}}"
+                                ToolTip="Confirm editing (Enter)"
                                 Background="Transparent"
                                 BorderBrush="Transparent"
                                 BorderThickness="0"

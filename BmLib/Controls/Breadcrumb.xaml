@@ -162,7 +162,7 @@
                                         Style="{DynamicResource {x:Static reskeys:ResourceKeys.RefreshCancel_ButtonStyle}}"
                                         DataContext="{TemplateBinding TaskQueueProcessing}"
                                         Visibility="{Binding ElementName=PART_Switch, Path=IsSwitchOn,Converter={StaticResource BoolToVisibilityConverterNeg},UpdateSourceTrigger=PropertyChanged,Mode=OneWay}"                                        
-                                        ToolTip="Cancel Suggestions"
+                                        ToolTip="Cancel Editing (Esc)"
                                         Margin="3" Padding="0"
                                     >
                                         <Button.Background>
