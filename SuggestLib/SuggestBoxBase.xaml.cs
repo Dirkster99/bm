@@ -104,6 +104,13 @@
         public static readonly DependencyProperty PopupBorderThicknessProperty =
             DependencyProperty.Register("PopupBorderThickness", typeof(Thickness),
                 typeof(SuggestBoxBase), new PropertyMetadata(default(Thickness)));
+
+        /// <summary>
+        /// Implements the backing store of the <see cref="EnableSuggestions"/> dependency property.
+        /// </summary>
+        public static readonly DependencyProperty EnableSuggestionsProperty =
+            DependencyProperty.Register("EnableSuggestions",
+                typeof(bool), typeof(SuggestBoxBase), new PropertyMetadata(true, OnEnableSuggestionChanged));
         #endregion fields
 
         #region Constructor
@@ -223,6 +230,15 @@
         {
             get { return (Thickness)GetValue(PopupBorderThicknessProperty); }
             set { SetValue(PopupBorderThicknessProperty, value); }
+        }
+
+        /// <summary>
+        /// Gets/sets whether suggestions should currently be queried and viewed or not.
+        /// </summary>
+        public bool EnableSuggestions
+        {
+            get { return (bool)GetValue(EnableSuggestionsProperty); }
+            set { SetValue(EnableSuggestionsProperty, value); }
         }
         #endregion
 
@@ -600,11 +616,28 @@
             }
         }
 
+        /// <summary>
+        /// Method creates and sends an <see cref="EditResult"/> event to
+        /// attached listners (if any). This event can be used to react on simple
+        /// keyboard short-cuts like Enter or Escape...
+        /// </summary>
+        /// <param name="result"></param>
         protected void MessageEditResult(EditPathResult result)
         {
             var message = new EditResult(result, Text);
 
             NewLocationRequestEvent?.Invoke(this, new NextTargetLocationArgs(message));
+        }
+
+        /// <summary>
+        /// Method executes when the <see cref="EnableSuggestions"/> dependency property
+        /// has changed its value.
+        /// 
+        /// Overwrite this method if you want to consume changes of this property.
+        /// </summary>
+        /// <param name="e"></param>
+        protected virtual void OnEnableSuggestionChanged(DependencyPropertyChangedEventArgs e)
+        {
         }
 
         /// <summary>
@@ -714,6 +747,20 @@
                     this.Focus();
                 }
             }
+        }
+
+        /// <summary>
+        /// Method executes when the <see cref="EnableSuggestions"/> dependency property
+        /// has changed its value.
+        /// </summary>
+        /// <param name="d"></param>
+        /// <param name="e"></param>
+        private static void OnEnableSuggestionChanged(DependencyObject d,
+                                                      DependencyPropertyChangedEventArgs e)
+        {
+            var ctrl = d as SuggestBoxBase;
+            if (ctrl != null)
+                ctrl.OnEnableSuggestionChanged(e);
         }
         #endregion
     }

@@ -49,6 +49,7 @@
         /// </summary>
         public SuggestBox()
         {
+            IsVisibleChanged += SuggestBox_IsVisibleChanged;
         }
         #endregion
 
@@ -119,6 +120,33 @@
         }
 
         /// <summary>
+        /// Method executes when the <see cref="EnableSuggestions"/> dependency property
+        /// has changed its value.
+        /// 
+        /// Overwrite this method if you want to consume changes of this property.
+        /// </summary>
+        /// <param name="e"></param>
+        override protected void OnEnableSuggestionChanged(DependencyPropertyChangedEventArgs e)
+        {
+            base.OnEnableSuggestionChanged(e);
+
+            if (((bool)e.NewValue) == true)
+                QueryForSuggestions();
+        }
+
+        /// <summary>
+        /// Method executes when the visibility of the control is changed to query for
+        /// suggestions if this was enabled...
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void SuggestBox_IsVisibleChanged(object sender, DependencyPropertyChangedEventArgs e)
+        {
+            if (((bool)e.NewValue) == true)
+                QueryForSuggestions();
+        }
+
+        /// <summary>
         /// Method executes when new text is entered in the textbox portion of the control.
         /// </summary>
         /// <param name="e"></param>
@@ -126,8 +154,14 @@
         {
             base.OnTextChanged(e);
 
+            QueryForSuggestions();
+        }
+
+        private void QueryForSuggestions()
+        {
             // Text change is likely to be from property change so we ignore it
-            if (Visibility != Visibility.Visible)
+            // if control is invisible or suggestions are currently not requested
+            if (Visibility != Visibility.Visible || EnableSuggestions == false)
                 return;
 
             try

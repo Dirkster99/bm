@@ -141,6 +141,7 @@
                                                   Text="{Binding SuggestedPath, UpdateSourceTrigger=Explicit}"
                                                   IsEnabled="{Binding EnableBreadcrumb, Mode=OneWay, Converter={StaticResource fb}}"
                                                   SuggestSources="{Binding SuggestSources}"
+                                                  EnableSuggestions="{Binding ElementName=PART_Switch,Path=IsSwitchOn,Converter={StaticResource fb}}"
                                                   HierarchyHelper="{x:Null}">
                                                 <!--
                                                     DisplayMemberPath="FullPath"
