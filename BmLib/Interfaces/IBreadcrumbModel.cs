@@ -25,7 +25,8 @@
         /// currently selected item. This method should be called whenever the SuggestBox
         /// is switched from invisible to visible.
         /// </summary>
+        /// <param name="locations"></param>
         /// <returns></returns>
-        string UpdateSuggestPath(out object RootItem);
+        string UpdateSuggestPath(out object locations);
     }
 }

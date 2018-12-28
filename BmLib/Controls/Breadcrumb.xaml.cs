@@ -194,6 +194,8 @@
         /// </summary>
         private string _previousLocation;
         private bool _SwitchToOnCanceled;
+
+        private ICommand _SwitchCommand;
         #endregion fields
 
         #region constructors
@@ -215,7 +217,27 @@
         #endregion constructors
 
         #region properties
-        #region Switch DPs
+        #region Switch Properties
+        public ICommand SwitchCommand
+        {
+            get
+            {
+                if (_SwitchCommand == null)
+                {
+                    _SwitchCommand = new Base.RelayCommand<object>((p) =>
+                    {
+                        Console.WriteLine("Toggling Switch '{0}'", IsSwitchOn);
+                        IsSwitchOn = !IsSwitchOn;
+                    }
+                    // This line controls whether switch command can execute or not
+                    , (p) => { return IsSwitchEnabled; }
+                    );
+                }
+
+                return _SwitchCommand;
+            }
+        }
+
         /// <summary>
         /// Gets/sets the content definition of the RootSwitchButton shown in the
         /// left most spot of the breadcrumb control.
@@ -260,7 +282,7 @@
             get { return (Style)GetValue(SwitchStyleProperty); }
             set { SetValue(SwitchStyleProperty, value); }
         }
-        #endregion Switch DPs
+        #endregion Switch Properties
 
         #region Tree dependency properties
         /// <summary>
@@ -586,9 +608,9 @@
                         }
                         else
                         {
-                            object location;
-                            _previousLocation = _BreadcrumbModel.UpdateSuggestPath(out location);
-                            Control_SuggestBox.RootItem = location;
+                            object locations;
+                            _previousLocation = _BreadcrumbModel.UpdateSuggestPath(out locations);
+                            Control_SuggestBox.RootItem = locations;
                         }
                     }
                     else

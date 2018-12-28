@@ -132,6 +132,10 @@
 
             base.OnTextChanged(e);
 
+            // Text change is likely to be from property change so we ignore it
+            if (Visibility != Visibility.Visible)
+                return;
+
             try
             {
                 var suggestSources = this.SuggestSources;

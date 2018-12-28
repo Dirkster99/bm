@@ -1,4 +1,4 @@
-﻿namespace BreadcrumbTestLib.ViewModels.Base
+﻿namespace BmLib.Base
 {
     using System;
     using System.Diagnostics;

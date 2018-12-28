@@ -83,9 +83,8 @@
         /// </summary>
         /// <param name="location"></param>
         /// <returns></returns>
-        public string GetFileSystemPath(out IDirectoryBrowser location)
+        public string GetFileSystemPath()
         {
-            location = null;
             string fileSystemPath = string.Empty;
 
             if (_CurrentPath.Count == 0)
@@ -103,10 +102,7 @@
             var fspath = lastElement.GetModel().PathFileSystem;
 
             if (ShellBrowser.IsTypeOf(fspath) == PathType.FileSystemPath)
-            {
-                location = lastElement.GetModel().Clone() as IDirectoryBrowser;
                 return fspath;
-            }
 
             return string.Empty;
         }
@@ -117,9 +113,8 @@
         /// </summary>
         /// <param name="location"></param>
         /// <returns></returns>
-        public string GetWinShellPath(out IDirectoryBrowser location)
+        public string GetWinShellPath()
         {
-            location = null;
             string path = string.Empty;
 
             // Skip showing the desktop in the string based path
@@ -132,8 +127,6 @@
                 path = path + (path.Length > 0 ? "\\" + _CurrentPath[i].ItemName :
                                                _CurrentPath[i].ItemName);
             }
-
-            location = _CurrentPath[_CurrentPath.Count - 1].GetModel().Clone() as IDirectoryBrowser;
 
             return path;
         }

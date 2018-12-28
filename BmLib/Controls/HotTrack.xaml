@@ -3,13 +3,10 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"    
     
     xmlns:ctrls="clr-namespace:BmLib.Controls"
-    xmlns:bc="clr-namespace:BmLib.Controls"
-    xmlns:conv="clr-namespace:BmLib.Converters"
-
     xmlns:reskeys="clr-namespace:BmLib.Themes"
     >
 
-    <conv:BoolToVisibilityCollapsedConverter x:Key="btvc" />
+    <!-- conv:BoolToVisibilityCollapsedConverter x:Key="btvc" /-->
 
     <Style TargetType="{x:Type ctrls:HotTrack}">
         <Setter Property="SelectedBrush" Value="{DynamicResource {x:Static reskeys:ResourceKeys.HotTrack_SelectedBrush}}" />
@@ -141,7 +138,7 @@
                         <Trigger Property="IsMouseOver" Value="True">
                             <Setter TargetName="borderCurrent"
                                     Property="BorderBrush"
-                                    Value="{Binding RelativeSource={RelativeSource AncestorType={x:Type bc:HotTrack}, Mode=FindAncestor}, Path=SelectedBorderBrush}" />
+                                    Value="{Binding RelativeSource={RelativeSource AncestorType={x:Type ctrls:HotTrack}, Mode=FindAncestor}, Path=SelectedBorderBrush}" />
                         </Trigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>

@@ -447,21 +447,20 @@ namespace BreadcrumbTestLib.ViewModels.Breadcrumbs
         /// currently selected item. This method should be called whenever the SuggestBox
         /// is switched from invisible to visible.
         /// </summary>
+        /// <param name="locations"></param>
         /// <returns></returns>
-        string IBreadcrumbModel.UpdateSuggestPath(out object RootItem)
+        string IBreadcrumbModel.UpdateSuggestPath(out object locations)
         {
-            RootItem = null;
+            locations = null;
             string path = string.Empty;
 
             if (_CurrentPath.Count > 0)
             {
-                IDirectoryBrowser location;
-                path = _CurrentPath.GetFileSystemPath(out location);
+                locations = _CurrentPath.GetPathModels();
+                path = _CurrentPath.GetFileSystemPath();
 
                 if (string.IsNullOrEmpty(path))
-                    path = _CurrentPath.GetWinShellPath(out location);
-
-                RootItem = location;
+                    path = _CurrentPath.GetWinShellPath();
             }
 
             // Update path in bound textBox with value from currently selected item

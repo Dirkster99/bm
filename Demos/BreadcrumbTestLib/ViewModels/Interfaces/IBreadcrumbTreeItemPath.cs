@@ -38,7 +38,7 @@
         /// </summary>
         /// <param name="location"></param>
         /// <returns></returns>
-        string GetFileSystemPath(out IDirectoryBrowser location);
+        string GetFileSystemPath();
 
         /// <summary>
         /// Gets a path that contains either the real file system location
@@ -46,7 +46,7 @@
         /// </summary>
         /// <param name="location"></param>
         /// <returns></returns>
-        string GetWinShellPath(out IDirectoryBrowser location);
+        string GetWinShellPath();
 
         /// <summary>
         /// Adds another <paramref name="item"/> as the last item in the current path.

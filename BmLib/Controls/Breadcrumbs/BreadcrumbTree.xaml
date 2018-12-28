@@ -15,7 +15,9 @@
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type uc:BreadcrumbTree}">
                     <Border BorderBrush="{TemplateBinding BorderBrush}"
-                            BorderThickness="{TemplateBinding BorderThickness}">
+                            BorderThickness="{TemplateBinding BorderThickness}"
+                            Padding="{TemplateBinding Padding}"
+                            >
                         <ItemsPresenter VerticalAlignment="Center" />
                     </Border>
                 </ControlTemplate>

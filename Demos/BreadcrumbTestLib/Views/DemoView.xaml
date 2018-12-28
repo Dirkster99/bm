@@ -4,7 +4,6 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              
-        xmlns:themes="clr-namespace:BmLib.Themes;assembly=BmLib"
         xmlns:reskeys="clr-namespace:BmLib.Themes;assembly=BmLib"
         xmlns:ThemeBehav="clr-namespace:BmLib.Behaviors;assembly=BmLib"
 
@@ -92,6 +91,7 @@
                                   TaskQueueProcessing="{Binding Data.BreadcrumbController.TaskQueue, Source={StaticResource AppDataContextProxy}}"
                                   Progressing="{Binding Progressing}"
                                   Margin="3"
+                                  Padding="3"
                               >
                     <ctrls:Breadcrumb.TreeItemContainerStyle>
                         <Style TargetType="{x:Type treectrls:BreadcrumbTreeItem}" BasedOn="{StaticResource {x:Type treectrls:BreadcrumbTreeItem}}">
@@ -162,17 +162,20 @@
                                 VerticalAlignment="Stretch"
                                 HorizontalAlignment="Center"
                                 Margin="0"
+                                Padding="0"
                                 SnapsToDevicePixels="True"
                             >
-                            <Path Stroke="{DynamicResource {x:Static reskeys:ResourceKeys.ControlNormalForegroundBrushKey}}"
+                            <Grid Margin="0,3">
+                                <Path Stroke="{DynamicResource {x:Static reskeys:ResourceKeys.ControlNormalForegroundBrushKey}}"
                                   StrokeThickness="1.2"
                                   HorizontalAlignment="Center"
                                   VerticalAlignment="Stretch"
                                   IsHitTestVisible="True"
-                                  Stretch="Fill"
-                                  Margin="3,6"
+                                  Stretch="UniformToFill"
+                                  Margin="3,0"
                                   Data="{Binding IsOverflown, ElementName=BreadcrumbDemoControl, Converter={StaticResource BoolToOneOfTwoBindingsConverter}}"
                             />
+                            </Grid>
                         </Border>
                     </ctrls:Breadcrumb.RootDropDownListHeader>
 
@@ -202,51 +205,51 @@
                     </ctrls:Breadcrumb.RootDropDownListItemContainerStyle>
 
                     <ctrls:Breadcrumb.SwitchHeader>
-                        <Grid>
-                            <!-- This should be visible when TreeView browsing is turned on -->
-                            <Image DataContext="{Binding SelectedRootViewModel}"
-                                   Visibility="{Binding Data.BreadcrumbController.BreadcrumbBrowser.EnableBreadcrumb,Mode=OneWay,UpdateSourceTrigger=PropertyChanged, Converter={StaticResource BoolToVisibilityConverter},Source={StaticResource AppDataContextProxy}}"
-                                   SnapsToDevicePixels="true"
-                                   RenderOptions.BitmapScalingMode="NearestNeighbor"
-                               >
-                                <Image.Source>
-                                    <MultiBinding Converter="{x:Static convLib:AssociatedIconConverter.Default}">
-                                        <MultiBinding.ConverterParameter>
-                                            <imgSize:IconSize >Small</imgSize:IconSize>
-                                        </MultiBinding.ConverterParameter>
-                                        <Binding Path="ItemPath" />
-                                        <Binding Path="ItemName" />
-                                        <Binding Path="IconResourceId" />
-                                    </MultiBinding>
-                                </Image.Source>
-                            </Image>
+                        <ctrls:HotTrack Margin="0" Focusable="False" Padding="0">
+                            <Grid>
+                                <!-- This should be visible when TreeView browsing is turned on -->
+                                <Image DataContext="{Binding SelectedRootViewModel}"
+                                       Visibility="{Binding Data.BreadcrumbController.BreadcrumbBrowser.EnableBreadcrumb,Mode=OneWay,UpdateSourceTrigger=PropertyChanged, Converter={StaticResource BoolToVisibilityConverter},Source={StaticResource AppDataContextProxy}}"
+                                       SnapsToDevicePixels="true"
+                                       RenderOptions.BitmapScalingMode="NearestNeighbor">
+                                    <Image.Source>
+                                        <MultiBinding Converter="{x:Static convLib:AssociatedIconConverter.Default}">
+                                            <MultiBinding.ConverterParameter>
+                                                <imgSize:IconSize >Small</imgSize:IconSize>
+                                            </MultiBinding.ConverterParameter>
+                                            <Binding Path="ItemPath" />
+                                            <Binding Path="ItemName" />
+                                            <Binding Path="IconResourceId" />
+                                        </MultiBinding>
+                                    </Image.Source>
+                                </Image>
 
-                            <!-- This should be visible when SugestBox editing is turned off -->
-                            <!-- Shows an '>' like symbol to style a 'Go' button that is in fact
+                                <!-- This should be visible when SugestBox editing is turned off -->
+                                <!-- Shows an '>' like symbol to style a 'Go' button that is in fact
                                  just the toggle button of the switch -->
-                            <Border
-                                Visibility="{Binding Data.BreadcrumbController.BreadcrumbBrowser.EnableBreadcrumb,Mode=OneWay,UpdateSourceTrigger=PropertyChanged, Converter={StaticResource InvertedBoolToVisibilityConverter},Source={StaticResource AppDataContextProxy}}"
-                                ToolTip="Confirm editing (Enter)"
-                                Background="Transparent"
-                                BorderBrush="Transparent"
-                                BorderThickness="0"
-                                VerticalAlignment="Stretch"
-                                HorizontalAlignment="Center"
-                                Margin="3"
-                                Padding="0"
-                                SnapsToDevicePixels="True"
-                                MinWidth="15"
-                            >
-                                <Path Stroke="{DynamicResource {x:Static reskeys:ResourceKeys.ControlNormalForegroundBrushKey}}"
+                                <Border Visibility="{Binding Data.BreadcrumbController.BreadcrumbBrowser.EnableBreadcrumb,Mode=OneWay,UpdateSourceTrigger=PropertyChanged, Converter={StaticResource InvertedBoolToVisibilityConverter},Source={StaticResource AppDataContextProxy}}"
+                                        ToolTip="Confirm editing (Enter)"
+                                        Background="Transparent"
+                                        BorderBrush="Transparent"
+                                        BorderThickness="0"
+                                        VerticalAlignment="Stretch"
+                                        HorizontalAlignment="Center"
+                                        Margin="0"
+                                        Padding="0,3"
+                                        SnapsToDevicePixels="True"
+                                        MinWidth="15"
+                                    >
+                                    <Path Stroke="{DynamicResource {x:Static reskeys:ResourceKeys.ControlNormalForegroundBrushKey}}"
                                       StrokeThickness="1.2"
                                       HorizontalAlignment="Stretch"
                                       VerticalAlignment="Stretch"
                                       IsHitTestVisible="True"
                                       Stretch="Uniform"
                                       Data="{DynamicResource {x:Static reskeys:ResourceKeys.NormalArrow}}"
-                            />
-                            </Border>
-                        </Grid>
+                                    />
+                                </Border>
+                            </Grid>
+                        </ctrls:HotTrack>
                     </ctrls:Breadcrumb.SwitchHeader>
                 </ctrls:Breadcrumb>
 
@@ -475,9 +478,6 @@
 
                 <CheckBox Content="Show BreadCrumb Control" Name="ShowBreadCrumbControl"
                           IsChecked="True" Margin="0,12,0,0" />
-
-                <CheckBox Content="IsEnabled"
-                          IsChecked="{Binding ElementName=BreadcrumbDemoControl,Path=IsEnabled}" />
 
                 <CheckBox Content="Breadcrumb.IsSwitchEnabled"
                           DataContext="{Binding ElementName=BreadcrumbDemoControl}"

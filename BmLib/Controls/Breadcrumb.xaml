@@ -76,13 +76,15 @@
                                 />
 
                                 <ctrls:Switch x:Name="PART_Switch"
-                                           Header="{TemplateBinding SwitchHeader}"
-                                           Style="{StaticResource {x:Static reskeys:ResourceKeys.BreadcrumbSwitchStyleKey}}"
-                                           IsSwitchOn="{Binding IsSwitchOn,RelativeSource={RelativeSource AncestorType={x:Type ctrls:Breadcrumb}},Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
-                                           VerticalAlignment="Center" VerticalContentAlignment="Center"
-                                           HorizontalAlignment="Stretch" HorizontalContentAlignment="Stretch"
-                                           CanSwitchContent="{TemplateBinding IsSwitchEnabled}"
-                                           Margin="0"
+                                        Header="{TemplateBinding SwitchHeader}"
+                                        Style="{StaticResource {x:Static reskeys:ResourceKeys.BreadcrumbSwitchStyleKey}}"
+                                        IsSwitchOn="{Binding IsSwitchOn,RelativeSource={RelativeSource AncestorType={x:Type ctrls:Breadcrumb}},Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
+                                        VerticalAlignment="Center" VerticalContentAlignment="Center"
+                                        HorizontalAlignment="Stretch" HorizontalContentAlignment="Stretch"
+                                        CanSwitchContent="{TemplateBinding IsSwitchEnabled}"
+                                        SwitchContentCommand="{Binding SwitchCommand,RelativeSource={RelativeSource AncestorType={x:Type ctrls:Breadcrumb}},Mode=OneTime}"
+                                        Padding="0"
+                                        Margin="{TemplateBinding Padding}"
                                      >
                                     <ctrls:Switch.ContentOn>
                                         <!-- Show TreeView with RootDropDown Items -->
@@ -94,7 +96,7 @@
                                             </Grid.ColumnDefinitions>
 
                                             <!-- Displays a root toggle button with a (root/overflow) dropdown list
-                                                 at the left most button in the control -->
+                                                 at the 2nd left most button in the control -->
                                             <ctrls:DropDownList Grid.Column="0"
                                                                 x:Name="PART_RootDropDownList"
                                                                 VerticalAlignment="Stretch" 
@@ -107,17 +109,19 @@
                                                                 HorizontalAlignment="Left"
                                                                 behav:SelectionChangedCommand.ChangedCommand="{TemplateBinding RootDropDownSelectionChangedCommand}"
                                                                 Margin="0"
+                                                                Padding="0"
                                                             />
-
 
                                             <!-- The BreadcrumbTree control displays the complete path and each drop down list -->
                                             <uc:BreadcrumbTree Grid.Column="1"
                                                                x:Name="PART_BreadcrumbTree"
                                                                Margin="0"
+                                                               Padding="0"
                                                                DropDownListItemDataTemplate="{TemplateBinding DropDownListItemDataTemplate}"
                                                                ItemsSource="{TemplateBinding TreeItemsSource}"
                                                                ItemTemplate="{TemplateBinding TreeItemTemplate}"
                                                                ItemContainerStyle="{TemplateBinding TreeItemContainerStyle}"
+                                                               VerticalAlignment="Stretch"
                                                                />
 
                                             <!-- Grid.Column="2" Is OverflowGap which is necessary to reach Switch
@@ -131,7 +135,7 @@
                                                   Visibility="{Binding IsSwitchOn, RelativeSource={RelativeSource AncestorType=ctrls:Switch}, Mode=OneWay, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource btv1}}"
                                                   BorderThickness="0"
                                                   BorderBrush="Transparent"
-                                                  Margin="0,3" Padding="0"
+                                                  Margin="0" Padding="0"
                                                   FontFamily="{TemplateBinding FontFamily}"
                                                   FontSize="{TemplateBinding FontSize}"
                                                   Text="{Binding SuggestedPath, UpdateSourceTrigger=Explicit}"
