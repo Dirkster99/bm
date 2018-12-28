@@ -12,8 +12,6 @@
     /// </summary>
     public class PathHierarchyHelper : IHierarchyHelper
     {
-        protected static readonly log4net.ILog logger = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
-
         #region Constructor
         /// <summary>
         /// Class constructor.
@@ -39,8 +37,6 @@
         #region Utils Func - extractPath/Name
         public virtual string ExtractPath(string pathName)
         {
-            logger.InfoFormat("Path {0}", (pathName == null? "" : pathName));
-
             if (String.IsNullOrEmpty(pathName))
                 return "";
 
@@ -54,8 +50,6 @@
 
         public virtual string ExtractName(string pathName)
         {
-            logger.InfoFormat("Path {0}", (pathName == null ? "" : pathName));
-
             if (String.IsNullOrEmpty(pathName))
                 return "";
 
@@ -70,22 +64,16 @@
 
         protected virtual object getParent(object item)
         {
-            logger.InfoFormat("Path {0}", (item == null ? "" : item.ToString()));
-
             return PropertyPathHelper.GetValueFromPropertyInfo(item, ParentPath);
         }
 
         protected virtual string getValuePath(object item)
         {
-            logger.InfoFormat("Path {0}", (item == null ? "" : item.ToString()));
-
             return PropertyPathHelper.GetValueFromPropertyInfo(item, ValuePath) as string;
         }
 
         protected virtual IEnumerable getSubEntries(object item)
         {
-            logger.InfoFormat("Path {0}", (item == null ? "" : item.ToString()));
-
             return PropertyPathHelper.GetValueFromPropertyInfo(item, SubentriesPath) as IEnumerable;
         }
         #endregion
@@ -98,8 +86,6 @@
         /// <returns></returns>
         public IEnumerable<object> GetHierarchy(object item, bool includeCurrent)
         {
-            logger.InfoFormat("Path {0}", (item == null ? "" : item.ToString()));
-
             if (includeCurrent)
                 yield return item;
 
@@ -118,15 +104,11 @@
         /// <returns></returns>
         public string GetPath(object item)
         {
-            logger.InfoFormat("Path {0}", (item == null ? "" : item.ToString()));
-
             return item == null ? "" : getValuePath(item);
         }
 
         public IEnumerable List(object item)
         {
-            logger.InfoFormat("Path {0}", (item == null ? "" : item.ToString()));
-
             if (item is IEnumerable)
                 return item as IEnumerable;
 
@@ -149,8 +131,6 @@
         /// <returns>The item found or null</returns>
         public object GetItem(object rootItem, string path)
         {
-            logger.InfoFormat("Path {0}", (path == null ? "" : path));
-
             var queue = new Queue<string>(path.Split(new char[] { this.Separator }, StringSplitOptions.RemoveEmptyEntries));
 
             object current = rootItem;              // Return root item if queue is empty

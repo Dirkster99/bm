@@ -14,8 +14,6 @@
     /// </summary>
     public class SuggestBox : SuggestBoxBase
     {
-        protected static readonly new log4net.ILog logger = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
-
         #region fields
         /// <summary>
         /// Implements the backing property of the <see cref="RootItem"/> dependency property.
@@ -91,8 +89,6 @@
         /// </summary>
         protected override void updateSource()
         {
-            logger.DebugFormat("{0}", (string.IsNullOrEmpty(Text) ? "" : Text));
-
             try
             {
                 var txtBindingExpr = this.GetBindingExpression(TextBox.TextProperty);
@@ -116,9 +112,9 @@
                                                                txtBindingExpr,
                                                                "Path does not exists.", null));
             }
-            catch (Exception exp)
+            catch
             {
-                logger.Error(exp);
+                // logger.Error(exp);
             }
         }
 
@@ -128,8 +124,6 @@
         /// <param name="e"></param>
         protected override void OnTextChanged(TextChangedEventArgs e)
         {
-            logger.DebugFormat("{0}", (string.IsNullOrEmpty(this.Text) ? "" : this.Text));
-
             base.OnTextChanged(e);
 
             // Text change is likely to be from property change so we ignore it
@@ -178,9 +172,9 @@
                         }, TaskScheduler.FromCurrentSynchronizationContext());
                 }
             }
-            catch (Exception exp)
+            catch
             {
-                logger.Error(exp);
+                // logger.Error(exp);
             }
         }
         #endregion

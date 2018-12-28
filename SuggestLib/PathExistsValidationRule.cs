@@ -9,7 +9,6 @@
     internal class PathExistsValidationRule : ValidationRule
     {
         #region fields
-        protected static readonly log4net.ILog logger = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
         private IHierarchyHelper _hierarchyHelper;
         private object _root;
         #endregion fields

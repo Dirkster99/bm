@@ -186,14 +186,12 @@
         private object _LockObject = new object();
         private bool _IsLoaded;
         private IBreadcrumbModel _BreadcrumbModel;
-        private EditResult _SwitchBoxEditResult;
 
         /// <summary>
         /// Save location before switching from TreeView to suggestbox to enable
         /// cancelling and roll-back to previous location if required.
         /// </summary>
         private string _previousLocation;
-        private bool _SwitchToOnCanceled;
 
         private ICommand _SwitchCommand;
         #endregion fields
@@ -218,16 +216,73 @@
 
         #region properties
         #region Switch Properties
+        /// <summary>
+        /// Gets a command to switch the view between TreeView and TextBox based view
+        /// (between BmLib.BreadcrumbTree and SuggestLib.SuggestBox).
+        /// 
+        /// Switching the view from text based editing back to TreeView can be canceled
+        /// by parameterizing this command with an <see cref="EditResult"/> object.
+        /// </summary>
         public ICommand SwitchCommand
         {
             get
             {
                 if (_SwitchCommand == null)
                 {
-                    _SwitchCommand = new Base.RelayCommand<object>((p) =>
+                    _SwitchCommand = new Base.RelayCommand<object>(async (p) =>
                     {
-                        Console.WriteLine("Toggling Switch '{0}'", IsSwitchOn);
-                        IsSwitchOn = !IsSwitchOn;
+                        // Switching from TreeView to Suggestbox
+                        if (IsSwitchOn == true)
+                        {
+                            // Assumption: Control is already bound and current location
+                            // is available in text property
+                            if (_BreadcrumbModel == null)
+                            {
+                                // Overwrite this only if we are not in a cancel-suggestion-workflow
+                                _previousLocation = Control_SuggestBox.Text;
+                            }
+                            else
+                            {
+                                object locations;
+                                _previousLocation = _BreadcrumbModel.UpdateSuggestPath(out locations);
+                                Control_SuggestBox.RootItem = locations;
+
+                                IsSwitchOn = false;  // Switch to text based view
+                            }
+                        }
+                        else
+                        {
+                            var switchOnTextBoxEditResult = p as EditResult;
+
+                            // Switching from Suggestbox to TreeView
+                            bool isPathValid = true, goBackToPreviousLocation = false;
+                            string path;
+
+                            if (switchOnTextBoxEditResult != null)
+                            {
+                                // Editing was cancelled by the user (eg.: user pressed Escape key)
+                                if (switchOnTextBoxEditResult.Result == EditPathResult.Cancel)
+                                {
+                                    path = string.Empty;
+                                    goBackToPreviousLocation = true;
+                                }
+                                else
+                                    path = switchOnTextBoxEditResult.NewLocation;
+                            }
+                            else
+                                path = Control_SuggestBox.Text;
+
+                            if (_BreadcrumbModel == null)
+                                isPathValid = false;      // Cannot invoke viewmodel method
+                            else
+                                isPathValid = await _BreadcrumbModel.NavigateTreeViewModel(path, goBackToPreviousLocation);
+
+                            // Canceling navigation from edit result since path appears to be invalid
+                            // > Stay with false path if path does not exist
+                            //   or viewmodel method cannot be invoked here ...
+                            if (isPathValid == true)
+                                IsSwitchOn = true;  // Switch on valid path only
+                        }
                     }
                     // This line controls whether switch command can execute or not
                     , (p) => { return IsSwitchEnabled; }
@@ -553,81 +608,30 @@
             if (dp == null)
                 return;
 
-            dp.OnSwitchChanged((bool)e.OldValue, (bool)e.NewValue);
+            dp.OnSwitchChangedAsync((bool)e.OldValue, (bool)e.NewValue);
         }
 
-        private async void OnSwitchChanged(bool OldValue, bool NewValue)
+        private async void OnSwitchChangedAsync(bool OldValue, bool NewValue)
         {
-            // Switch from suggestbox to tree view
-            if (OldValue == false && NewValue == true)
+            // Switch from tree view to suggestbox
+            if (OldValue == true && NewValue == false)
             {
-                bool isPathValid = true, goBackToPreviousLocation = false;
-                string path;
-
-                if (_SwitchBoxEditResult != null)
+                await Control_SuggestBox.Dispatcher.BeginInvoke(new Action(() =>
                 {
-                    // Editing was cancelled by the user (eg.: user pressed Escape key)
-                    if (_SwitchBoxEditResult.Result == EditPathResult.Cancel)
-                    {
-                        path = string.Empty;
-                        goBackToPreviousLocation = true;
-                    }
-                    else
-                        path = _SwitchBoxEditResult.NewLocation;
-                }
-                else
-                    path = Control_SuggestBox.Text;
+                    Control_SuggestBox.InitializeSuggestions();
+                    Keyboard.Focus(Control_SuggestBox);
+                    Control_SuggestBox.SelectAll();
+                    Control_SuggestBox.Focus();
 
-                if (_BreadcrumbModel == null)
-                    isPathValid = false;      // Cannot invoke viewmodel method
-                else
-                    isPathValid = await _BreadcrumbModel.NavigateTreeViewModel(path, goBackToPreviousLocation);
-
-                // Canceling navigation from edit result since path appears to be invalid
-                // > Stay with false path if path does not exist
-                //   or viewmodel method cannot be invoked here ...
-                if (isPathValid == false)
-                {
-                    _SwitchToOnCanceled = true;
-                    IsSwitchOn = false;  // Switch back to SuggestBox
-                }
+                }), System.Windows.Threading.DispatcherPriority.Background);
             }
-            else
-            {
-                // Switch from tree view to suggestbox
-                if (OldValue == true && NewValue == false)
-                {
-                    // Assumption: Control is already bound and current location
-                    // is available in text property
-                    if (_SwitchToOnCanceled == false)
-                    {
-                        if (_BreadcrumbModel == null)
-                        {
-                            // Overwrite this only if we are not in a cancel-suggestion-workflow
-                            _previousLocation = Control_SuggestBox.Text;
-                        }
-                        else
-                        {
-                            object locations;
-                            _previousLocation = _BreadcrumbModel.UpdateSuggestPath(out locations);
-                            Control_SuggestBox.RootItem = locations;
-                        }
-                    }
-                    else
-                        _SwitchToOnCanceled = false;
-
-                    await Control_SuggestBox.Dispatcher.BeginInvoke(new Action(() =>
-                    {
-                        Control_SuggestBox.InitializeSuggestions();
-                        Keyboard.Focus(Control_SuggestBox);
-                        Control_SuggestBox.SelectAll();
-                        Control_SuggestBox.Focus();
-
-                    }), System.Windows.Threading.DispatcherPriority.Background);
-                }
-            }
-
-            _SwitchBoxEditResult = null;
+            ////else
+            ////{
+            ////    // Switch from suggestbox to tree view
+            ////    if (OldValue == false && NewValue == true)
+            ////    {
+            ////    }
+            ////}
         }
 
         /// <summary>
@@ -641,8 +645,10 @@
         {
             if (IsSwitchOn == false)
             {
-                _SwitchBoxEditResult = new EditResult(EditPathResult.Cancel, string.Empty);
-                IsSwitchOn = true;
+                var ev = new EditResult(EditPathResult.Cancel, string.Empty);
+
+                if (this.SwitchCommand.CanExecute(null) == true)
+                    this.SwitchCommand.Execute(ev);
             }
         }
 
@@ -656,18 +662,19 @@
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void Control_SuggestBox_NewLocationRequestEvent(
-            object sender,
-            SuggestLib.Events.NextTargetLocationArgs e)
+        private void Control_SuggestBox_NewLocationRequestEvent(object sender,
+                                                            SuggestLib.Events.NextTargetLocationArgs e)
         {
-            _SwitchBoxEditResult = e.EditResult;
-
             // The user requests a new location via SuggestBox Text control
             // lets have the switch do the lifting of navigating the tree view
             if (IsSwitchOn == false)
-                IsSwitchOn = true;
+            {
+                if (this.SwitchCommand.CanExecute(null) == true)
+                    this.SwitchCommand.Execute(e.EditResult);
+            }
         }
 
+        #region OnLoaded DataContectChanged
         private void Breadcrumb_DataContextChanged(object sender,
                                                    DependencyPropertyChangedEventArgs e)
         {
@@ -697,10 +704,18 @@
             }
         }
 
+        /// <summary>
+        /// Updates the link between control and ViewModel to communicate changes
+        /// via DataContext when control switches between TreeView and SuggestBox.
+        /// 
+        /// (method executes when DataContext is changed or control has been loaded
+        /// for the first time).
+        /// </summary>
         private void OnViewAttached()
         {
-            this._BreadcrumbModel = this.DataContext as IBreadcrumbModel;
+            _BreadcrumbModel = this.DataContext as IBreadcrumbModel;
         }
+        #endregion OnLoaded DataContectChanged
         #endregion methods
     }
 }

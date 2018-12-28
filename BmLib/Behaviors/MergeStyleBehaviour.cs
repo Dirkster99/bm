@@ -40,11 +40,6 @@
         public static readonly DependencyProperty OriginalStyleProperty =
                                 DependencyProperty.RegisterAttached("OriginalStyle", typeof(Style), typeof(MergeStyleBehaviour),
                                 new FrameworkPropertyMetadata((Style)null));
-
-        /// <summary>
-        /// Log4net logger facility for this class.
-        /// </summary>
-        public static readonly log4net.ILog Logger = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
         #endregion fields
 
         #region public static methods
@@ -59,9 +54,9 @@
             {
                 return (bool)d.GetValue(AutoMergeStyleProperty);
             }
-            catch (Exception exp)
+            catch
             {
-                Logger.Error(exp);
+                // Logger.Error(exp);
             }
 
             return false;
@@ -78,9 +73,9 @@
             {
                 d.SetValue(AutoMergeStyleProperty, value);
             }
-            catch (Exception exp)
+            catch
             {
-                Logger.Error(exp);
+                // Logger.Error(exp);
             }
         }
 

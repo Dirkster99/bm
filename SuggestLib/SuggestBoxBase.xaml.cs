@@ -18,8 +18,6 @@
     [TemplatePart(Name = PART_ResizeableGrid, Type = typeof(Grid))]
     public class SuggestBoxBase : TextBox
     {
-        protected static readonly log4net.ILog logger = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
-
         public const string PART_Root = "PART_Root";
         public const string PART_Popup = "PART_Popup";
         public const string PART_ItemList = "PART_ItemList";
@@ -234,8 +232,6 @@
         /// </summary>
         public override void OnApplyTemplate()
         {
-            logger.DebugFormat("{0}", (string.IsNullOrEmpty(Text) ? "" : Text));
-
             base.OnApplyTemplate();
             _PART_Popup = this.Template.FindName(PART_Popup, this) as Popup;
             _PART_ItemList = this.Template.FindName(PART_ItemList, this) as ListBox;
@@ -283,10 +279,6 @@
         private void SuggestBoxBase_LostKeyboardFocus(object sender,
                                                       KeyboardFocusChangedEventArgs e)
         {
-            logger.DebugFormat("Old Focus {0} New Focus {1}",
-                (e.OldFocus == null ? "" : e.OldFocus.ToString()),
-                (e.NewFocus == null ? "" : e.NewFocus.ToString()));
-
             if (e.NewFocus == null)
                 SetPopUp(false, "LostKeyboardFocus");
             else
@@ -294,8 +286,6 @@
                 if (IsKeyboardFocusWithin == false &&
                     e.NewFocus != e.OldFocus)
                 {
-                    logger.DebugFormat("IsKeyboardFocusWithin {0} -> hidePopup()", IsKeyboardFocusWithin);
-
                     _PopUpIsCancelled = true;
                     SetPopUp(false, "LostKeyboardFocus");
                 }
@@ -307,8 +297,6 @@
 
         protected override void OnPreviewMouseLeftButtonDown(MouseButtonEventArgs e)
         {
-            logger.DebugFormat("_");
-
             base.OnPreviewMouseLeftButtonDown(e);
 
             // if (this.AutoSelectBehavior == AutoSelectBehavior.Never)
@@ -326,10 +314,6 @@
         private void SuggestBoxBase_GotKeyboardFocus(object sender,
                                                      KeyboardFocusChangedEventArgs e)
         {
-            logger.DebugFormat("Source {0} Old Focus {1} New Focus {2}", e.Source,
-                (e.OldFocus == null ? "" : e.OldFocus.ToString()),
-                (e.NewFocus == null ? "" : e.NewFocus.ToString()));
-                        
             // Select all text when control gains focus from a different control.
             // If the focus was not in one of the children (or popup),
             // we select all the text 
@@ -349,8 +333,6 @@
         /// </summary>
         private void SaveRestorePopUpStateOnWindowDeActivation()
         {
-            logger.DebugFormat("{0}", (string.IsNullOrEmpty(Text) ? "" : Text));
-
             Window parentWindow = UITools.FindLogicalAncestor<Window>(this);
             if (parentWindow != null)
             {
@@ -423,8 +405,6 @@
         /// <param name="itemList"></param>
         private void AttachHandlers(ListBox itemList)
         {
-            logger.DebugFormat("{0}", (string.IsNullOrEmpty(Text) ? "" : Text));
-
             itemList.MouseDoubleClick += (o, e) => { updateValueFromListBox(); };
 
             itemList.PreviewMouseUp += (o, e) =>
@@ -485,7 +465,6 @@
         /// in a derived class) if true, method is not invoked otherwise.</param>
         private void updateValueFromListBox(bool updateSrc = true)
         {
-            logger.DebugFormat("{0}", (string.IsNullOrEmpty(Text) ? "" : Text));
             this.SetValue(TextBox.TextProperty, _PART_ItemList.SelectedValue);
 
             if (updateSrc == true)
@@ -501,8 +480,6 @@
         /// </summary>
         protected virtual void updateSource()
         {
-            logger.DebugFormat("{0}", (string.IsNullOrEmpty(Text) ? "" : Text));
-
             var txtBindingExpr = this.GetBindingExpression(TextBox.TextProperty);
             if (txtBindingExpr == null)
                 return;
@@ -520,8 +497,6 @@
         /// </summary>
         protected void PopupIfSuggest()
         {
-            logger.DebugFormat("{0}", (string.IsNullOrEmpty(Text) ? "" : Text));
-
             if (this.IsFocused)
             {
                 if (Suggestions != null && Suggestions.Count > 0)
@@ -538,7 +513,6 @@
         {
             if (IsPopupOpened != newIsOpenValue)
             {
-                logger.InfoFormat("{0} -> {1} '{2}'", IsPopupOpened, newIsOpenValue, sourceOfReuqest);
                 IsPopupOpened = newIsOpenValue;
             }
         }
@@ -551,7 +525,6 @@
         /// <param name="e"></param>
         protected override void OnPreviewKeyDown(KeyEventArgs e)
         {
-            logger.DebugFormat("{0}", (string.IsNullOrEmpty(Text) ? "" : Text));
             base.OnPreviewKeyDown(e);
 
             switch (e.Key)
@@ -644,7 +617,6 @@
         /// <returns></returns>
         protected static string getDirectoryName(string path)
         {
-            logger.DebugFormat("{0}", (string.IsNullOrEmpty(path) ? "" : path));
             if (path.EndsWith("\\"))
                 return path;
             //path = path.Substring(0, path.Length - 1); //Remove ending slash.
@@ -669,7 +641,6 @@
 
             if (args.OldValue != args.NewValue)
             {
-                logger.DebugFormat("_", (string.IsNullOrEmpty(sbox.Text) ? "" : sbox.Text));
                 sbox.PopupIfSuggest();
             }
         }
@@ -700,7 +671,6 @@
         /// <param name="e"></param>
         private void MyThumb_DragDelta(object sender, DragDeltaEventArgs e)
         {
-            logger.Debug("_");
             Thumb MyThumb = sender as Thumb;
 
             // Set the new Width and Height fo Grid, Popup they will inherit
@@ -726,9 +696,6 @@
         {
             if (e == null)
                 return;
-
-            logger.DebugFormat("Old Value: {0}, New Value: {1}, Text {2}",
-                e.NewValue, e.OldValue, this.Text);
 
             // Do not react if popup was cancelled (eg: focus travelled off from here)
             // since gestures like Escape key of focus travelling should cancel
