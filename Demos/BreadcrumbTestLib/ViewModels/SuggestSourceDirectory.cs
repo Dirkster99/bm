@@ -81,7 +81,7 @@
 
             foreach (var item in ShellBrowserLib.ShellBrowser.GetChildItems(dirPath.PathShell, searchMask))
             {
-                Items.Add(new { Header = item.Label, Value = namedPath + '\\' + item.Name });
+                AddItem(ref Items, item.Label, namedPath + '\\' + item.Name, path);
             }
 
             return Task.FromResult<IList<object>>(Items);
@@ -94,6 +94,7 @@
         private List<object> ListRootItems()
         {
             List<object> rootItems = new List<object>();
+            var parent = ShellBrowser.Create(KF_IID.ID_FOLDERID_Desktop);
 
             // Get Root Items below Desktop
             // (filter out recycle bin and control panel entries since its not that useful...)
@@ -102,7 +103,7 @@
                 if (string.Compare(item.SpecialPathId, KF_IID.ID_FOLDERID_RecycleBinFolder, true) != 0 &&
                     string.Compare(item.PathRAW, "::{26EE0668-A00A-44D7-9371-BEB064C98683}", true) != 0)
                 {
-                    rootItems.Add(new { Header = item.Label, Value = item.Name });
+                    AddItem(ref rootItems, item.Label, item.Name, parent);
                 }
             }
 
@@ -139,12 +140,26 @@
         {
             List<object> Items = new List<object>();
 
+            var parent = ShellBrowser.Create(input);
             foreach (var item in ShellBrowserLib.ShellBrowser.GetChildItems(input, searchMask))
             {
-                Items.Add(new { Header = item.Label, Value = item.PathFileSystem });
+                AddItem(ref Items, item.Label, item.PathFileSystem, parent);
             }
 
             return Items;
+        }
+
+        private static void AddItem(ref List<object> items, string header, string value, object parent)
+        {
+            var newItem = new SuggestionListItem(header, value, parent);
+            items.Add(newItem);
+
+            ////items.Add(new
+            ////{
+            ////    Header = header,
+            ////    Value = value,
+            ////    Parent = parent
+            ////});
         }
     }
 }

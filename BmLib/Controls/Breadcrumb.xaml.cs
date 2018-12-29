@@ -244,7 +244,9 @@
                             else
                             {
                                 object locations;
-                                _previousLocation = _BreadcrumbModel.UpdateSuggestPath(out locations);
+                                Control_SuggestBox.Text = _BreadcrumbModel.UpdateSuggestPath(out locations);
+                                _previousLocation = Control_SuggestBox.Text;
+
                                 Control_SuggestBox.RootItem = locations;
 
                                 IsSwitchOn = false;  // Switch to text based view

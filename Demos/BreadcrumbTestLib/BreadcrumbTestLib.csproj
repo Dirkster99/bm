@@ -48,6 +48,7 @@
     <Compile Include="Behaviors\TreeViewItemBehaviour.cs" />
     <Compile Include="Models\HintDirection.cs" />
     <Compile Include="Models\IRoot.cs" />
+    <Compile Include="Models\LocationIndicator.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Tasks\OneTaskLimitedScheduler.cs" />
     <Compile Include="Utils\AsyncLock.cs" />
@@ -63,6 +64,7 @@
     <Compile Include="ViewModels\Breadcrumbs\BreadcrumbTreeItemHelperViewModel.cs" />
     <Compile Include="ViewModels\Breadcrumbs\BreadcrumbTreeItemViewModel.cs" />
     <Compile Include="ViewModels\Interfaces\IBreadcrumbTreeItemPath.cs" />
+    <Compile Include="ViewModels\SuggestionListItem.cs" />
     <Compile Include="ViewModels\SuggestSourceDirectory.cs" />
     <Compile Include="ViewModels\Breadcrumbs\ProgressViewModel.cs" />
     <Compile Include="ViewModels\Breadcrumbs\TreeSelectors\TreeSelectorViewModel.cs" />

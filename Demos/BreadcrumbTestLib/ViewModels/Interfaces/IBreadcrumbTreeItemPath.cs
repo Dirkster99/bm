@@ -1,5 +1,6 @@
 ﻿namespace BreadcrumbTestLib.ViewModels.Interfaces
 {
+    using BreadcrumbTestLib.Models;
     using BreadcrumbTestLib.ViewModels.Breadcrumbs;
     using ShellBrowserLib.Interfaces;
     using System.Collections.Generic;
@@ -23,6 +24,12 @@
         #endregion properties
 
         #region methods
+        /// <summary>
+        /// Gets an object that describes a current path with path model items.
+        /// </summary>
+        /// <returns></returns>
+        LocationIndicator GetLocation();
+
         /// <summary>
         /// Gets an array of <see cref="IDirectoryBrowser"/> model objects
         /// that describe the current path managed in this object.

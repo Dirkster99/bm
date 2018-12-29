@@ -87,6 +87,8 @@
         /// Updates the TextBox.Text Binding expression (if any) and
         /// raises the <see cref="ValueChangedEvent"/> event to notify
         /// subscribers of the changed text value.
+        /// 
+        /// Method override is invoked by base class whenever the selection has changed.
         /// </summary>
         protected override void updateSource()
         {

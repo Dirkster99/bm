@@ -456,17 +456,16 @@ namespace BreadcrumbTestLib.ViewModels.Breadcrumbs
 
             if (_CurrentPath.Count > 0)
             {
-                locations = _CurrentPath.GetPathModels();
-                path = _CurrentPath.GetFileSystemPath();
+                var locs = _CurrentPath.GetLocation();
+                path = locs.GetFileSystemPath();
 
                 if (string.IsNullOrEmpty(path))
-                    path = _CurrentPath.GetWinShellPath();
+                    path = locs.GetWinShellPath();
+
+                locations = locs;
             }
 
-            // Update path in bound textBox with value from currently selected item
-            SuggestedPath = path;
-
-            return SuggestedPath;
+            return path;
         }
         #endregion IBreadcrumbModel
 

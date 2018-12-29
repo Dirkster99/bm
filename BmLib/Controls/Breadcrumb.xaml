@@ -140,13 +140,14 @@
                                                   FontSize="{TemplateBinding FontSize}"
                                                   Text="{Binding SuggestedPath, UpdateSourceTrigger=Explicit}"
                                                   IsEnabled="{Binding EnableBreadcrumb, Mode=OneWay, Converter={StaticResource fb}}"
+                                                
                                                   SuggestSources="{Binding SuggestSources}"
                                                   EnableSuggestions="{Binding ElementName=PART_Switch,Path=IsSwitchOn,Converter={StaticResource fb}}"
-                                                  HierarchyHelper="{x:Null}">
-                                                <!--
-                                                    DisplayMemberPath="FullPath"
-                                                      ValuePath="FullPath" 
-                                                -->
+
+                                                  HierarchyHelper="{x:Null}"
+                                                  DisplayMemberPath="Header"
+                                                  ValuePath="Value"
+                                                >
                                             </sbox:SuggestBox>
 
                                         </Grid>
