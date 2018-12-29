@@ -6,7 +6,7 @@
     using System.Collections.Generic;
     using System.Linq;
 
-    public class LocationIndicator
+    internal class LocationIndicator
     {
         #region fields
         private readonly List<IDirectoryBrowser> _CurrentPath;
@@ -135,6 +135,66 @@
             }
 
             return path;
+        }
+
+        /// <summary>
+        /// Gets a Shell Path (sequence of localized item names) or a
+        /// file system path and indicates the type of path with <paramref name="pathTypeParam"/>.
+        /// </summary>
+        /// <param name="pathTypeParam"></param>
+        /// <returns></returns>
+        public string GetPath(out PathType pathTypeParam)
+        {
+            pathTypeParam = PathType.Unknown;
+            string path = string.Empty;
+
+            path = GetFileSystemPath();
+            pathTypeParam = PathType.FileSystemPath;
+
+            if (string.IsNullOrEmpty(path))
+            {
+                path = GetWinShellPath();
+                pathTypeParam = PathType.WinShellPath;
+            }
+
+            return path;
+        }
+
+        /// <summary>
+        /// Compares the given path with the path in this object
+        /// and indicates whether they match or not.
+        /// </summary>
+        /// <param name="inputPath"></param>
+        /// <returns></returns>
+        public bool IsCurrentPath(string inputPath)
+        {
+            PathType pathType = PathType.Unknown;
+            string path = GetPath(out pathType);
+
+            return IsCurrentPath(inputPath, path);
+        }
+
+        /// <summary>
+        /// Compares 2 to paths and indicates whether they match or not.
+        /// </summary>
+        /// <param name="inputPath"></param>
+        /// <param name="path"></param>
+        /// <returns></returns>
+        public bool IsCurrentPath(string inputPath, string path)
+        {
+            if (string.IsNullOrEmpty(inputPath) == true &&
+                string.IsNullOrEmpty(path) == true)
+                return true;
+
+            // Remove ending backslash to normalize both strings for comparison
+            int idx = inputPath.LastIndexOf('\\');
+            if (idx == (inputPath.Length - 1))
+                inputPath = inputPath.Substring(0, inputPath.Length - 1);
+
+            if (string.Compare(path, inputPath, true) == 0)
+                return true;
+
+            return false;
         }
 
         /// <summary>

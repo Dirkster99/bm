@@ -1,5 +1,6 @@
 ﻿namespace BreadcrumbTestLib.ViewModels
 {
+    using BreadcrumbTestLib.Models;
     using ShellBrowserLib;
     using ShellBrowserLib.Enums;
     using ShellBrowserLib.IDs;
@@ -29,6 +30,17 @@
         {
             input = (input == null ? string.Empty : input);
 
+            // location indicator matches input? if so, use this to list suggestion
+            var li = location as LocationIndicator;
+            if (li != null && input != null)
+            {
+                PathType pathType = PathType.Unknown;
+                string path = li.GetPath(out pathType);
+
+                if (li.IsCurrentPath(input, path))
+                    return ListChildren(li.GetPathModels(), pathType);
+            }
+
             if (input.Length <= 1)
                 return Task.FromResult<IList<object>>(ListRootItems());
 
@@ -40,7 +52,7 @@
                 // Win shell path folder
                 IDirectoryBrowser[] path = null;
                 if (ShellBrowserLib.ShellBrowser.DirectoryExists(input, out path))
-                    return ListChildren(path);
+                    return ListChildren(path, PathType.WinShellPath);
                 else
                 {
                     // List RootItems or last known parent folder's children based on seperator
@@ -55,7 +67,7 @@
                         // Win shell path folder
                         path = null;
                         if (ShellBrowserLib.ShellBrowser.DirectoryExists(parentDir, out path))
-                            return ListChildren(path, searchMask);
+                            return ListChildren(path, PathType.WinShellPath, searchMask);
                     }
                 }
             }
@@ -67,9 +79,11 @@
         /// Gets a list of child elements (if any available) of the list item in the array.
         /// </summary>
         /// <param name="path"></param>
+        /// <param name="pathType"></param>
         /// <param name="searchMask"></param>
         /// <returns></returns>
         private static Task<IList<object>> ListChildren(IDirectoryBrowser[] path,
+                                                        PathType pathType,
                                                         string searchMask = null)
         {
             var dirPath = path[path.Length - 1];
@@ -81,7 +95,7 @@
 
             foreach (var item in ShellBrowserLib.ShellBrowser.GetChildItems(dirPath.PathShell, searchMask))
             {
-                AddItem(ref Items, item.Label, namedPath + '\\' + item.Name, path);
+                AddItem(ref Items, item.Label, namedPath + '\\' + item.Name, pathType, path);
             }
 
             return Task.FromResult<IList<object>>(Items);
@@ -97,13 +111,14 @@
             var parent = ShellBrowser.Create(KF_IID.ID_FOLDERID_Desktop);
 
             // Get Root Items below Desktop
-            // (filter out recycle bin and control panel entries since its not that useful...)
             foreach (var item in ShellBrowserLib.ShellBrowser.GetChildItems(KF_IID.ID_FOLDERID_Desktop))
             {
+                // filter out RecycleBin and ControlPanel...
                 if (string.Compare(item.SpecialPathId, KF_IID.ID_FOLDERID_RecycleBinFolder, true) != 0 &&
                     string.Compare(item.PathRAW, "::{26EE0668-A00A-44D7-9371-BEB064C98683}", true) != 0)
                 {
-                    AddItem(ref rootItems, item.Label, item.Name, parent);
+                    AddItem(ref rootItems, item.Label, item.Name, PathType.WinShellPath,
+                                           parent);
                 }
             }
 
@@ -143,15 +158,19 @@
             var parent = ShellBrowser.Create(input);
             foreach (var item in ShellBrowserLib.ShellBrowser.GetChildItems(input, searchMask))
             {
-                AddItem(ref Items, item.Label, item.PathFileSystem, parent);
+                AddItem(ref Items, item.Label, item.PathFileSystem, PathType.FileSystemPath,
+                                   parent);
             }
 
             return Items;
         }
 
-        private static void AddItem(ref List<object> items, string header, string value, object parent)
+        private static void AddItem(ref List<object> items,
+                                    string header,
+                                    string textPath, PathType pathType,
+                                    object parent)
         {
-            var newItem = new SuggestionListItem(header, value, parent);
+            var newItem = new SuggestionListItem(header, textPath, parent, pathType);
             items.Add(newItem);
 
             ////items.Add(new
