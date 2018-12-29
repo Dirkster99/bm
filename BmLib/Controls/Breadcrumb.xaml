@@ -89,7 +89,7 @@
                                      >
                                     <ctrls:Switch.ContentOn>
                                         <!-- Show TreeView with RootDropDown Items -->
-                                        <Grid Focusable="True" FocusVisualStyle="{x:Null}">
+                                        <Grid Focusable="True">
                                             <Grid.InputBindings>
                                                 <!-- Use Rename Shortcut F2 to support switching content -->
                                                 <KeyBinding Key="F2"
