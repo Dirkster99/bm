@@ -146,7 +146,7 @@
 
                                                   HierarchyHelper="{x:Null}"
                                                   DisplayMemberPath="Header"
-                                                  ValuePath="Value"
+                                                  ValuePath="TextPath"
                                                 >
                                             </sbox:SuggestBox>
 

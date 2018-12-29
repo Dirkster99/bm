@@ -10,15 +10,15 @@
         /// Class constructor
         /// </summary>
         /// <param name="headerParam"></param>
-        /// <param name="valueParam"></param>
+        /// <param name="textpathParam"></param>
         /// <param name="parentParam"></param>
         public SuggestionListItem(string headerParam,
-                                  string valueParam,
+                                  string textpathParam,
                                   object parentParam)
             :this()
         {
             Header = headerParam;
-            Value = valueParam;
+            TextPath = textpathParam;
             Parent = parentParam;
         }
 
@@ -33,7 +33,7 @@
         #region properties
         public string Header { get; }
 
-        public string Value { get; }
+        public string TextPath { get; }
 
         public object Parent { get; }
         #endregion properties
