@@ -23,7 +23,7 @@
 
     <Style TargetType="{x:Type bc:Switch}" x:Key="{x:Type bc:Switch}">
         <Setter Property="Template" Value="{StaticResource SwitchTemplateKey}" />
-        <Setter Property="Focusable" Value="False" />
+        <Setter Property="Focusable" Value="True" />
     </Style>
 
 </ResourceDictionary>

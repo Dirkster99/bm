@@ -15,6 +15,7 @@
     </ResourceDictionary.MergedDictionaries>
     
     <Style TargetType="{x:Type ctrls:Breadcrumb}">
+        <Setter Property="Focusable" Value="True"/>
         <Setter Property="BorderBrush" Value="{DynamicResource {x:Static reskeys:ResourceKeys.ControlBorderBrushKey}}"/>
         <Setter Property="BorderThickness" Value="1"/>
         <Setter Property="Margin" Value="0" />
@@ -88,7 +89,14 @@
                                      >
                                     <ctrls:Switch.ContentOn>
                                         <!-- Show TreeView with RootDropDown Items -->
-                                        <Grid>
+                                        <Grid Focusable="True" FocusVisualStyle="{x:Null}">
+                                            <Grid.InputBindings>
+                                                <!-- Use Rename Shortcut F2 to support switching content -->
+                                                <KeyBinding Key="F2"
+                                                            Command="{Binding SwitchCommand,RelativeSource={RelativeSource AncestorType={x:Type ctrls:Breadcrumb}},Mode=OneTime}"
+                                            />
+                                            </Grid.InputBindings>
+                                            
                                             <Grid.ColumnDefinitions>
                                                 <ColumnDefinition Width="Auto"/>
                                                 <ColumnDefinition Width="*"/>
@@ -99,7 +107,7 @@
                                                  at the 2nd left most button in the control -->
                                             <ctrls:DropDownList Grid.Column="0"
                                                                 x:Name="PART_RootDropDownList"
-                                                                VerticalAlignment="Stretch" 
+                                                                behav:SelectionChangedCommand.ChangedCommand="{TemplateBinding RootDropDownSelectionChangedCommand}"
                                                                 ItemsSource="{TemplateBinding RootDropDownItemsSource}"
                                                                 SelectedValuePath="{TemplateBinding RootDropDownSelectedValuePath}"
                                                                 SelectedValue="{Binding RootDropDownSelectedValue,Mode=TwoWay, UpdateSourceTrigger=PropertyChanged,RelativeSource={RelativeSource AncestorType={x:Type ctrls:Breadcrumb}}}"
@@ -107,7 +115,7 @@
                                                                 ItemContainerStyle="{TemplateBinding RootDropDownListItemContainerStyle}"
                                                                 Header="{TemplateBinding RootDropDownListHeader}"
                                                                 HorizontalAlignment="Left"
-                                                                behav:SelectionChangedCommand.ChangedCommand="{TemplateBinding RootDropDownSelectionChangedCommand}"
+                                                                VerticalAlignment="Stretch" 
                                                                 Margin="0"
                                                                 Padding="0"
                                                             />
@@ -115,13 +123,13 @@
                                             <!-- The BreadcrumbTree control displays the complete path and each drop down list -->
                                             <uc:BreadcrumbTree Grid.Column="1"
                                                                x:Name="PART_BreadcrumbTree"
-                                                               Margin="0"
-                                                               Padding="0"
                                                                DropDownListItemDataTemplate="{TemplateBinding DropDownListItemDataTemplate}"
                                                                ItemsSource="{TemplateBinding TreeItemsSource}"
                                                                ItemTemplate="{TemplateBinding TreeItemTemplate}"
                                                                ItemContainerStyle="{TemplateBinding TreeItemContainerStyle}"
                                                                VerticalAlignment="Stretch"
+                                                               Margin="0"
+                                                               Padding="0"
                                                                />
 
                                             <!-- Grid.Column="2" Is OverflowGap which is necessary to reach Switch
@@ -129,7 +137,6 @@
                                         </Grid>
                                     </ctrls:Switch.ContentOn>
                                     <ctrls:Switch.ContentOff>
-                                        <Grid>
                                             <sbox:SuggestBox
                                                   x:Name="PART_SuggestBox"
                                                   Visibility="{Binding IsSwitchOn, RelativeSource={RelativeSource AncestorType=ctrls:Switch}, Mode=OneWay, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource btv1}}"
@@ -149,8 +156,6 @@
                                                   ValuePath="TextPath"
                                                 >
                                             </sbox:SuggestBox>
-
-                                        </Grid>
                                     </ctrls:Switch.ContentOff>
                                 </ctrls:Switch>
                             </Grid>
@@ -166,7 +171,6 @@
                                     <!-- Cancel Suggestions Button -->
                                     <Button x:Name="PART_CancelSuggestion"
                                         Style="{DynamicResource {x:Static reskeys:ResourceKeys.RefreshCancel_ButtonStyle}}"
-                                        DataContext="{TemplateBinding TaskQueueProcessing}"
                                         Visibility="{Binding ElementName=PART_Switch, Path=IsSwitchOn,Converter={StaticResource BoolToVisibilityConverterNeg},UpdateSourceTrigger=PropertyChanged,Mode=OneWay}"                                        
                                         ToolTip="Cancel Editing (Esc)"
                                         Margin="3" Padding="0"

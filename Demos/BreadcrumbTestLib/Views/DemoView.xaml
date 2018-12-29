@@ -14,7 +14,8 @@
         xmlns:convLib="clr-namespace:BmLib.Converters;assembly=BmLib"
 
         mc:Ignorable="d" 
-        d:DesignHeight="450" d:DesignWidth="800">
+        d:DesignHeight="450" d:DesignWidth="800"
+       >
     <Grid Margin="12">
         <Grid.Resources>
             <ResourceDictionary>
@@ -90,6 +91,7 @@
                                   
                                   TaskQueueProcessing="{Binding Data.BreadcrumbController.TaskQueue, Source={StaticResource AppDataContextProxy}}"
                                   Progressing="{Binding Progressing}"
+                                  
                                   Margin="3"
                                   Padding="3"
                               >

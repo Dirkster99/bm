@@ -621,19 +621,36 @@
                 await Control_SuggestBox.Dispatcher.BeginInvoke(new Action(() =>
                 {
                     Control_SuggestBox.InitializeSuggestions();
-                    Keyboard.Focus(Control_SuggestBox);
                     Control_SuggestBox.SelectAll();
-                    Control_SuggestBox.Focus();
+
+                    // Focus the newly switched UI element (requires Focusable="True")
+                    IInputElement inpcontrol = Control_Switch.ContentOff as IInputElement;
+                    if (inpcontrol != null)
+                    {
+                        Keyboard.Focus(inpcontrol);
+                        inpcontrol.Focus();
+                    }
 
                 }), System.Windows.Threading.DispatcherPriority.Background);
             }
-            ////else
-            ////{
-            ////    // Switch from suggestbox to tree view
-            ////    if (OldValue == false && NewValue == true)
-            ////    {
-            ////    }
-            ////}
+            else
+            {
+                // Switch from suggestbox to tree view
+                if (OldValue == false && NewValue == true)
+                {
+                    await Control_Switch.Dispatcher.BeginInvoke(new Action(() =>
+                    {
+                        // Focus the newly switched UI element (requires Focusable="True")
+                        IInputElement inpcontrol = Control_Switch.ContentOn as IInputElement;
+                        if (inpcontrol != null)
+                        {
+                            Keyboard.Focus(inpcontrol);
+                            inpcontrol.Focus();
+                        }
+
+                    }), System.Windows.Threading.DispatcherPriority.Background);
+                }
+            }
         }
 
         /// <summary>

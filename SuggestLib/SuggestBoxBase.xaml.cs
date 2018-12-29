@@ -569,7 +569,7 @@
                     if (IsPopupOpened == true)
                     {
                         if (_PART_ItemList.IsKeyboardFocusWithin)
-                            updateValueFromListBox();
+                            updateValueFromListBox(false);
 
                         SetPopUp(false, "OnPreviewKeyDown");
                         updateSource();
