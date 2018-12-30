@@ -1,8 +1,10 @@
 ﻿namespace BreadcrumbTestLib.Models
 {
+    using ShellBrowser.Enums;
     using ShellBrowserLib;
     using ShellBrowserLib.Enums;
     using ShellBrowserLib.Interfaces;
+    using System;
     using System.Collections.Generic;
     using System.Linq;
 
@@ -114,6 +116,23 @@
         }
 
         /// <summary>
+        /// Resest the path items kept in this object with the <see cref="pathList"/>.
+        /// </summary>
+        /// <param name="pathList"></param>
+        public void ResetPath(List<IDirectoryBrowser> pathList)
+        {
+            _CurrentPath.Clear();
+
+            if (pathList == null)
+                return;
+
+            foreach (var item in pathList)
+            {
+                _CurrentPath.Add(item.Clone() as IDirectoryBrowser);
+            }
+        }
+
+        /// <summary>
         /// Gets a path that contains either the real file system location
         /// or a location based on Named items along the current path (to avoid using SpecialPathIDs).
         /// </summary>
@@ -166,35 +185,12 @@
         /// </summary>
         /// <param name="inputPath"></param>
         /// <returns></returns>
-        public bool IsCurrentPath(string inputPath)
+        public PathMatch IsCurrentPath(string inputPath)
         {
             PathType pathType = PathType.Unknown;
             string path = GetPath(out pathType);
 
-            return IsCurrentPath(inputPath, path);
-        }
-
-        /// <summary>
-        /// Compares 2 to paths and indicates whether they match or not.
-        /// </summary>
-        /// <param name="inputPath"></param>
-        /// <param name="path"></param>
-        /// <returns></returns>
-        public bool IsCurrentPath(string inputPath, string path)
-        {
-            if (string.IsNullOrEmpty(inputPath) == true &&
-                string.IsNullOrEmpty(path) == true)
-                return true;
-
-            // Remove ending backslash to normalize both strings for comparison
-            int idx = inputPath.LastIndexOf('\\');
-            if (idx == (inputPath.Length - 1))
-                inputPath = inputPath.Substring(0, inputPath.Length - 1);
-
-            if (string.Compare(path, inputPath, true) == 0)
-                return true;
-
-            return false;
+            return ShellBrowser.IsCurrentPath(inputPath, path);
         }
 
         /// <summary>
@@ -204,6 +200,24 @@
         public void Add(IDirectoryBrowser item)
         {
             _CurrentPath.Add(item.Clone() as IDirectoryBrowser);
+        }
+
+        /// <summary>
+        /// Removes a range of path items from the <see cref="Items"/> collection
+        /// 
+        /// Exceptions:
+        /// <see cref="System.ArgumentOutOfRangeException"/>:
+        ///   index is less than 0.-or- count is less than 0.
+        ///
+        /// <see cref="System.ArgumentException"/>:
+        ///   index and count do not denote a valid range of elements
+        ///   in the list of <see cref="Items"/>
+        /// </summary>
+        /// <param name="index">The zero-based starting index of the range of elements to remove.</param>
+        /// <param name="count">The number of elements to remove.</param>
+        public void RemoveRange(int index, int count)
+        {
+            _CurrentPath.RemoveRange(index, count);
         }
 
         /// <summary>

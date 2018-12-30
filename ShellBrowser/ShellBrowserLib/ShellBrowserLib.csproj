@@ -51,6 +51,7 @@
     <Compile Include="Browser\DirectoryBrowser.cs" />
     <Compile Include="Browser\FilterMask.cs" />
     <Compile Include="Enums\DirectoryItemFlags.cs" />
+    <Compile Include="Enums\PathMatch.cs" />
     <Compile Include="Enums\PathType.cs" />
     <Compile Include="Enums\PathHandler.cs" />
     <Compile Include="FileSystemCommands.cs" />

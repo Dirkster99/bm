@@ -18,6 +18,7 @@
     using System.Text;
     using ShellBrowserLib.Enums;
     using System.Linq;
+    using global::ShellBrowser.Enums;
 
     /// <summary>
     /// Implements core API type methods and properties that are used to interact
@@ -395,7 +396,7 @@
             if (string.IsNullOrEmpty(folder) == true)
                 return null;
 
-            folder = DirectoryBrowser.NormalizePath(folder);
+            folder = ShellBrowser.NormalizePath(folder);
 
             string[] dirs = null;
 
@@ -683,29 +684,42 @@
         }
 
         /// <summary>
-        /// Determines if 2 string based paths describe the same location or not.
-        /// The method performs parsing of the given strings only.
-        /// 
-        /// Both paths should be normalized ('C:' vs. 'C:\') befores this is invoked.
-        /// Method returns false if any of the given paths is empty.
+        /// Compares 2 to paths and indicates whether they match or not.
         /// </summary>
-        /// <param name="parentPath"></param>
-        /// <param name="childPath"></param>
+        /// <param name="inputPath"></param>
+        /// <param name="path"></param>
         /// <returns></returns>
-        public static bool IsPathSameLocation(string parentPath, string childPath)
+        public static PathMatch IsCurrentPath(string inputPath, string path)
         {
-            if (string.IsNullOrEmpty(parentPath) == true || string.IsNullOrEmpty(childPath) == true)
-                return false;
+            if (string.IsNullOrEmpty(inputPath) == true &&
+                string.IsNullOrEmpty(path) == true)
+                return PathMatch.CompleteMatch;
 
-            int idx = parentPath.LastIndexOf('\\');         // Remove last seperator char if present
-            if (idx > 0 && idx == parentPath.Length - 1)
-                parentPath = parentPath.Substring(0, idx);
+            // Remove ending backslash to normalize both strings for comparison
+            int idx = inputPath.LastIndexOf('\\');
+            if (idx == (inputPath.Length - 1))
+                inputPath = inputPath.Substring(0, inputPath.Length - 1);
 
-            idx = childPath.LastIndexOf('\\');              // Remove last seperator char if present
-            if (idx > 0 && idx == childPath.Length - 1)
-                childPath = childPath.Substring(0, idx);
+            if (string.Compare(path, inputPath, true) == 0)
+                return PathMatch.CompleteMatch;
 
-            return (string.Compare(childPath, parentPath, true) == 0);
+            if (inputPath.Length > path.Length)
+            {
+                string tmpInputPath = inputPath.Substring(0, path.Length);
+                if (string.Compare(path, tmpInputPath, true) == 0)
+                    return PathMatch.PartialTarget;
+            }
+            else
+            {
+                if (path.Length > inputPath.Length)
+                {
+                    string tmpPath = path.Substring(0, inputPath.Length);
+                    if (string.Compare(inputPath, tmpPath, true) == 0)
+                        return PathMatch.PartialSource;
+                }
+            }
+
+            return PathMatch.Unrelated;
         }
 
         /// <summary>
@@ -774,6 +788,60 @@
             }
 
             return true;
+        }
+
+
+        /// <summary>
+        /// Make sure that a path reference does actually work with
+        /// <see cref="System.IO.DirectoryInfo"/> by replacing 'C:' by 'C:\'.
+        /// </summary>
+        /// <param name="dirOrfilePath"></param>
+        /// <returns></returns>
+        public static string NormalizePath(string dirOrfilePath)
+        {
+            if (string.IsNullOrEmpty(dirOrfilePath) == true)
+                return null;
+
+            // The dirinfo constructor will not work with 'C:' but does work with 'C:\'
+            if (dirOrfilePath.Length < 2)
+                return null;
+
+            if (dirOrfilePath.Length == 2)
+            {
+                if (dirOrfilePath[dirOrfilePath.Length - 1] == ':')
+                    return dirOrfilePath + System.IO.Path.DirectorySeparatorChar;
+            }
+
+            if (dirOrfilePath.Length == 3)
+            {
+                if (dirOrfilePath[dirOrfilePath.Length - 2] == ':' &&
+                    dirOrfilePath[dirOrfilePath.Length - 1] == System.IO.Path.DirectorySeparatorChar)
+                    return dirOrfilePath;
+
+                if (dirOrfilePath[1] == ':')
+                    return "" + dirOrfilePath[0] + dirOrfilePath[1] +
+                                System.IO.Path.DirectorySeparatorChar + dirOrfilePath[2];
+                else
+                    return dirOrfilePath;
+            }
+
+            // Insert a backslash in 3rd character position if not already present
+            // C:Temp\myfile -> C:\Temp\myfile
+            if (dirOrfilePath.Length >= 3)
+            {
+                if (char.ToUpper(dirOrfilePath[0]) >= 'A' && char.ToUpper(dirOrfilePath[0]) <= 'Z' &&
+                    dirOrfilePath[1] == ':' &&
+                    dirOrfilePath[2] != '\\')
+                {
+                    dirOrfilePath = dirOrfilePath.Substring(0, 2) + "\\" + dirOrfilePath.Substring(2);
+                }
+            }
+
+            // This will normalize directory and drive references into 'C:' or 'C:\Temp'
+            if (dirOrfilePath[dirOrfilePath.Length - 1] == System.IO.Path.DirectorySeparatorChar)
+                dirOrfilePath = dirOrfilePath.Trim(System.IO.Path.DirectorySeparatorChar);
+
+            return dirOrfilePath;
         }
         #endregion methods
     }

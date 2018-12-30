@@ -1,12 +1,14 @@
 ﻿namespace BreadcrumbTestLib.ViewModels
 {
     using BreadcrumbTestLib.Models;
+    using ShellBrowser.Enums;
     using ShellBrowserLib;
     using ShellBrowserLib.Enums;
     using ShellBrowserLib.IDs;
     using ShellBrowserLib.Interfaces;
     using SuggestLib.Interfaces;
     using System.Collections.Generic;
+    using System.Linq;
     using System.Threading.Tasks;
 
     /// <summary>
@@ -32,13 +34,55 @@
 
             // location indicator matches input? if so, use this to list suggestion
             var li = location as LocationIndicator;
-            if (li != null && input != null)
+            if (li != null && input.Length > 1)
             {
+                input = ShellBrowser.NormalizePath(input);
+
                 PathType pathType = PathType.Unknown;
                 string path = li.GetPath(out pathType);
 
-                if (li.IsCurrentPath(input, path))
-                    return ListChildren(li.GetPathModels(), pathType);
+                var match = ShellBrowser.IsCurrentPath(input, path);
+
+                switch (match)
+                {
+                    case PathMatch.CompleteMatch:
+                        return ListChildren(li.GetPathModels(), pathType);
+
+                    case PathMatch.PartialSource:
+                        {
+                            string pathExt = null;
+                            var pathModels = li.GetPathModels();
+                            int idx = ShellBrowser.FindCommonRoot(pathModels, input, out pathExt);
+
+                            if (idx > 0)
+                            {
+                                idx++;  // Keep common root and remove everything else
+
+                                li.RemoveRange(idx, li.Count - idx);
+                                return ListChildren(li.GetPathModels(), pathType);
+                            }
+                        }
+                        break;
+
+                    case PathMatch.PartialTarget:
+                        {
+                            var pathList = li.Items.ToList();
+                            string pathExt = null;
+                            if (ShellBrowser.IsParentPathOf(path, input, out pathExt))
+                            {
+                                if (ShellBrowser.ExtendPath(ref pathList, pathExt))
+                                {
+                                    li.ResetPath(pathList);
+                                    return ListChildren(li.GetPathModels(), pathType);
+                                }
+                            }
+                        }
+                        break;
+
+                    case PathMatch.Unrelated:
+                    default:
+                        break;
+                }
             }
 
             if (input.Length <= 1)
@@ -95,7 +139,16 @@
 
             foreach (var item in ShellBrowserLib.ShellBrowser.GetChildItems(dirPath.PathShell, searchMask))
             {
-                AddItem(ref Items, item.Label, namedPath + '\\' + item.Name, pathType, path);
+                if (pathType == PathType.WinShellPath)
+                {
+                    AddItem(ref Items, item.Label, namedPath + '\\' + item.Name,
+                            PathType.WinShellPath, path);
+                }
+                else
+                {
+                    AddItem(ref Items, item.Label, item.PathFileSystem,
+                            PathType.FileSystemPath, path);
+                }
             }
 
             return Task.FromResult<IList<object>>(Items);

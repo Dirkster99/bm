@@ -216,7 +216,7 @@
 
             if (isSpecialID != ShellHelpers.SpecialPath.IsSpecialPath)
             {
-                normPath = DirectoryBrowser.NormalizePath(path);
+                normPath = ShellBrowser.NormalizePath(path);
                 hasPIDL = PidlManager.GetParentIdListFromPath(normPath, out parentIdList, out relativeChildIdList);
             }
             else

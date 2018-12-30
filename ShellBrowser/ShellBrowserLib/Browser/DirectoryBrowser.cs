@@ -247,56 +247,6 @@ namespace ShellBrowserLib.Browser
         }
 
         /// <summary>
-        /// Make sure that a path reference does actually work with
-        /// <see cref="System.IO.DirectoryInfo"/> by replacing 'C:' by 'C:\'.
-        /// </summary>
-        /// <param name="dirOrfilePath"></param>
-        /// <returns></returns>
-        internal static string NormalizePath(string dirOrfilePath)
-        {
-            if (string.IsNullOrEmpty(dirOrfilePath) == true)
-                return null;
-
-            // The dirinfo constructor will not work with 'C:' but does work with 'C:\'
-            if (dirOrfilePath.Length < 2)
-                return null;
-
-            if (dirOrfilePath.Length == 2)
-            {
-                if (dirOrfilePath[dirOrfilePath.Length - 1] == ':')
-                    return dirOrfilePath + System.IO.Path.DirectorySeparatorChar;
-            }
-
-            if (dirOrfilePath.Length == 3)
-            {
-                if (dirOrfilePath[dirOrfilePath.Length - 2] == ':' &&
-                    dirOrfilePath[dirOrfilePath.Length - 1] == System.IO.Path.DirectorySeparatorChar)
-                    return dirOrfilePath;
-
-                return "" + dirOrfilePath[0] + dirOrfilePath[1] +
-                            System.IO.Path.DirectorySeparatorChar + dirOrfilePath[2];
-            }
-
-            // Insert a backslash in 3rd character position if not already present
-            // C:Temp\myfile -> C:\Temp\myfile
-            if (dirOrfilePath.Length >= 3)
-            {
-                if (char.ToUpper(dirOrfilePath[0]) >= 'A' && char.ToUpper(dirOrfilePath[0]) <= 'Z' &&
-                    dirOrfilePath[1] == ':' &&
-                    dirOrfilePath[2] != '\\')
-                {
-                    dirOrfilePath = dirOrfilePath.Substring(0, 2) + "\\" + dirOrfilePath.Substring(2);
-                }
-            }
-
-            // This will normalize directory and drive references into 'C:' or 'C:\Temp'
-            if (dirOrfilePath[dirOrfilePath.Length - 1] == System.IO.Path.DirectorySeparatorChar)
-                dirOrfilePath = dirOrfilePath.Trim(System.IO.Path.DirectorySeparatorChar);
-
-            return dirOrfilePath;
-        }
-
-        /// <summary>
         /// Determines whether the specified object is equal to the current object.
         /// </summary>
         /// <param name="other">The object to compare with the current object.</param>
