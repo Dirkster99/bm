@@ -119,7 +119,7 @@
         /// Resest the path items kept in this object with the <see cref="pathList"/>.
         /// </summary>
         /// <param name="pathList"></param>
-        public void ResetPath(List<IDirectoryBrowser> pathList)
+        public void ResetPath(IEnumerable<IDirectoryBrowser> pathList)
         {
             _CurrentPath.Clear();
 
@@ -236,6 +236,11 @@
         public IDirectoryBrowser Peek()
         {
             return _CurrentPath.Last();
+        }
+
+        internal void ResetPath(object pathList)
+        {
+            throw new NotImplementedException();
         }
 
         /// <summary>

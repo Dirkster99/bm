@@ -81,6 +81,7 @@
 
                     case PathMatch.Unrelated:
                     default:
+                        li.Clear();      // Clear loaction indicator since path is completely new ...
                         break;
                 }
             }
@@ -88,9 +89,10 @@
             if (input.Length <= 1)
                 return Task.FromResult<IList<object>>(ListRootItems());
 
+            // Location indicator may be pointing somewhere unrelated ...
             // Are we searching a drive based path ?
             if (ShellBrowser.IsTypeOf(input) == PathType.FileSystemPath)
-                return Task.FromResult<IList<object>>(ParseFileSystemPath(input));
+                return Task.FromResult<IList<object>>(ParseFileSystemPath(input, li));
             else
             {
                 // Win shell path folder
@@ -178,10 +180,17 @@
             return rootItems;
         }
 
-        private List<object> ParseFileSystemPath(string input)
+        private List<object> ParseFileSystemPath(string input,
+                                                 LocationIndicator li)
         {
-            if (ShellBrowser.DirectoryExists(input))
-                return ListDriveItems(input);
+            IDirectoryBrowser[] pathItems = null;
+            if (ShellBrowser.DirectoryExists(input, out pathItems))
+            {
+                if (li != null)
+                    li.ResetPath(pathItems);
+
+                return ListSubItems(input);
+            }
 
             // List RootItems or last known parent folder's children based on seperator
             int sepIdx = input.LastIndexOf('\\');
@@ -192,7 +201,7 @@
 
                 // Win shell path folder
                 if (ShellBrowserLib.ShellBrowser.DirectoryExists(parentDir))
-                    return ListDriveItems(parentDir, searchMask);
+                    return ListSubItems(parentDir, searchMask);
             }
 
             return new List<object>();
@@ -203,8 +212,8 @@
         /// The returned items Value contain a complete path for each item.
         /// </summary>
         /// <returns></returns>
-        private List<object> ListDriveItems(string input,
-                                            string searchMask = null)
+        private List<object> ListSubItems(string input,
+                                          string searchMask = null)
         {
             List<object> Items = new List<object>();
 
@@ -225,13 +234,6 @@
         {
             var newItem = new SuggestionListItem(header, textPath, parent, pathType);
             items.Add(newItem);
-
-            ////items.Add(new
-            ////{
-            ////    Header = header,
-            ////    Value = value,
-            ////    Parent = parent
-            ////});
         }
     }
 }

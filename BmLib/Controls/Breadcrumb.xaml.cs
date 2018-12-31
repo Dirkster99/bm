@@ -41,6 +41,21 @@
         public const string PART_SuggestBox = "PART_SuggestBox";
         public const string PART_BreadcrumbTree = "PART_BreadcrumbTree";
 
+
+
+        public ValidationRule PathValidation
+        {
+            get { return (ValidationRule)GetValue(PathValidationProperty); }
+            set { SetValue(PathValidationProperty, value); }
+        }
+
+        // Using a DependencyProperty as the backing store for PathValidation.  This enables animation, styling, binding, etc...
+        public static readonly DependencyProperty PathValidationProperty =
+            DependencyProperty.Register("PathValidation", typeof(ValidationRule),
+                typeof(Breadcrumb), new PropertyMetadata(null));
+
+
+
         #region Switch DPs
         /// <summary>
         /// Backing store of the <see cref="SwitchHeader"/> dependency property.
@@ -284,6 +299,21 @@
                             //   or viewmodel method cannot be invoked here ...
                             if (isPathValid == true)
                                 IsSwitchOn = true;  // Switch on valid path only
+                            else
+                            {
+                                // Show a red validation error rectangle around SuggestionBox
+                                // if validation rule dependency property is available
+                                if (PathValidation != null)
+                                {
+                                    var bindingExpr = Control_SuggestBox.GetBindingExpression(TextBox.TextProperty);
+                                    if (bindingExpr != null)
+                                    {
+                                        Validation.MarkInvalid(bindingExpr,
+                                                new ValidationError(PathValidation, bindingExpr,
+                                                                    "Path does not exists.", null));
+                                    }
+                                }
+                            }
                         }
                     }
                     // This line controls whether switch command can execute or not

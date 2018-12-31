@@ -17,6 +17,7 @@ namespace BreadcrumbTestLib.ViewModels.Breadcrumbs
     using System.Threading;
     using System.Threading.Tasks;
     using System.Windows;
+    using System.Windows.Controls;
     using System.Windows.Input;
 
     /// <summary>
@@ -66,6 +67,8 @@ namespace BreadcrumbTestLib.ViewModels.Breadcrumbs
         /// </summary>
         protected BreadcrumbViewModel()
         {
+            PathValidation = new ShellPathValidationRule();
+
             _OverflowedAndRootItems = new ObservableCollection<BreadcrumbTreeItemViewModel>();
             _CurrentPath = new BreadcrumbTreeItemPath();
             _EnableBreadcrumb = true;
@@ -96,6 +99,11 @@ namespace BreadcrumbTestLib.ViewModels.Breadcrumbs
         #endregion browsing events
 
         #region properties
+        /// <summary>
+        /// Provide a way of validating whether a string path is valid or not.
+        /// </summary>
+        public ValidationRule PathValidation { get; }
+
         /// <summary>
         /// Gets a list of suggestion sources that are queries when the <see cref="SuggestionBox"/>
         /// is visible and the user can enter a string based path.

@@ -64,6 +64,7 @@
     <Compile Include="ViewModels\Breadcrumbs\BreadcrumbTreeItemHelperViewModel.cs" />
     <Compile Include="ViewModels\Breadcrumbs\BreadcrumbTreeItemViewModel.cs" />
     <Compile Include="ViewModels\Interfaces\IBreadcrumbTreeItemPath.cs" />
+    <Compile Include="ViewModels\Breadcrumbs\ShellPathValidationRule.cs" />
     <Compile Include="ViewModels\SuggestionListItem.cs" />
     <Compile Include="ViewModels\SuggestSourceDirectory.cs" />
     <Compile Include="ViewModels\Breadcrumbs\ProgressViewModel.cs" />
