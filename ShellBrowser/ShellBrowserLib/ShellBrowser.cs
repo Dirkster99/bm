@@ -237,9 +237,11 @@
         /// <param name="folderParseName">Is the parse name that should be used to emit child items for.</param>
         /// <param name="searchMask">Optional name of an item that should be filtered
         /// in case insensitive fashion when searching for a certain child rather than all children.</param>
+        /// <param name="itemFilter">Specify wether to filter only on names or on names and ParseNames</param>
         /// <returns>returns each item as <see cref="IDirectoryBrowser"/> object</returns>
         public static IEnumerable<IDirectoryBrowser> GetChildItems(string folderParseName,
-                                                                   string searchMask = null)
+                                                                   string searchMask = null,
+                                                                   SubItemFilter itemFilter = SubItemFilter.NameOnly)
         {
             if (string.IsNullOrEmpty(folderParseName) == true)
                 yield break;
@@ -342,7 +344,12 @@
                         if (filter != null)
                         {
                             if (filter.MatchFileMask(name) == false)
+                            {
+                                if (itemFilter == SubItemFilter.NameOnly) // Filter items on Names only
+                                    continue;
+
                                 bFilter = true;
+                            }
                         }
 
                         string parseName = string.Empty;

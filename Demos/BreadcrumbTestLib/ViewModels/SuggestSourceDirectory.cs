@@ -166,14 +166,15 @@
 
             // Get Root Items below ThisPC
             var parent = ShellBrowser.MyComputer;
-            foreach (var item in ShellBrowserLib.ShellBrowser.GetChildItems(parent.SpecialPathId, input + "*"))
+            foreach (var item in ShellBrowserLib.ShellBrowser.GetChildItems(parent.SpecialPathId,
+                                                                            input + "*", SubItemFilter.NameOrParsName))
             {
                 AddItem(ref rootItems, item.Label, item.PathFileSystem, PathType.FileSystemPath, parent);
             }
 
             // Get Root Items below Desktop
             parent = ShellBrowser.DesktopDirectory;
-            foreach (var item in ShellBrowserLib.ShellBrowser.GetChildItems(parent.SpecialPathId, input+"*"))
+            foreach (var item in ShellBrowserLib.ShellBrowser.GetChildItems(parent.SpecialPathId, input + "*"))
             {
                 // filter out RecycleBin, ControlPanel... since its not that useful here...
                 bool IsFilteredItem = string.Compare(item.SpecialPathId, KF_IID.ID_FOLDERID_RecycleBinFolder, true) == 0 ||
