@@ -86,7 +86,7 @@
                                   RootDropDownSelectedValue="{Binding SelectedRootValue,Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                                   RootDropDownSelectedValuePath="Selection.Value"
                                   RootDropDownSelectionChangedCommand="{Binding RootDropDownSelectionChangedCommand}"
-                                  PathValidation="{Binding PathValidation}"
+                                  PathValidation="{Binding PathValidation,Mode=OneTime}"
                                   
                                   TreeItemsSource="{Binding BreadcrumbSubTree.Entries.All, Mode=OneWay,UpdateSourceTrigger=PropertyChanged}"
                                   

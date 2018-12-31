@@ -72,7 +72,10 @@
         }
 
         /// <summary>
-        /// Gets the interface for a user's MyComputer (virtual folder).
+        /// Gets the interface for a user's 'This PC' (virtual folder).
+        /// 
+        /// This item usually lists Mounted drives (eg: 'C:\'),
+        /// and frequently used special folders like: Desktop, Music, Video, Downloads etc..
         /// </summary>
         public static IDirectoryBrowser MyComputer
         {
@@ -326,6 +329,7 @@
                     try
                     {
                         string name = string.Empty;
+                        bool bFilter = false;
                         if (iFolder.GetDisplayNameOf(apidl, SHGDNF.SHGDN_INFOLDER | SHGDNF.SHGDN_FOREDITING, ptrStr) == HRESULT.S_OK)
                         {
                             NativeMethods.StrRetToBuf(ptrStr, default(IntPtr),
@@ -338,7 +342,7 @@
                         if (filter != null)
                         {
                             if (filter.MatchFileMask(name) == false)
-                                continue;
+                                bFilter = true;
                         }
 
                         string parseName = string.Empty;
@@ -348,6 +352,13 @@
                                                       strbuf, NativeMethods.MAX_PATH);
 
                             parseName = strbuf.ToString();
+                        }
+
+                        // Skip this item if search parameter is set and this appears to be a non-match
+                        if (filter != null)
+                        {
+                            if (filter.MatchFileMask(parseName) == false && bFilter == true)
+                                continue;
                         }
 
                         string labelName = string.Empty;

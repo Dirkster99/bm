@@ -87,7 +87,7 @@
             }
 
             if (input.Length <= 1)
-                return Task.FromResult<IList<object>>(ListRootItems());
+                return Task.FromResult<IList<object>>(ListRootItems(input));
 
             // Location indicator may be pointing somewhere unrelated ...
             // Are we searching a drive based path ?
@@ -104,7 +104,7 @@
                     // List RootItems or last known parent folder's children based on seperator
                     int sepIdx = input.LastIndexOf('\\');
                     if (sepIdx <= 0)
-                        return Task.FromResult<IList<object>>(ListRootItems());
+                        return Task.FromResult<IList<object>>(ListRootItems(input));
                     else
                     {
                         var parentDir = input.Substring(0, sepIdx);
@@ -160,17 +160,29 @@
         /// Gets a list of logical drives attached to thisPC.
         /// </summary>
         /// <returns></returns>
-        private List<object> ListRootItems()
+        private List<object> ListRootItems(string input)
         {
             List<object> rootItems = new List<object>();
-            var parent = ShellBrowser.Create(KF_IID.ID_FOLDERID_Desktop);
+
+            // Get Root Items below ThisPC
+            var parent = ShellBrowser.MyComputer;
+            foreach (var item in ShellBrowserLib.ShellBrowser.GetChildItems(parent.SpecialPathId, input + "*"))
+            {
+                AddItem(ref rootItems, item.Label, item.PathFileSystem, PathType.FileSystemPath, parent);
+            }
 
             // Get Root Items below Desktop
-            foreach (var item in ShellBrowserLib.ShellBrowser.GetChildItems(KF_IID.ID_FOLDERID_Desktop))
+            parent = ShellBrowser.DesktopDirectory;
+            foreach (var item in ShellBrowserLib.ShellBrowser.GetChildItems(parent.SpecialPathId, input+"*"))
             {
-                // filter out RecycleBin and ControlPanel...
-                if (string.Compare(item.SpecialPathId, KF_IID.ID_FOLDERID_RecycleBinFolder, true) != 0 &&
-                    string.Compare(item.PathRAW, "::{26EE0668-A00A-44D7-9371-BEB064C98683}", true) != 0)
+                // filter out RecycleBin, ControlPanel... since its not that useful here...
+                bool IsFilteredItem = string.Compare(item.SpecialPathId, KF_IID.ID_FOLDERID_RecycleBinFolder, true) == 0 ||
+                                      string.Compare(item.PathRAW, "::{26EE0668-A00A-44D7-9371-BEB064C98683}", true) == 0;
+
+                // Filter out ThisPC since its items are handled in previous loop
+                bool IsThisPC = string.Compare(item.SpecialPathId, KF_IID.ID_FOLDERID_ComputerFolder, true) == 0;
+
+                if (IsFilteredItem == false && IsThisPC == false)
                 {
                     AddItem(ref rootItems, item.Label, item.Name, PathType.WinShellPath,
                                            parent);
@@ -183,14 +195,17 @@
         private List<object> ParseFileSystemPath(string input,
                                                  LocationIndicator li)
         {
-            IDirectoryBrowser[] pathItems = null;
-            if (ShellBrowser.DirectoryExists(input, out pathItems))
-            {
-                if (li != null)
-                    li.ResetPath(pathItems);
-
+            if (ShellBrowser.DirectoryExists(input))
                 return ListSubItems(input);
-            }
+
+//            IDirectoryBrowser[] pathItems = null;
+//            if (ShellBrowser.DirectoryExists(input, out pathItems))
+//            {
+//                if (li != null)
+//                    li.ResetPath(pathItems);
+//
+//                return ListSubItems(input);
+//            }
 
             // List RootItems or last known parent folder's children based on seperator
             int sepIdx = input.LastIndexOf('\\');
