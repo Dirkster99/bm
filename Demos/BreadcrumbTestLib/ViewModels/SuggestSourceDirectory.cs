@@ -7,7 +7,7 @@
     using ShellBrowserLib.IDs;
     using ShellBrowserLib.Interfaces;
     using SuggestLib.Interfaces;
-    using System.Collections.Generic;
+    using SuggestLib.SuggestSource;
     using System.Linq;
     using System.Threading.Tasks;
 
@@ -26,7 +26,7 @@
         /// <param name="input">Text input to formulate string based path.</param>
         /// <param name="helper"></param>
         /// <returns></returns>
-        public Task<IList<object>> SuggestAsync(object location,
+        public Task<ISuggestResult> SuggestAsync(object location,
                                                 string input,
                                                 IHierarchyHelper helper)
         {
@@ -87,12 +87,12 @@
             }
 
             if (input.Length <= 1)
-                return Task.FromResult<IList<object>>(ListRootItems(input));
+                return Task.FromResult<ISuggestResult>(ListRootItems(input));
 
             // Location indicator may be pointing somewhere unrelated ...
             // Are we searching a drive based path ?
             if (ShellBrowser.IsTypeOf(input) == PathType.FileSystemPath)
-                return Task.FromResult<IList<object>>(ParseFileSystemPath(input, li));
+                return Task.FromResult<ISuggestResult>(ParseFileSystemPath(input, li));
             else
             {
                 // Win shell path folder
@@ -104,7 +104,7 @@
                     // List RootItems or last known parent folder's children based on seperator
                     int sepIdx = input.LastIndexOf('\\');
                     if (sepIdx <= 0)
-                        return Task.FromResult<IList<object>>(ListRootItems(input));
+                        return Task.FromResult<ISuggestResult>(ListRootItems(input));
                     else
                     {
                         var parentDir = input.Substring(0, sepIdx);
@@ -118,7 +118,7 @@
                 }
             }
 
-            return Task.FromResult<IList<object>>(new List<object>());
+            return Task.FromResult<ISuggestResult>(new SuggestResult());
         }
 
         /// <summary>
@@ -128,13 +128,14 @@
         /// <param name="pathType"></param>
         /// <param name="searchMask"></param>
         /// <returns></returns>
-        private static Task<IList<object>> ListChildren(IDirectoryBrowser[] path,
+        private static Task<ISuggestResult> ListChildren(IDirectoryBrowser[] path,
                                                         PathType pathType,
                                                         string searchMask = null)
         {
             var dirPath = path[path.Length - 1];
 
-            List<object> Items = new List<object>();
+            SuggestResult result = new SuggestResult();
+
             string namedPath = path[0].Name;
             for (int i = 1; i < path.Length; i++)
                 namedPath = namedPath + '\\' + path[i].Name;
@@ -143,38 +144,44 @@
             {
                 if (pathType == PathType.WinShellPath)
                 {
-                    AddItem(ref Items, item.Label, namedPath + '\\' + item.Name,
+                    AddItem(result, item.Label, namedPath + '\\' + item.Name,
                             PathType.WinShellPath, path);
                 }
                 else
                 {
-                    AddItem(ref Items, item.Label, item.PathFileSystem,
-                            PathType.FileSystemPath, path);
+                    if (string.IsNullOrEmpty(item.PathFileSystem) == false)
+                    {
+                        AddItem(result, item.Label, item.PathFileSystem,
+                                PathType.FileSystemPath, path);
+                    }
                 }
             }
 
-            return Task.FromResult<IList<object>>(Items);
+            return Task.FromResult<ISuggestResult>(result);
         }
 
         /// <summary>
         /// Gets a list of logical drives attached to thisPC.
         /// </summary>
         /// <returns></returns>
-        private List<object> ListRootItems(string input)
+        private ISuggestResult ListRootItems(string input)
         {
-            List<object> rootItems = new List<object>();
+            SuggestResult result = new SuggestResult();
 
             // Get Root Items below ThisPC
             var parent = ShellBrowser.MyComputer;
-            foreach (var item in ShellBrowserLib.ShellBrowser.GetChildItems(parent.SpecialPathId,
-                                                                            input + "*", SubItemFilter.NameOrParsName))
+            foreach (var item in ShellBrowser.GetChildItems(parent.SpecialPathId,
+                                                            input + "*", SubItemFilter.NameOrParsName))
             {
-                AddItem(ref rootItems, item.Label, item.PathFileSystem, PathType.FileSystemPath, parent);
+                if (string.IsNullOrEmpty(item.PathFileSystem) == false)
+                {
+                    AddItem(result, item.Label, item.PathFileSystem, PathType.FileSystemPath, parent);
+                }
             }
 
             // Get Root Items below Desktop
             parent = ShellBrowser.DesktopDirectory;
-            foreach (var item in ShellBrowserLib.ShellBrowser.GetChildItems(parent.SpecialPathId, input + "*"))
+            foreach (var item in ShellBrowser.GetChildItems(parent.SpecialPathId, input + "*"))
             {
                 // filter out RecycleBin, ControlPanel... since its not that useful here...
                 bool IsFilteredItem = string.Compare(item.SpecialPathId, KF_IID.ID_FOLDERID_RecycleBinFolder, true) == 0 ||
@@ -185,12 +192,21 @@
 
                 if (IsFilteredItem == false && IsThisPC == false)
                 {
-                    AddItem(ref rootItems, item.Label, item.Name, PathType.WinShellPath,
-                                           parent);
+                    AddItem(result, item.Label, item.Name, PathType.WinShellPath, parent);
                 }
             }
 
-            return rootItems;
+            // Pronounce path as invalid if list of suggestions is empty and path is non-existing
+            // We do this here because path could be non-existing but we could still find filter suggestions
+            // (eg: 'c' -> suggestion 'C:\')
+            if (result.Suggestions.Count == 0)
+            {
+                IDirectoryBrowser[] pathItems = null;
+                if (ShellBrowser.DirectoryExists(input, out pathItems) == false)
+                    result.ValidPath = false;
+            }
+
+            return result;
         }
 
         /// <summary>
@@ -206,7 +222,7 @@
         /// <param name="input"></param>
         /// <param name="li"></param>
         /// <returns></returns>
-        private List<object> ParseFileSystemPath(string input,
+        private ISuggestResult ParseFileSystemPath(string input,
                                                  LocationIndicator li)
         {
             IDirectoryBrowser[] pathItems = null;
@@ -235,7 +251,7 @@
                 }
             }
 
-            return new List<object>();
+            return new SuggestResult();
         }
 
         /// <summary>
@@ -243,28 +259,27 @@
         /// The returned items Value contain a complete path for each item.
         /// </summary>
         /// <returns></returns>
-        private List<object> ListSubItems(string input,
-                                          string searchMask = null)
+        private ISuggestResult ListSubItems(string input,
+                                            string searchMask = null)
         {
-            List<object> Items = new List<object>();
+            SuggestResult result = new SuggestResult();
 
             var parent = ShellBrowser.Create(input);
             foreach (var item in ShellBrowserLib.ShellBrowser.GetChildItems(input, searchMask))
             {
-                AddItem(ref Items, item.Label, item.PathFileSystem, PathType.FileSystemPath,
-                                   parent);
+                AddItem(result, item.Label, item.PathFileSystem, PathType.FileSystemPath, parent);
             }
 
-            return Items;
+            return result;
         }
 
-        private static void AddItem(ref List<object> items,
+        private static void AddItem(ISuggestResult result,
                                     string header,
                                     string textPath, PathType pathType,
                                     object parent)
         {
             var newItem = new SuggestionListItem(header, textPath, parent, pathType);
-            items.Add(newItem);
+            result.Suggestions.Add(newItem);
         }
     }
 }

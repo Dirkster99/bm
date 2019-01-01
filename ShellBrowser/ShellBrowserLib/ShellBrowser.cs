@@ -439,6 +439,97 @@
         }
 
         /// <summary>
+        /// Attempts to re-root a sequence of path model items
+        /// under the Desktop or ThisPC (filesystem).
+        /// </summary>
+        /// <param name="pathItems"></param>
+        /// <param name="newPath"></param>
+        /// <returns></returns>
+        public static IDirectoryBrowser[] FindRoot(IDirectoryBrowser[] pathItems,
+                                                   string newPath)
+        {
+            bool foundRoot = false;
+            List<IDirectoryBrowser> newRoot = new List<IDirectoryBrowser>();
+
+            var desktop = ShellBrowser.DesktopDirectory;
+            string pathExt = null;
+            if (ShellBrowser.IsParentPathOf(desktop.PathFileSystem, newPath, out pathExt))
+            {
+                // Search root under desktop
+                int idx = ShellBrowser.FindCommonRoot(pathItems, desktop.PathFileSystem, out pathExt);
+
+                if (idx >= 0)
+                {
+                    if ((pathItems[idx].ItemType & DirectoryItemFlags.Desktop) != 0)
+                    {
+                        if (idx < (pathItems.Length-1))
+                            idx++;
+                        else
+                            idx = -1; // Find Desktop under ThisPC/file system test below
+                    }
+                }
+
+                if (idx > 0)
+                {
+                    var dpItems = ShellBrowser.GetChildItems(KF_IID.ID_FOLDERID_Desktop, pathItems[idx].Name);
+                    if (dpItems.Any())
+                    {
+                        for (int i = idx; i < pathItems.Length; i++)
+                            newRoot.Add(pathItems[i].Clone() as IDirectoryBrowser);
+
+                        return newRoot.ToArray();
+                    }
+                }
+            }
+
+            // Second chance finding root under ThisPC
+            var thisPC = ShellBrowser.MyComputer;
+            foreach (var item in ShellBrowser.GetChildItems(KF_IID.ID_FOLDERID_ComputerFolder))
+            {
+                if (string.IsNullOrEmpty(item.PathFileSystem))
+                    continue;
+
+                pathExt = null;
+                if (ShellBrowser.IsParentPathOf(item.PathFileSystem, newPath, out pathExt) == true)
+                {
+                    // Search root under ThisPC
+                    int idx = ShellBrowser.FindCommonRoot(pathItems, item.PathFileSystem, out pathExt);
+
+                    if (idx >= 0)
+                    {
+                        var dpItems = ShellBrowser.GetChildItems(KF_IID.ID_FOLDERID_ComputerFolder, pathItems[idx].Name);
+                        if (dpItems.Any())
+                        {
+                            newRoot.Add(ShellBrowser.MyComputer);
+
+                            for (int i = idx; i < pathItems.Length; i++)
+                                newRoot.Add(pathItems[i].Clone() as IDirectoryBrowser);
+
+                            return newRoot.ToArray();
+                        }
+                    }
+                }
+            }
+
+            // Third chance try finding root under ThisPC
+            var items = ShellBrowser.GetChildItems(KF_IID.ID_FOLDERID_ComputerFolder, pathItems[0].Name);
+            if (items.Any())
+            {
+                foundRoot = true;
+                newRoot.Add(ShellBrowser.MyComputer);
+            }
+
+            // No rooted item found for re-mount
+            if (foundRoot == false)
+                return null;
+
+            for (int i = 0; i < pathItems.Length; i++) //Join path to root and return to sender
+                newRoot.Add(pathItems[i].Clone() as IDirectoryBrowser);
+
+            return newRoot.ToArray();
+        }
+
+        /// <summary>
         /// Determines if a directory (special or not) exists at the givem path
         /// (path can be a formatted as special path KF_IDD).
         /// </summary>

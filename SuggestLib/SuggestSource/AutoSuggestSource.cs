@@ -32,12 +32,12 @@
         /// <param name="input"></param>
         /// <param name="helper"></param>
         /// <returns></returns>
-        public Task<IList<object>> SuggestAsync(object data,
+        public Task<ISuggestResult> SuggestAsync(object data,
                                                 string input,
                                                 IHierarchyHelper helper)
         {
             if (helper == null)
-                return Task.FromResult<IList<object>>(new List<Object>());
+                return Task.FromResult<ISuggestResult>(new SuggestResult());
 
             string valuePath = helper.ExtractPath(input);
             string valueName = helper.ExtractName(input);
@@ -50,7 +50,7 @@
 
             var found = helper.GetItem(data, valuePath);
 
-            List<object> retVal = new List<object>();
+            ISuggestResult retVal = new SuggestResult();
 
             if (found != null)
             {
@@ -60,11 +60,11 @@
 
                     if (valuePathName.StartsWith(input, helper.StringComparisonOption) &&
                         !valuePathName.Equals(input, helper.StringComparisonOption))
-                        retVal.Add(item);
+                        retVal.Suggestions.Add(item);
                 }
             }
 
-            return Task.FromResult<IList<object>>(retVal);
+            return Task.FromResult<ISuggestResult>(retVal);
         }
         #endregion
     }

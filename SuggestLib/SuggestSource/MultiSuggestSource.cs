@@ -18,13 +18,16 @@
             _suggestSources = (new ISuggestSource[] { source1 }).Concat(moreSources).ToArray();
         }
 
-        public async Task<IList<object>> SuggestAsync(object data, string input, IHierarchyHelper helper)
+        public async Task<ISuggestResult> SuggestAsync(object data, string input, IHierarchyHelper helper)
         {
-            List<object> retVal = new List<object>();
-            foreach (var ss in _suggestSources)
-                retVal.AddRange(await ss.SuggestAsync(data, input, helper));
+            ISuggestResult result = new SuggestResult();
 
-            return retVal;
+            foreach (var ss in _suggestSources)
+            {
+                await ss.SuggestAsync(data, input, helper);
+            }
+
+            return result;
         }
     }
 }

@@ -1,6 +1,5 @@
 ﻿namespace SuggestLib.Interfaces
 {
-    using System.Collections.Generic;
     using System.Threading.Tasks;
 
     /// <summary>
@@ -20,7 +19,7 @@
         /// <param name="input">Text input to formulate string based path.</param>
         /// <param name="helper"></param>
         /// <returns></returns>
-        Task<IList<object>> SuggestAsync(object location,
+        Task<ISuggestResult> SuggestAsync(object location,
                                          string input,
                                          IHierarchyHelper helper);
     }

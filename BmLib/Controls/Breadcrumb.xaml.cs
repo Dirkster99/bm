@@ -41,8 +41,6 @@
         public const string PART_SuggestBox = "PART_SuggestBox";
         public const string PART_BreadcrumbTree = "PART_BreadcrumbTree";
 
-
-
         public ValidationRule PathValidation
         {
             get { return (ValidationRule)GetValue(PathValidationProperty); }
@@ -53,8 +51,6 @@
         public static readonly DependencyProperty PathValidationProperty =
             DependencyProperty.Register("PathValidation", typeof(ValidationRule),
                 typeof(Breadcrumb), new PropertyMetadata(null));
-
-
 
         #region Switch DPs
         /// <summary>
@@ -244,80 +240,9 @@
             {
                 if (_SwitchCommand == null)
                 {
-                    _SwitchCommand = new Base.RelayCommand<object>(async (p) =>
-                    {
-                        // Switching from TreeView to Suggestbox
-                        if (IsSwitchOn == true)
-                        {
-                            // Assumption: Control is already bound and current location
-                            // is available in text property
-                            if (_BreadcrumbModel == null)
-                            {
-                                // Overwrite this only if we are not in a cancel-suggestion-workflow
-                                _previousLocation = Control_SuggestBox.Text;
-                            }
-                            else
-                            {
-                                object locations;
-                                Control_SuggestBox.Text = _BreadcrumbModel.UpdateSuggestPath(out locations);
-                                _previousLocation = Control_SuggestBox.Text;
-
-                                Control_SuggestBox.RootItem = locations;
-
-                                IsSwitchOn = false;  // Switch to text based view
-                            }
-                        }
-                        else
-                        {
-                            var switchOnTextBoxEditResult = p as EditResult;
-
-                            // Switching from Suggestbox to TreeView
-                            bool isPathValid = true, goBackToPreviousLocation = false;
-                            string path;
-
-                            if (switchOnTextBoxEditResult != null)
-                            {
-                                // Editing was cancelled by the user (eg.: user pressed Escape key)
-                                if (switchOnTextBoxEditResult.Result == EditPathResult.Cancel)
-                                {
-                                    path = string.Empty;
-                                    goBackToPreviousLocation = true;
-                                }
-                                else
-                                    path = switchOnTextBoxEditResult.NewLocation;
-                            }
-                            else
-                                path = Control_SuggestBox.Text;
-
-                            if (_BreadcrumbModel == null)
-                                isPathValid = false;      // Cannot invoke viewmodel method
-                            else
-                                isPathValid = await _BreadcrumbModel.NavigateTreeViewModel(path, goBackToPreviousLocation);
-
-                            // Canceling navigation from edit result since path appears to be invalid
-                            // > Stay with false path if path does not exist
-                            //   or viewmodel method cannot be invoked here ...
-                            if (isPathValid == true)
-                                IsSwitchOn = true;  // Switch on valid path only
-                            else
-                            {
-                                // Show a red validation error rectangle around SuggestionBox
-                                // if validation rule dependency property is available
-                                if (PathValidation != null)
-                                {
-                                    var bindingExpr = Control_SuggestBox.GetBindingExpression(TextBox.TextProperty);
-                                    if (bindingExpr != null)
-                                    {
-                                        Validation.MarkInvalid(bindingExpr,
-                                                new ValidationError(PathValidation, bindingExpr,
-                                                                    "Path does not exists.", null));
-                                    }
-                                }
-                            }
-                        }
-                    }
-                    // This line controls whether switch command can execute or not
-                    , (p) => { return IsSwitchEnabled; }
+                    _SwitchCommand = new Base.RelayCommand<object>(
+                        (p) => SwitchCommandExecutedAsync(p)
+                      , (p) => IsSwitchEnabled // whether switch command can execute or not
                     );
                 }
 
@@ -680,6 +605,106 @@
 
                     }), System.Windows.Threading.DispatcherPriority.Background);
                 }
+            }
+        }
+
+        private async void SwitchCommandExecutedAsync(object parameter)
+        {
+            // Switching from TreeView to Suggestbox
+            if (IsSwitchOn == true)
+            {
+                MarkInvalidInputSuggestBox(false, null);
+
+                // Assumption: Control is already bound and current location
+                // is available in text property
+                if (_BreadcrumbModel == null)
+                {
+                    // Overwrite this only if we are not in a cancel-suggestion-workflow
+                    _previousLocation = Control_SuggestBox.Text;
+                }
+                else
+                {
+                    object locations;
+
+                    Control_SuggestBox.Text = _BreadcrumbModel.UpdateSuggestPath(out locations);
+                    _previousLocation = Control_SuggestBox.Text;
+
+                    Control_SuggestBox.RootItem = locations;
+
+                    IsSwitchOn = false;  // Switch to text based view
+                }
+            }
+            else
+            {
+                var switchOnTextBoxEditResult = parameter as EditResult;
+
+                // Switching from Suggestbox to TreeView
+                bool isPathValid = true, goBackToPreviousLocation = false;
+                string path;
+
+                if (switchOnTextBoxEditResult != null)
+                {
+                    // Editing was cancelled by the user (eg.: user pressed Escape key)
+                    if (switchOnTextBoxEditResult.Result == EditPathResult.Cancel)
+                    {
+                        path = string.Empty;
+                        goBackToPreviousLocation = true;
+                    }
+                    else
+                        path = switchOnTextBoxEditResult.NewLocation;
+                }
+                else
+                    path = Control_SuggestBox.Text;
+
+                if (_BreadcrumbModel == null)
+                    isPathValid = false;      // Cannot invoke viewmodel method
+                else
+                    isPathValid = await _BreadcrumbModel.NavigateTreeViewModel(path, goBackToPreviousLocation);
+
+                // Canceling navigation from edit result since path appears to be invalid
+                // > Stay with false path if path does not exist
+                //   or viewmodel method cannot be invoked here ...
+                if (isPathValid == true)
+                    IsSwitchOn = true;  // Switch on valid path only
+                else
+                {
+                    MarkInvalidInputSuggestBox(true, "Path does not exists.");
+                }
+            }
+        }
+
+        /// <summary>
+        /// Sets or clears a validation error on the SuggestBox
+        /// to indicate invalid input to the user.
+        /// </summary>
+        /// <param name="markError">True: Shows a red validation error rectangle around the SuggestBox
+        /// (<paramref name="msg"/> should also be set).
+        /// False: Clears previously set validation errors around the Text property of the SuggestBox.
+        /// </param>
+        /// <param name="msg">Error message (eg.: "invalid input") is set on the binding expression if
+        /// <paramref name="markError"/> is true.</param>
+        private void MarkInvalidInputSuggestBox(bool markError, string msg)
+        {
+            if (markError == true)
+            {
+                // Show a red validation error rectangle around SuggestionBox
+                // if validation rule dependency property is available
+                if (PathValidation != null)
+                {
+                    var bindingExpr = Control_SuggestBox.GetBindingExpression(TextBox.TextProperty);
+                    if (bindingExpr != null)
+                    {
+                        Validation.MarkInvalid(bindingExpr,
+                                new ValidationError(PathValidation, bindingExpr, msg, null));
+                    }
+                }
+            }
+            else
+            {
+                // Clear validation error in case it was previously set switching from Text to TreeView
+                var bindingExpr = Control_SuggestBox.GetBindingExpression(TextBox.TextProperty);
+                if (bindingExpr != null)
+                    Validation.ClearInvalid(bindingExpr);
             }
         }
 

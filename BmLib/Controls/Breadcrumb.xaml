@@ -150,6 +150,7 @@
                                                 
                                                   SuggestSources="{Binding SuggestSources}"
                                                   EnableSuggestions="{Binding ElementName=PART_Switch,Path=IsSwitchOn,Converter={StaticResource fb}}"
+                                                  PathValidation="{TemplateBinding PathValidation}"
 
                                                   HierarchyHelper="{x:Null}"
                                                   DisplayMemberPath="Header"

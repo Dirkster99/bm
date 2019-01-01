@@ -32,6 +32,17 @@
             typeof(IEnumerable<ISuggestSource>),
             typeof(SuggestBox),
             new PropertyMetadata(new List<ISuggestSource>(new[] { new AutoSuggestSource() })));
+
+        public ValidationRule PathValidation
+        {
+            get { return (ValidationRule)GetValue(PathValidationProperty); }
+            set { SetValue(PathValidationProperty, value); }
+        }
+
+        // Using a DependencyProperty as the backing store for PathValidation.  This enables animation, styling, binding, etc...
+        public static readonly DependencyProperty PathValidationProperty =
+            DependencyProperty.Register("PathValidation", typeof(ValidationRule),
+                typeof(SuggestBox), new PropertyMetadata(null));
         #endregion fields
 
         #region Constructor
@@ -184,26 +195,40 @@
                 {
                     Task.Run(async () =>
                     {
-                        List<Task<IList<object>>> tasks = new List<Task<IList<object>>>();
+                        List<Task<ISuggestResult>> tasks = new List<Task<ISuggestResult>>();
                         foreach (var item in suggestSources)
                         {
                             // Query suggestion source for suggestions on this input
                             tasks.Add(item.SuggestAsync(location, input, hierarchyHelper));
                         }
 
-                        //// Not sure why but this LINQ statement generates 2 queries - doubling the effort
-                        ////var tasks = from s in suggestSources
-                        ////            select s.SuggestAsync(data, text, hierarchyHelper);
-
                         await Task.WhenAll(tasks);
 
-                        return tasks.SelectMany(tsk => tsk.Result).Distinct().ToList();
+                        // Consolidate all results into 1 result object
+                        ISuggestResult AllResults = new SuggestResult(
+                            tasks.SelectMany(tsk => tsk.Result.Suggestions).Distinct().ToList());
+
+                        if (AllResults.Suggestions.Count == 0)
+                        {
+                            var validPaths = tasks.Where(tsk => tsk.Result.ValidPath == false);
+                            if (validPaths.Any())
+                                AllResults.ValidPath = false;  // No SuggestionSource could validate input
+                        }
+
+                        return AllResults;
                     }
                     ).ContinueWith(
                         (pTask) =>
                         {
-                            if (!pTask.IsFaulted)
-                                this.SetValue(SuggestionsProperty, pTask.Result);
+                            if (pTask.IsFaulted == false)
+                            {
+                                this.SetValue(SuggestionsProperty, pTask.Result.Suggestions);
+
+                                if (pTask.Result.ValidPath == true)
+                                    MarkInvalidInputSuggestBox(false);
+                                else
+                                    MarkInvalidInputSuggestBox(true, "Path is not valid.");
+                            }
 
                         }, TaskScheduler.FromCurrentSynchronizationContext());
                 }
@@ -211,6 +236,41 @@
             catch
             {
                 // logger.Error(exp);
+            }
+        }
+
+        /// <summary>
+        /// Sets or clears a validation error on the SuggestBox
+        /// to indicate invalid input to the user.
+        /// </summary>
+        /// <param name="markError">True: Shows a red validation error rectangle around the SuggestBox
+        /// (<paramref name="msg"/> should also be set).
+        /// False: Clears previously set validation errors around the Text property of the SuggestBox.
+        /// </param>
+        /// <param name="msg">Error message (eg.: "invalid input") is set on the binding expression if
+        /// <paramref name="markError"/> is true.</param>
+        private void MarkInvalidInputSuggestBox(bool markError, string msg = null)
+        {
+            if (markError == true)
+            {
+                // Show a red validation error rectangle around SuggestionBox
+                // if validation rule dependency property is available
+                if (PathValidation != null)
+                {
+                    var bindingExpr = this.GetBindingExpression(TextBox.TextProperty);
+                    if (bindingExpr != null)
+                    {
+                        Validation.MarkInvalid(bindingExpr,
+                                new ValidationError(PathValidation, bindingExpr, msg, null));
+                    }
+                }
+            }
+            else
+            {
+                // Clear validation error in case it was previously set switching from Text to TreeView
+                var bindingExpr = this.GetBindingExpression(TextBox.TextProperty);
+                if (bindingExpr != null)
+                    Validation.ClearInvalid(bindingExpr);
             }
         }
         #endregion

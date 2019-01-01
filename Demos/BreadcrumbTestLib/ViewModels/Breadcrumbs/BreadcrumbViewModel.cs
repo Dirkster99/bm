@@ -6,6 +6,7 @@ namespace BreadcrumbTestLib.ViewModels.Breadcrumbs
     using BreadcrumbTestLib.ViewModels.Base;
     using BreadcrumbTestLib.ViewModels.Interfaces;
     using ShellBrowserLib;
+    using ShellBrowserLib.Enums;
     using ShellBrowserLib.IDs;
     using ShellBrowserLib.Interfaces;
     using SSCoreLib.Browse;
@@ -434,9 +435,19 @@ namespace BreadcrumbTestLib.ViewModels.Breadcrumbs
                             }
                             else
                             {
-                                // We already have the objects representing the path
-                                // so lets navigate the tree to this location
-                                await NavigateToScheduledAsync(pathItems, "BreadcrumbViewModel.NavigateTreeViewModel 1");
+                                // Path is not rooted
+                                // Eg: We changed from 'C:' to 'F:' and are missing 'Desktop/ThisPC' root now
+                                if ((pathItems[0].ItemType & DirectoryItemFlags.Desktop) == 0)
+                                {
+                                    IDirectoryBrowser[] rootedPathItems = ShellBrowser.FindRoot(pathItems, navigateToThisLocation);
+
+                                    if (rootedPathItems != null)
+                                    {
+                                        // We already have the objects representing the path
+                                        // so lets navigate the tree to this location
+                                        await NavigateToScheduledAsync(rootedPathItems, "BreadcrumbViewModel.NavigateTreeViewModel 1");
+                                    }
+                                }
                             }
                         }
                     }

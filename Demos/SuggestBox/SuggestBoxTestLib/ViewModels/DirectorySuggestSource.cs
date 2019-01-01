@@ -1,6 +1,7 @@
 ﻿namespace SuggestBoxTestLib.ViewModels
 {
     using SuggestLib.Interfaces;
+    using SuggestLib.SuggestSource;
     using System;
     using System.Collections.Generic;
     using System.IO;
@@ -22,20 +23,20 @@
         /// <param name="input"></param>
         /// <param name="helper"></param>
         /// <returns></returns>
-        public Task<IList<object>> SuggestAsync(object data,
+        public Task<ISuggestResult> SuggestAsync(object data,
                                                 string input,
                                                 IHierarchyHelper helper)
         {
             if (string.IsNullOrEmpty(input) == false)
             {
                 if (input.Length <= 3)
-                    return Task.FromResult<IList<object>>(ListDrives(input));
+                    return Task.FromResult<ISuggestResult>(ListDrives(input));
             }
 
-            return Task.FromResult<IList<object>>(ListSubDirs(input));
+            return Task.FromResult<ISuggestResult>(ListSubDirs(input));
         }
 
-        private List<object> ListSubDirs(string input)
+        private ISuggestResult ListSubDirs(string input)
         {
             var subDirs = GetLogicalDriveOrSubDirs(input, input);
             if (subDirs != null)
@@ -55,10 +56,10 @@
 
                     if (directories != null)
                     {
-                        List<object> dirs = new List<object>();
+                        ISuggestResult dirs = new SuggestResult();
 
                         for (int i = 0; i < directories.Count; i++)
-                            dirs.Add(new { Header = directories[i], Value = directories[i] });
+                            dirs.Suggestions.Add(new { Header = directories[i], Value = directories[i] });
 
                         return dirs;
                     }
@@ -72,7 +73,7 @@
         /// Gets a list of logical drives attached to thisPC.
         /// </summary>
         /// <returns></returns>
-        private List<object> ListDrives(string input)
+        private ISuggestResult ListDrives(string input)
         {
             if (string.IsNullOrEmpty(input))
                 return GetLogicalDrives();
@@ -118,9 +119,9 @@
             return GetLogicalDrives();
         }
 
-        private static List<object> GetLogicalDrives()
+        private static ISuggestResult GetLogicalDrives()
         {
-            List<object> drives = new List<object>();
+            ISuggestResult drives = new SuggestResult();
 
             foreach (var driveName in Environment.GetLogicalDrives())
             {
@@ -141,30 +142,30 @@
                         header = driveName;
                     }
 
-                    drives.Add(new { Header = header, Value = driveName });
+                    drives.Suggestions.Add(new { Header = header, Value = driveName });
                 }
             }
 
             return drives;
         }
 
-        private static List<object> GetLogicalDriveOrSubDirs(
+        private static ISuggestResult GetLogicalDriveOrSubDirs(
             string testDrive,
             string input)
         {
             if (Directory.Exists(testDrive) == true)
             {
-                List<object> drives = new List<object>();
+                ISuggestResult drives = new SuggestResult();
 
                 // List the drive itself if there was only 1 or 2 letters
                 // since this is not a valid drive and we don'nt know if the user
                 // wants to go to the drive or a folder contained in it
                 if (input.Length <= 2)
-                    drives.Add(new { Header = testDrive, Value = testDrive });
+                    drives.Suggestions.Add(new { Header = testDrive, Value = testDrive });
 
                 // and list all sub-directories of that drive
                 foreach (var item in Directory.GetDirectories(testDrive))
-                    drives.Add(new { Header = item, Value = item });
+                    drives.Suggestions.Add(new { Header = item, Value = item });
 
                 return drives;
             }

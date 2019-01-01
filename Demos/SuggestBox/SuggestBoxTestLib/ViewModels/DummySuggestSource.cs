@@ -1,6 +1,7 @@
 ﻿namespace SuggestBoxTestLib.ViewModels
 {
     using SuggestLib.Interfaces;
+    using SuggestLib.SuggestSource;
     using System.Collections.Generic;
     using System.Threading.Tasks;
 
@@ -24,19 +25,18 @@
         /// <param name="input"></param>
         /// <param name="helper"></param>
         /// <returns></returns>
-        public Task<IList<object>> SuggestAsync(object data,
+        public Task<ISuggestResult> SuggestAsync(object data,
                                                 string input,
                                                 IHierarchyHelper helper)
         {
-            return Task.FromResult<IList<object>>(
-                
-            new List<object>()
-            {
-                // returns a collection of anynymous objects
-                // each with a Header and Value property
-                new { Header = input + "-add xyz", Value = input + "xyz" },
-                new { Header = input + "-add abc", Value = input + "abc" }
-            });
+            var result = new SuggestResult();
+
+            // returns a collection of anynymous objects
+            // each with a Header and Value property
+            result.Suggestions.Add(new { Header = input + "-add xyz", Value = input + "xyz" });
+            result.Suggestions.Add(new { Header = input + "-add abc", Value = input + "abc" });
+
+            return Task.FromResult<ISuggestResult> (result);
         }
     }
 }

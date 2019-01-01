@@ -95,8 +95,8 @@
         {
             string fileSystemPath = string.Empty;
 
-            if (_CurrentPath.Count == 0)
-                return string.Empty;
+            if (_CurrentPath.Count <= 0)
+                return fileSystemPath;
 
             // Skip showing the desktop in the string based path
             int i = 0;
@@ -141,6 +141,9 @@
         public string GetWinShellPath()
         {
             string path = string.Empty;
+
+            if (_CurrentPath.Count <= 0)
+                return path;
 
             // Skip showing the desktop in the string based path
             int i = 0;
