@@ -65,7 +65,7 @@
         /// </summary>
         public static readonly DependencyProperty IsSwitchOnProperty =
             DependencyProperty.Register("IsSwitchOn", typeof(bool),
-                typeof(Breadcrumb), new PropertyMetadata(true, OnIsSwitchOnChanged));
+                typeof(Breadcrumb), new PropertyMetadata(true, OnIsSwitchChanged));
 
         /// <summary>
         /// Backing store of the <see cref="IsSwitchEnabled"/> dependency property.
@@ -553,12 +553,82 @@
         }
 
         /// <summary>
+        /// Method executes as part of the <see cref="SwitchCommand"/> which tests whether
+        /// we are ready to switch between views and takes care of basic plumbing on the way.
+        /// </summary>
+        /// <param name="parameter"></param>
+        private async void SwitchCommandExecutedAsync(object parameter)
+        {
+            if (IsSwitchOn == true) // Switching from TreeView to Suggestbox
+            {
+                MarkInvalidInputSuggestBox(false, null);
+
+                // Assumption: Control is already bound and current location
+                // is available in text property
+                if (_BreadcrumbModel == null)
+                {
+                    // Overwrite this only if we are not in a cancel-suggestion-workflow
+                    _previousLocation = Control_SuggestBox.Text;
+                }
+                else
+                {
+                    object locations;
+
+                    Control_SuggestBox.Text = _BreadcrumbModel.UpdateSuggestPath(out locations);
+                    _previousLocation = Control_SuggestBox.Text;
+
+                    Control_SuggestBox.RootItem = locations;
+
+                    IsSwitchOn = false;  // Switch to text based view
+                }
+            }
+            else
+            {
+                // Switching from Suggestbox to TreeView
+                var switchOnTextBoxEditResult = parameter as EditResult;
+
+                bool isPathValid = true, goBackToPreviousLocation = false;
+                string path;
+
+                if (switchOnTextBoxEditResult != null)
+                {
+                    // Editing was cancelled by the user (eg.: user pressed Escape key)
+                    if (switchOnTextBoxEditResult.Result == EditPathResult.Cancel)
+                    {
+                        path = string.Empty;
+                        goBackToPreviousLocation = true;
+                    }
+                    else
+                        path = switchOnTextBoxEditResult.NewLocation;
+                }
+                else
+                    path = Control_SuggestBox.Text;
+
+                if (_BreadcrumbModel == null)
+                    isPathValid = false;      // Cannot invoke viewmodel method
+                else
+                    isPathValid = await _BreadcrumbModel.NavigateTreeViewModel(
+                        path, goBackToPreviousLocation, this.Control_SuggestBox.RootItem);
+
+                // Canceling navigation from edit result since path appears to be invalid
+                // > Stay with false path if path does not exist
+                //   or viewmodel method cannot be invoked here ...
+                if (isPathValid == true)
+                    IsSwitchOn = true;  // Switch on valid path only
+                else
+                {
+                    MarkInvalidInputSuggestBox(true, "Path does not exists.");
+                }
+            }
+        }
+
+        /// <summary>
         /// Method executes when the Switch property changed its value.
         /// </summary>
         /// <param name="d"></param>
         /// <param name="e"></param>
-        private static void OnIsSwitchOnChanged(DependencyObject d,
-                                                DependencyPropertyChangedEventArgs e)
+        private static void OnIsSwitchChanged(DependencyObject d,
+                                              DependencyPropertyChangedEventArgs e)
         {
             var dp = d as Breadcrumb;
             
@@ -604,71 +674,6 @@
                         }
 
                     }), System.Windows.Threading.DispatcherPriority.Background);
-                }
-            }
-        }
-
-        private async void SwitchCommandExecutedAsync(object parameter)
-        {
-            // Switching from TreeView to Suggestbox
-            if (IsSwitchOn == true)
-            {
-                MarkInvalidInputSuggestBox(false, null);
-
-                // Assumption: Control is already bound and current location
-                // is available in text property
-                if (_BreadcrumbModel == null)
-                {
-                    // Overwrite this only if we are not in a cancel-suggestion-workflow
-                    _previousLocation = Control_SuggestBox.Text;
-                }
-                else
-                {
-                    object locations;
-
-                    Control_SuggestBox.Text = _BreadcrumbModel.UpdateSuggestPath(out locations);
-                    _previousLocation = Control_SuggestBox.Text;
-
-                    Control_SuggestBox.RootItem = locations;
-
-                    IsSwitchOn = false;  // Switch to text based view
-                }
-            }
-            else
-            {
-                var switchOnTextBoxEditResult = parameter as EditResult;
-
-                // Switching from Suggestbox to TreeView
-                bool isPathValid = true, goBackToPreviousLocation = false;
-                string path;
-
-                if (switchOnTextBoxEditResult != null)
-                {
-                    // Editing was cancelled by the user (eg.: user pressed Escape key)
-                    if (switchOnTextBoxEditResult.Result == EditPathResult.Cancel)
-                    {
-                        path = string.Empty;
-                        goBackToPreviousLocation = true;
-                    }
-                    else
-                        path = switchOnTextBoxEditResult.NewLocation;
-                }
-                else
-                    path = Control_SuggestBox.Text;
-
-                if (_BreadcrumbModel == null)
-                    isPathValid = false;      // Cannot invoke viewmodel method
-                else
-                    isPathValid = await _BreadcrumbModel.NavigateTreeViewModel(path, goBackToPreviousLocation);
-
-                // Canceling navigation from edit result since path appears to be invalid
-                // > Stay with false path if path does not exist
-                //   or viewmodel method cannot be invoked here ...
-                if (isPathValid == true)
-                    IsSwitchOn = true;  // Switch on valid path only
-                else
-                {
-                    MarkInvalidInputSuggestBox(true, "Path does not exists.");
                 }
             }
         }

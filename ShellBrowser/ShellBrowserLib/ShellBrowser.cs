@@ -873,6 +873,10 @@
                 string.IsNullOrEmpty(path) == true)
                 return PathMatch.CompleteMatch;
 
+            if ((string.IsNullOrEmpty(inputPath) == true && string.IsNullOrEmpty(path) == false) ||
+                (string.IsNullOrEmpty(inputPath) == false && string.IsNullOrEmpty(path) == true))
+                return PathMatch.Unrelated;
+
             // Remove ending backslash to normalize both strings for comparison
             int idx = inputPath.LastIndexOf('\\');
             if (idx == (inputPath.Length - 1))

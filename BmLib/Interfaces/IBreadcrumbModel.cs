@@ -18,7 +18,8 @@
         /// <param name="navigateToThisLocation"></param>
         /// <returns></returns>
         Task<bool> NavigateTreeViewModel(string navigateToThisLocation,
-                                         bool goBackToPreviousLocation);
+                                         bool goBackToPreviousLocation,
+                                         object locationIndicator);
 
         /// <summary>
         /// Updates the bound text path property of the SuggestBox with the path of the

@@ -13,7 +13,7 @@
 
     /// <summary>
     /// Defines a suggestion object to generate suggestions
-    /// based on sub entries of specified string.
+    /// based on sub entries of a specified string.
     /// </summary>
     public class SuggestSourceDirectory : ISuggestSource
     {
@@ -46,7 +46,7 @@
                 switch (match)
                 {
                     case PathMatch.CompleteMatch:
-                        return ListChildren(li.GetPathModels(), pathType);
+                        return ListChildren(li.GetPathModels(), pathType, li);
 
                     case PathMatch.PartialSource:
                         {
@@ -59,7 +59,7 @@
                                 idx++;  // Keep common root and remove everything else
 
                                 li.RemoveRange(idx, li.Count - idx);
-                                return ListChildren(li.GetPathModels(), pathType);
+                                return ListChildren(li.GetPathModels(), pathType, li);
                             }
                         }
                         break;
@@ -73,7 +73,7 @@
                                 if (ShellBrowser.ExtendPath(ref pathList, pathExt))
                                 {
                                     li.ResetPath(pathList);
-                                    return ListChildren(li.GetPathModels(), pathType);
+                                    return ListChildren(li.GetPathModels(), pathType, li);
                                 }
                             }
                         }
@@ -98,7 +98,7 @@
                 // Win shell path folder
                 IDirectoryBrowser[] path = null;
                 if (ShellBrowserLib.ShellBrowser.DirectoryExists(input, out path))
-                    return ListChildren(path, PathType.WinShellPath);
+                    return ListChildren(path, PathType.WinShellPath, li);
                 else
                 {
                     // List RootItems or last known parent folder's children based on seperator
@@ -113,7 +113,7 @@
                         // Win shell path folder
                         path = null;
                         if (ShellBrowserLib.ShellBrowser.DirectoryExists(parentDir, out path))
-                            return ListChildren(path, PathType.WinShellPath, searchMask);
+                            return ListChildren(path, PathType.WinShellPath, li, searchMask);
                     }
                 }
             }
@@ -130,8 +130,12 @@
         /// <returns></returns>
         private static Task<ISuggestResult> ListChildren(IDirectoryBrowser[] path,
                                                         PathType pathType,
+                                                        LocationIndicator li,
                                                         string searchMask = null)
         {
+            if (li != null)
+                li.ResetPath(path);
+
             var dirPath = path[path.Length - 1];
 
             SuggestResult result = new SuggestResult();
@@ -223,7 +227,7 @@
         /// <param name="li"></param>
         /// <returns></returns>
         private ISuggestResult ParseFileSystemPath(string input,
-                                                 LocationIndicator li)
+                                                   LocationIndicator li)
         {
             IDirectoryBrowser[] pathItems = null;
             if (ShellBrowser.DirectoryExists(input, out pathItems))

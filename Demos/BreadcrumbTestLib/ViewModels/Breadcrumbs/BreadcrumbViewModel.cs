@@ -5,6 +5,7 @@ namespace BreadcrumbTestLib.ViewModels.Breadcrumbs
     using BreadcrumbTestLib.Tasks;
     using BreadcrumbTestLib.ViewModels.Base;
     using BreadcrumbTestLib.ViewModels.Interfaces;
+    using ShellBrowser.Enums;
     using ShellBrowserLib;
     using ShellBrowserLib.Enums;
     using ShellBrowserLib.IDs;
@@ -367,7 +368,9 @@ namespace BreadcrumbTestLib.ViewModels.Breadcrumbs
         /// <param name="navigateToThisLocation"></param>
         /// <returns></returns>
         Task<bool> IBreadcrumbModel.NavigateTreeViewModel(string navigateToThisLocation,
-                                                          bool goBackToPreviousLocation)
+                                                          bool goBackToPreviousLocation,
+                                                          object locationIndicator
+                                                          )
         {
             return Task.Run<bool>(async () =>
             {
@@ -397,6 +400,54 @@ namespace BreadcrumbTestLib.ViewModels.Breadcrumbs
                     }
                     else
                     {
+                        LocationIndicator li = locationIndicator as LocationIndicator;
+                        IDirectoryBrowser[] pathItems = null;
+                        if (li != null)
+                        {
+                            // Source of request supports a LocationIndicator -> Check Valid state
+                            PathType pathTypeParam;
+                            var path = li.GetPath(out pathTypeParam);
+
+                            if (ShellBrowser.IsCurrentPath(path, navigateToThisLocation) == PathMatch.CompleteMatch)
+                            {
+                                isPathValid = true;
+                                pathItems = li.GetPathModels();
+                            }
+                        }
+
+                        // Verify path existence and re-mount into root item
+                        if (pathItems == null)
+                            isPathValid = ShellBrowser.DirectoryExists(navigateToThisLocation, out pathItems);
+
+                        if (isPathValid == true)
+                        {
+                            // The path is valid but we do not have any objects for it, yet.
+                            // So, lets update the tree view based on the string representation.
+                            if (pathItems == null)
+                            {
+                                var location = ShellBrowser.Create(navigateToThisLocation);
+                                await NavigateToScheduledAsync(location, "BreadcrumbViewModel.NavigateTreeViewModel 0");
+                                return true;
+                            }
+                            else
+                            {
+                                // Path is not rooted
+                                // Eg: We changed from 'C:' to 'F:' and are missing 'Desktop/ThisPC' root now
+                                if ((pathItems[0].ItemType & DirectoryItemFlags.Desktop) == 0)
+                                {
+                                    IDirectoryBrowser[] rootedPathItems = ShellBrowser.FindRoot(pathItems, navigateToThisLocation);
+
+                                    if (rootedPathItems != null)
+                                    {
+                                        // We already have the objects representing the path
+                                        // so lets navigate the tree to this location
+                                        await NavigateToScheduledAsync(rootedPathItems, "BreadcrumbViewModel.NavigateTreeViewModel 1");
+                                        return true;
+                                    }
+                                }
+                            }
+                        }
+
                         // Attempt re-mounting if we find a common root for the given path
                         var currentPath = _CurrentPath.GetPathModels();
                         string extendPath = null;
@@ -416,38 +467,8 @@ namespace BreadcrumbTestLib.ViewModels.Breadcrumbs
 
                             if (joinSuccess) // path joined successfully -> lets go where no one has been before...
                             {
-                                await NavigateToScheduledAsync(pathList.ToArray(), "BreadcrumbViewModel.NavigateTreeViewModel 4");
+                                await NavigateToScheduledAsync(pathList.ToArray(), "BreadcrumbViewModel.NavigateTreeViewModel 2");
                                 return true;
-                            }
-                        }
-
-                        IDirectoryBrowser[] pathItems = null;
-                        isPathValid = ShellBrowser.DirectoryExists(navigateToThisLocation, out pathItems);
-
-                        if (isPathValid == true)
-                        {
-                            // The path is valid but we do not have any objects for it, yet.
-                            // So, lets update the tree view based on the string representation.
-                            if (pathItems == null)
-                            {
-                                var location = ShellBrowser.Create(navigateToThisLocation);
-                                await NavigateToScheduledAsync(location, "BreadcrumbViewModel.NavigateTreeViewModel 0");
-                            }
-                            else
-                            {
-                                // Path is not rooted
-                                // Eg: We changed from 'C:' to 'F:' and are missing 'Desktop/ThisPC' root now
-                                if ((pathItems[0].ItemType & DirectoryItemFlags.Desktop) == 0)
-                                {
-                                    IDirectoryBrowser[] rootedPathItems = ShellBrowser.FindRoot(pathItems, navigateToThisLocation);
-
-                                    if (rootedPathItems != null)
-                                    {
-                                        // We already have the objects representing the path
-                                        // so lets navigate the tree to this location
-                                        await NavigateToScheduledAsync(rootedPathItems, "BreadcrumbViewModel.NavigateTreeViewModel 1");
-                                    }
-                                }
                             }
                         }
                     }
