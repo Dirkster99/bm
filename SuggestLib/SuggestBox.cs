@@ -10,11 +10,28 @@
     using System.Windows.Controls;
 
     /// <summary>
-    /// Uses ISuggestSource and HierarchyHelper to suggest automatically.
+    /// Implements a text based control that updates a list of suggestions
+    /// when user updates a given text based path -> TextChangedEvent is raised.
+    /// 
+    /// This control uses <see cref="ISuggestSource"/> and HierarchyHelper
+    /// to suggest entries in a seperate popup as the user types.
     /// </summary>
     public class SuggestBox : SuggestBoxBase
     {
         #region fields
+        public static readonly DependencyProperty HierarchyHelperProperty =
+            DependencyProperty.Register("HierarchyHelper", typeof(IHierarchyHelper),
+            typeof(SuggestBox),
+            new UIPropertyMetadata(new PathHierarchyHelper("Parent", "Value", "SubEntries")));
+
+        /// <summary>
+        /// Implements the backing store for the <see cref="SuggestSources"/> dependency property.
+        /// </summary>
+        public static readonly DependencyProperty SuggestSourcesProperty = DependencyProperty.Register(
+            "SuggestSources", typeof(IEnumerable<ISuggestSource>),
+            typeof(SuggestBox),
+            new PropertyMetadata(new List<ISuggestSource>(new[] { new AutoSuggestSource() })));
+
         /// <summary>
         /// Implements the backing property of the <see cref="RootItem"/> dependency property.
         /// </summary>
@@ -22,24 +39,9 @@
             DependencyProperty.Register("RootItem", typeof(object),
                 typeof(SuggestBox), new PropertyMetadata(null));
 
-        public static readonly DependencyProperty HierarchyHelperProperty =
-            DependencyProperty.Register("HierarchyHelper", typeof(IHierarchyHelper),
-            typeof(SuggestBox),
-            new UIPropertyMetadata(new PathHierarchyHelper("Parent", "Value", "SubEntries")));
-
-        public static readonly DependencyProperty SuggestSourcesProperty = DependencyProperty.Register(
-            "SuggestSources",
-            typeof(IEnumerable<ISuggestSource>),
-            typeof(SuggestBox),
-            new PropertyMetadata(new List<ISuggestSource>(new[] { new AutoSuggestSource() })));
-
-        public ValidationRule PathValidation
-        {
-            get { return (ValidationRule)GetValue(PathValidationProperty); }
-            set { SetValue(PathValidationProperty, value); }
-        }
-
-        // Using a DependencyProperty as the backing store for PathValidation.  This enables animation, styling, binding, etc...
+        /// <summary>
+        /// Implements the backing store for the <see cref="PathValidation"/> dependency property.
+        /// </summary>
         public static readonly DependencyProperty PathValidationProperty =
             DependencyProperty.Register("PathValidation", typeof(ValidationRule),
                 typeof(SuggestBox), new PropertyMetadata(null));
@@ -71,6 +73,10 @@
             set { SetValue(HierarchyHelperProperty, value); }
         }
 
+        /// <summary>
+        /// Gets/sets a list of data sources that can be queries in order to
+        /// display suggested entries to the user.
+        /// </summary>
         public IEnumerable<ISuggestSource> SuggestSources
         {
             get { return (IEnumerable<ISuggestSource>)GetValue(SuggestSourcesProperty); }
@@ -81,15 +87,25 @@
         /// Gets/sets a dependency property that holds an object that represents the current
         /// location. This location object is also handed down to the SuggestedSources
         /// object to make finding the next list of suggestions a simple matter of retrieving
-        /// the children of the current the rootitem.
+        /// the children of the current rootitems object collection.
         /// 
-        /// This property should be assigned by the client application (eg. Breadcrumb) and be
-        /// updated throughout the browsing with the suggestions.
+        /// This property can be assigned by the client application (eg. Breadcrumb) and be
+        /// updated throughout the browsing with suggestions.
         /// </summary>
         public object RootItem
         {
             get { return GetValue(RootItemProperty); }
             set { SetValue(RootItemProperty, value); }
+        }
+
+        /// <summary>
+        /// Gets/sets a <see cref="ValidationRule"/> that must be present to show a
+        /// validation error (red rectangle around textbox) if user entered invalid data.
+        /// </summary>
+        public ValidationRule PathValidation
+        {
+            get { return (ValidationRule)GetValue(PathValidationProperty); }
+            set { SetValue(PathValidationProperty, value); }
         }
         #endregion
 

@@ -11,26 +11,25 @@
     using System.Windows.Media;
 
     /// <summary>
-    /// User update Suggestions when TextChangedEvent raised.
+    /// Implements a base control that updates a list of suggestions
+    /// when user updates a given text based path -> TextChangedEvent is raised.
     /// </summary>
     [TemplatePart(Name = PART_Popup, Type = typeof(Popup))]
     [TemplatePart(Name = PART_ResizeGripThumb, Type = typeof(Thumb))]
     [TemplatePart(Name = PART_ResizeableGrid, Type = typeof(Grid))]
+    [TemplatePart(Name = PART_ItemList, Type = typeof(ListBox))]
     public class SuggestBoxBase : TextBox
     {
-        public const string PART_Root = "PART_Root";
+        #region fields
         public const string PART_Popup = "PART_Popup";
-        public const string PART_ItemList = "PART_ItemList";
-        public const string PART_ContentHost = "PART_ContentHost";
         public const string PART_ResizeGripThumb = "PART_ResizeGripThumb";
         public const string PART_ResizeableGrid = "PART_ResizeableGrid";
+        public const string PART_ItemList = "PART_ItemList";
 
-        #region fields
         protected Popup _PART_Popup;
-        protected ListBox _PART_ItemList;
-        protected Grid _PART_Root;
         protected Thumb _PART_ResizeGripThumb;
         protected Grid _PART_ResizeableGrid;
+        protected ListBox _PART_ItemList;
 
         // Controls whether the PopUp should open when the control has focus and suggestion
         // or not (not should be implemented if the pop-up just closed and the textbox is
@@ -264,8 +263,6 @@
             // Set the handler
             if (_PART_ResizeGripThumb != null && _PART_ResizeableGrid != null)
                 _PART_ResizeGripThumb.DragDelta += new DragDeltaEventHandler(MyThumb_DragDelta);
-
-            _PART_Root = this.Template.FindName(PART_Root, this) as Grid;
 
             this.GotKeyboardFocus += SuggestBoxBase_GotKeyboardFocus;
 
