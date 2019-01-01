@@ -182,6 +182,35 @@
             return path;
         }
 
+        public string GetPath(string input, out PathType pathTypeParam)
+        {
+            pathTypeParam = PathType.Unknown;
+
+            if (string.IsNullOrEmpty(input))
+                return GetPath(out pathTypeParam);
+
+            if (input.Length < 2)
+                return GetPath(out pathTypeParam);
+
+            pathTypeParam = ShellBrowser.IsTypeOf(input);
+
+            switch (pathTypeParam)
+            {
+                case PathType.WinShellPath:
+                    return GetWinShellPath();
+
+                case PathType.FileSystemPath:
+                    return GetFileSystemPath();
+
+                case PathType.SpecialFolder:
+                case PathType.Unknown:
+                default:
+                    break;
+            }
+
+            return GetPath(out pathTypeParam);
+        }
+
         /// <summary>
         /// Compares the given path with the path in this object
         /// and indicates whether they match or not.

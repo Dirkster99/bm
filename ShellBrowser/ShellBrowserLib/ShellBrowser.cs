@@ -452,6 +452,23 @@
             List<IDirectoryBrowser> newRoot = new List<IDirectoryBrowser>();
 
             var desktop = ShellBrowser.DesktopDirectory;
+
+            if (ShellBrowser.IsTypeOf(newPath) == PathType.WinShellPath)
+            {
+                // Search root under desktop and return shorted possible number of items
+                for (int idx = pathItems.Length-1; idx >= 0; idx--)
+                {
+                    var dpItems = ShellBrowser.GetChildItems(KF_IID.ID_FOLDERID_Desktop, pathItems[idx].Name);
+                    if (dpItems.Any())
+                    {
+                        for (int i = idx; i < pathItems.Length; i++)
+                            newRoot.Add(pathItems[i].Clone() as IDirectoryBrowser);
+
+                        return newRoot.ToArray();
+                    }
+                }
+            }
+
             string pathExt = null;
             if (ShellBrowser.IsParentPathOf(desktop.PathFileSystem, newPath, out pathExt))
             {
@@ -916,24 +933,21 @@
         /// <param name="pathExtension"></param>
         /// <returns></returns>
         public static int FindCommonRoot(IDirectoryBrowser[] currentPath,
-                                         string navigateToThisLocation,
-                                         out string pathExtension)
+                                        string navigateToThisLocation,
+                                        out string pathExtension)
         {
             pathExtension = null;
 
-            if (currentPath.Length > 0)
+            for (int i = currentPath.Length - 1; i >= 0; i--)
             {
-                for (int i = currentPath.Length - 1; i >= 0; i--)
-                {
-                    var model = currentPath[i];
+                var model = currentPath[i];
 
-                    if (string.IsNullOrEmpty(model.PathFileSystem))
-                        break;
+                if (string.IsNullOrEmpty(model.PathFileSystem))
+                    break;
 
-                    // found a common root item for path discription
-                    if (ShellBrowser.IsParentPathOf(model.PathFileSystem, navigateToThisLocation, out pathExtension))
-                        return i;
-                }
+                // found a common root item for path discription
+                if (ShellBrowser.IsParentPathOf(model.PathFileSystem, navigateToThisLocation, out pathExtension))
+                    return i;
             }
 
             return -1;
@@ -982,11 +996,11 @@
         public static string NormalizePath(string dirOrfilePath)
         {
             if (string.IsNullOrEmpty(dirOrfilePath) == true)
-                return null;
+                return dirOrfilePath;
 
             // The dirinfo constructor will not work with 'C:' but does work with 'C:\'
             if (dirOrfilePath.Length < 2)
-                return null;
+                return dirOrfilePath;
 
             if (dirOrfilePath.Length == 2)
             {

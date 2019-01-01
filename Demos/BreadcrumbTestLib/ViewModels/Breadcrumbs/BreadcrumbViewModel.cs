@@ -406,7 +406,7 @@ namespace BreadcrumbTestLib.ViewModels.Breadcrumbs
                         {
                             // Source of request supports a LocationIndicator -> Check Valid state
                             PathType pathTypeParam;
-                            var path = li.GetPath(out pathTypeParam);
+                            var path = li.GetPath(navigateToThisLocation, out pathTypeParam);
 
                             if (ShellBrowser.IsCurrentPath(path, navigateToThisLocation) == PathMatch.CompleteMatch)
                             {

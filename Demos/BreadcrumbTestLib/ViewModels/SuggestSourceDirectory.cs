@@ -39,7 +39,7 @@
                 input = ShellBrowser.NormalizePath(input);
 
                 PathType pathType = PathType.Unknown;
-                string path = li.GetPath(out pathType);
+                string path = li.GetPath(input, out pathType);
 
                 var match = ShellBrowser.IsCurrentPath(input, path);
 
@@ -146,17 +146,17 @@
 
             foreach (var item in ShellBrowserLib.ShellBrowser.GetChildItems(dirPath.PathShell, searchMask))
             {
-                if (pathType == PathType.WinShellPath)
+                if (string.IsNullOrEmpty(item.PathFileSystem) == false)
                 {
-                    AddItem(result, item.Label, namedPath + '\\' + item.Name,
-                            PathType.WinShellPath, path);
-                }
-                else
-                {
-                    if (string.IsNullOrEmpty(item.PathFileSystem) == false)
+                    if (pathType == PathType.WinShellPath)
                     {
-                        AddItem(result, item.Label, item.PathFileSystem,
-                                PathType.FileSystemPath, path);
+                        AddItem(result, item.Label, namedPath + '\\' + item.Name,
+                                PathType.WinShellPath, path);
+                    }
+                    else
+                    {
+                            AddItem(result, item.Label, item.PathFileSystem,
+                                    PathType.FileSystemPath, path);
                     }
                 }
             }
