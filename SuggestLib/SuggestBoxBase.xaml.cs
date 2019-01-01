@@ -350,7 +350,7 @@
         /// </summary>
         private void SaveRestorePopUpStateOnWindowDeActivation()
         {
-            Window parentWindow = UITools.FindLogicalAncestor<Window>(this);
+            Window parentWindow = Window.GetWindow(this);
             if (parentWindow != null)
             {
                 // Save Popup state and close popup on Window deactivated

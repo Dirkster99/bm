@@ -108,9 +108,7 @@
     <Compile Include="SuggestSource\NullSuggestSource.cs" />
     <Compile Include="SuggestSource\SuggestResult.cs" />
     <Compile Include="Themes\ResourceKeys.cs" />
-    <Compile Include="Utils\AttachedProperties.cs" />
     <Compile Include="Utils\TreeHelper.cs" />
-    <Compile Include="Utils\UITools.cs" />
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
