@@ -193,20 +193,30 @@
             return rootItems;
         }
 
+        /// <summary>
+        /// Checks whether the:
+        /// 1) given path exists or its
+        /// 2) parent path exists
+        /// 
+        /// and returns a list of children for 1) or 2).
+        /// 
+        /// Method resests <paramref name="li"/> if either path can be resolved and
+        /// parameter is not null.
+        /// </summary>
+        /// <param name="input"></param>
+        /// <param name="li"></param>
+        /// <returns></returns>
         private List<object> ParseFileSystemPath(string input,
                                                  LocationIndicator li)
         {
-            if (ShellBrowser.DirectoryExists(input))
-                return ListSubItems(input);
+            IDirectoryBrowser[] pathItems = null;
+            if (ShellBrowser.DirectoryExists(input, out pathItems))
+            {
+                if (li != null)
+                    li.ResetPath(pathItems);
 
-//            IDirectoryBrowser[] pathItems = null;
-//            if (ShellBrowser.DirectoryExists(input, out pathItems))
-//            {
-//                if (li != null)
-//                    li.ResetPath(pathItems);
-//
-//                return ListSubItems(input);
-//            }
+                return ListSubItems(input);
+            }
 
             // List RootItems or last known parent folder's children based on seperator
             int sepIdx = input.LastIndexOf('\\');
@@ -216,8 +226,13 @@
                 var searchMask = input.Substring(sepIdx + 1) + "*";
 
                 // Win shell path folder
-                if (ShellBrowserLib.ShellBrowser.DirectoryExists(parentDir))
+                if (ShellBrowser.DirectoryExists(parentDir, out pathItems))
+                {
+                    if (li != null)
+                        li.ResetPath(pathItems);
+
                     return ListSubItems(parentDir, searchMask);
+                }
             }
 
             return new List<object>();

@@ -527,7 +527,14 @@
                     string fs_path = KnownFolderHelper.GetKnownFolderPath(path);
 
                     if (fs_path != null)
-                        return System.IO.Directory.Exists(fs_path);
+                    {
+                        bool exists = System.IO.Directory.Exists(fs_path);
+
+                        if (exists)
+                            pathItems = GetFileSystemPathItems(fs_path);
+
+                        return exists;
+                    }
                 }
                 catch
                 {
@@ -544,40 +551,24 @@
                 try
                 {
                     if ((path[0] == '\\' && path[1] == '\\') || path[1] == ':')
-                        return System.IO.Directory.Exists(path);
+                    {
+                        bool exists = System.IO.Directory.Exists(path);
+
+                        if (exists)
+                            pathItems = GetFileSystemPathItems(path);
+
+                        return exists;
+                    }
 
                     if (path.Length > 1)
                         path = path.TrimEnd('\\');
 
                     // Try to resolve an abstract Windows Shell Space description like:
-                    // 'Libraries/Documents' (in a localized fashion)
-                    string[] pathNames = GetDirectories(path);
-
-                    if (pathNames == null)
-                        return false;
-
-                    if (pathNames.Length == 0)
-                        return false;
-
-                    pathItems = new IDirectoryBrowser[pathNames.Length];
-
-                    string parentPath = KF_IID.ID_FOLDERID_Desktop;
-                    for (int i = 0; i < pathItems.Length; i++)
-                    {
-                        if (i > 0)
-                            parentPath = pathItems[i - 1].PathShell;
-
-                        var subList = ShellBrowser.GetChildItems(parentPath, pathNames[i]);
-                        if (subList.Any())
-                        {
-                            pathItems[i] = subList.First();
-                        }
-                        else
-                            return false;
-                    }
+                    // 'Libraries/Documents' (valid in a localized fashion only)
+                    pathItems = GetWinShellPathItems(path);
 
                     // This path exists as sequence of localized names of windows shell items
-                    if (pathItems[pathItems.Length - 1] != null)
+                    if (pathItems != null)
                         return true;
                 }
                 catch
@@ -587,6 +578,84 @@
                 }
 
                 return false;
+            }
+        }
+
+        /// <summary>
+        /// Converts a given existing file system path string into a sequence
+        /// of <see cref="IDirectoryBrowser"/> items or null if path cannot be resolved.
+        /// </summary>
+        /// <param name="fs_path">The file system path to be resolved.</param>
+        /// <returns></returns>
+        public static IDirectoryBrowser[] GetFileSystemPathItems(string fs_path)
+        {
+            try
+            {
+                var dirs = ShellBrowser.GetDirectories(fs_path);
+                var dirItems = new IDirectoryBrowser[dirs.Length];
+                string currentPath = null;
+                for (int i = 0; i < dirItems.Length; i++)
+                {
+                    if (currentPath == null)
+                        currentPath = dirs[0];
+                    else
+                        currentPath = System.IO.Path.Combine(currentPath, dirs[i]);
+
+                    dirItems[i] = ShellBrowser.Create(currentPath);
+                }
+
+                return dirItems;
+            }
+            catch
+            {
+                // Lets make sure we can recover from errors
+                return null;
+            }
+        }
+
+        /// <summary>
+        /// Converts a given existing Windows shell Path string
+        /// (eg 'Libraries\Music') into a sequence of <see cref="IDirectoryBrowser"/>
+        /// items or null if path cannot be resolved.
+        /// </summary>
+        /// <param name="path">The Windows Shell Path to be resolved.</param>
+        /// <returns></returns>
+        public static IDirectoryBrowser[] GetWinShellPathItems(string path)
+        {
+            IDirectoryBrowser[] pathItems = null;
+            try
+            {
+                string[] pathNames = GetDirectories(path);
+
+                if (pathNames == null)
+                    return null;
+
+                if (pathNames.Length == 0)
+                    return null;
+
+                pathItems = new IDirectoryBrowser[pathNames.Length];
+
+                string parentPath = KF_IID.ID_FOLDERID_Desktop;
+                for (int i = 0; i < pathItems.Length; i++)
+                {
+                    if (i > 0)
+                        parentPath = pathItems[i - 1].PathShell;
+
+                    var subList = ShellBrowser.GetChildItems(parentPath, pathNames[i]);
+                    if (subList.Any())
+                    {
+                        pathItems[i] = subList.First();
+                    }
+                    else
+                        return null;
+                }
+
+                return pathItems;
+            }
+            catch
+            {
+                // Lets make sure we can recover from errors
+                return null;
             }
         }
 
