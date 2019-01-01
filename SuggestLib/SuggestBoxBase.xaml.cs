@@ -249,6 +249,7 @@
         public override void OnApplyTemplate()
         {
             base.OnApplyTemplate();
+
             _PART_Popup = this.Template.FindName(PART_Popup, this) as Popup;
             _PART_ItemList = this.Template.FindName(PART_ItemList, this) as ListBox;
 
@@ -367,28 +368,38 @@
 
                 parentWindow.PreviewMouseDown += ParentWindow_PreviewMouseDown;
                 parentWindow.SizeChanged += ParentWindow_SizeChanged;
+                parentWindow.LocationChanged += ParentWindow_LocationChanged;
             }
         }
 
         /// <summary>
-        /// The pop-up element cannot be re-position when the containing window
-        /// changes its vertical size (the popup with does resize on change of
-        /// window size though). So, we close the pop up whenever the vertical
-        /// size of the parent window is changed (instead of looking realy stupid
-        /// with an open popup at the now invalid x,y position).
+        /// Close the pop-up if user drags the window around while its open.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void ParentWindow_LocationChanged(object sender, EventArgs e)
+        {
+            if (IsPopupOpened)
+            {
+                _PopUpIsCancelled = true;
+                SetPopUp(false, "ParentWindow_SizeChanged");
+                //e.Handled = true;
+            }
+        }
+
+        /// <summary>
+        /// Close pop-up element if window is re-positioned while pop-up is open
+        /// (instead of looking stupid with an open popup at an invalid x,y position).
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
         private void ParentWindow_SizeChanged(object sender, SizeChangedEventArgs e)
         {
-            if (e.HeightChanged == true && e.WidthChanged == false)
+            if (IsPopupOpened)
             {
-                if (IsPopupOpened)
-                {
-                    _PopUpIsCancelled = true;
-                    SetPopUp(false, "ParentWindow_SizeChanged");
-                    //e.Handled = true;
-                }
+                _PopUpIsCancelled = true;
+                SetPopUp(false, "ParentWindow_SizeChanged");
+                //e.Handled = true;
             }
         }
 
@@ -503,7 +514,6 @@
             txtBindingExpr.UpdateSource();
             RaiseEvent(new RoutedEventArgs(ValueChangedEvent));
         }
-
         #endregion
 
         #region Utils - Popup show / hide
