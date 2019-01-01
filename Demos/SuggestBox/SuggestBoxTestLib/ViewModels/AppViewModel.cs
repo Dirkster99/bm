@@ -2,7 +2,6 @@
 {
     using SuggestLib;
     using SuggestLib.Interfaces;
-    using SuggestLib.SuggestSource;
     using System;
     using System.Collections.Generic;
     using System.Linq;

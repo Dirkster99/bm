@@ -6,7 +6,8 @@
     /// <summary>
     /// Models a result class for the drop down portion of the <see cref="SuggestionBox"/>.
     /// 
-    /// Each suggestion source returns one of these objects containing a list of suggestions.
+    /// Each suggestion source <see cref="ISuggestSource"/> returns one of these objects
+    /// containing a list of suggestions and whether the input was considered valid or not.
     /// </summary>
     public class SuggestResult : ISuggestResult
     {
@@ -36,11 +37,17 @@
         #endregion ctors
 
         #region properties
+        /// <summary>
+        /// Gets a list of suugestion based on a given input.
+        /// </summary>
         public IList<object> Suggestions
         {
             get { return _suggestions; }
         }
 
+        /// <summary>
+        /// Gets/sets whether the given input was considered as valid or not.
+        /// </summary>
         public bool ValidPath { get; set; }
         #endregion properties
     }
