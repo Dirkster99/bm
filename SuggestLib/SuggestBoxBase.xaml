@@ -76,7 +76,7 @@
                                 HorizontalContentAlignment="Stretch"
                                 DisplayMemberPath="{TemplateBinding DisplayMemberPath}"
                                 SelectedValuePath="{TemplateBinding ValuePath}"
-                                ItemTemplate="{TemplateBinding HeaderTemplate}"
+                                ItemTemplate="{TemplateBinding ItemTemplate}"
                                 ItemsSource="{Binding Suggestions, RelativeSource={RelativeSource TemplatedParent}}"
                                 ScrollViewer.HorizontalScrollBarVisibility="Auto" 
                                 ScrollViewer.VerticalScrollBarVisibility="Auto" 

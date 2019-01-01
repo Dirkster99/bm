@@ -54,17 +54,18 @@
                     new PropertyMetadata("Value"));
 
         /// <summary>
+        /// Implements the backing store of the <see cref="ItemTemplate"/> dependency property.
+        /// </summary>
+        public static readonly DependencyProperty ItemTemplateProperty =
+            DependencyProperty.Register("ItemTemplate",
+            typeof(DataTemplate), typeof(SuggestBoxBase), new PropertyMetadata(null));
+
+        /// <summary>
         /// Implements the backing store of the <see cref="Suggestions"/> dependency property.
         /// </summary>
         public static readonly DependencyProperty SuggestionsProperty =
             DependencyProperty.Register("Suggestions", typeof(IList<object>), typeof(SuggestBoxBase),
             new PropertyMetadata(null, OnSuggestionsChanged));
-
-        /// <summary>
-        /// Implements the backing store of the <see cref="HeaderTemplate"/> dependency property.
-        /// </summary>
-        public static readonly DependencyProperty HeaderTemplateProperty =
-            HeaderedItemsControl.HeaderTemplateProperty.AddOwner(typeof(SuggestBoxBase));
 
         /// <summary>
         /// Implements the backing store of the <see cref="IsPopupOpened"/> dependency property.
@@ -84,7 +85,8 @@
         /// Implements the backing store of the <see cref="IsHintVisible"/> dependency property.
         /// </summary>
         public static readonly DependencyProperty IsHintVisibleProperty =
-            DependencyProperty.Register("IsHintVisible", typeof(bool), typeof(SuggestBoxBase), new PropertyMetadata(true));
+            DependencyProperty.Register("IsHintVisible", typeof(bool),
+                typeof(SuggestBoxBase), new PropertyMetadata(true));
 
         public static readonly RoutedEvent ValueChangedEvent =
             EventManager.RegisterRoutedEvent("ValueChanged",
@@ -167,10 +169,10 @@
         /// <summary>
         /// Gets/sets the ItemTemplate for the ListBox portion of the suggestion popup.
         /// </summary>
-        public DataTemplate HeaderTemplate
+        public DataTemplate ItemTemplate
         {
-            get { return (DataTemplate)GetValue(HeaderTemplateProperty); }
-            set { SetValue(HeaderTemplateProperty, value); }
+            get { return (DataTemplate)GetValue(ItemTemplateProperty); }
+            set { SetValue(ItemTemplateProperty, value); }
         }
 
         /// <summary>
