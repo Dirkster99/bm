@@ -19,18 +19,12 @@
     public class SuggestBox : SuggestBoxBase
     {
         #region fields
-        public static readonly DependencyProperty HierarchyHelperProperty =
-            DependencyProperty.Register("HierarchyHelper", typeof(IHierarchyHelper),
-            typeof(SuggestBox),
-            new UIPropertyMetadata(new PathHierarchyHelper("Parent", "Value", "SubEntries")));
-
         /// <summary>
         /// Implements the backing store for the <see cref="SuggestSources"/> dependency property.
         /// </summary>
         public static readonly DependencyProperty SuggestSourcesProperty = DependencyProperty.Register(
             "SuggestSources", typeof(IEnumerable<ISuggestSource>),
-            typeof(SuggestBox),
-            new PropertyMetadata(new List<ISuggestSource>(new[] { new AutoSuggestSource() })));
+            typeof(SuggestBox), new PropertyMetadata(null));
 
         /// <summary>
         /// Implements the backing property of the <see cref="RootItem"/> dependency property.
@@ -67,12 +61,6 @@
         #endregion
 
         #region Public Properties
-        public IHierarchyHelper HierarchyHelper
-        {
-            get { return (IHierarchyHelper)GetValue(HierarchyHelperProperty); }
-            set { SetValue(HierarchyHelperProperty, value); }
-        }
-
         /// <summary>
         /// Gets/sets a list of data sources that can be queries in order to
         /// display suggested entries to the user.
@@ -111,45 +99,7 @@
 
         #region Methods
         /// <summary>
-        /// Updates the TextBox.Text Binding expression (if any) and
-        /// raises the <see cref="ValueChangedEvent"/> event to notify
-        /// subscribers of the changed text value.
-        /// 
-        /// Method override is invoked by base class whenever the selection has changed.
-        /// </summary>
-        protected override void updateSource()
-        {
-            try
-            {
-                var txtBindingExpr = this.GetBindingExpression(TextBox.TextProperty);
-                if (txtBindingExpr == null)
-                    return;
-
-                bool valid = true;
-                if (HierarchyHelper != null)
-                    valid = HierarchyHelper.GetItem(RootItem, Text) != null;
-
-                if (valid)
-                {
-                    if (txtBindingExpr != null)
-                        txtBindingExpr.UpdateSource();
-
-                    RaiseEvent(new RoutedEventArgs(ValueChangedEvent));
-                }
-                else
-                    Validation.MarkInvalid(txtBindingExpr,
-                                           new ValidationError(new PathExistsValidationRule(),
-                                                               txtBindingExpr,
-                                                               "Path does not exists.", null));
-            }
-            catch
-            {
-                // logger.Error(exp);
-            }
-        }
-
-        /// <summary>
-        /// Method executes when the <see cref="EnableSuggestions"/> dependency property
+        /// Method executes when the <see cref="SuggestBoxBase.EnableSuggestions"/> dependency property
         /// has changed its value.
         /// 
         /// Overwrite this method if you want to consume changes of this property.
@@ -196,14 +146,12 @@
             try
             {
                 var suggestSources = this.SuggestSources;
-                var hierarchyHelper = this.HierarchyHelper;
                 string input = this.Text;
                 object location = this.RootItem;
                 IsHintVisible = String.IsNullOrEmpty(input);
 
                 if (IsEnabled == true)
                 {
-                    _PopUpIsCancelled = false;
                     _suggestionIsConsumed = false;
                 }
 
@@ -215,7 +163,7 @@
                         foreach (var item in suggestSources)
                         {
                             // Query suggestion source for suggestions on this input
-                            tasks.Add(item.SuggestAsync(location, input, hierarchyHelper));
+                            tasks.Add(item.SuggestAsync(location, input));
                         }
 
                         await Task.WhenAll(tasks);
@@ -224,6 +172,7 @@
                         ISuggestResult AllResults = new SuggestResult(
                             tasks.SelectMany(tsk => tsk.Result.Suggestions).Distinct().ToList());
 
+                        // See if a suggestion source invalidates the input if there are no results
                         if (AllResults.Suggestions.Count == 0)
                         {
                             var validPaths = tasks.Where(tsk => tsk.Result.ValidPath == false);

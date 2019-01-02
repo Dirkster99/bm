@@ -17,15 +17,13 @@
         /// <summary>
         /// Method returns a task that returns a list of suggestion objects
         /// that are associated to the <paramref name="input"/> string
-        /// and given <paramref name="data"/> object.
+        /// and given <paramref name="location"/> object.
         /// </summary>
-        /// <param name="data"></param>
+        /// <param name="location"></param>
         /// <param name="input"></param>
-        /// <param name="helper"></param>
         /// <returns></returns>
-        public Task<ISuggestResult> SuggestAsync(object data,
-                                                string input,
-                                                IHierarchyHelper helper)
+        public Task<ISuggestResult> SuggestAsync(object location,
+                                                string input)
         {
             if (string.IsNullOrEmpty(input) == false)
             {

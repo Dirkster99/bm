@@ -42,6 +42,8 @@
 
                     <RowDefinition Height="Auto"/>
                     <RowDefinition Height="Auto"/>
+
+                    <RowDefinition Height="Auto"/>
                 </Grid.RowDefinitions>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="Auto"/>
@@ -52,7 +54,7 @@
                            FontWeight="Bold" Grid.Column="0" Grid.Row="0" VerticalAlignment="Center"/>
                 <TextBlock Text="{Binding Text,ElementName=suggestBoxDummy}"
                        Grid.Column="1" Grid.Row="0" Margin="3,0"
-                       VerticalAlignment="Center"/>
+                       VerticalAlignment="Center" ToolTip="suggestBoxDummy"/>
 
                 <TextBlock Text="Test Input 1:" HorizontalAlignment="Right" Margin="3"
                            FontWeight="Bold" Grid.Column="0" Grid.Row="1" VerticalAlignment="Center" />
@@ -68,7 +70,7 @@
                 <TextBlock Text="Test Result:" HorizontalAlignment="Right" Margin="3"
                            FontWeight="Bold" Grid.Column="0" Grid.Row="3" VerticalAlignment="Center"/>
                 <TextBlock x:Name="txtAuto" Grid.Column="1" Grid.Row="3" Margin="3,0"
-                           VerticalAlignment="Center"/>
+                           VerticalAlignment="Center" ToolTip="suggestBoxAuto"/>
 
                 <TextBlock Text="Test Input 2:" HorizontalAlignment="Right" Margin="3"
                            FontWeight="Bold" Grid.Column="0" Grid.Row="4" VerticalAlignment="Center"/>
@@ -76,11 +78,10 @@
                         DisplayMemberPath="Value"
                         Hint="Uses ViewModel, try Sub1\Sub12"                                   
                         Text="{Binding Text, ElementName=txtAuto, UpdateSourceTrigger=Explicit}"
-                        RootItem="{Binding SuggestBoxAuto_RootItems}"
-                        HierarchyHelper="{Binding SuggestBoxAuto_HierarchyHelper}"
-                        MinHeight="21"
-                        MinWidth="100" Margin="3"
+                        RootItem="{Binding SuggestBoxAuto_LocationIndicator}"
+                        SuggestSources="{Binding SuggestBoxAuto_SuggestSources}"
                         IsEnabled="{Binding Processing,Converter={StaticResource FlipBoolConverter}}"
+                        Margin="3"
                         />
 
                 <Separator Grid.Row="5" Grid.ColumnSpan="2" Margin="3"/>
@@ -88,19 +89,20 @@
                 <TextBlock Text="Test Result:" HorizontalAlignment="Right" Margin="3"
                            FontWeight="Bold" Grid.Column="0" Grid.Row="6" VerticalAlignment="Center"/>
                 <TextBlock x:Name="txtAuto2" Grid.Column="1" Grid.Row="6" Margin="3,0"
-                           VerticalAlignment="Center"/>
+                           VerticalAlignment="Center" ToolTip="SuggestBoxAuto2_RootItems"/>
 
                 <TextBlock Text="Test Input 3:" HorizontalAlignment="Right" Margin="3"
                            FontWeight="Bold" Grid.Column="0" Grid.Row="7" VerticalAlignment="Center"/>
-                <bc:SuggestBox Grid.Column="1" Grid.Row="7"
-                           DisplayMemberPath="Value"
-                           Hint="With delay 1 sec"                                   
-                           RootItem="{Binding SuggestBoxAuto2_RootItems}"
-                           HierarchyHelper="{Binding SuggestBoxAuto2_HierarchyHelper}"
+                <bc:SuggestBox
+                    Grid.Column="1" Grid.Row="7"
+                    DisplayMemberPath="Value"
+                    Hint="With delay 1 sec"                                   
+                    Text="{Binding Text, ElementName=txtAuto2, UpdateSourceTrigger=Explicit}"
+                    RootItem="{Binding SuggestBoxAuto2_LocationIndicator}"
+                    SuggestSources="{Binding SuggestBoxAuto2_SuggestSources}"
                            
-                           Text="{Binding Text, ElementName=txtAuto2, UpdateSourceTrigger=Explicit}"
-                           Margin="3"    
-                        /><!-- SuggestSources="{Binding SuggestBoxAuto2_SuggestSources}" -->
+                    Margin="3"    
+                />
 
                 <Separator Grid.Row="8" Grid.ColumnSpan="2" Margin="3"/>
 
@@ -109,18 +111,70 @@
                 <TextBlock Grid.Column="1" Grid.Row="9" Margin="3,0"
                            VerticalAlignment="Center"
                            Text="{Binding ElementName=DiskPathSuggestBox,Path=Text}"
+                           ToolTip="DiskPathSuggestBox"
                            />
 
                 <TextBlock Text="Test Input 4:" HorizontalAlignment="Right" Margin="3"
                            FontWeight="Bold" Grid.Column="0" Grid.Row="10" VerticalAlignment="Center"/>
-                <bc:SuggestBox Grid.Column="1" Grid.Row="10" x:Name="DiskPathSuggestBox"
-                           Hint="Enter a file system path"                                   
-                           SuggestSources="{Binding DiskPathSuggestBox_SuggestSources}"
-                           Margin="3"    
-                        />
+                <bc:SuggestBox
+                    Grid.Column="1" Grid.Row="10" x:Name="DiskPathSuggestBox"
+                    Hint="Enter a file system path"                                   
+                    SuggestSources="{Binding DiskPathSuggestBox_SuggestSources}"
+                    Margin="3"    
+                />
+
+                <Grid Grid.Column="1" Grid.Row="11">
+                    <Grid.Resources>
+                        <conv:BoolToVisibilityPropConverter x:Key="BoolToVisibilityPropConverter"
+                                                FalseValue="Collapsed"
+                                                TrueValue="Visible" />
+                        <conv:BoolToVisibilityPropConverter x:Key="BoolToVisibilityPropConverterNeg"
+                                                FalseValue="Visible"
+                                                TrueValue="Collapsed" />
+                    </Grid.Resources>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+
+                    <bc:SuggestBox x:Name="DiskPathSuggestComboBox"
+                        Grid.Column="0"
+                        Hint="Enter a file system path and use the ToggleButton"
+                        SuggestSources="{Binding DiskPathSuggestBox_SuggestSources}"
+                        Visibility="{Binding ElementName=toggleButton,Path=IsChecked,Converter={StaticResource BoolToVisibilityPropConverterNeg}}"
+                        Margin="3"
+                    />
+
+                    <ToggleButton 
+                        x:Name="toggleButton"
+                        Grid.Column="1"
+                        MinWidth="{DynamicResource {x:Static SystemParameters.VerticalScrollBarWidthKey}}"
+                        >
+                        <Path x:Name="Arrow"
+                              Data="F1M0,0L2.667,2.66665 5.3334,0 5.3334,-1.78168 2.6667,0.88501 0,-1.78168 0,0z"
+                              Fill="Black"
+                              HorizontalAlignment="Center"
+                              Margin="0"
+                              VerticalAlignment="Center" />
+                    </ToggleButton>
+
+                    <ComboBox Grid.Column="0" xmlns:sys="clr-namespace:System;assembly=mscorlib"
+                          Visibility="{Binding ElementName=toggleButton,Path=IsChecked,Converter={StaticResource BoolToVisibilityPropConverter}}"
+                          IsDropDownOpen="{Binding ElementName=toggleButton,Path=IsChecked}"
+                          IsEditable="True"
+                          Text="{Binding ElementName=DiskPathSuggestComboBox,Path=Text}"
+                          >
+                        <ComboBox.Resources>
+                            <sys:Double x:Key="{x:Static SystemParameters.VerticalScrollBarWidthKey}">0</sys:Double>
+                        </ComboBox.Resources>
+                        <ComboBoxItem>C:</ComboBoxItem>
+                        <ComboBoxItem>D:</ComboBoxItem>
+                        <ComboBoxItem>E:</ComboBoxItem>
+                        <ComboBoxItem>F:</ComboBoxItem>
+                    </ComboBox>
+                </Grid>
             </Grid>
         </Grid>
-
 
         <TextBox Text="Test Text Control ..."
                   Grid.Row="3" />

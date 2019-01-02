@@ -1,6 +1,6 @@
-﻿namespace SuggestLib
+﻿namespace SuggestBoxTestLib.AutoSuggest
 {
-    using Interfaces;
+    using SuggestBoxTestLib.AutoSuggest.Interfaces;
     using System;
     using System.Collections;
     using System.Collections.Generic;
@@ -12,7 +12,7 @@
     /// </summary>
     public class PathHierarchyHelper : IHierarchyHelper
     {
-        #region Constructor
+        #region Constructors
         /// <summary>
         /// Class constructor.
         /// </summary>
@@ -26,59 +26,91 @@
             SubentriesPath = subEntriesPath;
         }
 
+        /// <summary>
+        /// Hidden class constructor
+        /// </summary>
         protected PathHierarchyHelper()
         {
             Separator = '\\';
             StringComparisonOption = StringComparison.CurrentCultureIgnoreCase;
         }
-        #endregion
+        #endregion Constructors
+
+        #region properties
+        /// <summary>
+        /// Gets a seperator character that is usually used to seperate one
+        /// entry of one level from its sub-level entry (eg.: '/' or '\')
+        /// </summary>
+        public char Separator { get; set; }
+
+        /// <summary>
+        /// Gets the string comparing option for comparing paths
+        /// (on Windows this usually case insensitive and ignores the current culture)
+        /// </summary>
+        public StringComparison StringComparisonOption { get; set; }
+
+        /// <summary>
+        /// Path to the dependency property of the parent item.
+        /// </summary>
+        public string ParentPath { get; set; }
+
+        /// <summary>
+        /// Path to the value dependency property of the item.
+        /// </summary>
+        public string ValuePath { get; set; }
+
+        /// <summary>
+        /// Path to the child dependency property of the item.
+        /// </summary>
+        public string SubentriesPath { get; set; }
+        #endregion properties
 
         #region Methods
-        #region Utils Func - extractPath/Name
+        /// <summary>
+        /// Gets the path from a string that holds at least
+        /// one <see cref="Separator"/> character or an empty string
+        /// if no seperator was present.
+        /// </summary>
+        /// <param name="pathName"></param>
+        /// <returns></returns>
         public virtual string ExtractPath(string pathName)
         {
             if (String.IsNullOrEmpty(pathName))
-                return "";
+                return string.Empty;
 
-            if (pathName.IndexOf(Separator) == -1)
-            {
-                return "";
-            }
+            int idx = pathName.LastIndexOf(Separator);
+            if (idx == -1)
+                return string.Empty;
             else
-                return pathName.Substring(0, pathName.LastIndexOf(Separator));
+                return pathName.Substring(0, idx);
         }
 
+        /// <summary>
+        /// Gets the name a string that can have  one or more
+        /// <see cref="Separator"/> characters or an empty string
+        /// if no input string was present.
+        /// 
+        /// The name portion of the string is either the string itself
+        /// or the remaining string after the last seperator.
+        /// 
+        /// input                  Name
+        /// 'Libraries'         -> 'Libraries'
+        /// 'Libraries\Music'   -> 'Music'
+        /// </summary>
+        /// <param name="pathName"></param>
+        /// <returns></returns>
         public virtual string ExtractName(string pathName)
         {
             if (String.IsNullOrEmpty(pathName))
-                return "";
+                return string.Empty;
 
-            if (pathName.IndexOf(Separator) == -1)
+            int idx = pathName.LastIndexOf(Separator);
+            if (idx == -1)
                 return pathName;
             else
-                return pathName.Substring(pathName.LastIndexOf(Separator) + 1);
-        }
-        #endregion
-
-        #region Overridable to improve speed.
-
-        protected virtual object getParent(object item)
-        {
-            return PropertyPathHelper.GetValueFromPropertyInfo(item, ParentPath);
+                return pathName.Substring(idx + 1);
         }
 
-        protected virtual string getValuePath(object item)
-        {
-            return PropertyPathHelper.GetValueFromPropertyInfo(item, ValuePath) as string;
-        }
-
-        protected virtual IEnumerable getSubEntries(object item)
-        {
-            return PropertyPathHelper.GetValueFromPropertyInfo(item, SubentriesPath) as IEnumerable;
-        }
-        #endregion
-
-        #region Implements
         /// <summary>
         /// Used to generate ItemsSource for BreadcrumbCore.
         /// </summary>
@@ -98,6 +130,26 @@
         }
 
         /// <summary>
+        /// Gets all sub entries below <paramref name="item"/> or
+        /// an empty list if item is not <see cref="IEnumerable"/>
+        /// or list of sub entries is non-existing.
+        /// </summary>
+        /// <param name="item"></param>
+        /// <returns></returns>
+        public IEnumerable List(object item)
+        {
+            if (item is IEnumerable)
+                return item as IEnumerable;
+
+            var retVal = getSubEntries(item);
+
+            if (retVal == null)
+                return new List<object>();
+
+            return retVal;
+        }
+
+        /// <summary>
         /// Generate Path from an item;
         /// </summary>
         /// <param name="item"></param>
@@ -107,21 +159,10 @@
             return item == null ? "" : getValuePath(item);
         }
 
-        public IEnumerable List(object item)
-        {
-            if (item is IEnumerable)
-                return item as IEnumerable;
-
-            var retVal = getSubEntries(item);
-            if (retVal == null)
-                return new List<object>();
-
-            return retVal;
-        }
-
         /// <summary>
         /// Attempts to find an hierarchy item from a given
-        /// <paramref name="path"/> and <paramref name="rootItem"/>.
+        /// <paramref name="path"/> and <paramref name="rootItem"/>
+        /// using a Breadth First Level Order lookup algorithm.
         /// 
         /// Assuming we give it a path like 'sub2/sub3' and the hierarchy contains
         /// this path then the method should return an object that represents sub3.
@@ -142,7 +183,7 @@
                 foreach (var item in List(current))
                 {
                     string valuePathName = getValuePath(item);
-                    string value = ExtractName(valuePathName); //Value may be full path, or just current value.
+                    string value = ExtractName(valuePathName); // Value may be full path, or just current value.
 
                     if (value.Equals(nextSegment, StringComparisonOption))
                     {
@@ -157,24 +198,42 @@
             return current;
         }
 
-        #endregion Implements
-        #endregion methods
-
-        #region Public Properties
+        /// <summary>
+        /// Gets a parent object given an <paramref name="item"/> and
+        /// a <see cref="ParentPath"/> to the dependency property that
+        /// should be used for lookup.
+        /// </summary>
+        /// <param name="item"></param>
+        /// <returns></returns>
+        protected virtual object getParent(object item)
+        {
+            return PropertyPathHelper.GetValueFromPropertyInfo(item, ParentPath);
+        }
 
         /// <summary>
-        /// Gets a seperator character that is usually used to seperate one
-        /// entry of one level from its sub-level entry (eg.: '/' or '\')
+        /// Gets an object given an <paramref name="item"/> and
+        /// a <see cref="ValuePath"/> to the dependency property that
+        /// should be used for lookup.
         /// </summary>
-        public char Separator { get; set; }
+        /// <param name="item"></param>
+        /// <returns></returns>
+        protected virtual string getValuePath(object item)
+        {
+            return PropertyPathHelper.GetValueFromPropertyInfo(item, ValuePath) as string;
+        }
 
-        public StringComparison StringComparisonOption { get; set; }
-
-        public string ParentPath { get; set; }
-        public string ValuePath { get; set; }
-        public string SubentriesPath { get; set; }
-
-        #endregion
+        /// <summary>
+        /// Gets an object given an <paramref name="item"/> and
+        /// a <see cref="SubentriesPath"/> to the dependency property that
+        /// should be used for lookup.
+        /// </summary>
+        /// <param name="item"></param>
+        /// <returns></returns>
+        protected virtual IEnumerable getSubEntries(object item)
+        {
+            return PropertyPathHelper.GetValueFromPropertyInfo(item, SubentriesPath) as IEnumerable;
+        }
+        #endregion methods
     }
 
     /// <summary>

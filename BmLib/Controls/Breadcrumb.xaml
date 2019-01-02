@@ -7,7 +7,9 @@
     xmlns:conv="clr-namespace:BmLib.Converters"
     xmlns:reskeys="clr-namespace:BmLib.Themes"
     xmlns:behav="clr-namespace:BmLib.Behaviors"
+
     xmlns:sbox="clr-namespace:SuggestLib;assembly=SuggestLib"
+    xmlns:sconv="clr-namespace:SuggestLib.Converters;assembly=SuggestLib"
    >
     <ResourceDictionary.MergedDictionaries>
         <!-- Define the style of the switch control inside the Breadcrumb control -->
@@ -42,9 +44,16 @@
                                 <conv:BoolToVisibilityPropConverter x:Key="btv1" FalseValue="Visible" TrueValue="Hidden"/>
                                 <conv:BoolToVisibilityCollapsedConverter x:Key="btv" />
                                 <conv:FlipBoolConverter x:Key="fb" />
+
+                                <conv:BoolToVisibilityPropConverter x:Key="BoolToVisibilityConverter"/>
+                                <conv:BoolToVisibilityPropConverter x:Key="BoolToVisibilityConverterNeg"
+                                                                    TrueValue="Collapsed" FalseValue="Visible" />
+
+                                <sconv:DoubleAddConverter x:Key="DoubleAddConverter"/>
                             </Grid.Resources>
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
                                 <ColumnDefinition Width="Auto"/>
                             </Grid.ColumnDefinitions>
                             
@@ -137,37 +146,46 @@
                                         </Grid>
                                     </ctrls:Switch.ContentOn>
                                     <ctrls:Switch.ContentOff>
-                                            <sbox:SuggestBox
-                                                  x:Name="PART_SuggestBox"
-                                                  Visibility="{Binding IsSwitchOn, RelativeSource={RelativeSource AncestorType=ctrls:Switch}, Mode=OneWay, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource btv1}}"
-                                                  BorderThickness="0"
-                                                  BorderBrush="Transparent"
-                                                  Margin="0" Padding="0"
-                                                  FontFamily="{TemplateBinding FontFamily}"
-                                                  FontSize="{TemplateBinding FontSize}"
-                                                  Text="{Binding SuggestedPath, UpdateSourceTrigger=Explicit}"
-                                                  IsEnabled="{Binding EnableBreadcrumb, Mode=OneWay, Converter={StaticResource fb}}"
+                                        <sbox:SuggestBox
+                                                Grid.Column="0"
+                                                x:Name="PART_SuggestBox"
+                                                Visibility="{Binding IsSwitchOn, RelativeSource={RelativeSource AncestorType=ctrls:Switch}, Mode=OneWay, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource btv1}}"
+                                                BorderThickness="0"
+                                                BorderBrush="Transparent"
+                                                Margin="0" Padding="0"
+                                                FontFamily="{TemplateBinding FontFamily}"
+                                                FontSize="{TemplateBinding FontSize}"
+                                                Text="{Binding SuggestedPath, UpdateSourceTrigger=Explicit}"
+                                                IsEnabled="{Binding EnableBreadcrumb, Mode=OneWay, Converter={StaticResource fb}}"
                                                 
-                                                  SuggestSources="{Binding SuggestSources}"
-                                                  EnableSuggestions="{Binding ElementName=PART_Switch,Path=IsSwitchOn,Converter={StaticResource fb}}"
-                                                  PathValidation="{TemplateBinding PathValidation}"
+                                                SuggestSources="{Binding SuggestSources}"
+                                                EnableSuggestions="{Binding ElementName=PART_Switch,Path=IsSwitchOn,Converter={StaticResource fb}}"
+                                                PathValidation="{TemplateBinding PathValidation}"
 
-                                                  HierarchyHelper="{x:Null}"
-                                                  DisplayMemberPath="Header"
-                                                  ValuePath="TextPath"
-                                                >
-                                            </sbox:SuggestBox>
+                                                DisplayMemberPath="Header"
+                                                ValuePath="TextPath"
+                                            />
                                     </ctrls:Switch.ContentOff>
                                 </ctrls:Switch>
                             </Grid>
 
-                            <!-- Cancel/Refesh Buttons -->
-                            <Grid Grid.Column="1">
-                                <Grid.Resources>
-                                    <conv:BoolToVisibilityPropConverter x:Key="BoolToVisibilityConverter"/>
-                                    <conv:BoolToVisibilityPropConverter x:Key="BoolToVisibilityConverterNeg" TrueValue="Collapsed" FalseValue="Visible" />
-                                </Grid.Resources>
+                            <sbox:SuggestComboBox Grid.Column="1" x:Name="PART_SuggestComboBox"
+                                                  ToggleRecentListCommand="{Binding RecentListCommand,RelativeSource={RelativeSource AncestorType={x:Type ctrls:Breadcrumb}},Mode=OneTime}"
+                                                  >
+                                <sbox:SuggestComboBox.PopUpWidth>
+                                    <MultiBinding Converter="{StaticResource DoubleAddConverter}">
+                                        <Binding ElementName="PART_Switch" Path="ActualWidth" Mode="OneWay" UpdateSourceTrigger="PropertyChanged"/>
+                                        <Binding ElementName="PART_SuggestComboBox" Path="ActualWidth" Mode="OneWay" UpdateSourceTrigger="PropertyChanged"/>
+                                    </MultiBinding>
+                                </sbox:SuggestComboBox.PopUpWidth>
+                                <ComboBoxItem>c:</ComboBoxItem>
+                                <ComboBoxItem>d:</ComboBoxItem>
+                                <ComboBoxItem>e:</ComboBoxItem>
+                                <ComboBoxItem>f:</ComboBoxItem>
+                            </sbox:SuggestComboBox>
 
+                            <!-- Cancel/Refesh Buttons -->
+                            <Grid Grid.Column="2">
                                 <Grid Visibility="{Binding ElementName=PART_Switch, Path=IsSwitchOn,Converter={StaticResource BoolToVisibilityConverterNeg},UpdateSourceTrigger=PropertyChanged,Mode=OneWay}">
                                     <!-- Cancel Suggestions Button -->
                                     <Button x:Name="PART_CancelSuggestion"

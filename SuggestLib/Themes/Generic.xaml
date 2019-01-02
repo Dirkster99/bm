@@ -1,4 +1,4 @@
-﻿<ResourceDictionary
+<ResourceDictionary
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation">
 
     <ResourceDictionary.MergedDictionaries>
@@ -6,6 +6,8 @@
         <ResourceDictionary Source="/SuggestLib;component/Styles/ListBoxTemplate.xaml" />
         <ResourceDictionary Source="/SuggestLib;component/Styles/ResizeGrip.xaml" />
         <ResourceDictionary Source="/SuggestLib;component/SuggestBoxBase.xaml" />
+        <ResourceDictionary Source="/SuggestLib;component/SuggestComboBoxButtonStyle.xaml"/>
+        <ResourceDictionary Source="/SuggestLib;component/SuggestComboBox.xaml" />
     </ResourceDictionary.MergedDictionaries>
 
 </ResourceDictionary>

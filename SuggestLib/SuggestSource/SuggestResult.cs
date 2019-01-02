@@ -4,7 +4,7 @@
     using System.Collections.Generic;
 
     /// <summary>
-    /// Models a result class for the drop down portion of the <see cref="SuggestionBox"/>.
+    /// Models a result class for the drop down portion of the SuggestionBox.
     /// 
     /// Each suggestion source <see cref="ISuggestSource"/> returns one of these objects
     /// containing a list of suggestions and whether the input was considered valid or not.

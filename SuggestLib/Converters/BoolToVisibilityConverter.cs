@@ -7,7 +7,7 @@
 
 	/// <summary>
 	/// This class simply converts a Boolean to a Visibility
-	/// with an optional invert
+	/// with an optional invert parameter.
 	/// </summary>
 	[ValueConversion(typeof(Boolean), typeof(Visibility))]
 	public class BoolToVisibilityConverter : IValueConverter

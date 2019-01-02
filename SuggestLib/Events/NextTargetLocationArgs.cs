@@ -34,7 +34,6 @@
         /// Parameterized standard constructor
         /// </summary>
         /// <param name="result"></param>
-        /// <param name="oldLocation"></param>
         /// <param name="newLocation"></param>
         public EditResult(
             EditPathResult result,
@@ -75,8 +74,7 @@
         /// <summary>
         /// Parameterized standard constructor
         /// </summary>
-        /// <param name="oldLocation"></param>
-        /// <param name="newLocation"></param>
+        /// <param name="editResult"></param>
         public NextTargetLocationArgs(EditResult editResult)
             : this()
         {

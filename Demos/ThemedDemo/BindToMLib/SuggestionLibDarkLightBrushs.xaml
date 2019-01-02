@@ -20,4 +20,14 @@
                      ResourceId=ControlPopupBackgroundBrushKey}"
                      Color="{DynamicResource {x:Static MLib_reskeys:ResourceKeys.ControlPopupBackgroundKey}}" />
 
+    <SolidColorBrush x:Key="{ComponentResourceKey TypeInTargetAssembly={x:Type reskeys:ResourceKeys},
+                     ResourceId=ControlItemBackgroundSelectedKey}"
+                     Color="{DynamicResource {x:Static MLib_reskeys:ResourceKeys.ControlAccentColorKey}}"
+                     options:Freeze="true" />
+
+    <SolidColorBrush x:Key="{ComponentResourceKey TypeInTargetAssembly={x:Type reskeys:ResourceKeys},
+                     ResourceId=ControlItemBorderSelectedKey}"
+                     Color="{DynamicResource {x:Static MLib_reskeys:ResourceKeys.ControlAccentColorKey}}"
+                     options:Freeze="true" />
+
 </ResourceDictionary>

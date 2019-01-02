@@ -20,15 +20,13 @@
         /// <summary>
         /// Method returns a task that returns a list of suggestion objects
         /// that are associated to the <paramref name="input"/> string
-        /// and given <paramref name="data"/> object.
+        /// and given <paramref name="location"/> object.
         /// </summary>
         /// <param name="location">Currently selected location.</param>
         /// <param name="input">Text input to formulate string based path.</param>
-        /// <param name="helper"></param>
         /// <returns></returns>
         public Task<ISuggestResult> SuggestAsync(object location,
-                                                string input,
-                                                IHierarchyHelper helper)
+                                                string input)
         {
             input = (input == null ? string.Empty : input);
 
@@ -146,17 +144,20 @@
 
             foreach (var item in ShellBrowserLib.ShellBrowser.GetChildItems(dirPath.PathShell, searchMask))
             {
-                if (string.IsNullOrEmpty(item.PathFileSystem) == false)
+                if (pathType == PathType.WinShellPath)
                 {
-                    if (pathType == PathType.WinShellPath)
+                    AddItem(result, item.Label, namedPath + '\\' + item.Name,
+                            PathType.WinShellPath, path);
+                }
+                else
+                {
+                    if (string.IsNullOrEmpty(item.PathFileSystem) == false)
                     {
-                        AddItem(result, item.Label, namedPath + '\\' + item.Name,
-                                PathType.WinShellPath, path);
-                    }
-                    else
-                    {
+                        if (string.IsNullOrEmpty(item.PathFileSystem) == false)
+                        {
                             AddItem(result, item.Label, item.PathFileSystem,
                                     PathType.FileSystemPath, path);
+                        }
                     }
                 }
             }

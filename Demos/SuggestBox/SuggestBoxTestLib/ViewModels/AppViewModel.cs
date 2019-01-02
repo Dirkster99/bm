@@ -1,6 +1,6 @@
 ﻿namespace SuggestBoxTestLib.ViewModels
 {
-    using SuggestLib;
+    using SuggestBoxTestLib.AutoSuggest;
     using SuggestLib.Interfaces;
     using System;
     using System.Collections.Generic;
@@ -30,25 +30,14 @@
             });
 
             // Construct SuggestBoxAuto properties
-            SuggestBoxAuto_RootItems = fvm;
-            SuggestBoxAuto_HierarchyHelper =
-                    new PathHierarchyHelper("Parent", "Value", "SubDirectories");
+            SuggestBoxAuto_LocationIndicator = new LocationIndicator(fvm);
+            SuggestBoxAuto_SuggestSources = new List<ISuggestSource>(new[] { new AutoSuggestSource() });
 
             // Construct SuggestBoxAuto2 properties
-            SuggestBoxAuto2_HierarchyHelper
-                = new PathHierarchyHelper("Parent", "Value", "SubDirectories");
+            SuggestBoxAuto2_LocationIndicator = new LocationIndicator(FakeViewModel.GenerateFakeViewModels(TimeSpan.FromSeconds(0.5)));
+            SuggestBoxAuto2_SuggestSources = new List<ISuggestSource>(new[] { new AutoSuggestSource()});
 
-            SuggestBoxAuto2_RootItems = FakeViewModel.GenerateFakeViewModels(TimeSpan.FromSeconds(0.5));
-
-            //// This class source is set by default
-            //// - so we should set it only if there was a custom source that is different from this
-            ////
-            //// SuggestBoxAuto2_SuggestSources = new List<ISuggestSource>(
-            ////     new[] {
-            ////         //This is default value, suggest based on HierarchyLister.List()
-            ////         new AutoSuggestSource()
-            ////     });
-
+            // Construct properties for diskpath suggestion demo
             DiskPathSuggestBox_SuggestSources = new List<ISuggestSource>(new[] { new DirectorySuggestSource() });
         }
         #endregion constructors
@@ -61,18 +50,34 @@
         public List<ISuggestSource> SuggestBoxDummy_SuggestSources { get; }
 
         #region SuggestBoxAuto
-        public PathHierarchyHelper SuggestBoxAuto_HierarchyHelper { get; }
+        /// <summary>
+        /// Gets the model properties that drive the SuggestBoxAuto sample SuggestBox.
+        /// </summary>
+        public LocationIndicator SuggestBoxAuto_LocationIndicator { get; }
 
-        public FakeViewModel SuggestBoxAuto_RootItems { get; }
+        /// <summary>
+        /// Gets the datasource that is queried for the SuggestBoxAuto sample SuggestBox.
+        /// </summary>
+        public List<ISuggestSource> SuggestBoxAuto_SuggestSources { get; }
         #endregion SuggestBoxAuto
 
         #region SuggestBoxAuto2
-        public PathHierarchyHelper SuggestBoxAuto2_HierarchyHelper { get; }
+        /// <summary>
+        /// Gets the model properties that drive the SuggestBoxAuto2 sample SuggestBox.
+        /// </summary>
+        public LocationIndicator SuggestBoxAuto2_LocationIndicator { get; }
 
-        public FakeViewModel SuggestBoxAuto2_RootItems { get; }
-
+        /// <summary>
+        /// Gets the datasource that is queried for the SuggestBoxAuto2 sample SuggestBox.
+        /// </summary>
         public List<ISuggestSource> SuggestBoxAuto2_SuggestSources { get; }
 
+        /// <summary>
+        /// Gets a property that indicates whether the initally constructed hierarchy for the
+        /// SuggestBoxAuto2 SuggestBox is ready for consumtion or not.
+        /// 
+        /// Returns false if the background task is still busy constructing hierarchy items.
+        /// </summary>
         public bool Processing
         {
             get { return _Processing; }

@@ -6,21 +6,9 @@
                     xmlns:reskeys="clr-namespace:SuggestLib.Themes"
                     >
 
-    <ContextMenu x:Key="SuggestBoxContextMenu">
-        <MenuItem Command="ApplicationCommands.Cut" />
-        <MenuItem Command="ApplicationCommands.Copy" />
-        <MenuItem Command="ApplicationCommands.Paste" />
-        <Separator/>
-        <MenuItem Command="ApplicationCommands.SelectAll" />
-        <Separator/>
-        <MenuItem Command="ApplicationCommands.Undo" />
-        <MenuItem Command="ApplicationCommands.Redo" />
-    </ContextMenu>
-
     <ControlTemplate x:Key="suggestableTextBoxTemplate"
                      TargetType="{x:Type bc:SuggestBoxBase}"
                      >
-
         <ControlTemplate.Resources>
             <conv:BoolToVisibilityConverter x:Key="btv" />
         </ControlTemplate.Resources>
@@ -38,7 +26,7 @@
                            Foreground="{DynamicResource {x:Static reskeys:ResourceKeys.ControlTextBrushKey}}"
                            Visibility="{Binding IsHintVisible, RelativeSource={RelativeSource TemplatedParent}, Converter={StaticResource btv}}"
                            Opacity="0.5" />
-                <ScrollViewer Margin="0" x:Name="PART_ContentHost" />
+                <ScrollViewer Margin="0" x:Name="PART_ContentHost" RenderOptions.ClearTypeHint="Enabled" />
                 <Popup x:Name="PART_Popup"
                        AllowsTransparency="true"  
                        PlacementTarget="{Binding ElementName=PART_ContentHost}"                                   
@@ -104,6 +92,7 @@
         </Border>
     </ControlTemplate>
 
+    <!-- Style the SuggestBoxBase control -->
     <Style TargetType="{x:Type bc:SuggestBoxBase}" BasedOn="{StaticResource {x:Type TextBox}}">
         <Setter Property="Template" Value="{StaticResource suggestableTextBoxTemplate}" />
         <Setter Property="VerticalContentAlignment" Value="Center" />
@@ -115,12 +104,26 @@
         <Setter Property="Padding" Value="0"/>
         <Setter Property="AllowDrop" Value="true"/>
         <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
-        <Setter Property="ContextMenu" Value="{StaticResource SuggestBoxContextMenu}"/>
+        <Setter Property="ContextMenu">
+            <Setter.Value>
+                <ContextMenu>
+                    <MenuItem Command="ApplicationCommands.Cut" />
+                    <MenuItem Command="ApplicationCommands.Copy" />
+                    <MenuItem Command="ApplicationCommands.Paste" />
+                    <Separator/>
+                    <MenuItem Command="ApplicationCommands.SelectAll" />
+                    <Separator/>
+                    <MenuItem Command="ApplicationCommands.Undo" />
+                    <MenuItem Command="ApplicationCommands.Redo" />
+                </ContextMenu>
+            </Setter.Value>
+        </Setter>
         <!--Setter Property="ScrollViewer.PanningMode" Value="VerticalFirst"/-->
         <Setter Property="Stylus.IsFlicksEnabled" Value="False"/>
         <Setter Property="SelectionBrush" Value="{DynamicResource {x:Static reskeys:ResourceKeys.ControlAccentBrushKey}}" />
     </Style>
 
+    <!-- Style the SuggestBox control -->
     <Style TargetType="{x:Type bc:SuggestBox}"
            BasedOn="{StaticResource {x:Type bc:SuggestBoxBase}}"
            />

@@ -1,4 +1,4 @@
-﻿namespace SuggestLib
+﻿namespace SuggestBoxTestLib.AutoSuggest
 {
     using Interfaces;
     using System;

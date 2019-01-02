@@ -42,6 +42,16 @@
         #endregion styles and templates
 
         /// <summary>
+        /// Unspecific normal foreground <see cref="System.Windows.Media.Color"/> key.
+        /// </summary>
+        public static readonly ComponentResourceKey ControlNormalForegroundKey = new ComponentResourceKey(typeof(ResourceKeys), "ControlNormalForegroundKey");
+
+        /// <summary>
+        /// Unspecific normal foreground <see cref="System.Windows.Media.Brush"/> key.
+        /// </summary>
+        public static readonly ComponentResourceKey ControlNormalForegroundBrushKey = new ComponentResourceKey(typeof(ResourceKeys), "ControlNormalForegroundBrushKey");
+
+        /// <summary>
         /// Gets a the applicable foreground Brush key that should be used for coloring text.
         /// </summary>
         public static readonly ComponentResourceKey ControlTextBrushKey = new ComponentResourceKey(typeof(ResourceKeys), "ControlTextBrushKey");
@@ -67,6 +77,16 @@
         /// </summary>
         public static readonly ComponentResourceKey ControlPopupBackgroundBrushKey = new ComponentResourceKey(typeof(ResourceKeys), "ControlPopupBackgroundBrushKey");
 
+        /// <summary>
+        /// PopUp control background <see cref="System.Windows.Media.Brush"/> key for disabled items in ItemsControls, such as, treeviews, listbox etc.
+        /// </summary>
+        public static readonly ComponentResourceKey PopUpControlNormalBackgroundKey = new ComponentResourceKey(typeof(ResourceKeys), "PopUpControlNormalBackgroundKey");
+
+        /// <summary>
+        /// PopUp control border <see cref="System.Windows.Media.Brush"/> key for disabled items in ItemsControls, such as, treeviews, listbox etc.
+        /// </summary>
+        public static readonly ComponentResourceKey PopUpControlNormalBorderKey = new ComponentResourceKey(typeof(ResourceKeys), "PopUpControlNormalBorderKey");
+
         // Color definitions for pop-up ResizeThumb dragging area
         #region Popup ResizeThumb Item
         /// <summary>
@@ -76,5 +96,39 @@
         public static readonly ComponentResourceKey ResizeThumbBackgroundDraggingKey = new ComponentResourceKey(typeof(ResourceKeys), "ResizeThumbBackgroundDraggingKey");
         #endregion Popup ResizeThumb Item
         #endregion Pop-Up
+
+        /// <summary>
+        /// Determines the style of the history (forward, backward, up) buttons in BrowseHistory display.
+        /// </summary>
+        public static readonly ComponentResourceKey HistoryButtonStyleKey = new ComponentResourceKey(typeof(ResourceKeys), "HistoryButtonStyleKey");
+
+        /// <summary>
+        /// Determines the style of the toggle drop down button in BrowseHistory display.
+        /// This button is usually a clickable down chevron symbol with a pop-up list of recent
+        /// locations underneath.
+        /// </summary>
+        public static readonly ComponentResourceKey HistoryToggleButtonStyleKey = new ComponentResourceKey(typeof(ResourceKeys), "HistoryToggleButtonStyleKey");
+
+        /// <summary>
+        /// Determines the style of the toggle drop down button in SuggestComboBox display.
+        /// This button is usually a clickable down chevron symbol with a pop-up list of recent
+        /// locations underneath.
+        /// </summary>
+        public static readonly ComponentResourceKey SuggestComboBoxToggleButtonStyleKey = new ComponentResourceKey(typeof(ResourceKeys), "SuggestComboBoxToggleButtonStyleKey");
+
+        /// <summary>
+        /// Item background <see cref="System.Windows.Media.Brush"/> key for selected items in ItemsControls, such as, treeviews, listbox etc.
+        /// </summary>
+        public static readonly ComponentResourceKey ControlItemBackgroundSelectedKey = new ComponentResourceKey(typeof(ResourceKeys), "ControlItemBackgroundSelectedKey");
+
+        /// <summary>
+        /// Item foreground <see cref="System.Windows.Media.Brush"/> key for selected items in ItemsControls, such as, treeviews, listbox etc.
+        /// </summary>
+        public static readonly ComponentResourceKey ControlItemTextSelectedKey = new ComponentResourceKey(typeof(ResourceKeys), "ControlItemTextSelectedKey");
+
+        /// <summary>
+        /// Unspecific normal background <see cref="System.Windows.Media.Brush"/> key for mouse over effects.
+        /// </summary>
+        public static readonly ComponentResourceKey ControlMouseOverBackgroundBrushKey = new ComponentResourceKey(typeof(ResourceKeys), "ControlMouseOverBackgroundBrushKey");
     }
 }

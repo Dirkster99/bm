@@ -5,9 +5,11 @@
     using SuggestLib;
     using SuggestLib.Events;
     using System;
+    using System.Linq;
     using System.Collections.Generic;
     using System.ComponentModel;
     using System.Diagnostics;
+    using System.Threading.Tasks;
     using System.Windows;
     using System.Windows.Controls;
     using System.Windows.Controls.Primitives;
@@ -204,7 +206,10 @@
         /// </summary>
         private string _previousLocation;
 
+        private bool _focusControsOnSwitch;
+
         private ICommand _SwitchCommand;
+        private ICommand _RecentListCommand;
         #endregion fields
 
         #region constructors
@@ -226,6 +231,21 @@
         #endregion constructors
 
         #region properties
+        public ICommand RecentListCommand
+        {
+            get
+            {
+                if (_RecentListCommand == null)
+                {
+                    _RecentListCommand = new Base.RelayCommand<object>(
+                            async (p) => await RecentListCommandExecutedAsync(p)
+                    );
+                }
+
+                return _RecentListCommand;
+            }
+        }
+
         #region Switch Properties
         /// <summary>
         /// Gets a command to switch the view between TreeView and TextBox based view
@@ -241,7 +261,7 @@
                 if (_SwitchCommand == null)
                 {
                     _SwitchCommand = new Base.RelayCommand<object>(
-                        (p) => SwitchCommandExecutedAsync(p)
+                        async (p) => await SwitchCommandExecutedAsync(p)
                       , (p) => IsSwitchEnabled // whether switch command can execute or not
                     );
                 }
@@ -476,13 +496,15 @@
             set { SetValue(TaskQueueProcessingProperty, value); }
         }
 
-        private DropDownList RootDropDownList { get; set; }
+        private DropDownList _PART_RootDropDownList { get; set; }
 
-        private BreadcrumbTree Control_Tree { get; set; }
+        private BreadcrumbTree _PART_Tree { get; set; }
 
-        private Switch Control_Switch { get; set; }
+        private Switch _PART_Switch { get; set; }
 
-        private SuggestBox Control_SuggestBox { get; set; }
+        private SuggestBox _PART_SuggestBox { get; set; }
+
+        private SuggestComboBox _PART_SuggestComboBox { get; set; }
         #endregion properties
 
         #region methods
@@ -493,20 +515,26 @@
         {
             base.OnApplyTemplate();
 
-            RootDropDownList = this.Template.FindName(PART_RootDropDownList, this) as DropDownList;
-            Control_Tree = this.Template.FindName(PART_BreadcrumbTree, this) as BreadcrumbTree;
-            Control_Switch = this.Template.FindName(PART_Switch, this) as Switch;
-            Control_SuggestBox = this.Template.FindName(PART_SuggestBox, this) as SuggestBox;
+            _PART_RootDropDownList = this.Template.FindName(PART_RootDropDownList, this) as DropDownList;
+            _PART_Tree = this.Template.FindName(PART_BreadcrumbTree, this) as BreadcrumbTree;
+            _PART_Switch = this.Template.FindName(PART_Switch, this) as Switch;
+            _PART_SuggestBox = this.Template.FindName(PART_SuggestBox, this) as SuggestBox;
+            _PART_SuggestComboBox = this.Template.FindName("PART_SuggestComboBox", this) as SuggestComboBox;
 
-            if (Control_SuggestBox != null)
+            if (_PART_SuggestBox != null)
             {
-                Control_SuggestBox.NewLocationRequestEvent += Control_SuggestBox_NewLocationRequestEvent;
+                _PART_SuggestBox.NewLocationRequestEvent += Control_SuggestBox_NewLocationRequestEvent;
             }
 
             var Ctrl_CancelSuggestion = this.Template.FindName("PART_CancelSuggestion", this) as ButtonBase;
             if (Ctrl_CancelSuggestion != null)
             {
                 Ctrl_CancelSuggestion.Click += Ctrl_CancelSuggestion_Click;
+            }
+
+            if (_PART_SuggestComboBox != null)
+            {
+                _PART_SuggestComboBox.SelectionChanged += _PART_SuggestComboBox_SelectionChanged;
             }
 
             this.Loaded += Breadcrumb_Loaded;
@@ -552,12 +580,49 @@
             return sz; // Return current size constrain
         }
 
+        private async Task RecentListCommandExecutedAsync(object parameter)
+        {
+            // Turn the switch on to SuggestBox if not already available
+            if (IsSwitchOn != false)
+                await SwitchCommandExecutedAsync(null, false);
+
+            if (_PART_SuggestComboBox != null)
+                _PART_SuggestComboBox.IsDropDownOpen = true;
+        }
+
+        /// <summary>
+        /// Method executes when the user has selected an item in the popup
+        /// control of the SuggestComboBox.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void _PART_SuggestComboBox_SelectionChanged(object sender,
+                                                            SelectionChangedEventArgs e)
+        {
+            if ((sender is ComboBox) == false)
+                return;
+
+            if (e.AddedItems.Count > 0)
+            {
+                var item = e.AddedItems[0] as ComboBoxItem;
+
+                string input = item.Content as string;
+                if (string.IsNullOrEmpty(input) == false)
+                {
+                    _PART_SuggestBox.Text = input;
+                }
+            }
+        }
+
         /// <summary>
         /// Method executes as part of the <see cref="SwitchCommand"/> which tests whether
         /// we are ready to switch between views and takes care of basic plumbing on the way.
         /// </summary>
         /// <param name="parameter"></param>
-        private async void SwitchCommandExecutedAsync(object parameter)
+        /// <param name="focusControl">Whether or not controls in the switched target content
+        /// should get the Focus or not.</param>
+        private async Task SwitchCommandExecutedAsync(object parameter,
+                                                      bool focusControl = true)
         {
             if (IsSwitchOn == true) // Switching from TreeView to Suggestbox
             {
@@ -568,17 +633,18 @@
                 if (_BreadcrumbModel == null)
                 {
                     // Overwrite this only if we are not in a cancel-suggestion-workflow
-                    _previousLocation = Control_SuggestBox.Text;
+                    _previousLocation = _PART_SuggestBox.Text;
                 }
                 else
                 {
                     object locations;
 
-                    Control_SuggestBox.Text = _BreadcrumbModel.UpdateSuggestPath(out locations);
-                    _previousLocation = Control_SuggestBox.Text;
+                    _PART_SuggestBox.Text = _BreadcrumbModel.UpdateSuggestPath(out locations);
+                    _previousLocation = _PART_SuggestBox.Text;
 
-                    Control_SuggestBox.RootItem = locations;
+                    _PART_SuggestBox.RootItem = locations;
 
+                    _focusControsOnSwitch = focusControl;
                     IsSwitchOn = false;  // Switch to text based view
                 }
             }
@@ -602,19 +668,22 @@
                         path = switchOnTextBoxEditResult.NewLocation;
                 }
                 else
-                    path = Control_SuggestBox.Text;
+                    path = _PART_SuggestBox.Text;
 
                 if (_BreadcrumbModel == null)
                     isPathValid = false;      // Cannot invoke viewmodel method
                 else
                     isPathValid = await _BreadcrumbModel.NavigateTreeViewModel(
-                        path, goBackToPreviousLocation, this.Control_SuggestBox.RootItem);
+                        path, goBackToPreviousLocation, this._PART_SuggestBox.RootItem);
 
                 // Canceling navigation from edit result since path appears to be invalid
                 // > Stay with false path if path does not exist
                 //   or viewmodel method cannot be invoked here ...
                 if (isPathValid == true)
+                {
+                    _focusControsOnSwitch = focusControl;
                     IsSwitchOn = true;  // Switch on valid path only
+                }
                 else
                 {
                     MarkInvalidInputSuggestBox(true, "Path does not exists.");
@@ -643,17 +712,20 @@
             // Switch from tree view to suggestbox
             if (OldValue == true && NewValue == false)
             {
-                await Control_SuggestBox.Dispatcher.BeginInvoke(new Action(() =>
+                await _PART_SuggestBox.Dispatcher.BeginInvoke(new Action(() =>
                 {
-                    Control_SuggestBox.InitializeSuggestions();
-                    Control_SuggestBox.SelectAll();
+                    _PART_SuggestBox.InitializeSuggestions();
+                    _PART_SuggestBox.SelectAll();
 
                     // Focus the newly switched UI element (requires Focusable="True")
-                    IInputElement inpcontrol = Control_Switch.ContentOff as IInputElement;
-                    if (inpcontrol != null)
+                    if (_focusControsOnSwitch)
                     {
-                        Keyboard.Focus(inpcontrol);
-                        inpcontrol.Focus();
+                        IInputElement inpcontrol = _PART_Switch.ContentOff as IInputElement;
+                        if (inpcontrol != null)
+                        {
+                            Keyboard.Focus(inpcontrol);
+                            inpcontrol.Focus();
+                        }
                     }
 
                 }), System.Windows.Threading.DispatcherPriority.Background);
@@ -663,17 +735,20 @@
                 // Switch from suggestbox to tree view
                 if (OldValue == false && NewValue == true)
                 {
-                    await Control_Switch.Dispatcher.BeginInvoke(new Action(() =>
+                    if (_focusControsOnSwitch)
                     {
-                        // Focus the newly switched UI element (requires Focusable="True")
-                        IInputElement inpcontrol = Control_Switch.ContentOn as IInputElement;
-                        if (inpcontrol != null)
+                        await _PART_Switch.Dispatcher.BeginInvoke(new Action(() =>
                         {
-                            Keyboard.Focus(inpcontrol);
-                            inpcontrol.Focus();
-                        }
+                            // Focus the newly switched UI element (requires Focusable="True")
+                            IInputElement inpcontrol = _PART_Switch.ContentOn as IInputElement;
+                            if (inpcontrol != null)
+                            {
+                                Keyboard.Focus(inpcontrol);
+                                inpcontrol.Focus();
+                            }
 
-                    }), System.Windows.Threading.DispatcherPriority.Background);
+                        }), System.Windows.Threading.DispatcherPriority.Background);
+                    }
                 }
             }
         }
@@ -696,7 +771,7 @@
                 // if validation rule dependency property is available
                 if (PathValidation != null)
                 {
-                    var bindingExpr = Control_SuggestBox.GetBindingExpression(TextBox.TextProperty);
+                    var bindingExpr = _PART_SuggestBox.GetBindingExpression(TextBox.TextProperty);
                     if (bindingExpr != null)
                     {
                         Validation.MarkInvalid(bindingExpr,
@@ -707,7 +782,7 @@
             else
             {
                 // Clear validation error in case it was previously set switching from Text to TreeView
-                var bindingExpr = Control_SuggestBox.GetBindingExpression(TextBox.TextProperty);
+                var bindingExpr = _PART_SuggestBox.GetBindingExpression(TextBox.TextProperty);
                 if (bindingExpr != null)
                     Validation.ClearInvalid(bindingExpr);
             }

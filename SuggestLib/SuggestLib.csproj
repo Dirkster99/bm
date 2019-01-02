@@ -24,6 +24,7 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <Prefer32Bit>false</Prefer32Bit>
+    <DocumentationFile>bin\Debug\SuggestLib.xml</DocumentationFile>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -33,6 +34,7 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <Prefer32Bit>false</Prefer32Bit>
+    <DocumentationFile>bin\Release\SuggestLib.xml</DocumentationFile>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
@@ -51,6 +53,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Converters\BoolToVisibilityCollapsedConverter.cs" />
+    <Compile Include="Converters\BoolToVisibilityPropConverter.cs" />
+    <Compile Include="Converters\DoubleAddConverter.cs" />
     <Compile Include="Converters\FlipBoolConverter.cs" />
     <Compile Include="Events\NextTargetLocationArgs.cs" />
     <Compile Include="Interfaces\ISuggestResult.cs" />
@@ -69,6 +73,14 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
+    <Page Include="SuggestComboBox.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="SuggestComboBoxButtonStyle.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Themes\DarkBrushs.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -84,10 +96,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Converters\BoolToVisibilityConverter.cs" />
-    <Compile Include="Interfaces\IHierarchyHelper.cs" />
     <Compile Include="Interfaces\ISuggestSource.cs" />
-    <Compile Include="PathExistsValidationRule.cs" />
-    <Compile Include="PathHierarchyHelper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -101,11 +110,8 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
-    <Compile Include="PropertyPathHelper.cs" />
     <Compile Include="SuggestBox.cs" />
-    <Compile Include="SuggestSource\AutoSuggestSource.cs" />
-    <Compile Include="SuggestSource\MultiSuggestSource.cs" />
-    <Compile Include="SuggestSource\NullSuggestSource.cs" />
+    <Compile Include="SuggestComboBox.cs" />
     <Compile Include="SuggestSource\SuggestResult.cs" />
     <Compile Include="Themes\ResourceKeys.cs" />
     <Compile Include="Utils\TreeHelper.cs" />

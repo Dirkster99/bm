@@ -21,21 +21,36 @@
     public class SuggestBoxBase : TextBox
     {
         #region fields
+        /// <summary>
+        /// Defines the templated name of the required <see cref="Popup"/>
+        /// control in the <see cref="SuggestBoxBase"/> template.
+        /// </summary>
         public const string PART_Popup = "PART_Popup";
+
+        /// <summary>
+        /// Defines the templated name of the required Resize Grip <see cref="Thumb"/>
+        /// control in the <see cref="SuggestBoxBase"/> template.
+        /// </summary>
         public const string PART_ResizeGripThumb = "PART_ResizeGripThumb";
+
+        /// <summary>
+        /// Defines the templated name of the required Resizeable <see cref="Grid"/>
+        /// control in the <see cref="SuggestBoxBase"/> template.
+        /// </summary>
         public const string PART_ResizeableGrid = "PART_ResizeableGrid";
+
+        /// <summary>
+        /// Defines the templated name of the required ItemsList <see cref="ListBox"/>
+        /// control in the <see cref="SuggestBoxBase"/> template.
+        /// </summary>
         public const string PART_ItemList = "PART_ItemList";
 
-        protected Popup _PART_Popup;
-        protected Thumb _PART_ResizeGripThumb;
-        protected Grid _PART_ResizeableGrid;
-        protected ListBox _PART_ItemList;
-
-        // Controls whether the PopUp should open when the control has focus and suggestion
-        // or not (not should be implemented if the pop-up just closed and the textbox is
-        // focused to let the user continue to type into the text portion).
+        /// <summary>
+        /// Controls whether the PopUp should open when the control has focus and suggestion
+        /// or not (not should be implemented if the pop-up just closed and the textbox is
+        /// focused to let the user continue to type into the text portion).
+        /// </summary>
         protected bool _suggestionIsConsumed = false;
-        protected bool _PopUpIsCancelled = false;
         private bool _prevState;
 
         /// <summary>
@@ -46,7 +61,7 @@
                     new PropertyMetadata("Header"));
 
         /// <summary>
-        /// Implements the backing store of the <see cref="Value"/> dependency property.
+        /// Implements the backing store of the <see cref="ValuePath"/> dependency property.
         /// </summary>
         public static readonly DependencyProperty ValuePathProperty =
             DependencyProperty.Register("ValuePath", typeof(string), typeof(SuggestBoxBase),
@@ -87,6 +102,10 @@
             DependencyProperty.Register("IsHintVisible", typeof(bool),
                 typeof(SuggestBoxBase), new PropertyMetadata(true));
 
+        /// <summary>
+        /// Implements a <see cref="ValueChanged"/> routed event which is raised when
+        /// the text in the <see cref="SuggestBoxBase"/> has been changed.
+        /// </summary>
         public static readonly RoutedEvent ValueChangedEvent =
             EventManager.RegisterRoutedEvent("ValueChanged",
                   RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(SuggestBoxBase));
@@ -112,6 +131,11 @@
         public static readonly DependencyProperty EnableSuggestionsProperty =
             DependencyProperty.Register("EnableSuggestions",
                 typeof(bool), typeof(SuggestBoxBase), new PropertyMetadata(true, OnEnableSuggestionChanged));
+
+        private Popup _PART_Popup;
+        private Thumb _PART_ResizeGripThumb;
+        private Grid _PART_ResizeableGrid;
+        private ListBox _PART_ItemList;
         #endregion fields
 
         #region Constructor
@@ -143,6 +167,11 @@
             remove { RemoveHandler(ValueChangedEvent, value); }
         }
 
+        /// <summary>
+        /// Implements a location changed event, which is raised when the user
+        /// types a certain key gesture (Enter == OK, Escape == Cancel) to inform
+        /// the client application that another location change request is available.
+        /// </summary>
         public event EventHandler<NextTargetLocationArgs> NewLocationRequestEvent;
         #endregion
 
@@ -302,7 +331,6 @@
                 if (IsKeyboardFocusWithin == false &&
                     e.NewFocus != e.OldFocus)
                 {
-                    _PopUpIsCancelled = true;
                     SetPopUp(false, "LostKeyboardFocus");
                 }
             }
@@ -311,6 +339,13 @@
             this._suggestionIsConsumed = false;
         }
 
+        /// <summary>
+        /// Invoked when an unhandled <see cref="System.Windows.UIElement.PreviewMouseLeftButtonDown"/>
+        /// routed event reaches an element in its route that is derived from this class.
+        /// 
+        /// Implement this method to add class handling for this event.
+        /// </summary>
+        /// <param name="e"></param>
         protected override void OnPreviewMouseLeftButtonDown(MouseButtonEventArgs e)
         {
             base.OnPreviewMouseLeftButtonDown(e);
@@ -336,7 +371,6 @@
             //            if (!TreeHelper.IsDescendantOf(e.OldFocus as DependencyObject, this))
             //                this.SelectAll();
 
-            _PopUpIsCancelled = false;
             this.PopupIfSuggest();
             IsHintVisible = false;
         }
@@ -380,7 +414,6 @@
         {
             if (IsPopupOpened)
             {
-                _PopUpIsCancelled = true;
                 SetPopUp(false, "ParentWindow_SizeChanged");
                 //e.Handled = true;
             }
@@ -396,7 +429,6 @@
         {
             if (IsPopupOpened)
             {
-                _PopUpIsCancelled = true;
                 SetPopUp(false, "ParentWindow_SizeChanged");
                 //e.Handled = true;
             }
@@ -417,7 +449,6 @@
             {
                 if (IsPopupOpened)
                 {
-                    _PopUpIsCancelled = true;
                     SetPopUp(false, "ParentWindow_PreviewMouseDown");
                     //e.Handled = true;
                 }
@@ -608,7 +639,6 @@
                 case Key.Escape:
                     if (IsPopupOpened == true)
                     {
-                        _PopUpIsCancelled = true;
                         SetPopUp(false, "OnPreviewKeyDown");
                         e.Handled = true;
                     }

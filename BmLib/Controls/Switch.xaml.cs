@@ -33,12 +33,21 @@
             DependencyProperty.Register("ContentOff", typeof(object),
                 typeof(Switch), new PropertyMetadata(null));
 
+        #region SwitchContentCommand
         /// <summary>
         /// Backing store of the <see cref="SwitchContentCommand"/> dependency property.
         /// </summary>
         public static readonly DependencyProperty SwitchContentCommandProperty =
             DependencyProperty.Register("SwitchContentCommand", typeof(ICommand),
                 typeof(Switch), new PropertyMetadata(null));
+
+        /// <summary>
+        /// Backing store of the <see cref="SwitchContentCommandParameter"/> dependency property.
+        /// </summary>
+        public static readonly DependencyProperty SwitchContentCommandParameterProperty =
+            DependencyProperty.Register("SwitchContentCommandParameter", typeof(object),
+                typeof(Switch), new PropertyMetadata(null));
+        #endregion SwitchContentCommand
 
         /// <summary>
         /// Backing store of the <see cref="CanSwitchContent"/> dependency property.
@@ -98,14 +107,26 @@
             set { SetValue(CanSwitchContentProperty, value); }
         }
 
+        #region SwitchContentCommand
         /// <summary>
-        /// Gets/sets a command to switch the content of the <see cref="Switch"/> control.
+        /// Gets/sets a command to exchange the visible content of the <see cref="Switch"/> control.
         /// </summary>
         public ICommand SwitchContentCommand
         {
             get { return (ICommand)GetValue(SwitchContentCommandProperty); }
             set { SetValue(SwitchContentCommandProperty, value); }
         }
+
+        /// <summary>
+        /// Gets/sets a command parameter for the switch command that exchanges
+        /// the visible content of the <see cref="Switch"/> control.
+        /// </summary>
+        public object SwitchContentCommandParameter
+        {
+            get { return (object)GetValue(SwitchContentCommandParameterProperty); }
+            set { SetValue(SwitchContentCommandParameterProperty, value); }
+        }
+        #endregion SwitchContentCommand
         #endregion properties
 
         #region methods
