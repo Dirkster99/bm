@@ -92,6 +92,7 @@
                                   
                                   TaskQueueProcessing="{Binding Data.BreadcrumbController.TaskQueue, Source={StaticResource AppDataContextProxy}}"
                                   Progressing="{Binding Progressing}"
+
                                   Margin="3"
                                   Padding="3"
                               >
@@ -170,7 +171,7 @@
                                     IsHitTestVisible="True"
                                     Stretch="Fill"
                                     Margin="3,0"
-                                    Data="{Binding IsOverflown, ElementName=BreadcrumbDemoControl, Converter={StaticResource BoolToOneOfTwoBindingsConverter}}"
+                                    Data="{Binding IsOverflown, ElementName=BreadcrumbDemoControl, Converter={StaticResource BoolToOneOfTwoBindingsConverter},Mode=OneWay,UpdateSourceTrigger=PropertyChanged}"
                                 />
                          </Grid>
                     </ctrls:Breadcrumb.RootDropDownListHeader>

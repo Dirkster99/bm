@@ -1,5 +1,6 @@
 ﻿namespace BmLib.Interfaces
 {
+    using System;
     using System.Threading.Tasks;
 
     /// <summary>
@@ -8,6 +9,11 @@
     /// </summary>
     public interface IBreadcrumbModel
     {
+        /// <summary>
+        /// Raised when a node is selected, use SelectedValue/ViewModel to return the selected item.
+        /// </summary>
+        event EventHandler SelectionChanged;
+
         /// <summary>
         /// This navigates the bound tree view model to the requested
         /// location when the user switches the display from:

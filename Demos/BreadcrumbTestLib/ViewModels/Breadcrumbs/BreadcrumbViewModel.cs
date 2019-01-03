@@ -97,7 +97,7 @@ namespace BreadcrumbTestLib.ViewModels.Breadcrumbs
         /// <summary>
         /// Raised when a node is selected, use SelectedValue/ViewModel to return the selected item.
         /// </summary>
-        event EventHandler SelectionChanged;
+        public event EventHandler SelectionChanged;
         #endregion browsing events
 
         #region properties

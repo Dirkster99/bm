@@ -5,15 +5,16 @@
     using SuggestLib;
     using SuggestLib.Events;
     using System;
-    using System.Linq;
     using System.Collections.Generic;
     using System.ComponentModel;
     using System.Diagnostics;
+    using System.Linq;
     using System.Threading.Tasks;
     using System.Windows;
     using System.Windows.Controls;
     using System.Windows.Controls.Primitives;
     using System.Windows.Input;
+    using System.Windows.Threading;
 
     /// <summary>
     /// BreadcrumbControl contains 3 main displays:
@@ -558,26 +559,43 @@
             }
 #endif
             var sz = base.MeasureOverride(constraint);
-
-            if (RootDropDownItemsSource != null)         // Go through root items and
-            {                                           // count those that are overflown
-                int overflowCount = 0;
-                foreach (var item in RootDropDownItemsSource)
-                {
-                    if (item is IOverflown)
-                    {
-                        if ((item as IOverflown).IsOverflown)
-                            overflowCount++;
-                    }
-                    else
-                        break;
-                }
-
-                // Set dependency property to determine whether control is overlown or not
-                IsOverflown = (overflowCount > 0 ? true : false);
-            }
+            UpdateIsOverflownProperty();
 
             return sz; // Return current size constrain
+        }
+
+        /// <summary>
+        /// Updates this <see cref="IsOverflown"/> property based on the state of the
+        /// items in the <see cref="RootDropDownItemsSource"/> property.
+        /// </summary>
+        private void UpdateIsOverflownProperty()
+        {
+            try
+            {
+                if (RootDropDownItemsSource != null)         // Go through root items and
+                {                                           // count those that are overflown
+                    var list = RootDropDownItemsSource.ToList();
+
+                    int overflowCount = 0;
+                    foreach (var item in list)
+                    {
+                        if (item is IOverflown)
+                        {
+                            if ((item as IOverflown).IsOverflown)
+                                overflowCount++;
+                        }
+                        else
+                            break;
+                    }
+
+                    // Set dependency property to determine whether control is overlown or not
+                    IsOverflown = (overflowCount > 0 ? true : false);
+                }
+            }
+            catch
+            {
+                // Catch this just in case something changes in the backend during this evaluation...
+            }
         }
 
         private async Task RecentListCommandExecutedAsync(object parameter)
@@ -848,7 +866,30 @@
         /// </summary>
         private void OnViewAttached()
         {
+            if (_BreadcrumbModel != null)
+            {
+                _BreadcrumbModel.SelectionChanged -= _BreadcrumbModel_SelectionChanged;
+            }
+
             _BreadcrumbModel = this.DataContext as IBreadcrumbModel;
+            _BreadcrumbModel.SelectionChanged += _BreadcrumbModel_SelectionChanged;
+        }
+
+        /// <summary>
+        /// Method is invoked whenever the selection of the currently
+        /// selected breadcrumb item has been changed.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void _BreadcrumbModel_SelectionChanged(object sender, EventArgs e)
+        {
+            // Do this with low priority to ensure that bindings are updated and
+            // IsOverflown property is not currently being changed ...
+            Application.Current.Dispatcher.Invoke(() =>
+            {
+                UpdateIsOverflownProperty();
+
+            }, DispatcherPriority.ApplicationIdle);
         }
         #endregion OnLoaded DataContectChanged
         #endregion methods
