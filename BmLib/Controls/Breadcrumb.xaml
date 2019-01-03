@@ -175,7 +175,7 @@
                                 <sbox:SuggestComboBox.PopUpWidth>
                                     <MultiBinding Converter="{StaticResource DoubleAddConverter}">
                                         <Binding ElementName="PART_Switch" Path="ActualWidth" Mode="OneWay" UpdateSourceTrigger="PropertyChanged"/>
-                                        <Binding ElementName="PART_SuggestComboBox" Path="ActualWidth" Mode="OneWay" UpdateSourceTrigger="PropertyChanged"/>
+                                        <!--Binding ElementName="PART_SuggestComboBox" Path="ActualWidth" Mode="OneWay" UpdateSourceTrigger="PropertyChanged"/-->
                                     </MultiBinding>
                                 </sbox:SuggestComboBox.PopUpWidth>
                                 <ComboBoxItem>c:</ComboBoxItem>
