@@ -73,7 +73,13 @@
                                 KeyboardNavigation.DirectionalNavigation="Cycle"
                                 BorderThickness="0"
                                 BorderBrush="{TemplateBinding BorderBrush}"
-                                />
+                                >
+                                <ListBox.ItemsPanel>
+                                    <ItemsPanelTemplate>
+                                        <VirtualizingStackPanel />
+                                    </ItemsPanelTemplate>
+                                </ListBox.ItemsPanel>
+                            </ListBox>
                         
                             <!-- RezizeGrip Thumb to support resizing the suggestion lib -->
                             <Thumb x:Name="PART_ResizeGripThumb"
