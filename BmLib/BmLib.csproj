@@ -137,6 +137,10 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
+    <Page Include="Themes\DarkIcons.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="Themes\LightIcons.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -190,14 +194,17 @@
     </None>
   </ItemGroup>
   <ItemGroup>
+    <Resource Include="Resources\Icons\Light\Refresh_black_16x.ico" />
+    <Resource Include="Resources\Icons\Dark\Close_White_16x.ico" />
+    <Content Include="Resources\Icons\Dark\Close_White_16x.svg" />
+    <Resource Include="Resources\Icons\Dark\Refresh_white_16x.ico" />
+    <Content Include="Resources\Icons\Dark\Refresh_white_16x.svg" />
+    <Resource Include="Resources\Icons\Light\ExpandChevronDown.ico" />
     <Content Include="Resources\Icons\Light\Refresh_16x.svg" />
-    <Resource Include="Resources\Icons\Light\Refresh_grey.ico" />
     <Resource Include="Resources\Icons\Light\Close.ico" />
     <Content Include="Resources\Icons\Light\Close_16x.svg" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Resources\Icons\Dark\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <ProjectReference Include="..\SuggestLib\SuggestLib.csproj">
       <Project>{78bf82dc-38fd-41dc-a8ce-45c79f628103}</Project>

@@ -2,7 +2,7 @@
 
     <ResourceDictionary.MergedDictionaries>
         <ResourceDictionary Source="/BmLib;component/Styles/RefreshCancelButton.xaml"/>
-        <ResourceDictionary Source="/BmLib;component/Themes/LightIcons.xaml"/>
+        <ResourceDictionary Source="/BmLib;component/Themes/DarkIcons.xaml"/>
         <ResourceDictionary Source="/BmLib;component/Themes/DarkBrushs.xaml" />
         <ResourceDictionary Source="/BmLib;component/Themes/Default/Geometry.xaml" />
         <ResourceDictionary Source="/BmLib;component/Themes/Default/Buttons.xaml" />

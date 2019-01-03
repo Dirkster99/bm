@@ -63,20 +63,14 @@
                     -->
                     <Button BorderBrush="{TemplateBinding BorderBrush}"
                             BorderThickness="{TemplateBinding BorderThickness}"
-                            Background="{TemplateBinding Background}"
+                            Background="{TemplateBinding ButtonBackground}"
                             HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch"
                             VerticalAlignment="Stretch"
                             Command="{TemplateBinding ToggleRecentListCommand}"
                             CommandParameter="{TemplateBinding ToggleRecentListCommandParameter}"
                             Style="{DynamicResource {x:Static reskeys:ResourceKeys.HistoryButtonStyleKey}}"
+                            Content="{TemplateBinding ButtonContent}"
                         >
-                        <Button.Content>
-                            <!-- Show a Down Chevron Symbol in the toggle button -->
-                            <TextBlock FontFamily="Segoe UI Symbol"
-                                       Text="&#xE0E5;"
-                                       VerticalAlignment="Center" HorizontalAlignment="Left"
-                            />
-                        </Button.Content>
                     </Button>
                 </Grid>
             </Border>
@@ -150,6 +144,13 @@
         <Setter Property="Template" Value="{StaticResource SuggestComboBoxTemplate}" />
         <Setter Property="VerticalContentAlignment" Value="Stretch" />
         <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+        <Setter Property="ButtonContent">
+            <Setter.Value>
+                <TextBlock FontFamily="Segoe UI Symbol"
+                                       Text="&#xE0E5;"
+                                       VerticalAlignment="Center" HorizontalAlignment="Left"/>
+            </Setter.Value>
+        </Setter>
         <Setter Property="ItemContainerStyle">
             <Setter.Value>
                 <Style TargetType="{x:Type ComboBoxItem}" BasedOn="{StaticResource {x:Type ComboBoxItem}}">

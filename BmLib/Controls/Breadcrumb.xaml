@@ -175,13 +175,30 @@
                             <sbox:SuggestComboBox Grid.Column="1" x:Name="PART_SuggestComboBox"
                                                   ToggleRecentListCommand="{Binding RecentListCommand,RelativeSource={RelativeSource AncestorType={x:Type ctrls:Breadcrumb}},Mode=OneTime}"
                                                   >
-                                <sbox:SuggestComboBox.PopUpWidth>
-                                    <MultiBinding Converter="{StaticResource DoubleAddConverter}">
-                                        <Binding ElementName="ProgressBar" Path="ActualWidth" Mode="OneWay" UpdateSourceTrigger="PropertyChanged"/>
-                                        <Binding RelativeSource="{RelativeSource Mode=FindAncestor,AncestorType={x:Type ctrls:Breadcrumb}}" Path="Padding.Left" Mode="OneWay" UpdateSourceTrigger="PropertyChanged"/>
-                                        <!--  Binding ElementName="PART_SuggestComboBox" Path="ActualWidth" Mode="OneWay" UpdateSourceTrigger="PropertyChanged"/-->
-                                    </MultiBinding>
-                                </sbox:SuggestComboBox.PopUpWidth>
+                                    <sbox:SuggestComboBox.PopUpWidth>
+                                        <MultiBinding Converter="{StaticResource DoubleAddConverter}">
+                                            <Binding ElementName="ProgressBar" Path="ActualWidth" Mode="OneWay" UpdateSourceTrigger="PropertyChanged"/>
+                                            <Binding RelativeSource="{RelativeSource Mode=FindAncestor,AncestorType={x:Type ctrls:Breadcrumb}}" Path="Padding.Left" Mode="OneWay" UpdateSourceTrigger="PropertyChanged"/>
+                                        </MultiBinding>
+                                    </sbox:SuggestComboBox.PopUpWidth>
+                                    <sbox:SuggestComboBox.ButtonContent>
+                                            <Rectangle Width="16" Height="16">
+                                                <Rectangle.Fill>
+                                                    <DrawingBrush>
+                                                        <DrawingBrush.Drawing>
+                                                            <DrawingGroup>
+                                                                <DrawingGroup.Children>
+                                                                    <GeometryDrawing Brush="#00FFFFFF" Geometry="F1M0,0L16,0 16,16 0,16z" />
+                                                                    <GeometryDrawing Brush="#10F6F6F6" Geometry="F1M2.3057,6.3906L4.7807,3.9156 7.9997,7.1356 11.2197,3.9156 13.6947,6.3906 7.9997,12.0836z" />
+                                                                    <GeometryDrawing Brush="{Binding Path=Foreground, RelativeSource={RelativeSource AncestorType={x:Type Button},Mode=FindAncestor},Mode=OneWay,UpdateSourceTrigger=PropertyChanged}"
+                                                                                     Geometry="F1M3.7197,6.3901L4.7807,5.3291 7.9997,8.5491 11.2197,5.3291 12.2807,6.3901 7.9997,10.6701z" />
+                                                                </DrawingGroup.Children>
+                                                            </DrawingGroup>
+                                                        </DrawingBrush.Drawing>
+                                                    </DrawingBrush>
+                                                </Rectangle.Fill>
+                                            </Rectangle>
+                                    </sbox:SuggestComboBox.ButtonContent>
                                 <ComboBoxItem>c:</ComboBoxItem>
                                 <ComboBoxItem>d:</ComboBoxItem>
                                 <ComboBoxItem>e:</ComboBoxItem>

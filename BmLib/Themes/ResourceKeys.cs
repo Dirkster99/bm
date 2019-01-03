@@ -186,6 +186,8 @@
         /// Defines the Icon that is shown for Close button displayed on the far right side of the Breadcrumb control.
         /// </summary>
         public static readonly ComponentResourceKey ICON_Close = new ComponentResourceKey(typeof(ResourceKeys), "ICON_Close");
+
+        public static readonly ComponentResourceKey ICON_ExpandDown = new ComponentResourceKey(typeof(ResourceKeys), "ICON_ExpandDown");
         #endregion Refresh Cancel Button
 
         /// <summary>

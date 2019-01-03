@@ -5,11 +5,11 @@
 
     <BitmapImage  x:Key="{ComponentResourceKey TypeInTargetAssembly={x:Type reskeys:ResourceKeys},
                   ResourceId=ICON_Close}"
-                  UriSource="/BmLib;component/Resources/Icons/Light/Close.ico" />
+                  UriSource="/BmLib;component/Resources/Icons/Dark/Close_White_16x.ico" />
 
     <BitmapImage  x:Key="{ComponentResourceKey TypeInTargetAssembly={x:Type reskeys:ResourceKeys},
                   ResourceId=ICON_Refresh}"
-                  UriSource="/BmLib;component/Resources/Icons/Light/Refresh_black_16x.ico" />
+                  UriSource="/BmLib;component/Resources/Icons/Dark/Refresh_white_16x.ico" />
 
     <BitmapImage  x:Key="{ComponentResourceKey TypeInTargetAssembly={x:Type reskeys:ResourceKeys},
                   ResourceId=ICON_ExpandDown}"

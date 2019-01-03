@@ -3,6 +3,7 @@
     using System.Windows;
     using System.Windows.Controls;
     using System.Windows.Input;
+    using System.Windows.Media;
 
     /// <summary>
     /// Implements a control that lets the user pick a suggestion
@@ -17,6 +18,28 @@
         public static readonly DependencyProperty PopUpWidthProperty =
             DependencyProperty.Register("PopUpWidth", typeof(double), typeof(SuggestComboBox),
                 new PropertyMetadata(10.0));
+
+        public object ButtonContent
+        {
+            get { return (object)GetValue(ButtonContentProperty); }
+            set { SetValue(ButtonContentProperty, value); }
+        }
+
+        // Using a DependencyProperty as the backing store for ButtonContent.  This enables animation, styling, binding, etc...
+        public static readonly DependencyProperty ButtonContentProperty =
+            DependencyProperty.Register("ButtonContent", typeof(object),
+                typeof(SuggestComboBox), new PropertyMetadata(null));
+
+        public Brush ButtonBackground
+        {
+            get { return (Brush)GetValue(ButtonBackgroundProperty); }
+            set { SetValue(ButtonBackgroundProperty, value); }
+        }
+
+        // Using a DependencyProperty as the backing store for ButtonBackground.  This enables animation, styling, binding, etc...
+        public static readonly DependencyProperty ButtonBackgroundProperty =
+            DependencyProperty.Register("ButtonBackground", typeof(Brush),
+                typeof(SuggestComboBox), new PropertyMetadata(new SolidColorBrush(Color.FromArgb(0,0,0,0))));
 
         #region ToggleRecentListCommand
         /// <summary>
