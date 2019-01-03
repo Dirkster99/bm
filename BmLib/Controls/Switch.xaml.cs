@@ -1,5 +1,7 @@
 ﻿namespace BmLib.Controls
 {
+    using System;
+    using System.Threading.Tasks;
     using System.Windows;
     using System.Windows.Controls;
     using System.Windows.Input;
@@ -130,7 +132,6 @@
         #endregion properties
 
         #region methods
-
         /// <summary>
         /// Measures the child elements of a <seealso cref="StackPanel"/> 
         /// in anticipation of arranging them during the
@@ -148,6 +149,46 @@
             }
 #endif
             return base.MeasureOverride(constraint);
+        }
+
+        /// <summary>
+        /// Method sets the Control Focus and <see cref="Keyboard.FocusedElement"/>
+        /// to either switch <see cref="ContentOn"/> or <see cref="ContentOff"/> as
+        /// determined by <paramref name="focusContentOn"/>.
+        /// 
+        /// This method of setting the focus requires a Focusable element
+        /// (eg.: Grid Focusable="true") to be present inside the switch.
+        /// </summary>
+        /// <param name="focusContentOn"></param>
+        /// <returns></returns>
+        public async Task FocusSwitchAsync(bool focusContentOn = true)
+        {
+            if (focusContentOn == true)
+            {
+                await this.Dispatcher.BeginInvoke(new Action(() =>
+                {
+                    // Focus the newly switched UI element (requires Focusable="True")
+                    IInputElement inpcontrol = this.ContentOn as IInputElement;
+                    if (inpcontrol != null)
+                    {
+                        Keyboard.Focus(inpcontrol);
+                        inpcontrol.Focus();
+                    }
+
+                }), System.Windows.Threading.DispatcherPriority.Background);
+            }
+            else
+            {
+                await this.Dispatcher.BeginInvoke(new Action(() =>
+                {
+                    IInputElement inpcontrol = this.ContentOff as IInputElement;
+                    if (inpcontrol != null)
+                    {
+                        Keyboard.Focus(inpcontrol);
+                        inpcontrol.Focus();
+                    }
+                }), System.Windows.Threading.DispatcherPriority.Background);
+            }
         }
         #endregion methods
     }

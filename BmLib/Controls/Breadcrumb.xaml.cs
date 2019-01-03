@@ -534,7 +534,7 @@
 
             if (_PART_SuggestComboBox != null)
             {
-                _PART_SuggestComboBox.SelectionChanged += _PART_SuggestComboBox_SelectionChanged;
+                _PART_SuggestComboBox.SelectionChanged += _PART_SuggestComboBox_SelectionChangedAsync;
             }
 
             this.Loaded += Breadcrumb_Loaded;
@@ -596,8 +596,8 @@
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void _PART_SuggestComboBox_SelectionChanged(object sender,
-                                                            SelectionChangedEventArgs e)
+        private async void _PART_SuggestComboBox_SelectionChangedAsync(object sender,
+                                                                       SelectionChangedEventArgs e)
         {
             if ((sender is ComboBox) == false)
                 return;
@@ -610,6 +610,10 @@
                 if (string.IsNullOrEmpty(input) == false)
                 {
                     _PART_SuggestBox.Text = input;
+                    _PART_SuggestBox.SelectAll();
+
+                    // Focus the newly switched UI element (requires Focusable="True")
+                    await _PART_Switch.FocusSwitchAsync(false);
                 }
             }
         }
@@ -712,23 +716,12 @@
             // Switch from tree view to suggestbox
             if (OldValue == true && NewValue == false)
             {
-                await _PART_SuggestBox.Dispatcher.BeginInvoke(new Action(() =>
-                {
-                    _PART_SuggestBox.InitializeSuggestions();
-                    _PART_SuggestBox.SelectAll();
+                _PART_SuggestBox.InitializeSuggestions();
+                _PART_SuggestBox.SelectAll();
 
-                    // Focus the newly switched UI element (requires Focusable="True")
-                    if (_focusControsOnSwitch)
-                    {
-                        IInputElement inpcontrol = _PART_Switch.ContentOff as IInputElement;
-                        if (inpcontrol != null)
-                        {
-                            Keyboard.Focus(inpcontrol);
-                            inpcontrol.Focus();
-                        }
-                    }
-
-                }), System.Windows.Threading.DispatcherPriority.Background);
+                // Focus the newly switched UI element (requires Focusable="True")
+                if (_focusControsOnSwitch)
+                    await _PART_Switch.FocusSwitchAsync(false);
             }
             else
             {
@@ -736,19 +729,7 @@
                 if (OldValue == false && NewValue == true)
                 {
                     if (_focusControsOnSwitch)
-                    {
-                        await _PART_Switch.Dispatcher.BeginInvoke(new Action(() =>
-                        {
-                            // Focus the newly switched UI element (requires Focusable="True")
-                            IInputElement inpcontrol = _PART_Switch.ContentOn as IInputElement;
-                            if (inpcontrol != null)
-                            {
-                                Keyboard.Focus(inpcontrol);
-                                inpcontrol.Focus();
-                            }
-
-                        }), System.Windows.Threading.DispatcherPriority.Background);
-                    }
+                        await _PART_Switch.FocusSwitchAsync();
                 }
             }
         }

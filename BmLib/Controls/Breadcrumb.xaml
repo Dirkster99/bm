@@ -48,7 +48,8 @@
                                 <conv:BoolToVisibilityPropConverter x:Key="BoolToVisibilityConverter"/>
                                 <conv:BoolToVisibilityPropConverter x:Key="BoolToVisibilityConverterNeg"
                                                                     TrueValue="Collapsed" FalseValue="Visible" />
-
+                                <conv:BoolToVisibilityPropConverter x:Key="BoolToVisibilityHiddenConverter"
+                                                                    TrueValue="Visible" FalseValue="Hidden" />
                                 <sconv:DoubleAddConverter x:Key="DoubleAddConverter"/>
                             </Grid.Resources>
                             <Grid.ColumnDefinitions>
@@ -57,13 +58,14 @@
                                 <ColumnDefinition Width="Auto"/>
                             </Grid.ColumnDefinitions>
 
-                            <!-- Show a progress-bar to indicate long running processing -->
+                            <!-- Show a progress-bar to indicate long running processing
+                            -->
                             <ProgressBar DataContext="{TemplateBinding Progressing}"  x:Name="ProgressBar"
                                IsIndeterminate="{Binding IsIndeterminate, Mode=OneWay,UpdateSourceTrigger=PropertyChanged}"
                                Value="{Binding ProgressValue, Mode=OneWay,UpdateSourceTrigger=PropertyChanged}"
                                Minimum="{Binding MinimumProgressValue, Mode=OneWay,UpdateSourceTrigger=PropertyChanged}"
                                Maximum="{Binding MaximumProgressValue, Mode=OneWay,UpdateSourceTrigger=PropertyChanged}"
-                               Visibility="{Binding IsProgressbarVisible, Mode=OneWay,UpdateSourceTrigger=PropertyChanged, Converter={StaticResource btv}}"
+                               Visibility="{Binding IsProgressbarVisible, Mode=OneWay,UpdateSourceTrigger=PropertyChanged, Converter={StaticResource BoolToVisibilityHiddenConverter}}"
                                Style="{DynamicResource {x:Static reskeys:ResourceKeys.BreadcrumbProgressBarStyleKey}}"
                                Height="3"
                                HorizontalAlignment="Stretch"
@@ -176,6 +178,7 @@
                                 <sbox:SuggestComboBox.PopUpWidth>
                                     <MultiBinding Converter="{StaticResource DoubleAddConverter}">
                                         <Binding ElementName="ProgressBar" Path="ActualWidth" Mode="OneWay" UpdateSourceTrigger="PropertyChanged"/>
+                                        <Binding RelativeSource="{RelativeSource Mode=FindAncestor,AncestorType={x:Type ctrls:Breadcrumb}}" Path="Padding.Left" Mode="OneWay" UpdateSourceTrigger="PropertyChanged"/>
                                         <!--  Binding ElementName="PART_SuggestComboBox" Path="ActualWidth" Mode="OneWay" UpdateSourceTrigger="PropertyChanged"/-->
                                     </MultiBinding>
                                 </sbox:SuggestComboBox.PopUpWidth>
