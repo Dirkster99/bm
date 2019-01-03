@@ -56,6 +56,20 @@
                                 <ColumnDefinition Width="Auto"/>
                                 <ColumnDefinition Width="Auto"/>
                             </Grid.ColumnDefinitions>
+
+                            <!-- Show a progress-bar to indicate long running processing -->
+                            <ProgressBar DataContext="{TemplateBinding Progressing}"  x:Name="ProgressBar"
+                               IsIndeterminate="{Binding IsIndeterminate, Mode=OneWay,UpdateSourceTrigger=PropertyChanged}"
+                               Value="{Binding ProgressValue, Mode=OneWay,UpdateSourceTrigger=PropertyChanged}"
+                               Minimum="{Binding MinimumProgressValue, Mode=OneWay,UpdateSourceTrigger=PropertyChanged}"
+                               Maximum="{Binding MaximumProgressValue, Mode=OneWay,UpdateSourceTrigger=PropertyChanged}"
+                               Visibility="{Binding IsProgressbarVisible, Mode=OneWay,UpdateSourceTrigger=PropertyChanged, Converter={StaticResource btv}}"
+                               Style="{DynamicResource {x:Static reskeys:ResourceKeys.BreadcrumbProgressBarStyleKey}}"
+                               Height="3"
+                               HorizontalAlignment="Stretch"
+                               VerticalAlignment="Bottom"
+                               Grid.ColumnSpan="2"
+                             />
                             
                             <!-- Progress Bar and Switch Control with Breadcrumb Tree and TextBox input -->
                             <Grid HorizontalAlignment="Stretch"
@@ -71,19 +85,6 @@
                                 -->
                                     <ColumnDefinition Width="*" />
                                 </Grid.ColumnDefinitions>
-
-                                <!-- Show a progress-bar to indicate long running processing -->
-                                <ProgressBar DataContext="{TemplateBinding Progressing}"
-                                    IsIndeterminate="{Binding IsIndeterminate, Mode=OneWay,UpdateSourceTrigger=PropertyChanged}"
-                                    Value="{Binding ProgressValue, Mode=OneWay,UpdateSourceTrigger=PropertyChanged}"
-                                    Minimum="{Binding MinimumProgressValue, Mode=OneWay,UpdateSourceTrigger=PropertyChanged}"
-                                    Maximum="{Binding MaximumProgressValue, Mode=OneWay,UpdateSourceTrigger=PropertyChanged}"
-                                    Visibility="{Binding IsProgressbarVisible, Mode=OneWay,UpdateSourceTrigger=PropertyChanged, Converter={StaticResource btv}}"
-                                    Style="{DynamicResource {x:Static reskeys:ResourceKeys.BreadcrumbProgressBarStyleKey}}"
-                                    Height="3"
-                                    HorizontalAlignment="Stretch"
-                                    VerticalAlignment="Bottom"
-                                />
 
                                 <ctrls:Switch x:Name="PART_Switch"
                                         Header="{TemplateBinding SwitchHeader}"
@@ -174,7 +175,7 @@
                                                   >
                                 <sbox:SuggestComboBox.PopUpWidth>
                                     <MultiBinding Converter="{StaticResource DoubleAddConverter}">
-                                        <Binding ElementName="PART_Switch" Path="ActualWidth" Mode="OneWay" UpdateSourceTrigger="PropertyChanged"/>
+                                        <Binding ElementName="ProgressBar" Path="ActualWidth" Mode="OneWay" UpdateSourceTrigger="PropertyChanged"/>
                                         <Binding ElementName="PART_SuggestComboBox" Path="ActualWidth" Mode="OneWay" UpdateSourceTrigger="PropertyChanged"/>
                                     </MultiBinding>
                                 </sbox:SuggestComboBox.PopUpWidth>
