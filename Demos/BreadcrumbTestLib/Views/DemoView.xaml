@@ -23,7 +23,7 @@
                 <convLib:BoolToVisibilityPropConverter TrueValue="Collapsed" FalseValue="Visible" x:Key="InvertedBoolToVisibilityConverter" />
                 <convLib:BoolToVisibilityCollapsedConverter x:Key="btv" />
                 <convLib:BoolToVisibilityCollapsedConverter x:Key="btvc" />
-                
+
                 <!-- Binds to a boolean datasource and returns one of two possible bound values -->
                 <convLib:BoolToOneOfTwoBindingsConverter x:Key="BoolToOneOfTwoBindingsConverter"
                                                          TrueSource="{DynamicResource {x:Static reskeys:ResourceKeys.ExpanderArrow}}"
@@ -92,7 +92,6 @@
                                   
                                   TaskQueueProcessing="{Binding Data.BreadcrumbController.TaskQueue, Source={StaticResource AppDataContextProxy}}"
                                   Progressing="{Binding Progressing}"
-                                  
                                   Margin="3"
                                   Padding="3"
                               >
@@ -158,28 +157,22 @@
                         </DataTemplate>
                     </ctrls:Breadcrumb.DropDownListItemDataTemplate>
                     <ctrls:Breadcrumb.RootDropDownListHeader>
-                        <Border x:Name="border"
-                                Background="Transparent"
-                                BorderBrush="Transparent"
-                                BorderThickness="0"
-                                VerticalAlignment="Stretch"
-                                HorizontalAlignment="Center"
-                                Margin="0"
-                                Padding="0"
-                                SnapsToDevicePixels="True"
-                            >
-                            <Grid Margin="0,3">
-                                <Path Stroke="{DynamicResource {x:Static reskeys:ResourceKeys.ControlNormalForegroundBrushKey}}"
-                                  StrokeThickness="1.2"
-                                  HorizontalAlignment="Center"
-                                  VerticalAlignment="Stretch"
-                                  IsHitTestVisible="True"
-                                  Stretch="UniformToFill"
-                                  Margin="3,0"
-                                  Data="{Binding IsOverflown, ElementName=BreadcrumbDemoControl, Converter={StaticResource BoolToOneOfTwoBindingsConverter}}"
-                            />
-                            </Grid>
-                        </Border>
+                        <!--Viewbox>
+                            <ContentPresenter Content="{Binding IsOverflown, ElementName=BreadcrumbDemoControl, Converter={StaticResource BoolToOneOfTwoBindingsConverter}}"
+                                          VerticalAlignment="Stretch" HorizontalAlignment="Stretch"
+                                          />
+                        </Viewbox-->
+                        <Grid>
+                            <Path Stroke="{DynamicResource {x:Static reskeys:ResourceKeys.ControlNormalForegroundBrushKey}}"
+                                    StrokeThickness="1.2"
+                                    HorizontalAlignment="Center"
+                                    VerticalAlignment="Stretch"
+                                    IsHitTestVisible="True"
+                                    Stretch="Fill"
+                                    Margin="3,0"
+                                    Data="{Binding IsOverflown, ElementName=BreadcrumbDemoControl, Converter={StaticResource BoolToOneOfTwoBindingsConverter}}"
+                                />
+                         </Grid>
                     </ctrls:Breadcrumb.RootDropDownListHeader>
 
                     <!-- Define ItemContainerStyle in RootDropDownList -->

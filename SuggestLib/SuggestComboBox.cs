@@ -19,24 +19,16 @@
             DependencyProperty.Register("PopUpWidth", typeof(double), typeof(SuggestComboBox),
                 new PropertyMetadata(10.0));
 
-        public object ButtonContent
-        {
-            get { return (object)GetValue(ButtonContentProperty); }
-            set { SetValue(ButtonContentProperty, value); }
-        }
-
-        // Using a DependencyProperty as the backing store for ButtonContent.  This enables animation, styling, binding, etc...
+        /// <summary>
+        /// Implements the backing store for the <see cref="ButtonContent"/> dependency property.
+        /// </summary>
         public static readonly DependencyProperty ButtonContentProperty =
             DependencyProperty.Register("ButtonContent", typeof(object),
                 typeof(SuggestComboBox), new PropertyMetadata(null));
 
-        public Brush ButtonBackground
-        {
-            get { return (Brush)GetValue(ButtonBackgroundProperty); }
-            set { SetValue(ButtonBackgroundProperty, value); }
-        }
-
-        // Using a DependencyProperty as the backing store for ButtonBackground.  This enables animation, styling, binding, etc...
+        /// <summary>
+        /// Implements the backing store for the <see cref="ButtonBackground"/> dependency property.
+        /// </summary>
         public static readonly DependencyProperty ButtonBackgroundProperty =
             DependencyProperty.Register("ButtonBackground", typeof(Brush),
                 typeof(SuggestComboBox), new PropertyMetadata(new SolidColorBrush(Color.FromArgb(0,0,0,0))));
@@ -78,6 +70,26 @@
         {
             get { return (double)GetValue(PopUpWidthProperty); }
             set { SetValue(PopUpWidthProperty, value); }
+        }
+
+        /// <summary>
+        /// Gets/sets the content property of the drop down button
+        /// in the <see cref="SuggestComboBox"/> drop down element.
+        /// </summary>
+        public object ButtonContent
+        {
+            get { return (object)GetValue(ButtonContentProperty); }
+            set { SetValue(ButtonContentProperty, value); }
+        }
+
+        /// <summary>
+        /// Gets/sets the Background <see cref="Brush"/> of the drop down button
+        /// in the <see cref="SuggestComboBox"/> drop down element.
+        /// </summary>
+        public Brush ButtonBackground
+        {
+            get { return (Brush)GetValue(ButtonBackgroundProperty); }
+            set { SetValue(ButtonBackgroundProperty, value); }
         }
 
         #region ToggleRecentListCommand

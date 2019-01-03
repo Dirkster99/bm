@@ -47,7 +47,7 @@
     
     <SolidColorBrush x:Key="{ComponentResourceKey TypeInTargetAssembly={x:Type reskeys:ResourceKeys},
                      ResourceId=PopUpControlNormalBackgroundKey}"
-                     Color="#000000"
+                     Color="#1e1e1e"
                      options:Freeze="true" />
 
     <SolidColorBrush x:Key="{ComponentResourceKey TypeInTargetAssembly={x:Type reskeys:ResourceKeys},

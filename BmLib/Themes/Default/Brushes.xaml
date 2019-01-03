@@ -28,12 +28,12 @@
         <GradientStop Color="#FFa6d9f4" Offset="0.75" />
     </LinearGradientBrush>
 
-    <LinearGradientBrush x:Key="{x:Static reskeys:ResourceKeys.ButtonBackgoundColor}" StartPoint="0,0" EndPoint="0,1" options:Freeze="true">
+    <!--LinearGradientBrush x:Key="{x:Static reskeys:ResourceKeys.ButtonBackgoundColor}" StartPoint="0,0" EndPoint="0,1" options:Freeze="true">
         <GradientStop Color="#FFeaf6fd" Offset="0.2" />
         <GradientStop Color="#FFd7effc" Offset="0.25" />
         <GradientStop Color="#FFbde6fd" Offset="0.5" />
         <GradientStop Color="#FFa6d9f4" Offset="0.75" />
-    </LinearGradientBrush>
+    </LinearGradientBrush-->
 
     <!-- Decide whether styling is using a 3D depth effect or not -->
     <sys:Boolean x:Key="{ComponentResourceKey TypeInTargetAssembly={x:Type reskeys:ResourceKeys},

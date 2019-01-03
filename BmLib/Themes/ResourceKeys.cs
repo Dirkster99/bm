@@ -80,10 +80,10 @@
         /// </summary>
         public static readonly ComponentResourceKey ButtonSelectedColor = new ComponentResourceKey(typeof(ResourceKeys), "ButtonSelectedColor");
 
-        /// <summary>
-        /// Currently not used (or only in uncommented lines).
-        /// </summary>
-        public static readonly ComponentResourceKey ButtonBackgoundColor = new ComponentResourceKey(typeof(ResourceKeys), "ButtonBackgoundColor");
+////        /// <summary>
+////        /// Currently not used (or only in uncommented lines).
+////        /// </summary>
+////        public static readonly ComponentResourceKey ButtonBackgoundColor = new ComponentResourceKey(typeof(ResourceKeys), "ButtonBackgoundColor");
 
         /// <summary>
         /// Decide whether styling is using a 3D depth effect or not

@@ -70,6 +70,8 @@
                             CommandParameter="{TemplateBinding ToggleRecentListCommandParameter}"
                             Style="{DynamicResource {x:Static reskeys:ResourceKeys.HistoryButtonStyleKey}}"
                             Content="{TemplateBinding ButtonContent}"
+                            MinWidth="{Binding ActualHeight, RelativeSource={RelativeSource Self}}" 
+                            MinHeight="{Binding ActualWidth, RelativeSource={RelativeSource Self}}"
                         >
                     </Button>
                 </Grid>
@@ -174,20 +176,6 @@
                                             <ColumnDefinition Width="*" />
                                         </Grid.ColumnDefinitions>
 
-                                        <TextBlock FontFamily="Segoe UI Symbol"
-                                                   Text="X"
-                                                   Margin="0,0,6,0"
-                                                   x:Name="MeasurTextBlock"
-                                                   Visibility="Hidden"
-                                                   />
-
-                                        <TextBlock FontFamily="Segoe UI Symbol"
-                                                   Text=" "
-                                                   Margin="0,0,6,0"
-                                                   MinWidth="{Binding ElementName=MeasurTextBlock,Path=ActualWidth}"
-                                                   x:Name="ItemIndicator"
-                                                   />
-
                                         <ContentPresenter
                                             Grid.Column="1"
                                             HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
@@ -200,8 +188,6 @@
                                         <!-- Show selected item as selected until another item is selected -->
                                         <Setter TargetName="Bd" Property="Background" Value="{DynamicResource {x:Static reskeys:ResourceKeys.ControlItemBackgroundSelectedKey}}"/>
                                         <Setter Property="Foreground" Value="{DynamicResource {x:Static reskeys:ResourceKeys.ControlItemTextSelectedKey}}"/>
-                                        <!-- Show a checkmark before selected item -->
-                                        <Setter TargetName="ItemIndicator" Property="Text" Value="&#x2714;"/>
                                     </Trigger>
                                     <Trigger Property="IsHighlighted" Value="true">
                                         <Setter TargetName="Bd" Property="Background" Value="{DynamicResource {x:Static reskeys:ResourceKeys.ControlItemBackgroundSelectedKey}}"/>

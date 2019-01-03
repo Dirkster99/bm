@@ -20,9 +20,8 @@
                         Background="Transparent"
                         VerticalAlignment="Stretch"
                     >
-            <ContentPresenter HorizontalAlignment="{TemplateBinding HorizontalAlignment}" 
-                            VerticalAlignment="Stretch"
-                            Grid.RowSpan="2" />
+            <ContentPresenter HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" 
+                              VerticalAlignment="Center" />
         </ctrls:HotTrack>
     </ControlTemplate>
 
@@ -54,14 +53,14 @@
                  while the inner grid positions the symbol in the center of that space -->
             <Grid VerticalAlignment="Center" HorizontalAlignment="Center">
                 <Path x:Name="path"
-                Fill="{DynamicResource {x:Static reskeys:ResourceKeys.ArrowFillForeground}}"
-                Stroke="{DynamicResource {x:Static reskeys:ResourceKeys.ArrowBorderForeground}}"
-                Data="{DynamicResource {x:Static reskeys:ResourceKeys.NormalArrow}}"
-                StrokeThickness="1.2"
-                Margin="3,0"
-                Stretch="Fill"
-                IsHitTestVisible="True"
-                Visibility="Visible"  />
+                        Fill="{DynamicResource {x:Static reskeys:ResourceKeys.ArrowFillForeground}}"
+                        Stroke="{DynamicResource {x:Static reskeys:ResourceKeys.ArrowBorderForeground}}"
+                        Data="{DynamicResource {x:Static reskeys:ResourceKeys.NormalArrow}}"
+                        StrokeThickness="1.2"
+                        Margin="3,0"
+                        Stretch="Fill"
+                        IsHitTestVisible="True"
+                        Visibility="Visible"  />
             </Grid>
         </Border>
         <ControlTemplate.Triggers>

@@ -64,9 +64,9 @@
                      ResourceId=ButtonSelectedColor}" 
                      Color="White" options:Freeze="true" />
                      
-    <SolidColorBrush x:Key="{ComponentResourceKey TypeInTargetAssembly={x:Type reskeys:ResourceKeys},
+    <!--SolidColorBrush x:Key="{ComponentResourceKey TypeInTargetAssembly={x:Type reskeys:ResourceKeys},
                      ResourceId=ButtonBackgoundColor}"
-                     Color="White" options:Freeze="true"/>
+                     Color="White" options:Freeze="true"/-->
 
     <!-- Decide whether styling is using a 3D depth effect or not -->
     <sys:Boolean x:Key="{ComponentResourceKey TypeInTargetAssembly={x:Type reskeys:ResourceKeys},
@@ -96,7 +96,7 @@
 
     <SolidColorBrush x:Key="{ComponentResourceKey TypeInTargetAssembly={x:Type reskeys:ResourceKeys},
                      ResourceId=ControlInputBackgroundKey}"
-                     Color="#252526" options:Freeze="true"/>
+                     Color="#1e1e1e" options:Freeze="true"/>
 
     <SolidColorBrush x:Key="{ComponentResourceKey TypeInTargetAssembly={x:Type reskeys:ResourceKeys},
                      ResourceId=ControlInputBorderKey}"

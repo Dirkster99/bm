@@ -14,21 +14,21 @@
       <Setter.Value>
         <ControlTemplate TargetType="{x:Type ctlrs:DropDown}">
           <Grid>
-            <ToggleButton x:Name="PART_ToggleButton"
-                          Template="{Binding HeaderButtonTemplate, RelativeSource={RelativeSource TemplatedParent}, Mode=OneWay}" 
-                          BorderBrush="{TemplateBinding BorderBrush}" 
-                          BorderThickness="{TemplateBinding BorderThickness}"  
-                          HorizontalAlignment="Center"
-                          HorizontalContentAlignment="Center"
-                          VerticalContentAlignment="Center"
-                          Margin="0"
-                          Padding="0"
-                          IsChecked="{Binding IsDropDownOpen, Mode=TwoWay, RelativeSource={RelativeSource TemplatedParent}}">
-              <Grid>
-                <ContentPresenter Content="{TemplateBinding Header}"
-                                  VerticalAlignment="Stretch"/>
-              </Grid>
-            </ToggleButton>
+            <ToggleButton
+                x:Name="PART_ToggleButton"
+                Template="{Binding HeaderButtonTemplate, RelativeSource={RelativeSource TemplatedParent}, Mode=OneWay}" 
+                BorderBrush="{TemplateBinding BorderBrush}" 
+                BorderThickness="{TemplateBinding BorderThickness}"  
+                HorizontalAlignment="Center"
+                HorizontalContentAlignment="Stretch"
+                VerticalContentAlignment="Stretch"
+                Margin="0"
+                Padding="0"
+                IsChecked="{Binding IsDropDownOpen, Mode=TwoWay, RelativeSource={RelativeSource TemplatedParent}}"
+                MinWidth="{Binding ActualHeight, RelativeSource={RelativeSource Self}}" 
+                MinHeight="{Binding ActualWidth, RelativeSource={RelativeSource Self}}"
+                Content="{TemplateBinding Header}"
+             />
 
             <Popup
                 x:Name="PART_Popup" Focusable="False"
