@@ -21,8 +21,6 @@
             <ResourceDictionary>
                 <convLib:BoolToVisibilityPropConverter TrueValue="Visible" FalseValue="Collapsed" x:Key="BoolToVisibilityConverter" />
                 <convLib:BoolToVisibilityPropConverter TrueValue="Collapsed" FalseValue="Visible" x:Key="InvertedBoolToVisibilityConverter" />
-                <convLib:BoolToVisibilityCollapsedConverter x:Key="btv" />
-                <convLib:BoolToVisibilityCollapsedConverter x:Key="btvc" />
 
                 <!-- Binds to a boolean datasource and returns one of two possible bound values -->
                 <convLib:BoolToOneOfTwoBindingsConverter x:Key="BoolToOneOfTwoBindingsConverter"
@@ -183,16 +181,16 @@
                             <!-- http://social.msdn.microsoft.com/Forums/en-US/wpf/thread/63696841-0358-4f7a-abe1-e6062518e3d6 -->
                             <Setter Property="ThemeBehav:MergeStyleBehaviour.AutoMergeStyle" Value="True"/>
 
-                            <Setter Property="Visibility" Value="{Binding Selection.IsOverflowedOrRoot, Mode=OneWay, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource btvc}}"  />
+                            <Setter Property="Visibility" Value="{Binding Selection.IsOverflowedOrRoot, Mode=OneWay, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource BoolToVisibilityConverter}}"  />
                             <Style.Triggers>
                                 <DataTrigger Binding="{Binding}" Value="{x:Null}">
                                     <Setter Property="Template">
                                         <Setter.Value>
                                             <ControlTemplate TargetType="{x:Type ComboBoxItem}">
-                                                <!-- Converter ensure to show Seperator only if items are overflown -->
+                                                <!-- Converter ensure to show Seperator only if there are overflown items -->
                                                 <Separator HorizontalAlignment="Stretch"
                                                            IsEnabled="False"
-                                                           Visibility="{Binding IsOverflown,Converter={StaticResource btv}, UpdateSourceTrigger=PropertyChanged, ElementName=BreadcrumbDemoControl}"
+                                                           Visibility="{Binding IsOverflown,Converter={StaticResource BoolToVisibilityConverter}, UpdateSourceTrigger=PropertyChanged, ElementName=BreadcrumbDemoControl}"
                                                         />
                                             </ControlTemplate>
                                         </Setter.Value>
@@ -323,9 +321,6 @@
                         ScrollViewer.CanContentScroll="True"
                         ScrollViewer.VerticalScrollBarVisibility="Visible"
                         >
-                        <ListBox.Resources>
-                            <convLib:BoolToVisibilityCollapsedConverter x:Key="btv" />
-                        </ListBox.Resources>
                         <ListBox.ItemTemplate>
                             <DataTemplate>
                                 <Grid>

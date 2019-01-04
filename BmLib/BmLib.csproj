@@ -76,6 +76,7 @@
       <DependentUpon>Switch.xaml</DependentUpon>
     </Compile>
     <Compile Include="Converters\AssociatedIconConverter.cs" />
+    <Compile Include="Converters\InvertBoolConverter.cs" />
     <Compile Include="Interfaces\IBreadcrumbModel.cs" />
     <Compile Include="Interfaces\IBrowseRequestTaskQueue.cs" />
     <Compile Include="Interfaces\IParent.cs" />
@@ -158,12 +159,7 @@
       <SubType>Designer</SubType>
     </Page>
     <Compile Include="Converters\BoolToOneOfTwoBindingsConverter.cs" />
-    <Compile Include="Converters\BoolToVisibilityCollapsedConverter.cs" />
-    <Compile Include="Converters\BoolToVisibilityConverter.cs" />
     <Compile Include="Converters\BoolToVisibilityPropConverter.cs" />
-    <Compile Include="Converters\FlipBoolConverter.cs" />
-    <Compile Include="Converters\FlipBoolToVisibilityCollapsedConverter.cs" />
-    <Compile Include="Converters\FlipBoolToVisibilityConverter.cs" />
     <Page Include="Themes\LightBrushs.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>

@@ -10,8 +10,9 @@
              d:DesignHeight="450" d:DesignWidth="800">
     <Grid>
         <Grid.Resources>
-            <conv:BoolToVisibilityCollapsedConverter x:Key="BoolToVisibilityCollapsedConverter"/>
-            <conv:FlipBoolConverter x:Key="FlipBoolConverter"/>
+            <conv:BoolToVisibilityPropConverter TrueValue="Visible" FalseValue="Hidden"
+                                                x:Key="BoolToVisibilityPropConverter" />
+            <conv:InvertBoolConverter x:Key="InvertBoolConverter"/>
         </Grid.Resources>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
@@ -80,7 +81,7 @@
                         Text="{Binding Text, ElementName=txtAuto, UpdateSourceTrigger=Explicit}"
                         RootItem="{Binding SuggestBoxAuto_LocationIndicator}"
                         SuggestSources="{Binding SuggestBoxAuto_SuggestSources}"
-                        IsEnabled="{Binding Processing,Converter={StaticResource FlipBoolConverter}}"
+                        IsEnabled="{Binding Processing,Converter={StaticResource InvertBoolConverter}}"
                         Margin="3"
                         />
 
@@ -180,7 +181,7 @@
                   Grid.Row="3" />
 
         <Grid Grid.Row="4" VerticalAlignment="Bottom"
-            Visibility="{Binding Processing,Converter={StaticResource BoolToVisibilityCollapsedConverter}}">
+            Visibility="{Binding Processing,Converter={StaticResource BoolToVisibilityPropConverter}}">
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="Auto"/>

@@ -2,20 +2,17 @@
 {
     using System;
 	using System.Globalization;
-	using System.Windows;
 	using System.Windows.Data;
 
     /// <summary>
-    /// This class simply converts a Boolean to a Visibility value:
-    /// True  -> <see cref="Visibility.Visible"/>
-    /// False -> <see cref="Visibility.Collapsed"/>
+    /// Inverts a boolean value and returns it.
     /// </summary>
-    [ValueConversion(typeof(string), typeof(Visibility))]
-	public class BoolToVisibilityCollapsedConverter : IValueConverter
+	[ValueConversion(typeof(bool), typeof(bool))]
+	public class InvertBoolConverter : IValueConverter
 	{
 		#region IValueConverter Members
         /// <summary>
-        /// Converts a boolean false/true into a <see cref="Visibility"/> value.
+        /// Returns an inverted boolean value.
         /// </summary>
         /// <param name="value"></param>
         /// <param name="targetType"></param>
@@ -25,13 +22,13 @@
 		public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
 		{
 			if (value is bool && (bool)value)
-				return Visibility.Visible;
-
-            return Visibility.Collapsed;
+				return false;
+			else
+                return true;
 		}
 
         /// <summary>
-        /// Converts a <see cref="Visibility"/> into a boolean false/true value.
+        /// Returns an inverted boolean value.
         /// </summary>
         /// <param name="value"></param>
         /// <param name="targetType"></param>
@@ -40,11 +37,12 @@
         /// <returns></returns>
 		public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
 		{
-			if ((Visibility)value != Visibility.Collapsed)
-				return true;
-
-			return false;
+			if (value is bool && (bool)value)
+				return false;
+			else
+                return true;
 		}
+
 		#endregion
 	}
 }

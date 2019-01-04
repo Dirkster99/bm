@@ -10,7 +10,7 @@
                      TargetType="{x:Type bc:SuggestBoxBase}"
                      >
         <ControlTemplate.Resources>
-            <conv:BoolToVisibilityConverter x:Key="btv" />
+            <conv:BoolToVisibilityPropConverter x:Key="btv" />
         </ControlTemplate.Resources>
 
         <Border Name="Border"

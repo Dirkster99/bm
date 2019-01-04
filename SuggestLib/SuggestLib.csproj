@@ -52,11 +52,10 @@
     <Reference Include="PresentationFramework" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Converters\BoolToVisibilityCollapsedConverter.cs" />
     <Compile Include="Converters\IntToVisibilityPropConverter.cs" />
     <Compile Include="Converters\BoolToVisibilityPropConverter.cs" />
     <Compile Include="Converters\DoubleAddConverter.cs" />
-    <Compile Include="Converters\FlipBoolConverter.cs" />
+    <Compile Include="Converters\InvertBoolConverter.cs" />
     <Compile Include="Events\NextTargetLocationArgs.cs" />
     <Compile Include="Interfaces\ISuggestResult.cs" />
     <Compile Include="SuggestBoxBase.xaml.cs">
@@ -96,7 +95,6 @@
     </Page>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Converters\BoolToVisibilityConverter.cs" />
     <Compile Include="Interfaces\ISuggestSource.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>

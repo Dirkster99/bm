@@ -8,7 +8,7 @@
     /// Implements a boolean negation converter.
     /// </summary>
 	[ValueConversion(typeof(bool), typeof(bool))]
-	public class FlipBoolConverter : IValueConverter
+	public class InvertBoolConverter : IValueConverter
 	{
 		#region IValueConverter Members
         /// <summary>

@@ -36,7 +36,7 @@
                                         >
                             <Grid Background="Transparent">
                                 <Grid.Resources>
-                                    <conv:BoolToVisibilityCollapsedConverter x:Key="btvc" />
+                                    <conv:BoolToVisibilityPropConverter TrueValue="Visible" FalseValue="Collapsed" x:Key="BoolToVisibilityConverter" />
                                 </Grid.Resources>
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="*"/>
@@ -62,7 +62,7 @@
                                                     Margin="0"
                                                     Padding="0"
                                                     ItemsSource="{TemplateBinding ItemsSource}"
-                                                    Visibility="{Binding HasItems, RelativeSource={RelativeSource TemplatedParent}, Converter={StaticResource btvc}}" 
+                                                    Visibility="{Binding HasItems, RelativeSource={RelativeSource TemplatedParent}, Converter={StaticResource BoolToVisibilityConverter}}" 
                                                     SelectedValuePath="{Binding ValuePath, RelativeSource={RelativeSource TemplatedParent}}"                                  
                                                     SelectedValue="{Binding SelectedChild, Mode=OneWay, UpdateSourceTrigger=PropertyChanged, RelativeSource={RelativeSource TemplatedParent}}"
                                                     IsDropDownOpen="{Binding IsExpanded, Mode=TwoWay, RelativeSource={RelativeSource TemplatedParent}}"

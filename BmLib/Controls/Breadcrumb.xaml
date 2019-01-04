@@ -42,8 +42,7 @@
                         <Grid>
                             <Grid.Resources>
                                 <conv:BoolToVisibilityPropConverter x:Key="btv1" FalseValue="Visible" TrueValue="Hidden"/>
-                                <conv:BoolToVisibilityCollapsedConverter x:Key="btv" />
-                                <conv:FlipBoolConverter x:Key="fb" />
+                                <conv:InvertBoolConverter x:Key="InvertBoolConverter" />
 
                                 <conv:BoolToVisibilityPropConverter x:Key="BoolToVisibilityConverter"/>
                                 <conv:BoolToVisibilityPropConverter x:Key="BoolToVisibilityConverterNeg"
@@ -163,10 +162,10 @@
                                                 FontFamily="{TemplateBinding FontFamily}"
                                                 FontSize="{TemplateBinding FontSize}"
                                                 Text="{Binding SuggestedPath, UpdateSourceTrigger=Explicit}"
-                                                IsEnabled="{Binding EnableBreadcrumb, Mode=OneWay, Converter={StaticResource fb}}"
+                                                IsEnabled="{Binding EnableBreadcrumb, Mode=OneWay, Converter={StaticResource InvertBoolConverter}}"
                                                 
                                                 SuggestSources="{Binding SuggestSources}"
-                                                EnableSuggestions="{Binding ElementName=PART_Switch,Path=IsSwitchOn,Converter={StaticResource fb}}"
+                                                EnableSuggestions="{Binding ElementName=PART_Switch,Path=IsSwitchOn,Converter={StaticResource InvertBoolConverter}}"
                                                 PathValidation="{TemplateBinding PathValidation}"
 
                                                 DisplayMemberPath="Header"

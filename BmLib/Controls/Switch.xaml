@@ -6,18 +6,18 @@
     >
     <ControlTemplate x:Key="SwitchTemplateKey" TargetType="{x:Type bc:Switch}">
         <ControlTemplate.Resources>
-            <conv:FlipBoolToVisibilityCollapsedConverter x:Key="fbtvc" />
-            <conv:BoolToVisibilityCollapsedConverter x:Key="btvc" />
+            <conv:BoolToVisibilityPropConverter TrueValue="Visible" FalseValue="Hidden" x:Key="BoolToVisibilityConverter" />
+            <conv:BoolToVisibilityPropConverter TrueValue="Hidden" FalseValue="Visible" x:Key="InvertedBoolToVisibilityConverter" />
         </ControlTemplate.Resources>
         <Grid>
             <ContentPresenter
                 Content="{TemplateBinding ContentOn}" 
                 Visibility="{Binding IsSwitchOn,
-                                     RelativeSource={RelativeSource TemplatedParent}, Converter={StaticResource btvc}}" />
+                                     RelativeSource={RelativeSource TemplatedParent}, Converter={StaticResource BoolToVisibilityConverter}}" />
             <ContentPresenter
                 Content="{TemplateBinding ContentOff}"
                 Visibility="{Binding IsSwitchOn,
-                                     RelativeSource={RelativeSource TemplatedParent},Converter={StaticResource fbtvc}}" />
+                                     RelativeSource={RelativeSource TemplatedParent},Converter={StaticResource InvertedBoolToVisibilityConverter}}" />
         </Grid>
     </ControlTemplate>
 
