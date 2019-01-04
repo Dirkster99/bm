@@ -41,7 +41,7 @@ namespace BreadcrumbTestLib.ViewModels.Breadcrumbs
         private bool _IsBrowsing;
 
         private BreadcrumbTreeItemViewModel _SelectedRootViewModel;
-        private BreadcrumbTreeItemViewModel _BreadcrumbSelectedItem;
+        private IParent _BreadcrumbSelectedItem;
         private IDirectoryBrowser _SelectedRootValue;
 
         private ICommand _RootDropDownSelectionChangedCommand;
@@ -170,7 +170,7 @@ namespace BreadcrumbTestLib.ViewModels.Breadcrumbs
         /// Gets a currently selected item that is at the end
         /// of the currently selected path.
         /// </summary>
-        public BreadcrumbTreeItemViewModel BreadcrumbSelectedItem
+        public IParent BreadcrumbSelectedItem
         {
             get
             {
@@ -396,6 +396,10 @@ namespace BreadcrumbTestLib.ViewModels.Breadcrumbs
             }
         }
 
+        /// <summary>
+        /// Gets a command that remove all Windows Shell Paths or
+        /// File System paths in the list of recent location items.
+        /// </summary>
         public ICommand ClearRecentLocationsCommand
         {
             get
@@ -417,7 +421,6 @@ namespace BreadcrumbTestLib.ViewModels.Breadcrumbs
         #endregion properties
 
         #region methods
-        #region IBreadcrumbModel
         /// <summary>
         /// This navigates the bound tree view model to the requested
         /// location when the user switches the display from:
@@ -447,16 +450,16 @@ namespace BreadcrumbTestLib.ViewModels.Breadcrumbs
                             return true;
 
                         isPathValid = false;
-                        var previousLocation = BreadcrumbSelectedItem.GetModel();
-
-                        // Previous location should be valid if we can re-create the model
-                        isPathValid = (ShellBrowser.Create(previousLocation.PathShell) != null);
-
-                        if (isPathValid)
-                        {
-                            await NavigateToScheduledAsync(previousLocation, "BreadcrumbViewModel.NavigateTreeViewModel");
-                            return true;
-                        }
+                        //// var previousLocation = (BreadcrumbSelectedItem as BreadcrumbTreeItemViewModel).GetModel();
+                        //// 
+                        //// // Previous location should be valid if we can re-create the model
+                        //// isPathValid = (ShellBrowser.Create(previousLocation.PathShell) != null);
+                        ////
+                        ////if (isPathValid)
+                        ////{
+                        ////    await NavigateToScheduledAsync(previousLocation, "BreadcrumbViewModel.NavigateTreeViewModel");
+                        ////    return true;
+                        ////}
                     }
                     else
                     {
@@ -567,7 +570,6 @@ namespace BreadcrumbTestLib.ViewModels.Breadcrumbs
 
             return path;
         }
-        #endregion IBreadcrumbModel
 
         /// <summary>
         /// Method should be called after construction to initialize the viewmodel
@@ -1278,7 +1280,8 @@ namespace BreadcrumbTestLib.ViewModels.Breadcrumbs
             var hintDirection = HintDirection.Unrelated;
             BreadcrumbTreeItemViewModel toBeSelectedLocation = null;
 
-            if (selectedFolder.Selection.IsOverflowed) // We can opimize browsing if target is in current path
+            // We can opimize browsing if target is in current path
+            if (selectedFolder.Selection.IsOverflowed && selectedFolder.Selection.IsRoot == false)
             {
                 // The selected root item is an overflowed root item so we move up towards the item that
                 // is already part of the path

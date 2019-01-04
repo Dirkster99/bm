@@ -49,6 +49,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Base\RelayCommand.cs" />
+    <Compile Include="Behaviors\TreeViewVirtualItemBehaviour.cs" />
     <Compile Include="Controls\BindingProxy.cs" />
     <Compile Include="Controls\OverflowableStackPanel.cs" />
     <Compile Include="Behaviors\MergeStyleBehaviour.cs" />
@@ -77,6 +78,7 @@
     <Compile Include="Converters\AssociatedIconConverter.cs" />
     <Compile Include="Interfaces\IBreadcrumbModel.cs" />
     <Compile Include="Interfaces\IBrowseRequestTaskQueue.cs" />
+    <Compile Include="Interfaces\IParent.cs" />
     <Compile Include="Interfaces\IProgress.cs" />
     <Compile Include="Themes\ResourceKeys.cs" />
     <Page Include="Controls\Breadcrumb.xaml">

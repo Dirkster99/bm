@@ -15,6 +15,12 @@
         event EventHandler SelectionChanged;
 
         /// <summary>
+        /// Gets a currently selected item that is at the end
+        /// of the currently selected path.
+        /// </summary>
+        IParent BreadcrumbSelectedItem { get; }
+
+        /// <summary>
         /// This navigates the bound tree view model to the requested
         /// location when the user switches the display from:
         /// 

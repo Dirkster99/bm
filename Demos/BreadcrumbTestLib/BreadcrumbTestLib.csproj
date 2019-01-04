@@ -71,7 +71,7 @@
     <Compile Include="ViewModels\Breadcrumbs\TreeSelectors\TreeSelectorViewModel.cs" />
     <Compile Include="ViewModels\BrowseRequestTaskQueueViewModel.cs" />
     <Compile Include="ViewModels\Interfaces\IBreadcrumbViewModel.cs" />
-    <Compile Include="ViewModels\Interfaces\IBreadcrumbTreeItemViewModel.cs" />
+    <Compile Include="ViewModels\Interfaces\IBreadcrumbTreeItemHelperViewModel.cs" />
     <Compile Include="ViewModels\Interfaces\ISupportTreeSelector.cs" />
     <Compile Include="ViewModels\Interfaces\ITreeSelector.cs" />
     <Compile Include="Views\DemoView.xaml.cs">

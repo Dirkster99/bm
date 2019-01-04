@@ -94,7 +94,7 @@
                                   Progressing="{Binding Progressing}"
                                   RecentLocationsItemsSource="{Binding  RecentLocationItems}"
 
-                                  Margin="0"
+                                  Margin="3"
                                   Padding="3,0"
                               >
                     <ctrls:Breadcrumb.TreeItemContainerStyle>

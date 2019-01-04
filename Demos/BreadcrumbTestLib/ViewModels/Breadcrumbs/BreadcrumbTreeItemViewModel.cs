@@ -13,8 +13,12 @@
     using BreadcrumbTestLib.Models;
     using System.Windows.Input;
     using ShellBrowserLib;
-    using SSCoreLib.Browse;
     using ShellBrowserLib.IDs;
+
+    public interface IBreadcrumbTreeItemViewModel : IParent
+    {
+
+    }
 
     /// <summary>
     /// Class implements a ViewModel to manage a sub-tree of a Breadcrumb control.
@@ -25,7 +29,8 @@
     /// - a list of items below this item (<see cref="BreadcrumbTreeItemHelperViewModel{VM}"/>).
     /// </summary>
     public class BreadcrumbTreeItemViewModel : ViewModelBase,
-                                       ISupportBreadcrumbTreeItemViewModel<BreadcrumbTreeItemViewModel, IDirectoryBrowser>
+                                               ISupportBreadcrumbTreeItemViewModel<BreadcrumbTreeItemViewModel, IDirectoryBrowser>,
+                                               IBreadcrumbTreeItemViewModel
     {
         #region fields
         /// <summary>
@@ -401,6 +406,11 @@
         internal bool EqualsLocation(IDirectoryBrowser location)
         {
             return _dir.Equals(location);
+        }
+
+        public IParent GetParent()
+        {
+            return _parentNode;
         }
         #endregion
     }
