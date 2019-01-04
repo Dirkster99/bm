@@ -5,7 +5,12 @@
 	using System.Windows.Controls;
     using System.Windows.Input;
 
-	[TemplateVisualState(Name = "ShowCaption", GroupName = "CaptionStates")]
+    /// <summary>
+    /// Implements the tree items collection for a breadcrumb control that
+    /// specifies its items <see cref="DataTemplate"/> with <see cref="HierarchicalDataTemplate"/>s
+    /// as a source data structure.
+    /// </summary>
+    [TemplateVisualState(Name = "ShowCaption", GroupName = "CaptionStates")]
 	[TemplateVisualState(Name = "HideCaption", GroupName = "CaptionStates")]
 	public class BreadcrumbTreeItem : TreeViewItem
 	{
@@ -26,31 +31,51 @@
                 typeof(BreadcrumbTreeItem),
                 new PropertyMetadata(null));
 
-        public static readonly DependencyProperty OverflowItemCountProperty = OverflowableStackPanel.OverflowItemCountProperty
-		.AddOwner(typeof(BreadcrumbTreeItem), new PropertyMetadata(OnOverflowItemCountChanged));
+        /// <summary>
+        /// Implement the backing store of the <see cref="OverflowItemCount"/> dependency property.
+        /// </summary>
+        public static readonly DependencyProperty OverflowItemCountProperty =
+            OverflowableStackPanel.OverflowItemCountProperty.AddOwner(
+                typeof(BreadcrumbTreeItem), new PropertyMetadata(OnOverflowItemCountChanged));
 
-		public static readonly DependencyProperty IsOverflowedProperty = DependencyProperty.Register("IsOverflowed", typeof(bool),
-		 typeof(BreadcrumbTreeItem), new PropertyMetadata(false));
+        /// <summary>
+        /// Implement the backing store of the <see cref="IsOverflowed"/> dependency property.
+        /// </summary>
+        public static readonly DependencyProperty IsOverflowedProperty =
+            DependencyProperty.Register("IsOverflowed", typeof(bool),
+		     typeof(BreadcrumbTreeItem), new PropertyMetadata(false));
 
-		public static readonly DependencyProperty SelectedChildProperty =
+        /// <summary>
+        /// Implement the backing store of the <see cref="SelectedChild"/> dependency property.
+        /// </summary>
+        public static readonly DependencyProperty SelectedChildProperty =
 			DependencyProperty.Register("SelectedChild", typeof(object), typeof(BreadcrumbTreeItem),
 					new UIPropertyMetadata(null));
 
-		public static readonly DependencyProperty ValuePathProperty =
+        /// <summary>
+        /// Implement the backing store of the <see cref="ValuePath"/> dependency property.
+        /// </summary>
+        public static readonly DependencyProperty ValuePathProperty =
 		 DependencyProperty.Register("ValuePath", typeof(string), typeof(BreadcrumbTreeItem),
 				 new UIPropertyMetadata(string.Empty));
 
-		public static readonly DependencyProperty IsChildSelectedProperty =
+        /// <summary>
+        /// Implement the backing store of the <see cref="IsChildSelected"/> dependency property.
+        /// </summary>
+        public static readonly DependencyProperty IsChildSelectedProperty =
 				DependencyProperty.Register("IsChildSelected", typeof(bool), typeof(BreadcrumbTreeItem),
 						new UIPropertyMetadata());
 
+        /// <summary>
+        /// Implement the backing store of the <see cref="IsCurrentSelected"/> dependency property.
+        /// </summary>
 		public static readonly DependencyProperty IsCurrentSelectedProperty =
 			 DependencyProperty.Register("IsCurrentSelected", typeof(bool), typeof(BreadcrumbTreeItem),
 					 new UIPropertyMetadata(false));
 
-		public static readonly DependencyProperty IsCaptionVisibleProperty =
-								DependencyProperty.Register("IsCaptionVisible", typeof(bool), typeof(BreadcrumbTreeItem),
-								new UIPropertyMetadata(true, OnIsCaptionVisibleChanged));
+		////public static readonly DependencyProperty IsCaptionVisibleProperty =
+		////						DependencyProperty.Register("IsCaptionVisible", typeof(bool), typeof(BreadcrumbTreeItem),
+		////						new UIPropertyMetadata(true, OnIsCaptionVisibleChanged));
         #endregion fields
 
         #region Constructor
@@ -100,100 +125,88 @@
             set { SetValue(ClickItemCommandProperty, value); }
         }
 
+        /// <summary>
+        /// Gets/sets the number of items that are overflown below this item
+        /// (This number includes the item itself if it is overflown).
+        /// </summary>
         public int OverflowItemCount
 		{
 			get { return (int)GetValue(OverflowItemCountProperty); }
 			set { this.SetValue(OverflowItemCountProperty, value); }
 		}
 
+        /// <summary>
+        /// Gets/sets whether this item is currently overflown
+        /// (does not fit into the available view) or not.
+        /// </summary>
 		public bool IsOverflowed
 		{
 			get { return (bool)GetValue(IsOverflowedProperty); }
 			set { this.SetValue(IsOverflowedProperty, value); }
 		}
 
+        /// <summary>
+        /// Gets/sets the model of the selected child item.
+        /// </summary>
 		public object SelectedChild
 		{
 			get { return (object)GetValue(SelectedChildProperty); }
 			set { this.SetValue(SelectedChildProperty, value); }
 		}
 
-		public string ValuePath
+        /// <summary>
+        /// Gets/sets the instance of the model object that represents this selection helper.
+        /// The model backs the ViewModel property and should be in sync with it.
+        /// </summary>
+        public string ValuePath
 		{
 			get { return (string)GetValue(ValuePathProperty); }
 			set { this.SetValue(ValuePathProperty, value); }
 		}
 
+        /// <summary>
+        /// Gets/sets whether a child item of this item is currently selected or not.
+        /// All items along the current path (except for the selected item) must have
+        /// this property set to true - the path is otherwise not visible in the
+        /// breadcrumbs control.
+        /// </summary>
 		public bool IsChildSelected
 		{
 			get { return (bool)GetValue(IsChildSelectedProperty); }
 			set { this.SetValue(IsChildSelectedProperty, value); }
 		}
 
+        /// <summary>
+        /// Gets/sets whether this item is currently selected or not.
+        /// </summary>
 		public bool IsCurrentSelected
 		{
 			get { return (bool)GetValue(IsCurrentSelectedProperty); }
 			set { this.SetValue(IsCurrentSelectedProperty, value); }
 		}
-
-		/// <summary>
-		/// Display Caption
-		/// </summary>
-		public bool IsCaptionVisible
-		{
-			get { return (bool)GetValue(IsCaptionVisibleProperty); }
-			set { this.SetValue(IsCaptionVisibleProperty, value); }
-		}
 		#endregion properties
 
 		#region Methods
-		public static void OnIsCaptionVisibleChanged(object sender, DependencyPropertyChangedEventArgs args)
-		{
-			(sender as BreadcrumbTreeItem).UpdateStates(true);
-		}
-
-		public static void OnOverflowItemCountChanged(object sender, DependencyPropertyChangedEventArgs args)
-		{
-			(sender as BreadcrumbTreeItem).SetValue(IsOverflowedProperty, ((int)args.NewValue) > 0);
-		}
-
-		/// <summary>
-		/// Is called when a control template is applied.
-		/// </summary>
-		public override void OnApplyTemplate()
-		{
-			base.OnApplyTemplate();
-
-////            this.AddHandler(Button.ClickEvent, (RoutedEventHandler)((o, e) =>
-////			{
-////				if (e.Source is Button)
-////				{
-////					this.SetValue(IsCurrentSelectedProperty, true);
-////					e.Handled = true;
-////				}
-////			}));
-
-			////this.AddHandler(OverflowItem.SelectedEvent, (RoutedEventHandler)((o, e) =>
-			////    {
-			////        if (e.Source is OverflowItem)
-			////        {
-			////            IsExpanded = false;
-			////        }
-			////    }));
-		}
-
+        /// <summary>
+        /// Creates a new System.Windows.Controls.TreeViewItem to use to display the object.
+        /// </summary>
+        /// <returns>A new <see cref="System.Windows.Controls.TreeViewItem"/> to use to
+        /// display the object.</returns>
         protected override DependencyObject GetContainerForItemOverride()
 		{
 			return new BreadcrumbTreeItem();
 		}
 
-		private void UpdateStates(bool useTransition)
-		{
-			if (this.IsCaptionVisible)
-				VisualStateManager.GoToState(this, "ShowCaption", useTransition);
-			else
-				VisualStateManager.GoToState(this, "HideCaption", useTransition);
-		}
+        /// <summary>
+        /// Sets the <see cref="IsOverflowed"/> property to true
+        /// if any of the items children is overflown.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="args"></param>
+        private static void OnOverflowItemCountChanged(object sender, DependencyPropertyChangedEventArgs args)
+        {
+            (sender as BreadcrumbTreeItem).SetValue(IsOverflowedProperty, ((int)args.NewValue) > 0);
+        }
         #endregion
     }
 }

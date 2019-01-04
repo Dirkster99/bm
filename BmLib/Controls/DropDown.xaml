@@ -17,6 +17,7 @@
             <ToggleButton
                 x:Name="PART_ToggleButton"
                 Template="{Binding HeaderButtonTemplate, RelativeSource={RelativeSource TemplatedParent}, Mode=OneWay}" 
+                Content="{TemplateBinding Header}"
                 BorderBrush="{TemplateBinding BorderBrush}" 
                 BorderThickness="{TemplateBinding BorderThickness}"  
                 HorizontalAlignment="Center"
@@ -27,7 +28,6 @@
                 IsChecked="{Binding IsDropDownOpen, Mode=TwoWay, RelativeSource={RelativeSource TemplatedParent}}"
                 MinWidth="{Binding ActualHeight, RelativeSource={RelativeSource Self}}" 
                 MinHeight="{Binding ActualWidth, RelativeSource={RelativeSource Self}}"
-                Content="{TemplateBinding Header}"
              />
 
             <Popup

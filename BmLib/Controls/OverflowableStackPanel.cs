@@ -12,14 +12,31 @@
     /// </summary>
 	public class OverflowableStackPanel : StackPanel
 	{
-		#region fields
-		public static DependencyProperty OverflowItemCountProperty = DependencyProperty.Register("OverflowItemCount", typeof(int),
+        #region fields
+        /// <summary>
+        /// Implements the backing store of the <see cref="OverflowItemCount"/> dependency property.
+        /// </summary>
+        public static DependencyProperty OverflowItemCountProperty =
+            DependencyProperty.Register("OverflowItemCount", typeof(int),
 				typeof(OverflowableStackPanel), new PropertyMetadata(0));
 
-		public static DependencyProperty CanOverflowProperty = DependencyProperty.RegisterAttached("CanOverflow", typeof(bool),
+        /// <summary>
+        /// Implements the backing store of the attached
+        /// <see cref="SetCanOverflow(DependencyObject, bool)"/>
+        /// <see cref="GetCanOverflow(DependencyObject)"/> dependency property.
+        /// </summary>
+		public static DependencyProperty CanOverflowProperty =
+            DependencyProperty.RegisterAttached("CanOverflow", typeof(bool),
                 typeof(OverflowableStackPanel), new UIPropertyMetadata(false));
 
-		public static DependencyProperty IsOverflowProperty = DependencyProperty.RegisterAttached("IsOverflow", typeof(bool),
+        /// <summary>
+        /// Implements the backing store of the attached
+        /// <see cref="SetIsOverflow(DependencyObject, bool)"/>
+        /// <see cref="GetIsOverflow(DependencyObject)"/>
+        /// dependency property.
+        /// </summary>
+		public static DependencyProperty IsOverflowProperty =
+            DependencyProperty.RegisterAttached("IsOverflow", typeof(bool),
                 typeof(OverflowableStackPanel), new UIPropertyMetadata(false));
 
 		private double overflowableWH = 0;
@@ -36,34 +53,67 @@
 		#endregion
 
 		#region properties
+        /// <summary>
+        /// Gets sets the number of items that are overflown in this <see cref="StackPanel"/>.
+        /// </summary>
 		public int OverflowItemCount
 		{
 			get { return (int)GetValue(OverflowItemCountProperty); }
 			set { this.SetValue(OverflowItemCountProperty, value); }
 		}
-
-		public static bool GetCanOverflow(DependencyObject obj)
-		{
-			return (bool)obj.GetValue(CanOverflowProperty);
-		}
-
-		public static void SetCanOverflow(DependencyObject obj, bool value)
-		{
-			obj.SetValue(CanOverflowProperty, value);
-		}
-
-		public static bool GetIsOverflow(DependencyObject obj)
-		{
-			return (bool)obj.GetValue(IsOverflowProperty);
-		}
-
-		public static void SetIsOverflow(DependencyObject obj, bool value)
-		{
-			obj.SetValue(IsOverflowProperty, value);
-		}
         #endregion properties
 
         #region methods
+        #region CanOverflow
+        /// <summary>
+        /// Sets the attached CanOverflow dependency property to configure whether
+        /// this <see cref="StackPanel"/> can overflow or not.
+        /// </summary>
+        /// <param name="obj"></param>
+        /// <returns></returns>
+        public static bool GetCanOverflow(DependencyObject obj)
+        {
+            return (bool)obj.GetValue(CanOverflowProperty);
+        }
+
+        /// <summary>
+        /// gets the attached CanOverflow dependency property to determine whether
+        /// this <see cref="StackPanel"/> is configured to be overflowable or not.
+        /// </summary>
+        /// <param name="obj"></param>
+        /// <param name="value"></param>
+        /// <returns></returns>
+        public static void SetCanOverflow(DependencyObject obj, bool value)
+        {
+            obj.SetValue(CanOverflowProperty, value);
+        }
+        #endregion CanOverflow
+
+        #region IsOverflow
+        /// <summary>
+        /// Sets the attached IsOverflow dependency property to determine whether
+        /// this <see cref="StackPanel"/> is overflown or not.
+        /// </summary>
+        /// <param name="obj"></param>
+        /// <returns></returns>
+        public static bool GetIsOverflow(DependencyObject obj)
+        {
+            return (bool)obj.GetValue(IsOverflowProperty);
+        }
+
+        /// <summary>
+        /// Gets the attached IsOverflow dependency property to determine whether
+        /// this <see cref="StackPanel"/> is overflown or not.
+        /// </summary>
+        /// <param name="obj"></param>
+        /// <param name="value"></param>
+        /// <returns></returns>
+        public static void SetIsOverflow(DependencyObject obj, bool value)
+        {
+            obj.SetValue(IsOverflowProperty, value);
+        }
+        #endregion IsOverflow
+
         /// <summary>
         /// Measures the child elements of a <seealso cref="StackPanel"/> 
         /// in anticipation of arranging them during the
@@ -122,6 +172,15 @@
                 return new Size(maxHW, this.overflowableWH + this.nonoverflowableWH);
 		}
 
+        /// <summary>
+        /// Arranges the content of a System.Windows.Controls.StackPanel element.
+        /// </summary>
+        /// <param name="arrangeSize">The <see cref="System.Windows.Size"/> that this element should
+        /// use to arrange its child elements.</param>
+        /// <returns>
+        /// The System.Windows.Size that represents the arranged size of this System.Windows.Controls.StackPanel
+        /// element and its child elements.
+        /// </returns>
 		protected override Size ArrangeOverride(Size arrangeSize)
 		{
 			var items = InternalChildren.Cast<UIElement>();

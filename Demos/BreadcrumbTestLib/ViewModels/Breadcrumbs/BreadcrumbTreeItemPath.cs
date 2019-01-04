@@ -144,6 +144,29 @@
         }
 
         /// <summary>
+        /// Gets a Shell Path (sequence of localized item names) or a
+        /// file system path and indicates the type of path with <paramref name="pathTypeParam"/>.
+        /// </summary>
+        /// <param name="pathTypeParam"></param>
+        /// <returns></returns>
+        public string GetPath(out PathType pathTypeParam)
+        {
+            pathTypeParam = PathType.Unknown;
+            string path = string.Empty;
+
+            path = GetFileSystemPath();
+            pathTypeParam = PathType.FileSystemPath;
+
+            if (string.IsNullOrEmpty(path))
+            {
+                path = GetWinShellPath();
+                pathTypeParam = PathType.WinShellPath;
+            }
+
+            return path;
+        }
+
+        /// <summary>
         /// Adds another <paramref name="item"/> as the last item in the current path.
         /// </summary>
         /// <param name="item"></param>

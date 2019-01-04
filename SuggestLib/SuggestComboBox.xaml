@@ -28,39 +28,29 @@
                            Placement="Left"
                            VerticalOffset="{TemplateBinding ActualHeight}" 
                            HorizontalOffset="{TemplateBinding ActualWidth}"
-                           MinWidth="{TemplateBinding PopUpWidth}"
+                           Width="{TemplateBinding PopUpWidth}"
                            >
-                        <Grid x:Name="DropDown"
-                              MaxHeight="{TemplateBinding MaxDropDownHeight}"
-                              MinWidth="{TemplateBinding ActualWidth}"
-                              SnapsToDevicePixels="True">
-                            <Border x:Name="DropDownBorder"
-                                   BorderThickness="1"
-                                   BorderBrush="{DynamicResource {x:Static reskeys:ResourceKeys.PopUpControlNormalBorderKey}}" 
-                                   Background="{DynamicResource {x:Static reskeys:ResourceKeys.PopUpControlNormalBackgroundKey}}">
-                                <ScrollViewer x:Name="DropDownScrollViewer">
+                        <Border x:Name="DropDownBorder"
+                                BorderThickness="1"
+                                BorderBrush="{DynamicResource {x:Static reskeys:ResourceKeys.PopUpControlNormalBorderKey}}" 
+                                Background="{DynamicResource {x:Static reskeys:ResourceKeys.PopUpControlNormalBackgroundKey}}">
+                            <Grid x:Name="DropDown"
+                                  MaxHeight="{TemplateBinding MaxDropDownHeight}"
+                                  SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}">
+                                <ScrollViewer Focusable="False"
+                                              CanContentScroll="True"
+                                              ScrollViewer.HorizontalScrollBarVisibility="Auto"
+                                              ScrollViewer.VerticalScrollBarVisibility="Auto">
                                     <Grid x:Name="grid">
-                                        <Canvas x:Name="canvas"
-                                                HorizontalAlignment="Left"
-                                                Height="0"
-                                                VerticalAlignment="Top"
-                                                Width="0">
-                                            <Rectangle x:Name="OpaqueRect"
-                                                      Fill="{Binding Background, ElementName=DropDownBorder}"
-                                                      Height="{Binding ActualHeight, ElementName=DropDownBorder}"
-                                                      Width="{Binding ActualWidth, ElementName=DropDownBorder}" />
-                                        </Canvas>
                                         <ItemsPresenter x:Name="ItemsPresenter"
                                                         KeyboardNavigation.DirectionalNavigation="Contained"
                                                         SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"
                                         />
                                     </Grid>
                                 </ScrollViewer>
-                            </Border>
-                        </Grid>
+                            </Grid>
+                        </Border>
                     </Popup>
-                    <!-- IsChecked="{Binding IsDropDownOpen, Mode=TwoWay, RelativeSource={RelativeSource TemplatedParent}}"
-                    -->
                     <Button BorderBrush="{TemplateBinding BorderBrush}"
                             BorderThickness="{TemplateBinding BorderThickness}"
                             Background="{TemplateBinding ButtonBackground}"
@@ -72,8 +62,7 @@
                             Content="{TemplateBinding ButtonContent}"
                             MinWidth="{Binding ActualHeight, RelativeSource={RelativeSource Self}}" 
                             MinHeight="{Binding ActualWidth, RelativeSource={RelativeSource Self}}"
-                        >
-                    </Button>
+                        />
                 </Grid>
             </Border>
         </Grid>
@@ -88,10 +77,6 @@
                 </MultiTrigger.Conditions>
                 <Setter Property="ScrollViewer.CanContentScroll" Value="False" />
             </MultiTrigger>
-            <Trigger Property="CanContentScroll" SourceName="DropDownScrollViewer" Value="False">
-                <Setter Property="Canvas.Top" TargetName="OpaqueRect" Value="{Binding VerticalOffset, ElementName=DropDownScrollViewer}" />
-                <Setter Property="Canvas.Left" TargetName="OpaqueRect"  Value="{Binding HorizontalOffset, ElementName=DropDownScrollViewer}" />
-            </Trigger>
             <Trigger Property="IsEditable" Value="True">
                 <Setter Property="IsTabStop" Value="False" />
                 <Setter Property="Padding" Value="2" />
@@ -146,6 +131,7 @@
         <Setter Property="Template" Value="{StaticResource SuggestComboBoxTemplate}" />
         <Setter Property="VerticalContentAlignment" Value="Stretch" />
         <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+        <Setter Property="SnapsToDevicePixels" Value="True"/>
         <Setter Property="ButtonContent">
             <Setter.Value>
                 <TextBlock FontFamily="Segoe UI Symbol"

@@ -11,6 +11,9 @@
     /// </summary>
     public class BindingProxy : Freezable
     {
+        /// <summary>
+        /// Backing store of the <see cref="Data"/> dependency property.
+        /// </summary>
         public static readonly DependencyProperty DataProperty =
             DependencyProperty.Register("Data", typeof(object), typeof(BindingProxy), new UIPropertyMetadata(null));
 

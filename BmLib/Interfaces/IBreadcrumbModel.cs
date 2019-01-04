@@ -22,6 +22,8 @@
         /// - the tree view item based and path orient tree view.
         /// </summary>
         /// <param name="navigateToThisLocation"></param>
+        /// <param name="goBackToPreviousLocation"></param>
+        /// <param name="locationIndicator"></param>
         /// <returns></returns>
         Task<bool> NavigateTreeViewModel(string navigateToThisLocation,
                                          bool goBackToPreviousLocation,

@@ -53,6 +53,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Converters\BoolToVisibilityCollapsedConverter.cs" />
+    <Compile Include="Converters\IntToVisibilityPropConverter.cs" />
     <Compile Include="Converters\BoolToVisibilityPropConverter.cs" />
     <Compile Include="Converters\DoubleAddConverter.cs" />
     <Compile Include="Converters\FlipBoolConverter.cs" />

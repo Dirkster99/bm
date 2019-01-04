@@ -21,6 +21,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <DocumentationFile>bin\Debug\BmLib.xml</DocumentationFile>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -29,6 +30,7 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <DocumentationFile>bin\Release\BmLib.xml</DocumentationFile>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
@@ -157,7 +159,6 @@
     <Compile Include="Converters\BoolToVisibilityCollapsedConverter.cs" />
     <Compile Include="Converters\BoolToVisibilityConverter.cs" />
     <Compile Include="Converters\BoolToVisibilityPropConverter.cs" />
-    <Compile Include="Converters\BorderClipConverter.cs" />
     <Compile Include="Converters\FlipBoolConverter.cs" />
     <Compile Include="Converters\FlipBoolToVisibilityCollapsedConverter.cs" />
     <Compile Include="Converters\FlipBoolToVisibilityConverter.cs" />
@@ -167,7 +168,6 @@
     </Page>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Enums\HierarchicalResult.cs" />
     <Compile Include="Enums\UpdateMode.cs" />
     <Compile Include="Interfaces\IOverflown.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">

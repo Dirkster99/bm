@@ -184,9 +184,14 @@
 
         /// <summary>
         /// Defines the Icon that is shown for Close button displayed on the far right side of the Breadcrumb control.
+        /// This icon is displayed when the switch is turned to show text of if there is a cancelable background
+        /// task that could be cancelled with this button.
         /// </summary>
         public static readonly ComponentResourceKey ICON_Close = new ComponentResourceKey(typeof(ResourceKeys), "ICON_Close");
 
+        /// <summary>
+        /// Defines the (chevron down) icon that is shown for recent location button displayed on the right side of the Breadcrumb control.
+        /// </summary>
         public static readonly ComponentResourceKey ICON_ExpandDown = new ComponentResourceKey(typeof(ResourceKeys), "ICON_ExpandDown");
         #endregion Refresh Cancel Button
 

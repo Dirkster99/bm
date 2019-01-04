@@ -20,6 +20,7 @@ namespace BreadcrumbTestLib.ViewModels.Breadcrumbs
     using System.Threading.Tasks;
     using System.Windows;
     using System.Windows.Controls;
+    using System.Windows.Data;
     using System.Windows.Input;
 
     /// <summary>
@@ -34,9 +35,6 @@ namespace BreadcrumbTestLib.ViewModels.Breadcrumbs
         /// </summary>
         protected static readonly log4net.ILog Logger = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
 
-        private OneTaskLimitedScheduler _OneTaskScheduler;
-        private SemaphoreSlim _Semaphore;
-
         private bool _EnableBreadcrumb;
         private string _suggestedPath;
 
@@ -47,10 +45,16 @@ namespace BreadcrumbTestLib.ViewModels.Breadcrumbs
         private IDirectoryBrowser _SelectedRootValue;
 
         private ICommand _RootDropDownSelectionChangedCommand;
+        private ICommand _AddRecentLocationCommand;
+        private ICommand _ClearRecentLocationsCommand;
+
         private readonly INavigationController _NavigationController;
-        private readonly ObservableCollection<BreadcrumbTreeItemViewModel> _OverflowedAndRootItems = null;
+        private readonly ObservableCollection<BreadcrumbTreeItemViewModel> _OverflowedAndRootItems;
         private readonly IBreadcrumbTreeItemPath _CurrentPath;
         private readonly IDirectoryBrowser _RootLocation = ShellBrowser.DesktopDirectory;
+
+        private readonly ObservableCollection<string> _RecentLocationItems;
+        private readonly object _RecentLocationItemsItemsLock;
         #endregion fields
 
         #region constructors
@@ -69,15 +73,17 @@ namespace BreadcrumbTestLib.ViewModels.Breadcrumbs
         /// </summary>
         protected BreadcrumbViewModel()
         {
-            PathValidation = new ShellPathValidationRule();
+            _RecentLocationItemsItemsLock = new object();
 
+            PathValidation = new ShellPathValidationRule();
             _OverflowedAndRootItems = new ObservableCollection<BreadcrumbTreeItemViewModel>();
+
+            _RecentLocationItems = new ObservableCollection<string>();
+            BindingOperations.EnableCollectionSynchronization(_RecentLocationItems, _RecentLocationItemsItemsLock);
+
             _CurrentPath = new BreadcrumbTreeItemPath();
             _EnableBreadcrumb = true;
             _IsBrowsing = false;
-
-            _Semaphore = new SemaphoreSlim(1, 1);
-            _OneTaskScheduler = new OneTaskLimitedScheduler();
 
             Progressing = new ProgressViewModel();
             BreadcrumbSubTree = new BreadcrumbTreeItemViewModel(null, null, this);
@@ -200,55 +206,6 @@ namespace BreadcrumbTestLib.ViewModels.Breadcrumbs
         }
 
         /// <summary>
-        /// Gets a command that can change the navigation target of the currently
-        /// selected location towards a new location.
-        /// 
-        /// Expected command parameter:
-        /// Array of length 1 with an object of type <see cref="BreadcrumbTreeItemViewModel"/>
-        /// object[1] = {new <see cref="BreadcrumbTreeItemViewModel"/>() }
-        /// </summary>
-        public ICommand RootDropDownSelectionChangedCommand
-        {
-            get
-            {
-                if (_RootDropDownSelectionChangedCommand == null)
-                {
-                    _RootDropDownSelectionChangedCommand = new RelayCommand<object>(async (p) =>
-                    {
-                        if (IsBrowsing == true)
-                            return;
-
-                        var parArray = p as object[];
-                        if (parArray == null)
-                            return;
-
-                        if (parArray.Length <= 0)
-                            return;
-
-                        // Limitation of command is currently only 1 LOCATION PARAMETER being processed
-                        var selectedFolder = parArray[0] as BreadcrumbTreeItemViewModel;
-
-                        if (selectedFolder == null)
-                            return;
-
-                        Logger.InfoFormat("selectedFolder {0}", selectedFolder);
-
-                        await RootDropDownSelectionChangedCommand_Executed(selectedFolder);
-                    },
-                    (param) =>
-                    {
-                        if (IsBrowsing == true)
-                            return false;
-
-                        return true;
-                    });
-                }
-
-                return _RootDropDownSelectionChangedCommand;
-            }
-        }
-
-        /// <summary>
         /// Gets whether the browser is currently processing
         /// a request for brwosing to a known location.
         /// 
@@ -352,6 +309,109 @@ namespace BreadcrumbTestLib.ViewModels.Breadcrumbs
                     _SelectedRootValue = value;
                     NotifyPropertyChanged(() => this.SelectedRootValue);
                 }
+            }
+        }
+
+        /// <summary>
+        /// Gets a command that can change the navigation target of the currently
+        /// selected location towards a new location.
+        /// 
+        /// Expected command parameter:
+        /// Array of length 1 with an object of type <see cref="BreadcrumbTreeItemViewModel"/>
+        /// object[1] = {new <see cref="BreadcrumbTreeItemViewModel"/>() }
+        /// </summary>
+        public ICommand RootDropDownSelectionChangedCommand
+        {
+            get
+            {
+                if (_RootDropDownSelectionChangedCommand == null)
+                {
+                    _RootDropDownSelectionChangedCommand = new RelayCommand<object>(async (p) =>
+                    {
+                        if (_IsBrowsing == true)
+                            return;
+
+                        var parArray = p as object[];
+                        if (parArray == null)
+                            return;
+
+                        if (parArray.Length <= 0)
+                            return;
+
+                        // Limitation of command is currently only 1 LOCATION PARAMETER being processed
+                        var selectedFolder = parArray[0] as BreadcrumbTreeItemViewModel;
+
+                        if (selectedFolder == null)
+                            return;
+
+                        Logger.InfoFormat("selectedFolder {0}", selectedFolder);
+
+                        await RootDropDownSelectionChangedCommand_Executed(selectedFolder);
+                    });
+                }
+
+                return _RootDropDownSelectionChangedCommand;
+            }
+        }
+
+        /// <summary>
+        /// Gets a list of recent locations containing a Windows Shell or
+        /// a File System path.
+        /// </summary>
+        public IEnumerable<string> RecentLocationItems
+        {
+            get
+            {
+                return _RecentLocationItems;
+            }
+        }
+
+        /// <summary>
+        /// Gets a command that adds the current Windows Shell Path or
+        /// File System path into the list of recent location items.
+        /// </summary>
+        public ICommand AddRecentLocationCommand
+        {
+            get
+            {
+                if (_AddRecentLocationCommand == null)
+                {
+                    _AddRecentLocationCommand = new RelayCommand<object>((p) =>
+                    {
+                        if (_IsBrowsing == true)
+                            return;
+
+                        PathType pathTypeParam;
+                        string currPath = _CurrentPath.GetPath(out pathTypeParam);
+
+                        if (pathTypeParam == PathType.FileSystemPath ||
+                            pathTypeParam == PathType.WinShellPath)
+                        {
+                            AddRecentLocation(currPath);
+                        }
+                    });
+                }
+
+                return _AddRecentLocationCommand;
+            }
+        }
+
+        public ICommand ClearRecentLocationsCommand
+        {
+            get
+            {
+                if (_ClearRecentLocationsCommand == null)
+                {
+                    _ClearRecentLocationsCommand = new RelayCommand<object>((p) =>
+                    {
+                        if (_IsBrowsing == true)
+                            return;
+
+                        _RecentLocationItems.Clear();
+                    });
+                }
+
+                return _ClearRecentLocationsCommand;
             }
         }
         #endregion properties
@@ -1204,6 +1264,8 @@ namespace BreadcrumbTestLib.ViewModels.Breadcrumbs
                 Logger.Error(exp);
             }
 
+            // This should occur in the last step of every navigational handling
+            // since it informs the breadcrumb control to update its view (IsOverflown property)
             if (this.SelectionChanged != null)
                 this.SelectionChanged(this, EventArgs.Empty);
 
@@ -1249,6 +1311,31 @@ namespace BreadcrumbTestLib.ViewModels.Breadcrumbs
                 await this.NavigateToAsync(request, "BreadcrumbViewModel.RootDropDownSelectionChangedCommand",
                     hintDirection, toBeSelectedLocation);
             }
+        }
+
+        /// <summary>
+        /// Adds anpther recent location into the maintained list of recent locations.
+        /// </summary>
+        /// <param name="currPath"></param>
+        private void AddRecentLocation(string currPath)
+        {
+            // Move item to first spot if it exists already
+            var items =_RecentLocationItems.Where(i => string.Compare(i, currPath, true) == 0);
+            if (items.Any())
+            {
+                _RecentLocationItems.Remove(items.First());
+                _RecentLocationItems.Insert(0, currPath);
+
+                return;
+            }
+
+            if (_RecentLocationItems.Count > 99) // Make sure list does not grow beyond 99 elements
+            {
+                for (int i = 98; i < _RecentLocationItems.Count; i++)
+                    _RecentLocationItems.RemoveAt(i);
+            }
+
+            _RecentLocationItems.Insert(0, currPath);
         }
         #endregion methods
     }

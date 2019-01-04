@@ -2,6 +2,7 @@
 {
     using BreadcrumbTestLib.Models;
     using BreadcrumbTestLib.ViewModels.Breadcrumbs;
+    using ShellBrowserLib.Enums;
     using ShellBrowserLib.Interfaces;
     using System.Collections.Generic;
 
@@ -54,6 +55,14 @@
         /// <param name="location"></param>
         /// <returns></returns>
         string GetWinShellPath();
+
+        /// <summary>
+        /// Gets a Shell Path (sequence of localized item names) or a
+        /// file system path and indicates the type of path with <paramref name="pathTypeParam"/>.
+        /// </summary>
+        /// <param name="pathTypeParam"></param>
+        /// <returns></returns>
+        string GetPath(out PathType pathTypeParam);
 
         /// <summary>
         /// Adds another <paramref name="item"/> as the last item in the current path.

@@ -5,21 +5,39 @@
 	using System.Windows;
 	using System.Windows.Data;
 
-	[ValueConversion(typeof(string), typeof(Visibility))]
+    /// <summary>
+    /// Implements a bool to visibility converter.
+    /// </summary>
+	[ValueConversion(typeof(bool), typeof(Visibility))]
 	public class FlipBoolToVisibilityCollapsedConverter : IValueConverter
 	{
-		public static FlipBoolToVisibilityCollapsedConverter Instance = new FlipBoolToVisibilityCollapsedConverter();
-
-		#region IValueConverter Members
-
-		public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        #region IValueConverter Members
+        /// <summary>
+        /// Converts a bool true value to <see cref="Visibility.Collapsed"/> and
+        /// false into <see cref="Visibility.Visible"/>.
+        /// </summary>
+        /// <param name="value"></param>
+        /// <param name="targetType"></param>
+        /// <param name="parameter"></param>
+        /// <param name="culture"></param>
+        /// <returns></returns>
+        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
 		{
 			if (value is bool && (bool)value)
 				return Visibility.Collapsed;
-			else
-				return Visibility.Visible;
+
+    		return Visibility.Visible;
 		}
 
+        /// <summary>
+        /// Converts a <see cref="Visibility.Collapsed"/> value to bool true and
+        /// any other value to false.
+        /// </summary>
+        /// <param name="value"></param>
+        /// <param name="targetType"></param>
+        /// <param name="parameter"></param>
+        /// <param name="culture"></param>
+        /// <returns></returns>
 		public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
 		{
 			if ((Visibility)value == Visibility.Collapsed)

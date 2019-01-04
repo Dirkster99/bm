@@ -92,9 +92,10 @@
                                   
                                   TaskQueueProcessing="{Binding Data.BreadcrumbController.TaskQueue, Source={StaticResource AppDataContextProxy}}"
                                   Progressing="{Binding Progressing}"
+                                  RecentLocationsItemsSource="{Binding  RecentLocationItems}"
 
-                                  Margin="3"
-                                  Padding="3"
+                                  Margin="0"
+                                  Padding="3,0"
                               >
                     <ctrls:Breadcrumb.TreeItemContainerStyle>
                         <Style TargetType="{x:Type treectrls:BreadcrumbTreeItem}" BasedOn="{StaticResource {x:Type treectrls:BreadcrumbTreeItem}}">
@@ -479,6 +480,24 @@
                 <CheckBox Content="Breadcrumb.IsSwitchEnabled"
                           DataContext="{Binding ElementName=BreadcrumbDemoControl}"
                           IsChecked="{Binding Path=IsSwitchEnabled}" />
+
+                <GroupBox Header="Recent Location" Margin="0,12,0,0">
+                    <StackPanel Orientation="Horizontal">
+                        <Button Content="Add " VerticalAlignment="Center" HorizontalAlignment="Left"
+                                DataContext="{Binding BreadcrumbController.BreadcrumbBrowser}"
+                                Command="{Binding AddRecentLocationCommand}"
+                                ToolTip="Added current path to recent locations in drop down"
+                                Margin="3"
+                        />
+
+                        <Button Content="Clear"  VerticalAlignment="Center" HorizontalAlignment="Left"
+                                DataContext="{Binding BreadcrumbController.BreadcrumbBrowser}"
+                                Command="{Binding ClearRecentLocationsCommand}"
+                                ToolTip="Remove all recent locations in drop down"
+                                Margin="3"
+                        />
+                    </StackPanel>                    
+                </GroupBox>
             </StackPanel>
         </ScrollViewer>
     </Grid>

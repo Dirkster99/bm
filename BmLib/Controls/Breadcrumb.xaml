@@ -51,6 +51,7 @@
                                 <conv:BoolToVisibilityPropConverter x:Key="BoolToVisibilityHiddenConverter"
                                                                     TrueValue="Visible" FalseValue="Hidden" />
                                 <sconv:DoubleAddConverter x:Key="DoubleAddConverter"/>
+                                <sconv:IntToVisibilityPropConverter x:Key="IntToVisibilityPropConverter"/>
                             </Grid.Resources>
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="*"/>
@@ -142,6 +143,8 @@
                                                                VerticalAlignment="Stretch"
                                                                Margin="0"
                                                                Padding="0"
+                                                               VirtualizingStackPanel.IsVirtualizing="True"
+                                                               VirtualizingStackPanel.VirtualizationMode="Recycling"
                                                                />
 
                                             <!-- Grid.Column="2" Is OverflowGap which is necessary to reach Switch
@@ -174,6 +177,11 @@
 
                             <sbox:SuggestComboBox Grid.Column="1" x:Name="PART_SuggestComboBox"
                                                   ToggleRecentListCommand="{Binding RecentListCommand,RelativeSource={RelativeSource AncestorType={x:Type ctrls:Breadcrumb}},Mode=OneTime}"
+                                                  ItemsSource="{TemplateBinding RecentLocationsItemsSource}"
+                                                  Visibility="{Binding Path=RecentLocationsItemsSource.Count, RelativeSource={RelativeSource AncestorType=ctrls:Breadcrumb}, Mode=OneWay, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource IntToVisibilityPropConverter}}"
+                                                  VerticalAlignment="Stretch"
+                                                  HorizontalAlignment="Right"
+                                                  Height="{Binding ElementName=PART_Switch,Path=ActualHeight}"
                                                   >
                                     <sbox:SuggestComboBox.PopUpWidth>
                                         <MultiBinding Converter="{StaticResource DoubleAddConverter}">
@@ -201,10 +209,6 @@
                                         </Rectangle>
                                     </Viewbox>
                                 </sbox:SuggestComboBox.ButtonContent>
-                                <ComboBoxItem>c:</ComboBoxItem>
-                                <ComboBoxItem>d:</ComboBoxItem>
-                                <ComboBoxItem>e:</ComboBoxItem>
-                                <ComboBoxItem>f:</ComboBoxItem>
                             </sbox:SuggestComboBox>
 
                             <!-- Cancel/Refesh Buttons -->

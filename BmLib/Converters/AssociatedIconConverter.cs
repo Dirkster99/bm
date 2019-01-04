@@ -86,7 +86,7 @@
         /// <summary>
         /// Converts the specified value.
         /// </summary>
-        /// <param name="value">The value.</param>
+        /// <param name="values">The value.</param>
         /// <param name="targetType">Type of the target.</param>
         /// <param name="parameter">The parameter.</param>
         /// <param name="culture">The culture.</param>
@@ -177,7 +177,7 @@
         /// Converts the back.
         /// </summary>
         /// <param name="value">The value.</param>
-        /// <param name="targetType">Type of the target.</param>
+        /// <param name="targetTypes">Type of the target.</param>
         /// <param name="parameter">The parameter.</param>
         /// <param name="culture">The culture.</param>
         /// <returns></returns>

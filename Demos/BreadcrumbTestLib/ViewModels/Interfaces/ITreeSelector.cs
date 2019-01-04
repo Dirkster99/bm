@@ -31,13 +31,13 @@
         bool IsChildSelected { get; }
 
         /// <summary>
-        /// Gets the selected child of current view model.          
+        /// Gets the model of the selected child item.
         /// </summary>
         M SelectedChild { get; set; }
 
         /// <summary>
         /// Gets the instance of the model object that represents this selection helper.
-        /// The model backs the <see cref="ViewModel"/> property and should be in sync
+        /// The model backs the ViewModel property and should be in sync
         /// with it.
         /// </summary>
         M Value { get; }

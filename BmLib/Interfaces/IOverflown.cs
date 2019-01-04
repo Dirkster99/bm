@@ -7,6 +7,9 @@
     /// </summary>
     public interface IOverflown
     {
+        /// <summary>
+        /// Gets whether the breadcrumb item is overflown or not.
+        /// </summary>
         bool IsOverflown { get; }
     }
 }

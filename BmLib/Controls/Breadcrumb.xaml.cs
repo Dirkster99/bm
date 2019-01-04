@@ -5,6 +5,7 @@
     using SuggestLib;
     using SuggestLib.Events;
     using System;
+    using System.Collections;
     using System.Collections.Generic;
     using System.ComponentModel;
     using System.Diagnostics;
@@ -39,20 +40,39 @@
     public class Breadcrumb : UserControl
     {
         #region fields
+        /// <summary>
+        /// Gets the templated name of the required <see cref="DropDownList"/> control.
+        /// </summary>
         public const string PART_RootDropDownList = "PART_RootDropDownList";
+
+        /// <summary>
+        /// Gets the templated name of the required <see cref="Switch"/> control.
+        /// </summary>
         public const string PART_Switch = "PART_Switch";
+
+        /// <summary>
+        /// Gets the templated name of the required <see cref="SuggestBox"/> control.
+        /// </summary>
         public const string PART_SuggestBox = "PART_SuggestBox";
+
+        /// <summary>
+        /// Gets the templated name of the required <see cref="BreadcrumbTree"/> control.
+        /// </summary>
         public const string PART_BreadcrumbTree = "PART_BreadcrumbTree";
 
-        public ValidationRule PathValidation
-        {
-            get { return (ValidationRule)GetValue(PathValidationProperty); }
-            set { SetValue(PathValidationProperty, value); }
-        }
-
-        // Using a DependencyProperty as the backing store for PathValidation.  This enables animation, styling, binding, etc...
+        /// <summary>
+        /// Backing store of the <see cref="PathValidation"/> dependency property.
+        /// </summary>
         public static readonly DependencyProperty PathValidationProperty =
             DependencyProperty.Register("PathValidation", typeof(ValidationRule),
+                typeof(Breadcrumb), new PropertyMetadata(null));
+
+
+        /// <summary>
+        /// Backing store of the <see cref="RecentLocationsItemsSource"/> dependency property.
+        /// </summary>
+        public static readonly DependencyProperty RecentLocationsItemsSourceProperty =
+            DependencyProperty.Register("RecentLocationsItemsSource", typeof(IEnumerable),
                 typeof(Breadcrumb), new PropertyMetadata(null));
 
         #region Switch DPs
@@ -116,12 +136,7 @@
                 typeof(Breadcrumb), new PropertyMetadata(null));
 
         /// <summary>
-        /// Implements the backing store field of the OverflowGap dependency property.
-        /// 
-        /// The OverflowGap dependency property defines the gap
-        /// that is displayed in the right most part of the BreadcrumbTree
-        /// view to let the user click into this area when the switch should
-        /// be turned on to display the text display with the SuggestBox.
+        /// Implements the backing store of the <see cref="OverflowGap"/> dependency property.
         /// </summary>
         public static readonly DependencyProperty OverflowGapProperty =
             DependencyProperty.Register("OverflowGap",
@@ -232,6 +247,11 @@
         #endregion constructors
 
         #region properties
+        /// <summary>
+        /// Gets a command that opens the drop down list of recent locations
+        /// to let the user select a Windows Shell or File System path that
+        /// can be edit within the <see cref="SuggestBox"/> control.
+        /// </summary>
         public ICommand RecentListCommand
         {
             get
@@ -239,12 +259,33 @@
                 if (_RecentListCommand == null)
                 {
                     _RecentListCommand = new Base.RelayCommand<object>(
-                            async (p) => await RecentListCommandExecutedAsync(p)
+                            (p) => RecentListCommandExecutedAsync(p)
                     );
                 }
 
                 return _RecentListCommand;
             }
+        }
+
+        /// <summary>
+        /// Gets/sets a validation rule object that can be used to validate a
+        /// path and mark it as invalid when path information is entered into
+        /// the textual portion of the <see cref="SuggestBox"/> in this control.
+        /// </summary>
+        public ValidationRule PathValidation
+        {
+            get { return (ValidationRule)GetValue(PathValidationProperty); }
+            set { SetValue(PathValidationProperty, value); }
+        }
+
+        /// <summary>
+        /// Gets/sets a list of recent locations which can be viewed in the
+        /// recent locations drop down.
+        /// </summary>
+        public IEnumerable RecentLocationsItemsSource
+        {
+            get { return (IEnumerable)GetValue(RecentLocationsItemsSourceProperty); }
+            set { SetValue(RecentLocationsItemsSourceProperty, value); }
         }
 
         #region Switch Properties
@@ -598,14 +639,13 @@
             }
         }
 
-        private async Task RecentListCommandExecutedAsync(object parameter)
+        private void RecentListCommandExecutedAsync(object parameter)
         {
-            // Turn the switch on to SuggestBox if not already available
-            if (IsSwitchOn != false)
-                await SwitchCommandExecutedAsync(null, false);
-
             if (_PART_SuggestComboBox != null)
+            {
+                _PART_SuggestComboBox.SelectedItem = null;
                 _PART_SuggestComboBox.IsDropDownOpen = true;
+            }
         }
 
         /// <summary>
@@ -622,11 +662,21 @@
 
             if (e.AddedItems.Count > 0)
             {
-                var item = e.AddedItems[0] as ComboBoxItem;
+                string input = null;
+                input = e.AddedItems[0] as string;
+                if (string.IsNullOrEmpty(input) == true)
+                {
+                    var item = e.AddedItems[0] as ComboBoxItem;
+                    if (item != null)
+                        input = item.Content as string;
+                }
 
-                string input = item.Content as string;
                 if (string.IsNullOrEmpty(input) == false)
                 {
+                    // Turn the switch on to SuggestBox if not already available
+                    if (IsSwitchOn != false)
+                        await SwitchCommandExecutedAsync(null, false);
+
                     _PART_SuggestBox.Text = input;
                     _PART_SuggestBox.SelectAll();
 
@@ -889,7 +939,7 @@
             {
                 UpdateIsOverflownProperty();
 
-            }, DispatcherPriority.ApplicationIdle);
+            }, DispatcherPriority.ContextIdle);
         }
         #endregion OnLoaded DataContectChanged
         #endregion methods
