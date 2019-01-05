@@ -85,6 +85,37 @@
             Assert.IsTrue(dir.PathType == PathHandler.FileSystem);
         }
 
+        [TestMethod]
+        public void TestPathShell()
+        {
+            var dir = ShellBrowser.DesktopDirectory;
+
+            Assert.IsTrue(string.IsNullOrEmpty(dir.PathShell) == false);
+            Assert.IsTrue(string.Compare(dir.SpecialPathId, dir.PathShell, true) == 0);
+
+            var sysDefault = ShellBrowser.SysDefault;
+            Assert.IsTrue(string.IsNullOrEmpty(sysDefault.PathShell) == false);
+            Assert.IsTrue(string.Compare(sysDefault.PathFileSystem, sysDefault.PathShell, true) == 0);
+
+        }
+
+        [TestMethod]
+        public void TestFullName()
+        {
+            var dir = ShellBrowser.DesktopDirectory;
+
+            Assert.IsTrue(string.IsNullOrEmpty(dir.FullName) == false);
+            Assert.IsTrue(string.Compare(dir.FullName, dir.PathFileSystem, true) == 0);
+
+            var sysDefault = ShellBrowser.SysDefault;
+            Assert.IsTrue(string.IsNullOrEmpty(sysDefault.FullName) == false);
+            Assert.IsTrue(string.Compare(sysDefault.PathFileSystem, sysDefault.FullName, true) == 0);
+
+            var thisPC = ShellBrowser.MyComputer;
+            Assert.IsTrue(string.IsNullOrEmpty(thisPC.FullName) == false);
+            Assert.IsTrue(string.Compare(thisPC.FullName, thisPC.SpecialPathId, true) == 0);
+        }
+
         /// <summary>
         /// Verify that we can build a <see cref="IDirectoryBrowser"/> object
         /// for a special known folder item that does NOT have a drirectory in

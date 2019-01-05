@@ -2,6 +2,7 @@
 {
     using ShellBrowserLib;
     using ShellBrowserLib.IDs;
+    using ShellBrowserLib.Interfaces;
     using ShellBrowserLib.Shell.Interop.Interfaces.Knownfolders;
     using ShellBrowserLib.Shell.Interop.Knownfolders;
     using System;
@@ -138,8 +139,9 @@
             foreach (KeyValuePair<string, string> pair in Ids)
             {
                 var folderid = pair.Value;
+                IDirectoryBrowser[] pathItems;
 
-                if (ShellBrowser.DirectoryExists(folderid) == true)
+                if (ShellBrowser.DirectoryExists(folderid, out pathItems) == true)
                     existingFolders.Add(pair.Key, pair.Value);
                 else
                     nonExistingFolders.Add(pair.Key, pair.Value);

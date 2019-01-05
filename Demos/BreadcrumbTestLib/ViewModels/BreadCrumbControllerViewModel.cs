@@ -152,8 +152,10 @@ namespace BreadcrumbTestLib.ViewModels
         /// </summary>
         public void InitPath(string initialPath)
         {
+            IDirectoryBrowser[] pathItems;
+
             // Revert request to default if requested path is non-existing
-            if (ShellBrowser.DirectoryExists(initialPath) == false)
+            if (ShellBrowser.DirectoryExists(initialPath, out pathItems) == false)
                 initialPath =  ShellBrowser.SysDefault.FullName;
 
             Logger.InfoFormat("'{0}'", initialPath);

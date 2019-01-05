@@ -148,6 +148,9 @@
 
                 // Initialize DemoViewModel stuff ...
                 _appVM.Demo.InitPath(@"C:\Program Files\Microsoft ASP.NET Core Runtime Package Store\2.0");
+
+                // TODO XXXX WinShell Path does not work in start-up, yet
+                //_appVM.Demo.InitPath(@"Libraries\Music");
             }
             catch (Exception exp)
             {

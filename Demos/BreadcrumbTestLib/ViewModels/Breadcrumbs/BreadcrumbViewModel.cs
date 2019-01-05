@@ -507,6 +507,18 @@ namespace BreadcrumbTestLib.ViewModels.Breadcrumbs
                                         await NavigateToScheduledAsync(rootedPathItems, "BreadcrumbViewModel.NavigateTreeViewModel 1");
                                         return true;
                                     }
+
+                                    // Try a second time with an approach closer to the system
+                                    rootedPathItems = ShellBrowser.FindRoot(pathItems[pathItems.Length - 1]);
+
+                                    if (rootedPathItems != null)
+                                    {
+                                        // We already have the objects representing the path
+                                        // so lets navigate the tree to this location
+                                        await NavigateToScheduledAsync(rootedPathItems, "BreadcrumbViewModel.NavigateTreeViewModel 1");
+                                        return true;
+
+                                    }
                                 }
                             }
                         }

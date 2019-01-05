@@ -439,6 +439,33 @@
         }
 
         /// <summary>
+        /// Attempts to re-root a path model item
+        /// under the Desktop or ThisPC (filesystem) by looking up its PIDLS
+        /// and building a sequence of path models from those PIDLS.
+        /// </summary>
+        /// <param name="location"></param>
+        /// <returns></returns>
+        public static IDirectoryBrowser[] FindRoot(IDirectoryBrowser location)
+        {
+            IDirectoryBrowser[] ret = null;
+
+            try
+            {
+                var items = ShellBrowser.PathItemsAsIdList(location);
+                IDirectoryBrowser[] pathItems = new IDirectoryBrowser[items.Count];
+
+                for (int i = 0; i < items.Count; i++)
+                    pathItems[i] = ShellBrowser.Create(items[i]);
+
+                return pathItems;
+            }
+            catch
+            {
+                return ret;
+            }
+        }
+
+        /// <summary>
         /// Attempts to re-root a sequence of path model items
         /// under the Desktop or ThisPC (filesystem).
         /// </summary>
@@ -544,39 +571,6 @@
                 newRoot.Add(pathItems[i].Clone() as IDirectoryBrowser);
 
             return newRoot.ToArray();
-        }
-
-        /// <summary>
-        /// Determines if a directory (special or not) exists at the givem path
-        /// (path can be a formatted as special path KF_IDD).
-        /// </summary>
-        /// <param name="path"></param>
-        /// <returns>Returns true if item has a filesystem path otherwise false.</returns>
-        public static bool DirectoryExists(string path)
-        {
-            if (string.IsNullOrEmpty(path))
-                return false;
-
-            try
-            {
-                if (ShellHelpers.IsSpecialPath(path) == ShellHelpers.SpecialPath.IsSpecialPath)
-                {
-                    // translate KF_IID into file system path and check if it exists
-                    string fs_path = KnownFolderHelper.GetKnownFolderPath(path);
-
-                    if (fs_path != null)
-                        return System.IO.Directory.Exists(fs_path);
-
-                    return false;
-                }
-                else
-                    return System.IO.Directory.Exists(path);
-            }
-            catch (System.ArgumentException)
-            {
-                // Is thrown by System.IO.Directory.Exists(...) if path contains illegal caharacter (eg: '<')
-                return false;
-            }
         }
 
         /// <summary>
@@ -880,6 +874,7 @@
 
         /// <summary>
         /// Compares 2 to paths and indicates whether they match or not.
+        /// Both strings should be normalized before calling this method.
         /// </summary>
         /// <param name="inputPath"></param>
         /// <param name="path"></param>

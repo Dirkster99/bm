@@ -1,5 +1,6 @@
 ﻿namespace BreadcrumbTestLib.ViewModels.Breadcrumbs
 {
+    using ShellBrowserLib.Interfaces;
     using System.Globalization;
     using System.Windows.Controls;
 
@@ -31,7 +32,9 @@
                 if (!(value is string))
                     return new ValidationResult(false, "Invalid Path");
 
-                if (ShellBrowserLib.ShellBrowser.DirectoryExists((string)value) == false)
+                IDirectoryBrowser[] pathItems;
+
+                if (ShellBrowserLib.ShellBrowser.DirectoryExists((string)value, out pathItems) == false)
                     return new ValidationResult(false, "Path Not Found");
             }
             catch (System.Exception ex)
