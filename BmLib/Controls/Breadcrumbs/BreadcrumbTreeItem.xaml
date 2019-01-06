@@ -32,7 +32,8 @@
                                         ctrls:OverflowableStackPanel.CanOverflow="True"
                                         SelectedBorderBrush="{TemplateBinding BorderBrush}"
                                         MaxWidth="1000"
-                                        BorderThickness="0"
+                                        BorderThickness="1"
+                                        BorderBrush="Transparent"
                                         >
                             <Grid Background="Transparent">
                                 <Grid.Resources>

@@ -70,9 +70,10 @@
     <SolidColorBrush x:Key="{x:Static reskeys:ResourceKeys.HotTrack_BackgroundBrush}"
                      Color="#FFd9eee5" options:Freeze="true" />
 
-    <SolidColorBrush x:Key="{x:Static reskeys:ResourceKeys.HotTrack_HighlightBrush}"
-                     Color="{DynamicResource {x:Static reskeys:ResourceKeys.ControlAccentColorKey}}"
-                     Opacity=".1" options:Freeze="true"
+    <SolidColorBrush x:Key="{ComponentResourceKey TypeInTargetAssembly={x:Type reskeys:ResourceKeys},
+                     ResourceId=HotTrack_HighlightBrush}"
+                     Color="#FFDDDDDD"
+                     options:Freeze="true"
                      />
 
     <!-- This color is applied to the drop down button (Hottrack) when it is selected and the drop down is open -->

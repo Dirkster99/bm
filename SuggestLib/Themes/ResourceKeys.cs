@@ -117,9 +117,14 @@
         public static readonly ComponentResourceKey SuggestComboBoxToggleButtonStyleKey = new ComponentResourceKey(typeof(ResourceKeys), "SuggestComboBoxToggleButtonStyleKey");
 
         /// <summary>
-        /// Item background <see cref="System.Windows.Media.Brush"/> key for selected items in ItemsControls, such as, treeviews, listbox etc.
+        /// Item background <see cref="System.Windows.Media.Brush"/> key for selected or highlighted items in ItemsControls, such as, treeviews, listbox etc.
         /// </summary>
         public static readonly ComponentResourceKey ControlItemBackgroundSelectedKey = new ComponentResourceKey(typeof(ResourceKeys), "ControlItemBackgroundSelectedKey");
+
+        /// <summary>
+        /// Item border <see cref="System.Windows.Media.Brush"/> key for selected or highlighted items in ItemsControls, such as, treeviews, listbox etc.
+        /// </summary>
+        public static readonly ComponentResourceKey ControlItemBorderSelectedKey = new ComponentResourceKey(typeof(ResourceKeys), "ControlItemBorderSelectedKey");
 
         /// <summary>
         /// Item foreground <see cref="System.Windows.Media.Brush"/> key for selected items in ItemsControls, such as, treeviews, listbox etc.

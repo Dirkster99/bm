@@ -145,7 +145,8 @@
                     <Setter Property="HorizontalContentAlignment" Value="{Binding Path=HorizontalContentAlignment,RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}}}"/>
                     <Setter Property="VerticalContentAlignment" Value="{Binding Path=VerticalContentAlignment,RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}}}"/>
                     <Setter Property="Padding" Value="7,2,8,2"/>
-                    <Setter Property="BorderThickness" Value="0" />
+                    <Setter Property="BorderThickness" Value="1" />
+                    <Setter Property="BorderBrush" Value="Transparent"/>
                     <Setter Property="Background" Value="Transparent"/>
                     <Setter Property="Template">
                         <Setter.Value>
@@ -176,8 +177,12 @@
                                         <Setter Property="Foreground" Value="{DynamicResource {x:Static reskeys:ResourceKeys.ControlItemTextSelectedKey}}"/>
                                     </Trigger>
                                     <Trigger Property="IsHighlighted" Value="true">
-                                        <Setter TargetName="Bd" Property="Background" Value="{DynamicResource {x:Static reskeys:ResourceKeys.ControlItemBackgroundSelectedKey}}"/>
-                                        <Setter Property="Foreground" Value="{DynamicResource {x:Static reskeys:ResourceKeys.ControlItemTextSelectedKey}}"/>
+                                        <Setter TargetName="Bd" Property="Background"
+                                                Value="{DynamicResource {x:Static reskeys:ResourceKeys.ControlItemBackgroundSelectedKey}}"/>
+                                        <Setter TargetName="Bd" Property="BorderBrush"
+                                                Value="{DynamicResource {x:Static reskeys:ResourceKeys.ControlItemBorderSelectedKey}}"/>
+                                        <Setter Property="Foreground"
+                                                Value="{DynamicResource {x:Static reskeys:ResourceKeys.ControlItemTextSelectedKey}}"/>
                                     </Trigger>
                                     <Trigger Property="IsEnabled" Value="false">
                                         <Setter Property="Foreground" Value="{DynamicResource ItemTextDisabled}"/>

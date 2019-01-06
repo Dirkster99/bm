@@ -11,6 +11,8 @@
         <Setter Property="BackgroundBrush" Value="{DynamicResource {x:Static reskeys:ResourceKeys.HotTrack_BackgroundBrush}}" />
         <Setter Property="HighlightBrush" Value="{DynamicResource {x:Static reskeys:ResourceKeys.HotTrack_HighlightBrush}}" />
         <Setter Property="ThreeDStyle" Value="{DynamicResource {x:Static reskeys:ResourceKeys.ThreeDStyleBrushes}}" />
+        <Setter Property="BorderBrush" Value="Transparent"/>
+        <Setter Property="BorderThickness" Value="1"/>
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="ctrls:HotTrack">

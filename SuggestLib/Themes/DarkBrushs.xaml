@@ -65,4 +65,9 @@
                      Color="{DynamicResource {x:Static reskeys:ResourceKeys.ControlAccentColorKey}}"
                      options:Freeze="true" />
 
+    <SolidColorBrush x:Key="{ComponentResourceKey TypeInTargetAssembly={x:Type reskeys:ResourceKeys},
+                     ResourceId=ControlItemTextSelectedKey}"
+                     Color="Black"
+                     options:Freeze="true" />
+    
 </ResourceDictionary>
