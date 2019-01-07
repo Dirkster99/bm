@@ -322,7 +322,7 @@
                 Header = _dir.Label;
 
                 // and insert desktop sub-entries into Entries property
-                Entries.SetEntries(UpdateMode.Update,
+                Entries.SetEntries(UpdateMode.Replace,
                     ShellBrowser.GetChildItems(_dir.PathShell)
                                                 // (filter out recycle bin and control panel entries since its not that useful...)
                                                 .Where(d => string.Compare(d.SpecialPathId, KF_IID.ID_FOLDERID_RecycleBinFolder, true) != 0)
