@@ -15,11 +15,6 @@
     using ShellBrowserLib;
     using ShellBrowserLib.IDs;
 
-    public interface IBreadcrumbTreeItemViewModel : IParent
-    {
-
-    }
-
     /// <summary>
     /// Class implements a ViewModel to manage a sub-tree of a Breadcrumb control.
     /// 
