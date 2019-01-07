@@ -2,7 +2,6 @@ namespace BreadcrumbTestLib.ViewModels.Breadcrumbs
 {
     using BmLib.Interfaces;
     using BreadcrumbTestLib.Models;
-    using BreadcrumbTestLib.Tasks;
     using BreadcrumbTestLib.ViewModels.Base;
     using BreadcrumbTestLib.ViewModels.Interfaces;
     using ShellBrowser.Enums;
@@ -450,16 +449,6 @@ namespace BreadcrumbTestLib.ViewModels.Breadcrumbs
                             return true;
 
                         isPathValid = false;
-                        //// var previousLocation = (BreadcrumbSelectedItem as BreadcrumbTreeItemViewModel).GetModel();
-                        //// 
-                        //// // Previous location should be valid if we can re-create the model
-                        //// isPathValid = (ShellBrowser.Create(previousLocation.PathShell) != null);
-                        ////
-                        ////if (isPathValid)
-                        ////{
-                        ////    await NavigateToScheduledAsync(previousLocation, "BreadcrumbViewModel.NavigateTreeViewModel");
-                        ////    return true;
-                        ////}
                     }
                     else
                     {
@@ -480,7 +469,7 @@ namespace BreadcrumbTestLib.ViewModels.Breadcrumbs
 
                         // Verify path existence and re-mount into root item
                         if (pathItems == null)
-                            isPathValid = ShellBrowser.DirectoryExists(navigateToThisLocation, out pathItems);
+                            isPathValid = ShellBrowser.DirectoryExists(navigateToThisLocation, out pathItems, true);
 
                         if (isPathValid == true)
                         {
@@ -488,7 +477,7 @@ namespace BreadcrumbTestLib.ViewModels.Breadcrumbs
                             // So, lets update the tree view based on the string representation.
                             if (pathItems == null)
                             {
-                                var location = ShellBrowser.Create(navigateToThisLocation);
+                                var location = ShellBrowser.Create(navigateToThisLocation, true);
                                 await NavigateToScheduledAsync(location, "BreadcrumbViewModel.NavigateTreeViewModel 0");
                                 return true;
                             }

@@ -22,7 +22,7 @@
 
         [MethodImpl(MethodImplOptions.InternalCall,
             MethodCodeType = MethodCodeType.Runtime)]
-        void GetFolderIds([Out] out IntPtr folders,
+        HRESULT GetFolderIds([Out] out IntPtr folders,
           [Out] out UInt32 count);
 
         [PreserveSig]

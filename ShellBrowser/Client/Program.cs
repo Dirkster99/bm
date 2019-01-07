@@ -2,7 +2,6 @@
 {
     using ShellBrowserLib;
     using ShellBrowserLib.IDs;
-    using ShellBrowserLib.Interfaces;
     using ShellBrowserLib.Shell.Interop.Interfaces.Knownfolders;
     using ShellBrowserLib.Shell.Interop.Knownfolders;
     using System;
@@ -81,7 +80,7 @@
             Console.WriteLine("Listing Canonical Names for all known folders:");
             foreach (var item in KnownFolderHelper.GetAllFolders())
             {
-                Console.WriteLine("Knownfolder {0}", item.CanonicalName);
+                Console.WriteLine("Knownfolder {0}", item.Value.CanonicalName);
             }
 
             // Test service functions ...
@@ -130,26 +129,31 @@
         /// </summary>
         private static void KnownFolder_PhysicalPathExistence()
         {
-            Dictionary<string, string> existingFolders = new Dictionary<string, string>();
-            Dictionary<string, string> nonExistingFolders = new Dictionary<string, string>();
+            var existingFolders = new Dictionary<string, KnownfolderBase>();
+            var nonExistingFolders = new Dictionary<string, KnownfolderBase>();
 
             // Get all IID value pairs defined in KF_IID in one dictionary
             var Ids = KF_IID.GetIdKnownFolders();
 
-            foreach (KeyValuePair<string, string> pair in Ids)
+            foreach (KeyValuePair<string, KnownfolderBase> pair in Ids)
             {
-                var folderid = pair.Value;
-                IDirectoryBrowser[] pathItems;
+                var folderid = pair.Key;
 
-                if (ShellBrowser.DirectoryExists(folderid, out pathItems) == true)
-                    existingFolders.Add(pair.Key, pair.Value);
+                string fs_path = KnownFolderHelper.GetKnownFolderPath(pair.Key);
+                bool exists = false;
+
+                if (fs_path != null)
+                    exists = System.IO.Directory.Exists(fs_path);
+
+                if (exists == true)
+                    existingFolders.Add(pair.Key, new KnownfolderBase(pair.Key,pair.Value.Name, fs_path));
                 else
                     nonExistingFolders.Add(pair.Key, pair.Value);
             }
 
             // Print information on all shell folders that do not exist locally
             Console.WriteLine("Folders NOT existing in file system (is either virtual or has never been created):");
-            foreach (KeyValuePair<string, string> pair in nonExistingFolders)
+            foreach (KeyValuePair<string, KnownfolderBase> pair in nonExistingFolders)
             {
                 var folderid = pair.Value;
 
@@ -160,9 +164,9 @@
             Console.WriteLine("");
             Console.WriteLine("");
             Console.WriteLine("Folders existing in file system:");
-            foreach (KeyValuePair<string, string> pair in existingFolders)
+            foreach (KeyValuePair<string, KnownfolderBase> pair in existingFolders)
             {
-                var folderid = pair.Value;
+                var folderid = pair.Key;
 
                 string path = KnownFolderHelper.GetKnownFolderPath(folderid);
 

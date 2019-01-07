@@ -95,7 +95,7 @@
             {
                 // Win shell path folder
                 IDirectoryBrowser[] path = null;
-                if (ShellBrowserLib.ShellBrowser.DirectoryExists(input, out path))
+                if (ShellBrowserLib.ShellBrowser.DirectoryExists(input, out path, true))
                     return ListChildren(path, PathType.WinShellPath, li);
                 else
                 {
@@ -110,7 +110,7 @@
 
                         // Win shell path folder
                         path = null;
-                        if (ShellBrowserLib.ShellBrowser.DirectoryExists(parentDir, out path))
+                        if (ShellBrowserLib.ShellBrowser.DirectoryExists(parentDir, out path, true))
                             return ListChildren(path, PathType.WinShellPath, li, searchMask);
                     }
                 }
@@ -231,7 +231,7 @@
                                                    LocationIndicator li)
         {
             IDirectoryBrowser[] pathItems = null;
-            if (ShellBrowser.DirectoryExists(input, out pathItems))
+            if (ShellBrowser.DirectoryExists(input, out pathItems, true))
             {
                 if (li != null)
                     li.ResetPath(pathItems);
@@ -247,7 +247,7 @@
                 var searchMask = input.Substring(sepIdx + 1) + "*";
 
                 // Win shell path folder
-                if (ShellBrowser.DirectoryExists(parentDir, out pathItems))
+                if (ShellBrowser.DirectoryExists(parentDir, out pathItems, true))
                 {
                     if (li != null)
                         li.ResetPath(pathItems);

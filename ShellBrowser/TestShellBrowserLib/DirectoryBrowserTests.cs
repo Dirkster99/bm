@@ -65,7 +65,7 @@
             Assert.IsTrue(dirPath != null);
 
             // Lets test the directory browser object with that path
-            var dir = ShellBrowser.Create(dirPath);
+            var dir = ShellBrowser.Create(dirPath, true);
 
             Assert.IsTrue(dir != null);
 

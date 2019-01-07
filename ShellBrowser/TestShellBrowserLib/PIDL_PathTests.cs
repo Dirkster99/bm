@@ -125,7 +125,7 @@
                 Assert.IsFalse(string.IsNullOrEmpty(parseName));
                 Console.WriteLine(parseName);
 
-                var browserItem = ShellBrowser.Create(parseName);
+                var browserItem = ShellBrowser.Create(parseName, true);
                 Assert.IsTrue(browserItem != null);
 
                 Assert.IsTrue(browserItem.EqualsParseName(parseName));
@@ -158,12 +158,12 @@
                 Assert.IsFalse(string.IsNullOrEmpty(parseName));
                 Console.WriteLine(parseName);
 
-                var browserItem = ShellBrowser.Create(parseName);
+                var browserItem = ShellBrowser.Create(parseName,true);
                 Assert.IsTrue(browserItem != null);
 
                 Assert.IsTrue(browserItem.EqualsParseName(parseName));
 
-                var browserItem1 = ShellBrowser.Create(item);
+                var browserItem1 = ShellBrowser.Create(item, true);
                 Assert.IsTrue(browserItem1 != null);
 
                 // Object from PIDL and ParseName should realy describe same location
@@ -191,7 +191,7 @@
                 Assert.IsFalse(string.IsNullOrEmpty(parseName));
                 Console.WriteLine(parseName);
 
-                var browserItem = ShellBrowser.Create(parseName);
+                var browserItem = ShellBrowser.Create(parseName,true);
                 Assert.IsTrue(browserItem != null);
 
                 Assert.IsTrue(browserItem.EqualsParseName(parseName));

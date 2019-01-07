@@ -57,7 +57,7 @@
 
             this.PathSpecialItemId = pathSpecialItemId;
 
-            this.PathFileSystem = (string.IsNullOrEmpty(parseName) ? normPath : parseName);
+            this.PathFileSystem = normPath;
 
             this.IsSpecialFolder = isSpecialID;
             this.ParentIdList = parentIdList;
@@ -190,7 +190,8 @@
         /// for more details.</param>
         /// <returns>Returns a simple pojo type object to initialize
         /// the calling object members.</returns>
-        internal static BrowseItemFromPath InitItemType(string path)
+        internal static BrowseItemFromPath InitItemType(string path,
+                                                        bool bFindKF = false)
         {
             if (string.IsNullOrEmpty(path) == true)   // return unknown references
             {
@@ -210,7 +211,7 @@
             }
 
             ShellHelpers.SpecialPath isSpecialID = ShellHelpers.IsSpecialPath(path);
-            string normPath = null;
+            string normPath = null, SpecialPathId = null;
             bool hasPIDL = false;
             IdList parentIdList, relativeChildIdList;
 
@@ -220,7 +221,10 @@
                 hasPIDL = PidlManager.GetParentIdListFromPath(normPath, out parentIdList, out relativeChildIdList);
             }
             else
+            {
+                SpecialPathId = path;
                 hasPIDL = PidlManager.GetParentIdListFromPath(path, out parentIdList, out relativeChildIdList);
+            }
 
             if (hasPIDL == false)   // return references that cannot resolve with a PIDL
             {
@@ -299,8 +303,11 @@
                     }
                 }
 
-                return InitItemType(path, normPath, parseName, name, labelName,
-                                    parentIdList, relativeChildIdList, fullIdList);
+                if (ShellHelpers.IsSpecialPath(parseName) == ShellHelpers.SpecialPath.None)
+                    normPath = parseName;
+
+                return InitItemType(path, normPath, parseName, name, labelName, SpecialPathId,
+                                    parentIdList, relativeChildIdList, fullIdList, bFindKF);
             }
             finally
             {
@@ -324,18 +331,23 @@
         /// <returns></returns>
         internal static BrowseItemFromPath InitItemType(string parseName,
                                                         string name,
-                                                        string labelName)
+                                                        string labelName,
+                                                        bool bFindKF = false)
         {
             bool hasPIDL = false;
             IdList parentIdList = null;
             IdList relativeChildIdList = null;
 
             string path = parseName;
-            string normPath = null;
+            string normPath = null, SpecialPathId = null;
 
             ShellHelpers.SpecialPath isSpecialID = ShellHelpers.IsSpecialPath(path);
             if (isSpecialID == ShellHelpers.SpecialPath.None)
                 normPath = parseName;
+            else
+            {
+                SpecialPathId = path;
+            }
 
             hasPIDL = PidlManager.GetParentIdListFromPath(path, out parentIdList, out relativeChildIdList);
 
@@ -353,29 +365,32 @@
             if ((parentIdList == null && relativeChildIdList == null) == false)
                 fullIdList = PidlManager.CombineParentChild(parentIdList, relativeChildIdList);
 
-            return InitItemType(path, normPath, parseName, name, labelName,
-                                parentIdList, relativeChildIdList, fullIdList);
+            return InitItemType(path, normPath, parseName, name, labelName, SpecialPathId,
+                                parentIdList, relativeChildIdList, fullIdList, bFindKF);
         }
 
         private static BrowseItemFromPath InitItemType(string path, string normPath,
-                                                        string parseName,
-                                                        string name,
-                                                        string labelName,
-                                                        IdList parentIdList,
-                                                        IdList relativeChildIdList,
-                                                        IdList fullIdList = null
+                                                       string parseName,
+                                                       string name,
+                                                       string labelName, string SpecialPathId,
+                                                       IdList parentIdList,
+                                                       IdList relativeChildIdList,
+                                                       IdList fullIdList = null,
+                                                       bool bFindKF = false
                                                 )
         {
             PathHandler pathType = PathHandler.Unknown;
             DirectoryItemFlags itemType = DirectoryItemFlags.Unknown;
 
-            var specialPath = ShellHelpers.IsSpecialPath(parseName);
-
-            if (specialPath == ShellHelpers.SpecialPath.IsSpecialPath ||
-                specialPath == ShellHelpers.SpecialPath.ContainsSpecialPath)
-                parseName = null;
-            else
+            ShellHelpers.SpecialPath specialPath = ShellHelpers.SpecialPath.None;
+            if (normPath != null)
             {
+                specialPath = ShellHelpers.IsSpecialPath(normPath);
+            }
+
+            if (specialPath == ShellHelpers.SpecialPath.None)
+            {
+                // TODO XXX Always evaluate on NormPath???
                 try
                 {
                     bool pathExists = false;
@@ -451,11 +466,14 @@
                     PidlManager.CombineParentChild(parentIdList, relativeChildIdList);
             }
 
-            GetKnownFolder(fullIdList, ref pathType,
-                                       ref itemType,
-                                       ref props,
-                                       ref isSpecialFolder,
-                                       ref pathSpecialItemId);
+            if (SpecialPathId != null || bFindKF == true)
+            {
+                GetKnownFolder(fullIdList, ref pathType,
+                                           ref itemType,
+                                           ref props,
+                                           ref isSpecialFolder,
+                                           ref pathSpecialItemId);
+            }
 
             // Initialize a normal file system path item or special folder item
             return new BrowseItemFromPath(path, normPath, isSpecialFolder,

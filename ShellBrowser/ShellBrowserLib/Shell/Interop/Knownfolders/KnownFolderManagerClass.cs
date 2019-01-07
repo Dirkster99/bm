@@ -6,6 +6,9 @@
     using System.Runtime.CompilerServices;
     using System.Runtime.InteropServices;
 
+    /// <summary>
+    /// https://docs.microsoft.com/en-us/windows/desktop/api/shobjidl_core/nn-shobjidl_core-iknownfoldermanager
+    /// </summary>
     [ComImport]
     [Guid("4df0c730-df9d-4ae3-9153-aa6b82e9795a")]
     internal class KnownFolderManagerClass : IKnownFolderManager
@@ -21,9 +24,15 @@
             [In, MarshalAs(UnmanagedType.LPStruct)] Guid id,
             [Out] out int csidl);
 
+        /// <summary>
+        /// Gets an array of all registered known folder IDs.
+        /// This can be used in enumerating all known folders.
+        /// </summary>
+        /// <param name="folders"></param>
+        /// <param name="count"></param>
         [MethodImpl(MethodImplOptions.InternalCall,
             MethodCodeType = MethodCodeType.Runtime)]
-        public virtual extern void GetFolderIds(
+        public virtual extern HRESULT GetFolderIds(
             [Out] out IntPtr folders,
             [Out] out UInt32 count);
 

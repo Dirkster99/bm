@@ -22,6 +22,8 @@
         /// The Special case <see cref="SpecialPath.ContainsSpecialPath"/> indicates
         /// a path that contains a special folderid together with something else and
         /// is, therefore, likely to require more processing than just retireving a folder.
+        /// 
+        /// &lt;Drive>:\Users\&lt;User>\Desktop" -> ::{B4BFCC3A-DB2C-424C-B029-7FE99A87C641}"
         /// </summary>
         /// <param name="path"></param>
         /// <returns></returns>
@@ -30,7 +32,7 @@
             if (string.IsNullOrEmpty(path) == true)
                 return SpecialPath.None;
 
-            if (path.Length == (KF_IID.IID_Prefix.Length + KF_ID.ID_Length))
+            if (path.Length == (KF_IID.IID_Prefix.Length + 38))
             {
                 if (path.Substring(0, KF_IID.IID_Prefix.Length) == KF_IID.IID_Prefix)
                     return SpecialPath.IsSpecialPath;

@@ -143,14 +143,15 @@
         /// </summary>
         /// <param name="fullPath"></param>
         /// <returns></returns>
-        public static IDirectoryBrowser Create(string fullPath)
+        public static IDirectoryBrowser Create(string fullPath,
+                                               bool bFindKF = false)
         {
             if (string.IsNullOrEmpty(fullPath) == true)
                 throw new System.ArgumentNullException("path cannot be null or empty");
 
             try
             {
-                var itemModel = BrowseItemFromPath.InitItemType(fullPath);
+                var itemModel = BrowseItemFromPath.InitItemType(fullPath, bFindKF);
 
                 return new DirectoryBrowser(itemModel);
             }
@@ -214,7 +215,8 @@
         /// </summary>
         /// <param name="fullPidl"></param>
         /// <returns></returns>
-        public static IDirectoryBrowser Create(IdList fullPidl)
+        public static IDirectoryBrowser Create(IdList fullPidl,
+                                               bool bFindKF = false)
         {
             if (fullPidl == null)
                 return Create(KF_IID.ID_FOLDERID_Desktop);
@@ -227,7 +229,7 @@
             if (string.IsNullOrEmpty(parseName) == true)
                 return null;
 
-            return Create(parseName);
+            return Create(parseName, bFindKF);
         }
 
         /// <summary>
@@ -482,7 +484,7 @@
 
             if (ShellBrowser.IsTypeOf(newPath) == PathType.WinShellPath)
             {
-                // Search root under desktop and return shorted possible number of items
+                // Search root under desktop and return shortest possible number of items
                 for (int idx = pathItems.Length-1; idx >= 0; idx--)
                 {
                     var dpItems = ShellBrowser.GetChildItems(KF_IID.ID_FOLDERID_Desktop, pathItems[idx].Name);
@@ -499,8 +501,51 @@
             string pathExt = null;
             if (ShellBrowser.IsParentPathOf(desktop.PathFileSystem, newPath, out pathExt))
             {
-                // Search root under desktop
-                int idx = ShellBrowser.FindCommonRoot(pathItems, desktop.PathFileSystem, out pathExt);
+                int idx = -1;
+
+                // Is this path under desktop but desktop burried in the middle of it?
+                // Eg 'C:', 'Users', '<User>', 'Desktop', 'Folder', 'SubFolder'
+                if (pathItems.Length > 1)
+                {
+                    for (int i = 0; i < pathItems.Length; i++)
+                    {
+                        if ((pathItems[i].ItemType & DirectoryItemFlags.Desktop) != 0)
+                        {
+                            idx = i;
+                            break;
+                        }
+                    }
+
+                    if (idx >= 0 && idx == pathItems.Length - 1)
+                    {
+                        // Requested location is desktop itself, so we return 'ThisPC','Desktop'
+                        var retArr = new IDirectoryBrowser[2];
+                        retArr[0] = ShellBrowser.MyComputer;
+
+                        var dpItems = ShellBrowser.GetChildItems(retArr[0].SpecialPathId, desktop.Name);
+                        if (dpItems.Any())
+                        {
+                            retArr[1] = dpItems.First();
+
+                            return retArr;
+                        }
+                    }
+
+                    if (idx >= 0)
+                    {
+                        // Return remaining path but skip desktop
+                        // since items under desktop are ROOTED items
+                        for (int i = idx + 1; i < pathItems.Length; i++)
+                            newRoot.Add(pathItems[i].Clone() as IDirectoryBrowser);
+
+                        return newRoot.ToArray();
+                    }
+                }
+
+                IDirectoryBrowser[] arrDesktop = new IDirectoryBrowser[1] { desktop };
+
+                // Search root under desktop based on pathItems.Length == 1
+                idx = ShellBrowser.FindCommonRoot(arrDesktop, newPath, out pathExt);
 
                 if (idx >= 0)
                 {
@@ -513,7 +558,7 @@
                     }
                 }
 
-                if (idx > 0)
+                if (idx >= 0)
                 {
                     var dpItems = ShellBrowser.GetChildItems(KF_IID.ID_FOLDERID_Desktop, pathItems[idx].Name);
                     if (dpItems.Any())
@@ -614,7 +659,9 @@
         /// <param name="path"></param>
         /// <param name="pathItems"></param>
         /// <returns>Returns true if item has a filesystem path otherwise false.</returns>
-        public static bool DirectoryExists(string path, out IDirectoryBrowser[] pathItems)
+        public static bool DirectoryExists(string path,
+                                           out IDirectoryBrowser[] pathItems,
+                                           bool bFindKF = false)
         {
             pathItems = null;
                 
@@ -633,7 +680,7 @@
                         bool exists = System.IO.Directory.Exists(fs_path);
 
                         if (exists)
-                            pathItems = GetFileSystemPathItems(fs_path);
+                            pathItems = GetFileSystemPathItems(fs_path, bFindKF);
 
                         return exists;
                     }
@@ -657,7 +704,7 @@
                         bool exists = System.IO.Directory.Exists(path);
 
                         if (exists)
-                            pathItems = GetFileSystemPathItems(path);
+                            pathItems = GetFileSystemPathItems(path, bFindKF);
 
                         return exists;
                     }
@@ -689,7 +736,8 @@
         /// </summary>
         /// <param name="fs_path">The file system path to be resolved.</param>
         /// <returns></returns>
-        public static IDirectoryBrowser[] GetFileSystemPathItems(string fs_path)
+        public static IDirectoryBrowser[] GetFileSystemPathItems(string fs_path,
+                                                                 bool bFindKF = false)
         {
             try
             {
@@ -703,7 +751,7 @@
                     else
                         currentPath = System.IO.Path.Combine(currentPath, dirs[i]);
 
-                    dirItems[i] = ShellBrowser.Create(currentPath);
+                    dirItems[i] = ShellBrowser.Create(currentPath, bFindKF);
                 }
 
                 return dirItems;

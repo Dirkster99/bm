@@ -327,21 +327,20 @@
         /// Gets a strongly-typed read-only collection of all the registered known folders.
         /// </summary>
         /// <returns></returns>
-        public static ReadOnlyCollection<IKnownFolderProperties> GetAllFolders()
+        public static Dictionary<Guid, IKnownFolderProperties> GetAllFolders()
         {
             // Should this method be thread-safe?? (It'll take a while
             // to get a list of all the known folders, create the managed wrapper
             // and return the read-only collection.
-
-            SortedList<string, IKnownFolderProperties> foldersList = new SortedList<string, IKnownFolderProperties>();
+            var foldersList = new Dictionary<Guid, IKnownFolderProperties>();
+            var pathList = new Dictionary<string, IKnownFolderProperties>();
             uint count;
             IntPtr folders = IntPtr.Zero;
 
             try
             {
-
                 KnownFolderManagerClass knownFolderManager = new KnownFolderManagerClass();
-                knownFolderManager.GetFolderIds(out folders, out count);
+                var result = knownFolderManager.GetFolderIds(out folders, out count);
 
                 if (count > 0 && folders != IntPtr.Zero)
                 {
@@ -363,7 +362,12 @@
                                 // Add to our collection if it's not null (some folders might not exist on the system
                                 // or we could have an exception that resulted in the null return from above method call
                                 if (kf != null)
-                                    foldersList.Add(kf.CanonicalName, kf);
+                                {
+                                    foldersList.Add(kf.FolderId, kf);
+
+                                    if (kf.IsExistsInFileSystem == true)
+                                        pathList.Add(kf.Path, kf);
+                                }
                             }
                         }
                         catch { }
@@ -376,7 +380,7 @@
                     Marshal.FreeCoTaskMem(folders);
             }
 
-            return new ReadOnlyCollection<IKnownFolderProperties>(foldersList.Values);
+            return foldersList;
         }
 
         /// <summary>
@@ -397,13 +401,14 @@
                 using (var kf = KnownFolderHelper.FromKnownFolderGuid(kf_guid))
                 {
                     if (kf != null)
-                    {
                         return kf.GetPath();
-                    }
                 }
 
             }
-            catch { }
+            catch
+            {
+                // Guard: in case the caller has passed an invalid id we return null.
+            }
 
             return null;
         }
