@@ -20,6 +20,50 @@
     using System.Linq;
     using global::ShellBrowser.Enums;
 
+    public class DirectoryBrowserStageZero
+    {
+        #region ctors
+        /// <summary>
+        /// Parameterized class constructor
+        /// </summary>
+        public DirectoryBrowserStageZero(int parId,
+                                         string itemPath,
+
+                                         string parName,
+                                         string parParseName,
+                                         string parLabelName)
+            : this()
+        {
+            ID = parId;
+            ItemPath = itemPath;
+            Name = parName;
+            ParseName = parParseName;
+            LabelName = parLabelName;
+        }
+
+        /// <summary>
+        /// Hidden class constructor
+        /// </summary>
+        protected DirectoryBrowserStageZero()
+        {
+        }
+        #endregion ctors
+
+        #region properties
+        public int ID { get; }
+        public object ItemPath { get; }
+
+        public string Name { get; }
+        public string ParseName { get; }
+        public string LabelName { get; }
+        #endregion properties
+
+        #region methods
+
+        #endregion methods
+    }
+
+
     /// <summary>
     /// Implements core API type methods and properties that are used to interact
     /// with Windows Shell Items (folders and known folders).
@@ -142,6 +186,7 @@
         /// Exception being thrown.
         /// </summary>
         /// <param name="fullPath"></param>
+        /// <param name="bFindKF"></param>
         /// <returns></returns>
         public static IDirectoryBrowser Create(string fullPath,
                                                bool bFindKF = false)
@@ -186,7 +231,7 @@
         /// <param name="labelName"></param>
         /// <param name="name"></param>
         /// <returns></returns>
-        private static IDirectoryBrowser Create(string parseName,
+        public static IDirectoryBrowser Create(string parseName,
                                                string name,
                                                string labelName)
         {
@@ -485,7 +530,7 @@
             if (ShellBrowser.IsTypeOf(newPath) == PathType.WinShellPath)
             {
                 // Search root under desktop and return shortest possible number of items
-                for (int idx = pathItems.Length-1; idx >= 0; idx--)
+                for (int idx = pathItems.Length - 1; idx >= 0; idx--)
                 {
                     var dpItems = ShellBrowser.GetChildItems(KF_IID.ID_FOLDERID_Desktop, pathItems[idx].Name);
                     if (dpItems.Any())
@@ -551,7 +596,7 @@
                 {
                     if ((pathItems[idx].ItemType & DirectoryItemFlags.Desktop) != 0)
                     {
-                        if (idx < (pathItems.Length-1))
+                        if (idx < (pathItems.Length - 1))
                             idx++;
                         else
                             idx = -1; // Find Desktop under ThisPC/file system test below
@@ -664,7 +709,7 @@
                                            bool bFindKF = false)
         {
             pathItems = null;
-                
+
             if (string.IsNullOrEmpty(path))
                 return false;
 
@@ -1083,5 +1128,172 @@
             return dirOrfilePath;
         }
         #endregion methods
+
+        public static IEnumerable<DirectoryBrowserStageZero> GetStageZeroChildItems(string folderParseName,
+                                                                                    string searchMask = null,
+                                                                                    SubItemFilter itemFilter = SubItemFilter.NameOnly)
+        {
+            if (string.IsNullOrEmpty(folderParseName) == true)
+                yield break;
+
+            // Defines the type of items that we want to retieve below the item passed in
+            const SHCONTF flags = SHCONTF.FOLDERS | SHCONTF.INCLUDEHIDDEN | SHCONTF.FASTITEMS;
+
+            //  Get the desktop root folder.
+            IntPtr enumerator = default(IntPtr);
+            IntPtr pidlFull = default(IntPtr);
+            IntPtr ptrFolder = default(IntPtr);
+            IShellFolder2 iFolder = null;
+            IEnumIDList enumIDs = null;
+            IntPtr ptrStr = default(IntPtr);      // Fetch parse name for this item
+            try
+            {
+                HRESULT hr;
+
+                if (KF_IID.ID_FOLDERID_Desktop.Equals(folderParseName, StringComparison.InvariantCultureIgnoreCase))
+                    hr = NativeMethods.SHGetDesktopFolder(out ptrFolder);
+                else
+                {
+                    pidlFull = ShellHelpers.PidlFromParsingName(folderParseName);
+
+                    if (pidlFull == default(IntPtr)) // 2nd chance try known folders
+                    {
+                        using (var kf = KnownFolderHelper.FromPath(folderParseName))
+                        {
+                            if (kf != null)
+                                kf.Obj.GetIDList(KNOWN_FOLDER_FLAG.KF_NO_FLAGS, out pidlFull);
+                        }
+                    }
+
+                    if (pidlFull == default(IntPtr))
+                        yield break;
+
+                    using (var desktopFolder = new ShellFolderDesktop())
+                    {
+                        hr = desktopFolder.Obj.BindToObject(pidlFull, IntPtr.Zero,
+                                                            typeof(IShellFolder2).GUID,
+                                                            out ptrFolder);
+                    }
+                }
+
+                if (hr != HRESULT.S_OK)
+                    yield break;
+
+                if (ptrFolder != IntPtr.Zero)
+                    iFolder = (IShellFolder2)Marshal.GetTypedObjectForIUnknown(ptrFolder, typeof(IShellFolder2));
+
+                if (iFolder == null)
+                    yield break;
+
+                //  Create an enumerator and enumerate over each item.
+                hr = iFolder.EnumObjects(IntPtr.Zero, flags, out enumerator);
+
+                if (hr != HRESULT.S_OK)
+                    yield break;
+
+                // Convert enum IntPtr to interface
+                enumIDs = (IEnumIDList)Marshal.GetTypedObjectForIUnknown(enumerator, typeof(IEnumIDList));
+
+                if (enumIDs == null)
+                    yield break;
+
+                FilterMask filter = null;
+                if (searchMask != null)
+                    filter = new FilterMask(searchMask);
+
+                uint fetched, count = 0;
+                IntPtr apidl = default(IntPtr);
+
+                // Allocate memory to convert parsing names into .Net strings efficiently below
+                ptrStr = Marshal.AllocCoTaskMem(NativeMethods.MAX_PATH * 2 + 4);
+                Marshal.WriteInt32(ptrStr, 0, 0);
+                StringBuilder strbuf = new StringBuilder(NativeMethods.MAX_PATH);
+                int index = 0;
+
+                // Get one item below root item at a time and process by getting its display name
+                // PITEMID_CHILD: The ITEMIDLIST is an allocated child ITEMIDLIST relative to
+                // a parent folder, such as a result of IEnumIDList::Next.
+                // It contains exactly one SHITEMID structure (https://docs.microsoft.com/de-de/windows/desktop/api/shtypes/ns-shtypes-_itemidlist)
+                for (; enumIDs.Next(1, out apidl, out fetched) == HRESULT.S_OK; count++)
+                {
+                    if (fetched <= 0)  // End this loop if no more items are available
+                        break;
+
+                    try
+                    {
+                        string name = string.Empty;
+                        bool bFilter = false;
+                        if (iFolder.GetDisplayNameOf(apidl, SHGDNF.SHGDN_INFOLDER | SHGDNF.SHGDN_FOREDITING, ptrStr) == HRESULT.S_OK)
+                        {
+                            NativeMethods.StrRetToBuf(ptrStr, default(IntPtr),
+                                                      strbuf, NativeMethods.MAX_PATH);
+
+                            name = strbuf.ToString();
+                        }
+
+                        // Skip this item if search parameter is set and this appears to be a non-match
+                        if (filter != null)
+                        {
+                            if (filter.MatchFileMask(name) == false)
+                            {
+                                if (itemFilter == SubItemFilter.NameOnly) // Filter items on Names only
+                                    continue;
+
+                                bFilter = true;
+                            }
+                        }
+
+                        string parseName = string.Empty;
+                        if (iFolder.GetDisplayNameOf(apidl, SHGDNF.SHGDN_FORPARSING, ptrStr) == HRESULT.S_OK)
+                        {
+                            NativeMethods.StrRetToBuf(ptrStr, default(IntPtr),
+                                                      strbuf, NativeMethods.MAX_PATH);
+
+                            parseName = strbuf.ToString();
+                        }
+
+                        // Skip this item if search parameter is set and this appears to be a non-match
+                        if (filter != null)
+                        {
+                            if (filter.MatchFileMask(parseName) == false && bFilter == true)
+                                continue;
+                        }
+
+                        string labelName = string.Empty;
+                        if (iFolder.GetDisplayNameOf(apidl, SHGDNF.SHGDN_NORMAL, ptrStr) == HRESULT.S_OK)
+                        {
+                            NativeMethods.StrRetToBuf(ptrStr, default(IntPtr),
+                                                      strbuf, NativeMethods.MAX_PATH);
+
+                            labelName = strbuf.ToString();
+                        }
+
+                        IdList apidlIdList = PidlManager.PidlToIdlist(apidl);
+
+                        yield return new DirectoryBrowserStageZero(index++, folderParseName, parseName, name, labelName);
+                    }
+                    finally
+                    {
+                        apidl = PidlManager.FreeCoTaskMem(apidl);
+                    }
+                }
+            }
+            finally
+            {
+                if (enumIDs != null)
+                    Marshal.ReleaseComObject(enumIDs);
+
+                if (enumerator != default(IntPtr))
+                    Marshal.Release(enumerator);
+
+                if (iFolder != null)
+                    Marshal.ReleaseComObject(iFolder);
+
+                if (ptrFolder != default(IntPtr))
+                    Marshal.Release(ptrFolder);
+
+                ptrStr = PidlManager.FreeCoTaskMem(ptrStr);
+            }
+        }
     }
 }

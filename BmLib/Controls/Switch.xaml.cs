@@ -100,7 +100,7 @@
 
         /// <summary>
         /// Gets/sets whether the <see cref="Switch"/> control that can host 2 controls
-        /// can currently by switched by the user (by clicking the left most root toggle
+        /// can currently be switched by the user (by clicking the left most root toggle
         /// button) or not.
         /// </summary>
         public bool CanSwitchContent

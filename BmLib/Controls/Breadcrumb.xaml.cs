@@ -8,7 +8,6 @@
     using System.Collections;
     using System.Collections.Generic;
     using System.ComponentModel;
-    using System.Diagnostics;
     using System.Linq;
     using System.Threading.Tasks;
     using System.Windows;
@@ -303,8 +302,15 @@
                 if (_SwitchCommand == null)
                 {
                     _SwitchCommand = new Base.RelayCommand<object>(
-                        async (p) => await SwitchCommandExecutedAsync(p)
-                      , (p) => IsSwitchEnabled // whether switch command can execute or not
+
+                        async (p) =>
+                        {
+                            if (IsSwitchEnabled == true)
+                                await SwitchCommandExecutedAsync(p);
+                        }
+                        // Not using this since this would disable the button and the complete switch
+                        // but the hosted contorl (treeview) should be usable when this is set to false.
+                        //, (p) => IsSwitchEnabled // whether switch command can execute or not
                     );
                 }
 

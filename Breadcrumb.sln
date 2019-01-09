@@ -46,6 +46,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ThemedSuggestBoxDemo", "Dem
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PerformanceTestClient", "ShellBrowser\PerformanceTestClient\PerformanceTestClient.csproj", "{FF9EEC41-56B0-4142-B0F0-9612B1EDA355}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WpfPerformance", "WpfPerformance\WpfPerformance.csproj", "{A7CFAE94-B84A-4DD1-A54B-7637A59B8B67}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -258,6 +260,18 @@ Global
 		{FF9EEC41-56B0-4142-B0F0-9612B1EDA355}.Release|x64.Build.0 = Release|Any CPU
 		{FF9EEC41-56B0-4142-B0F0-9612B1EDA355}.Release|x86.ActiveCfg = Release|Any CPU
 		{FF9EEC41-56B0-4142-B0F0-9612B1EDA355}.Release|x86.Build.0 = Release|Any CPU
+		{A7CFAE94-B84A-4DD1-A54B-7637A59B8B67}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A7CFAE94-B84A-4DD1-A54B-7637A59B8B67}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A7CFAE94-B84A-4DD1-A54B-7637A59B8B67}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{A7CFAE94-B84A-4DD1-A54B-7637A59B8B67}.Debug|x64.Build.0 = Debug|Any CPU
+		{A7CFAE94-B84A-4DD1-A54B-7637A59B8B67}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{A7CFAE94-B84A-4DD1-A54B-7637A59B8B67}.Debug|x86.Build.0 = Debug|Any CPU
+		{A7CFAE94-B84A-4DD1-A54B-7637A59B8B67}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A7CFAE94-B84A-4DD1-A54B-7637A59B8B67}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A7CFAE94-B84A-4DD1-A54B-7637A59B8B67}.Release|x64.ActiveCfg = Release|Any CPU
+		{A7CFAE94-B84A-4DD1-A54B-7637A59B8B67}.Release|x64.Build.0 = Release|Any CPU
+		{A7CFAE94-B84A-4DD1-A54B-7637A59B8B67}.Release|x86.ActiveCfg = Release|Any CPU
+		{A7CFAE94-B84A-4DD1-A54B-7637A59B8B67}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -280,6 +294,7 @@ Global
 		{24AE0C23-875A-4718-BF04-2CCEC08DEF05} = {CE4D1B55-5B70-4753-8CC6-17C4DC79C11A}
 		{6D9EE64D-07A4-4C8A-B5F0-0D59DD525A52} = {E5B93A3B-845A-447E-B730-E7074E8D2B7A}
 		{FF9EEC41-56B0-4142-B0F0-9612B1EDA355} = {CE4D1B55-5B70-4753-8CC6-17C4DC79C11A}
+		{A7CFAE94-B84A-4DD1-A54B-7637A59B8B67} = {CE4D1B55-5B70-4753-8CC6-17C4DC79C11A}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {BF54795A-160E-4272-A394-F23A4AA5AF62}
