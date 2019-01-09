@@ -5,16 +5,23 @@
     xmlns:reskeys="clr-namespace:BmLib.Themes"
     >
 
-  <Style x:Key="{x:Type ctrls:DropDownList}" TargetType="{x:Type ctrls:DropDownList}">
-    <Setter Property="Background" Value="{DynamicResource {x:Static reskeys:ResourceKeys.ControlInputBackgroundKey}}" />
-    <Setter Property="Foreground" Value="{DynamicResource {x:Static reskeys:ResourceKeys.ControlTextBrushKey}}" />
-    <Setter Property="BorderBrush" Value="{DynamicResource {x:Static reskeys:ResourceKeys.ControlInputBorderKey}}" />
-    <Setter Property="HeaderButtonTemplate" Value="{DynamicResource {x:Static reskeys:ResourceKeys.BaseToggleButton}}" />
-    <Setter Property="BorderThickness" Value="1" />
-    <Setter Property="Template">
-      <Setter.Value>
-        <ControlTemplate TargetType="{x:Type ctrls:DropDownList}">
-          <ctrls:DropDown IsDropDownOpen="{Binding IsDropDownOpen, Mode=TwoWay, RelativeSource={RelativeSource TemplatedParent}}"
+    <Style x:Key="{x:Type ctrls:DropDownList}" TargetType="{x:Type ctrls:DropDownList}">
+        <Setter Property="Background" Value="{DynamicResource {x:Static reskeys:ResourceKeys.ControlInputBackgroundKey}}" />
+        <Setter Property="Foreground" Value="{DynamicResource {x:Static reskeys:ResourceKeys.ControlTextBrushKey}}" />
+        <Setter Property="BorderBrush" Value="{DynamicResource {x:Static reskeys:ResourceKeys.ControlInputBorderKey}}" />
+        <Setter Property="HeaderButtonTemplate" Value="{DynamicResource {x:Static reskeys:ResourceKeys.BaseToggleButton}}" />
+        <Setter Property="BorderThickness" Value="1" />
+        <Setter Property="ItemsPanel">
+            <Setter.Value>
+                <ItemsPanelTemplate>
+                    <VirtualizingStackPanel/>
+                </ItemsPanelTemplate>
+            </Setter.Value>
+        </Setter>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type ctrls:DropDownList}">
+                    <ctrls:DropDown IsDropDownOpen="{Binding IsDropDownOpen, Mode=TwoWay, RelativeSource={RelativeSource TemplatedParent}}"
                           Background="{TemplateBinding Background}"
                           BorderBrush="{TemplateBinding BorderBrush}"
                           BorderThickness="{TemplateBinding BorderThickness}" 
@@ -27,14 +34,14 @@
                           Header="{Binding Header,RelativeSource={RelativeSource TemplatedParent}}"
                           HeaderButtonTemplate="{Binding HeaderButtonTemplate,RelativeSource={RelativeSource TemplatedParent}}"            
           >
-          <ItemsPresenter x:Name="ItemsPresenter" 
+                        <ItemsPresenter x:Name="ItemsPresenter" 
                           KeyboardNavigation.DirectionalNavigation="Contained" 
                           SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"/>
-        </ctrls:DropDown>
+                    </ctrls:DropDown>
 
-        </ControlTemplate>
-      </Setter.Value>
-    </Setter>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
         <Setter Property="ItemContainerStyle">
             <Setter.Value>
                 <Style TargetType="{x:Type ComboBoxItem}" BasedOn="{StaticResource {x:Type ComboBoxItem}}" >
@@ -52,6 +59,6 @@
                 </Style>
             </Setter.Value>
         </Setter>
-  </Style>
+    </Style>
 
 </ResourceDictionary>
