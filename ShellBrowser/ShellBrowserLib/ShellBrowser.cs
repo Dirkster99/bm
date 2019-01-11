@@ -70,7 +70,16 @@
     /// </summary>
     public static class ShellBrowser
     {
+        #region MyRegion
+        static ShellBrowser()
+        {
+            KnownFileSystemFolders = new Dictionary<string, IDirectoryBrowser>();
+        }
+        #endregion
+
         #region properties
+        public static Dictionary<string, IDirectoryBrowser> KnownFileSystemFolders { get; }
+
         /// <summary>
         /// Gets the default system drive - usually 'C:\'.
         /// </summary>
@@ -196,6 +205,15 @@
 
             try
             {
+                // Try to locate a known folder by its directory path in the file system
+                if (ShellHelpers.IsSpecialPath(fullPath) == ShellHelpers.SpecialPath.None)
+                {
+                    var item = ShellBrowser.FindKnownFolderByFileSystemPath(fullPath);
+
+                    if (item != null)
+                        return item;
+                }
+
                 var itemModel = BrowseItemFromPath.InitItemType(fullPath, bFindKF);
 
                 return new DirectoryBrowser(itemModel);
@@ -240,6 +258,15 @@
 
             try
             {
+                // Try to locate a known folder by its directory path in the file system
+                if (ShellHelpers.IsSpecialPath(parseName) == ShellHelpers.SpecialPath.None)
+                {
+                    var item = ShellBrowser.FindKnownFolderByFileSystemPath(parseName);
+
+                    if (item != null)
+                        return item;
+                }
+
                 var itemModel = BrowseItemFromPath.InitItemType(parseName, name, labelName);
 
                 return new DirectoryBrowser(itemModel);
@@ -365,6 +392,7 @@
                 ptrStr = Marshal.AllocCoTaskMem(NativeMethods.MAX_PATH * 2 + 4);
                 Marshal.WriteInt32(ptrStr, 0, 0);
                 StringBuilder strbuf = new StringBuilder(NativeMethods.MAX_PATH);
+                var desktop = ShellBrowser.DesktopDirectory;
 
                 // Get one item below root item at a time and process by getting its display name
                 // PITEMID_CHILD: The ITEMIDLIST is an allocated child ITEMIDLIST relative to
@@ -520,12 +548,70 @@
         /// <param name="newPath"></param>
         /// <returns></returns>
         public static IDirectoryBrowser[] FindRoot(IDirectoryBrowser[] pathItems,
-                                                   string newPath)
+                                                   string newPath,
+                                                   out bool pathIsRouted)
         {
+            pathIsRouted = false;
             bool foundRoot = false;
             List<IDirectoryBrowser> newRoot = new List<IDirectoryBrowser>();
 
             var desktop = ShellBrowser.DesktopDirectory;
+
+            if (pathItems.Length >= 1)
+            {
+                // Is the desktop already part of the indicated location?
+                for (int i = 0; i < pathItems.Length; i++)
+                {
+                    if (desktop.Equals(pathItems[i]) == true)
+                    {
+                        for (int j = i+1; j < pathItems.Length; j++)
+                            newRoot.Add(pathItems[j].Clone() as IDirectoryBrowser);
+
+                        if (newRoot.Count == 0)
+                        {
+                            newRoot.Add(ShellBrowser.MyComputer);
+                            newRoot.Add(ShellBrowser.DesktopDirectory);
+                        }
+
+                        pathIsRouted = true;
+                        return newRoot.ToArray();
+                    }
+                }
+
+                // Search this item under desktop root
+                for (int i = pathItems.Length-1; i >= 0 ; i--)
+                {
+                    var it = ShellBrowser.GetChildItems(KF_IID.ID_FOLDERID_Desktop, pathItems[i].Name);
+                    if (it.Any())
+                    {
+                        // This is rooted so we just return it as is
+                        if (pathItems[i].Equals(it.First()) == true)
+                        {
+                            for (int j = i; j < pathItems.Length; j++)
+                                newRoot.Add(pathItems[j].Clone() as IDirectoryBrowser);
+
+                            pathIsRouted = true;
+                            return newRoot.ToArray();
+                        }
+                    }
+                }
+
+                // Can we find it under ThisPC? then return it with ThisPC on top
+                var itms = ShellBrowser.GetChildItems(KF_IID.ID_FOLDERID_ComputerFolder, pathItems[0].Name);
+                if (itms.Any())
+                {
+                    if (pathItems[0].Equals(itms.First()) == true)
+                    {
+                        newRoot.Add(ShellBrowser.MyComputer);
+
+                        for (int i = 0; i < pathItems.Length; i++)
+                            newRoot.Add(pathItems[i].Clone() as IDirectoryBrowser);
+
+                        pathIsRouted = true;
+                        return newRoot.ToArray();
+                    }
+                }
+            }
 
             if (ShellBrowser.IsTypeOf(newPath) == PathType.WinShellPath)
             {
@@ -538,6 +624,7 @@
                         for (int i = idx; i < pathItems.Length; i++)
                             newRoot.Add(pathItems[i].Clone() as IDirectoryBrowser);
 
+                        pathIsRouted = true;
                         return newRoot.ToArray();
                     }
                 }
@@ -583,6 +670,7 @@
                         for (int i = idx + 1; i < pathItems.Length; i++)
                             newRoot.Add(pathItems[i].Clone() as IDirectoryBrowser);
 
+                        pathIsRouted = true;
                         return newRoot.ToArray();
                     }
                 }
@@ -611,6 +699,7 @@
                         for (int i = idx; i < pathItems.Length; i++)
                             newRoot.Add(pathItems[i].Clone() as IDirectoryBrowser);
 
+                        pathIsRouted = true;
                         return newRoot.ToArray();
                     }
                 }
@@ -639,6 +728,7 @@
                             for (int i = idx; i < pathItems.Length; i++)
                                 newRoot.Add(pathItems[i].Clone() as IDirectoryBrowser);
 
+                            pathIsRouted = true;
                             return newRoot.ToArray();
                         }
                     }
@@ -660,6 +750,7 @@
             for (int i = 0; i < pathItems.Length; i++) //Join path to root and return to sender
                 newRoot.Add(pathItems[i].Clone() as IDirectoryBrowser);
 
+            pathIsRouted = true;
             return newRoot.ToArray();
         }
 
@@ -1294,6 +1385,87 @@
 
                 ptrStr = PidlManager.FreeCoTaskMem(ptrStr);
             }
+        }
+
+        /// <summary>
+        /// Gets a strongly-typed read-only collection of all the registered known folders.
+        /// </summary>
+        /// <returns></returns>
+        public static Dictionary<string, IDirectoryBrowser> GetAllKnownFolders()
+        {
+            // Should this method be thread-safe?? (It'll take a while
+            // to get a list of all the known folders, create the managed wrapper
+            // and return the read-only collection.
+            var pathList = new Dictionary<string, IDirectoryBrowser>();
+            uint count;
+            IntPtr folders = IntPtr.Zero;
+
+            try
+            {
+                KnownFolderManagerClass knownFolderManager = new KnownFolderManagerClass();
+                var result = knownFolderManager.GetFolderIds(out folders, out count);
+
+                if (count > 0 && folders != IntPtr.Zero)
+                {
+                    // Loop through all the KnownFolderID elements
+                    for (int i = 0; i < count; i++)
+                    {
+                        // Read the current pointer
+                        IntPtr current = new IntPtr(folders.ToInt64() + (Marshal.SizeOf(typeof(Guid)) * i));
+
+                        // Convert to Guid
+                        Guid knownFolderID = (Guid)Marshal.PtrToStructure(current, typeof(Guid));
+
+                        try
+                        {
+                            var folder = ShellBrowser.Create("::" + knownFolderID.ToString("B"), true);
+
+                            if (folder != null)
+                            {
+                            if (string.IsNullOrEmpty(folder.PathFileSystem) == false)
+                                pathList.Add(folder.PathFileSystem, folder);
+                            }
+
+////                            using (var nativeKF = KnownFolderHelper.FromKnownFolderGuid(knownFolderID))
+////                            {
+////                                var kf = KnownFolderHelper.GetFolderProperties(nativeKF.Obj);
+////
+////                                // Add to our collection if it's not null (some folders might not exist on the system
+////                                // or we could have an exception that resulted in the null return from above method call
+////                                if (kf != null)
+////                                {
+////                                    foldersList.Add(kf.FolderId, kf);
+////
+////                                    if (kf.IsExistsInFileSystem == true)
+////                                        pathList.Add(kf.Path, kf);
+////                                }
+////                            }
+                        }
+                        catch { }
+                    }
+                }
+            }
+            finally
+            {
+                if (folders != IntPtr.Zero)
+                    Marshal.FreeCoTaskMem(folders);
+            }
+
+            return pathList;
+        }
+
+        public static IDirectoryBrowser FindKnownFolderByFileSystemPath(string path)
+        {
+            if (KnownFileSystemFolders.Count == 0)
+            {
+                foreach (var item in GetAllKnownFolders())
+                    KnownFileSystemFolders.Add(item.Key, item.Value);
+            }
+
+            IDirectoryBrowser matchedItem = null;
+            KnownFileSystemFolders.TryGetValue(path, out matchedItem);
+
+            return matchedItem;
         }
     }
 }

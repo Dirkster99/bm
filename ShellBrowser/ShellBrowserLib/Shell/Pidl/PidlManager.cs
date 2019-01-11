@@ -354,11 +354,19 @@
                 // Get the KnownFolderId Guid for this special folder
                 var kf_guid = new Guid(path.Substring(KF_IID.IID_Prefix.Length));
 
-                using (var kf = KnownFolderHelper.FromPath(path))
+                using (var kf = KnownFolderHelper.FromKnownFolderGuid(kf_guid))
                 {
                     if (kf != null)
                     {
-                        kf.Obj.GetIDList(0, out pidlPtr);
+                        try
+                        {
+                            kf.Obj.GetIDList(0, out pidlPtr);
+                        }
+                        catch (ArgumentException)
+                        {
+                            return IntPtr.Zero;
+                        }
+
                         return pidlPtr;
                     }
                 }

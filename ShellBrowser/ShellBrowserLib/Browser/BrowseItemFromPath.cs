@@ -200,7 +200,8 @@
                 return ret;
             }
 
-            if (path == KF_IID.ID_ROOT_Desktop)  // Return item for root desktop item
+            // Return item for root desktop item
+            if (string.Compare(path, KF_IID.ID_ROOT_Desktop,true) == 0)
             {
                 var ret = InitDesktopRootItem();
 

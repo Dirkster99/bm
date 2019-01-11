@@ -440,6 +440,8 @@ namespace BreadcrumbTestLib.ViewModels.Breadcrumbs
 
                 try
                 {
+                    navigateToThisLocation = ShellBrowser.NormalizePath(navigateToThisLocation);
+
                     // Navigation to new location was cancelled of given path is obviously empty
                     // Lets try and rollback to previously active location
                     if (string.IsNullOrEmpty(navigateToThisLocation) || goBackToPreviousLocation)
@@ -467,6 +469,38 @@ namespace BreadcrumbTestLib.ViewModels.Breadcrumbs
                             }
                         }
 
+                        if (pathItems != null)
+                        {
+                            // Path is not rooted
+                            // Eg: We changed from 'C:' to 'F:' and are missing 'Desktop/ThisPC' root now
+                            if ((pathItems[0].ItemType & DirectoryItemFlags.Desktop) == 0)
+                            {
+                                bool pathIsRooted = false;
+                                IDirectoryBrowser[] rootedPathItems = ShellBrowser.FindRoot(pathItems, navigateToThisLocation,
+                                                                                            out pathIsRooted);
+
+                                if (pathIsRooted == true)
+                                {
+                                    // We already have the objects representing the path
+                                    // so lets navigate the tree to this location
+                                    await NavigateToScheduledAsync(rootedPathItems, "BreadcrumbViewModel.NavigateTreeViewModel 1");
+                                    return true;
+                                }
+
+                                // Try a second time with an approach closer to the system
+                                rootedPathItems = ShellBrowser.FindRoot(pathItems[pathItems.Length - 1]);
+
+                                if (rootedPathItems != null)
+                                {
+                                    // We already have the objects representing the path
+                                    // so lets navigate the tree to this location
+                                    await NavigateToScheduledAsync(rootedPathItems, "BreadcrumbViewModel.NavigateTreeViewModel 1");
+                                    return true;
+
+                                }
+                            }
+                        }
+
                         // Verify path existence and re-mount into root item
                         if (pathItems == null)
                             isPathValid = ShellBrowser.DirectoryExists(navigateToThisLocation, out pathItems, true);
@@ -480,35 +514,6 @@ namespace BreadcrumbTestLib.ViewModels.Breadcrumbs
                                 var location = ShellBrowser.Create(navigateToThisLocation, true);
                                 await NavigateToScheduledAsync(location, "BreadcrumbViewModel.NavigateTreeViewModel 0");
                                 return true;
-                            }
-                            else
-                            {
-                                // Path is not rooted
-                                // Eg: We changed from 'C:' to 'F:' and are missing 'Desktop/ThisPC' root now
-                                if ((pathItems[0].ItemType & DirectoryItemFlags.Desktop) == 0)
-                                {
-                                    IDirectoryBrowser[] rootedPathItems = ShellBrowser.FindRoot(pathItems, navigateToThisLocation);
-
-                                    if (rootedPathItems != null)
-                                    {
-                                        // We already have the objects representing the path
-                                        // so lets navigate the tree to this location
-                                        await NavigateToScheduledAsync(rootedPathItems, "BreadcrumbViewModel.NavigateTreeViewModel 1");
-                                        return true;
-                                    }
-
-                                    // Try a second time with an approach closer to the system
-                                    rootedPathItems = ShellBrowser.FindRoot(pathItems[pathItems.Length - 1]);
-
-                                    if (rootedPathItems != null)
-                                    {
-                                        // We already have the objects representing the path
-                                        // so lets navigate the tree to this location
-                                        await NavigateToScheduledAsync(rootedPathItems, "BreadcrumbViewModel.NavigateTreeViewModel 1");
-                                        return true;
-
-                                    }
-                                }
                             }
                         }
 

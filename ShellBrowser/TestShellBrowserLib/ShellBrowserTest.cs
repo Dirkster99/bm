@@ -131,7 +131,10 @@
             bool exists = ShellBrowser.DirectoryExists(sysDefault.PathFileSystem, out pathItems);
 
             Assert.IsTrue(pathItems != null);
-            var rootedPath = ShellBrowser.FindRoot(pathItems, sysDefault.PathFileSystem);
+            bool pathIsRouted = false;
+            var rootedPath = ShellBrowser.FindRoot(pathItems, sysDefault.PathFileSystem, out pathIsRouted);
+
+            Assert.IsTrue(pathIsRouted);
 
             // Expectation:
             // The rooted Path should contain 'ThisPC' + drive

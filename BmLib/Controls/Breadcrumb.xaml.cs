@@ -602,7 +602,7 @@
             if (double.IsPositiveInfinity(constraint.Width)) // || double.IsPositiveInfinity(constraint.Height))
             {
                 // This constrain hints a layout proplem that can cause items to NOT Overflow.
-                Debug.WriteLine("    +---> Warning: Breadcrumb.MeasureOverride(Size constraint) with constraint == Infinity");
+                System.Diagnostics.Debug.WriteLine("    +---> Warning: Breadcrumb.MeasureOverride(Size constraint) with constraint == Infinity");
             }
 #endif
             var sz = base.MeasureOverride(constraint);
