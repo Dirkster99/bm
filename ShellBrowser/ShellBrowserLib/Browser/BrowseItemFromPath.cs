@@ -384,74 +384,76 @@
             DirectoryItemFlags itemType = DirectoryItemFlags.Unknown;
 
             ShellHelpers.SpecialPath specialPath = ShellHelpers.SpecialPath.None;
-            if (normPath != null)
+            if (string.IsNullOrEmpty(normPath) == false)
             {
                 specialPath = ShellHelpers.IsSpecialPath(normPath);
-            }
 
-            if (specialPath == ShellHelpers.SpecialPath.None)
-            {
-                // TODO XXX Always evaluate on NormPath???
-                try
+                var pathIsTypeOf = ShellBrowser.IsTypeOf(normPath);
+
+                if (pathIsTypeOf == Enums.PathType.FileSystemPath)
                 {
-                    bool pathExists = false;
-                    try
-                    {
-                        pathExists = System.IO.File.Exists(parseName);
-                    }
-                    catch { }
-
-                    if (pathExists && parseName.EndsWith(".zip"))
-                    {
-                        pathType = PathHandler.FileSystem;
-                        itemType |= DirectoryItemFlags.DataFileContainer;
-                    }
-                }
-                catch { }
-
-                // See if this is a directory if it was not a file...
-                if ((itemType & DirectoryItemFlags.DataFileContainer) == 0)
-                {
-                    // Does this directory exist in file system ?
+                    // TODO XXX Always evaluate on NormPath???
                     try
                     {
                         bool pathExists = false;
                         try
                         {
-                            pathExists = System.IO.Directory.Exists(parseName);
+                            pathExists = System.IO.File.Exists(normPath);
                         }
                         catch { }
 
-                        if (pathExists == true)
+                        if (pathExists && normPath.EndsWith(".zip"))
                         {
                             pathType = PathHandler.FileSystem;
-                            itemType |= DirectoryItemFlags.FileSystemDirectory;
-
-                            // This appears to be a reference to a drive
-                            DirectoryInfo d = new DirectoryInfo(parseName);
-                            if (d.Parent == null)
-                                itemType |= DirectoryItemFlags.Drive;
-                        }
-                        else
-                        {
-                            // Neither a regular directory nor a regular file
-                            // -> Most likely a folder inside a zip file data container
-                            if (string.IsNullOrEmpty(normPath) == false)
-                            {
-                                if (normPath.Contains(".zip"))
-                                {
-                                    pathType = PathHandler.ZipFileSystem;
-                                    itemType |= DirectoryItemFlags.DataFileContainerFolder;
-                                }
-
-                                // -> Lets get its name for display if its more than empty
-                                string displayName = System.IO.Path.GetFileName(normPath);
-                            }
+                            itemType |= DirectoryItemFlags.DataFileContainer;
                         }
                     }
-                    catch (Exception exp)
+                    catch { }
+
+                    // See if this is a directory if it was not a file...
+                    if ((itemType & DirectoryItemFlags.DataFileContainer) == 0)
                     {
-                        Debug.WriteLine(exp.Message);
+                        // Does this directory exist in file system ?
+                        try
+                        {
+                            bool pathExists = false;
+                            try
+                            {
+                                pathExists = System.IO.Directory.Exists(parseName);
+                            }
+                            catch { }
+
+                            if (pathExists == true)
+                            {
+                                pathType = PathHandler.FileSystem;
+                                itemType |= DirectoryItemFlags.FileSystemDirectory;
+
+                                // This appears to be a reference to a drive
+                                DirectoryInfo d = new DirectoryInfo(parseName);
+                                if (d.Parent == null)
+                                    itemType |= DirectoryItemFlags.Drive;
+                            }
+                            else
+                            {
+                                // Neither a regular directory nor a regular file
+                                // -> Most likely a folder inside a zip file data container
+                                if (string.IsNullOrEmpty(normPath) == false)
+                                {
+                                    if (normPath.Contains(".zip"))
+                                    {
+                                        pathType = PathHandler.ZipFileSystem;
+                                        itemType |= DirectoryItemFlags.DataFileContainerFolder;
+                                    }
+
+                                    // -> Lets get its name for display if its more than empty
+                                    string displayName = System.IO.Path.GetFileName(normPath);
+                                }
+                            }
+                        }
+                        catch (Exception exp)
+                        {
+                            Debug.WriteLine(exp.Message);
+                        }
                     }
                 }
             }

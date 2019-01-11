@@ -90,7 +90,7 @@
         /// <returns>f this method succeeds, it returns S_OK. Otherwise, it returns an HRESULT error code.</returns>
         /// <remarks>Equivalent to Shell32.SHGetKnownFolderIDList.</remarks>
         [MethodImpl(MethodImplOptions.InternalCall, MethodCodeType = MethodCodeType.Runtime)]
-        int GetIDList([In] KNOWN_FOLDER_FLAG flag,
+        HRESULT GetIDList([In] uint flag,
             [Out] out IntPtr itemIdentifierListPointer);
 
         /// <summary>

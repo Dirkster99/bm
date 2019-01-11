@@ -126,9 +126,9 @@
             IntPtr ptrAddr = default(IntPtr);
             try
             {
-                int RetVal = Obj.GetIDList(KNOWN_FOLDER_FLAG.KF_FLAG_CREATE, out ptrAddr);
+                HRESULT RetVal = Obj.GetIDList((uint)KNOWN_FOLDER_FLAG.KF_NO_FLAGS, out ptrAddr);
 
-                if (ptrAddr != default(IntPtr))
+                if (ptrAddr != default(IntPtr) && RetVal == HRESULT.S_OK)
                 {
                     return ptrAddr;
                 }

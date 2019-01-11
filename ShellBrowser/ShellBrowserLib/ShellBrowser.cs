@@ -345,7 +345,7 @@
                         using (var kf = KnownFolderHelper.FromPath(folderParseName))
                         {
                             if (kf != null)
-                                kf.Obj.GetIDList(KNOWN_FOLDER_FLAG.KF_NO_FLAGS, out pidlFull);
+                                kf.Obj.GetIDList((uint)KNOWN_FOLDER_FLAG.KF_NO_FLAGS, out pidlFull);
                         }
                     }
 
@@ -1252,7 +1252,7 @@
                         using (var kf = KnownFolderHelper.FromPath(folderParseName))
                         {
                             if (kf != null)
-                                kf.Obj.GetIDList(KNOWN_FOLDER_FLAG.KF_NO_FLAGS, out pidlFull);
+                                kf.Obj.GetIDList((uint)KNOWN_FOLDER_FLAG.KF_NO_FLAGS, out pidlFull);
                         }
                     }
 
@@ -1420,10 +1420,18 @@
                         {
                             var folder = ShellBrowser.Create("::" + knownFolderID.ToString("B"), true);
 
-                            if (folder != null)
+                            if (folder != null &&
+                                string.IsNullOrEmpty(folder.PathFileSystem) == false)
                             {
-                            if (string.IsNullOrEmpty(folder.PathFileSystem) == false)
-                                pathList.Add(folder.PathFileSystem, folder);
+                                // It is possible to have more than one known folder point at one
+                                // file system location - but this implementation still handles
+                                // unique file locations and associated folders
+                                IDirectoryBrowser val = null;
+                                if (pathList.TryGetValue(folder.PathFileSystem, out val) == false)
+                                {
+                                    if (string.IsNullOrEmpty(folder.PathFileSystem) == false)
+                                        pathList.Add(folder.PathFileSystem, folder);
+                                }
                             }
 
 ////                            using (var nativeKF = KnownFolderHelper.FromKnownFolderGuid(knownFolderID))

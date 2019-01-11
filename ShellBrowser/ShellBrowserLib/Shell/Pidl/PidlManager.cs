@@ -333,6 +333,31 @@
         }
 
         /// <summary>
+        /// Identifies knowfolder by their special id and indicates whether these are known
+        /// to have no PIDL or not.
+        /// </summary>
+        /// <param name="path"></param>
+        /// <returns></returns>
+        public static bool HasNoPIDL(string path)
+        {
+            switch (path.ToLower())
+            {
+                case "::{2a00375e-224c-49de-b8d1-440df7ef3ddc}": return true;  // 'LocalizedResourcesDir'
+                case "::{0f214138-b1d3-4a90-bba9-27cbc0c5389a}": return true;  // 'SyncSetup'
+                case "::{289a9a43-be44-4057-a41b-587a76d7e7f9}": return true;  // 'SyncResults'
+                case "::{4bfefb45-347d-4006-a5be-ac0cb0567192}": return true;  // 'Conflict'
+                case "::{a305ce99-f527-492b-8b1a-7e76fa98d6e4}": return true;  // 'AppUpdates'
+                case "::{df7266ac-9274-4867-8d55-3bd661de872d}": return true;  // 'ChangeRemovePrograms'
+                case "::{43668bf8-c14e-49b2-97c9-747784d784b7}": return true;  // 'SyncManager'
+
+                default:
+                    break;
+            }
+
+            return false;
+        }
+
+        /// <summary>
         /// Converts a path representation 'C:\' into an
         /// <see cref="IntPtr"/> formated PIDL representation.
         /// 
@@ -351,19 +376,20 @@
             // Handle Special Folder path notation
             if (ShellHelpers.IsSpecialPath(path) == ShellHelpers.SpecialPath.IsSpecialPath)
             {
-                // Get the KnownFolderId Guid for this special folder
-                var kf_guid = new Guid(path.Substring(KF_IID.IID_Prefix.Length));
+                if (HasNoPIDL(path) == true)
+                    return IntPtr.Zero;
 
-                using (var kf = KnownFolderHelper.FromKnownFolderGuid(kf_guid))
+                using (var kf = KnownFolderHelper.FromPath(path))
                 {
                     if (kf != null)
                     {
                         try
                         {
-                            kf.Obj.GetIDList(0, out pidlPtr);
+                            kf.Obj.GetIDList((uint)KNOWN_FOLDER_FLAG.KF_NO_FLAGS, out pidlPtr);
                         }
                         catch (ArgumentException)
                         {
+                            Console.WriteLine("ArgumentException '{0}'", path);
                             return IntPtr.Zero;
                         }
 

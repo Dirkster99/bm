@@ -655,8 +655,8 @@
         }
 
         /// <summary>
-        /// Method executes when the user has selected an item in the popup
-        /// control of the SuggestComboBox.
+        /// Method executes when the user has selected an item in
+        /// the recent list popup control of the SuggestComboBox.
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
@@ -681,7 +681,13 @@
                 {
                     // Turn the switch on to SuggestBox if not already available
                     if (IsSwitchOn != false)
+                    {
+                        // Is Switch configured to change to text input?
+                        if (IsSwitchEnabled == false)
+                            return;
+
                         await SwitchCommandExecutedAsync(null, false);
+                    }
 
                     _PART_SuggestBox.Text = input;
                     _PART_SuggestBox.SelectAll();

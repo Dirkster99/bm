@@ -68,6 +68,9 @@
         /// <returns></returns>
         public IDirectoryBrowser[] GetPathModels()
         {
+            if (_CurrentPath.Count == 0)
+                return null;
+
             // Skip showing the desktop in the string based path
             int idxSrc = 0, size = _CurrentPath.Count;
             if ((_CurrentPath[idxSrc].ItemType & DirectoryItemFlags.Desktop) != 0)

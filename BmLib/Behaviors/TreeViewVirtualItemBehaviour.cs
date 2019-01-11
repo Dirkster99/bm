@@ -73,13 +73,16 @@
 
                 // Sanity check: Are we looking at the least required data we need?
                 var itemNode = e.NewValue as IParent;
-                if (itemNode == null)
+                if (itemNode == null)                          // Filter out Desktop
                     return;
 
                 Stack<object> Nodes = new Stack<object>();     // Unwind IParent Stack
 
                 for (; itemNode != null; itemNode = itemNode.GetParent())
-                    Nodes.Push(itemNode);
+                {
+                    if (itemNode.GetParent() != null)
+                        Nodes.Push(itemNode);
+                }
 
                 var newNode = Nodes.ToArray();
 
@@ -129,7 +132,9 @@
                                 // Use your favourite logger here since the exception will otherwise kill the appliaction
                                 System.Console.WriteLine("Node '" + node + "' cannot be fount in container");
 #endif
+                                return;
                             }
+
                             virtualizingPanel.BringIndexIntoViewPublic(index);
 
                             newParent = currentParent.ItemContainerGenerator.ContainerFromIndex(index) as TreeViewItem;
@@ -159,8 +164,8 @@
                     }
 
                     // Make sure nodes (except for last child node) are expanded to make children visible
-                    if (i < newNode.Length - 1)
-                        newParent.IsExpanded = true;
+                    // if (i < newNode.Length - 1)
+                    //     newParent.IsExpanded = true;
 
                     currentParent = newParent;
                 }
