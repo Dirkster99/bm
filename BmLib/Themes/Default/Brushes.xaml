@@ -5,6 +5,13 @@
     xmlns:options="http://schemas.microsoft.com/winfx/2006/xaml/presentation/options"
     xmlns:reskeys="clr-namespace:BmLib.Themes"
     >
+
+    <Color x:Key="{x:Static reskeys:ResourceKeys.ControlAccentColorKey}" options:Freeze="true">#1ba1e2</Color>
+
+    <SolidColorBrush x:Key="{x:Static reskeys:ResourceKeys.ControlAccentBrushKey}"
+                     Color="{DynamicResource {x:Static reskeys:ResourceKeys.ControlAccentColorKey}}"
+                     options:Freeze="true" />
+
     <!-- Generic Color Definitions including 3-D depth effect as in Windows 7 -->
     <SolidColorBrush x:Key="{x:Static reskeys:ResourceKeys.ControlNormalBackgroundKey}" Color="White" options:Freeze="true"/>
 

@@ -10,8 +10,8 @@
                      ResourceId=BaseToggleButton}" TargetType="{x:Type ToggleButton}">
         <ctrls:HotTrack IsSelected="{TemplateBinding IsChecked}"
                         SelectedBrush="{DynamicResource {x:Static reskeys:ResourceKeys.HotTrack_SelectedBrush}}"
-                        BackgroundBrush="{DynamicResource HotTrack_BackgroundBrush}"
-                        HighlightBrush="{DynamicResource HotTrack_HighlightBrush}"
+                        BackgroundBrush="{DynamicResource {x:Static reskeys:ResourceKeys.HotTrack_BackgroundBrush}}"
+                        HighlightBrush="{DynamicResource {x:Static reskeys:ResourceKeys.HotTrack_HighlightBrush}}"
                         ThreeDStyle="{DynamicResource {x:Static reskeys:ResourceKeys.ThreeDStyleBrushes}}"
                         SelectedBorderBrush="{DynamicResource {x:Static SystemColors.ActiveBorderBrushKey}}"
                         BorderThickness="{TemplateBinding BorderThickness}"
