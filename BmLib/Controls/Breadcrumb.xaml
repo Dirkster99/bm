@@ -142,14 +142,11 @@
                                                                VerticalAlignment="Stretch"
                                                                Margin="0"
                                                                Padding="0"
+                                                               VirtualizingStackPanel.IsVirtualizing="True"
+                                                               VirtualizingStackPanel.VirtualizationMode="Standard"
+                                                               behav:TreeViewVirtualItemBehaviour.SelectedItem="{Binding BreadcrumbSelectedItem,Mode=OneWay,UpdateSourceTrigger=PropertyChanged}"
                                             />
                                             
-                                            <!--
-                                                VirtualizingStackPanel.IsVirtualizing="True"
-                                                VirtualizingStackPanel.VirtualizationMode="Standard"
-                                                behav:TreeViewVirtualItemBehaviour.SelectedItem="{Binding BreadcrumbSelectedItem,Mode=OneWay,UpdateSourceTrigger=PropertyChanged}"
-                                            -->
-
                                             <!-- Grid.Column="2" Is OverflowGap which is necessary to reach Switch
                                                  through click on right-most background of BreadcrumbTree -->
                                         </Grid>

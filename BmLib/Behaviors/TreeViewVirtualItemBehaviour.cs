@@ -164,8 +164,8 @@
                     }
 
                     // Make sure nodes (except for last child node) are expanded to make children visible
-                    // if (i < newNode.Length - 1)
-                    //     newParent.IsExpanded = true;
+                    if (i < newNode.Length - 1)
+                        newParent.IsExpanded = true;
 
                     currentParent = newParent;
                 }

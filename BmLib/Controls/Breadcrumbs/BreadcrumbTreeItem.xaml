@@ -57,7 +57,7 @@
                                                       SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"
                                                       ContentSource="Header" />
                                 </Button>
-                                
+
                                 <ctrls:DropDownList x:Name="PART_Toggle"
                                                     Grid.Column="1"
                                                     Margin="0"
@@ -66,10 +66,15 @@
                                                     Visibility="{Binding HasItems, RelativeSource={RelativeSource TemplatedParent}, Converter={StaticResource BoolToVisibilityConverter}}" 
                                                     SelectedValuePath="{Binding ValuePath, RelativeSource={RelativeSource TemplatedParent}}"                                  
                                                     SelectedValue="{Binding SelectedChild, Mode=OneWay, UpdateSourceTrigger=PropertyChanged, RelativeSource={RelativeSource TemplatedParent}}"
-                                                    IsDropDownOpen="{Binding IsExpanded, Mode=TwoWay, RelativeSource={RelativeSource TemplatedParent}}"
                                                     ItemTemplate="{TemplateBinding DropDownListItemDataTemplate}"
                                                     behav:SelectionChangedCommand.ChangedCommand="{Binding Path=DropDownItemSelectedCommand}"
-                                    />
+                                    >
+<!--
+    Binding this causes problems with virtualized treeview
+    If Binding should be necessary (don't see the point right now) we should bind to something else
+    IsDropDownOpen="{Binding IsExpanded, Mode=TwoWay, RelativeSource={RelativeSource TemplatedParent}}"
+-->
+                                </ctrls:DropDownList>
                             </Grid>
                         </ctrls:HotTrack>
 
