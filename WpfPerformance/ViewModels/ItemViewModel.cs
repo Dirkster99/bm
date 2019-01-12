@@ -87,8 +87,15 @@
         {
             get
             {
-                if (_dir != null)
-                    return _dir.Name;
+                if (IsLoaded)
+                {
+                    if (_dir != null)
+                        return _dir.Name;
+                }
+                else
+                {
+                    return _ModelStage1.ParseName;
+                }
 
                 return string.Empty;
             }

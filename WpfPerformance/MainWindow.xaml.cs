@@ -28,15 +28,6 @@
             await appVM.InitLoadAsync();
         }
 
-        private void ListBox_CleanUpVirtualizedItem(object sender,
-                                                    CleanUpVirtualizedItemEventArgs e)
-        {
-            var item = e.Value as ItemViewModel;
-
-            if (item != null)
-                item.UnlodLoadModel();
-        }
-
         private static bool IsUserVisible(FrameworkElement element, FrameworkElement container)
         {
             if (!element.IsVisible)
