@@ -188,6 +188,11 @@
         /// <param name="path">Is either a path reference a la 'C:' or a
         /// special folder path reference a la '::{...}' <seealso cref="KF_IID"/>
         /// for more details.</param>
+        /// <param name="bFindKF">Determines if known folder should be looked up
+        /// even if given folder is a normal string such as (eg.: 'C:\Windows\').
+        /// Set this parameter only if you are sure that you need it as it will
+        /// have a performance impact on the time required to generate the object.
+        /// </param>
         /// <returns>Returns a simple pojo type object to initialize
         /// the calling object members.</returns>
         internal static BrowseItemFromPath InitItemType(string path,
@@ -329,6 +334,11 @@
         /// <param name="parseName"></param>
         /// <param name="name"></param>
         /// <param name="labelName"></param>
+        /// <param name="bFindKF">Determines if known folder should be looked up
+        /// even if given folder is a normal string such as (eg.: 'C:\Windows\').
+        /// Set this parameter only if you are sure that you need it as it will
+        /// have a performance impact on the time required to generate the object.
+        /// </param>
         /// <returns></returns>
         internal static BrowseItemFromPath InitItemType(string parseName,
                                                         string name,

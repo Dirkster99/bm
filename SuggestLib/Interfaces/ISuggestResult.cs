@@ -19,5 +19,11 @@
         /// Gets/sets whether the given input was considered as valid or not.
         /// </summary>
         bool ValidPath { get; set; }
+
+        /// <summary>
+        /// Adds a range of entries into the list of <see cref="Suggestions"/>.
+        /// </summary>
+        /// <param name="list"></param>
+        void AddRange(IEnumerable<object> list);
     }
 }

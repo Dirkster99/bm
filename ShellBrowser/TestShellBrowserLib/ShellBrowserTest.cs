@@ -1,7 +1,6 @@
 ﻿namespace TestShellBrowserLib
 {
     using Microsoft.VisualStudio.TestTools.UnitTesting;
-    using ShellBrowser.Enums;
     using ShellBrowserLib;
     using ShellBrowserLib.Enums;
     using ShellBrowserLib.IDs;

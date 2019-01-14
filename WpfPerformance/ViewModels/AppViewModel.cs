@@ -184,7 +184,7 @@
                     Console.WriteLine("...{0} working on it...\n", startTime);
 
                     int i = 0;
-                    foreach (var item in ShellBrowser.GetStageZeroChildItems(dirPath))
+                    foreach (var item in ShellBrowser.GetSlimChildItems(dirPath))
                     {
                         result.Add(new ItemViewModel(item));
                         i++;

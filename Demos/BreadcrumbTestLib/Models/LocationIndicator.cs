@@ -1,6 +1,5 @@
 ﻿namespace BreadcrumbTestLib.Models
 {
-    using ShellBrowser.Enums;
     using ShellBrowserLib;
     using ShellBrowserLib.Enums;
     using ShellBrowserLib.Interfaces;

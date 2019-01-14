@@ -1,6 +1,7 @@
 ﻿namespace PerformanceTestClient
 {
     using ShellBrowserLib;
+    using ShellBrowserLib.Browser;
     using ShellBrowserLib.IDs;
     using ShellBrowserLib.Interfaces;
     using System;
@@ -62,9 +63,9 @@
             var startTime = DateTime.Now;
             Console.WriteLine("...{0} working on it...\n", startTime);
 
-            var result = new List<DirectoryBrowserStageZero>();
+            var result = new List<DirectoryBrowserSlim>();
             int i = 0;
-            foreach (var item in ShellBrowser.GetStageZeroChildItems(dirPath))
+            foreach (var item in ShellBrowser.GetSlimChildItems(dirPath))
             {
                 result.Add(item);
                 i++;

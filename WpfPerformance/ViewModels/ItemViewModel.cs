@@ -3,12 +3,13 @@
     using System;
     using System.Threading.Tasks;
     using ShellBrowserLib;
+    using ShellBrowserLib.Browser;
     using ShellBrowserLib.Interfaces;
 
     public class ItemViewModel : Base.ViewModelBase, IItemViewModel
     {
         #region fields
-        private readonly DirectoryBrowserStageZero _ModelStage1;
+        private readonly DirectoryBrowserSlim _ModelStage1;
         private DateTime _lastRefreshTimeUtc;
         private IDirectoryBrowser _dir;
         private bool _isLoaded;
@@ -19,7 +20,7 @@
         /// <summary>
         /// parameterized class constructor
         /// </summary>
-        public ItemViewModel(DirectoryBrowserStageZero model)
+        public ItemViewModel(DirectoryBrowserSlim model)
             : this()
         {
             this._ModelStage1 = model;

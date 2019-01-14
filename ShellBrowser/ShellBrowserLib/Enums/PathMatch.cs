@@ -1,4 +1,4 @@
-﻿namespace ShellBrowser.Enums
+﻿namespace ShellBrowserLib.Enums
 {
     /// <summary>
     /// Enumeration can be used to indicate the type of a match between

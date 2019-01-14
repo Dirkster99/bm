@@ -39,6 +39,13 @@
         public static readonly DependencyProperty PathValidationProperty =
             DependencyProperty.Register("PathValidation", typeof(ValidationRule),
                 typeof(SuggestBox), new PropertyMetadata(null));
+
+        /// <summary>
+        /// Implements the backing store for the <see cref="IsDeferredScrolling"/> dependency property.
+        /// </summary>
+        public static readonly DependencyProperty IsDeferredScrollingProperty =
+            DependencyProperty.Register("IsDeferredScrolling",
+                typeof(bool), typeof(SuggestBox), new PropertyMetadata(false));
         #endregion fields
 
         #region Constructor
@@ -94,6 +101,18 @@
         {
             get { return (ValidationRule)GetValue(PathValidationProperty); }
             set { SetValue(PathValidationProperty, value); }
+        }
+
+        /// <summary>
+        /// Gets/sets whether the scrollbar <see cref="ListBox"/> inside the suggestions PopUp
+        /// control is directly linked to scrolling the content or not (is deferred).
+        /// 
+        /// This property is handled by the control itself and should not be used via binding.
+        /// </summary>
+        public bool IsDeferredScrolling
+        {
+            get { return (bool)GetValue(IsDeferredScrollingProperty); }
+            set { SetValue(IsDeferredScrollingProperty, value); }
         }
         #endregion
 
@@ -177,7 +196,7 @@
                         {
                             var validPaths = tasks.Where(tsk => tsk.Result.ValidPath == false);
                             if (validPaths.Any())
-                                AllResults.ValidPath = false;  // No SuggestionSource could validate input
+                                AllResults.ValidPath = false;  // No SuggestionSource could not validate input
                         }
 
                         return AllResults;
@@ -187,6 +206,12 @@
                         {
                             if (pTask.IsFaulted == false)
                             {
+                                // Determine whether deferred scrolling makes any sense or not
+                                if (pTask.Result.Suggestions.Count > 4096)
+                                    IsDeferredScrolling = true;
+                                else
+                                    IsDeferredScrolling = false;
+
                                 this.SetValue(SuggestionsProperty, pTask.Result.Suggestions);
 
                                 if (pTask.Result.ValidPath == true)

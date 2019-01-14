@@ -20,7 +20,7 @@
         /// Class constructor from list of suggestions
         /// </summary>
         /// <param name="list"></param>
-        public SuggestResult(List<object> list)
+        public SuggestResult(IEnumerable<object> list)
             : this()
         {
             _suggestions.AddRange(list);
@@ -35,6 +35,17 @@
             ValidPath = true;
         }
         #endregion ctors
+
+        #region methods
+        /// <summary>
+        /// Adds a range of entries into the list of <see cref="Suggestions"/>.
+        /// </summary>
+        /// <param name="list"></param>
+        public void AddRange(IEnumerable<object> list)
+        {
+            _suggestions.AddRange(list);
+        }
+        #endregion methods
 
         #region properties
         /// <summary>

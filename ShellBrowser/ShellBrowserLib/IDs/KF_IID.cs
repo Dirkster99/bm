@@ -2,28 +2,6 @@
 {
     using System.Collections.Generic;
 
-    public class KnownfolderBase
-    {
-        public KnownfolderBase(string _parseName, string _name, string _fileSystemPath)
-        {
-            SpecialId = _parseName;
-            Name = _name;
-            FileSystemPath = _fileSystemPath;
-        }
-
-        public KnownfolderBase(string _parseName, string _name)
-        {
-            SpecialId = _parseName;
-            Name = _name;
-        }
-
-        public string SpecialId { get; }
-
-        public string Name { get; }
-
-        public string FileSystemPath { get; }
-    }
-
     /// <summary>
     /// KnownFolders contain the known folder ids for windows.
     ///
@@ -1093,9 +1071,9 @@
         /// <summary>
         /// Returns a dictionary of all constants and their Ids in this class.
         /// </summary>
-        public static Dictionary<string, KnownfolderBase> GetIdKnownFolders()
+        public static Dictionary<string, KnownfolderSlim> GetIdKnownFolders()
         {
-            var lstOfConstants = new Dictionary<string, KnownfolderBase>();
+            var lstOfConstants = new Dictionary<string, KnownfolderSlim>();
 
             foreach (var constant in typeof(KF_IID).GetFields())
             {
@@ -1104,7 +1082,7 @@
 
                 if (constant.IsLiteral && !constant.IsInitOnly)
                 {
-                    var kfBase = new KnownfolderBase((string)constant.GetValue(null), constant.Name);
+                    var kfBase = new KnownfolderSlim((string)constant.GetValue(null), constant.Name);
                     lstOfConstants.Add(kfBase.SpecialId, kfBase);
                 }
             }

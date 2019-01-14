@@ -4,6 +4,7 @@
     using SuggestLib.Utils;
     using System;
     using System.Collections.Generic;
+    using System.Collections.ObjectModel;
     using System.Windows;
     using System.Windows.Controls;
     using System.Windows.Controls.Primitives;
@@ -78,7 +79,7 @@
         /// Implements the backing store of the <see cref="Suggestions"/> dependency property.
         /// </summary>
         public static readonly DependencyProperty SuggestionsProperty =
-            DependencyProperty.Register("Suggestions", typeof(IList<object>), typeof(SuggestBoxBase),
+            DependencyProperty.Register("Suggestions", typeof(List<object>), typeof(SuggestBoxBase),
             new PropertyMetadata(null, OnSuggestionsChanged));
 
         /// <summary>
@@ -207,9 +208,9 @@
         /// Gets/sets a list of suggestions that are shown to suggest
         /// alternative or more complete items while a user is typing.
         /// </summary>
-        public IList<object> Suggestions
+        public List<object> Suggestions
         {
-            get { return (IList<object>)GetValue(SuggestionsProperty); }
+            get { return (List<object>)GetValue(SuggestionsProperty); }
             set { SetValue(SuggestionsProperty, value); }
         }
 
@@ -565,10 +566,32 @@
             }
         }
 
+        /// <summary>
+        /// Method is invoked to close or open the PopUp control
+        /// via bound dependency property.
+        /// </summary>
+        /// <param name="newIsOpenValue"></param>
+        /// <param name="sourceOfReuqest"></param>
         private void SetPopUp(bool newIsOpenValue, string sourceOfReuqest)
         {
             if (IsPopupOpened != newIsOpenValue)
             {
+                // Adjust the MaxWidth of the PopUp's grid to look nice in comparison
+                // to size of the textbox control element
+                if (newIsOpenValue == true)
+                {
+                    if (this.ActualWidth > 600)
+                    {
+                        if (_PART_ResizeableGrid.MaxWidth != this.ActualWidth)
+                            _PART_ResizeableGrid.MaxWidth = this.ActualWidth;
+                    }
+                    else
+                    {
+                        if (_PART_ResizeableGrid.MaxWidth != 600)
+                            _PART_ResizeableGrid.MaxWidth = 600;
+                    }
+                }
+
                 IsPopupOpened = newIsOpenValue;
             }
         }
@@ -745,16 +768,37 @@
         {
             Thumb MyThumb = sender as Thumb;
 
-            // Set the new Width and Height fo Grid, Popup they will inherit
+            // Set the new Width and Height for Grid, Popup they will inherit
             double yAdjust = _PART_ResizeableGrid.ActualHeight + e.VerticalChange;
             double xAdjust = _PART_ResizeableGrid.ActualWidth + e.HorizontalChange;
 
             // Set new Height and Width
             if (xAdjust >= 0)
-                _PART_ResizeableGrid.Width = xAdjust;
+            {
+                // Respect MaxWidth if it is set
+                if (MaxWidth != System.Double.PositiveInfinity)
+                {
+                    if (xAdjust <= MaxWidth)
+                        _PART_ResizeableGrid.Width = xAdjust;
+                    else
+                        _PART_ResizeableGrid.Width = MaxWidth;
+                }
+                else
+                    _PART_ResizeableGrid.Width = xAdjust;
+            }
 
             if (yAdjust >= 0)
-                _PART_ResizeableGrid.Height = yAdjust;
+            {
+                if (MaxHeight != System.Double.PositiveInfinity)
+                {
+                    if (yAdjust <= MaxHeight)
+                        _PART_ResizeableGrid.Height = yAdjust;
+                    else
+                        _PART_ResizeableGrid.Height = MaxHeight;
+                }
+                else
+                    _PART_ResizeableGrid.Height = yAdjust;
+            }
         }
 
         /// <summary>

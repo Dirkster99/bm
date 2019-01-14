@@ -40,7 +40,12 @@
                             BorderThickness="{TemplateBinding PopupBorderThickness}"
                             Background="{DynamicResource {x:Static reskeys:ResourceKeys.ControlPopupBackgroundBrushKey}}"  
                             >
-                        <Grid x:Name="PART_ResizeableGrid" Background="Transparent">
+                        <!-- Do NOT REMOVE MaxHeight and MaxWidth
+                             These ensure that containing ListBox is virtualizing -->
+                        <Grid x:Name="PART_ResizeableGrid" Background="Transparent"
+                              MaxHeight="600"
+                              MaxWidth="600"
+                              >
                             <Grid.RowDefinitions>
                                 <RowDefinition Height="*"/>
                             </Grid.RowDefinitions>
@@ -58,29 +63,28 @@
 
                             <ListBox
                                 x:Name="PART_ItemList" Grid.Row="0"
-                                Template="{DynamicResource {x:Static reskeys:ResourceKeys.PopListBoxControlTemplate}}"
-                                SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"                                                             
-                                VerticalContentAlignment="Stretch"
-                                HorizontalContentAlignment="Stretch"
-                                DisplayMemberPath="{TemplateBinding DisplayMemberPath}"
-                                SelectedValuePath="{TemplateBinding ValuePath}"
-                                ItemTemplate="{TemplateBinding ItemTemplate}"
+                                HorizontalAlignment="Stretch" VerticalAlignment="Top"
                                 ItemsSource="{Binding Suggestions, RelativeSource={RelativeSource TemplatedParent}}"
+                                BorderThickness="0"
+                                ItemTemplate="{TemplateBinding ItemTemplate}"
+                                SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"                                                             
+                                Template="{DynamicResource {x:Static reskeys:ResourceKeys.PopListBoxControlTemplate}}"
                                 ScrollViewer.HorizontalScrollBarVisibility="Auto" 
                                 ScrollViewer.VerticalScrollBarVisibility="Auto" 
                                 ScrollViewer.CanContentScroll="True"
+                                
+                                DisplayMemberPath="{TemplateBinding DisplayMemberPath}"
+                                SelectedValuePath="{TemplateBinding ValuePath}"
+                                
                                 KeyboardNavigation.AcceptsReturn="True"
                                 KeyboardNavigation.DirectionalNavigation="Cycle"
-                                BorderThickness="0"
+
                                 BorderBrush="{TemplateBinding BorderBrush}"
-                                >
-                                <ListBox.ItemsPanel>
-                                    <ItemsPanelTemplate>
-                                        <VirtualizingStackPanel />
-                                    </ItemsPanelTemplate>
-                                </ListBox.ItemsPanel>
-                            </ListBox>
-                        
+                                VirtualizingPanel.IsVirtualizing="True"
+                                VirtualizingPanel.VirtualizationMode="Recycling"
+                                ScrollViewer.IsDeferredScrollingEnabled="{Binding IsDeferredScrolling, RelativeSource={RelativeSource TemplatedParent},Mode=OneWay,UpdateSourceTrigger=PropertyChanged}"
+                                />
+
                             <!-- RezizeGrip Thumb to support resizing the suggestion lib -->
                             <Thumb x:Name="PART_ResizeGripThumb"
                                    Grid.Row="0"

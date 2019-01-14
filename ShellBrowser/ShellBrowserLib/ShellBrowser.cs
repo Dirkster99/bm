@@ -18,51 +18,6 @@
     using System.Text;
     using ShellBrowserLib.Enums;
     using System.Linq;
-    using global::ShellBrowser.Enums;
-
-    public class DirectoryBrowserStageZero
-    {
-        #region ctors
-        /// <summary>
-        /// Parameterized class constructor
-        /// </summary>
-        public DirectoryBrowserStageZero(int parId,
-                                         string itemPath,
-
-                                         string parName,
-                                         string parParseName,
-                                         string parLabelName)
-            : this()
-        {
-            ID = parId;
-            ItemPath = itemPath;
-            Name = parName;
-            ParseName = parParseName;
-            LabelName = parLabelName;
-        }
-
-        /// <summary>
-        /// Hidden class constructor
-        /// </summary>
-        protected DirectoryBrowserStageZero()
-        {
-        }
-        #endregion ctors
-
-        #region properties
-        public int ID { get; }
-        public object ItemPath { get; }
-
-        public string Name { get; }
-        public string ParseName { get; }
-        public string LabelName { get; }
-        #endregion properties
-
-        #region methods
-
-        #endregion methods
-    }
-
 
     /// <summary>
     /// Implements core API type methods and properties that are used to interact
@@ -78,7 +33,11 @@
         #endregion
 
         #region properties
-        public static Dictionary<string, IDirectoryBrowser> KnownFileSystemFolders { get; }
+        /// <summary>
+        /// Contains a collection of known folders with a file system folder.
+        /// This collection is build on program start-up.
+        /// </summary>
+        private static Dictionary<string, IDirectoryBrowser> KnownFileSystemFolders { get; }
 
         /// <summary>
         /// Gets the default system drive - usually 'C:\'.
@@ -286,6 +245,11 @@
         /// Returns null if a parseName could not be determined.
         /// </summary>
         /// <param name="fullPidl"></param>
+        /// <param name="bFindKF">Determines if known folder should be looked up
+        /// even if given folder is a normal string such as (eg.: 'C:\Windows\').
+        /// Set this parameter only if you are sure that you need it as it will
+        /// have a performance impact on the time required to generate the object.
+        /// </param>
         /// <returns></returns>
         public static IDirectoryBrowser Create(IdList fullPidl,
                                                bool bFindKF = false)
@@ -546,12 +510,16 @@
         /// </summary>
         /// <param name="pathItems"></param>
         /// <param name="newPath"></param>
+        /// <param name="pathIsRooted">Determines whether the output result
+        /// was succesfully rooted or not. This parameter was introduced to
+        /// support returning empty collection to indicate Desktop
+        /// - NOT 100% sure if this is stil required.</param>
         /// <returns></returns>
         public static IDirectoryBrowser[] FindRoot(IDirectoryBrowser[] pathItems,
                                                    string newPath,
-                                                   out bool pathIsRouted)
+                                                   out bool pathIsRooted)
         {
-            pathIsRouted = false;
+            pathIsRooted = false;
             bool foundRoot = false;
             List<IDirectoryBrowser> newRoot = new List<IDirectoryBrowser>();
 
@@ -573,7 +541,7 @@
                             newRoot.Add(ShellBrowser.DesktopDirectory);
                         }
 
-                        pathIsRouted = true;
+                        pathIsRooted = true;
                         return newRoot.ToArray();
                     }
                 }
@@ -590,7 +558,7 @@
                             for (int j = i; j < pathItems.Length; j++)
                                 newRoot.Add(pathItems[j].Clone() as IDirectoryBrowser);
 
-                            pathIsRouted = true;
+                            pathIsRooted = true;
                             return newRoot.ToArray();
                         }
                     }
@@ -607,7 +575,7 @@
                         for (int i = 0; i < pathItems.Length; i++)
                             newRoot.Add(pathItems[i].Clone() as IDirectoryBrowser);
 
-                        pathIsRouted = true;
+                        pathIsRooted = true;
                         return newRoot.ToArray();
                     }
                 }
@@ -624,7 +592,7 @@
                         for (int i = idx; i < pathItems.Length; i++)
                             newRoot.Add(pathItems[i].Clone() as IDirectoryBrowser);
 
-                        pathIsRouted = true;
+                        pathIsRooted = true;
                         return newRoot.ToArray();
                     }
                 }
@@ -670,7 +638,7 @@
                         for (int i = idx + 1; i < pathItems.Length; i++)
                             newRoot.Add(pathItems[i].Clone() as IDirectoryBrowser);
 
-                        pathIsRouted = true;
+                        pathIsRooted = true;
                         return newRoot.ToArray();
                     }
                 }
@@ -699,7 +667,7 @@
                         for (int i = idx; i < pathItems.Length; i++)
                             newRoot.Add(pathItems[i].Clone() as IDirectoryBrowser);
 
-                        pathIsRouted = true;
+                        pathIsRooted = true;
                         return newRoot.ToArray();
                     }
                 }
@@ -728,7 +696,7 @@
                             for (int i = idx; i < pathItems.Length; i++)
                                 newRoot.Add(pathItems[i].Clone() as IDirectoryBrowser);
 
-                            pathIsRouted = true;
+                            pathIsRooted = true;
                             return newRoot.ToArray();
                         }
                     }
@@ -750,7 +718,7 @@
             for (int i = 0; i < pathItems.Length; i++) //Join path to root and return to sender
                 newRoot.Add(pathItems[i].Clone() as IDirectoryBrowser);
 
-            pathIsRouted = true;
+            pathIsRooted = true;
             return newRoot.ToArray();
         }
 
@@ -794,6 +762,11 @@
         /// </summary>
         /// <param name="path"></param>
         /// <param name="pathItems"></param>
+        /// <param name="bFindKF">Determines if known folder should be looked up
+        /// even if given folder is a normal string such as (eg.: 'C:\Windows\').
+        /// Set this parameter only if you are sure that you need it as it will
+        /// have a performance impact on the time required to generate the object.
+        /// </param>
         /// <returns>Returns true if item has a filesystem path otherwise false.</returns>
         public static bool DirectoryExists(string path,
                                            out IDirectoryBrowser[] pathItems,
@@ -871,6 +844,11 @@
         /// of <see cref="IDirectoryBrowser"/> items or null if path cannot be resolved.
         /// </summary>
         /// <param name="fs_path">The file system path to be resolved.</param>
+        /// <param name="bFindKF">Determines if known folder should be looked up
+        /// even if given folder is a normal string such as (eg.: 'C:\Windows\').
+        /// Set this parameter only if you are sure that you need it as it will
+        /// have a performance impact on the time required to generate the object.
+        /// </param>
         /// <returns></returns>
         public static IDirectoryBrowser[] GetFileSystemPathItems(string fs_path,
                                                                  bool bFindKF = false)
@@ -1218,11 +1196,19 @@
 
             return dirOrfilePath;
         }
-        #endregion methods
 
-        public static IEnumerable<DirectoryBrowserStageZero> GetStageZeroChildItems(string folderParseName,
-                                                                                    string searchMask = null,
-                                                                                    SubItemFilter itemFilter = SubItemFilter.NameOnly)
+        /// <summary>
+        /// Gets an enumeration of all childitems below the
+        /// <paramref name="folderParseName"/> item.
+        /// </summary>
+        /// <param name="folderParseName">Is the parse name that should be used to emit child items for.</param>
+        /// <param name="searchMask">Optional name of an item that should be filtered
+        /// in case insensitive fashion when searching for a certain child rather than all children.</param>
+        /// <param name="itemFilter">Specify wether to filter only on names or on names and ParseNames</param>
+        /// <returns>returns each item as <see cref="DirectoryBrowserSlim"/> object</returns>
+        public static IEnumerable<DirectoryBrowserSlim> GetSlimChildItems(string folderParseName,
+                                                                          string searchMask = null,
+                                                                          SubItemFilter itemFilter = SubItemFilter.NameOnly)
         {
             if (string.IsNullOrEmpty(folderParseName) == true)
                 yield break;
@@ -1361,7 +1347,7 @@
 
                         IdList apidlIdList = PidlManager.PidlToIdlist(apidl);
 
-                        yield return new DirectoryBrowserStageZero(index++, folderParseName, parseName, name, labelName);
+                        yield return new DirectoryBrowserSlim(index++, folderParseName, parseName, name, labelName);
                     }
                     finally
                     {
@@ -1388,7 +1374,8 @@
         }
 
         /// <summary>
-        /// Gets a strongly-typed read-only collection of all the registered known folders.
+        /// Gets a strongly-typed collection of all registered known folders that have
+        /// an associated file system path.
         /// </summary>
         /// <returns></returns>
         public static Dictionary<string, IDirectoryBrowser> GetAllKnownFolders()
@@ -1462,6 +1449,12 @@
             return pathList;
         }
 
+        /// <summary>
+        /// Tries to determine whether there is a known folder associated with this
+        /// path or not.
+        /// </summary>
+        /// <param name="path"></param>
+        /// <returns></returns>
         public static IDirectoryBrowser FindKnownFolderByFileSystemPath(string path)
         {
             if (KnownFileSystemFolders.Count == 0)
@@ -1475,5 +1468,6 @@
 
             return matchedItem;
         }
+        #endregion methods
     }
 }

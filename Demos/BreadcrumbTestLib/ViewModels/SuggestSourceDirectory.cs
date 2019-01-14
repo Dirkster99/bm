@@ -1,7 +1,6 @@
 ﻿namespace BreadcrumbTestLib.ViewModels
 {
     using BreadcrumbTestLib.Models;
-    using ShellBrowser.Enums;
     using ShellBrowserLib;
     using ShellBrowserLib.Enums;
     using ShellBrowserLib.IDs;
@@ -138,28 +137,32 @@
 
             SuggestResult result = new SuggestResult();
 
-            string namedPath = path[0].Name;
-            for (int i = 1; i < path.Length; i++)
-                namedPath = namedPath + '\\' + path[i].Name;
-
-            foreach (var item in ShellBrowserLib.ShellBrowser.GetChildItems(dirPath.PathShell, searchMask))
+            string namedPath = string.Empty;
+            if (pathType == PathType.WinShellPath)
             {
+                namedPath = path[0].Name;
+                for (int i = 1; i < path.Length; i++)
+                    namedPath = namedPath + '\\' + path[i].Name;
+            }
+
+            foreach (var item in ShellBrowser.GetSlimChildItems(dirPath.PathShell, searchMask))
+            {
+                SuggestionListItem Itemsuggest = null;
                 if (pathType == PathType.WinShellPath)
                 {
-                    AddItem(result, item.Label, namedPath + '\\' + item.Name,
-                            PathType.WinShellPath, path);
+                    Itemsuggest = CreateItem(item.LabelName, namedPath + '\\' + item.ParseName,
+                                                PathType.WinShellPath, path);
                 }
                 else
                 {
-                    if (string.IsNullOrEmpty(item.PathFileSystem) == false)
+                    if (ShellBrowser.IsTypeOf(item.Name) != PathType.SpecialFolder)
                     {
-                        if (string.IsNullOrEmpty(item.PathFileSystem) == false)
-                        {
-                            AddItem(result, item.Label, item.PathFileSystem,
-                                    PathType.FileSystemPath, path);
-                        }
+                        Itemsuggest = CreateItem(item.LabelName, item.Name,
+                                                    PathType.FileSystemPath, path);
                     }
                 }
+
+                result.Suggestions.Add(Itemsuggest);
             }
 
             return Task.FromResult<ISuggestResult>(result);
@@ -175,29 +178,31 @@
 
             // Get Root Items below ThisPC
             var parent = ShellBrowser.MyComputer;
-            foreach (var item in ShellBrowser.GetChildItems(parent.SpecialPathId,
-                                                            input + "*", SubItemFilter.NameOrParsName))
+            foreach (var item in ShellBrowser.GetSlimChildItems(parent.SpecialPathId,
+                                                                     input + "*", SubItemFilter.NameOrParsName))
             {
-                if (string.IsNullOrEmpty(item.PathFileSystem) == false)
+                if (ShellBrowser.IsTypeOf(item.Name) != PathType.SpecialFolder)
                 {
-                    AddItem(result, item.Label, item.PathFileSystem, PathType.FileSystemPath, parent);
+                    var Itemsuggest = CreateItem(item.LabelName, item.Name, PathType.FileSystemPath, parent);
+                    result.Suggestions.Add(Itemsuggest);
                 }
             }
 
             // Get Root Items below Desktop
             parent = ShellBrowser.DesktopDirectory;
-            foreach (var item in ShellBrowser.GetChildItems(parent.SpecialPathId, input + "*"))
+            foreach (var item in ShellBrowser.GetSlimChildItems(parent.SpecialPathId, input + "*"))
             {
                 // filter out RecycleBin, ControlPanel... since its not that useful here...
-                bool IsFilteredItem = string.Compare(item.SpecialPathId, KF_IID.ID_FOLDERID_RecycleBinFolder, true) == 0 ||
-                                      string.Compare(item.PathRAW, "::{26EE0668-A00A-44D7-9371-BEB064C98683}", true) == 0;
+                bool IsFilteredItem = string.Compare(item.Name, KF_IID.ID_FOLDERID_RecycleBinFolder, true) == 0 ||
+                                      string.Compare(item.Name, "::{26EE0668-A00A-44D7-9371-BEB064C98683}", true) == 0;
 
                 // Filter out ThisPC since its items are handled in previous loop
-                bool IsThisPC = string.Compare(item.SpecialPathId, KF_IID.ID_FOLDERID_ComputerFolder, true) == 0;
+                bool IsThisPC = string.Compare(item.Name, "::{20D04FE0-3AEA-1069-A2D8-08002B30309D}", true) == 0;
 
                 if (IsFilteredItem == false && IsThisPC == false)
                 {
-                    AddItem(result, item.Label, item.Name, PathType.WinShellPath, parent);
+                    var Itemsuggest = CreateItem(item.LabelName, item.ParseName, PathType.WinShellPath, parent);
+                    result.Suggestions.Add(Itemsuggest);
                 }
             }
 
@@ -270,21 +275,24 @@
             SuggestResult result = new SuggestResult();
 
             var parent = ShellBrowser.Create(input);
-            foreach (var item in ShellBrowserLib.ShellBrowser.GetChildItems(input, searchMask))
+            foreach (var item in ShellBrowser.GetSlimChildItems(input, searchMask))
             {
-                AddItem(result, item.Label, item.PathFileSystem, PathType.FileSystemPath, parent);
+                if (ShellBrowser.IsTypeOf(item.Name) != PathType.SpecialFolder)
+                {
+                    result.Suggestions.Add(CreateItem(item.LabelName, item.Name,
+                                                      PathType.FileSystemPath, parent));
+                }
             }
 
             return result;
         }
 
-        private static void AddItem(ISuggestResult result,
-                                    string header,
-                                    string textPath, PathType pathType,
-                                    object parent)
+        private static SuggestionListItem CreateItem(string header,
+                                                     string textPath,
+                                                     PathType pathType,
+                                                     object parent)
         {
-            var newItem = new SuggestionListItem(header, textPath, parent, pathType);
-            result.Suggestions.Add(newItem);
+            return new SuggestionListItem(header, textPath, parent, pathType);
         }
     }
 }
