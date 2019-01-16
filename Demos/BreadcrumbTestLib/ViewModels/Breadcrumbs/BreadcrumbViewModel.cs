@@ -34,7 +34,6 @@ namespace BreadcrumbTestLib.ViewModels.Breadcrumbs
         protected static readonly log4net.ILog Logger = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
 
         private bool _EnableBreadcrumb;
-        private string _suggestedPath;
 
         private bool _IsBrowsing;
 
@@ -86,8 +85,7 @@ namespace BreadcrumbTestLib.ViewModels.Breadcrumbs
             Progressing = new ProgressViewModel();
             BreadcrumbSubTree = new BreadcrumbTreeItemViewModel(null, null, this);
 
-            SuggestSources = new List<ISuggestSource>(new[]
-                                { new SuggestSourceDirectory() });
+            SuggestSources = new SuggestSourceDirectory();
         }
         #endregion constructors
 
@@ -111,10 +109,11 @@ namespace BreadcrumbTestLib.ViewModels.Breadcrumbs
         public ValidationRule PathValidation { get; }
 
         /// <summary>
-        /// Gets a list of suggestion sources that are queries when the <see cref="SuggestionBox"/>
-        /// is visible and the user can enter a string based path.
+        /// Gets a list of suggestions that match a string based path query
+        /// when the <see cref="SuggestionBox"/> is visible and the user can
+        /// enter a string based path.
         /// </summary>
-        public List<ISuggestSource> SuggestSources { get; }
+        public SuggestSourceDirectory SuggestSources { get; }
 
         /// <summary>
         /// Gets a viewmodel that manages the progress display that is shown to inform
@@ -182,23 +181,6 @@ namespace BreadcrumbTestLib.ViewModels.Breadcrumbs
                     _BreadcrumbSelectedItem = value;
                     NotifyPropertyChanged(() => BreadcrumbSelectedItem);
                     NotifyPropertyChanged(() => CurrentPath);
-                }
-            }
-        }
-
-        /// <summary>
-        /// Gets/Sets the string based path that binds to the SuggestBox and changes
-        /// when it is visible and the user enters queries...
-        /// </summary>
-        public string SuggestedPath
-        {
-            get { return _suggestedPath; }
-            set
-            {
-                if (_suggestedPath != value)
-                {
-                    _suggestedPath = value;
-                    NotifyPropertyChanged(() => SuggestedPath);
                 }
             }
         }
@@ -429,8 +411,7 @@ namespace BreadcrumbTestLib.ViewModels.Breadcrumbs
         /// <param name="navigateToThisLocation"></param>
         /// <returns></returns>
         Task<bool> IBreadcrumbModel.NavigateTreeViewModel(string navigateToThisLocation,
-                                                          bool goBackToPreviousLocation,
-                                                          object locationIndicator
+                                                          bool goBackToPreviousLocation
                                                           )
         {
             return Task.Run<bool>(async () =>
@@ -453,7 +434,7 @@ namespace BreadcrumbTestLib.ViewModels.Breadcrumbs
                     }
                     else
                     {
-                        LocationIndicator li = locationIndicator as LocationIndicator;
+                        LocationIndicator li = SuggestSources.CurrentPath;
                         IDirectoryBrowser[] pathItems = null;
                         if (li != null)
                         {
@@ -570,6 +551,7 @@ namespace BreadcrumbTestLib.ViewModels.Breadcrumbs
                 if (string.IsNullOrEmpty(path))
                     path = locs.GetWinShellPath();
 
+                SuggestSources.ResetLocationIndicator(locs);
                 locations = locs;
             }
 

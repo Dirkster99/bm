@@ -25,7 +25,7 @@
 
     /// <summary>
     /// Implements a simple class to store what the new loaction of
-    /// a path edit workflow is and whether editing was cancell'ed od OK'ed.
+    /// a path edit workflow is and whether editing was cancell'ed or OK'ed.
     /// </summary>
     public class EditResult
     {

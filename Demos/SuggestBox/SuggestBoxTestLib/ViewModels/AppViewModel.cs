@@ -1,7 +1,9 @@
 ﻿namespace SuggestBoxTestLib.ViewModels
 {
     using SuggestBoxTestLib.AutoSuggest;
-    using SuggestLib.Interfaces;
+    using SuggestBoxTestLib.DataSources;
+    using SuggestBoxTestLib.DataSources.Auto;
+    using SuggestBoxTestLib.DataSources.Directory;
     using System;
     using System.Collections.Generic;
     using System.Linq;
@@ -9,36 +11,31 @@
 
     public class AppViewModel : Base.ViewModelBase
     {
-        #region fields
-        private bool _Processing;
-        #endregion fields
-
         #region constructors
         /// <summary>
         /// Class constructor.
         /// </summary>
         public AppViewModel()
         {
-            SuggestBoxDummy_SuggestSources = new List<ISuggestSource>(new[] { new DummySuggestSource() });
+            DummySuggestions = new DummySuggestions();
 
+            // Construct SuggestBoxAuto properties
             FakeViewModel fvm = new FakeViewModel();
-            this.Processing = true;
+            SuggestBoxAuto_SuggestSources = new AutoSuggestSource(new LocationIndicator(fvm));
+            SuggestBoxAuto_SuggestSources.SetProcessing(true);
             var t = ConstructHierarchy(fvm);
             t.ContinueWith((result) =>
             {
-                this.Processing = false;
+                SuggestBoxAuto_SuggestSources.SetProcessing(false);
             });
 
-            // Construct SuggestBoxAuto properties
-            SuggestBoxAuto_LocationIndicator = new LocationIndicator(fvm);
-            SuggestBoxAuto_SuggestSources = new List<ISuggestSource>(new[] { new AutoSuggestSource() });
-
             // Construct SuggestBoxAuto2 properties
-            SuggestBoxAuto2_LocationIndicator = new LocationIndicator(FakeViewModel.GenerateFakeViewModels(TimeSpan.FromSeconds(0.5)));
-            SuggestBoxAuto2_SuggestSources = new List<ISuggestSource>(new[] { new AutoSuggestSource()});
+            var fakeViewModel = new LocationIndicator(FakeViewModel.GenerateFakeViewModels(TimeSpan.FromSeconds(0.5)));
+            SuggestBoxAuto2_SuggestSources = new AutoSuggestSource(fakeViewModel);
 
             // Construct properties for diskpath suggestion demo
-            DiskPathSuggestBox_SuggestSources = new List<ISuggestSource>(new[] { new DirectorySuggestSource() });
+            SuggestDirectory = new DirectorySuggestSource();
+            SuggestDirectoryWithRecentList = new DirectorySuggestSource();
         }
         #endregion constructors
 
@@ -47,58 +44,33 @@
         /// Gets a simple data provider object that will always suggest a list of 2 items
         /// based on any given input string (by adding a constant output to any given input).
         /// </summary>
-        public List<ISuggestSource> SuggestBoxDummy_SuggestSources { get; }
-
-        #region SuggestBoxAuto
-        /// <summary>
-        /// Gets the model properties that drive the SuggestBoxAuto sample SuggestBox.
-        /// </summary>
-        public LocationIndicator SuggestBoxAuto_LocationIndicator { get; }
+        public DummySuggestions DummySuggestions { get; }
 
         /// <summary>
         /// Gets the datasource that is queried for the SuggestBoxAuto sample SuggestBox.
         /// </summary>
-        public List<ISuggestSource> SuggestBoxAuto_SuggestSources { get; }
-        #endregion SuggestBoxAuto
-
-        #region SuggestBoxAuto2
-        /// <summary>
-        /// Gets the model properties that drive the SuggestBoxAuto2 sample SuggestBox.
-        /// </summary>
-        public LocationIndicator SuggestBoxAuto2_LocationIndicator { get; }
+        public AutoSuggestSource SuggestBoxAuto_SuggestSources { get; }
 
         /// <summary>
         /// Gets the datasource that is queried for the SuggestBoxAuto2 sample SuggestBox.
         /// </summary>
-        public List<ISuggestSource> SuggestBoxAuto2_SuggestSources { get; }
-
-        /// <summary>
-        /// Gets a property that indicates whether the initally constructed hierarchy for the
-        /// SuggestBoxAuto2 SuggestBox is ready for consumtion or not.
-        /// 
-        /// Returns false if the background task is still busy constructing hierarchy items.
-        /// </summary>
-        public bool Processing
-        {
-            get { return _Processing; }
-            private set
-            {
-                if (_Processing != value)
-                {
-                    _Processing = value;
-                    NotifyPropertyChanged(() => Processing);
-                }
-            }
-        }
-        #endregion SuggestBoxAuto2
+        public AutoSuggestSource SuggestBoxAuto2_SuggestSources { get; }
 
         #region DiskPathSuggestBox
-        public List<ISuggestSource> DiskPathSuggestBox_SuggestSources { get; }
+        /// <summary>
+        /// Gets a suggestions data source that can produce file based suggestions.
+        /// </summary>
+        public DirectorySuggestSource SuggestDirectory { get; }
+
+        /// <summary>
+        /// Gets a suggestions data source that can produce file based suggestions
+        /// and is also supported by a recent list of previously selected entries.
+        /// </summary>
+        public DirectorySuggestSource SuggestDirectoryWithRecentList { get; }
         #endregion DiskPathSuggestBox
         #endregion properties
 
         #region methods
-
         /// <summary>
         /// Returns a tree of <see cref="FakeViewModel"/> items with a depth
         /// of <paramref name="iLevels"/> and

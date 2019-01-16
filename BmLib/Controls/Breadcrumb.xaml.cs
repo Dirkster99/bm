@@ -4,6 +4,7 @@
     using BmLib.Interfaces;
     using SuggestLib;
     using SuggestLib.Events;
+    using SuggestLib.Utils;
     using System;
     using System.Collections;
     using System.Collections.Generic;
@@ -64,7 +65,7 @@
         /// </summary>
         public static readonly DependencyProperty PathValidationProperty =
             DependencyProperty.Register("PathValidation", typeof(ValidationRule),
-                typeof(Breadcrumb), new PropertyMetadata(null));
+                typeof(Breadcrumb), new PropertyMetadata(new InvalidValidationRule()));
 
 
         /// <summary>
@@ -721,12 +722,10 @@
                 }
                 else
                 {
+                    // Reset current suggestions path from current BreadcrumbVM location
                     object locations;
-
                     _PART_SuggestBox.Text = _BreadcrumbModel.UpdateSuggestPath(out locations);
                     _previousLocation = _PART_SuggestBox.Text;
-
-                    _PART_SuggestBox.RootItem = locations;
 
                     _focusControsOnSwitch = focusControl;
                     IsSwitchOn = false;  // Switch to text based view
@@ -758,7 +757,7 @@
                     isPathValid = false;      // Cannot invoke viewmodel method
                 else
                     isPathValid = await _BreadcrumbModel.NavigateTreeViewModel(
-                        path, goBackToPreviousLocation, this._PART_SuggestBox.RootItem);
+                        path, goBackToPreviousLocation);
 
                 // Canceling navigation from edit result since path appears to be invalid
                 // > Stay with false path if path does not exist
@@ -796,7 +795,7 @@
             // Switch from tree view to suggestbox
             if (OldValue == true && NewValue == false)
             {
-                _PART_SuggestBox.InitializeSuggestions();
+//                _PART_SuggestBox.InitializeSuggestions();
                 _PART_SuggestBox.SelectAll();
 
                 // Focus the newly switched UI element (requires Focusable="True")

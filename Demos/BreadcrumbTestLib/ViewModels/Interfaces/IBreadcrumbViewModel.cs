@@ -34,8 +34,6 @@
         /// Gets an interface to determine whether progress display should currenlty be visible or not.
         /// </summary>
         IProgress Progressing { get; }
-
-        string SuggestedPath { get; set; }
         #endregion properties
 
         #region methods

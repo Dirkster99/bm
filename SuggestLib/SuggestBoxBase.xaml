@@ -64,7 +64,7 @@
                             <ListBox
                                 x:Name="PART_ItemList" Grid.Row="0"
                                 HorizontalAlignment="Stretch" VerticalAlignment="Top"
-                                ItemsSource="{Binding Suggestions, RelativeSource={RelativeSource TemplatedParent}}"
+                                ItemsSource="{Binding ItemsSource, RelativeSource={RelativeSource TemplatedParent}}"
                                 BorderThickness="0"
                                 ItemTemplate="{TemplateBinding ItemTemplate}"
                                 SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"                                                             

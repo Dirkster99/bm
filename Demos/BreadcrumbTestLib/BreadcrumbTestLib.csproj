@@ -68,6 +68,7 @@
     <Compile Include="ViewModels\Interfaces\IBreadcrumbTreeItemViewModel.cs" />
     <Compile Include="ViewModels\SuggestionListItem.cs" />
     <Compile Include="ViewModels\SuggestSourceDirectory.cs" />
+    <Compile Include="ViewModels\SuggestQueryResultModel.cs" />
     <Compile Include="ViewModels\Breadcrumbs\ProgressViewModel.cs" />
     <Compile Include="ViewModels\Breadcrumbs\TreeSelectors\TreeSelectorViewModel.cs" />
     <Compile Include="ViewModels\BrowseRequestTaskQueueViewModel.cs" />

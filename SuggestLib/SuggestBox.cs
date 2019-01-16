@@ -1,13 +1,9 @@
 ﻿namespace SuggestLib
 {
     using Interfaces;
-    using SuggestLib.SuggestSource;
-    using System;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Threading.Tasks;
     using System.Windows;
     using System.Windows.Controls;
+    using System.Windows.Input;
 
     /// <summary>
     /// Implements a text based control that updates a list of suggestions
@@ -20,32 +16,11 @@
     {
         #region fields
         /// <summary>
-        /// Implements the backing store for the <see cref="SuggestSources"/> dependency property.
+        /// Implements the backing store for the <see cref="TextChangedCommand"/> dependency property.
         /// </summary>
-        public static readonly DependencyProperty SuggestSourcesProperty = DependencyProperty.Register(
-            "SuggestSources", typeof(IEnumerable<ISuggestSource>),
-            typeof(SuggestBox), new PropertyMetadata(null));
-
-        /// <summary>
-        /// Implements the backing property of the <see cref="RootItem"/> dependency property.
-        /// </summary>
-        public static readonly DependencyProperty RootItemProperty =
-            DependencyProperty.Register("RootItem", typeof(object),
-                typeof(SuggestBox), new PropertyMetadata(null));
-
-        /// <summary>
-        /// Implements the backing store for the <see cref="PathValidation"/> dependency property.
-        /// </summary>
-        public static readonly DependencyProperty PathValidationProperty =
-            DependencyProperty.Register("PathValidation", typeof(ValidationRule),
-                typeof(SuggestBox), new PropertyMetadata(null));
-
-        /// <summary>
-        /// Implements the backing store for the <see cref="IsDeferredScrolling"/> dependency property.
-        /// </summary>
-        public static readonly DependencyProperty IsDeferredScrollingProperty =
-            DependencyProperty.Register("IsDeferredScrolling",
-                typeof(bool), typeof(SuggestBox), new PropertyMetadata(false));
+        public static readonly DependencyProperty TextChangedCommandProperty =
+            DependencyProperty.Register("TextChangedCommand",
+                typeof(ICommand), typeof(SuggestBox), new PropertyMetadata(null));
         #endregion fields
 
         #region Constructor
@@ -69,50 +44,13 @@
 
         #region Public Properties
         /// <summary>
-        /// Gets/sets a list of data sources that can be queries in order to
-        /// display suggested entries to the user.
+        /// Gets/sets a command that should be executed whenever the text in the textbox
+        /// portion of this control has changed.
         /// </summary>
-        public IEnumerable<ISuggestSource> SuggestSources
+        public ICommand TextChangedCommand
         {
-            get { return (IEnumerable<ISuggestSource>)GetValue(SuggestSourcesProperty); }
-            set { SetValue(SuggestSourcesProperty, value); }
-        }
-
-        /// <summary>
-        /// Gets/sets a dependency property that holds an object that represents the current
-        /// location. This location object is also handed down to the SuggestedSources
-        /// object to make finding the next list of suggestions a simple matter of retrieving
-        /// the children of the current rootitems object collection.
-        /// 
-        /// This property can be assigned by the client application (eg. Breadcrumb) and be
-        /// updated throughout the browsing with suggestions.
-        /// </summary>
-        public object RootItem
-        {
-            get { return GetValue(RootItemProperty); }
-            set { SetValue(RootItemProperty, value); }
-        }
-
-        /// <summary>
-        /// Gets/sets a <see cref="ValidationRule"/> that must be present to show a
-        /// validation error (red rectangle around textbox) if user entered invalid data.
-        /// </summary>
-        public ValidationRule PathValidation
-        {
-            get { return (ValidationRule)GetValue(PathValidationProperty); }
-            set { SetValue(PathValidationProperty, value); }
-        }
-
-        /// <summary>
-        /// Gets/sets whether the scrollbar <see cref="ListBox"/> inside the suggestions PopUp
-        /// control is directly linked to scrolling the content or not (is deferred).
-        /// 
-        /// This property is handled by the control itself and should not be used via binding.
-        /// </summary>
-        public bool IsDeferredScrolling
-        {
-            get { return (bool)GetValue(IsDeferredScrollingProperty); }
-            set { SetValue(IsDeferredScrollingProperty, value); }
+            get { return (ICommand)GetValue(TextChangedCommandProperty); }
+            set { SetValue(TextChangedCommandProperty, value); }
         }
         #endregion
 
@@ -152,115 +90,48 @@
         {
             base.OnTextChanged(e);
 
+            if (string.IsNullOrEmpty(this.Text) == false)
+                IsHintVisible = false;
+            else
+                IsHintVisible = true;
+
             QueryForSuggestions();
         }
 
         private void QueryForSuggestions()
         {
+            // A change during disabled state is likely to be caused by a bound property
+            // in a viewmodel (a machine based edit rather than user input)
+            // -> Lets break the message loop here to avoid unnecessary CPU processings...
+            if (this.IsEnabled == false || this.IsLoaded == false)
+            return;
+
             // Text change is likely to be from property change so we ignore it
             // if control is invisible or suggestions are currently not requested
             if (Visibility != Visibility.Visible || EnableSuggestions == false)
                 return;
 
-            try
+            if (ParentWindowIsClosing == true)
+                return;
+
+            ICommand changedCommand = this.TextChangedCommand;
+
+            // There may not be a command bound to this after all
+            if (changedCommand == null)
+                return;
+
+            var item = this.Text;
+
+            // Check whether this attached behaviour is bound to a RoutedCommand
+            if (changedCommand is RoutedCommand)
             {
-                var suggestSources = this.SuggestSources;
-                string input = this.Text;
-                object location = this.RootItem;
-                IsHintVisible = String.IsNullOrEmpty(input);
-
-                if (IsEnabled == true)
-                {
-                    _suggestionIsConsumed = false;
-                }
-
-                if (IsEnabled && suggestSources != null)
-                {
-                    Task.Run(async () =>
-                    {
-                        List<Task<ISuggestResult>> tasks = new List<Task<ISuggestResult>>();
-                        foreach (var item in suggestSources)
-                        {
-                            // Query suggestion source for suggestions on this input
-                            tasks.Add(item.SuggestAsync(location, input));
-                        }
-
-                        await Task.WhenAll(tasks);
-
-                        // Consolidate all results into 1 result object
-                        ISuggestResult AllResults = new SuggestResult(
-                            tasks.SelectMany(tsk => tsk.Result.Suggestions).Distinct().ToList());
-
-                        // See if a suggestion source invalidates the input if there are no results
-                        if (AllResults.Suggestions.Count == 0)
-                        {
-                            var validPaths = tasks.Where(tsk => tsk.Result.ValidPath == false);
-                            if (validPaths.Any())
-                                AllResults.ValidPath = false;  // No SuggestionSource could not validate input
-                        }
-
-                        return AllResults;
-                    }
-                    ).ContinueWith(
-                        (pTask) =>
-                        {
-                            if (pTask.IsFaulted == false)
-                            {
-                                // Determine whether deferred scrolling makes any sense or not
-                                if (pTask.Result.Suggestions.Count > 4096)
-                                    IsDeferredScrolling = true;
-                                else
-                                    IsDeferredScrolling = false;
-
-                                this.SetValue(SuggestionsProperty, pTask.Result.Suggestions);
-
-                                if (pTask.Result.ValidPath == true)
-                                    MarkInvalidInputSuggestBox(false);
-                                else
-                                    MarkInvalidInputSuggestBox(true, "Path is not valid.");
-                            }
-
-                        }, TaskScheduler.FromCurrentSynchronizationContext());
-                }
-            }
-            catch
-            {
-                // logger.Error(exp);
-            }
-        }
-
-        /// <summary>
-        /// Sets or clears a validation error on the SuggestBox
-        /// to indicate invalid input to the user.
-        /// </summary>
-        /// <param name="markError">True: Shows a red validation error rectangle around the SuggestBox
-        /// (<paramref name="msg"/> should also be set).
-        /// False: Clears previously set validation errors around the Text property of the SuggestBox.
-        /// </param>
-        /// <param name="msg">Error message (eg.: "invalid input") is set on the binding expression if
-        /// <paramref name="markError"/> is true.</param>
-        private void MarkInvalidInputSuggestBox(bool markError, string msg = null)
-        {
-            if (markError == true)
-            {
-                // Show a red validation error rectangle around SuggestionBox
-                // if validation rule dependency property is available
-                if (PathValidation != null)
-                {
-                    var bindingExpr = this.GetBindingExpression(TextBox.TextProperty);
-                    if (bindingExpr != null)
-                    {
-                        Validation.MarkInvalid(bindingExpr,
-                                new ValidationError(PathValidation, bindingExpr, msg, null));
-                    }
-                }
+                // Execute the routed command
+                (changedCommand as RoutedCommand).Execute(item, this);
             }
             else
             {
-                // Clear validation error in case it was previously set switching from Text to TreeView
-                var bindingExpr = this.GetBindingExpression(TextBox.TextProperty);
-                if (bindingExpr != null)
-                    Validation.ClearInvalid(bindingExpr);
+                // Execute the Command as bound delegate
+                changedCommand.Execute(item);
             }
         }
         #endregion

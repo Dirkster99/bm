@@ -3,8 +3,10 @@
     using SuggestLib.Events;
     using SuggestLib.Utils;
     using System;
+    using System.Linq;
+    using System.Collections;
     using System.Collections.Generic;
-    using System.Collections.ObjectModel;
+    using System.Collections.Specialized;
     using System.Windows;
     using System.Windows.Controls;
     using System.Windows.Controls.Primitives;
@@ -46,12 +48,6 @@
         /// </summary>
         public const string PART_ItemList = "PART_ItemList";
 
-        /// <summary>
-        /// Controls whether the PopUp should open when the control has focus and suggestion
-        /// or not (not should be implemented if the pop-up just closed and the textbox is
-        /// focused to let the user continue to type into the text portion).
-        /// </summary>
-        protected bool _suggestionIsConsumed = false;
         private bool _prevState;
 
         /// <summary>
@@ -74,13 +70,6 @@
         public static readonly DependencyProperty ItemTemplateProperty =
             DependencyProperty.Register("ItemTemplate",
             typeof(DataTemplate), typeof(SuggestBoxBase), new PropertyMetadata(null));
-
-        /// <summary>
-        /// Implements the backing store of the <see cref="Suggestions"/> dependency property.
-        /// </summary>
-        public static readonly DependencyProperty SuggestionsProperty =
-            DependencyProperty.Register("Suggestions", typeof(List<object>), typeof(SuggestBoxBase),
-            new PropertyMetadata(null, OnSuggestionsChanged));
 
         /// <summary>
         /// Implements the backing store of the <see cref="IsPopupOpened"/> dependency property.
@@ -133,10 +122,39 @@
             DependencyProperty.Register("EnableSuggestions",
                 typeof(bool), typeof(SuggestBoxBase), new PropertyMetadata(true, OnEnableSuggestionChanged));
 
+        /// <summary>
+        /// Implements the backing store of the <see cref="ItemsSource"/> dependency property.
+        /// </summary>
+        public static readonly DependencyProperty ItemsSourceProperty =
+            DependencyProperty.Register("ItemsSource", typeof(IEnumerable),
+                typeof(SuggestBoxBase), new PropertyMetadata(null,OnItemsSourceChanged));
+
+        /// <summary>
+        /// Implements the backing store for the <see cref="IsDeferredScrolling"/> dependency property.
+        /// </summary>
+        public static readonly DependencyProperty IsDeferredScrollingProperty =
+            DependencyProperty.Register("IsDeferredScrolling",
+                typeof(bool), typeof(SuggestBoxBase), new PropertyMetadata(false));
+
+        /// <summary>
+        /// Implements the backing store for the <see cref="PathValidation"/> dependency property.
+        /// </summary>
+        public static readonly DependencyProperty PathValidationProperty =
+            DependencyProperty.Register("PathValidation", typeof(ValidationRule),
+                typeof(SuggestBoxBase), new PropertyMetadata(new InvalidValidationRule()));
+
+        /// <summary>
+        /// Implements the backing store for the <see cref="ValidText"/> dependency property.
+        /// </summary>
+        public static readonly DependencyProperty ValidTextProperty =
+            DependencyProperty.Register("ValidText", typeof(bool),
+                typeof(SuggestBoxBase), new PropertyMetadata(true, OnValidTextChanged));
+
         private Popup _PART_Popup;
         private Thumb _PART_ResizeGripThumb;
         private Grid _PART_ResizeableGrid;
         private ListBox _PART_ItemList;
+        private bool _ParentWindowIsClosing;
         #endregion fields
 
         #region Constructor
@@ -205,16 +223,6 @@
         }
 
         /// <summary>
-        /// Gets/sets a list of suggestions that are shown to suggest
-        /// alternative or more complete items while a user is typing.
-        /// </summary>
-        public List<object> Suggestions
-        {
-            get { return (List<object>)GetValue(SuggestionsProperty); }
-            set { SetValue(SuggestionsProperty, value); }
-        }
-
-        /// <summary>
         /// Gets/sets whether the Popup portion of the control is currently open or not.
         /// </summary>
         public bool IsPopupOpened
@@ -271,6 +279,63 @@
             get { return (bool)GetValue(EnableSuggestionsProperty); }
             set { SetValue(EnableSuggestionsProperty, value); }
         }
+
+        /// <summary>
+        /// Gets/sets an <see cref="IEnumerable"/> ItemsSource for the list of objects
+        /// that pops up when the user has entered some text.
+        /// 
+        /// Ideally, this should be an ObservableCollection{T} since the control with
+        /// look for the <see cref="INotifyCollectionChanged"/> event in order to listen
+        /// for this type of event.
+        /// </summary>
+        public IEnumerable ItemsSource
+        {
+            get { return (IEnumerable)GetValue(ItemsSourceProperty); }
+            set { SetValue(ItemsSourceProperty, value); }
+        }
+
+        /// <summary>
+        /// Gets/sets whether the scrollbar <see cref="ListBox"/> inside the suggestions PopUp
+        /// control is directly linked to scrolling the content or not (is deferred).
+        /// 
+        /// This property is handled by the control itself and should not be used via binding.
+        /// </summary>
+        public bool IsDeferredScrolling
+        {
+            get { return (bool)GetValue(IsDeferredScrollingProperty); }
+            set { SetValue(IsDeferredScrollingProperty, value); }
+        }
+
+        /// <summary>
+        /// Gets/sets a <see cref="ValidationRule"/> that must be present to show a
+        /// validation error (red rectangle around textbox) if user entered invalid data.
+        /// </summary>
+        public ValidationRule PathValidation
+        {
+            get { return (ValidationRule)GetValue(PathValidationProperty); }
+            set { SetValue(PathValidationProperty, value); }
+        }
+
+        /// <summary>
+        /// Gets/sets whether the current text should be marked as invalid (control
+        /// shows a red rectangle around the textbox portion or not).
+        /// </summary>
+        public bool ValidText
+        {
+            get { return (bool)GetValue(ValidTextProperty); }
+            set { SetValue(ValidTextProperty, value); }
+        }
+
+        /// <summary>
+        /// Gets whether the containing parent window is about to be closed or not.
+        /// </summary>
+        protected bool ParentWindowIsClosing
+        {
+            get
+            {
+                return _ParentWindowIsClosing;
+            }
+        }
         #endregion
 
         #region Methods
@@ -304,24 +369,6 @@
             SaveRestorePopUpStateOnWindowDeActivation();
         }
 
-        /// <summary>
-        /// Call this method to clear the list of available suggestion before
-        /// or after using this SuggestionBox. Usually this method should be called
-        /// before the SuggestBox is used (eg. is visible or gets the focus).
-        /// 
-        /// But it can also be called after using the SuggestionBox to select an entry
-        /// to initialize the control for its next usage - doing so makes ensure fresh
-        /// values being pulled each time the SuggestionBox is used (with different values).
-        /// </summary>
-        public void InitializeSuggestions()
-        {
-            if (Suggestions != null)
-            {
-                if (Suggestions.Count > 0)
-                    Suggestions.Clear();  // Clear previous suggestion to ensure new/current results
-            }
-        }
-
         private void SuggestBoxBase_LostKeyboardFocus(object sender,
                                                       KeyboardFocusChangedEventArgs e)
         {
@@ -337,7 +384,6 @@
             }
 
             IsHintVisible = string.IsNullOrEmpty(Text);
-            this._suggestionIsConsumed = false;
         }
 
         /// <summary>
@@ -398,6 +444,13 @@
                 parentWindow.Activated += delegate
                 {
                     SetPopUp(_prevState, "parentWindow.Activated");
+                };
+
+                parentWindow.Closing += delegate
+                {
+                    SetPopUp(false, "parentWindow.Closing");
+                    _ParentWindowIsClosing = true;
+
                 };
 
                 parentWindow.PreviewMouseDown += ParentWindow_PreviewMouseDown;
@@ -554,15 +607,67 @@
         /// </summary>
         protected void PopupIfSuggest()
         {
+            if (ValidText == true)
+                MarkInvalidInputSuggestBox(false);
+            else
+            {
+                MarkInvalidInputSuggestBox(true, "Path is not valid.");
+                SetPopUp(false, "PopupIfSuggest() 0");
+                return;
+            }
+
             if (this.IsFocused)
             {
-                if (Suggestions != null && Suggestions.Count > 0)
+                var itemssource = ItemsSource as IEnumerable<object>;
+
+                if (Any<object>(itemssource))
                 {
-                    if (this._suggestionIsConsumed == false && IsKeyboardFocusWithin)
+                    // Determine whether deferred scrolling makes sense or not
+                    if (itemssource.Skip(4095).Any())
+                        IsDeferredScrolling = true;
+                    else
+                        IsDeferredScrolling = false;
+
+                    if (IsKeyboardFocusWithin)
                         SetPopUp(true, "PopupIfSuggest() 1");
                 }
                 else
                     SetPopUp(false, "PopupIfSuggest() 2");
+            }
+        }
+
+        /// <summary>
+        /// Sets or clears a validation error on the SuggestBox
+        /// to indicate invalid input to the user.
+        /// </summary>
+        /// <param name="markError">True: Shows a red validation error rectangle around the SuggestBox
+        /// (<paramref name="msg"/> should also be set).
+        /// False: Clears previously set validation errors around the Text property of the SuggestBox.
+        /// </param>
+        /// <param name="msg">Error message (eg.: "invalid input") is set on the binding expression if
+        /// <paramref name="markError"/> is true.</param>
+        private void MarkInvalidInputSuggestBox(bool markError, string msg = null)
+        {
+            if (markError == true)
+            {
+                // Show a red validation error rectangle around SuggestionBox
+                // if validation rule dependency property is available
+                if (PathValidation != null)
+                {
+                    var bindingExpr = this.GetBindingExpression(TextBox.TextProperty);
+                    if (bindingExpr != null)
+                    {
+                        Validation.MarkInvalid(bindingExpr,
+                                new ValidationError(PathValidation, bindingExpr, msg, null));
+                    }
+                }
+            }
+            else
+            {
+                // Clear validation error in case it was previously set switching from Text to TreeView
+                var bindingExpr = this.GetBindingExpression(TextBox.TextProperty);
+                if (bindingExpr != null)
+                    Validation.ClearInvalid(bindingExpr);
             }
         }
 
@@ -612,18 +717,21 @@
                 case Key.Down:
                 case Key.Prior:
                 case Key.Next:
-                    if (Suggestions != null && Suggestions.Count > 0 && !(e.OriginalSource is ListBoxItem))
+                    if (Any<object>(ItemsSource as IEnumerable<object>))
                     {
-                        PopupIfSuggest();
-                        _PART_ItemList.Focus();
-                        _PART_ItemList.SelectedIndex = 0;
+                        if (!(e.OriginalSource is ListBoxItem))
+                        {
+                            PopupIfSuggest();
+                            _PART_ItemList.Focus();
+                            _PART_ItemList.SelectedIndex = 0;
 
-                        ListBoxItem lbi = _PART_ItemList.ItemContainerGenerator.ContainerFromIndex(0) as ListBoxItem;
+                            ListBoxItem lbi = _PART_ItemList.ItemContainerGenerator.ContainerFromIndex(0) as ListBoxItem;
 
-                        if (lbi != null)
-                            lbi.Focus();
+                            if (lbi != null)
+                                lbi.Focus();
 
-                        e.Handled = true;
+                            e.Handled = true;
+                        }
                     }
                     break;
 
@@ -690,6 +798,8 @@
 
             NewLocationRequestEvent?.Invoke(this, new NextTargetLocationArgs(message));
         }
+        #endregion
+
 
         /// <summary>
         /// Method executes when the <see cref="EnableSuggestions"/> dependency property
@@ -724,22 +834,25 @@
         }
 
         /// <summary>
-        /// Is invoked when the bound list of suggestions in the <see cref="SuggestionsProperty"/>
+        /// Is invoked when the bound list of suggestions in the <see cref="ItemsSource"/>
         /// has changed and shows the popup list if control has focus and there are
         /// suggestions available.
         /// </summary>
         /// <param name="sender"></param>
-        /// <param name="args"></param>
-        protected static void OnSuggestionsChanged(object sender, DependencyPropertyChangedEventArgs args)
+        /// <param name="e"></param>
+        protected void Observable_CollectionChanged(object sender,
+                                                  NotifyCollectionChangedEventArgs e)
         {
-            SuggestBoxBase sbox = sender as SuggestBoxBase;
-
-            if (args.OldValue != args.NewValue)
-            {
-                sbox.PopupIfSuggest();
-            }
+            this.PopupIfSuggest();
         }
-        #endregion
+
+        #region static privates
+        private static void OnItemsSourceChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            var sbox = d as SuggestBoxBase;
+            if (sbox != null)
+                sbox.OnItemsSourceChanged(e);
+        }
 
         /// <summary>
         /// Method is attached on the changed handler of the IsPopUp dependency property.
@@ -754,6 +867,48 @@
             var ctrl = d as SuggestBoxBase;
             if (ctrl != null)
                 ctrl.OnIsPopUpOpenChanged(e);
+        }
+
+        /// <summary>
+        /// Method executes when the <see cref="EnableSuggestions"/> dependency property
+        /// has changed its value.
+        /// </summary>
+        /// <param name="d"></param>
+        /// <param name="e"></param>
+        private static void OnEnableSuggestionChanged(DependencyObject d,
+                                                      DependencyPropertyChangedEventArgs e)
+        {
+            var ctrl = d as SuggestBoxBase;
+            if (ctrl != null)
+                ctrl.OnEnableSuggestionChanged(e);
+        }
+
+        private static void OnValidTextChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            var ctrl = d as SuggestBoxBase;
+            if (ctrl != null)
+                ctrl.OnValidTextChanged(e);
+        }
+        #endregion static privates
+
+        private void OnValidTextChanged(DependencyPropertyChangedEventArgs e)
+        {
+            PopupIfSuggest();
+        }
+
+        private void OnItemsSourceChanged(DependencyPropertyChangedEventArgs e)
+        {
+            if (e.OldValue != null)
+            {
+                var observable = e.OldValue as INotifyCollectionChanged;
+                observable.CollectionChanged -= Observable_CollectionChanged;
+            }
+
+            if (e.NewValue != null)
+            {
+                var observable = e.NewValue as INotifyCollectionChanged;
+                observable.CollectionChanged += Observable_CollectionChanged;
+            }
         }
 
         /// <summary>
@@ -826,24 +981,23 @@
                     else
                         this.SelectionStart = 0;
 
-                    this._suggestionIsConsumed = true;
                     this.Focus();
                 }
             }
         }
 
-        /// <summary>
-        /// Method executes when the <see cref="EnableSuggestions"/> dependency property
-        /// has changed its value.
-        /// </summary>
-        /// <param name="d"></param>
-        /// <param name="e"></param>
-        private static void OnEnableSuggestionChanged(DependencyObject d,
-                                                      DependencyPropertyChangedEventArgs e)
+        private bool Any<TSource>(IEnumerable<TSource> source)
         {
-            var ctrl = d as SuggestBoxBase;
-            if (ctrl != null)
-                ctrl.OnEnableSuggestionChanged(e);
+            if (source == null)
+                return false;
+
+            using (IEnumerator<TSource> e = source.GetEnumerator())
+            {
+                if (e.MoveNext())
+                    return true;
+            }
+
+            return false;
         }
         #endregion
     }

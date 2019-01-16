@@ -1,4 +1,4 @@
-﻿namespace SuggestBoxTestLib.AutoSuggest.Interfaces
+﻿namespace SuggestBoxTestLib.DataSources.Auto.Interfaces
 {
     using System;
     using System.Collections;

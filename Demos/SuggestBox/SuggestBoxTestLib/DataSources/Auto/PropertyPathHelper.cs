@@ -1,4 +1,4 @@
-﻿namespace SuggestBoxTestLib.AutoSuggest
+﻿namespace SuggestBoxTestLib.DataSources.Auto
 {
     using System;
     using System.Collections.Generic;

@@ -1,21 +1,205 @@
 ﻿namespace BreadcrumbTestLib.ViewModels
 {
     using BreadcrumbTestLib.Models;
+    using BreadcrumbTestLib.Utils;
+    using BreadcrumbTestLib.ViewModels.Base;
     using ShellBrowserLib;
     using ShellBrowserLib.Enums;
     using ShellBrowserLib.IDs;
     using ShellBrowserLib.Interfaces;
-    using SuggestLib.Interfaces;
-    using SuggestLib.SuggestSource;
+    using System.Collections.Generic;
     using System.Linq;
+    using System.Threading;
     using System.Threading.Tasks;
+    using System.Windows.Input;
 
     /// <summary>
     /// Defines a suggestion object to generate suggestions
     /// based on sub entries of a specified string.
     /// </summary>
-    public class SuggestSourceDirectory : ISuggestSource
+    public class SuggestSourceDirectory : ViewModels.Base.ViewModelBase
     {
+        #region fields
+        private readonly LocationIndicator _LocationIndicator;
+        
+        private readonly Dictionary<string, CancellationTokenSource> _Queue;
+        private readonly SemaphoreSlim _SlowStuffSemaphore;
+        private readonly FastObservableCollection<object> _ListQueryResult;
+        private ICommand _SuggestTextChangedCommand;
+        private string _CurrentText;
+        private bool _IsValidText = true;
+        #endregion fields
+      
+        #region ctors
+        /// <summary>
+        /// Parameterized class constructor
+        /// </summary>
+        /// <param name="li">Is a helper object that can be used to keep state and thus
+        /// speed up query time by trying to associate the current query as an extension
+        /// of the last query...</param>
+        internal SuggestSourceDirectory(LocationIndicator li)
+            : this()
+        {
+          _LocationIndicator = li;
+        }
+
+        /// <summary>
+        /// Class constructor
+        /// </summary>
+        internal SuggestSourceDirectory()
+        {
+            _LocationIndicator = new LocationIndicator();
+            _Queue = new Dictionary<string, CancellationTokenSource>();
+            _SlowStuffSemaphore = new SemaphoreSlim(1, 1);
+            _ListQueryResult = new FastObservableCollection<object>();
+        }
+        #endregion ctors
+
+        #region properties       
+        /// <summary>
+        /// Gets whether the last query text was valid or invalid.
+        /// </summary>
+        public bool IsValidText
+        {
+            get
+            {
+                return _IsValidText;
+            }
+
+            protected set
+            {
+                if (_IsValidText != value)
+                {
+                    _IsValidText = value;
+                    NotifyPropertyChanged(() => IsValidText);
+                }
+            }
+        }
+
+        internal LocationIndicator CurrentPath
+        {
+            get
+            {
+                return _LocationIndicator;
+            }
+        }
+
+        /// <summary>
+        /// Gets/sets the text currently edit in the SuggestBox
+        /// </summary>
+        public string CurrentText
+        {
+            get
+            {
+                return _CurrentText;
+            }
+
+            set
+            {
+                if (_CurrentText != value)
+                {
+                    _CurrentText = value;
+                    NotifyPropertyChanged(() => CurrentText);
+                }
+            }
+        }
+
+        /// <summary>
+        /// Gets a collection of items that represent likely suggestions towards
+        /// a previously entered text.
+        /// </summary>
+        public IEnumerable<object> ListQueryResult
+        {
+            get
+            {
+                return _ListQueryResult;
+            }
+        }
+
+        /// <summary>
+        /// Gets a command that queries a sub-system in order to resolve a query
+        /// based on a previously entered text. The entered text is expected as
+        /// parameter of this command.
+        /// </summary>
+        public ICommand SuggestTextChangedCommand
+        {
+            get
+            {
+                if (_SuggestTextChangedCommand == null)
+                {
+                    _SuggestTextChangedCommand = new RelayCommand<object>(async (p) =>
+                    {
+                        // We want to process empty strings here as well
+                        string newText = p as string;
+                        if (newText == null)
+                            return;
+
+                        var suggestions = await SuggestTextChangedCommand_Executed(newText);
+
+                        _ListQueryResult.Clear();
+                        IsValidText = suggestions.ValidInput;
+
+                        if (IsValidText == true)
+                            _ListQueryResult.AddItems(suggestions.ResultList);
+                    });
+                }
+
+                return _SuggestTextChangedCommand;
+            }
+        }
+        #endregion properties
+
+        #region methods
+        /// <summary>
+        /// Method replaces the current location indicator with the stated indicator.
+        /// </summary>
+        /// <param name="locations">Location indicator object that describes a current location</param>
+        internal void ResetLocationIndicator(LocationIndicator locations)
+        {
+          _LocationIndicator.ResetPath(locations);
+        }
+        
+        private async Task<SuggestQueryResultModel> SuggestTextChangedCommand_Executed(string queryThis)
+        {
+            // Cancel current task(s) if there is any...
+            var queueList = _Queue.Values.ToList();
+
+            for (int i = 0; i < queueList.Count; i++)
+                queueList[i].Cancel();
+
+            var tokenSource = new CancellationTokenSource();
+            _Queue.Add(queryThis, tokenSource);
+
+            // Make sure the task always processes the last input but is not started twice
+            await _SlowStuffSemaphore.WaitAsync();
+            try
+            {
+                // There is more recent input to process so we ignore this one
+                if (_Queue.Count > 1)
+                {
+                    _Queue.Remove(queryThis);
+                    return null;
+                }
+
+                // Do the search and return results
+                var result = await SuggestAsync(_LocationIndicator, queryThis);
+
+                return result;
+            }
+            catch (System.Exception exp)
+            {
+                System.Console.WriteLine(exp.Message);
+            }
+            finally
+            {
+                _Queue.Remove(queryThis);
+                _SlowStuffSemaphore.Release();
+            }
+
+            return null;
+        }
+
+        #region input parser
         /// <summary>
         /// Method returns a task that returns a list of suggestion objects
         /// that are associated to the <paramref name="input"/> string
@@ -24,8 +208,8 @@
         /// <param name="location">Currently selected location.</param>
         /// <param name="input">Text input to formulate string based path.</param>
         /// <returns></returns>
-        public Task<ISuggestResult> SuggestAsync(object location,
-                                                string input)
+        internal Task<SuggestQueryResultModel> SuggestAsync(LocationIndicator location,
+                                                            string input)
         {
             input = (input == null ? string.Empty : input);
 
@@ -84,12 +268,12 @@
             }
 
             if (input.Length <= 1)
-                return Task.FromResult<ISuggestResult>(ListRootItems(input));
+                return Task.FromResult<SuggestQueryResultModel>(ListRootItems(input));
 
             // Location indicator may be pointing somewhere unrelated ...
             // Are we searching a drive based path ?
             if (ShellBrowser.IsTypeOf(input) == PathType.FileSystemPath)
-                return Task.FromResult<ISuggestResult>(ParseFileSystemPath(input, li));
+                return Task.FromResult<SuggestQueryResultModel>(ParseFileSystemPath(input, li));
             else
             {
                 // Win shell path folder
@@ -101,7 +285,7 @@
                     // List RootItems or last known parent folder's children based on seperator
                     int sepIdx = input.LastIndexOf('\\');
                     if (sepIdx <= 0)
-                        return Task.FromResult<ISuggestResult>(ListRootItems(input));
+                        return Task.FromResult<SuggestQueryResultModel>(ListRootItems(input));
                     else
                     {
                         var parentDir = input.Substring(0, sepIdx);
@@ -115,7 +299,7 @@
                 }
             }
 
-            return Task.FromResult<ISuggestResult>(new SuggestResult());
+            return Task.FromResult<SuggestQueryResultModel>(new SuggestQueryResultModel());
         }
 
         /// <summary>
@@ -125,17 +309,17 @@
         /// <param name="pathType"></param>
         /// <param name="searchMask"></param>
         /// <returns></returns>
-        private static Task<ISuggestResult> ListChildren(IDirectoryBrowser[] path,
-                                                        PathType pathType,
-                                                        LocationIndicator li,
-                                                        string searchMask = null)
+        private static Task<SuggestQueryResultModel> ListChildren(IDirectoryBrowser[] path,
+                                                                  PathType pathType,
+                                                                  LocationIndicator li,
+                                                                  string searchMask = null)
         {
             if (li != null)
                 li.ResetPath(path);
 
             var dirPath = path[path.Length - 1];
 
-            SuggestResult result = new SuggestResult();
+            SuggestQueryResultModel result = new SuggestQueryResultModel();
 
             string namedPath = string.Empty;
             if (pathType == PathType.WinShellPath)
@@ -162,19 +346,19 @@
                     }
                 }
 
-                result.Suggestions.Add(Itemsuggest);
+                result.ResultList.Add(Itemsuggest);
             }
 
-            return Task.FromResult<ISuggestResult>(result);
+            return Task.FromResult<SuggestQueryResultModel>(result);
         }
 
         /// <summary>
         /// Gets a list of logical drives attached to thisPC.
         /// </summary>
         /// <returns></returns>
-        private ISuggestResult ListRootItems(string input)
+        private SuggestQueryResultModel ListRootItems(string input)
         {
-            SuggestResult result = new SuggestResult();
+            SuggestQueryResultModel result = new SuggestQueryResultModel();
 
             // Get Root Items below ThisPC
             var parent = ShellBrowser.MyComputer;
@@ -184,7 +368,7 @@
                 if (ShellBrowser.IsTypeOf(item.Name) != PathType.SpecialFolder)
                 {
                     var Itemsuggest = CreateItem(item.LabelName, item.Name, PathType.FileSystemPath, parent);
-                    result.Suggestions.Add(Itemsuggest);
+                    result.ResultList.Add(Itemsuggest);
                 }
             }
 
@@ -202,18 +386,18 @@
                 if (IsFilteredItem == false && IsThisPC == false)
                 {
                     var Itemsuggest = CreateItem(item.LabelName, item.ParseName, PathType.WinShellPath, parent);
-                    result.Suggestions.Add(Itemsuggest);
+                    result.ResultList.Add(Itemsuggest);
                 }
             }
 
             // Pronounce path as invalid if list of suggestions is empty and path is non-existing
             // We do this here because path could be non-existing but we could still find filter suggestions
             // (eg: 'c' -> suggestion 'C:\')
-            if (result.Suggestions.Count == 0)
+            if (result.ResultList.Count == 0)
             {
                 IDirectoryBrowser[] pathItems = null;
                 if (ShellBrowser.DirectoryExists(input, out pathItems) == false)
-                    result.ValidPath = false;
+                    result.ValidInput = false;
             }
 
             return result;
@@ -232,8 +416,8 @@
         /// <param name="input"></param>
         /// <param name="li"></param>
         /// <returns></returns>
-        private ISuggestResult ParseFileSystemPath(string input,
-                                                   LocationIndicator li)
+        private SuggestQueryResultModel ParseFileSystemPath(string input,
+                                                            LocationIndicator li)
         {
             IDirectoryBrowser[] pathItems = null;
             if (ShellBrowser.DirectoryExists(input, out pathItems, true))
@@ -261,7 +445,7 @@
                 }
             }
 
-            return new SuggestResult();
+            return new SuggestQueryResultModel();
         }
 
         /// <summary>
@@ -269,18 +453,18 @@
         /// The returned items Value contain a complete path for each item.
         /// </summary>
         /// <returns></returns>
-        private ISuggestResult ListSubItems(string input,
-                                            string searchMask = null)
+        private SuggestQueryResultModel ListSubItems(string input,
+                                                     string searchMask = null)
         {
-            SuggestResult result = new SuggestResult();
+            SuggestQueryResultModel result = new SuggestQueryResultModel();
 
             var parent = ShellBrowser.Create(input);
             foreach (var item in ShellBrowser.GetSlimChildItems(input, searchMask))
             {
                 if (ShellBrowser.IsTypeOf(item.Name) != PathType.SpecialFolder)
                 {
-                    result.Suggestions.Add(CreateItem(item.LabelName, item.Name,
-                                                      PathType.FileSystemPath, parent));
+                    result.ResultList.Add(CreateItem(item.LabelName, item.Name,
+                                                     PathType.FileSystemPath, parent));
                 }
             }
 
@@ -295,4 +479,6 @@
             return new SuggestionListItem(header, textPath, parent, pathType);
         }
     }
+    #endregion input parser
+    #endregion methods
 }

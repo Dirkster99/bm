@@ -155,18 +155,22 @@
                                         <sbox:SuggestBox
                                                 Grid.Column="0"
                                                 x:Name="PART_SuggestBox"
-                                                Visibility="{Binding IsSwitchOn, RelativeSource={RelativeSource AncestorType=ctrls:Switch}, Mode=OneWay, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource btv1}}"
                                                 BorderThickness="0"
                                                 BorderBrush="Transparent"
                                                 Margin="0" Padding="0"
                                                 FontFamily="{TemplateBinding FontFamily}"
                                                 FontSize="{TemplateBinding FontSize}"
-                                                Text="{Binding SuggestedPath, UpdateSourceTrigger=Explicit}"
-                                                IsEnabled="{Binding EnableBreadcrumb, Mode=OneWay, Converter={StaticResource InvertBoolConverter}}"
                                                 
-                                                SuggestSources="{Binding SuggestSources}"
-                                                EnableSuggestions="{Binding ElementName=PART_Switch,Path=IsSwitchOn,Converter={StaticResource InvertBoolConverter}}"
-                                                PathValidation="{TemplateBinding PathValidation}"
+                                                DataContext="{Binding SuggestSources}"
+                                                Text="{Binding CurrentText}"
+                                                ValidText="{Binding IsValidText,Mode=OneWay,UpdateSourceTrigger=PropertyChanged}"
+                                                TextChangedCommand="{Binding SuggestTextChangedCommand}"
+                                                ItemsSource="{Binding ListQueryResult}"
+
+                                                Visibility="{Binding ElementName=PART_Switch,Path=IsSwitchOn, Mode=OneWay, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource btv1}}"
+                                                IsEnabled="{Binding ElementName=PART_Switch,Path=IsSwitchOn, Mode=OneWay, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource InvertBoolConverter}}"
+                                                EnableSuggestions="{Binding ElementName=PART_Switch,Path=IsSwitchOn, Mode=OneWay, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource InvertBoolConverter}}"
+                                                PathValidation="{Binding PathValidation,RelativeSource={RelativeSource AncestorType={x:Type ctrls:Breadcrumb}},Mode=OneWay,UpdateSourceTrigger=PropertyChanged}"
 
                                                 DisplayMemberPath="Header"
                                                 ValuePath="TextPath"

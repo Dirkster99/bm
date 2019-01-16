@@ -90,7 +90,7 @@
                                   
                                   TaskQueueProcessing="{Binding Data.BreadcrumbController.TaskQueue, Source={StaticResource AppDataContextProxy}}"
                                   Progressing="{Binding Progressing}"
-                                  RecentLocationsItemsSource="{Binding  RecentLocationItems}"
+                                  RecentLocationsItemsSource="{Binding RecentLocationItems}"
 
                                   Margin="3"
                                   Padding="3,0"

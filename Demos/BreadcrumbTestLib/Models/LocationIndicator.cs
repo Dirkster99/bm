@@ -135,6 +135,15 @@
         }
 
         /// <summary>
+        /// Reset the path items kept in this object with the path from the other instance.
+        /// </summary>
+        /// <param name="other"></param>
+        public void ResetPath(LocationIndicator other)
+        {
+          ResetPath(other.Items);
+        }
+
+        /// <summary>
         /// Gets a path that contains either the real file system location
         /// or a location based on Named items along the current path (to avoid using SpecialPathIDs).
         /// </summary>

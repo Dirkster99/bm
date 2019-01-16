@@ -1,6 +1,7 @@
 ﻿namespace SuggestBoxTestLib.AutoSuggest
 {
-    using SuggestBoxTestLib.AutoSuggest.Interfaces;
+    using SuggestBoxTestLib.DataSources.Auto;
+    using SuggestBoxTestLib.DataSources.Auto.Interfaces;
 
     /// <summary>
     /// Implements an object that keeps track of the root of the
@@ -26,6 +27,13 @@
         {
             this.RootItem = rootItemParam;
             this.HierarchyHelper = new PathHierarchyHelper("Parent", "Value", "SubDirectories");
+        }
+
+        /// <summary>
+        /// Hidden class constructor
+        /// </summary>
+        protected LocationIndicator()
+        {
         }
         #endregion ctors
 

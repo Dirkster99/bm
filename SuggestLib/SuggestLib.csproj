@@ -114,6 +114,7 @@
     <Compile Include="SuggestComboBox.cs" />
     <Compile Include="SuggestSource\SuggestResult.cs" />
     <Compile Include="Themes\ResourceKeys.cs" />
+    <Compile Include="Utils\InvalidValidationRule.cs" />
     <Compile Include="Utils\TreeHelper.cs" />
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>

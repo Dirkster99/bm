@@ -1,6 +1,6 @@
-﻿namespace SuggestBoxTestLib.AutoSuggest
+﻿namespace SuggestBoxTestLib.DataSources.Auto
 {
-    using SuggestBoxTestLib.AutoSuggest.Interfaces;
+    using SuggestBoxTestLib.DataSources.Auto.Interfaces;
     using System;
     using System.Collections;
     using System.Collections.Generic;
