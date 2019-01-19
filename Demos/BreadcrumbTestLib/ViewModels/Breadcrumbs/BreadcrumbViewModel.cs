@@ -9,7 +9,6 @@ namespace BreadcrumbTestLib.ViewModels.Breadcrumbs
     using ShellBrowserLib.IDs;
     using ShellBrowserLib.Interfaces;
     using SSCoreLib.Browse;
-    using SuggestLib.Interfaces;
     using System;
     using System.Collections.Generic;
     using System.Collections.ObjectModel;

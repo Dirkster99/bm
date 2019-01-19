@@ -33,6 +33,9 @@
     <DocumentationFile>bin\Release\BmLib.xml</DocumentationFile>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="SuggestBoxLib, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Dirkster.SuggestBoxLib.1.0.0\lib\net452\SuggestBoxLib.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
@@ -186,6 +189,7 @@
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
     <None Include="BmLib.cd" />
+    <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
@@ -203,11 +207,5 @@
     <Content Include="Resources\Icons\Light\Close_16x.svg" />
   </ItemGroup>
   <ItemGroup />
-  <ItemGroup>
-    <ProjectReference Include="..\SuggestLib\SuggestLib.csproj">
-      <Project>{78bf82dc-38fd-41dc-a8ce-45c79f628103}</Project>
-      <Name>SuggestLib</Name>
-    </ProjectReference>
-  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

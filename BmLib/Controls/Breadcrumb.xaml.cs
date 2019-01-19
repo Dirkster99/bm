@@ -2,9 +2,9 @@
 {
     using BmLib.Controls.Breadcrumbs;
     using BmLib.Interfaces;
-    using SuggestLib;
-    using SuggestLib.Events;
-    using SuggestLib.Utils;
+    using SuggestBoxLib;
+    using SuggestBoxLib.Events;
+    using SuggestBoxLib.Utils;
     using System;
     using System.Collections;
     using System.Collections.Generic;
@@ -291,7 +291,7 @@
         #region Switch Properties
         /// <summary>
         /// Gets a command to switch the view between TreeView and TextBox based view
-        /// (between BmLib.BreadcrumbTree and SuggestLib.SuggestBox).
+        /// (between BmLib.BreadcrumbTree and SuggestBoxLib.SuggestBox).
         /// 
         /// Switching the view from text based editing back to TreeView can be canceled
         /// by parameterizing this command with an <see cref="EditResult"/> object.
@@ -877,7 +877,7 @@
         /// <param name="sender"></param>
         /// <param name="e"></param>
         private void Control_SuggestBox_NewLocationRequestEvent(object sender,
-                                                            SuggestLib.Events.NextTargetLocationArgs e)
+                                                                SuggestBoxLib.Events.NextTargetLocationArgs e)
         {
             // The user requests a new location via SuggestBox Text control
             // lets have the switch do the lifting of navigating the tree view

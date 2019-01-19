@@ -92,6 +92,9 @@
     <Reference Include="MWindowLib, Version=1.0.4.2, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\..\packages\Dirkster.MWindowLib.1.0.4.2\lib\net452\MWindowLib.dll</HintPath>
     </Reference>
+    <Reference Include="SuggestBoxLib, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Dirkster.SuggestBoxLib.1.0.0\lib\net452\SuggestBoxLib.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Windows.Interactivity, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
@@ -199,10 +202,6 @@
     <ProjectReference Include="..\..\Components\Settings\Settings\Settings.csproj">
       <Project>{2807b493-cc2e-402e-901a-eb138698fedc}</Project>
       <Name>Settings</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\SuggestLib\SuggestLib.csproj">
-      <Project>{78bf82dc-38fd-41dc-a8ce-45c79f628103}</Project>
-      <Name>SuggestLib</Name>
     </ProjectReference>
     <ProjectReference Include="..\BreadcrumbTestLib\BreadcrumbTestLib.csproj">
       <Project>{5dd7405c-a81d-49be-93bf-46fedd0a3a2c}</Project>

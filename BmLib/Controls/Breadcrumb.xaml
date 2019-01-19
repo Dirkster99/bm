@@ -8,8 +8,8 @@
     xmlns:reskeys="clr-namespace:BmLib.Themes"
     xmlns:behav="clr-namespace:BmLib.Behaviors"
 
-    xmlns:sbox="clr-namespace:SuggestLib;assembly=SuggestLib"
-    xmlns:sconv="clr-namespace:SuggestLib.Converters;assembly=SuggestLib"
+    xmlns:sbox="clr-namespace:SuggestBoxLib;assembly=SuggestBoxLib"
+    xmlns:sconv="clr-namespace:SuggestBoxLib.Converters;assembly=SuggestBoxLib"
    >
     <ResourceDictionary.MergedDictionaries>
         <!-- Define the style of the switch control inside the Breadcrumb control -->
@@ -173,7 +173,7 @@
                                                 PathValidation="{Binding PathValidation,RelativeSource={RelativeSource AncestorType={x:Type ctrls:Breadcrumb}},Mode=OneWay,UpdateSourceTrigger=PropertyChanged}"
 
                                                 DisplayMemberPath="Header"
-                                                ValuePath="TextPath"
+                                                SelectedValuePath="TextPath"
                                             />
                                     </ctrls:Switch.ContentOff>
                                 </ctrls:Switch>
