@@ -10,6 +10,7 @@ The implementation of the Windows Shell Browser in [ShellBrowserLib](https://git
 
 ![](https://raw.githubusercontent.com/Dirkster99/Docu/master/bm/DarkBreadcrumb2.png)
 
+The AutoComplete portion of this control is implemented in a separate [SuggestionBoxLib](https://github.com/Dirkster99/SuggestBoxLib) project:
 ![](https://raw.githubusercontent.com/Dirkster99/Docu/master/bm/DarkBreadcrumb3.png)
 
 ![](https://raw.githubusercontent.com/Dirkster99/Docu/master/bm/DarkBreadcrumb4.png)
