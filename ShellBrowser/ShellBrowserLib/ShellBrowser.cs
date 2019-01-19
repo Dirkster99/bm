@@ -513,7 +513,7 @@
         /// <param name="pathIsRooted">Determines whether the output result
         /// was succesfully rooted or not. This parameter was introduced to
         /// support returning empty collection to indicate Desktop
-        /// - NOT 100% sure if this is stil required.</param>
+        /// - NOT 100% sure if this is still required.</param>
         /// <returns></returns>
         public static IDirectoryBrowser[] FindRoot(IDirectoryBrowser[] pathItems,
                                                    string newPath,
@@ -532,7 +532,7 @@
                 {
                     if (desktop.Equals(pathItems[i]) == true)
                     {
-                        for (int j = i+1; j < pathItems.Length; j++)
+                        for (int j = i + 1; j < pathItems.Length; j++)
                             newRoot.Add(pathItems[j].Clone() as IDirectoryBrowser);
 
                         if (newRoot.Count == 0)
@@ -547,7 +547,7 @@
                 }
 
                 // Search this item under desktop root
-                for (int i = pathItems.Length-1; i >= 0 ; i--)
+                for (int i = pathItems.Length - 1; i >= 0; i--)
                 {
                     var it = ShellBrowser.GetChildItems(KF_IID.ID_FOLDERID_Desktop, pathItems[i].Name);
                     if (it.Any())
@@ -564,19 +564,27 @@
                     }
                 }
 
-                // Can we find it under ThisPC? then return it with ThisPC on top
-                var itms = ShellBrowser.GetChildItems(KF_IID.ID_FOLDERID_ComputerFolder, pathItems[0].Name);
-                if (itms.Any())
+                // Can we find it under an item directly under the Destop (eg.: Under ThisPC)?
+                // (then return it with eg.: ThisPC on top)
+                foreach (var rootitem in ShellBrowser.GetChildItems(KF_IID.ID_FOLDERID_Desktop))
                 {
-                    if (pathItems[0].Equals(itms.First()) == true)
+                    // Evaluate only special items, such as, ThisPC, User etc.
+                    if (string.IsNullOrEmpty(rootitem.SpecialPathId))
+                        continue;
+
+                    var itms = ShellBrowser.GetChildItems(rootitem.SpecialPathId, pathItems[0].Name);
+                    if (itms.Any())
                     {
-                        newRoot.Add(ShellBrowser.MyComputer);
+                        if (pathItems[0].Equals(itms.First()) == true)
+                        {
+                            newRoot.Add(rootitem);
 
-                        for (int i = 0; i < pathItems.Length; i++)
-                            newRoot.Add(pathItems[i].Clone() as IDirectoryBrowser);
+                            for (int i = 0; i < pathItems.Length; i++)
+                                newRoot.Add(pathItems[i].Clone() as IDirectoryBrowser);
 
-                        pathIsRooted = true;
-                        return newRoot.ToArray();
+                            pathIsRooted = true;
+                            return newRoot.ToArray();
+                        }
                     }
                 }
             }
@@ -1421,20 +1429,20 @@
                                 }
                             }
 
-////                            using (var nativeKF = KnownFolderHelper.FromKnownFolderGuid(knownFolderID))
-////                            {
-////                                var kf = KnownFolderHelper.GetFolderProperties(nativeKF.Obj);
-////
-////                                // Add to our collection if it's not null (some folders might not exist on the system
-////                                // or we could have an exception that resulted in the null return from above method call
-////                                if (kf != null)
-////                                {
-////                                    foldersList.Add(kf.FolderId, kf);
-////
-////                                    if (kf.IsExistsInFileSystem == true)
-////                                        pathList.Add(kf.Path, kf);
-////                                }
-////                            }
+                            ////                            using (var nativeKF = KnownFolderHelper.FromKnownFolderGuid(knownFolderID))
+                            ////                            {
+                            ////                                var kf = KnownFolderHelper.GetFolderProperties(nativeKF.Obj);
+                            ////
+                            ////                                // Add to our collection if it's not null (some folders might not exist on the system
+                            ////                                // or we could have an exception that resulted in the null return from above method call
+                            ////                                if (kf != null)
+                            ////                                {
+                            ////                                    foldersList.Add(kf.FolderId, kf);
+                            ////
+                            ////                                    if (kf.IsExistsInFileSystem == true)
+                            ////                                        pathList.Add(kf.Path, kf);
+                            ////                                }
+                            ////                            }
                         }
                         catch { }
                     }
