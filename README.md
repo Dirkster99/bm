@@ -4,7 +4,7 @@
 
 This project implements an open source Breadcrumb control that was originally developed by <b>Leung Yat Chun Joseph <a href="https://github.com/lycj">lycj</a></b> in his FileExplorer application originating from CodePlex and <a href="https://www.codeproject.com/Members/Fainx">CodeProject</a>.
 
-The implementation of the Windows Shell Browser in [ShellBrowserLib](https://github.com/Dirkster99/bm/tree/master/ShellBrowser/ShellBrowserLib) is based on LYCJ's interfaces but completely refactored in terms of models and classes using [SharpShell](https://github.com/dwmkerr/sharpshell) as base of most things that are there.
+The implementation of the Windows Shell Browser in [WSF](https://github.com/Dirkster99/bm/tree/master/ShellBrowser/WSF) is based on LYCJ's interfaces but completely refactored in terms of models and classes using [SharpShell](https://github.com/dwmkerr/sharpshell) as base of most things that are there.
 
 ![](https://raw.githubusercontent.com/Dirkster99/Docu/master/bm/DarkBreadcrumb.png)
 
