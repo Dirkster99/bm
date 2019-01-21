@@ -155,12 +155,12 @@ namespace BreadcrumbTestLib.ViewModels
             IDirectoryBrowser[] pathItems;
 
             // Revert request to default if requested path is non-existing
-            if (ShellBrowser.DirectoryExists(initialPath, out pathItems) == false)
-                initialPath =  ShellBrowser.SysDefault.FullName;
+            if (Browser.DirectoryExists(initialPath, out pathItems) == false)
+                initialPath =  Browser.SysDefault.FullName;
 
             Logger.InfoFormat("'{0}'", initialPath);
 
-            var location = ShellBrowser.Create(initialPath);
+            var location = Browser.Create(initialPath);
 
             var cancelTokenSrc = GetCancelToken();
             var token = CancellationToken.None;

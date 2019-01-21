@@ -86,34 +86,34 @@
             // Test service functions ...
             Console.WriteLine("\n");
 
-            var directory = ShellBrowser.Create(@"C:tmp");
+            var directory = Browser.Create(@"C:tmp");
 
-            var music = ShellBrowser.Create(KF_IID.ID_FOLDERID_Music);
+            var music = Browser.Create(KF_IID.ID_FOLDERID_Music);
 
-            var desktop = ShellBrowser.Create(KF_IID.ID_FOLDERID_Desktop);
+            var desktop = Browser.Create(KF_IID.ID_FOLDERID_Desktop);
 
             Console.WriteLine("");
             Console.WriteLine("Enumerating children below '{0}' item", desktop.Name);
-            foreach (var item in ShellBrowser.GetChildItems(desktop.SpecialPathId))
+            foreach (var item in Browser.GetChildItems(desktop.SpecialPathId))
             {
                 Console.WriteLine("Name '{0}' SpecialPathId '{1}' PathFileSystem '{2}'",
                     item.Name, item.SpecialPathId, item.PathFileSystem);
             }
 
-            var thisPC = ShellBrowser.Create(KF_IID.ID_FOLDERID_ComputerFolder);
+            var thisPC = Browser.Create(KF_IID.ID_FOLDERID_ComputerFolder);
 
             Console.WriteLine("");
             Console.WriteLine("Enumerating children below '{0}' item", thisPC.Name);
-            foreach (var item in ShellBrowser.GetChildItems(thisPC.SpecialPathId))
+            foreach (var item in Browser.GetChildItems(thisPC.SpecialPathId))
             {
                 Console.WriteLine("Name '{0}' SpecialPathId '{1}' PathFileSystem '{2}'",
                     item.Name, item.SpecialPathId, item.PathFileSystem);
             }
 
-            var drive = ShellBrowser.Create(@"C:");
+            var drive = Browser.Create(@"C:");
             Console.WriteLine("");
             Console.WriteLine("Enumerating children below '{0}' item", drive.Name);
-            foreach (var item in ShellBrowser.GetChildItems(drive.PathFileSystem))
+            foreach (var item in Browser.GetChildItems(drive.PathFileSystem))
             {
                 Console.WriteLine("Name '{0}' SpecialPathId '{1}' PathFileSystem '{2}'",
                     item.Name, item.SpecialPathId, item.PathFileSystem);

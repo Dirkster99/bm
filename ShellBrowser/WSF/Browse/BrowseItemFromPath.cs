@@ -223,7 +223,7 @@
 
             if (isSpecialID != ShellHelpers.SpecialPath.IsSpecialPath)
             {
-                normPath = ShellBrowser.NormalizePath(path);
+                normPath = Browser.NormalizePath(path);
                 hasPIDL = PidlManager.GetParentIdListFromPath(normPath, out parentIdList, out relativeChildIdList);
             }
             else
@@ -398,7 +398,7 @@
             {
                 specialPath = ShellHelpers.IsSpecialPath(normPath);
 
-                var pathIsTypeOf = ShellBrowser.IsTypeOf(normPath);
+                var pathIsTypeOf = Browser.IsTypeOf(normPath);
 
                 if (pathIsTypeOf == Enums.PathType.FileSystemPath)
                 {

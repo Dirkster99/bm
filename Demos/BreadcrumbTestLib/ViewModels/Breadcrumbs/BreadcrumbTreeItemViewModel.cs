@@ -74,7 +74,7 @@
                     // FullName has preference for directory file system path over SpecialId
                     // (if an item has both)
                     // -> this is useful here to no relist SpecialItems below Desktop or other special items
-                    return ShellBrowser.GetChildItems(_dir.FullName).Select(d => new BreadcrumbTreeItemViewModel(d, this, _Root));
+                    return Browser.GetChildItems(_dir.FullName).Select(d => new BreadcrumbTreeItemViewModel(d, this, _Root));
                 }
                 catch (Exception exp)
                 {
@@ -323,7 +323,7 @@
 
                 // and insert desktop sub-entries into Entries property
                 Entries.SetEntries(UpdateMode.Replace,
-                    ShellBrowser.GetChildItems(_dir.PathShell)
+                    Browser.GetChildItems(_dir.PathShell)
                                                 // (filter out recycle bin and control panel entries since its not that useful...)
                                                 .Where(d => string.Compare(d.SpecialPathId, KF_IID.ID_FOLDERID_RecycleBinFolder, true) != 0)
                                                 .Where(d => string.Compare(d.PathRAW, "::{26EE0668-A00A-44D7-9371-BEB064C98683}", true) != 0)

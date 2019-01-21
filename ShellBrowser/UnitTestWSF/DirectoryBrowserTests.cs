@@ -27,7 +27,7 @@
 
             Assert.IsTrue(drivePath != null);
 
-            var drive = ShellBrowser.Create(drivePath);
+            var drive = Browser.Create(drivePath);
 
             Assert.IsTrue(drive != null);
 
@@ -65,7 +65,7 @@
             Assert.IsTrue(dirPath != null);
 
             // Lets test the directory browser object with that path
-            var dir = ShellBrowser.Create(dirPath, true);
+            var dir = Browser.Create(dirPath, true);
 
             Assert.IsTrue(dir != null);
 
@@ -88,12 +88,12 @@
         [TestMethod]
         public void TestPathShell()
         {
-            var dir = ShellBrowser.DesktopDirectory;
+            var dir = Browser.DesktopDirectory;
 
             Assert.IsTrue(string.IsNullOrEmpty(dir.PathShell) == false);
             Assert.IsTrue(string.Compare(dir.SpecialPathId, dir.PathShell, true) == 0);
 
-            var sysDefault = ShellBrowser.SysDefault;
+            var sysDefault = Browser.SysDefault;
             Assert.IsTrue(string.IsNullOrEmpty(sysDefault.PathShell) == false);
             Assert.IsTrue(string.Compare(sysDefault.PathFileSystem, sysDefault.PathShell, true) == 0);
 
@@ -102,16 +102,16 @@
         [TestMethod]
         public void TestFullName()
         {
-            var dir = ShellBrowser.DesktopDirectory;
+            var dir = Browser.DesktopDirectory;
 
             Assert.IsTrue(string.IsNullOrEmpty(dir.FullName) == false);
             Assert.IsTrue(string.Compare(dir.FullName, dir.PathFileSystem, true) == 0);
 
-            var sysDefault = ShellBrowser.SysDefault;
+            var sysDefault = Browser.SysDefault;
             Assert.IsTrue(string.IsNullOrEmpty(sysDefault.FullName) == false);
             Assert.IsTrue(string.Compare(sysDefault.PathFileSystem, sysDefault.FullName, true) == 0);
 
-            var thisPC = ShellBrowser.MyComputer;
+            var thisPC = Browser.MyComputer;
             Assert.IsTrue(string.IsNullOrEmpty(thisPC.FullName) == false);
             Assert.IsTrue(string.Compare(thisPC.FullName, thisPC.SpecialPathId, true) == 0);
         }
@@ -146,7 +146,7 @@
             Assert.IsTrue(pathShell != id);
 
             // Lets test the directory browser object with that path
-            var specialItem = ShellBrowser.Create(pathShell);
+            var specialItem = Browser.Create(pathShell);
 
             Assert.IsTrue(specialItem != null);
 
@@ -178,7 +178,7 @@
         [TestMethod]
         public void GetMusic()
         {
-            var music = ShellBrowser.Create(KF_IID.ID_FOLDERID_Music);
+            var music = Browser.Create(KF_IID.ID_FOLDERID_Music);
 
             Assert.IsTrue(music != null);
             Assert.IsFalse(string.IsNullOrEmpty(music.IconResourceId));
@@ -209,8 +209,8 @@
 
             Assert.IsTrue(drivePath != null);
 
-            var drive = ShellBrowser.Create(drivePath);
-            var drive1 = ShellBrowser.Create(drivePath);
+            var drive = Browser.Create(drivePath);
+            var drive1 = Browser.Create(drivePath);
 
             Assert.IsTrue(drive != null);
             Assert.IsTrue(drive1 != null);
@@ -235,8 +235,8 @@
             Assert.IsTrue(dirPath != null);
 
             // Lets test the directory browser object with that path
-            var dir = ShellBrowser.Create(dirPath);
-            var dir1 = ShellBrowser.Create(dirPath);
+            var dir = Browser.Create(dirPath);
+            var dir1 = Browser.Create(dirPath);
 
             Assert.IsTrue(dir != null);
             Assert.IsTrue(dir1 != null);
@@ -266,8 +266,8 @@
             Assert.IsTrue(pathShell != id);
 
             // Lets test the directory browser object with that path
-            var specialItem = ShellBrowser.Create(pathShell);
-            var specialItem1 = ShellBrowser.Create(pathShell);
+            var specialItem = Browser.Create(pathShell);
+            var specialItem1 = Browser.Create(pathShell);
 
             Assert.IsTrue(specialItem != null);
             Assert.IsTrue(specialItem1 != null);
@@ -281,8 +281,8 @@
         [TestMethod]
         public void GetMusicEquality()
         {
-            var music = ShellBrowser.Create(KF_IID.ID_FOLDERID_Music);
-            var music1 = ShellBrowser.Create(KF_IID.ID_FOLDERID_Music);
+            var music = Browser.Create(KF_IID.ID_FOLDERID_Music);
+            var music1 = Browser.Create(KF_IID.ID_FOLDERID_Music);
 
             Assert.IsTrue(music != null);
             Assert.IsTrue(music1 != null);
@@ -300,7 +300,7 @@
             // Get the default drive's path
             var drivePath = new DirectoryInfo(Environment.SystemDirectory).Root.Name;
             var driveInfoPath = new System.IO.DriveInfo(drivePath);
-            var drive = ShellBrowser.Create(drivePath);
+            var drive = Browser.Create(drivePath);
 
             // Lets test the directory browser object with that path
             string dirPath = null;
@@ -308,11 +308,11 @@
             {
                 dirPath = kf.GetPath();
             }
-            var dir = ShellBrowser.Create(dirPath);
+            var dir = Browser.Create(dirPath);
 
             // Get This PC and Music SpecialItem
-            var specialItem = ShellBrowser.Create(KF_IID.ID_FOLDERID_ComputerFolder);
-            var music = ShellBrowser.Create(KF_IID.ID_FOLDERID_Music);
+            var specialItem = Browser.Create(KF_IID.ID_FOLDERID_ComputerFolder);
+            var music = Browser.Create(KF_IID.ID_FOLDERID_Music);
 
             Assert.IsFalse(drive.Equals(dir));
             Assert.IsFalse(drive.Equals(specialItem));

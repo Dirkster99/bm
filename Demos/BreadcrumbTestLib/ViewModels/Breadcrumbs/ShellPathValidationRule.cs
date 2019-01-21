@@ -34,7 +34,7 @@
 
                 IDirectoryBrowser[] pathItems;
 
-                if (WSF.ShellBrowser.DirectoryExists((string)value, out pathItems) == false)
+                if (WSF.Browser.DirectoryExists((string)value, out pathItems) == false)
                     return new ValidationResult(false, "Path Not Found");
             }
             catch (System.Exception ex)

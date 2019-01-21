@@ -111,7 +111,7 @@
             var lastElement = _CurrentPath[_CurrentPath.Count - 1];
             var fspath = lastElement.PathFileSystem;
 
-            if (ShellBrowser.IsTypeOf(fspath) == PathType.FileSystemPath)
+            if (Browser.IsTypeOf(fspath) == PathType.FileSystemPath)
                 return fspath;
 
             return string.Empty;
@@ -203,7 +203,7 @@
             if (input.Length < 2)
                 return GetPath(out pathTypeParam);
 
-            pathTypeParam = ShellBrowser.IsTypeOf(input);
+            pathTypeParam = Browser.IsTypeOf(input);
 
             switch (pathTypeParam)
             {
@@ -233,7 +233,7 @@
             PathType pathType = PathType.Unknown;
             string path = GetPath(out pathType);
 
-            return ShellBrowser.IsCurrentPath(inputPath, path);
+            return Browser.IsCurrentPath(inputPath, path);
         }
 
         /// <summary>

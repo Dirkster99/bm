@@ -217,12 +217,12 @@
             var li = location as LocationIndicator;
             if (li != null && input.Length > 1)
             {
-                input = ShellBrowser.NormalizePath(input);
+                input = Browser.NormalizePath(input);
 
                 PathType pathType = PathType.Unknown;
                 string path = li.GetPath(input, out pathType);
 
-                var match = ShellBrowser.IsCurrentPath(input, path);
+                var match = Browser.IsCurrentPath(input, path);
 
                 switch (match)
                 {
@@ -233,7 +233,7 @@
                         {
                             string pathExt = null;
                             var pathModels = li.GetPathModels();
-                            int idx = ShellBrowser.FindCommonRoot(pathModels, input, out pathExt);
+                            int idx = Browser.FindCommonRoot(pathModels, input, out pathExt);
 
                             if (idx > 0)
                             {
@@ -249,9 +249,9 @@
                         {
                             var pathList = li.Items.ToList();
                             string pathExt = null;
-                            if (ShellBrowser.IsParentPathOf(path, input, out pathExt))
+                            if (Browser.IsParentPathOf(path, input, out pathExt))
                             {
-                                if (ShellBrowser.ExtendPath(ref pathList, pathExt))
+                                if (Browser.ExtendPath(ref pathList, pathExt))
                                 {
                                     li.ResetPath(pathList);
                                     return ListChildren(li.GetPathModels(), pathType, li);
@@ -272,13 +272,13 @@
 
             // Location indicator may be pointing somewhere unrelated ...
             // Are we searching a drive based path ?
-            if (ShellBrowser.IsTypeOf(input) == PathType.FileSystemPath)
+            if (Browser.IsTypeOf(input) == PathType.FileSystemPath)
                 return Task.FromResult<SuggestQueryResultModel>(ParseFileSystemPath(input, li));
             else
             {
                 // Win shell path folder
                 IDirectoryBrowser[] path = null;
-                if (WSF.ShellBrowser.DirectoryExists(input, out path, true))
+                if (WSF.Browser.DirectoryExists(input, out path, true))
                     return ListChildren(path, PathType.WinShellPath, li);
                 else
                 {
@@ -293,7 +293,7 @@
 
                         // Win shell path folder
                         path = null;
-                        if (WSF.ShellBrowser.DirectoryExists(parentDir, out path, true))
+                        if (WSF.Browser.DirectoryExists(parentDir, out path, true))
                             return ListChildren(path, PathType.WinShellPath, li, searchMask);
                     }
                 }
@@ -329,7 +329,7 @@
                     namedPath = namedPath + '\\' + path[i].Name;
             }
 
-            foreach (var item in ShellBrowser.GetSlimChildItems(dirPath.PathShell, searchMask))
+            foreach (var item in Browser.GetSlimChildItems(dirPath.PathShell, searchMask))
             {
                 SuggestionListItem Itemsuggest = null;
                 if (pathType == PathType.WinShellPath)
@@ -339,7 +339,7 @@
                 }
                 else
                 {
-                    if (ShellBrowser.IsTypeOf(item.Name) != PathType.SpecialFolder)
+                    if (Browser.IsTypeOf(item.Name) != PathType.SpecialFolder)
                     {
                         Itemsuggest = CreateItem(item.LabelName, item.Name,
                                                     PathType.FileSystemPath, path);
@@ -361,11 +361,11 @@
             SuggestQueryResultModel result = new SuggestQueryResultModel();
 
             // Get Root Items below ThisPC
-            var parent = ShellBrowser.MyComputer;
-            foreach (var item in ShellBrowser.GetSlimChildItems(parent.SpecialPathId,
+            var parent = Browser.MyComputer;
+            foreach (var item in Browser.GetSlimChildItems(parent.SpecialPathId,
                                                                      input + "*", SubItemFilter.NameOrParsName))
             {
-                if (ShellBrowser.IsTypeOf(item.Name) != PathType.SpecialFolder)
+                if (Browser.IsTypeOf(item.Name) != PathType.SpecialFolder)
                 {
                     var Itemsuggest = CreateItem(item.LabelName, item.Name, PathType.FileSystemPath, parent);
                     result.ResultList.Add(Itemsuggest);
@@ -373,8 +373,8 @@
             }
 
             // Get Root Items below Desktop
-            parent = ShellBrowser.DesktopDirectory;
-            foreach (var item in ShellBrowser.GetSlimChildItems(parent.SpecialPathId, input + "*"))
+            parent = Browser.DesktopDirectory;
+            foreach (var item in Browser.GetSlimChildItems(parent.SpecialPathId, input + "*"))
             {
                 // filter out RecycleBin, ControlPanel... since its not that useful here...
                 bool IsFilteredItem = string.Compare(item.Name, KF_IID.ID_FOLDERID_RecycleBinFolder, true) == 0 ||
@@ -396,7 +396,7 @@
             if (result.ResultList.Count == 0)
             {
                 IDirectoryBrowser[] pathItems = null;
-                if (ShellBrowser.DirectoryExists(input, out pathItems) == false)
+                if (Browser.DirectoryExists(input, out pathItems) == false)
                     result.ValidInput = false;
             }
 
@@ -420,7 +420,7 @@
                                                             LocationIndicator li)
         {
             IDirectoryBrowser[] pathItems = null;
-            if (ShellBrowser.DirectoryExists(input, out pathItems, true))
+            if (Browser.DirectoryExists(input, out pathItems, true))
             {
                 if (li != null)
                     li.ResetPath(pathItems);
@@ -436,7 +436,7 @@
                 var searchMask = input.Substring(sepIdx + 1) + "*";
 
                 // Win shell path folder
-                if (ShellBrowser.DirectoryExists(parentDir, out pathItems, true))
+                if (Browser.DirectoryExists(parentDir, out pathItems, true))
                 {
                     if (li != null)
                         li.ResetPath(pathItems);
@@ -458,10 +458,10 @@
         {
             SuggestQueryResultModel result = new SuggestQueryResultModel();
 
-            var parent = ShellBrowser.Create(input);
-            foreach (var item in ShellBrowser.GetSlimChildItems(input, searchMask))
+            var parent = Browser.Create(input);
+            foreach (var item in Browser.GetSlimChildItems(input, searchMask))
             {
-                if (ShellBrowser.IsTypeOf(item.Name) != PathType.SpecialFolder)
+                if (Browser.IsTypeOf(item.Name) != PathType.SpecialFolder)
                 {
                     result.ResultList.Add(CreateItem(item.LabelName, item.Name,
                                                      PathType.FileSystemPath, parent));

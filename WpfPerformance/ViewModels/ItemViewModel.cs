@@ -195,7 +195,7 @@
                                                                    , System.IO.Path.DirectorySeparatorChar
                                                                    , _ModelStage1.ParseName );
 
-                    _dir = ShellBrowser.Create(pathFileName, _ModelStage1.LabelName,
+                    _dir = Browser.Create(pathFileName, _ModelStage1.LabelName,
                                                _ModelStage1.Name);
 
                     if (_dir != null)

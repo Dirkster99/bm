@@ -113,7 +113,7 @@
             var lastElement = _CurrentPath[_CurrentPath.Count - 1];
             var fspath = lastElement.GetModel().PathFileSystem;
 
-            if (ShellBrowser.IsTypeOf(fspath) == PathType.FileSystemPath)
+            if (Browser.IsTypeOf(fspath) == PathType.FileSystemPath)
                 return fspath;
 
             return string.Empty;

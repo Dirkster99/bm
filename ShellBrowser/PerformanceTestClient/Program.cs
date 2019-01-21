@@ -20,7 +20,7 @@
 
         private static void TestAllWinSxsFoldersRetrieval()
         {
-            var windowsFolder = ShellBrowser.Create(KF_IID.ID_FOLDERID_Windows);
+            var windowsFolder = Browser.Create(KF_IID.ID_FOLDERID_Windows);
 
             string dirPath = System.IO.Path.Combine(windowsFolder.PathFileSystem, "WinSxs");
 
@@ -32,7 +32,7 @@
 
             List<IDirectoryBrowser> result = new List<IDirectoryBrowser>();
             int i = 0;
-            foreach (var item in ShellBrowser.GetChildItems(dirPath))
+            foreach (var item in Browser.GetChildItems(dirPath))
             {
                 result.Add(item);
                 i++;
@@ -53,7 +53,7 @@
 
         private static void TestStageZeroAllWinSxsFoldersRetrieval()
         {
-            var windowsFolder = ShellBrowser.Create(KF_IID.ID_FOLDERID_Windows);
+            var windowsFolder = Browser.Create(KF_IID.ID_FOLDERID_Windows);
 
             string dirPath = System.IO.Path.Combine(windowsFolder.PathFileSystem, "WinSxs");
 
@@ -65,7 +65,7 @@
 
             var result = new List<DirectoryBrowserSlim>();
             int i = 0;
-            foreach (var item in ShellBrowser.GetSlimChildItems(dirPath))
+            foreach (var item in Browser.GetSlimChildItems(dirPath))
             {
                 result.Add(item);
                 i++;

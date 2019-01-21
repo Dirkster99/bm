@@ -31,7 +31,7 @@
 
             Assert.IsTrue(System.IO.File.Exists(resourcePath));
 
-            IDirectoryBrowser zipFile = WSF.ShellBrowser.Create(resourcePath);
+            IDirectoryBrowser zipFile = WSF.Browser.Create(resourcePath);
 
             Assert.IsTrue(zipFile != null);
             Assert.IsTrue(zipFile.ItemType == DirectoryItemFlags.DataFileContainer);

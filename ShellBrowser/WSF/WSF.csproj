@@ -104,7 +104,7 @@
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
     </Compile>
-    <Compile Include="ShellBrowser.cs" />
+    <Compile Include="Browser.cs" />
     <Compile Include="Shell\Enums\GetPropertyStoreFlags.cs" />
     <Compile Include="Shell\Enums\SFGAOF.cs" />
     <Compile Include="Shell\Enums\SIGDN.cs" />
@@ -220,7 +220,6 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
-    <None Include="ClassDiagram1.cd" />
     <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

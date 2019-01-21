@@ -16,14 +16,14 @@
         [TestMethod]
         public void TestSysDefault()
         {
-            var dir = ShellBrowser.SysDefault;
+            var dir = Browser.SysDefault;
 
             Assert.IsTrue(dir != null);
 
-            Assert.IsTrue(ShellBrowser.IsTypeOf(dir.PathFileSystem) == PathType.FileSystemPath);
+            Assert.IsTrue(Browser.IsTypeOf(dir.PathFileSystem) == PathType.FileSystemPath);
 
             IDirectoryBrowser[] pathItems;
-            Assert.IsTrue(ShellBrowser.DirectoryExists(dir.PathFileSystem, out pathItems));
+            Assert.IsTrue(Browser.DirectoryExists(dir.PathFileSystem, out pathItems));
 
             Assert.IsTrue(pathItems != null);
             Assert.IsTrue(pathItems.Length > 0);
@@ -36,11 +36,11 @@
         [TestMethod]
         public void TestWinShellPath()
         {
-            IDirectoryBrowser libraries = ShellBrowser.Create(KF_IID.ID_FOLDERID_Libraries);
+            IDirectoryBrowser libraries = Browser.Create(KF_IID.ID_FOLDERID_Libraries);
             IDirectoryBrowser music = null;
             Assert.IsTrue(libraries != null);
 
-            foreach (var item in ShellBrowser.GetChildItems(libraries.SpecialPathId))
+            foreach (var item in Browser.GetChildItems(libraries.SpecialPathId))
             {
                 if (string.Compare(item.SpecialPathId, KF_IID.ID_FOLDERID_MusicLibrary, true) == 0)
                     music = item;
@@ -52,16 +52,16 @@
             string WindowsShellPath = string.Format("{0}\\{1}", libraries.Name, music.Name);
 
             // Check if we can retrieve items for this through dedicated method
-            IDirectoryBrowser[] winPath = ShellBrowser.GetWinShellPathItems(WindowsShellPath);
+            IDirectoryBrowser[] winPath = Browser.GetWinShellPathItems(WindowsShellPath);
 
             Assert.IsTrue(winPath != null);
             Assert.IsTrue(winPath.Length == 2);
 
-            Assert.IsTrue(ShellBrowser.IsTypeOf(WindowsShellPath) == PathType.WinShellPath);
+            Assert.IsTrue(Browser.IsTypeOf(WindowsShellPath) == PathType.WinShellPath);
 
             // Check to see if we can retrieve items for this through DirectoryExists
             IDirectoryBrowser[] pathItems;
-            bool exists = ShellBrowser.DirectoryExists(WindowsShellPath, out pathItems);
+            bool exists = Browser.DirectoryExists(WindowsShellPath, out pathItems);
 
             Assert.IsTrue(pathItems != null);
             Assert.IsTrue(pathItems.Length == 2);
@@ -78,14 +78,14 @@
             string testPath1 = @"c:windows\win32";
 
             // Test Path normalization
-            var normPath = ShellBrowser.NormalizePath(testPath1);
+            var normPath = Browser.NormalizePath(testPath1);
             Assert.IsTrue(string.Compare(testRefPath, normPath, true) == 0);
 
             // Test getting directories for normalized and unnormalized paths
-            var dirNormItems = ShellBrowser.GetDirectories(normPath);
+            var dirNormItems = Browser.GetDirectories(normPath);
             Assert.IsTrue(dirNormItems.Length == 3);
 
-            var dirItems = ShellBrowser.GetDirectories(testPath1);
+            var dirItems = Browser.GetDirectories(testPath1);
             Assert.IsTrue(dirItems.Length == 3);
 
             for (int i = 0; i < dirItems.Length; i++)
@@ -97,13 +97,13 @@
         [TestMethod]
         public void TestGetFileSystemPathItems()
         {
-            var windowsDir = ShellBrowser.Create(KF_IID.ID_FOLDERID_Windows);
+            var windowsDir = Browser.Create(KF_IID.ID_FOLDERID_Windows);
             Assert.IsTrue( windowsDir.DirectoryPathExists() );
 
             // Test getting directories for normalized and unnormalized paths
-            var dirWindowsStringItems = ShellBrowser.GetDirectories(windowsDir.PathFileSystem);
+            var dirWindowsStringItems = Browser.GetDirectories(windowsDir.PathFileSystem);
 
-            var dirWindowsItems = ShellBrowser.GetFileSystemPathItems(windowsDir.PathFileSystem);
+            var dirWindowsItems = Browser.GetFileSystemPathItems(windowsDir.PathFileSystem);
 
             Assert.IsTrue(dirWindowsItems.Length == dirWindowsStringItems.Length);
 
@@ -111,7 +111,7 @@
             {
                 // The name of a drive can be its label (eg name of 'c:\' drive may be 'Windows')
                 // So, we need to explicitely evaluate the PathFileSystem to compare this to strings
-                var dirs = ShellBrowser.GetDirectories(dirWindowsItems[i].PathFileSystem);
+                var dirs = Browser.GetDirectories(dirWindowsItems[i].PathFileSystem);
 
                 Assert.IsTrue(string.Compare(dirs[dirs.Length-1],
                                              dirWindowsStringItems[i], true) == 0);
@@ -124,14 +124,14 @@
         [TestMethod]
         public void TestFindRoot()
         {
-            var sysDefault = ShellBrowser.SysDefault;
+            var sysDefault = Browser.SysDefault;
 
             IDirectoryBrowser[] pathItems;
-            bool exists = ShellBrowser.DirectoryExists(sysDefault.PathFileSystem, out pathItems);
+            bool exists = Browser.DirectoryExists(sysDefault.PathFileSystem, out pathItems);
 
             Assert.IsTrue(pathItems != null);
             bool pathIsRouted = false;
-            var rootedPath = ShellBrowser.FindRoot(pathItems, sysDefault.PathFileSystem, out pathIsRouted);
+            var rootedPath = Browser.FindRoot(pathItems, sysDefault.PathFileSystem, out pathIsRouted);
 
             Assert.IsTrue(pathIsRouted);
 
@@ -147,20 +147,20 @@
         [TestMethod]
         public void TestPathItemsAsIdList()
         {
-            var windowsDir = ShellBrowser.Create(KF_IID.ID_FOLDERID_Windows);
+            var windowsDir = Browser.Create(KF_IID.ID_FOLDERID_Windows);
             Assert.IsTrue(windowsDir.DirectoryPathExists());
 
-            var items = ShellBrowser.PathItemsAsIdList(windowsDir);
+            var items = Browser.PathItemsAsIdList(windowsDir);
 
             IDirectoryBrowser[] pathItems;
-            bool exists = ShellBrowser.DirectoryExists(windowsDir.PathFileSystem, out pathItems);
+            bool exists = Browser.DirectoryExists(windowsDir.PathFileSystem, out pathItems);
 
             Assert.IsTrue(items != null);
             Assert.IsTrue(items.Count > 0);
 
             foreach (var item in items)
             {
-                var dirItem = ShellBrowser.Create(item);
+                var dirItem = Browser.Create(item);
                 Assert.IsTrue(dirItem != null);
             }
 
@@ -170,7 +170,7 @@
             Assert.IsTrue(pathItems.Length < items.Count);
 
             // See if FindRoot agrees with what we got
-            var rootedItems = ShellBrowser.FindRoot(windowsDir);
+            var rootedItems = Browser.FindRoot(windowsDir);
             Assert.IsTrue(rootedItems.Length == items.Count);
         }
 
@@ -181,11 +181,11 @@
         [TestMethod]
         public void TestPathItemsAsParseNames()
         {
-            var windowsDir = ShellBrowser.Create(KF_IID.ID_FOLDERID_Windows);
+            var windowsDir = Browser.Create(KF_IID.ID_FOLDERID_Windows);
             Assert.IsTrue(windowsDir.DirectoryPathExists());
 
-            var browseItems = ShellBrowser.PathItemsAsIdList(windowsDir);
-            var items = ShellBrowser.PathItemsAsParseNames(windowsDir);
+            var browseItems = Browser.PathItemsAsIdList(windowsDir);
+            var items = Browser.PathItemsAsParseNames(windowsDir);
 
             // Expectation: Both lists hold the same path using a different format
             // So, there length should be equal
@@ -195,7 +195,7 @@
 
             for (int i = 0; i < items.Count; i++)
             {
-                var dirItem = ShellBrowser.Create(items[i]);
+                var dirItem = Browser.Create(items[i]);
 
                 Assert.IsTrue(dirItem != null);
             }
@@ -207,29 +207,29 @@
         [TestMethod]
         public void TestIsParentOf()
         {
-            var windowsDir = ShellBrowser.Create(KF_IID.ID_FOLDERID_Windows);
+            var windowsDir = Browser.Create(KF_IID.ID_FOLDERID_Windows);
             Assert.IsTrue(windowsDir.DirectoryPathExists());
 
-            var dirStrings = ShellBrowser.GetDirectories(windowsDir.PathFileSystem);
+            var dirStrings = Browser.GetDirectories(windowsDir.PathFileSystem);
 
             string pathExt;
-            Assert.IsTrue(ShellBrowser.IsParentPathOf(dirStrings[0], windowsDir.PathFileSystem,
+            Assert.IsTrue(Browser.IsParentPathOf(dirStrings[0], windowsDir.PathFileSystem,
                                                       out pathExt));
 
             // Alternative 1) way to check for parent relationship between 2 paths
-            var result = ShellBrowser.IsCurrentPath(dirStrings[0], windowsDir.PathFileSystem);
+            var result = Browser.IsCurrentPath(dirStrings[0], windowsDir.PathFileSystem);
             Assert.IsTrue(result == PathMatch.PartialSource);
 
             // Alternative 2) way to check for parent relationship between 2 paths
-            result = ShellBrowser.IsCurrentPath(windowsDir.PathFileSystem, dirStrings[0]);
+            result = Browser.IsCurrentPath(windowsDir.PathFileSystem, dirStrings[0]);
             Assert.IsTrue(result == PathMatch.PartialTarget);
 
             // Check if 2 paths are the same
-            result = ShellBrowser.IsCurrentPath(windowsDir.PathFileSystem, windowsDir.PathFileSystem);
+            result = Browser.IsCurrentPath(windowsDir.PathFileSystem, windowsDir.PathFileSystem);
             Assert.IsTrue(result == PathMatch.CompleteMatch);
 
             // Check if 2 paths are completely unrelated
-            result = ShellBrowser.IsCurrentPath(@"X:\Data\MyPath", @"Y:\Data\MyPath");
+            result = Browser.IsCurrentPath(@"X:\Data\MyPath", @"Y:\Data\MyPath");
             Assert.IsTrue(result == PathMatch.Unrelated);
         }
 
@@ -240,36 +240,36 @@
         [TestMethod]
         public void TestFindCommonRoot()
         {
-            var windowsDir = ShellBrowser.Create(KF_IID.ID_FOLDERID_Windows);
+            var windowsDir = Browser.Create(KF_IID.ID_FOLDERID_Windows);
             Assert.IsTrue(windowsDir.DirectoryPathExists());
 
-            var dirStrings = ShellBrowser.GetDirectories(windowsDir.PathFileSystem);
+            var dirStrings = Browser.GetDirectories(windowsDir.PathFileSystem);
 
             string pathExt;
-            Assert.IsTrue(ShellBrowser.IsParentPathOf(dirStrings[0], windowsDir.PathFileSystem,
+            Assert.IsTrue(Browser.IsParentPathOf(dirStrings[0], windowsDir.PathFileSystem,
                                                       out pathExt));
 
             // Alternative 1) way to check for parent relationship between 2 paths
-            var result = ShellBrowser.IsCurrentPath(dirStrings[0], windowsDir.PathFileSystem);
+            var result = Browser.IsCurrentPath(dirStrings[0], windowsDir.PathFileSystem);
             Assert.IsTrue(result == PathMatch.PartialSource);
 
-            var currentPath = ShellBrowser.FindRoot(windowsDir);
+            var currentPath = Browser.FindRoot(windowsDir);
 
-            var items = ShellBrowser.FindCommonRoot(currentPath, dirStrings[0], out pathExt);
+            var items = Browser.FindCommonRoot(currentPath, dirStrings[0], out pathExt);
 
             Assert.IsTrue(items > 0);
             Assert.IsTrue(pathExt == string.Empty);
 
-            var dirstringsItems = ShellBrowser.FindRoot(ShellBrowser.Create(dirStrings[0]));
+            var dirstringsItems = Browser.FindRoot(Browser.Create(dirStrings[0]));
 
-            items = ShellBrowser.FindCommonRoot(dirstringsItems, windowsDir.PathFileSystem , out pathExt);
+            items = Browser.FindCommonRoot(dirstringsItems, windowsDir.PathFileSystem , out pathExt);
 
             Assert.IsTrue(items > 0);
             Assert.IsTrue(string.IsNullOrEmpty(pathExt) == false);
 
             var dirstringsList = dirstringsItems.ToList();
 
-            bool bresult = ShellBrowser.ExtendPath(ref dirstringsList, pathExt);
+            bool bresult = Browser.ExtendPath(ref dirstringsList, pathExt);
 
             Assert.IsTrue(bresult);
             Assert.IsTrue(dirstringsItems.Length < dirstringsList.Count);

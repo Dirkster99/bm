@@ -47,7 +47,7 @@ namespace BreadcrumbTestLib.ViewModels.Breadcrumbs
         private readonly INavigationController _NavigationController;
         private readonly ObservableCollection<BreadcrumbTreeItemViewModel> _OverflowedAndRootItems;
         private readonly IBreadcrumbTreeItemPath _CurrentPath;
-        private readonly IDirectoryBrowser _RootLocation = ShellBrowser.DesktopDirectory;
+        private readonly IDirectoryBrowser _RootLocation = Browser.DesktopDirectory;
 
         private readonly ObservableCollection<string> _RecentLocationItems;
         private readonly object _RecentLocationItemsItemsLock;
@@ -419,7 +419,7 @@ namespace BreadcrumbTestLib.ViewModels.Breadcrumbs
 
                 try
                 {
-                    navigateToThisLocation = ShellBrowser.NormalizePath(navigateToThisLocation);
+                    navigateToThisLocation = Browser.NormalizePath(navigateToThisLocation);
 
                     // Navigation to new location was cancelled of given path is obviously empty
                     // Lets try and rollback to previously active location
@@ -441,7 +441,7 @@ namespace BreadcrumbTestLib.ViewModels.Breadcrumbs
                             PathType pathTypeParam;
                             var path = li.GetPath(navigateToThisLocation, out pathTypeParam);
 
-                            if (ShellBrowser.IsCurrentPath(path, navigateToThisLocation) == PathMatch.CompleteMatch)
+                            if (Browser.IsCurrentPath(path, navigateToThisLocation) == PathMatch.CompleteMatch)
                             {
                                 isPathValid = true;
                                 pathItems = li.GetPathModels();
@@ -455,7 +455,7 @@ namespace BreadcrumbTestLib.ViewModels.Breadcrumbs
                             if ((pathItems[0].ItemType & DirectoryItemFlags.Desktop) == 0)
                             {
                                 bool pathIsRooted = false;
-                                IDirectoryBrowser[] rootedPathItems = ShellBrowser.FindRoot(pathItems, navigateToThisLocation,
+                                IDirectoryBrowser[] rootedPathItems = Browser.FindRoot(pathItems, navigateToThisLocation,
                                                                                             out pathIsRooted);
 
                                 if (pathIsRooted == true)
@@ -467,7 +467,7 @@ namespace BreadcrumbTestLib.ViewModels.Breadcrumbs
                                 }
 
                                 // Try a second time with an approach closer to the system
-                                rootedPathItems = ShellBrowser.FindRoot(pathItems[pathItems.Length - 1]);
+                                rootedPathItems = Browser.FindRoot(pathItems[pathItems.Length - 1]);
 
                                 if (rootedPathItems != null)
                                 {
@@ -482,7 +482,7 @@ namespace BreadcrumbTestLib.ViewModels.Breadcrumbs
 
                         // Verify path existence and re-mount into root item
                         if (pathItems == null)
-                            isPathValid = ShellBrowser.DirectoryExists(navigateToThisLocation, out pathItems, true);
+                            isPathValid = Browser.DirectoryExists(navigateToThisLocation, out pathItems, true);
 
                         if (isPathValid == true)
                         {
@@ -490,7 +490,7 @@ namespace BreadcrumbTestLib.ViewModels.Breadcrumbs
                             // So, lets update the tree view based on the string representation.
                             if (pathItems == null)
                             {
-                                var location = ShellBrowser.Create(navigateToThisLocation, true);
+                                var location = Browser.Create(navigateToThisLocation, true);
                                 await NavigateToScheduledAsync(location, "BreadcrumbViewModel.NavigateTreeViewModel 0");
                                 return true;
                             }
@@ -499,7 +499,7 @@ namespace BreadcrumbTestLib.ViewModels.Breadcrumbs
                         // Attempt re-mounting if we find a common root for the given path
                         var currentPath = _CurrentPath.GetPathModels();
                         string extendPath = null;
-                        int idxCommonRoot = ShellBrowser.FindCommonRoot(currentPath, navigateToThisLocation, out extendPath);
+                        int idxCommonRoot = Browser.FindCommonRoot(currentPath, navigateToThisLocation, out extendPath);
 
                         if (idxCommonRoot > 0 && extendPath != null)
                         {
@@ -511,7 +511,7 @@ namespace BreadcrumbTestLib.ViewModels.Breadcrumbs
 
                             bool joinSuccess = true;
                             if (string.IsNullOrEmpty(extendPath) == false)
-                                joinSuccess = ShellBrowser.ExtendPath(ref pathList, extendPath);
+                                joinSuccess = Browser.ExtendPath(ref pathList, extendPath);
 
                             if (joinSuccess) // path joined successfully -> lets go where no one has been before...
                             {
@@ -898,7 +898,7 @@ namespace BreadcrumbTestLib.ViewModels.Breadcrumbs
             List<string> locations = null;
 
             if (secLevelRootItem == null)
-                locations = ShellBrowser.PathItemsAsParseNames(location);
+                locations = Browser.PathItemsAsParseNames(location);
             else
                 locations = new List<string>();
 

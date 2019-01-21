@@ -159,12 +159,12 @@
                         // Load default demo directory if path was not supplied
                         if (string.IsNullOrEmpty(dirPath))
                         {
-                            var windowsFolder = ShellBrowser.Create(KF_IID.ID_FOLDERID_Windows, true);
+                            var windowsFolder = Browser.Create(KF_IID.ID_FOLDERID_Windows, true);
                             dirPath = System.IO.Path.Combine(windowsFolder.PathFileSystem, "WinSxs");
                         }
 
                         if (System.IO.Directory.Exists(dirPath) == false)
-                            dirPath = ShellBrowser.SysDefault.PathFileSystem;
+                            dirPath = Browser.SysDefault.PathFileSystem;
 
                         // Clip of last seperator if any
                         int idx = dirPath.LastIndexOf(System.IO.Path.DirectorySeparatorChar);
@@ -173,7 +173,7 @@
                     }
                     catch
                     {
-                        dirPath = ShellBrowser.SysDefault.PathFileSystem;
+                        dirPath = Browser.SysDefault.PathFileSystem;
                     }
 
                     GoToPath = CurrentPath = dirPath;
@@ -184,7 +184,7 @@
                     Console.WriteLine("...{0} working on it...\n", startTime);
 
                     int i = 0;
-                    foreach (var item in ShellBrowser.GetSlimChildItems(dirPath))
+                    foreach (var item in Browser.GetSlimChildItems(dirPath))
                     {
                         result.Add(new ItemViewModel(item));
                         i++;

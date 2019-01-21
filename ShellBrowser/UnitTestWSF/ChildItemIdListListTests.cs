@@ -18,7 +18,7 @@
         public void GetDesktopChildItems()
         {
             int iCnt = 0;
-            foreach (var item in ShellBrowser.GetChildItems(KF_IID.ID_FOLDERID_Desktop))
+            foreach (var item in Browser.GetChildItems(KF_IID.ID_FOLDERID_Desktop))
             {
                 // First item is null if we are looking at an item under the desktop item
                 var fullIdList = (item.ParentIdList != null ?
@@ -46,7 +46,7 @@
         public void GetPCChildItems()
         {
             int iCnt = 0;
-            foreach (var item in ShellBrowser.GetChildItems(KF_IID.ID_FOLDERID_ComputerFolder))
+            foreach (var item in Browser.GetChildItems(KF_IID.ID_FOLDERID_ComputerFolder))
             {
                 // First item is null if we are looking at an item under the desktop item
                 var fullIdList = (item.ParentIdList != null ?
@@ -74,7 +74,7 @@
         public void GetProgramFilesChildItems()
         {
             int iCnt = 0;
-            foreach (var item in ShellBrowser.GetChildItems(KF_IID.ID_FOLDERID_ProgramFiles))
+            foreach (var item in Browser.GetChildItems(KF_IID.ID_FOLDERID_ProgramFiles))
             {
                 Assert.IsTrue(item != null);
                 iCnt++;
@@ -89,7 +89,7 @@
         {
             IDirectoryBrowser filterReferenceItem = null;
             int iCnt = 0;
-            foreach (var item in ShellBrowser.GetChildItems(KF_IID.ID_FOLDERID_ProgramFiles))
+            foreach (var item in Browser.GetChildItems(KF_IID.ID_FOLDERID_ProgramFiles))
             {
                 Assert.IsTrue(item != null);
                 filterReferenceItem = item;
@@ -100,7 +100,7 @@
             // Filtering for an arbitrary item in the programm files folder should yield
             // a collection with one item (assuming that all item names are unique)
             int iCntFiltered = 0;
-            foreach (var item in ShellBrowser.GetChildItems(KF_IID.ID_FOLDERID_ProgramFiles,
+            foreach (var item in Browser.GetChildItems(KF_IID.ID_FOLDERID_ProgramFiles,
                                                             filterReferenceItem.Name))
             {
                 Assert.IsTrue(item != null);
@@ -112,7 +112,7 @@
             // Filtering for an arbitrary '*' item in the programm files folder should yield
             // a collection with one item (assuming that all item names are unique)
             iCntFiltered = 0;
-            foreach (var item in ShellBrowser.GetChildItems(KF_IID.ID_FOLDERID_ProgramFiles,
+            foreach (var item in Browser.GetChildItems(KF_IID.ID_FOLDERID_ProgramFiles,
                                                             "*" + filterReferenceItem.Name + "*"))
             {
                 Assert.IsTrue(item != null);
@@ -129,7 +129,7 @@
         public void GetMusicChildItems()
         {
             int iCnt = 0;
-            foreach (var item in ShellBrowser.GetChildItems(KF_IID.ID_FOLDERID_Music))
+            foreach (var item in Browser.GetChildItems(KF_IID.ID_FOLDERID_Music))
             {
                 Assert.IsTrue(item != null);
                 iCnt++;

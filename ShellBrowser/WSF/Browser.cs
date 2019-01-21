@@ -21,16 +21,19 @@
 
     /// <summary>
     /// Implements core API type methods and properties that are used to interact
-    /// with Windows Shell Items (folders and known folders).
+    /// with Windows Shell System Items (folders and known folders).
     /// </summary>
-    public static class ShellBrowser
+    public static class Browser
     {
-        #region MyRegion
-        static ShellBrowser()
+        #region ctors
+        /// <summary>
+        /// Static constructor
+        /// </summary>
+        static Browser()
         {
             KnownFileSystemFolders = new Dictionary<string, IDirectoryBrowser>();
         }
-        #endregion
+        #endregion  ctors
 
         #region properties
         /// <summary>
@@ -93,7 +96,7 @@
         {
             get
             {
-                return ShellBrowser.Create(KF_IID.ID_FOLDERID_ComputerFolder);
+                return Browser.Create(KF_IID.ID_FOLDERID_ComputerFolder);
             }
         }
 
@@ -167,7 +170,7 @@
                 // Try to locate a known folder by its directory path in the file system
                 if (ShellHelpers.IsSpecialPath(fullPath) == ShellHelpers.SpecialPath.None)
                 {
-                    var item = ShellBrowser.FindKnownFolderByFileSystemPath(fullPath);
+                    var item = Browser.FindKnownFolderByFileSystemPath(fullPath);
 
                     if (item != null)
                         return item;
@@ -220,7 +223,7 @@
                 // Try to locate a known folder by its directory path in the file system
                 if (ShellHelpers.IsSpecialPath(parseName) == ShellHelpers.SpecialPath.None)
                 {
-                    var item = ShellBrowser.FindKnownFolderByFileSystemPath(parseName);
+                    var item = Browser.FindKnownFolderByFileSystemPath(parseName);
 
                     if (item != null)
                         return item;
@@ -356,7 +359,7 @@
                 ptrStr = Marshal.AllocCoTaskMem(NativeMethods.MAX_PATH * 2 + 4);
                 Marshal.WriteInt32(ptrStr, 0, 0);
                 StringBuilder strbuf = new StringBuilder(NativeMethods.MAX_PATH);
-                var desktop = ShellBrowser.DesktopDirectory;
+                var desktop = Browser.DesktopDirectory;
 
                 // Get one item below root item at a time and process by getting its display name
                 // PITEMID_CHILD: The ITEMIDLIST is an allocated child ITEMIDLIST relative to
@@ -453,7 +456,7 @@
             if (string.IsNullOrEmpty(folder) == true)
                 return null;
 
-            folder = ShellBrowser.NormalizePath(folder);
+            folder = Browser.NormalizePath(folder);
 
             string[] dirs = null;
 
@@ -490,11 +493,11 @@
 
             try
             {
-                var items = ShellBrowser.PathItemsAsIdList(location);
+                var items = Browser.PathItemsAsIdList(location);
                 IDirectoryBrowser[] pathItems = new IDirectoryBrowser[items.Count];
 
                 for (int i = 0; i < items.Count; i++)
-                    pathItems[i] = ShellBrowser.Create(items[i]);
+                    pathItems[i] = Browser.Create(items[i]);
 
                 return pathItems;
             }
@@ -523,7 +526,7 @@
             bool foundRoot = false;
             List<IDirectoryBrowser> newRoot = new List<IDirectoryBrowser>();
 
-            var desktop = ShellBrowser.DesktopDirectory;
+            var desktop = Browser.DesktopDirectory;
 
             if (pathItems.Length >= 1)
             {
@@ -537,8 +540,8 @@
 
                         if (newRoot.Count == 0)
                         {
-                            newRoot.Add(ShellBrowser.MyComputer);
-                            newRoot.Add(ShellBrowser.DesktopDirectory);
+                            newRoot.Add(Browser.MyComputer);
+                            newRoot.Add(Browser.DesktopDirectory);
                         }
 
                         pathIsRooted = true;
@@ -549,7 +552,7 @@
                 // Search this item under desktop root
                 for (int i = pathItems.Length - 1; i >= 0; i--)
                 {
-                    var it = ShellBrowser.GetChildItems(KF_IID.ID_FOLDERID_Desktop, pathItems[i].Name);
+                    var it = Browser.GetChildItems(KF_IID.ID_FOLDERID_Desktop, pathItems[i].Name);
                     if (it.Any())
                     {
                         // This is rooted so we just return it as is
@@ -566,13 +569,13 @@
 
                 // Can we find it under an item directly under the Destop (eg.: Under ThisPC)?
                 // (then return it with eg.: ThisPC on top)
-                foreach (var rootitem in ShellBrowser.GetChildItems(KF_IID.ID_FOLDERID_Desktop))
+                foreach (var rootitem in Browser.GetChildItems(KF_IID.ID_FOLDERID_Desktop))
                 {
                     // Evaluate only special items, such as, ThisPC, User etc.
                     if (string.IsNullOrEmpty(rootitem.SpecialPathId))
                         continue;
 
-                    var itms = ShellBrowser.GetChildItems(rootitem.SpecialPathId, pathItems[0].Name);
+                    var itms = Browser.GetChildItems(rootitem.SpecialPathId, pathItems[0].Name);
                     if (itms.Any())
                     {
                         if (pathItems[0].Equals(itms.First()) == true)
@@ -589,12 +592,12 @@
                 }
             }
 
-            if (ShellBrowser.IsTypeOf(newPath) == PathType.WinShellPath)
+            if (Browser.IsTypeOf(newPath) == PathType.WinShellPath)
             {
                 // Search root under desktop and return shortest possible number of items
                 for (int idx = pathItems.Length - 1; idx >= 0; idx--)
                 {
-                    var dpItems = ShellBrowser.GetChildItems(KF_IID.ID_FOLDERID_Desktop, pathItems[idx].Name);
+                    var dpItems = Browser.GetChildItems(KF_IID.ID_FOLDERID_Desktop, pathItems[idx].Name);
                     if (dpItems.Any())
                     {
                         for (int i = idx; i < pathItems.Length; i++)
@@ -607,7 +610,7 @@
             }
 
             string pathExt = null;
-            if (ShellBrowser.IsParentPathOf(desktop.PathFileSystem, newPath, out pathExt))
+            if (Browser.IsParentPathOf(desktop.PathFileSystem, newPath, out pathExt))
             {
                 int idx = -1;
 
@@ -628,9 +631,9 @@
                     {
                         // Requested location is desktop itself, so we return 'ThisPC','Desktop'
                         var retArr = new IDirectoryBrowser[2];
-                        retArr[0] = ShellBrowser.MyComputer;
+                        retArr[0] = Browser.MyComputer;
 
-                        var dpItems = ShellBrowser.GetChildItems(retArr[0].SpecialPathId, desktop.Name);
+                        var dpItems = Browser.GetChildItems(retArr[0].SpecialPathId, desktop.Name);
                         if (dpItems.Any())
                         {
                             retArr[1] = dpItems.First();
@@ -654,7 +657,7 @@
                 IDirectoryBrowser[] arrDesktop = new IDirectoryBrowser[1] { desktop };
 
                 // Search root under desktop based on pathItems.Length == 1
-                idx = ShellBrowser.FindCommonRoot(arrDesktop, newPath, out pathExt);
+                idx = Browser.FindCommonRoot(arrDesktop, newPath, out pathExt);
 
                 if (idx >= 0)
                 {
@@ -669,7 +672,7 @@
 
                 if (idx >= 0)
                 {
-                    var dpItems = ShellBrowser.GetChildItems(KF_IID.ID_FOLDERID_Desktop, pathItems[idx].Name);
+                    var dpItems = Browser.GetChildItems(KF_IID.ID_FOLDERID_Desktop, pathItems[idx].Name);
                     if (dpItems.Any())
                     {
                         for (int i = idx; i < pathItems.Length; i++)
@@ -682,24 +685,24 @@
             }
 
             // Second chance finding root under ThisPC
-            var thisPC = ShellBrowser.MyComputer;
-            foreach (var item in ShellBrowser.GetChildItems(KF_IID.ID_FOLDERID_ComputerFolder))
+            var thisPC = Browser.MyComputer;
+            foreach (var item in Browser.GetChildItems(KF_IID.ID_FOLDERID_ComputerFolder))
             {
                 if (string.IsNullOrEmpty(item.PathFileSystem))
                     continue;
 
                 pathExt = null;
-                if (ShellBrowser.IsParentPathOf(item.PathFileSystem, newPath, out pathExt) == true)
+                if (Browser.IsParentPathOf(item.PathFileSystem, newPath, out pathExt) == true)
                 {
                     // Search root under ThisPC
-                    int idx = ShellBrowser.FindCommonRoot(pathItems, item.PathFileSystem, out pathExt);
+                    int idx = Browser.FindCommonRoot(pathItems, item.PathFileSystem, out pathExt);
 
                     if (idx >= 0)
                     {
-                        var dpItems = ShellBrowser.GetChildItems(KF_IID.ID_FOLDERID_ComputerFolder, pathItems[idx].Name);
+                        var dpItems = Browser.GetChildItems(KF_IID.ID_FOLDERID_ComputerFolder, pathItems[idx].Name);
                         if (dpItems.Any())
                         {
-                            newRoot.Add(ShellBrowser.MyComputer);
+                            newRoot.Add(Browser.MyComputer);
 
                             for (int i = idx; i < pathItems.Length; i++)
                                 newRoot.Add(pathItems[i].Clone() as IDirectoryBrowser);
@@ -712,11 +715,11 @@
             }
 
             // Third chance try finding root under ThisPC
-            var items = ShellBrowser.GetChildItems(KF_IID.ID_FOLDERID_ComputerFolder, pathItems[0].Name);
+            var items = Browser.GetChildItems(KF_IID.ID_FOLDERID_ComputerFolder, pathItems[0].Name);
             if (items.Any())
             {
                 foundRoot = true;
-                newRoot.Add(ShellBrowser.MyComputer);
+                newRoot.Add(Browser.MyComputer);
             }
 
             // No rooted item found for re-mount
@@ -863,7 +866,7 @@
         {
             try
             {
-                var dirs = ShellBrowser.GetDirectories(fs_path);
+                var dirs = Browser.GetDirectories(fs_path);
                 var dirItems = new IDirectoryBrowser[dirs.Length];
                 string currentPath = null;
                 for (int i = 0; i < dirItems.Length; i++)
@@ -873,7 +876,7 @@
                     else
                         currentPath = System.IO.Path.Combine(currentPath, dirs[i]);
 
-                    dirItems[i] = ShellBrowser.Create(currentPath, bFindKF);
+                    dirItems[i] = Browser.Create(currentPath, bFindKF);
                 }
 
                 return dirItems;
@@ -913,7 +916,7 @@
                     if (i > 0)
                         parentPath = pathItems[i - 1].PathShell;
 
-                    var subList = ShellBrowser.GetChildItems(parentPath, pathNames[i]);
+                    var subList = Browser.GetChildItems(parentPath, pathNames[i]);
                     if (subList.Any())
                     {
                         pathItems[i] = subList.First();
@@ -1111,7 +1114,7 @@
                     break;
 
                 // found a common root item for path discription
-                if (ShellBrowser.IsParentPathOf(model.PathFileSystem, navigateToThisLocation, out pathExtension))
+                if (Browser.IsParentPathOf(model.PathFileSystem, navigateToThisLocation, out pathExtension))
                     return i;
             }
 
@@ -1135,7 +1138,7 @@
                 {
                     var currentRootParseName = pathList[pathList.Count - 1].PathShell;
 
-                    var nxt = ShellBrowser.GetChildItems(currentRootParseName, altPathNames[i]);
+                    var nxt = Browser.GetChildItems(currentRootParseName, altPathNames[i]);
 
                     if (nxt.Any() == false)
                         return false;
@@ -1413,7 +1416,7 @@
 
                         try
                         {
-                            var folder = ShellBrowser.Create("::" + knownFolderID.ToString("B"), true);
+                            var folder = Browser.Create("::" + knownFolderID.ToString("B"), true);
 
                             if (folder != null &&
                                 string.IsNullOrEmpty(folder.PathFileSystem) == false)
