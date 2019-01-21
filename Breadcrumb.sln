@@ -24,13 +24,13 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Demos", "Demos", "{51467FF2
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BmLib", "BmLib\BmLib.csproj", "{0F864F5C-CE7A-438B-B943-620D3B13FA11}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ShellBrowserLib", "ShellBrowser\ShellBrowserLib\ShellBrowserLib.csproj", "{2FB5C730-5836-4ED7-ABCA-2B9669E8C0A6}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WSF", "ShellBrowser\WSF\WSF.csproj", "{2FB5C730-5836-4ED7-ABCA-2B9669E8C0A6}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ShellBrowser", "ShellBrowser", "{CE4D1B55-5B70-4753-8CC6-17C4DC79C11A}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Client", "ShellBrowser\Client\Client.csproj", "{8BB7BFC8-1A2E-401B-8F90-1A5C45C91F76}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestShellBrowserLib", "ShellBrowser\TestShellBrowserLib\TestShellBrowserLib.csproj", "{534DE0E7-B6F9-4AD6-9036-82A6102B83D5}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UnitTestWSF", "ShellBrowser\UnitTestWSF\UnitTestWSF.csproj", "{534DE0E7-B6F9-4AD6-9036-82A6102B83D5}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SSCoreLib", "ShellBrowser\SSCCoreLib\SSCoreLib.csproj", "{24AE0C23-875A-4718-BF04-2CCEC08DEF05}"
 EndProject

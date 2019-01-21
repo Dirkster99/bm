@@ -1,8 +1,8 @@
 ﻿namespace BreadcrumbTestLib.Models
 {
-    using ShellBrowserLib;
-    using ShellBrowserLib.Enums;
-    using ShellBrowserLib.Interfaces;
+    using WSF;
+    using WSF.Enums;
+    using WSF.Interfaces;
     using System;
     using System.Collections.Generic;
     using System.Linq;

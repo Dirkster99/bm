@@ -1,7 +1,7 @@
 namespace SSCoreLib.Browse
 {
     using System;
-    using ShellBrowserLib.Interfaces;
+    using WSF.Interfaces;
 
     /// <summary>
     /// A simple event based state model that informs the subscriber about the

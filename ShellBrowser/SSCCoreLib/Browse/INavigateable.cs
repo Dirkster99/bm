@@ -1,6 +1,6 @@
 namespace SSCoreLib.Browse
 {
-    using ShellBrowserLib.Interfaces;
+    using WSF.Interfaces;
     using System.Threading.Tasks;
 
     /// <summary>

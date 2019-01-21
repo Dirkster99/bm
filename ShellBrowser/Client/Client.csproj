@@ -49,9 +49,9 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\ShellBrowserLib\ShellBrowserLib.csproj">
+    <ProjectReference Include="..\WSF\WSF.csproj">
       <Project>{2fb5c730-5836-4ed7-abca-2b9669e8c0a6}</Project>
-      <Name>ShellBrowserLib</Name>
+      <Name>WSF</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

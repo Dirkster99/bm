@@ -3,7 +3,7 @@
     using BmLib.Interfaces;
     using BreadcrumbTestLib.Models;
     using BreadcrumbTestLib.ViewModels.Breadcrumbs;
-    using ShellBrowserLib.Interfaces;
+    using WSF.Interfaces;
     using SSCoreLib.Browse;
     using System.ComponentModel;
     using System.Threading.Tasks;

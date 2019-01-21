@@ -2,9 +2,9 @@
 {
     using System;
     using System.Threading.Tasks;
-    using ShellBrowserLib;
-    using ShellBrowserLib.Browser;
-    using ShellBrowserLib.Interfaces;
+    using WSF;
+    using WSF.Browse;
+    using WSF.Interfaces;
 
     public class ItemViewModel : Base.ViewModelBase, IItemViewModel
     {

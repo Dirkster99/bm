@@ -1,7 +1,7 @@
 ﻿namespace WpfPerformance.ViewModels
 {
-    using ShellBrowserLib;
-    using ShellBrowserLib.IDs;
+    using WSF;
+    using WSF.IDs;
     using System;
     using System.Collections.Generic;
     using System.Threading.Tasks;

@@ -3,10 +3,10 @@
     using BreadcrumbTestLib.Models;
     using BreadcrumbTestLib.Utils;
     using BreadcrumbTestLib.ViewModels.Base;
-    using ShellBrowserLib;
-    using ShellBrowserLib.Enums;
-    using ShellBrowserLib.IDs;
-    using ShellBrowserLib.Interfaces;
+    using WSF;
+    using WSF.Enums;
+    using WSF.IDs;
+    using WSF.Interfaces;
     using System.Collections.Generic;
     using System.Linq;
     using System.Threading;
@@ -278,7 +278,7 @@
             {
                 // Win shell path folder
                 IDirectoryBrowser[] path = null;
-                if (ShellBrowserLib.ShellBrowser.DirectoryExists(input, out path, true))
+                if (WSF.ShellBrowser.DirectoryExists(input, out path, true))
                     return ListChildren(path, PathType.WinShellPath, li);
                 else
                 {
@@ -293,7 +293,7 @@
 
                         // Win shell path folder
                         path = null;
-                        if (ShellBrowserLib.ShellBrowser.DirectoryExists(parentDir, out path, true))
+                        if (WSF.ShellBrowser.DirectoryExists(parentDir, out path, true))
                             return ListChildren(path, PathType.WinShellPath, li, searchMask);
                     }
                 }

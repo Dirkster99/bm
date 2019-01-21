@@ -9,9 +9,12 @@ ECHO.
 ECHO BmLib
 ECHO.
 ECHO ShellBrowser\Client
-ECHO ShellBrowser\ShellBrowserLib
-ECHO ShellBrowser\TestShellBrowserLib
+ECHO ShellBrowser\WSF
+ECHO ShellBrowser\UnitTestWSF
 ECHO ShellBrowser\SSCCoreLib
+ECHO ShellBrowser\PerformanceTestClient
+ECHO WpfPerformance
+ECHO.
 ECHO Icons
 ECHO.
 ECHO Components\ServiceLocator
@@ -43,8 +46,8 @@ RMDIR /S /Q BmLib\obj
 ECHO.
 ECHO Deleting BIN and OBJ Folders in ShellBrowserLib folder
 ECHO.
-RMDIR /S /Q ShellBrowser\ShellBrowserLib\bin
-RMDIR /S /Q ShellBrowser\ShellBrowserLib\obj
+RMDIR /S /Q ShellBrowser\WSF\bin
+RMDIR /S /Q ShellBrowser\WSF\obj
 
 ECHO.
 ECHO Deleting BIN and OBJ Folders in Client folder
@@ -55,13 +58,23 @@ RMDIR /S /Q ShellBrowser\Client\obj
 ECHO.
 ECHO Deleting BIN and OBJ Folders in UnitTests folder
 ECHO.
-RMDIR /S /Q ShellBrowser\TestShellBrowserLib\bin
-RMDIR /S /Q ShellBrowser\TestShellBrowserLib\obj
+RMDIR /S /Q ShellBrowser\UnitTestWSF\bin
+RMDIR /S /Q ShellBrowser\UnitTestWSF\obj
 
 ECHO Deleting BIN and OBJ Folders in ShellBrowser\SSCCoreLib folder
 ECHO.
 RMDIR /S /Q ShellBrowser\SSCCoreLib\bin
 RMDIR /S /Q ShellBrowser\SSCCoreLib\obj
+
+ECHO Deleting BIN and OBJ Folders in ShellBrowser\PerformanceTestClient folder
+ECHO.
+RMDIR /S /Q ShellBrowser\PerformanceTestClient\bin
+RMDIR /S /Q ShellBrowser\PerformanceTestClient\obj
+
+ECHO Deleting BIN and OBJ Folders in WpfPerformance folder
+ECHO.
+RMDIR /S /Q WpfPerformance\bin
+RMDIR /S /Q WpfPerformance\obj
 
 ECHO Deleting BIN and OBJ Folders in Icons folder
 ECHO.

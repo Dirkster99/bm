@@ -1,9 +1,9 @@
 ﻿namespace PerformanceTestClient
 {
-    using ShellBrowserLib;
-    using ShellBrowserLib.Browser;
-    using ShellBrowserLib.IDs;
-    using ShellBrowserLib.Interfaces;
+    using WSF;
+    using WSF.Browse;
+    using WSF.IDs;
+    using WSF.Interfaces;
     using System;
     using System.Collections.Generic;
 

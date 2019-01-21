@@ -4,10 +4,10 @@ namespace BreadcrumbTestLib.ViewModels.Breadcrumbs
     using BreadcrumbTestLib.Models;
     using BreadcrumbTestLib.ViewModels.Base;
     using BreadcrumbTestLib.ViewModels.Interfaces;
-    using ShellBrowserLib;
-    using ShellBrowserLib.Enums;
-    using ShellBrowserLib.IDs;
-    using ShellBrowserLib.Interfaces;
+    using WSF;
+    using WSF.Enums;
+    using WSF.IDs;
+    using WSF.Interfaces;
     using SSCoreLib.Browse;
     using System;
     using System.Collections.Generic;

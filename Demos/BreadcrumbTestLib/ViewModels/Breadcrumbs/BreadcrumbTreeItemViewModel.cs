@@ -6,14 +6,14 @@
     using BreadcrumbTestLib.ViewModels.Interfaces;
     using BreadcrumbTestLib.ViewModels.Breadcrumbs.TreeSelectors;
     using BreadcrumbTestLib.ViewModels.Base;
-    using ShellBrowserLib.Interfaces;
+    using WSF.Interfaces;
     using System;
     using BmLib.Interfaces;
     using BmLib.Enums;
     using BreadcrumbTestLib.Models;
     using System.Windows.Input;
-    using ShellBrowserLib;
-    using ShellBrowserLib.IDs;
+    using WSF;
+    using WSF.IDs;
 
     /// <summary>
     /// Class implements a ViewModel to manage a sub-tree of a Breadcrumb control.

@@ -2,8 +2,8 @@
 {
     using BreadcrumbTestLib.Models;
     using BreadcrumbTestLib.ViewModels.Breadcrumbs;
-    using ShellBrowserLib.Enums;
-    using ShellBrowserLib.Interfaces;
+    using WSF.Enums;
+    using WSF.Interfaces;
     using System.Collections.Generic;
 
     /// <summary>

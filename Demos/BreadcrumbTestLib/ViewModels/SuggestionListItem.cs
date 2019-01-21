@@ -1,6 +1,6 @@
 ﻿namespace BreadcrumbTestLib.ViewModels
 {
-    using ShellBrowserLib.Enums;
+    using WSF.Enums;
     using System;
 
     /// <summary>

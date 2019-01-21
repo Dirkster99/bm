@@ -4,7 +4,7 @@ namespace SSCoreLib.Interfaces
     using System.ComponentModel;
     using System.Threading;
     using System.Windows.Input;
-    using ShellBrowserLib.Interfaces;
+    using WSF.Interfaces;
     using SSCoreLib.Browse;
 
     /// <summary>

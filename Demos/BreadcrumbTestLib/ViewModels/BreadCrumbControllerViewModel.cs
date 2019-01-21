@@ -3,8 +3,8 @@ namespace BreadcrumbTestLib.ViewModels
     using BreadcrumbTestLib.Tasks;
     using BreadcrumbTestLib.ViewModels.Breadcrumbs;
     using BreadcrumbTestLib.ViewModels.Interfaces;
-    using ShellBrowserLib;
-    using ShellBrowserLib.Interfaces;
+    using WSF;
+    using WSF.Interfaces;
     using SSCoreLib.Browse;
     using System;
     using System.Diagnostics;

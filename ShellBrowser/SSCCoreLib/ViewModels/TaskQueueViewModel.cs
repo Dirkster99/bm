@@ -6,7 +6,7 @@ namespace SSCoreLib.ViewModels
     using System.Threading;
     using System.Threading.Tasks;
     using System.Windows.Input;
-    using ShellBrowserLib.Interfaces;
+    using WSF.Interfaces;
     using SSCoreLib.Browse;
     using SSCoreLib.Interfaces;
     using SSCoreLib.ViewModels.Base;

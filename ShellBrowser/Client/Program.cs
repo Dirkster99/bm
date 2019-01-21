@@ -1,9 +1,9 @@
 ﻿namespace Client
 {
-    using ShellBrowserLib;
-    using ShellBrowserLib.IDs;
-    using ShellBrowserLib.Shell.Interop.Interfaces.Knownfolders;
-    using ShellBrowserLib.Shell.Interop.Knownfolders;
+    using WSF;
+    using WSF.IDs;
+    using WSF.Shell.Interop.Interfaces.Knownfolders;
+    using WSF.Shell.Interop.Knownfolders;
     using System;
     using System.Collections.Generic;
 
