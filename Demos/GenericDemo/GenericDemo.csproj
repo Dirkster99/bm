@@ -130,10 +130,6 @@
       <Project>{0f864f5c-ce7a-438b-b943-620d3b13fa11}</Project>
       <Name>BmLib</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\ShellBrowser\WSF\WSF.csproj">
-      <Project>{2fb5c730-5836-4ed7-abca-2b9669e8c0a6}</Project>
-      <Name>WSF</Name>
-    </ProjectReference>
     <ProjectReference Include="..\BreadcrumbTestLib\BreadcrumbTestLib.csproj">
       <Project>{5dd7405c-a81d-49be-93bf-46fedd0a3a2c}</Project>
       <Name>BreadcrumbTestLib</Name>

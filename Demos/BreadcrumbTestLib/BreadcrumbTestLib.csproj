@@ -43,6 +43,9 @@
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
     <Reference Include="WindowsBase" />
+    <Reference Include="WSF, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Dirkster.WSF.1.0.0\lib\net4\WSF.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Behaviors\TreeViewItemBehaviour.cs" />
@@ -85,11 +88,7 @@
       <Project>{0f864f5c-ce7a-438b-b943-620d3b13fa11}</Project>
       <Name>BmLib</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\ShellBrowser\WSF\WSF.csproj">
-      <Project>{2fb5c730-5836-4ed7-abca-2b9669e8c0a6}</Project>
-      <Name>WSF</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\ShellBrowser\SSCCoreLib\SSCoreLib.csproj">
+    <ProjectReference Include="..\SSCCoreLib\SSCoreLib.csproj">
       <Project>{24ae0c23-875a-4718-bf04-2ccec08def05}</Project>
       <Name>SSCoreLib</Name>
     </ProjectReference>
