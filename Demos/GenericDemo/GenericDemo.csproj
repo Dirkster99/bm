@@ -143,9 +143,6 @@
       <Name>Icons</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Readme.txt" />
-  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PreBuildEvent>
