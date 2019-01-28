@@ -5,7 +5,6 @@
     using BreadcrumbTestLib.ViewModels.Base;
     using WSF;
     using WSF.Enums;
-    using WSF.IDs;
     using WSF.Interfaces;
     using System.Collections.Generic;
     using System.Linq;
@@ -334,15 +333,15 @@
                 SuggestionListItem Itemsuggest = null;
                 if (pathType == PathType.WinShellPath)
                 {
-                    Itemsuggest = CreateItem(item.LabelName, namedPath + '\\' + item.ParseName,
+                    Itemsuggest = CreateItem(item.LabelName, namedPath + '\\' + item.Name,
                                                 PathType.WinShellPath, path);
                 }
                 else
                 {
-                    if (Browser.IsTypeOf(item.Name) != PathType.SpecialFolder)
+                    if (Browser.IsTypeOf(item.ParseName) != PathType.SpecialFolder)
                     {
-                        Itemsuggest = CreateItem(item.LabelName, item.Name,
-                                                    PathType.FileSystemPath, path);
+                        Itemsuggest = CreateItem(item.LabelName, item.ParseName,
+                                                 PathType.FileSystemPath, path);
                     }
                 }
 
@@ -363,11 +362,11 @@
             // Get Root Items below ThisPC
             var parent = Browser.MyComputer;
             foreach (var item in Browser.GetSlimChildItems(parent.SpecialPathId,
-                                                                     input + "*", SubItemFilter.NameOrParsName))
+                                                           input + "*", SubItemFilter.NameOrParsName))
             {
-                if (Browser.IsTypeOf(item.Name) != PathType.SpecialFolder)
+                if (Browser.IsTypeOf(item.ParseName) != PathType.SpecialFolder)
                 {
-                    var Itemsuggest = CreateItem(item.LabelName, item.Name, PathType.FileSystemPath, parent);
+                    var Itemsuggest = CreateItem(item.LabelName, item.ParseName, PathType.FileSystemPath, parent);
                     result.ResultList.Add(Itemsuggest);
                 }
             }
@@ -377,15 +376,15 @@
             foreach (var item in Browser.GetSlimChildItems(parent.SpecialPathId, input + "*"))
             {
                 // filter out RecycleBin, ControlPanel... since its not that useful here...
-                bool IsFilteredItem = string.Compare(item.Name, KF_IID.ID_FOLDERID_RecycleBinFolder, true) == 0 ||
-                                      string.Compare(item.Name, "::{26EE0668-A00A-44D7-9371-BEB064C98683}", true) == 0;
+                bool IsFilteredItem = string.Compare(item.ParseName, "::{645FF040-5081-101B-9F08-00AA002F954E}", true) == 0 ||
+                                      string.Compare(item.ParseName, "::{26EE0668-A00A-44D7-9371-BEB064C98683}", true) == 0;
 
                 // Filter out ThisPC since its items are handled in previous loop
-                bool IsThisPC = string.Compare(item.Name, "::{20D04FE0-3AEA-1069-A2D8-08002B30309D}", true) == 0;
+                bool IsThisPC = string.Compare(item.ParseName, "::{20D04FE0-3AEA-1069-A2D8-08002B30309D}", true) == 0;
 
                 if (IsFilteredItem == false && IsThisPC == false)
                 {
-                    var Itemsuggest = CreateItem(item.LabelName, item.ParseName, PathType.WinShellPath, parent);
+                    var Itemsuggest = CreateItem(item.LabelName, item.Name, PathType.WinShellPath, parent);
                     result.ResultList.Add(Itemsuggest);
                 }
             }
@@ -461,9 +460,9 @@
             var parent = Browser.Create(input);
             foreach (var item in Browser.GetSlimChildItems(input, searchMask))
             {
-                if (Browser.IsTypeOf(item.Name) != PathType.SpecialFolder)
+                if (Browser.IsTypeOf(item.ParseName) != PathType.SpecialFolder)
                 {
-                    result.ResultList.Add(CreateItem(item.LabelName, item.Name,
+                    result.ResultList.Add(CreateItem(item.LabelName, item.ParseName,
                                                      PathType.FileSystemPath, parent));
                 }
             }

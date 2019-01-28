@@ -321,13 +321,21 @@
                 _dir = location;
                 Header = _dir.Label;
 
-                // and insert desktop sub-entries into Entries property
-                Entries.SetEntries(UpdateMode.Replace,
-                    Browser.GetChildItems(_dir.PathShell)
+////                var modelSlim = Browser.GetSlimChildItems(_dir.PathShell)
+////                                // (filter out recycle bin and control panel entries since its not that useful...)
+////                                .Where(d => string.Compare(d.SpecialParseNameId, KF_IID.ID_FOLDERID_RecycleBinFolder, true) != 0)
+////                                .Where(d => string.Compare(d.ParseName, "::{26EE0668-A00A-44D7-9371-BEB064C98683}", true) != 0);
+
+
+                var models = Browser.GetChildItems(_dir.PathShell)
                                                 // (filter out recycle bin and control panel entries since its not that useful...)
                                                 .Where(d => string.Compare(d.SpecialPathId, KF_IID.ID_FOLDERID_RecycleBinFolder, true) != 0)
-                                                .Where(d => string.Compare(d.PathRAW, "::{26EE0668-A00A-44D7-9371-BEB064C98683}", true) != 0)
-                                                .Select(d => new BreadcrumbTreeItemViewModel(d, this, _Root)).ToArray());
+                                                .Where(d => string.Compare(d.PathRAW, "::{26EE0668-A00A-44D7-9371-BEB064C98683}", true) != 0);
+
+                var viewmodels = models.Select(d => new BreadcrumbTreeItemViewModel(d, this, _Root)).ToArray();
+
+                // and insert desktop sub-entries into Entries property
+                Entries.SetEntries(UpdateMode.Replace, viewmodels);
 
                 if (Entries.All.Count() > 0)
                 {
