@@ -4,7 +4,7 @@
 
 This project implements an open source Breadcrumb control that was originally developed by <b>Leung Yat Chun Joseph <a href="https://github.com/lycj">lycj</a></b> in his FileExplorer application originating from CodePlex and <a href="https://www.codeproject.com/Members/Fainx">CodeProject</a>.
 
-The implementation of the Windows Shell Browser in [WSF](https://github.com/Dirkster99/WSF) is based on LYCJ's interfaces but completely refactored in terms of models and classes using [SharpShell](https://github.com/dwmkerr/sharpshell) as base of most things that are there.
+The implementation of the Windows Shell Browser in [WSF](https://github.com/Dirkster99/WSF) is based on LYCJ's interfaces but completely refactored in terms of models and classes using [SharpShell](https://github.com/dwmkerr/sharpshell) as base of most things that are there. Another base of this project is the [SuggestBox](https://github.com/Dirkster99/SuggestBox) control which implements the AutoComplete portion that is visible when textual path information can be edit. 
 
 ![](https://raw.githubusercontent.com/Dirkster99/Docu/master/bm/DarkBreadcrumb.png)
 
