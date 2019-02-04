@@ -142,7 +142,8 @@
                         {
                             if (string.IsNullOrEmpty(resourceId[0]) == false)
                             {
-                                return Extract(resourceId[0], iconIndex, iconSize);
+                                if (IsReferenceToUnknownIcon(resourceId[0], iconIndex) == false)
+                                    return Extract(resourceId[0], iconIndex, iconSize);
                             }
                             else
                             {
@@ -184,6 +185,35 @@
         public object[] ConvertBack(object value, Type[] targetTypes, object parameter, CultureInfo culture)
         {
             throw new NotImplementedException();
+        }
+
+        /// <summary>
+        /// Gets if the icon points to a real association or just a blank page
+        /// saying: "We don't really know the association but here is an icon anyway..."
+        /// https://www.win7dll.info/imageres_dll.html
+        /// </summary>
+        /// <param name="filename"></param>
+        /// <param name="index"></param>
+        /// <returns></returns>
+        private bool IsReferenceToUnknownIcon(string filename, int index)
+        {
+            if (index == -3)
+            {
+                const string imgresdll = "imageres.dll";
+                if (filename.Length > imgresdll.Length)
+                {
+                    int idx = filename.IndexOf(imgresdll);
+                    if (idx > 0)
+                    {
+                        string match = filename.Substring(idx);
+
+                        if (string.Compare(match, imgresdll, true) == 0)
+                            return true;
+                    }
+                }
+            }
+
+            return false;
         }
 
         /// <summary>
@@ -471,4 +501,3 @@
         #endregion  private classes
     }
 }
-

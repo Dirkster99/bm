@@ -277,7 +277,7 @@
             {
                 // Win shell path folder
                 IDirectoryBrowser[] path = null;
-                if (WSF.Browser.DirectoryExists(input, out path, true))
+                if (Browser.DirectoryExists(input, out path))
                     return ListChildren(path, PathType.WinShellPath, li);
                 else
                 {
@@ -292,7 +292,7 @@
 
                         // Win shell path folder
                         path = null;
-                        if (WSF.Browser.DirectoryExists(parentDir, out path, true))
+                        if (Browser.DirectoryExists(parentDir, out path))
                             return ListChildren(path, PathType.WinShellPath, li, searchMask);
                     }
                 }
@@ -328,19 +328,19 @@
                     namedPath = namedPath + '\\' + path[i].Name;
             }
 
-            foreach (var item in Browser.GetSlimChildItems(dirPath.PathShell, searchMask))
+            foreach (var item in Browser.GetChildItems(dirPath.PathShell, searchMask, SubItemFilter.NameOnly, true))
             {
                 SuggestionListItem Itemsuggest = null;
                 if (pathType == PathType.WinShellPath)
                 {
-                    Itemsuggest = CreateItem(item.LabelName, namedPath + '\\' + item.Name,
+                    Itemsuggest = CreateItem(item.Label, namedPath + '\\' + item.Name,
                                                 PathType.WinShellPath, path);
                 }
                 else
                 {
                     if (Browser.IsTypeOf(item.ParseName) != PathType.SpecialFolder)
                     {
-                        Itemsuggest = CreateItem(item.LabelName, item.ParseName,
+                        Itemsuggest = CreateItem(item.Label, item.ParseName,
                                                  PathType.FileSystemPath, path);
                     }
                 }
@@ -361,19 +361,19 @@
 
             // Get Root Items below ThisPC
             var parent = Browser.MyComputer;
-            foreach (var item in Browser.GetSlimChildItems(parent.SpecialPathId,
-                                                           input + "*", SubItemFilter.NameOrParsName))
+            foreach (var item in Browser.GetChildItems(parent.SpecialPathId,
+                                                        input + "*", SubItemFilter.NameOrParsName, true))
             {
                 if (Browser.IsTypeOf(item.ParseName) != PathType.SpecialFolder)
                 {
-                    var Itemsuggest = CreateItem(item.LabelName, item.ParseName, PathType.FileSystemPath, parent);
+                    var Itemsuggest = CreateItem(item.Label, item.ParseName, PathType.FileSystemPath, parent);
                     result.ResultList.Add(Itemsuggest);
                 }
             }
 
             // Get Root Items below Desktop
             parent = Browser.DesktopDirectory;
-            foreach (var item in Browser.GetSlimChildItems(parent.SpecialPathId, input + "*"))
+            foreach (var item in Browser.GetChildItems(parent.SpecialPathId, input + "*", SubItemFilter.NameOnly, true))
             {
                 // filter out RecycleBin, ControlPanel... since its not that useful here...
                 bool IsFilteredItem = string.Compare(item.ParseName, "::{645FF040-5081-101B-9F08-00AA002F954E}", true) == 0 ||
@@ -384,7 +384,7 @@
 
                 if (IsFilteredItem == false && IsThisPC == false)
                 {
-                    var Itemsuggest = CreateItem(item.LabelName, item.Name, PathType.WinShellPath, parent);
+                    var Itemsuggest = CreateItem(item.Label, item.Name, PathType.WinShellPath, parent);
                     result.ResultList.Add(Itemsuggest);
                 }
             }
@@ -419,7 +419,7 @@
                                                             LocationIndicator li)
         {
             IDirectoryBrowser[] pathItems = null;
-            if (Browser.DirectoryExists(input, out pathItems, true))
+            if (Browser.DirectoryExists(input, out pathItems))
             {
                 if (li != null)
                     li.ResetPath(pathItems);
@@ -435,7 +435,7 @@
                 var searchMask = input.Substring(sepIdx + 1) + "*";
 
                 // Win shell path folder
-                if (Browser.DirectoryExists(parentDir, out pathItems, true))
+                if (Browser.DirectoryExists(parentDir, out pathItems))
                 {
                     if (li != null)
                         li.ResetPath(pathItems);
@@ -458,11 +458,11 @@
             SuggestQueryResultModel result = new SuggestQueryResultModel();
 
             var parent = Browser.Create(input);
-            foreach (var item in Browser.GetSlimChildItems(input, searchMask))
+            foreach (var item in Browser.GetChildItems(input, searchMask, SubItemFilter.NameOnly, true))
             {
                 if (Browser.IsTypeOf(item.ParseName) != PathType.SpecialFolder)
                 {
-                    result.ResultList.Add(CreateItem(item.LabelName, item.ParseName,
+                    result.ResultList.Add(CreateItem(item.Label, item.ParseName,
                                                      PathType.FileSystemPath, parent));
                 }
             }

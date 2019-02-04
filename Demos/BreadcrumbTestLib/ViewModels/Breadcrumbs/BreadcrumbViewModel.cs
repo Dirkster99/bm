@@ -482,7 +482,7 @@ namespace BreadcrumbTestLib.ViewModels.Breadcrumbs
 
                         // Verify path existence and re-mount into root item
                         if (pathItems == null)
-                            isPathValid = Browser.DirectoryExists(navigateToThisLocation, out pathItems, true);
+                            isPathValid = Browser.DirectoryExists(navigateToThisLocation, out pathItems);
 
                         if (isPathValid == true)
                         {
@@ -490,7 +490,7 @@ namespace BreadcrumbTestLib.ViewModels.Breadcrumbs
                             // So, lets update the tree view based on the string representation.
                             if (pathItems == null)
                             {
-                                var location = Browser.Create(navigateToThisLocation, true);
+                                var location = Browser.Create(navigateToThisLocation);
                                 await NavigateToScheduledAsync(location, "BreadcrumbViewModel.NavigateTreeViewModel 0");
                                 return true;
                             }
