@@ -15,6 +15,7 @@
     using WSF;
     using WSF.IDs;
     using WSF.Enums;
+    using System.Windows;
 
     /// <summary>
     /// Class implements a ViewModel to manage a sub-tree of a Breadcrumb control.
@@ -68,16 +69,22 @@
 
             Header = (dir != null ? _dir.Label : string.Empty );
 
-            Func<bool, object, Task<IEnumerable<BreadcrumbTreeItemViewModel>>> loadAsyncFunc = (isLoaded, parameter) => Task.Run(() =>
+            Func<bool, object, Task<IList<BreadcrumbTreeItemViewModel>>> loadAsyncFunc = (isLoaded, parameter) => Task.Run(() =>
             {
                 try
                 {
                     var subItemsList = Browser.GetChildItems(_dir.FullName, null, SubItemFilter.NameOnly, true);
 
-                    // FullName has preference for directory file system path over SpecialId
-                    // (if an item has both)
-                    // -> this is useful here to no relist SpecialItems below Desktop or other special items
-                    return subItemsList.Select(d => new BreadcrumbTreeItemViewModel(d, this, _Root));
+                    //var viewmodels = subItemsList.Select(d => new BreadcrumbTreeItemViewModel(d, this, _Root));
+                    IList<BreadcrumbTreeItemViewModel> viewmodelItems = new List<BreadcrumbTreeItemViewModel>();
+                    foreach (var item in subItemsList)
+                    {
+                        viewmodelItems.Add(new BreadcrumbTreeItemViewModel(item, this, _Root));
+                    }
+
+                    System.Console.WriteLine("{0} Retrieved {1:D8} items for '{2}'", DateTime.Now, subItemsList.Count(), _dir.FullName);
+
+                    return viewmodelItems;
                 }
                 catch (Exception exp)
                 {
@@ -329,22 +336,19 @@
                                                 .Where(d => string.Compare(d.SpecialPathId, KF_ParseName_IID.RecycleBinFolder, true) != 0)
                                                 .Where(d => string.Compare(d.PathRAW, KF_ParseName_IID.ControlPanelFolder, true) != 0);
 
-                var viewmodels = models.Select(d => new BreadcrumbTreeItemViewModel(d, this, _Root)).ToArray();
+                var viewmodels = models.Select(d => new BreadcrumbTreeItemViewModel(d, this, _Root)).ToList();
 
                 // and insert desktop sub-entries into Entries property
-                Entries.SetEntries(UpdateMode.Replace, viewmodels);
+                Entries.SetEntries(viewmodels, UpdateMode.Replace);
 
-                if (Entries.All.Count() > 0)
-                {
-                    // All items imidiately under root are by definition root items
-                    foreach (var item in Entries.All)
-                        item.Selection.IsRoot = true;
+                // All items imidiately under root are by definition root items
+                foreach (var item in viewmodels)
+                    item.Selection.IsRoot = true;
 
-                    var firstRootItem = Entries.All.First();
-                    firstRootItem.Selection.IsSelected = true;
+                var firstRootItem = viewmodels.First();
+                firstRootItem.Selection.IsSelected = true;
 
-                    return firstRootItem;
-                }
+                return firstRootItem;
             }
             catch
             {

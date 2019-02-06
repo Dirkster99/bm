@@ -45,7 +45,9 @@
         /// </summary>
         /// <param name="force">Load sub-entries even if it's already loaded.</param>
         /// <returns></returns>
-        Task<IEnumerable<VM>> LoadAsync(UpdateMode updateMode = UpdateMode.Replace, bool force = false, object parameter = null);
+        Task<int> LoadAsync(UpdateMode updateMode = UpdateMode.Replace,
+                            bool force = false,
+                            object parameter = null);
 
         /// <summary>
         /// Call to unload sub-entries.
@@ -58,7 +60,8 @@
         /// Used to preload sub-entries, fully overwrite entries stored in the helper.
         /// </summary>
         /// <param name="viewModels"></param>
-        void SetEntries(UpdateMode updateMode = UpdateMode.Replace, params VM[] viewModels);
+        /// <param name="updateMode"></param>
+        void SetEntries(List<VM> viewModels, UpdateMode updateMode = UpdateMode.Replace);
         #endregion methods
     }
 }

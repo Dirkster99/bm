@@ -23,9 +23,7 @@
         /// </summary>
         protected static readonly log4net.ILog Logger = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
 
-        protected Func<bool, object, Task<IEnumerable<VM>>> _loadSubEntryFunc;
-
-        private bool _clearBeforeLoad = false;
+        protected Func<bool, object, Task<IList<VM>>> _loadSubEntryFunc;
 
         private bool _isLoaded = false;
         private bool _isExpanded = false;
@@ -43,45 +41,16 @@
         /// Class constructor
         /// </summary>
         /// <param name="loadSubEntryFunc"></param>
-        public BreadcrumbTreeItemHelperViewModel(Func<bool, object, Task<IEnumerable<VM>>> loadSubEntryFunc)
+        public BreadcrumbTreeItemHelperViewModel(Func<bool, object, Task<IList<VM>>> loadSubEntryFunc)
             : this()
         {
             _loadSubEntryFunc = loadSubEntryFunc;
 
-            _All = new FastObservableCollection<VM>
-            {
-                default(VM)
-            };
+            _All = new FastObservableCollection<VM>();
+////            {
+////                default(VM)
+////            };
         }
-
-////        /// <summary>
-////        /// Class constructor
-////        /// </summary>
-////        /// <param name="loadSubEntryFunc"></param>
-////        public BreadcrumbTreeItemHelperViewModel(Func<bool, Task<IEnumerable<VM>>> loadSubEntryFunc)
-////          : this((b, __) => loadSubEntryFunc(b))
-////        {
-////        }
-
-////        /// <summary>
-////        /// Class constructor
-////        /// </summary>
-////        /// <param name="loadSubEntryFunc"></param>
-////        public BreadcrumbTreeItemHelperViewModel(Func<Task<IEnumerable<VM>>> loadSubEntryFunc)
-////          : this(_ => loadSubEntryFunc())
-////        {
-////        }
-
-////        /// <summary>
-////        /// Class constructor from entries parameters.
-////        /// </summary>
-////        /// <param name="entries"></param>
-////        public BreadcrumbTreeItemHelperViewModel(params VM[] entries)
-////            : this()
-////        {
-////            _isLoaded = true;
-////            _All.AddItems(entries);
-////        }
 
         /// <summary>
         /// Hidden standard class constructor
@@ -195,9 +164,9 @@
         /// </summary>
         /// <param name="force">Load sub-entries even if it's already loaded.</param>
         /// <returns></returns>
-        public async Task<IEnumerable<VM>> LoadAsync(UpdateMode updateMode = UpdateMode.Replace,
-                                                     bool force = false,
-                                                     object parameter = null)
+        public async Task<int> LoadAsync(UpdateMode updateMode = UpdateMode.Replace,
+                                         bool force = false,
+                                         object parameter = null)
         {
             Logger.InfoFormat("_");
 
@@ -212,46 +181,31 @@
 
                     if (!_isLoaded || force)
                     {
-
-                        if (_clearBeforeLoad)
+                        try
                         {
-                            Application.Current.Dispatcher.Invoke(() =>
+                            await _loadSubEntryFunc(_isLoaded, parameter).ContinueWith((prevTask, _) =>
                             {
-                                _All.Clear();
-                            });
-                        }
+                                IsLoaded = true;
+                                IsLoading = false;
 
-                        await Application.Current.Dispatcher.Invoke(async () =>
-                        {
-                            try
-                            {
-                                var scheduler = TaskScheduler.FromCurrentSynchronizationContext();
-                                IsLoading = true;
-
-                                await _loadSubEntryFunc(_isLoaded, parameter).ContinueWith((prevTask, _) =>
+                                if (!prevTask.IsCanceled && !prevTask.IsFaulted)
                                 {
-                                    IsLoaded = true;
-                                    IsLoading = false;
+                                    this.SetEntries(prevTask.Result.ToList(), updateMode);
 
-                                    if (!prevTask.IsCanceled && !prevTask.IsFaulted)
-                                    {
-                                        this.SetEntries(updateMode, prevTask.Result.ToArray());
-                                        _lastRefreshTimeUtc = DateTime.UtcNow;
-                                    }
-                                },
-
-                                _lastCancellationToken, scheduler);
-                            }
-                            catch (InvalidOperationException ex)
-                            {
-                                Logger.Error("Cannot obtain SynchronizationContext", ex);
-                            }
-                        });
+                                    _lastRefreshTimeUtc = DateTime.UtcNow;
+                                }
+                            },
+                            _lastCancellationToken);
+                        }
+                        catch (InvalidOperationException ex)
+                        {
+                            Logger.Error("Cannot obtain SynchronizationContext", ex);
+                        }
                     }
                 }
             }
 
-            return _All;
+            return _All.Count;
         }
 
         /// <summary>
@@ -282,8 +236,7 @@
         /// </summary>
         /// <param name="updateMode">Specifies whether the ALL items collection is updated or reset.</param>
         /// <param name="viewModels"></param>
-        public void SetEntries(UpdateMode updateMode = UpdateMode.Replace,
-                               params VM[] viewModels)
+        public void SetEntries(List<VM> viewModels, UpdateMode updateMode = UpdateMode.Replace)
         {
             Logger.InfoFormat("_");
 
@@ -307,7 +260,7 @@
         /// with the entries in the <param name="viewModels"/> array parameter.
         /// </summary>
         /// <param name="viewModels"></param>
-        private void UpdateAllEntries(params VM[] viewModels)
+        private void UpdateAllEntries(List<VM> viewModels)
         {
             Logger.InfoFormat("_");
 
@@ -337,23 +290,24 @@
         /// with the entries in the <param name="viewModels"/> parameter.
         /// </summary>
         /// <param name="viewModels"></param>
-        private void ResetAllEntries(params VM[] viewModels)
+        private void ResetAllEntries(List <VM> viewModels)
         {
             Logger.InfoFormat("_");
 
-            FastObservableCollection<VM> all = this.All as FastObservableCollection<VM>;
-
-            all.SuspendCollectionChangeNotification();
             try
             {
-                all.Clear();
-                all.NotifyChanges();
-                all.AddItems(viewModels);
+                if (_All.Count > 0)
+                {
+                    Application.Current.Dispatcher.Invoke(() =>
+                    {
+                        _All.Clear();
+                    });
+                }
+
+                _All.AddItems(viewModels);
             }
             finally
             {
-                all.NotifyChanges();
-
                 if (this.EntriesChanged != null)
                     this.EntriesChanged(this, EventArgs.Empty);
             }
