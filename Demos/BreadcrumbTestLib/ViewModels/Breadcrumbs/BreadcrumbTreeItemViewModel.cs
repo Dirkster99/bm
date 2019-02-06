@@ -69,14 +69,14 @@
 
             Header = (dir != null ? _dir.Label : string.Empty );
 
-            Func<bool, object, Task<IList<BreadcrumbTreeItemViewModel>>> loadAsyncFunc = (isLoaded, parameter) => Task.Run(() =>
+            Func<bool, object, Task<List<BreadcrumbTreeItemViewModel>>> loadAsyncFunc = (isLoaded, parameter) => Task.Run(() =>
             {
                 try
                 {
                     var subItemsList = Browser.GetChildItems(_dir.FullName, null, SubItemFilter.NameOnly, true);
 
                     //var viewmodels = subItemsList.Select(d => new BreadcrumbTreeItemViewModel(d, this, _Root));
-                    IList<BreadcrumbTreeItemViewModel> viewmodelItems = new List<BreadcrumbTreeItemViewModel>();
+                    List<BreadcrumbTreeItemViewModel> viewmodelItems = new List<BreadcrumbTreeItemViewModel>();
                     foreach (var item in subItemsList)
                     {
                         viewmodelItems.Add(new BreadcrumbTreeItemViewModel(item, this, _Root));

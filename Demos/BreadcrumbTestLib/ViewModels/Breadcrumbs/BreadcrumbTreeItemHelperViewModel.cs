@@ -23,7 +23,7 @@
         /// </summary>
         protected static readonly log4net.ILog Logger = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
 
-        protected Func<bool, object, Task<IList<VM>>> _loadSubEntryFunc;
+        protected Func<bool, object, Task<List<VM>>> _loadSubEntryFunc;
 
         private bool _isLoaded = false;
         private bool _isExpanded = false;
@@ -41,15 +41,10 @@
         /// Class constructor
         /// </summary>
         /// <param name="loadSubEntryFunc"></param>
-        public BreadcrumbTreeItemHelperViewModel(Func<bool, object, Task<IList<VM>>> loadSubEntryFunc)
+        public BreadcrumbTreeItemHelperViewModel(Func<bool, object, Task<List<VM>>> loadSubEntryFunc)
             : this()
         {
             _loadSubEntryFunc = loadSubEntryFunc;
-
-            _All = new FastObservableCollection<VM>();
-////            {
-////                default(VM)
-////            };
         }
 
         /// <summary>
@@ -170,6 +165,13 @@
         {
             Logger.InfoFormat("_");
 
+////            var entries = await _loadSubEntryFunc(_isLoaded, parameter);
+////            this.SetEntries(entries, updateMode);
+////
+////            _lastRefreshTimeUtc = DateTime.UtcNow;
+////
+////            return _All.Count;
+
             // Ignore if constructed using entries but not entries func
             if (_loadSubEntryFunc != null)
             {
@@ -197,7 +199,7 @@
                             },
                             _lastCancellationToken);
                         }
-                        catch (InvalidOperationException ex)
+                        catch (Exception ex)
                         {
                             Logger.Error("Cannot obtain SynchronizationContext", ex);
                         }
