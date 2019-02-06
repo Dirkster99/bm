@@ -33,7 +33,7 @@
                                       
                           Header="{Binding Header,RelativeSource={RelativeSource TemplatedParent}}"
                           HeaderButtonTemplate="{Binding HeaderButtonTemplate,RelativeSource={RelativeSource TemplatedParent}}"            
-          >
+                    >
                         <ItemsPresenter x:Name="ItemsPresenter" 
                           KeyboardNavigation.DirectionalNavigation="Contained" 
                           SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"/>

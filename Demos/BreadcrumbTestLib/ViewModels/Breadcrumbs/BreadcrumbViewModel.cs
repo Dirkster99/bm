@@ -1097,7 +1097,7 @@ namespace BreadcrumbTestLib.ViewModels.Breadcrumbs
         {
             if (secLevelRootItem == null)
             {
-                var thisPC = desktopRootItem.Entries.All.Where(i => i.EqualsParseName(KF_ParseName_IID.MyComputerFolder));
+                var thisPC = desktopRootItem.Entries.All.Where(i => i.EqualsParseName(KF_IID.ID_FOLDERID_ComputerFolder));
                 secLevelRootItem = thisPC.First();
             }
 
