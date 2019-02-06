@@ -44,7 +44,7 @@
     <Reference Include="System.Xml" />
     <Reference Include="WindowsBase" />
     <Reference Include="WSF, Version=1.1.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\Dirkster.WSF.1.1.0\lib\net4\WSF.dll</HintPath>
+      <HintPath>..\..\packages\Dirkster.WSF.1.1.1\lib\net4\WSF.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>

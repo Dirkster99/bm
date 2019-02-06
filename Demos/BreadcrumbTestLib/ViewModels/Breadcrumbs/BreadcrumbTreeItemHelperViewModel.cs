@@ -54,34 +54,34 @@
             };
         }
 
-        /// <summary>
-        /// Class constructor
-        /// </summary>
-        /// <param name="loadSubEntryFunc"></param>
-        public BreadcrumbTreeItemHelperViewModel(Func<bool, Task<IEnumerable<VM>>> loadSubEntryFunc)
-          : this((b, __) => loadSubEntryFunc(b))
-        {
-        }
+////        /// <summary>
+////        /// Class constructor
+////        /// </summary>
+////        /// <param name="loadSubEntryFunc"></param>
+////        public BreadcrumbTreeItemHelperViewModel(Func<bool, Task<IEnumerable<VM>>> loadSubEntryFunc)
+////          : this((b, __) => loadSubEntryFunc(b))
+////        {
+////        }
 
-        /// <summary>
-        /// Class constructor
-        /// </summary>
-        /// <param name="loadSubEntryFunc"></param>
-        public BreadcrumbTreeItemHelperViewModel(Func<Task<IEnumerable<VM>>> loadSubEntryFunc)
-          : this(_ => loadSubEntryFunc())
-        {
-        }
+////        /// <summary>
+////        /// Class constructor
+////        /// </summary>
+////        /// <param name="loadSubEntryFunc"></param>
+////        public BreadcrumbTreeItemHelperViewModel(Func<Task<IEnumerable<VM>>> loadSubEntryFunc)
+////          : this(_ => loadSubEntryFunc())
+////        {
+////        }
 
-        /// <summary>
-        /// Class constructor from entries parameters.
-        /// </summary>
-        /// <param name="entries"></param>
-        public BreadcrumbTreeItemHelperViewModel(params VM[] entries)
-            : this()
-        {
-            _isLoaded = true;
-            _All.AddItems(entries);
-        }
+////        /// <summary>
+////        /// Class constructor from entries parameters.
+////        /// </summary>
+////        /// <param name="entries"></param>
+////        public BreadcrumbTreeItemHelperViewModel(params VM[] entries)
+////            : this()
+////        {
+////            _isLoaded = true;
+////            _All.AddItems(entries);
+////        }
 
         /// <summary>
         /// Hidden standard class constructor

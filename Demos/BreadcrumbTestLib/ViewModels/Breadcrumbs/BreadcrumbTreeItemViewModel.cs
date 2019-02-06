@@ -14,6 +14,7 @@
     using System.Windows.Input;
     using WSF;
     using WSF.IDs;
+    using WSF.Enums;
 
     /// <summary>
     /// Class implements a ViewModel to manage a sub-tree of a Breadcrumb control.
@@ -71,10 +72,12 @@
             {
                 try
                 {
+                    var subItemsList = Browser.GetChildItems(_dir.FullName, null, SubItemFilter.NameOnly, true);
+
                     // FullName has preference for directory file system path over SpecialId
                     // (if an item has both)
                     // -> this is useful here to no relist SpecialItems below Desktop or other special items
-                    return Browser.GetChildItems(_dir.FullName).Select(d => new BreadcrumbTreeItemViewModel(d, this, _Root));
+                    return subItemsList.Select(d => new BreadcrumbTreeItemViewModel(d, this, _Root));
                 }
                 catch (Exception exp)
                 {
@@ -321,16 +324,10 @@
                 _dir = location;
                 Header = _dir.Label;
 
-////                var modelSlim = Browser.GetSlimChildItems(_dir.PathShell)
-////                                // (filter out recycle bin and control panel entries since its not that useful...)
-////                                .Where(d => string.Compare(d.SpecialParseNameId, KF_IID.ID_FOLDERID_RecycleBinFolder, true) != 0)
-////                                .Where(d => string.Compare(d.ParseName, "::{26EE0668-A00A-44D7-9371-BEB064C98683}", true) != 0);
-
-
-                var models = Browser.GetChildItems(_dir.PathShell)
+                var models = Browser.GetChildItems(_dir.PathShell, null, SubItemFilter.NameOnly, true)
                                                 // (filter out recycle bin and control panel entries since its not that useful...)
-                                                .Where(d => string.Compare(d.SpecialPathId, KF_IID.ID_FOLDERID_RecycleBinFolder, true) != 0)
-                                                .Where(d => string.Compare(d.PathRAW, "::{26EE0668-A00A-44D7-9371-BEB064C98683}", true) != 0);
+                                                .Where(d => string.Compare(d.SpecialPathId, KF_ParseName_IID.RecycleBinFolder, true) != 0)
+                                                .Where(d => string.Compare(d.PathRAW, KF_ParseName_IID.ControlPanelFolder, true) != 0);
 
                 var viewmodels = models.Select(d => new BreadcrumbTreeItemViewModel(d, this, _Root)).ToArray();
 
