@@ -11,13 +11,14 @@
         <Setter Property="BorderBrush" Value="{DynamicResource {x:Static reskeys:ResourceKeys.ControlInputBorderKey}}" />
         <Setter Property="HeaderButtonTemplate" Value="{DynamicResource {x:Static reskeys:ResourceKeys.BaseToggleButton}}" />
         <Setter Property="BorderThickness" Value="1" />
-        <Setter Property="ItemsPanel">
+        <Setter Property="MaxDropDownHeight" Value="800"/>
+        <!--Setter Property="ItemsPanel">
             <Setter.Value>
                 <ItemsPanelTemplate>
-                    <VirtualizingStackPanel/>
+                    <VirtualizingStackPanel />
                 </ItemsPanelTemplate>
             </Setter.Value>
-        </Setter>
+        </Setter -->
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type ctrls:DropDownList}">
@@ -35,32 +36,32 @@
                         Header="{Binding Header,RelativeSource={RelativeSource TemplatedParent}}"
                         HeaderButtonTemplate="{Binding HeaderButtonTemplate,RelativeSource={RelativeSource TemplatedParent}}"
                     >
-                        <Grid MaxWidth="1600" MaxHeight="1600">
-                            <ListBox Background="Transparent"
-                                ItemsSource="{TemplateBinding ItemsSource}"
-                                ItemTemplate="{TemplateBinding ItemTemplate}"
-                                ItemContainerStyle="{TemplateBinding ItemContainerStyle}"
-                                ScrollViewer.HorizontalScrollBarVisibility="Auto" 
-                                ScrollViewer.VerticalScrollBarVisibility="Auto" 
-                                ScrollViewer.CanContentScroll="True"
-                                
-                                KeyboardNavigation.AcceptsReturn="True"
-                                KeyboardNavigation.DirectionalNavigation="Cycle"
+                        <!-- https://stackoverflow.com/questions/3835472/wpf-what-can-cause-a-combobox-to-not-virtualize -->
+                        <Grid MaxHeight="{TemplateBinding MaxDropDownHeight}"
+                              MinWidth="{TemplateBinding ActualWidth}"
+                              x:Name="DropDown" SnapsToDevicePixels="True">
+                            <Border x:Name="DropDownBorder" Background="{DynamicResource ShadeBrush}"
+                                    BorderBrush="{DynamicResource SolidBorderBrush}"
+                                    BorderThickness="1"/>
+                            <ScrollViewer Margin="0"
+                                          SnapsToDevicePixels="True"
+                                          HorizontalScrollBarVisibility="Auto"
+                                          VerticalScrollBarVisibility="Auto"
+                                          CanContentScroll="True">
 
-                                VirtualizingPanel.IsVirtualizing="True"
-                                VirtualizingPanel.VirtualizationMode="Recycling"
-                                FontSize="{TemplateBinding FontSize}"
-                                FontFamily="{TemplateBinding FontFamily}"
-                            />
+                                <VirtualizingStackPanel IsItemsHost="True"
+                                                        KeyboardNavigation.DirectionalNavigation="Contained"/>
+                                
+                            </ScrollViewer>
                         </Grid>
                     </ctrls:DropDown>
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
-        <Setter Property="ItemContainerStyle">
+        <!--Setter Property="ItemContainerStyle">
             <Setter.Value>
                 <Style TargetType="{x:Type ListBoxItem}" BasedOn="{StaticResource {x:Type ListBoxItem}}" >
-                    <!-- Style.Triggers>
+                    < Style.Triggers>
                         <DataTrigger Binding="{Binding}" Value="{x:Null}">
                             <Setter Property="Template">
                                 <Setter.Value>
@@ -70,10 +71,10 @@
                                 </Setter.Value>
                             </Setter>
                         </DataTrigger>
-                    </Style.Triggers-->
+                    </Style.Triggers>
                 </Style>
             </Setter.Value>
-        </Setter>
+        </-->
     </Style>
 
 </ResourceDictionary>

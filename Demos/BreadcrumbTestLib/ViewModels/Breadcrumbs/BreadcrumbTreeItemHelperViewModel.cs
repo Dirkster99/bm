@@ -233,7 +233,7 @@
                             {
                                 Logger.Error("Cannot obtain SynchronizationContext", ex);
                             }
-                        },DispatcherPriority.Background);
+                        });
                     }
                 }
             }
