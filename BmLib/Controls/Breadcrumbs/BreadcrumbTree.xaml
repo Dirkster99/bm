@@ -35,7 +35,7 @@
                         </ItemsPanelTemplate>
                     </Setter.Value>
                 </Setter>
-                <!--Setter Property="ScrollViewer.CanContentScroll" Value="True" /-->
+                <Setter Property="ScrollViewer.CanContentScroll" Value="True" />
             </Trigger>
             <Trigger Property="IsEnabled" Value="False">
                 <Setter Property="Background" Value="{DynamicResource {x:Static reskeys:ResourceKeys.ControlDisabledBackgroundKey}}" />

@@ -21,30 +21,45 @@
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type ctrls:DropDownList}">
-                    <ctrls:DropDown IsDropDownOpen="{Binding IsDropDownOpen, Mode=TwoWay, RelativeSource={RelativeSource TemplatedParent}}"
-                          Background="{TemplateBinding Background}"
-                          BorderBrush="{TemplateBinding BorderBrush}"
-                          BorderThickness="{TemplateBinding BorderThickness}" 
+                    <ctrls:DropDown
+                        IsDropDownOpen="{Binding IsDropDownOpen, Mode=TwoWay, RelativeSource={RelativeSource TemplatedParent}}"
+                        Background="{TemplateBinding Background}"
+                        BorderBrush="{TemplateBinding BorderBrush}"
+                        BorderThickness="{TemplateBinding BorderThickness}" 
                                       
-                          HorizontalOffset="{TemplateBinding HorizontalOffset}"
-                          VerticalOffset="{TemplateBinding VerticalOffset}"
-                          Placement="{TemplateBinding Placement}" 
-                          PlacementTarget="{TemplateBinding PlacementTarget}"
-                                      
-                          Header="{Binding Header,RelativeSource={RelativeSource TemplatedParent}}"
-                          HeaderButtonTemplate="{Binding HeaderButtonTemplate,RelativeSource={RelativeSource TemplatedParent}}"            
-                    >
-                        <ItemsPresenter x:Name="ItemsPresenter" 
-                          KeyboardNavigation.DirectionalNavigation="Contained" 
-                          SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"/>
-                    </ctrls:DropDown>
+                        HorizontalOffset="{TemplateBinding HorizontalOffset}"
+                        VerticalOffset="{TemplateBinding VerticalOffset}"
+                        Placement="{TemplateBinding Placement}" 
+                        PlacementTarget="{TemplateBinding PlacementTarget}"
 
+                        Header="{Binding Header,RelativeSource={RelativeSource TemplatedParent}}"
+                        HeaderButtonTemplate="{Binding HeaderButtonTemplate,RelativeSource={RelativeSource TemplatedParent}}"
+                    >
+                        <Grid MaxWidth="1600" MaxHeight="1600">
+                            <ListBox Background="Transparent"
+                                ItemsSource="{TemplateBinding ItemsSource}"
+                                ItemTemplate="{TemplateBinding ItemTemplate}"
+                                ItemContainerStyle="{TemplateBinding ItemContainerStyle}"
+                                ScrollViewer.HorizontalScrollBarVisibility="Auto" 
+                                ScrollViewer.VerticalScrollBarVisibility="Auto" 
+                                ScrollViewer.CanContentScroll="True"
+                                
+                                KeyboardNavigation.AcceptsReturn="True"
+                                KeyboardNavigation.DirectionalNavigation="Cycle"
+
+                                VirtualizingPanel.IsVirtualizing="True"
+                                VirtualizingPanel.VirtualizationMode="Recycling"
+                                FontSize="{TemplateBinding FontSize}"
+                                FontFamily="{TemplateBinding FontFamily}"
+                            />
+                        </Grid>
+                    </ctrls:DropDown>
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
         <Setter Property="ItemContainerStyle">
             <Setter.Value>
-                <Style TargetType="{x:Type ComboBoxItem}" BasedOn="{StaticResource {x:Type ComboBoxItem}}" >
+                <Style TargetType="{x:Type ListBoxItem}" BasedOn="{StaticResource {x:Type ListBoxItem}}" >
                     <!-- Style.Triggers>
                         <DataTrigger Binding="{Binding}" Value="{x:Null}">
                             <Setter Property="Template">

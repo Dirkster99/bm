@@ -9,6 +9,7 @@
     using System.Threading.Tasks;
     using BmLib.Enums;
     using System.Windows;
+    using System.Windows.Threading;
 
     /// <summary>
     /// Implements the viewmodel template that drives every BreadcrumbTreeItem control
@@ -24,8 +25,6 @@
         protected static readonly log4net.ILog Logger = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
 
         protected Func<bool, object, Task<IEnumerable<VM>>> _loadSubEntryFunc;
-
-        private bool _clearBeforeLoad = false;
 
         private bool _isLoaded = false;
         private bool _isExpanded = false;
@@ -48,10 +47,7 @@
         {
             _loadSubEntryFunc = loadSubEntryFunc;
 
-            _All = new FastObservableCollection<VM>
-            {
-                default(VM)
-            };
+            _All = new FastObservableCollection<VM>();
         }
 
 ////        /// <summary>
@@ -212,15 +208,6 @@
 
                     if (!_isLoaded || force)
                     {
-
-                        if (_clearBeforeLoad)
-                        {
-                            Application.Current.Dispatcher.Invoke(() =>
-                            {
-                                _All.Clear();
-                            });
-                        }
-
                         await Application.Current.Dispatcher.Invoke(async () =>
                         {
                             try
@@ -246,7 +233,7 @@
                             {
                                 Logger.Error("Cannot obtain SynchronizationContext", ex);
                             }
-                        });
+                        },DispatcherPriority.Background);
                     }
                 }
             }
@@ -272,6 +259,7 @@
                 {
                     _All.Clear();
                 });
+
                 _isLoaded = false;
             }
         }

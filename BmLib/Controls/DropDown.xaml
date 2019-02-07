@@ -50,12 +50,12 @@
                           BorderBrush="{TemplateBinding BorderBrush}" 
                           BorderThickness="{TemplateBinding BorderThickness}">
                     <Grid>
-                        <ScrollViewer Focusable="False"
+                        <!--ScrollViewer Focusable="False"
                                       CanContentScroll="True"
                                       ScrollViewer.HorizontalScrollBarVisibility="Auto"
-                                      ScrollViewer.VerticalScrollBarVisibility="Auto">
+                                      ScrollViewer.VerticalScrollBarVisibility="Auto"-->
                             <ContentPresenter x:Name="PART_Content" Content="{TemplateBinding Content}" />
-                        </ScrollViewer>
+                        <!--/ScrollViewer-->
                     </Grid>
                   </Border>
                 </Grid>
