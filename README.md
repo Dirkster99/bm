@@ -1,4 +1,6 @@
 [![Build status](https://ci.appveyor.com/api/projects/status/rbxt9vtsth75o87i?svg=true)](https://ci.appveyor.com/project/Dirkster99/bm)
+[![GitHub issues](https://img.shields.io/github/issues-raw/dirkster99/BM.svg)](https://github.com/dirkster99/BM/issues)
+[![GitHub pull requests](https://img.shields.io/github/issues-pr-raw/dirkster99/BM.svg)](https://github.com/dirkster99/BM/pulls)
 
 # Breadcrumb.Metro
 
