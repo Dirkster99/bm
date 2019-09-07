@@ -112,5 +112,8 @@
     <!-- Setting ProgressBar foreground color -->
     <SolidColorBrush x:Key="{x:Static reskeys:ResourceKeys.HotTrackBrushKey}"
                      Color="{DynamicResource {x:Static reskeys:ResourceKeys.ControlAccentColorKey}}"/>
-    
+
+    <SolidColorBrush x:Key="{x:Static reskeys:ResourceKeys.ControlMouseOverBackgroundBrushKey}"
+                     Color="#FF3F3F41" options:Freeze="true" />
+
 </ResourceDictionary>

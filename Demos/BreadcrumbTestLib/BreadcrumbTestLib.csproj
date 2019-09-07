@@ -9,8 +9,9 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>BreadcrumbTestLib</RootNamespace>
     <AssemblyName>BreadcrumbTestLib</AssemblyName>
-    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.5.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -43,8 +44,8 @@
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
     <Reference Include="WindowsBase" />
-    <Reference Include="WSF, Version=1.1.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\Dirkster.WSF.1.1.1\lib\net4\WSF.dll</HintPath>
+    <Reference Include="WSF, Version=1.2.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Dirkster.WSF.1.2.0\lib\net40\WSF.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
@@ -85,7 +86,7 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\BmLib\BmLib.csproj">
-      <Project>{0f864f5c-ce7a-438b-b943-620d3b13fa11}</Project>
+      <Project>{461f8e3c-6bc6-45fe-85a1-2104135131a1}</Project>
       <Name>BmLib</Name>
     </ProjectReference>
     <ProjectReference Include="..\SSCCoreLib\SSCoreLib.csproj">
@@ -101,6 +102,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Resources\FolderOpen.ico" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

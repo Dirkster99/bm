@@ -1,211 +1,162 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+﻿<Project Sdk="Microsoft.NET.Sdk.WindowsDesktop">
+
   <PropertyGroup>
-    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{0F864F5C-CE7A-438B-B943-620D3B13FA11}</ProjectGuid>
-    <OutputType>library</OutputType>
-    <RootNamespace>BmLib</RootNamespace>
-    <AssemblyName>BmLib</AssemblyName>
-    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
-    <FileAlignment>512</FileAlignment>
-    <ProjectTypeGuids>{60dc8134-eba5-43b8-bcc9-bb4bc16c2548};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
-    <WarningLevel>4</WarningLevel>
+    <TargetFrameworks>net451;netcoreapp3.0</TargetFrameworks>
+    <UseWPF>true</UseWPF>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <DebugSymbols>true</DebugSymbols>
-    <DebugType>full</DebugType>
-    <Optimize>false</Optimize>
-    <OutputPath>bin\Debug\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-    <DocumentationFile>bin\Debug\BmLib.xml</DocumentationFile>
+
+  <PropertyGroup>
+    <AssemblyTitle>BmLib</AssemblyTitle>
+    <PackageId>Dirkster.BmLib</PackageId>
+    <Product>BmLib</Product>
+    <Copyright>2018 - 2019</Copyright>
+    <Company>Open Source</Company>
+    <Description>Provides a WPF/MVVM AutoComplete control</Description>
+    <Version>1.1</Version>
+    <AssemblyVersion>1.1</AssemblyVersion>
+    <FileVersion>1.1</FileVersion>
+    <VersionPrefix>1.1</VersionPrefix>
+    <PackageProjectUrl>https://github.com/Dirkster99/BmLib</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/Dirkster99/BmLib</RepositoryUrl>
+    <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
+    <PackageTags>mvvm c# .net breadcrumb autocomplete wpf dark light themable control</PackageTags>
+    <!--PackageIconUrl>https://raw.githubusercontent.com/Dirkster99/Docu/master/SuggestBoxLib/icons/AutoComplete_64x.png</PackageIconUrl-->
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <PackageReleaseNotes>Package Update with support based on .NetCore 3 Preview 8 and .Net4.5.2</PackageReleaseNotes>
+    <NeutralLanguage>en</NeutralLanguage>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <DebugType>pdbonly</DebugType>
-    <Optimize>true</Optimize>
-    <OutputPath>bin\Release\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-    <DocumentationFile>bin\Release\BmLib.xml</DocumentationFile>
+
+  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net452|AnyCPU'">
+    <DocumentationFile>BmLib.xml</DocumentationFile>
   </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net452|AnyCPU'">
+    <DocumentationFile>BmLib.xml</DocumentationFile>
+  </PropertyGroup>
+
   <ItemGroup>
-    <Reference Include="SuggestBoxLib, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Dirkster.SuggestBoxLib.1.0.1\lib\net452\SuggestBoxLib.dll</HintPath>
-    </Reference>
-    <Reference Include="System" />
-    <Reference Include="System.Data" />
-    <Reference Include="System.Drawing" />
-    <Reference Include="System.Xml" />
-    <Reference Include="Microsoft.CSharp" />
-    <Reference Include="System.Core" />
-    <Reference Include="System.Xml.Linq" />
-    <Reference Include="System.Xaml">
-      <RequiredTargetFramework>4.0</RequiredTargetFramework>
-    </Reference>
-    <Reference Include="WindowsBase" />
-    <Reference Include="PresentationCore" />
-    <Reference Include="PresentationFramework" />
+    <None Remove="Resources\Icons\Dark\Close_White_16x.ico" />
+    <None Remove="Resources\Icons\Dark\Close_White_16x.svg" />
+    <None Remove="Resources\Icons\Dark\Refresh_white_16x.ico" />
+    <None Remove="Resources\Icons\Dark\Refresh_white_16x.svg" />
+    <None Remove="Resources\Icons\Light\Close.ico" />
+    <None Remove="Resources\Icons\Light\Close_16x.svg" />
+    <None Remove="Resources\Icons\Light\ExpandChevronDown.ico" />
+    <None Remove="Resources\Icons\Light\Refresh_16x.svg" />
+    <None Remove="Resources\Icons\Light\Refresh_black_16x.ico" />
   </ItemGroup>
+
   <ItemGroup>
-    <Compile Include="Base\RelayCommand.cs" />
-    <Compile Include="Behaviors\TreeViewVirtualItemBehaviour.cs" />
-    <Compile Include="Controls\BindingProxy.cs" />
-    <Compile Include="Controls\OverflowableStackPanel.cs" />
-    <Compile Include="Behaviors\MergeStyleBehaviour.cs" />
-    <Compile Include="Behaviors\SelectionChangedCommand.cs" />
-    <Compile Include="Controls\Breadcrumb.xaml.cs">
+    <Content Include="Resources\Icons\Dark\Close_White_16x.svg" />
+    <Content Include="Resources\Icons\Dark\Refresh_white_16x.svg" />
+    <Content Include="Resources\Icons\Light\Close_16x.svg" />
+    <Content Include="Resources\Icons\Light\Refresh_16x.svg" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Dirkster.SuggestBoxLib" Version="1.2.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="Resources\Icons\Dark\Close_White_16x.ico" />
+    <Resource Include="Resources\Icons\Dark\Refresh_white_16x.ico" />
+    <Resource Include="Resources\Icons\Light\Close.ico" />
+    <Resource Include="Resources\Icons\Light\ExpandChevronDown.ico" />
+    <Resource Include="Resources\Icons\Light\Refresh_black_16x.ico" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Update="Controls\Breadcrumb.xaml.cs">
       <DependentUpon>Breadcrumb.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Controls\Breadcrumbs\BreadcrumbTree.xaml.cs">
+    <Compile Update="Controls\Breadcrumbs\BreadcrumbTree.xaml.cs">
       <DependentUpon>BreadcrumbTree.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Controls\Breadcrumbs\BreadcrumbTreeItem.xaml.cs">
+    <Compile Update="Controls\Breadcrumbs\BreadcrumbTreeItem.xaml.cs">
       <DependentUpon>BreadcrumbTreeItem.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Controls\DropDown.xaml.cs">
+    <Compile Update="Controls\DropDown.xaml.cs">
       <DependentUpon>DropDown.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Controls\DropDownList.xaml.cs">
+    <Compile Update="Controls\DropDownList.xaml.cs">
       <DependentUpon>DropDownList.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Controls\HotTrack.xaml.cs">
+    <Compile Update="Controls\HotTrack.xaml.cs">
       <DependentUpon>HotTrack.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Controls\Switch.xaml.cs">
+    <Compile Update="Controls\Switch.xaml.cs">
       <DependentUpon>Switch.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Converters\AssociatedIconConverter.cs" />
-    <Compile Include="Converters\InvertBoolConverter.cs" />
-    <Compile Include="Interfaces\IBreadcrumbModel.cs" />
-    <Compile Include="Interfaces\IBrowseRequestTaskQueue.cs" />
-    <Compile Include="Interfaces\IParent.cs" />
-    <Compile Include="Interfaces\IProgress.cs" />
-    <Compile Include="Themes\ResourceKeys.cs" />
-    <Page Include="Controls\Breadcrumb.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Controls\BreadcrumbSwitchStyle.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Controls\Breadcrumbs\BreadcrumbTree.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Controls\Breadcrumbs\BreadcrumbTreeItem.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Controls\DropDown.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Controls\DropDownList.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Controls\HotTrack.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Controls\Switch.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Styles\ProgressBar.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Styles\RefreshCancelButton.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Themes\DarkBrushs.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Themes\Default\Brushes.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Themes\Default\Buttons.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Themes\Default\Geometry.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Themes\DarkTheme.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Themes\DarkIcons.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Themes\LightIcons.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Themes\LightTheme.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Themes\Generic.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Compile Include="Converters\BoolToOneOfTwoBindingsConverter.cs" />
-    <Compile Include="Converters\BoolToVisibilityPropConverter.cs" />
-    <Page Include="Themes\LightBrushs.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
   </ItemGroup>
+
   <ItemGroup>
-    <Compile Include="Enums\UpdateMode.cs" />
-    <Compile Include="Interfaces\IOverflown.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Properties\Resources.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Resources.resx</DependentUpon>
-    </Compile>
-    <Compile Include="Properties\Settings.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DependentUpon>Settings.settings</DependentUpon>
-      <DesignTimeSharedInput>True</DesignTimeSharedInput>
-    </Compile>
-    <EmbeddedResource Include="Properties\Resources.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
-    </EmbeddedResource>
-    <None Include="BmLib.cd" />
-    <None Include="packages.config" />
-    <None Include="Properties\Settings.settings">
-      <Generator>SettingsSingleFileGenerator</Generator>
-      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
-    </None>
+    <Page Update="Controls\Breadcrumb.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Controls\BreadcrumbSwitchStyle.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Controls\Breadcrumbs\BreadcrumbTree.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Controls\Breadcrumbs\BreadcrumbTreeItem.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Controls\DropDown.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Controls\DropDownList.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Controls\HotTrack.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Controls\Switch.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Styles\ProgressBar.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Styles\RefreshCancelButton.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Themes\DarkBrushs.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Themes\DarkIcons.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Themes\DarkTheme.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Themes\Default\Brushes.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Themes\Default\Buttons.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Themes\Default\Geometry.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Themes\Generic.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Update="Themes\LightBrushs.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Themes\LightIcons.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Themes\LightTheme.xaml">
+      <SubType>Designer</SubType>
+    </Page>
   </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Resources\Icons\Light\Refresh_black_16x.ico" />
-    <Resource Include="Resources\Icons\Dark\Close_White_16x.ico" />
-    <Content Include="Resources\Icons\Dark\Close_White_16x.svg" />
-    <Resource Include="Resources\Icons\Dark\Refresh_white_16x.ico" />
-    <Content Include="Resources\Icons\Dark\Refresh_white_16x.svg" />
-    <Resource Include="Resources\Icons\Light\ExpandChevronDown.ico" />
-    <Content Include="Resources\Icons\Light\Refresh_16x.svg" />
-    <Resource Include="Resources\Icons\Light\Close.ico" />
-    <Content Include="Resources\Icons\Light\Close_16x.svg" />
+
+  <ItemGroup Condition="'$(TargetFramework)' == 'netcoreapp3.0'">
+    <PackageReference Include="System.Drawing.Common">
+      <Version>4.5.1</Version>
+    </PackageReference>
   </ItemGroup>
-  <ItemGroup />
-  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+
 </Project>
