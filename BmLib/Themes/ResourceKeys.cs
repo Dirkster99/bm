@@ -209,5 +209,10 @@
         /// Defines the style of Switch control inside the Breadcrumb control.
         /// </summary>
         public static readonly ComponentResourceKey BreadcrumbSwitchStyleKey = new ComponentResourceKey(typeof(ResourceKeys), "BreadcrumbSwitchStyleKey");
+
+        /// <summary>
+        /// Colors the drop down button when the mouse is over the button
+        /// </summary>
+        public static readonly ComponentResourceKey ControlMouseOverBackgroundBrushKey = new ComponentResourceKey(typeof(ResourceKeys), "ControlMouseOverBackgroundBrushKey");
     }
 }

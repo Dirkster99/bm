@@ -311,7 +311,7 @@
             // Write the icon (as a png) into a memory stream
             memoryStream = new MemoryStream();
 
-            Icon.FromHandle(iconHandle).ToBitmap().Save(memoryStream, ImageFormat.Png);
+            System.Drawing.Icon.FromHandle(iconHandle).ToBitmap().Save(memoryStream, ImageFormat.Png);
             memoryStream.Seek(0, SeekOrigin.Begin);
 
             // Decode the icon

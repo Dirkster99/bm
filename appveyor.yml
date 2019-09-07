@@ -1,0 +1,30 @@
+version: 1.1.{build}
+
+branches:
+  only:
+  - master
+  
+before_build:
+  - cmd: nuget restore Breadcrumb.sln
+
+build:
+  verbosity: minimal
+
+configuration: Release
+
+platform: Any CPU
+
+image: Visual Studio 2019 Preview
+
+install:
+  - cmd: choco install dotnetcore-sdk --pre
+
+artifacts:
+- path: source\BmLib\bin\Release
+  name: BmLib
+
+- path: source\Demos\GenericDemo\bin\Release
+  name: GenericDemo
+
+- path: source\Demos\ThemedDemo\bin\Release
+  name: ThemedDemo

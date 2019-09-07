@@ -1,0 +1,66 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="Current" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup />
+  <ItemGroup>
+    <Page Update="Controls\Breadcrumb.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Controls\BreadcrumbSwitchStyle.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Controls\Breadcrumbs\BreadcrumbTree.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Controls\Breadcrumbs\BreadcrumbTreeItem.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Controls\DropDown.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Controls\DropDownList.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Controls\HotTrack.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Controls\Switch.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Styles\ProgressBar.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Styles\RefreshCancelButton.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Themes\DarkBrushs.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Themes\DarkIcons.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Themes\DarkTheme.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Themes\Default\Brushes.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Themes\Default\Buttons.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Themes\Default\Geometry.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Themes\Generic.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Themes\LightBrushs.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Themes\LightIcons.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Themes\LightTheme.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+  </ItemGroup>
+</Project>

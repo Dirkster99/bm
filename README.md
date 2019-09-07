@@ -2,6 +2,8 @@
 [![GitHub issues](https://img.shields.io/github/issues-raw/dirkster99/BM.svg)](https://github.com/dirkster99/BM/issues)
 [![GitHub pull requests](https://img.shields.io/github/issues-pr-raw/dirkster99/BM.svg)](https://github.com/dirkster99/BM/pulls)
 
+![Net4](https://badgen.net/badge/Framework/.Net&nbsp;4/blue) ![NetCore3](https://badgen.net/badge/Framework/NetCore&nbsp;3/blue)
+
 # Breadcrumb.Metro
 
 This project implements an open source Breadcrumb control that was originally developed by <b>Leung Yat Chun Joseph <a href="https://github.com/lycj">lycj</a></b> in his FileExplorer application originating from CodePlex and <a href="https://www.codeproject.com/Members/Fainx">CodeProject</a>.
