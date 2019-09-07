@@ -5,7 +5,7 @@ branches:
   - master
   
 before_build:
-  - cmd: nuget restore source/Breadcrumb.sln
+  - cmd: nuget restore Breadcrumb.sln
 
 build:
   verbosity: minimal
