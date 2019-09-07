@@ -5,7 +5,7 @@ branches:
   - master
   
 before_build:
-  - cmd: nuget restore source/SuggestBoxLib.sln
+  - cmd: nuget restore source/Breadcrumb.sln
 
 build:
   verbosity: minimal
